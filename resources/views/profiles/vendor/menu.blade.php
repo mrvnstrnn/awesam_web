@@ -1,5 +1,5 @@
 <ul class="vertical-nav-menu">
-    <li class="app-sidebar__heading">Agent</li>
+    <li class="app-sidebar__heading">{{ $profile }}</li>
     
     <li>
         <a href="/">

@@ -6,7 +6,7 @@
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase font-size-md opacity-7 mb-3 font-weight-normal">
-                    Highlights
+                    Tasks Today
                 </h6>
                 <div class="border-light card-border card">
                     <div class="scrollbar-container">
@@ -20,16 +20,16 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Beck Collier</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$152</div>
+                                                <div class="badge badge-pill badge-primary">North Luzon</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                <span>750</span>
-                                                <small class="text-success pl-2">
-                                                    <i class="fa fa-angle-down"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-alternate">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -48,12 +48,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                <span>542</span>
-                                                <small class="text-danger pl-2">
-                                                    <i class="fa fa-angle-up"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-info">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -72,12 +72,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                <span>874</span>
-                                                <small class="text-warning pl-2">
-                                                    <i class="fa fa-angle-down"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-danger">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -96,12 +96,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                348
-                                                <small class="text-muted pl-2">
-                                                    <i class="fa fa-angle-up"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-success">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -120,12 +120,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                692
-                                                <small class="text-muted pl-2">
-                                                    <i class="fa fa-angle-up"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-primary">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -144,12 +144,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                395
-                                                <small class="text-muted pl-2">
-                                                    <i class="fa fa-angle-down"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-dark">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -168,12 +168,12 @@
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="fsize-2 text-success">
-                                                <small class="opacity-5 pr-1">$</small>
-                                                619
-                                                <small class="text-muted pl-2">
-                                                    <i class="fa fa-angle-down"></i>
-                                                </small>
+                                            <div class="icon-wrapper m-0">
+                                                <div class="progress-circle-wrapper">
+                                                    <div class="circle-progress d-inline-block circle-progress-success">
+                                                        <small></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -3,7 +3,7 @@
 $(document).ready(() => {
   $(".circle-progress-primary")
     .circleProgress({
-      value: 0.64,
+      value: 0.80,
       size: 52,
       lineCap: "round",
       fill: { color: "#3f6ad8" },
