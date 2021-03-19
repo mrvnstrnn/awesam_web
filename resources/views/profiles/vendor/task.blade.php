@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-md-12 col-lg-6 col-xl-4">
+    <div class="col-md-12 col-lg-6 col-xl-6">
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase font-size-md opacity-7 mb-3 font-weight-normal">
