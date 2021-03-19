@@ -6,7 +6,7 @@
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase font-size-md opacity-7 mb-3 font-weight-normal">
-                    Tasks Today
+                    Agents Today
                 </h6>
                 <div class="border-light card-border card">
                     <div class="scrollbar-container">
@@ -20,7 +20,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Beck Collier</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">North Luzon</div>
+                                                <div class="badge badge-pill badge-primary">Quezom City</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -44,7 +44,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Angelo Hume</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$53</div>
+                                                <div class="badge badge-pill badge-primary">Quezom City</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -68,7 +68,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Saim Melendez</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$239</div>
+                                                <div class="badge badge-pill badge-primary">Quezom City</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -92,7 +92,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Primrose Navarro</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$21</div>
+                                                <div class="badge badge-pill badge-primary">Quezom City</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -116,7 +116,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Finnlay Barton</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$381</div>
+                                                <div class="badge badge-pill badge-primary">North Caloocan</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -140,7 +140,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Johan Corbett</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$74</div>
+                                                <div class="badge badge-pill badge-primary">North Caloocan</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
@@ -164,7 +164,7 @@
                                         <div class="widget-content-left">
                                             <div class="widget-heading">Kaja Wolfe</div>
                                             <div class="widget-subheading mt-1 opacity-10">
-                                                <div class="badge badge-pill badge-primary">$7</div>
+                                                <div class="badge badge-pill badge-primary">South Caloocan</div>
                                             </div>
                                         </div>
                                         <div class="widget-content-right">
