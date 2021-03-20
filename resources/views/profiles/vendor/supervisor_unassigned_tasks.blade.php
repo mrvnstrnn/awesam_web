@@ -22,7 +22,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">#</th>
-                                        <th>Name</th>
+                                        <th>Site</th>
                                         <th class="text-center">Type</th>
                                         <th class="text-center">Details</th>
                                         <th class="text-center">Activities</th>
@@ -35,14 +35,8 @@
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="/images/avatars/4.jpg" alt="">
-                                                        </div>
-                                                    </div>
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
+                                                        <div class="widget-heading">NEOPOLITAN-IV-C1</div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
@@ -66,14 +60,8 @@
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="/images/avatars/3.jpg" alt="">
-                                                        </div>
-                                                    </div>
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">Ruben Tillman</div>
+                                                        <div class="widget-heading">VILLA-VERDE-01</div>
                                                         <div class="widget-subheading opacity-7">Caloocan North</div>
                                                     </div>
                                                 </div>
@@ -97,14 +85,8 @@
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="/images/avatars/2.jpg" alt="">
-                                                        </div>
-                                                    </div>
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">Elliot Huber</div>
+                                                        <div class="widget-heading">GUADANOVILLE-XX</div>
                                                         <div class="widget-subheading opacity-7">
                                                             Caloocan South
                                                         </div>
@@ -130,14 +112,8 @@
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="/images/avatars/1.jpg" alt="">
-                                                        </div>
-                                                    </div>
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">Vinnie Wagstaff</div>
+                                                        <div class="widget-heading">JORDAN-PLAINS-VV</div>
                                                         <div class="widget-subheading opacity-7">Malabon</div>
                                                     </div>
                                                 </div>
