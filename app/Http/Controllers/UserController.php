@@ -29,7 +29,8 @@ class UserController extends Controller
         $title_subheading  = ucwords($mode . " : " . $profile);
         $title_icon = 'home';
 
-        
+        $active_slug = "";
+
         $profile_menu = self::getProfileMenuLinks($mode, $profile);
 
         $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
@@ -41,6 +42,7 @@ class UserController extends Controller
             compact(
                 'mode',
                 'profile',
+                'active_slug',
                 'profile_menu',
                 'profile_direct_links',
                 'program_direct_links',
@@ -87,6 +89,9 @@ class UserController extends Controller
             $view = 'profiles.' . $mode . '.index';
         }
 
+
+        $active_slug = $show;
+
         $profile_menu = self::getProfileMenuLinks($mode, $profile);
 
         $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
@@ -98,6 +103,7 @@ class UserController extends Controller
             compact(
                 'mode',
                 'profile',
+                'active_slug',
                 'profile_menu',
                 'profile_direct_links',
                 'program_direct_links',

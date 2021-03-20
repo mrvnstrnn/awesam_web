@@ -6,12 +6,21 @@
             Home
         </a>
     </li>
+    @if($active_slug == '/agents')
+    <li>
+        <a class="mm-active" href="/agents">
+            <i class="metismenu-icon pe-7s-users"></i>
+            Agents
+        </a>
+    </li>
+    @else
     <li>
         <a href="/agents">
             <i class="metismenu-icon pe-7s-users"></i>
             Agents
         </a>
     </li>
+    @endif
     <li>
         <a href="#">
             <i class="metismenu-icon pe-7s-date"></i>
