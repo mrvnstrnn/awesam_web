@@ -21,10 +21,10 @@
 
 @section('title-icon')
 
-    <i class="pe-7s-home icon-gradient bg-mean-fruit"></i>
+
+    <i class=" {{ "pe-7s-" . $title_icon . " icon-gradient bg-mean-fruit" }}"></i>
 
     {{-- icon from controller issue need to find a new way --}}
     {{-- to get variable info from UserController --}}
-    {{-- {{ $title_icon }} --}}
 
 @endsection

@@ -80,6 +80,10 @@
                         @yield('content')
 
                     </div>    
+
+                    {{-- Footer --}}
+                    @include('layouts.footer.index')
+
                 </div>
             </div>        
         </div>

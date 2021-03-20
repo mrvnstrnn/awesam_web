@@ -18,7 +18,7 @@
         <link href="/styles/css/base.css" rel="stylesheet">
     </head>
 
-    <body>
+    <body class="sidebar-minimized">
         <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar"> 
 
             {{-- HEADER MODULE --}}

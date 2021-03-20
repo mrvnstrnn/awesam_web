@@ -17,6 +17,8 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
+
+
     public function index()
     {
 
@@ -27,18 +29,12 @@ class UserController extends Controller
         $title_subheading  = ucwords($mode . " : " . $profile);
         $title_icon = 'home';
 
-        $profile_menu = Slug::where([
-            ['mode', '=', $mode],
-            ['profile', '=', $profile]
-        ])->get();
+        
+        $profile_menu = self::getProfileMenuLinks($mode, $profile);
 
-
-        $profile_direct_links = UserProfileMainMenu::select('*')
-            ->where([
-                ['mode', '=', $mode],
-                ['profile', '=', $profile]
-            ])
-            ->get();
+        $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+            
+        $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
 
         
         return view('profiles.' . $mode . '.index', 
@@ -47,6 +43,7 @@ class UserController extends Controller
                 'profile',
                 'profile_menu',
                 'profile_direct_links',
+                'program_direct_links',
                 'title', 
                 'title_subheading', 
                 'title_icon'
@@ -90,25 +87,20 @@ class UserController extends Controller
             $view = 'profiles.' . $mode . '.index';
         }
 
-        $profile_menu = Slug::where([
-            ['mode', '=', $mode],
-            ['profile', '=', $profile]
-        ])->get();
+        $profile_menu = self::getProfileMenuLinks($mode, $profile);
 
+        $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+            
+        $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
 
-        $profile_direct_links = UserProfileMainMenu::select('*')
-            ->where([
-                ['mode', '=', $mode],
-                ['profile', '=', $profile]
-            ])
-            ->get();
-
+    
         return view($view, 
             compact(
                 'mode',
                 'profile',
                 'profile_menu',
                 'profile_direct_links',
+                'program_direct_links',
                 'title', 
                 'title_subheading', 
                 'title_icon'
@@ -117,6 +109,48 @@ class UserController extends Controller
 
 
     }
+
+
+    private function getProfileMenuLinks($mode, $profile){
+
+        $profile_menu = Slug::where([
+            ['mode', '=', $mode],
+            ['profile', '=', $profile]
+        ])->get();
+
+        return $profile_menu;
+
+    }
+
+    private function getProfileMenuDirectLinks($mode, $profile){
+
+        $profile_direct_links = UserProfileMainMenu::select('*')
+            ->where([
+                ['mode', '=', $mode],
+                ['profile', '=', $profile],
+                ['level_one', '=', 'profile_menu']
+            ])
+            ->get();
+
+        return $profile_direct_links;
+
+    }
+
+    private function getProgramMenuDirectLinks($mode, $profile){
+
+        $program_direct_links = UserProfileMainMenu::select('*')
+            ->where([
+                ['mode', '=', $mode],
+                ['profile', '=', $profile],
+                ['level_one', '=', 'program_menu']
+            ])
+            ->get();
+        
+        return $program_direct_links;
+
+    }
+
+
 
 
 }
