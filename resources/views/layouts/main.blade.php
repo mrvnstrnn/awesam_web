@@ -10,7 +10,7 @@
         <meta name="description" content="Site Acquisition and Management.">
         <!-- Disable tap highlight on IE -->
         <meta name="msapplication-tap-highlight" content="no">
-        <!-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+        <!-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> --> 
         <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="/vendors/ionicons-npm/css/ionicons.css">
         <link rel="stylesheet" href="/vendors/linearicons-master/dist/web-font/style.css">
