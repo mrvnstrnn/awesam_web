@@ -4,27 +4,3 @@
 
 
 @endsection
-
-@section('menu')
-
-    @include('profiles.vendor.menu')
-
-@endsection
-
-@section('title')
-    {{ $title }}
-@endsection
-
-@section('title-subheading')
-    {{ $title_subheading }}
-@endsection
-
-@section('title-icon')
-
-
-    <i class=" {{ "pe-7s-" . $title_icon . " icon-gradient bg-mean-fruit" }}"></i>
-
-    {{-- icon from controller issue need to find a new way --}}
-    {{-- to get variable info from UserController --}}
-
-@endsection

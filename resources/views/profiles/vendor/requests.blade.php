@@ -169,6 +169,25 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <ul class="pagination pagination-sm" style="margin-bottom: 0px;">
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="javascript:void(0);" class="page-link">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,6 +216,25 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="card-footer">
+                            <ul class="pagination pagination-sm" style="margin-bottom: 0px;">
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="javascript:void(0);" class="page-link">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -227,34 +265,30 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <ul class="pagination pagination-sm" style="margin-bottom: 0px;">
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="javascript:void(0);" class="page-link">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-@endsection
-
-@section('menu')
-
-    @include('profiles.vendor.menu')
-
-@endsection
-
-@section('title')
-    {{ $title }}
-@endsection
-
-@section('title-subheading')
-    {{ $title_subheading }}
-@endsection
-
-@section('title-icon')
-
-    <i class=" {{ "pe-7s-" . $title_icon . " icon-gradient bg-mean-fruit" }}"></i>
-
-    {{-- icon from controller issue need to find a new way --}}
-    {{-- to get variable info from UserController --}}
-    {{-- {{ $title_icon }} --}}
 
 @endsection

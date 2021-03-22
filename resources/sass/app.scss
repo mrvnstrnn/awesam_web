@@ -1,3 +1,46 @@
 // Bootstrap
 
 @import '~bootstrap/scss/bootstrap';
+
+
+
+.stage1{
+    background-color:blue;
+} 
+
+.stage2{
+    background-color:blueviolet;
+} 
+
+.stage3{
+    background-color: #C71585;
+} 
+
+.stage4{
+    background-color:red;
+} 
+
+.stage5{
+    background-color:orange;
+} 
+
+.stage6{
+    background-color: yellowgreen;
+} 
+.stage7{
+    background-color:green;
+} 
+
+.stage-text{
+    font-size: 1.2em;
+}
+
+.stage-disabled{
+    opacity: 0.4;
+}
+
+.stage-active{
+    animation: progress-bar-stripes 1s linear infinite;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+}

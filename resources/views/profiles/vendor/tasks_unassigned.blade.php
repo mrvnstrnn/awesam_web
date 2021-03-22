@@ -15,23 +15,25 @@
                 <div class="col-md-12">
                     <div class="main-card mb-3 card">
                         <div class="card-header">
-                            Unassigned Tasks
+                            Unassigned Sites
                         </div>
                         <div class="table-responsive">
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">#</th>
+                                        <th class="text-center" >SAM ID</th>
                                         <th>Site</th>
-                                        <th class="text-center">Type</th>
-                                        <th class="text-center">Details</th>
-                                        <th class="text-center">Activities</th>
+                                        <th >Technology</th>
+                                        <th >PLA ID</th>
+                                        <th >Endorsement</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-center text-muted">#345</td>
+                                        <td class="text-center" style="width: 150px;">
+                                            4354
+                                        </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -42,21 +44,23 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="badge badge-success">LEAVE</div>
+                                        <td>
+                                            L9, L21
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            Mar 22 to 24
+                                        <td>
+                                            NCR788
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            10
+                                        <td style="width: 150px;">
+                                            Mar 5, 2021
                                         </td>
                                         <td class="text-center">
                                             <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center text-muted">#347</td>
+                                        <td class="text-center" style="width: 150px;">
+                                            4355
+                                        </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -67,21 +71,23 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="badge badge-success">LEAVE</div>
+                                        <td>
+                                            L9, L21
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            Apr 16 to 21
+                                        <td>
+                                            NCR900
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            15
+                                        <td style="width: 150px;">
+                                            Mar 5, 2021
                                         </td>
                                         <td class="text-center">
                                             <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center text-muted">#321</td>
+                                        <td class="text-center" style="width: 150px;">
+                                            4356
+                                        </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -94,21 +100,23 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="badge badge-danger">Absent</div>
+                                        <td>
+                                            L9, L21
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            Mar 20
+                                        <td>
+                                            NCR329
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            3
+                                        <td style="width: 150px;">
+                                            Mar 5, 2021
                                         </td>
                                         <td class="text-center">
                                             <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center text-muted">#55</td>
+                                        <td class="text-center" style="width: 150px;">
+                                            4357
+                                        </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -119,14 +127,14 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="badge badge-success">LEAVE</div>
+                                        <td>
+                                            L9, L21
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            Apr 1 to 5
+                                        <td>
+                                            NCR432
                                         </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            15
+                                        <td style="width: 150px;">
+                                            Mar 5, 2021
                                         </td>
                                         <td class="text-center">
                                             <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
@@ -135,34 +143,41 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <ul class="pagination pagination-sm" style="margin-bottom: 0px;">
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="javascript:void(0);" class="page-link">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">4</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">5</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-@endsection
-
-@section('menu')
-
-    @include('profiles.vendor.menu')
-
-@endsection
-
-@section('title')
-    {{ $title }}
-@endsection
-
-@section('title-subheading')
-    {{ $title_subheading }}
-@endsection
-
-@section('title-icon')
-
-    <i class=" {{ "pe-7s-" . $title_icon . " icon-gradient bg-mean-fruit" }}"></i>
-
-    {{-- icon from controller issue need to find a new way --}}
-    {{-- to get variable info from UserController --}}
-    {{-- {{ $title_icon }} --}}
 
 @endsection

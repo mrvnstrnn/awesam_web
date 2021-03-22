@@ -18,7 +18,6 @@ class UserController extends Controller
     // Should be profile dependent
 
 
-
     public function index()
     {
 
@@ -53,9 +52,6 @@ class UserController extends Controller
         );
     }
 
-
-    // View Show Router
-    // Should be profile dependent
 
     public function show($show = null){
 

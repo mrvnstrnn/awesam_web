@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+    <ul class="tabs-animated body-tabs-animated nav">
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
                 <span>Today</span>
@@ -720,29 +720,5 @@
         <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
         </div>
     </div>
-
-@endsection
-
-@section('menu')
-
-    @include('profiles.vendor.menu')
-
-@endsection
-
-@section('title')
-    {{ $title }}
-@endsection
-
-@section('title-subheading')
-    {{ $title_subheading }}
-@endsection
-
-@section('title-icon')
-
-    <i class=" {{ "pe-7s-" . $title_icon . " icon-gradient bg-mean-fruit" }}"></i>
-
-    {{-- icon from controller issue need to find a new way --}}
-    {{-- to get variable info from UserController --}}
-    {{-- {{ $title_icon }} --}}
 
 @endsection

@@ -16,6 +16,49 @@
         <link rel="stylesheet" href="/vendors/linearicons-master/dist/web-font/style.css">
         <link rel="stylesheet" href="/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css">
         <link href="/styles/css/base.css" rel="stylesheet">
+
+        <style>
+            .stage1{
+                background-color:blue;
+            } 
+
+            .stage2{
+                background-color:blueviolet;
+            } 
+
+            .stage3{
+                background-color: #C71585;
+            } 
+
+            .stage4{
+                background-color:red;
+            } 
+
+            .stage5{
+                background-color:orange;
+            } 
+
+            .stage6{
+                background-color: yellowgreen;
+            } 
+            .stage7{
+                background-color:green;
+            } 
+
+            .stage-text{
+                font-size: 1.2em;
+            }
+
+            .stage-disabled{
+                opacity: 0.4;
+            }
+
+            .stage-active{
+                animation: progress-bar-stripes 1s linear infinite;
+                background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+                background-size: 1rem 1rem;
+            }
+                    </style>    
     </head>
 
     <body>
@@ -63,8 +106,7 @@
                         <div class="app-sidebar__inner">
                             
                             {{-- SIDEBAR CONTENT --}}
-
-                            @yield('menu')
+                            @include('layouts.sidebar.menu')
                 
                         </div>
                     </div>
@@ -74,7 +116,8 @@
                 <div class="app-main__outer">
                     <div class="app-main__inner">
 
-                        <x-layout.page_title />
+                        {{-- INNER TITLE --}}
+                        @include('layouts.inner.title')
 
                         {{-- MAIN CONTENT --}}
                         @yield('content')

@@ -64,7 +64,7 @@
                             
                             {{-- SIDEBAR CONTENT --}}
 
-                            @yield('menu')
+                            @include('layouts.sidebar.menu')
                 
                         </div>
                     </div>

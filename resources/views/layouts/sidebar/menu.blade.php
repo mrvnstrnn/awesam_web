@@ -1,3 +1,5 @@
+{{-- PROFILE MENU --}}
+
 <ul class="vertical-nav-menu">
     <li class="app-sidebar__heading">{{ $profile }}</li>
     
@@ -60,8 +62,10 @@
 
 </ul>    
 
-<x-globe.program.menu>
+{{-- PROGRAM MENU --}}
 
+<ul class="vertical-nav-menu">
+    <li class="app-sidebar__heading">Program</li>
     @foreach ($program_direct_links as $mainmenu)
         <li> 
             @if($mainmenu->submenus > 1)
@@ -105,11 +109,4 @@
             @endif
         </li>
     @endforeach    
-
-    {{-- <x-vendor.program.coloc /> --}}
-    {{-- <x-globe.program.ibs />
-    <x-globe.program.wireless />
-    <x-globe.program.wireline />
-    <x-globe.program.site_management /> --}}
-
-</x-globe.program.menu>
+</ul>

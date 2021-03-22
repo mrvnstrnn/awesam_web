@@ -8,9 +8,3 @@
 </div>
 
 @endsection
-
-@section('menu')
-
-    @include('profiles.vendor.menu')
-
-@endsection
