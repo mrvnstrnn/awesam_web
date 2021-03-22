@@ -71,10 +71,11 @@ class UserController extends Controller
 
 
         $slug_info = Slug::where([
-            ['mode', '=', $mode],
-            ['profile', '=', $profile],
-            ['slug', '=', $show]
-        ])->get();
+                ['mode', '=', $mode],
+                ['profile', '=', $profile],
+                ['slug', '=', $show]
+            ])
+            ->get();
 
         if(count($slug_info)>0){
 
@@ -138,9 +139,12 @@ class UserController extends Controller
     private function getProfileMenuLinks($mode, $profile){
 
         $profile_menu = Slug::where([
-            ['mode', '=', $mode],
-            ['profile', '=', $profile]
-        ])->get();
+                ['mode', '=', $mode],
+                ['profile', '=', $profile]
+            ])
+            ->orderBy('level_two', 'asc')
+            ->orderBy('menu', 'asc')
+            ->get();
 
         return $profile_menu;
 
