@@ -62,23 +62,44 @@ class UserController extends Controller
         $profile = Auth::user()->profile;
 
 
+        // LIMIT TWO LEVELS OF SLUGS FOR PAGES
+        // USE THIRD SLUG LEVEL AS PARAMETER
+        if(count($path) >= 3){
+            $show = $path[0]."/".$path[1];
+        }
+
+
+
         $slug_info = Slug::where([
-                ['mode', '=', $mode],
-                ['profile', '=', $profile],
-                ['slug', '=', $show]
-            ])->get();
+            ['mode', '=', $mode],
+            ['profile', '=', $profile],
+            ['slug', '=', $show]
+        ])->get();
 
         if(count($slug_info)>0){
 
-            $title = $slug_info[0]['title'];
+
+
+            if(count($path) >= 3){
+
+                $view = $slug_info[0]['view'] . "_param";
+                $title = $path[2];
+
+            }
+            else {
+
+                $view = $slug_info[0]['view'];
+                $title = $slug_info[0]['title'];
+
+            }
+
             $title_subheading  = $slug_info[0]['title_subheading'];
             $title_icon = $slug_info[0]['title_icon'];
 
-            $view = $slug_info[0]['view'];
     
         } else {
 
-            $title = "Not Found";
+            $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
             $title_subheading  = "Link not available in your profile or still under construction";
             $title_icon = 'home';
 
@@ -94,20 +115,21 @@ class UserController extends Controller
             
         $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
 
-    
+        
         return view($view, 
-            compact(
-                'mode',
-                'profile',
-                'active_slug',
-                'profile_menu',
-                'profile_direct_links',
-                'program_direct_links',
-                'title', 
-                'title_subheading', 
-                'title_icon'
-            )
-        );
+        compact(
+            'mode',
+            'profile',
+            'active_slug',
+            'profile_menu',
+            'profile_direct_links',
+            'program_direct_links',
+            'title', 
+            'title_subheading', 
+            'title_icon'
+        )
+    );
+
 
 
     }

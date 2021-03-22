@@ -22,30 +22,34 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">Agent</th>
-                                        <th>Site</th>
                                         <th class="text-center">Technology</th>
+                                        <th>Site</th>
                                         <th>PLA ID</th>
                                         <th class="text-center" >Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/4.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">NEOPOLITAN-IV-C1</div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/NEOPOLITAN-IV-C1">
+                                                            NEOPOLITAN-IV-C1
+                                                            </a>
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
@@ -61,22 +65,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/4.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">NEOPOLITAN-IV-C1</div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/NEOPOLITAN-IV-C1">
+                                                            NEOPOLITAN-IV-C1
+                                                            </a>
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
@@ -96,22 +104,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/5.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">VILLA-VERDE-01                                                        </div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/VILLA-VERDE-01">
+                                                            VILLA-VERDE-01
+                                                            </a>                           
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
@@ -125,22 +137,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/5.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">VILLA-VERDE-01</div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/VILLA-VERDE-01">
+                                                            VILLA-VERDE-01
+                                                            </a>
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
@@ -164,22 +180,26 @@
                                         </td>                                            
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/6.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">GUADANOVILLE-XX                                                        </div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/GUADANOVILLE-XX">
+                                                            GUADANOVILLE-XX
+                                                            </a>
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
@@ -199,22 +219,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="width: 150px;">
+                                        <td class="text-center" style="width: 80px;">
                                             <img width="40" class="rounded-circle"
                                                 src="/images/avatars/6.jpg" alt="">
+                                        </td>
+                                        <td class="text-center" style="width: 150px;">
+                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">GUADANOVILLE-XX                                                        </div>
+                                                        <div class="widget-heading">
+                                                            <a href="/tasks/assigned/GUADANOVILLE-XX">
+                                                            GUADANOVILLE-XX
+                                                            </a>
+                                                        </div>
                                                         <div class="widget-subheading opacity-7">Quezon City</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
                                         </td>
                                         <td style="width: 150px;">
                                             NCR788
