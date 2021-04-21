@@ -29,4 +29,5 @@ Route::get('/{slug}', [UserController::class, 'show'])
 
 Route::view('/profile-switcher/{mode}/{profile}', 'welcome');
 
+Route::view('/team', 'home');
 

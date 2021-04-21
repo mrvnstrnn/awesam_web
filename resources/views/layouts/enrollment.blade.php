@@ -68,72 +68,23 @@
 
             {{-- HEADER MODULE --}}
             {{-- USE LAYOUT INCLUDE --}}
-            @include('layouts.header.index')
+            @include('layouts.header.enrollment')
             
             <div class="app-main">
 
-                {{-- SIDEBAR MODULE --}}
-                <div class="app-sidebar sidebar-shadow">
-                    <div class="app-header__logo">
-                        <div class="logo-src"></div>
-                        <div class="header__pane ml-auto">
-                            <div>
-                                <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
-                                    <span class="hamburger-box">
-                                        <span class="hamburger-inner"></span>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="app-header__mobile-menu">
-                        <div>
-                            <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                                <span class="hamburger-box">
-                                    <span class="hamburger-inner"></span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="app-header__menu">
-                        <span>
-                            <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                                <span class="btn-icon-wrapper">
-                                    <i class="fa fa-ellipsis-v fa-w-6"></i>
-                                </span>
-                            </button>
-                        </span>
-                    </div>
-                    <div class="scrollbar-sidebar">
-                        <div class="app-sidebar__inner">
-                            
-                            {{-- SIDEBAR CONTENT --}}
-                            @include('layouts.sidebar.menu')
+                @yield('content')
                 
-                        </div>
-                    </div>
-                </div>    
-                
-                {{-- MAIN MODULE --}}
-                <div class="app-main__outer">
-                    <div class="app-main__inner">
-
-                        {{-- INNER TITLE --}}
-                        @include('layouts.inner.title')
-
-                        {{-- MAIN CONTENT --}}
-                        @yield('content')
-
-                    </div>    
-
-                    {{-- Footer --}}
-                    @include('layouts.footer.index')
-
-                </div>
             </div>        
         </div>
 
         <div class="app-drawer-overlay d-none animated fadeIn"></div>
+
+
+
+
+
+
+
 
     <!-- plugin dependencies -->
     <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
@@ -146,6 +97,9 @@
     <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script>
     <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script>
     <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script>
+    <script type="text/javascript" src="./vendors/smartwizard/dist/js/jquery.smartWizard.min.js"></script>
+
+
     <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -165,6 +119,8 @@
     <script type="text/javascript" src="/js/toastr.js"></script>
     <script type="text/javascript" src="/js/treeview.js"></script>
     <script type="text/javascript" src="/js/form-components/toggle-switch.js"></script>
+    <script type="text/javascript" src="/js/form-components/form-wizard.js"></script>
+
     <script type="text/javascript" src="/js/tables.js"></script>
     <script type="text/javascript" src="/js/carousel-slider.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>

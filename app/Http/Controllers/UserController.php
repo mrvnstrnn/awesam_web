@@ -24,32 +24,42 @@ class UserController extends Controller
         $mode = Auth::user()->mode;
         $profile = Auth::user()->profile;
 
-        $title = ucwords(Auth::user()->name);
-        $title_subheading  = ucwords($mode . " : " . $profile);
-        $title_icon = 'home';
+        if($mode == null && $profile == null){
 
-        $active_slug = "";
+            return view('profiles.enrollment');
 
-        $profile_menu = self::getProfileMenuLinks($mode, $profile);
-
-        $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+        }
+        else {
+            $title = ucwords(Auth::user()->name);
+            $title_subheading  = ucwords($mode . " : " . $profile);
+            $title_icon = 'home';
+    
+            $active_slug = "";
+    
+            $profile_menu = self::getProfileMenuLinks($mode, $profile);
+    
+            $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+                
+            $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+    
             
-        $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+            return view('profiles.' . $mode . '.index', 
+                compact(
+                    'mode',
+                    'profile',
+                    'active_slug',
+                    'profile_menu',
+                    'profile_direct_links',
+                    'program_direct_links',
+                    'title', 
+                    'title_subheading', 
+                    'title_icon'
+                )
+            );
+    
+        }
 
-        
-        return view('profiles.' . $mode . '.index', 
-            compact(
-                'mode',
-                'profile',
-                'active_slug',
-                'profile_menu',
-                'profile_direct_links',
-                'program_direct_links',
-                'title', 
-                'title_subheading', 
-                'title_icon'
-            )
-        );
+
     }
 
 
@@ -62,6 +72,7 @@ class UserController extends Controller
         $profile = Auth::user()->profile;
 
 
+
         // LIMIT TWO LEVELS OF SLUGS FOR PAGES
         // USE THIRD SLUG LEVEL AS PARAMETER
         if(count($path) >= 3){
@@ -69,69 +80,80 @@ class UserController extends Controller
         }
 
 
+        if($mode == null && $profile == null){
 
-        $slug_info = Slug::where([
+            $slug_info = Slug::where([
+                ['mode', '=', 'NULL'],
+                ['profile', '=', 'NULL'],
+                ['slug', '=', $show]
+            ])
+            ->get();
+
+            return view('team');
+
+
+            
+        } else {
+
+            $slug_info = Slug::where([
                 ['mode', '=', $mode],
                 ['profile', '=', $profile],
                 ['slug', '=', $show]
             ])
             ->get();
 
-        if(count($slug_info)>0){
+            if(count($slug_info)>0){
 
+                if(count($path) >= 3){
 
+                    $view = $slug_info[0]['view'] . "_param";
+                    $title = $path[2];
 
-            if(count($path) >= 3){
+                }
+                else {
 
-                $view = $slug_info[0]['view'] . "_param";
-                $title = $path[2];
+                    $view = $slug_info[0]['view'];
+                    $title = $slug_info[0]['title'];
 
-            }
-            else {
+                }
 
-                $view = $slug_info[0]['view'];
-                $title = $slug_info[0]['title'];
-
-            }
-
-            $title_subheading  = $slug_info[0]['title_subheading'];
-            $title_icon = $slug_info[0]['title_icon'];
-
-    
-        } else {
-
-            $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
-            $title_subheading  = "Link not available in your profile or still under construction";
-            $title_icon = 'home';
-
-            $view = 'profiles.' . $mode . '.index';
-        }
-
-
-        $active_slug = $show;
-
-        $profile_menu = self::getProfileMenuLinks($mode, $profile);
-
-        $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
-            
-        $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+                $title_subheading  = $slug_info[0]['title_subheading'];
+                $title_icon = $slug_info[0]['title_icon'];
 
         
-        return view($view, 
-        compact(
-            'mode',
-            'profile',
-            'active_slug',
-            'profile_menu',
-            'profile_direct_links',
-            'program_direct_links',
-            'title', 
-            'title_subheading', 
-            'title_icon'
-        )
-    );
+            } else {
+
+                $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
+                $title_subheading  = "Link not available in your profile or still under construction";
+                $title_icon = 'home';
+
+                $view = 'profiles.' . $mode . '.index';
+            }
 
 
+            $active_slug = $show;
+
+            $profile_menu = self::getProfileMenuLinks($mode, $profile);
+
+            $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+                
+            $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+
+            
+            return view($view, 
+                compact(
+                    'mode',
+                    'profile',
+                    'active_slug',
+                    'profile_menu',
+                    'profile_direct_links',
+                    'program_direct_links',
+                    'title', 
+                    'title_subheading', 
+                    'title_icon'
+                )
+            );
+        }
 
     }
 
