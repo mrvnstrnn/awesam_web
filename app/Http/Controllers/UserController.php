@@ -73,10 +73,10 @@ class UserController extends Controller
 
 
 
+// FIX USER CONTROLLER
 
 
 
-        
 
         // LIMIT TWO LEVELS OF SLUGS FOR PAGES
         // USE THIRD SLUG LEVEL AS PARAMETER
