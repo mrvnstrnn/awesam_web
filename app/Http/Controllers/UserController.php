@@ -25,6 +25,8 @@ class UserController extends Controller
         $mode = Auth::user()->mode;
         $profile = Auth::user()->profile;
 
+        $role = \Auth::user()->getAllNavigation()->get();
+
         if($mode == null && $profile == null){
 
             return view('profiles.enrollment');
@@ -32,19 +34,19 @@ class UserController extends Controller
         }
         else {
             $title = ucwords(Auth::user()->name);
-            $title_subheading  = ucwords($mode . " : " . $profile);
+            $title_subheading  = ucwords($role[0]->mode . " : " . $role[0]->profile);
             $title_icon = 'home';
     
             $active_slug = "";
     
-            $profile_menu = self::getProfileMenuLinks($mode, $profile);
+            $profile_menu = self::getProfileMenuLinks($role[0]->mode, $role[0]->profile);
     
-            $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+            $profile_direct_links = self::getProfileMenuDirectLinks($role[0]->mode, $role[0]->profile);
                 
-            $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+            $program_direct_links = self::getProgramMenuDirectLinks($role[0]->mode, $role[0]->profile);
     
             
-            return view('profiles.' . $mode . '.index', 
+            return view('profiles.' . $role[0]->mode . '.index', 
                 compact(
                     'mode',
                     'profile',
@@ -117,8 +119,6 @@ class UserController extends Controller
             $profile_menu = self::getProfileMenuLinks($role[0]->mode, $role[0]->profile);
 
             $profile_direct_links = self::getProfileMenuDirectLinks($role[0]->mode, $role[0]->profile);
-
-            // dd($profile_direct_links);
             
             $program_direct_links = self::getProgramMenuDirectLinks($role[0]->mode, $role[0]->profile);
 
