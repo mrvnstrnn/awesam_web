@@ -71,11 +71,7 @@ class UserController extends Controller
         $mode = Auth::user()->mode;
         $profile = Auth::user()->profile;
 
-
-
 // FIX USER CONTROLLER
-
-
 
 
         // LIMIT TWO LEVELS OF SLUGS FOR PAGES
@@ -97,17 +93,18 @@ class UserController extends Controller
 
                     $view = $slug_info[0]['view'] . "_param";
                     $title = $path[2];
-
                 }
                 else {
 
                     $view = $slug_info[0]['view'];
                     $title = $slug_info[0]['title'];
 
+
                 }
 
                 $title_subheading  = $slug_info[0]['title_subheading'];
                 $title_icon = $slug_info[0]['title_icon'];
+                
 
         
             } else {
@@ -125,7 +122,7 @@ class UserController extends Controller
             $profile_menu = self::getProfileMenuLinks($mode, $profile);
 
             $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
-                
+            
             $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
 
             

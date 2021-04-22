@@ -24,7 +24,7 @@ Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified
 //USERCONTROLLER WILL TAKE OVER THE ROUTING 
 Route::get('/{slug}', [UserController::class, 'show'])
     ->where('slug', '.*')
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'navigation']);
 
 
 Route::view('/profile-switcher/{mode}/{profile}', 'welcome');
