@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Slug;
 use App\Models\UserProfileMainMenu;
+use App\Models\RolePermission;
 // use Illuminate\Support\Facades\DB;
 
 
@@ -63,13 +64,17 @@ class UserController extends Controller
     }
 
 
-    public function show($show = null){
+    public function show($show = null, Request $request){
 
 
         $path = explode('/', $show);
 
         $mode = Auth::user()->mode;
         $profile = Auth::user()->profile;
+
+        // if (\Auth::check()) {
+            $role = \Auth::user()->getAllNavigation()->get();
+        // }
 
 // FIX USER CONTROLLER
 
@@ -79,51 +84,43 @@ class UserController extends Controller
         if(count($path) >= 3){
             $show = $path[0]."/".$path[1];
         }
-
+        
             $slug_info = Slug::where([
-                ['mode', '=', $mode],
-                ['profile', '=', $profile],
+                ['mode', '=', $role[0]->mode],
+                ['profile', '=', $role[0]->profile],
                 ['slug', '=', $show]
             ])
             ->get();
 
-            if(count($slug_info)>0){
-
+            if(count($role)>0){
                 if(count($path) >= 3){
-
                     $view = $slug_info[0]['view'] . "_param";
                     $title = $path[2];
-                }
-                else {
-
+                } else {
                     $view = $slug_info[0]['view'];
                     $title = $slug_info[0]['title'];
-
-
                 }
 
                 $title_subheading  = $slug_info[0]['title_subheading'];
                 $title_icon = $slug_info[0]['title_icon'];
-                
-
-        
+            
             } else {
-
                 $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
                 $title_subheading  = "Link not available in your profile or still under construction";
                 $title_icon = 'home';
-
-                $view = 'profiles.' . $mode . '.index';
+                $view = 'profiles.' . $role[0]->mode . '.index';
             }
 
 
             $active_slug = $show;
 
-            $profile_menu = self::getProfileMenuLinks($mode, $profile);
+            $profile_menu = self::getProfileMenuLinks($role[0]->mode, $role[0]->profile);
 
-            $profile_direct_links = self::getProfileMenuDirectLinks($mode, $profile);
+            $profile_direct_links = self::getProfileMenuDirectLinks($role[0]->mode, $role[0]->profile);
+
+            // dd($profile_direct_links);
             
-            $program_direct_links = self::getProgramMenuDirectLinks($mode, $profile);
+            $program_direct_links = self::getProgramMenuDirectLinks($role[0]->mode, $role[0]->profile);
 
             
             return view($view, 
@@ -145,10 +142,15 @@ class UserController extends Controller
 
     private function getProfileMenuLinks($mode, $profile){
 
-        $profile_menu = Slug::where([
-                ['mode', '=', $mode],
-                ['profile', '=', $profile]
-            ])
+        // $profile_menu = Slug::where([
+        //         ['mode', '=', $mode],
+        //         ['profile', '=', $profile]
+        //     ])
+        //     ->orderBy('level_two', 'asc')
+        //     ->orderBy('menu', 'asc')
+        //     ->get();
+
+        $profile_menu = \Auth::user()->getAllNavigation()
             ->orderBy('level_two', 'asc')
             ->orderBy('menu', 'asc')
             ->get();
@@ -167,6 +169,12 @@ class UserController extends Controller
             ])
             ->get();
 
+        // $profile_direct_links = \Auth::user()->getAllNavigation()
+        //     ->where('roles.profile', $profile)
+        //     ->where('roles.mode', $mode)
+        //     ->where('permissions.level_one', 'profile_menu')
+        //     ->get();
+
         return $profile_direct_links;
 
     }
@@ -180,6 +188,12 @@ class UserController extends Controller
                 ['level_one', '=', 'program_menu']
             ])
             ->get();
+
+        // $program_direct_links = \Auth::user()->getAllNavigation()
+        //     ->where('roles.profile', $profile)
+        //     ->where('roles.mode', $mode)
+        //     ->where('permissions.level_one', 'program_menu')
+        //     ->get();
         
         return $program_direct_links;
 
