@@ -73,27 +73,16 @@ class UserController extends Controller
 
 
 
+
+
+
+        
+
         // LIMIT TWO LEVELS OF SLUGS FOR PAGES
         // USE THIRD SLUG LEVEL AS PARAMETER
         if(count($path) >= 3){
             $show = $path[0]."/".$path[1];
         }
-
-
-        if($mode == null && $profile == null){
-
-            $slug_info = Slug::where([
-                ['mode', '=', 'NULL'],
-                ['profile', '=', 'NULL'],
-                ['slug', '=', $show]
-            ])
-            ->get();
-
-            return view('team');
-
-
-            
-        } else {
 
             $slug_info = Slug::where([
                 ['mode', '=', $mode],
@@ -153,7 +142,6 @@ class UserController extends Controller
                     'title_icon'
                 )
             );
-        }
 
     }
 
