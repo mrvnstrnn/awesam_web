@@ -46,19 +46,32 @@ class User extends Authenticatable
 
     public function can_do($checkPermission)
     {
-        if($checkPermission == 'team'){
-            return true;
-        }
-        $permission = Permission::where('slug', $checkPermission)->first();
 
-        if(is_null($permission)) {
+        $collection = collect();
+        $permissions = Permission::where('slug', $checkPermission)
+                                    ->get();
+
+        if(is_null($permissions)) {
             return false;
         } else {
-            $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
-                    ->where('permission_id', $permission->id)
-                    ->first();
 
-            return !is_null($rolePermission) ? true : false;
+
+
+            foreach ($permissions as $permission) {
+                $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
+                        ->where('permission_id', $permission->id)
+                        ->first();
+
+                if(!is_null($rolePermission)){
+                    $collection->push($rolePermission);
+                }
+
+            }
+
+            
+            // dd($collection);
+
+            return !is_null($collection) ? true : false;
         }
     }
 
