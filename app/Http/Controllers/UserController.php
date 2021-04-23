@@ -104,24 +104,16 @@ class UserController extends Controller
 
                 $title_subheading  = $slug_info[0]['title_subheading'];
                 $title_icon = $slug_info[0]['title_icon'];
-                
-
         
             } else {
 
-                if ($show == 'team') {
-                    $view = 'team';
+                $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
 
-                    return view($view);
-                }  else {
-                    $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
-    
-                    
-                    $title_subheading  = "Link not available in your profile or still under construction";
-                    $title_icon = 'home';
-    
-                    $view = 'profiles.' . $mode . '.index';
-                }
+                
+                $title_subheading  = "Link not available in your profile or still under construction";
+                $title_icon = 'home';
+
+                $view = 'profiles.' . $mode . '.index';
             }
 
             $active_slug = $show;
