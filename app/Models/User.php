@@ -46,6 +46,9 @@ class User extends Authenticatable
 
     public function can_do($checkPermission)
     {
+        if($checkPermission == 'team'){
+            return true;
+        }
         $permission = Permission::where('slug', $checkPermission)->first();
 
         if(is_null($permission)) {
