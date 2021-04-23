@@ -109,13 +109,20 @@ class UserController extends Controller
         
             } else {
 
-                $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
-                $title_subheading  = "Link not available in your profile or still under construction";
-                $title_icon = 'home';
+                if ($show == 'team') {
+                    $view = 'team';
 
-                $view = 'profiles.' . $mode . '.index';
+                    return view($view);
+                }  else {
+                    $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
+    
+                    
+                    $title_subheading  = "Link not available in your profile or still under construction";
+                    $title_icon = 'home';
+    
+                    $view = 'profiles.' . $mode . '.index';
+                }
             }
-
 
             $active_slug = $show;
 
