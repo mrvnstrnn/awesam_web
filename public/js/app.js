@@ -157,18 +157,18 @@ $(document).ready(() => {
 
   // Responsive
 
-  var resizeClass = function () {
-    var win = document.body.clientWidth;
-    if (win < 1250) {
-      $(".app-container").addClass("closed-sidebar-mobile closed-sidebar");
-    } else {
-      $(".app-container").removeClass("closed-sidebar-mobile closed-sidebar");
-    }
-  };
+  // var resizeClass = function () {
+  //   var win = document.body.clientWidth;
+  //   if (win < 1250) {
+  //     $(".app-container").addClass("closed-sidebar-mobile closed-sidebar");
+  //   } else {
+  //     $(".app-container").removeClass("closed-sidebar-mobile closed-sidebar");
+  //   }
+  // };
 
-  $(window).on("resize", function () {
-    resizeClass();
-  });
+  // $(window).on("resize", function () {
+  //   resizeClass();
+  // });
 
-  resizeClass();
+  // resizeClass();
 });

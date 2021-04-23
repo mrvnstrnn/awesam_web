@@ -61,4 +61,12 @@ class User extends Authenticatable
             return !is_null($rolePermission) ? true : false;
         }
     }
+
+    public function getAllNavigation()
+    {
+        return RolePermission::join('permissions', 'permissions.id', 'role_permissions.permission_id')
+                                        ->join('roles', 'roles.id', 'role_permissions.role_id')
+                                        ->where('role_permissions.role_id', \Auth::user()->role_id);
+                                        // ->get();
+    }
 }
