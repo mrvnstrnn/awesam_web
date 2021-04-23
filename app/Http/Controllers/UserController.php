@@ -94,6 +94,8 @@ class UserController extends Controller
             ])
             ->get();
 
+            // dd($slug_info);
+
             if(count($role)>0){
                 if(count($path) >= 3){
                     $view = $slug_info[0]['view'] . "_param";

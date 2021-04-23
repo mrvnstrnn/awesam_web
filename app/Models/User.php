@@ -46,7 +46,8 @@ class User extends Authenticatable
 
     public function can_do($checkPermission)
     {
-        $permission = Permission::where('slug', $checkPermission)->first();
+        $permission = Permission::where('slug', $checkPermission)
+                                    ->first();
 
         if(is_null($permission)) {
             return false;
