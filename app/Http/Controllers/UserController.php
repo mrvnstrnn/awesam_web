@@ -93,8 +93,9 @@ class UserController extends Controller
                 ['slug', '=', $show]
             ])
             ->get();
+            
 
-            // dd($slug_info);
+                                // dd($slug_info);
 
             if(count($role)>0){
                 if(count($path) >= 3){
