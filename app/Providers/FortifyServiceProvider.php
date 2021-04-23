@@ -53,7 +53,11 @@ class FortifyServiceProvider extends ServiceProvider
 
         // AUTHENTICATION
 
-        Fortify::loginView(fn () => view('auth.login'));
+        // Fortify::loginView(fn () => view('auth.login'));
+
+        Fortify::loginView(function () {
+            return view('auth.login');
+        });
 
 
         Fortify::authenticateUsing(function (Request $request) {
@@ -67,7 +71,11 @@ class FortifyServiceProvider extends ServiceProvider
     
         // REGISTRATION
 
-        Fortify::registerView(fn () => view('auth.register'));
+        // Fortify::registerView(fn () => view('auth.register'));
+
+        Fortify::registerView(function () {
+            return view('auth.register');
+        });
     
         // FORGOT PASSWORD
 
@@ -85,7 +93,11 @@ class FortifyServiceProvider extends ServiceProvider
         
         // EMAIL VERIFICATION
 
-        Fortify::verifyEmailView(fn () => view('auth.verify-email'));
+        // Fortify::verifyEmailView(fn () => view('auth.verify-email'));
+
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
 
 
 

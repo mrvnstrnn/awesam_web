@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Permission;
+use App\Models\RolePermission;
 
 class User extends Authenticatable
 {
@@ -20,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -40,4 +43,27 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function can_do($checkPermission)
+    {
+        $permission = Permission::where('slug', $checkPermission)->first();
+
+        if(is_null($permission)) {
+            return false;
+        } else {
+            $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
+                    ->where('permission_id', $permission->id)
+                    ->first();
+
+            return !is_null($rolePermission) ? true : false;
+        }
+    }
+
+    public function getAllNavigation()
+    {
+        return RolePermission::join('permissions', 'permissions.id', 'role_permissions.permission_id')
+                                        ->join('roles', 'roles.id', 'role_permissions.role_id')
+                                        ->where('role_permissions.role_id', \Auth::user()->role_id);
+                                        // ->get();
+    }
 }

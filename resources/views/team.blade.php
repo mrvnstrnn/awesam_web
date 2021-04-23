@@ -105,7 +105,7 @@
                 <img src="/images/team/romark-limtingco.jpg" alt="Romark Limtingco" width="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
-                    <h4>RAM</h4>
+                    <h4>DOC</h4>
                     <p class="menu-header-subtitle">Romark Limtingco</p>
                     <small>ETL Developer</small>
                 </div>
