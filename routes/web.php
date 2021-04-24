@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
 
 
 /*
@@ -16,7 +18,6 @@ use App\Http\Controllers\UserController;
 */
 
 //ROUTE TO USER'S HOME
-
 Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified']);
 
 Route::view('/team', 'team');
