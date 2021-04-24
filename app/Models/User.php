@@ -54,9 +54,6 @@ class User extends Authenticatable
         if(is_null($permissions)) {
             return false;
         } else {
-
-
-
             foreach ($permissions as $permission) {
                 $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
                         ->where('permission_id', $permission->id)
@@ -65,13 +62,9 @@ class User extends Authenticatable
                 if(!is_null($rolePermission)){
                     $collection->push($rolePermission);
                 }
-
             }
-
             
-            // dd($collection);
-
-            return !is_null($collection) ? true : false;
+            return count($collection->all()) > 0 ? true : false;
         }
     }
 
