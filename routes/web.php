@@ -20,7 +20,7 @@ use App\Http\Controllers\UserController;
 Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified']);
 
 Route::view('/team', 'team');
-Route::view('/onboarding', 'onboarding');
+Route::get('/onboarding', [UserController::class, 'onboarding']);
 //ROUTE TO SLUG 
 //USERCONTROLLER WILL TAKE OVER THE ROUTING 
 Route::get('/{slug}', [UserController::class, 'show'])

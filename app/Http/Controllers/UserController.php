@@ -18,35 +18,39 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
+    public function onboarding()
+    {
+        if(is_null(\Auth::user()->role_id)){
+            return view('profiles.enrollment');
+        } else {
+            return redirect('/');
+        }
+    }
+
 
     public function index()
     {
-
-        $mode = Auth::user()->mode;
-        $profile = Auth::user()->profile;
-
-        $role = \Auth::user()->getAllNavigation()->get();
-
-        if($mode == null && $profile == null){
-
-            return view('profiles.enrollment');
-
-        }
-        else {
+        if(is_null(\Auth::user()->role_id)){
+            return redirect('/onboarding');
+        } else {
+            $role = \Auth::user()->getAllNavigation()->get();
+            $mode = $role[0]->mode;
+            $profile = $role[0]->profile;
+            
             $title = ucwords(Auth::user()->name);
-            $title_subheading  = ucwords($role[0]->mode . " : " . $role[0]->profile);
+            $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
             $title_icon = 'home';
     
             $active_slug = "";
     
-            $profile_menu = self::getProfileMenuLinks($role[0]->mode, $role[0]->profile);
+            $profile_menu = self::getProfileMenuLinks();
 
-            $profile_direct_links = self::getProfileMenuDirectLinks($role[0]->mode, $role[0]->profile);
+            $profile_direct_links = self::getProfileMenuDirectLinks();
                 
-            $program_direct_links = self::getProgramMenuDirectLinks($role[0]->mode, $role[0]->profile);
+            $program_direct_links = self::getProgramMenuDirectLinks();
     
             
-            return view('profiles.' . $role[0]->mode . '.index', 
+            return view('profiles.' . $mode . '.index', 
                 compact(
                     'mode',
                     'profile',
@@ -68,16 +72,15 @@ class UserController extends Controller
 
     public function show($show = null, Request $request){
 
-
-        $path = explode('/', $show);
-
-// FIX USER CONTROLLER
-
-        // LIMIT TWO LEVELS OF SLUGS FOR PAGES
-        // USE THIRD SLUG LEVEL AS PARAMETER
-        if(count($path) >= 3){
-            $show = $path[0]."/".$path[1];
-        }
+        if(is_null(\Auth::user()->role_id)){
+            return redirect('/onboarding');
+        } else {
+            $path = explode('/', $show);
+            // LIMIT TWO LEVELS OF SLUGS FOR PAGES
+            // USE THIRD SLUG LEVEL AS PARAMETER
+            if(count($path) >= 3){
+                $show = $path[0]."/".$path[1];
+            }
 
             $role = \Auth::user()->getAllNavigation()
                                     ->where('permissions.slug', $show)
@@ -92,10 +95,10 @@ class UserController extends Controller
                     $title = $path[2];
                 } else if (count($path) == 2) {
                     $title = $role[0]->title;
-                    $view = 'profiles' . '.' .$role[0]->mode. '.index';
+                    $view = 'profiles' . '.' .$mode. '.index';
                 } else {
                     $title = $role[0]->title;
-                    $view = 'profiles' . '.' .$role[0]->mode. '.' .end($path);
+                    $view = 'profiles' . '.' .$mode. '.' .end($path);
                 }
 
                 $title_subheading  = $role[0]->title_subheading;
@@ -105,7 +108,7 @@ class UserController extends Controller
                 $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
                 $title_subheading  = "Link not available in your profile or still under construction";
                 $title_icon = 'home';
-                $view = 'profiles.' . $role[0]->mode . '.index';
+                $view = 'profiles.' . $mode . '.index';
             }
 
 
@@ -130,6 +133,7 @@ class UserController extends Controller
                     'title_icon'
                 )
             );
+        }
 
     }
 
