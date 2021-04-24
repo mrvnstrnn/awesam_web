@@ -16,25 +16,25 @@ class PermissionSeeder extends Seeder
     {
         // 'mode', 'menu', 'slug', 'title', 'sub title', 'levle_one', 'level_two', 'level_three'
         $data = [
-            ['STS Endorsements', 'sts-endorsements', 'STS Endorsements', 'New sites from STS', 'profile_menu', 'tasks', ''],
-            ['Document Approval', 'document-approval', 'Document Approval', 'Document management and validation', 'profile_menu', 'tasks', ''],
-            ['Issue Approval', 'issue-approval', 'Issue Approval', 'Issue management and validation', 'profile_menu', 'tasks', ''],
-            ['Calendar', 'calendar', 'My Calendar', 'Activities tracker', 'profile_menu', 'schedule', ''],
-            ['Tasks', 'tasks', 'My Tasks', 'Tasks tracker', 'profile_menu', 'schedule', ''],
-            ['Requests', 'requests', 'My Requests', 'Request tracker', 'profile_menu', 'schedule', ''],
-            ['Calendar', 'calendar', 'Team Calendar', 'Activities tracker', 'profile_menu', 'schedule', ''],
-            ['Team Tasks', 'tasks', 'Team Tasks', 'Team task management', 'profile_menu', 'tasks', ''],
-            ['Requests', 'requests', 'Team Requests', 'Request tracker', 'profile_menu', 'schedule', ''],
-            ['Agents', 'agents', 'My Team', 'Supervisor\'s team management', 'profile_menu', 'agents', ''],
-            ['Dashboard', 'coloc', 'COLOC Dashboard', 'Colocation Service Management', 'program_menu', 'Colocation', ''],
-            ['Universe', 'coloc/universe', 'COLOC Universe', 'Colocation Service Complete Sites', 'program_menu', 'Colocation', ''],
-            ['Descoped', 'coloc/descoped', 'COLOC Descoped', 'Colocation Service Descoped Sites', 'program_menu', 'Colocation', ''],
-            ['Dashboard', 'ibs', 'IBS Dashboard', 'In-Building Service Management', 'program_menu', 'In-Building', ''],
-            ['Universe', 'ibs/universe', 'IBS Universe', 'In-Building Service Complete Sites', 'program_menu', 'In-Building', ''],
-            ['Descoped', 'ibs/descoped', 'IBS Descoped', 'In-Building Service Descoped Sites', 'program_menu', 'In-Building', ''],
-            ['Dashboard', 'wireless', 'Wireless Dashboard', 'Wireless Service Management', 'program_menu', 'Wireless', ''],
-            ['Universe', 'wireless/universe', 'Wireless Universe', 'Wireless Service Complete Sites', 'program_menu', 'Wireless', ''],
-            ['Descoped', 'wireless/descoped', 'Wireless Descoped', 'Wireless Service Descoped Sites', 'program_menu', 'Wireless', ''],
+            ['STS Endorsements', 'sts-endorsements', 'STS Endorsements', 'New sites from STS', 'profile_menu', 'tasks', '', ''],
+            ['Document Approval', 'document-approval', 'Document Approval', 'Document management and validation', 'profile_menu', 'tasks', '', ''],
+            ['Issue Approval', 'issue-approval', 'Issue Approval', 'Issue management and validation', 'profile_menu', 'tasks', '', ''],
+            ['Calendar', 'calendar', 'My Calendar', 'Activities tracker', 'profile_menu', 'schedule', '', 'date'],
+            ['Tasks', 'tasks', 'My Tasks', 'Tasks tracker', 'profile_menu', 'schedule', '', 'network'],
+            ['Requests', 'requests', 'My Requests', 'Request tracker', 'profile_menu', 'schedule', '', 'network'],
+            ['Calendar', 'calendar', 'Team Calendar', 'Activities tracker', 'profile_menu', 'schedule', '', 'date'],
+            ['Team Tasks', 'tasks', 'Team Tasks', 'Team task management', 'profile_menu', 'tasks', '', 'network'],
+            ['Requests', 'requests', 'Team Requests', 'Request tracker', 'profile_menu', 'schedule', '', 'network'],
+            ['Agents', 'agents', 'My Team', 'Supervisor\'s team management', 'profile_menu', 'agents', '', 'users'],
+            ['Dashboard', 'coloc', 'COLOC Dashboard', 'Colocation Service Management', 'program_menu', 'Colocation', '', 'box2'],
+            ['Universe', 'coloc/universe', 'COLOC Universe', 'Colocation Service Complete Sites', 'program_menu', 'Colocation', '', 'box2'],
+            ['Descoped', 'coloc/descoped', 'COLOC Descoped', 'Colocation Service Descoped Sites', 'program_menu', 'Colocation', '', 'box2'],
+            ['Dashboard', 'ibs', 'IBS Dashboard', 'In-Building Service Management', 'program_menu', 'In-Building', '', 'box2'],
+            ['Universe', 'ibs/universe', 'IBS Universe', 'In-Building Service Complete Sites', 'program_menu', 'In-Building', '', 'box2'],
+            ['Descoped', 'ibs/descoped', 'IBS Descoped', 'In-Building Service Descoped Sites', 'program_menu', 'In-Building', '', 'box2'],
+            ['Dashboard', 'wireless', 'Wireless Dashboard', 'Wireless Service Management', 'program_menu', 'Wireless', '', 'box2'],
+            ['Universe', 'wireless/universe', 'Wireless Universe', 'Wireless Service Complete Sites', 'program_menu', 'Wireless', '', 'box2'],
+            ['Descoped', 'wireless/descoped', 'Wireless Descoped', 'Wireless Service Descoped Sites', 'program_menu', 'Wireless', '', 'box2'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
@@ -46,6 +46,7 @@ class PermissionSeeder extends Seeder
                 'level_one' => $data[$i][4],
                 'level_two' => $data[$i][5],
                 'level_three' => $data[$i][6],
+                'icon' => $data[$i][7],
             ]);
         }
     }
