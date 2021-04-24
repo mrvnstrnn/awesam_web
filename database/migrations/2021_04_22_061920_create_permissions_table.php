@@ -22,6 +22,7 @@ class CreatePermissionsTable extends Migration
             $table->string('level_one')->nullable();
             $table->string('level_two')->nullable();
             $table->string('level_three')->nullable();
+            $table->string('icon')->nullable();
 
             $table->timestamps();
         });
