@@ -2,9 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
-use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +18,7 @@ use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
 Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified']);
 
 Route::view('/team', 'team');
-Route::get('/onboarding', [UserController::class, 'onboarding']);
+Route::get('/onboarding', [UserController::class, 'onboarding'])->middleware(['auth', 'verified']);
 //ROUTE TO SLUG 
 //USERCONTROLLER WILL TAKE OVER THE ROUTING 
 Route::get('/{slug}', [UserController::class, 'show'])
