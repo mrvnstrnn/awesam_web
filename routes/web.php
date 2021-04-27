@@ -15,10 +15,21 @@ use App\Http\Controllers\UserController;
 */
 
 //ROUTE TO USER'S HOME
-Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified']);
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/onboarding', [UserController::class, 'onboarding']);
+    Route::get('/invite', [UserController::class, 'invitation'])->name('invite.employee');
+    Route::post('/send-invitation', [UserController::class, 'send_invitation'])->name('invite.send');
+});
+
+
+Route::get('/invitation-link/{token}/{invitation_code}', [UserController::class, 'invitation_registration'])->name('invite.link')->middleware(['invitation']);
 
 Route::view('/team', 'team');
-Route::get('/onboarding', [UserController::class, 'onboarding'])->middleware(['auth', 'verified']);
+Route::view('/invalid-invitation', 'invalid-invitation');
+
+
+
 //ROUTE TO SLUG 
 //USERCONTROLLER WILL TAKE OVER THE ROUTING 
 Route::get('/{slug}', [UserController::class, 'show'])

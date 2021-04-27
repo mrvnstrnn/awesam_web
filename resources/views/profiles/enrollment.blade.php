@@ -1,10 +1,8 @@
 @extends('layouts.enrollment')
 
 @section('content')
-
         <div class="row  vw-100 mt-4">
             <div class="col-lg-8 col-md-10 offset-md-1 offset-lg-2">
-
                 <div class="main-card mb-3 card">
                     <div class="card-body">
                         <div id="smartwizard" class="sw-main sw-theme-default">
