@@ -171,6 +171,8 @@
 
     <script type="text/javascript" src="/js/calendar.js"></script>
 
+    @yield('js_script')
+
 
     @yield('modals')
 </body>
