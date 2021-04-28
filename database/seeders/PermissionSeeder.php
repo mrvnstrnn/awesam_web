@@ -35,6 +35,7 @@ class PermissionSeeder extends Seeder
             ['Dashboard', 'wireless', 'Wireless Dashboard', 'Wireless Service Management', 'program_menu', 'Wireless', '', 'box2'],
             ['Universe', 'wireless/universe', 'Wireless Universe', 'Wireless Service Complete Sites', 'program_menu', 'Wireless', '', 'box2'],
             ['Descoped', 'wireless/descoped', 'Wireless Descoped', 'Wireless Service Descoped Sites', 'program_menu', 'Wireless', '', 'box2'],
+            ['Invite', 'invite', 'Invite', 'Invite employee to the company', 'profile_menu', 'invite', '', 'paper-plane'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
