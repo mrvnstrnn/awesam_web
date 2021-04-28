@@ -7,16 +7,23 @@ $(document).ready(() => {
             data: $("#invitation_form").serialize(),
             success: function (resp) {
                 if(!resp.error) {
-                    console.log(resp.message);
+                    toastr.success(resp.message, 'Success');
                     $("#invite_btn").text('Invite');
                 } else {
-                    console.log(resp.message);
+                    
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("#" + index + "-error").text(data);
+                        });
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
                     $("#invite_btn").text('Invite');
                 }
             },
 
             error: function (resp) {
-                console.log(resp.message);
+                toastr.error(resp.message, 'Error');
             }
         });
     });

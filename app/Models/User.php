@@ -78,4 +78,14 @@ class User extends Authenticatable implements MustVerifyEmail
                                         ->where('role_permissions.role_id', \Auth::user()->role_id);
                                         // ->get();
     }
+
+    public function getUserRole()
+    {
+        return Role::find(\Auth::user()->role_id);
+    }
+
+    public function getCompany($id)
+    {
+        return Company::find($id);
+    }
 }
