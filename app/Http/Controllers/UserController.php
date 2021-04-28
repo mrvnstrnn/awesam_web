@@ -101,8 +101,6 @@ class UserController extends Controller
 
                 $useCheck = Invitation::where('mode', $request->input('mode'))
                                             ->where('company_id', $request->input('company'))
-                                            ->where('firstname', $request->input('firstname'))
-                                            ->where('lastname', $request->input('lastname'))
                                             ->where('email', $request->input('email'))
                                             ->first();
 
