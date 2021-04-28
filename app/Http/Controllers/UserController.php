@@ -45,34 +45,34 @@ class UserController extends Controller
         ));
     }
 
-    public function invitation()
-    {
-        $role = \Auth::user()->getAllNavigation()->get();
-        $mode = $role[0]->mode;
-        $profile = $role[0]->profile;
-        $active_slug = "invite.employee";
+    // public function invitation()
+    // {
+    //     $role = \Auth::user()->getAllNavigation()->get();
+    //     $mode = $role[0]->mode;
+    //     $profile = $role[0]->profile;
+    //     $active_slug = "invite.employee";
 
-        $title = ucwords(Auth::user()->name);
-        $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
-        $title_icon = 'paper-plane';
+    //     $title = ucwords(Auth::user()->name);
+    //     $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
+    //     $title_icon = 'paper-plane';
 
-        $profile_menu = self::getProfileMenuLinks();
+    //     $profile_menu = self::getProfileMenuLinks();
 
-        $profile_direct_links = self::getProfileMenuDirectLinks();
+    //     $profile_direct_links = self::getProfileMenuDirectLinks();
             
-        $program_direct_links = self::getProgramMenuDirectLinks();
-        return view('profiles.vendor.invite', compact(
-            'mode',
-            'profile',
-            'active_slug',
-            'profile_menu',
-            'profile_direct_links',
-            'program_direct_links',
-            'title', 
-            'title_subheading', 
-            'title_icon'
-        ));
-    }
+    //     $program_direct_links = self::getProgramMenuDirectLinks();
+    //     return view('profiles.vendor.invite', compact(
+    //         'mode',
+    //         'profile',
+    //         'active_slug',
+    //         'profile_menu',
+    //         'profile_direct_links',
+    //         'program_direct_links',
+    //         'title', 
+    //         'title_subheading', 
+    //         'title_icon'
+    //     ));
+    // }
 
     public function send_invitation(Request $request)
     {

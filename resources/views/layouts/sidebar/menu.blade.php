@@ -10,12 +10,12 @@
         </a>
     </li>
 
-    <li class="{{ \Route::currentRouteName() ==  $active_slug ? 'mm-active' : '' }}">
+    {{-- <li class="{{ \Route::currentRouteName() ==  $active_slug ? 'mm-active' : '' }}">
         <a class="{{ \Route::currentRouteName() == 'invite.employee' ? 'mm-active' : '' }}" href="{{ route('invite.employee') }}">
             <i class="metismenu-icon pe-7s-{{ $title_icon }}"></i>
             Invite
         </a>
-    </li>
+    </li> --}}
 
 
     @foreach ($profile_direct_links as $key => $mainmenus)
