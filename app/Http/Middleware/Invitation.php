@@ -17,15 +17,19 @@ class Invitation
      */
     public function handle(Request $request, Closure $next)
     {
-        $invitations = InvitationModel::where('token', $request->route('token'))
-                                    ->where('invitation_code', $request->route('invitation_code'))
-                                    ->first();
-
-        if (is_null($invitations)){
-            abort(403, 'Link is no longer valid.');
+        if(\Auth::check()) {
+            abort(403, 'There is user already login.');
         } else {
-            if ($invitations->use) {
-                abort(403, 'Link is already used.');
+        $invitations = InvitationModel::where('token', $request->route('token'))
+                                        ->where('invitation_code', $request->route('invitation_code'))
+                                        ->first();
+
+            if (is_null($invitations)){
+                abort(403, 'Link is no longer valid.');
+            } else {
+                if ($invitations->use) {
+                    abort(403, 'Link is already used.');
+                }
             }
         }
         return $next($request);
