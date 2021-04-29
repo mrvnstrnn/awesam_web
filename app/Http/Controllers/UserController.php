@@ -10,6 +10,10 @@ use App\Models\UserProfileMainMenu;
 use App\Models\RolePermission;
 use App\Models\Invitation;
 use App\Models\Company;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Hash;
+use Validator;
 
 // use Illuminate\Support\Facades\DB;
 
@@ -27,6 +31,29 @@ class UserController extends Controller
             return view('profiles.enrollment');
         } else {
             return redirect('/');
+        }
+    }
+
+    public function change_password(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'password' => ['required', 'min:8', 'confirmed:confirm-password'],
+            ));
+
+            if ($validate->passes()) {
+                User::where('id', \Auth::user()->id)
+                        ->update([
+                            'password' => Hash::make($request->input('password')),
+                            'first_time_login' => 1
+                        ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully updated password." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
 

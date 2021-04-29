@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/onboarding', [UserController::class, 'onboarding']);
     // Route::get('/invite', [UserController::class, 'invitation'])->name('invite.employee');
     Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
+    Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
 });
 
 
