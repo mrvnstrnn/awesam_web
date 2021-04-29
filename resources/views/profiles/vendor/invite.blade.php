@@ -14,6 +14,7 @@
                             <div class="position-relative form-group">
                                 <label for="firstname" class="">Firstname</label>
                                 <input name="firstname" id="firstname" placeholder="John" type="text" class="form-control">
+                                <small id="firstname-error" class="text-danger"></small>
                             </div>
                         </div>
 
@@ -21,6 +22,7 @@
                             <div class="position-relative form-group">
                                 <label for="lastname" class="">Lastname</label>
                                 <input name="lastname" id="lastname" placeholder="Doe" type="text" class="form-control">
+                                <small id="lastname-error" class="text-danger"></small>
                             </div>
                         </div>
                     </div>
@@ -29,18 +31,20 @@
                             <div class="position-relative form-group">
                                 <label for="email" class="">Email</label>
                                 <input name="email" id="email" placeholder="johndoe@gmail.com" type="email" class="form-control">
+                                <small id="email-error" class="text-danger"></small>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="mode" class="">Mode</label>
-                                <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="Vendor">
+                                <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="{{ ucfirst(\Auth::user()->getUserRole()->first()->mode) }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="company" class="">Company</label>
-                                <input name="company" id="company" placeholder="Company" type="text" class="form-control" value="2">
+                                <input name="company" id="company" value="{{ \Auth::user()->getCompany(2)->company_name }}" type="text" class="form-control" readonly>
+                                <input name="company_hidden" id="company_hidden" type="hidden" class="form-control" value="2" readonly>
                             </div>
                         </div>
                     </div>
