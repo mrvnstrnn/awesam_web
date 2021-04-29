@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddModeProfileColumnsToUsersTable extends Migration
+class AddFirstLastname extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,8 @@ class AddModeProfileColumnsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('mode')
-                    ->after('email_verified_at')
-                    ->nullable();
-
-            $table->text('profile')
-                    ->after('mode')
-                    ->nullable();
+            $table->string('firstname')->after('id');
+            $table->string('lastname')->after('firstname');
         });
     }
 
@@ -31,8 +26,6 @@ class AddModeProfileColumnsToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('mode', 'profile');
-        });
+        Schema::dropIfExists('users');
     }
 }

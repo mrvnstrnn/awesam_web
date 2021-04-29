@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Permission;
 use App\Models\RolePermission;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -19,10 +19,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'firstname',
+        'lastname',
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'email_verified_at'
     ];
 
     /**
@@ -54,9 +57,6 @@ class User extends Authenticatable
         if(is_null($permissions)) {
             return false;
         } else {
-
-
-
             foreach ($permissions as $permission) {
                 $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
                         ->where('permission_id', $permission->id)
@@ -65,13 +65,9 @@ class User extends Authenticatable
                 if(!is_null($rolePermission)){
                     $collection->push($rolePermission);
                 }
-
             }
-
             
-            // dd($collection);
-
-            return !is_null($collection) ? true : false;
+            return count($collection->all()) > 0 ? true : false;
         }
     }
 
@@ -81,5 +77,15 @@ class User extends Authenticatable
                                         ->join('roles', 'roles.id', 'role_permissions.role_id')
                                         ->where('role_permissions.role_id', \Auth::user()->role_id);
                                         // ->get();
+    }
+
+    public function getUserRole()
+    {
+        return Role::find(\Auth::user()->role_id);
+    }
+
+    public function getCompany($id)
+    {
+        return Company::find($id);
     }
 }

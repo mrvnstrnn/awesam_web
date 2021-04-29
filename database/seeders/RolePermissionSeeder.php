@@ -41,6 +41,8 @@ class RolePermissionSeeder extends Seeder
             ['7', '9'],
             ['7', '8'],
             ['7', '7'],
+
+            ['6', '20'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 

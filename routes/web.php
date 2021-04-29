@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\InviteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +16,19 @@ use App\Http\Controllers\UserController;
 */
 
 //ROUTE TO USER'S HOME
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/onboarding', [UserController::class, 'onboarding']);
+    // Route::get('/invite', [UserController::class, 'invitation'])->name('invite.employee');
+    Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
+    Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
+});
 
-Route::get('/', [UserController::class, 'index'])->middleware(['auth', 'verified']);
+
+Route::get('/invitation-link/{token}/{invitation_code}', [InviteController::class, 'invitation_registration'])->name('invite.link')->middleware(['invitation']);
 
 Route::view('/team', 'team');
+
 //ROUTE TO SLUG 
 //USERCONTROLLER WILL TAKE OVER THE ROUTING 
 
