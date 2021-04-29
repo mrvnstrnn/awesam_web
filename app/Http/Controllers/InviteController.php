@@ -12,6 +12,8 @@ use App\Mail\GTInvitationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\UserDetail;
+use App\Models\Company;
+use App\Models\Invitation;
 
 class InviteController extends Controller
 {
@@ -27,6 +29,8 @@ class InviteController extends Controller
 
             if(\Auth::user()->getUserRole()->profile == 'GT Admin') {
                 $unique = 'unique:users';
+            } else {
+                $unique = '';
             }
 
             $validate = Validator::make($request->all(), array(
