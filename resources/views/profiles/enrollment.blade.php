@@ -125,7 +125,7 @@
     </div>
 
     <input type="hidden" name="firsttime_login" id="firsttime_login" value="{{ \Auth::user()->first_time_login }}">
-    <input type="hiddenc" name="user_detail" id="user_detail" value="{{ \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first() }}">
+    <input type="hidden" name="user_detail" id="user_detail" value="{{ $user_details ? $user_details : '' }}">
 @endsection
 
 @section('modals')

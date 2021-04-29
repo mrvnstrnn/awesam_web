@@ -32,7 +32,9 @@ class UserController extends Controller
         if(is_null(\Auth::user()->role_id)){
             $locate = Location::select('region');
             $locations = $locate->groupBy('region')->get();
-            return view('profiles.enrollment', compact('locations'));
+
+            $user_details = \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first();
+            return view('profiles.enrollment', compact('locations', 'user_details'));
         } else {
             return redirect('/');
         }
