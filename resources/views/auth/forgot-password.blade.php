@@ -40,7 +40,7 @@
                     </div>
                     <div class="divider"></div>
                     <h6 class="mb-0">
-                        <a href="javascript:void(0);" class="text-primary">Sign in existing account</a>
+                        <a href="{{ route('login') }}" class="text-primary">Sign in existing account</a>
                     </h6>
                 </div>
                 <div class="modal-footer d-block text-center">

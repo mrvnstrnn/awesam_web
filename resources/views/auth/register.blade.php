@@ -68,7 +68,7 @@
                     <h6 class="mb-0">
                         Already have an account?
     
-                        <a href="javascript:void(0);" class="text-primary">Sign in</a> |
+                        <a href="{{ route('login') }}" class="text-primary">Sign in</a> |
                         @if (Route::has('password.request'))
                             <a class="text-primary" href="{{ route('password.request') }}">
                                 {{ __('Recover Password?') }}
