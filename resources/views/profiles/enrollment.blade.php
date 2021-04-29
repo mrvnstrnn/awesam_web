@@ -7,158 +7,117 @@
                 <div class="card-body">
                     <div id="smartwizard" class="sw-main sw-theme-default">
                         <ul class="forms-wizard nav nav-tabs step-anchor">
-                            <li class="nav-item active">
+                            <li class="nav-item step-1-li active">
                                 <a href="#step-1" class="nav-link">
                                     <em>1</em>
                                     <span>User Information</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item step-2-li">
                                 <a href="#step-2" class="nav-link">
                                     <em>2</em>
                                     <span>Profile Information</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item step-3-li">
                                 <a href="#step-3" class="nav-link">
                                     <em>3</em>
                                     <span>Finish Registration</span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="form-wizard-content sw-container tab-content" style="min-height: 353px;">
-                            <div id="step-1" class="tab-pane step-content" style="display: block;">
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="position-relative form-group">
-                                            <label for="exampleEmail55">Email</label>
-                                            <input name="email" id="exampleEmail55" placeholder="with a placeholder" type="email" class="form-control">
+                        <div class="form-wizard-content sw-container tab-content d-block" style="min-height: 353px;">
+                            <form id="onboardingForm">
+                                <div id="step-1" class="tab-pane step-content">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="firstname">Firstname</label>
+                                                <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="position-relative form-group">
-                                            <label for="examplePassword22">Password</label>
-                                            <input name="password" id="examplePassword22" placeholder="password placeholder" type="password" class="form-control">
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="lastname">Lastname</label>
+                                                <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative form-group">
-                                    <label for="exampleAddress">Address</label>
-                                    <input name="address" id="exampleAddress" placeholder="1234 Main St" type="text" class="form-control">
-                                </div>
-                                <div class="position-relative form-group">
-                                    <label for="exampleAddress2">Address 2</label>
-                                    <input name="address2" id="exampleAddress2" placeholder="Apartment, studio, or floor" type="text" class="form-control">
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="position-relative form-group">
-                                            <label for="exampleCity">City</label>
-                                            <input name="city" id="exampleCity" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="position-relative form-group">
-                                            <label for="exampleState">State</label>
-                                            <input name="state" id="exampleState" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="position-relative form-group">
-                                            <label for="exampleZip">Zip</label>
-                                            <input name="zip" id="exampleZip" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative form-check">
-                                    <input name="check" id="exampleCheck" type="checkbox" class="form-check-input">
-                                    <label for="exampleCheck" class="form-check-label">Check me out</label>
-                                </div>
-                            </div>                                
-                            <div id="step-2" class="tab-pane step-content">
-                                <div id="accordion" class="accordion-wrapper mb-3">
-                                    <div class="card">
-                                        <div id="headingOne" class="card-header">
-                                            <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link btn-block">
-                                                <span class="form-heading">Profile Information
-                                                    <p>Enter your user informations below</p>
-                                                </span>
-                                            </button>
-                                        </div>
-                                        <div data-parent="#accordion" id="collapseOne" aria-labelledby="headingOne" class="collapse show">
-                                            <div class="card-body">
-                                                <div class="form-row">
-                                                    <div class="col-md-6">
-                                                        <div class="position-relative form-group">
-                                                            <label for="exampleEmail2">Email</label>
-                                                            <input name="email" id="exampleEmail2" placeholder="with a placeholder" type="email" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="position-relative form-group">
-                                                            <label for="examplePassword">Password</label>
-                                                            <input name="password" id="examplePassword" placeholder="password placeholder" type="password" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="position-relative form-group">
-                                                    <label for="exampleAddress">Address</label>
-                                                    <input name="address" id="exampleAddress" placeholder="1234 Main St" type="text" class="form-control">
-                                                </div>
-                                                <div class="position-relative form-group">
-                                                    <label for="exampleAddress2">Address 2</label>
-                                                    <input name="address2" id="exampleAddress2" placeholder="Apartment, studio, or floor" type="text" class="form-control">
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-6">
-                                                        <div class="position-relative form-group">
-                                                            <label for="exampleCity">City</label>
-                                                            <input name="city" id="exampleCity" type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="position-relative form-group">
-                                                            <label for="exampleState">State</label>
-                                                            <input name="state" id="exampleState" type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="position-relative form-group">
-                                                            <label for="exampleZip">Zip</label>
-                                                            <input name="zip" id="exampleZip" type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="email">Email</label>
+                                                <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div id="step-3" class="tab-pane step-content">
-                                <div class="no-results">
-                                    <div class="swal2-icon swal2-success swal2-animate-success-icon">
-                                        <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
-                                        <span class="swal2-success-line-tip"></span>
-                                        <span class="swal2-success-line-long"></span>
-                                        <div class="swal2-success-ring"></div>
-                                        <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
-                                        <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="region">Region</label>
+                                                <select class="form-control" name="address" id="region">
+                                                    <option value="">Please select region</option>
+                                                    @foreach ($locations as $location)
+                                                    <option value="{{ $location->region }}">{{ $location->region }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="province">Province</label>
+                                                <select class="form-control" name="address" id="province" disabled required></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="lgu">City</label>
+                                                <select class="form-control" name="address" id="lgu" disabled required></select>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="results-subtitle mt-4">Finished!</div>
-                                    <div class="results-title">You arrived at the last form wizard step!</div>
-                                    <div class="mt-3 mb-3"></div>
-                                    <div class="text-center">
-                                        <button class="btn-shadow btn-wide btn btn-success btn-lg">Finish</button>
+                                    <div class="divider"></div>
+                                    <div class="clearfix">
+                                        <button type="button" id="reset-btn-1" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
+                                        <button type="button" id="next-btn-1" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Next</button>
+                                    </div>
+                                </div>                                
+                                <div id="step-2" class="tab-pane step-content d-none">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="region">Mode</label>
+                                                <input type="text" class="form-control" id="mode" name="mode" value="{{ \Auth::user()->getUserDetail()->first()->mode }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="clearfix">
+                                        <button type="button" id="reset-btn-2" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
+                                        <button type="button" id="finish-btn" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary" data-href="{{ route('finish.onboarding') }}">Finish</button>
+                                        <button type="button" id="prev-btn" class="btn-shadow btn-wide mr-2 float-right btn-pill btn-hover-shine btn btn-default">Previous</button>
                                     </div>
                                 </div>
-                            </div>
+                                <div id="step-3" class="tab-pane step-content  d-none">
+                                    <div class="no-results">
+                                        <div class="swal2-icon swal2-success swal2-animate-success-icon">
+                                            <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                                            <span class="swal2-success-line-tip"></span>
+                                            <span class="swal2-success-line-long"></span>
+                                            <div class="swal2-success-ring"></div>
+                                            <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                                            <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+                                        </div>
+                                        <div class="results-subtitle mt-4">Finished!</div>
+                                        <div class="results-title"></div>
+                                        <div class="mt-3 mb-3"></div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="hidden_route" id="hidden_route" value="{{ route('get.address') }}">
+                                <input type="hidden" name="hidden_region" id="hidden_region">
+                                <input type="hidden" name="hidden_province" id="hidden_province">
+                                <input type="hidden" name="hidden_lgu" id="hidden_lgu">
+                                <input type="hidden" id="hidden_mode" hidden_mode="mode" value="{{ \Auth::user()->getUserDetail()->first()->mode }}">
+                            </form>
                         </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="clearfix">
-                        <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link">Reset</button>
-                        <button type="button" id="next-btn" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Next</button>
-                        <button type="button" id="prev-btn" class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary">Previous</button>
                     </div>
                 </div>
             </div>                
@@ -166,6 +125,7 @@
     </div>
 
     <input type="hidden" name="firsttime_login" id="firsttime_login" value="{{ \Auth::user()->first_time_login }}">
+    <input type="hiddenc" name="user_detail" id="user_detail" value="{{ \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first() }}">
 @endsection
 
 @section('modals')
@@ -190,6 +150,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <a class="btn-shadow float-left btn btn-link reset-btn"
+                        href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                            Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                     <button type="button" class="btn btn-primary update_password" data-href="{{ route('update.password') }}">Update</button>
                 </div>
             </form>

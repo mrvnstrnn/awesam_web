@@ -11,6 +11,7 @@ use App\Mail\InvitationMail;
 use App\Mail\GTInvitationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\UserDetail;
 
 class InviteController extends Controller
 {
@@ -46,13 +47,18 @@ class InviteController extends Controller
 
                     $password = strtolower(substr($request->input('firstname'), 0, 1).substr($request->input('lastname'), 0, 1).$request->input('company').$randomString);
 
-                    User::create([
+                    $user = User::create([
                         'firstname' => $request->input('firstname'),
                         'lastname' => $request->input('lastname'),
                         'name' => $request->input('firstname'). ' ' .$request->input('lastname'),
                         'email' => $request->input('email'),
                         'email_verified_at' => Carbon::now()->toDate(),
                         'password' => Hash::make($password)
+                    ]);
+
+                    UserDetail::create([
+                        'user_id' => $user->id,
+                        'mode' => $request->input('mode'),
                     ]);
 
                     Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('company'), $email));
