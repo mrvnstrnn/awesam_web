@@ -94,4 +94,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Company::find($id);
     }
+
+    public function allRoles()
+    {
+        return Role::get();
+    }
 }
