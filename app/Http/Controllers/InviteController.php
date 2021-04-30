@@ -65,7 +65,7 @@ class InviteController extends Controller
                         'mode' => $request->input('mode'),
                     ]);
 
-                    Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('company'), $email));
+                    Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
 
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 }
