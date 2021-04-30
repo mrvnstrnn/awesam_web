@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Permission;
 use App\Models\RolePermission;
+use App\Models\UserDetail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -82,6 +83,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUserRole()
     {
         return Role::find(\Auth::user()->role_id);
+    }
+
+    public function getUserDetail()
+    {
+        return UserDetail::join('users', 'users.id', 'user_details.user_id')->where('user_details.user_id', \Auth::user()->id);
     }
 
     public function getCompany($id)

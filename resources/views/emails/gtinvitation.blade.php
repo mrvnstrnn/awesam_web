@@ -1,7 +1,7 @@
 @component('mail::message')
 Hi {{ $name }},
 
-This is your login invitation link from you company {{ $company }}.
+This is your login invitation link from you company {{ $mode }}.
 
 Email: {{ $email }}<br>
 Password: {{ $password }}

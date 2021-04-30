@@ -121,7 +121,7 @@
     <script type="text/javascript" src="/js/toastr.js"></script>
     <script type="text/javascript" src="/js/treeview.js"></script>
     <script type="text/javascript" src="/js/form-components/toggle-switch.js"></script>
-    <script type="text/javascript" src="/js/form-components/form-wizard.js"></script>
+    {{-- <script type="text/javascript" src="/js/form-components/form-wizard.js"></script> --}}
 
     <script type="text/javascript" src="/js/tables.js"></script>
     <script type="text/javascript" src="/js/carousel-slider.js"></script>
