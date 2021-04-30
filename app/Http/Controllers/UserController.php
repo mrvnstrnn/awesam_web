@@ -11,6 +11,8 @@ use App\Models\RolePermission;
 use App\Models\Invitation;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Location;
+use App\Models\UserDetail;
 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -25,10 +27,28 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
+    public function profile_switcher($role_id)
+    {
+        try {
+            User::where('id', \Auth::user()->id)
+                    ->update([
+                        'role_id' => $role_id
+                    ]);
+            
+            return redirect('/');
+        } catch (\Throwable $th) {
+            return abort(404, $th);
+        }
+    }
+
     public function onboarding()
     {
         if(is_null(\Auth::user()->role_id)){
-            return view('profiles.enrollment');
+            $locate = Location::select('region');
+            $locations = $locate->groupBy('region')->get();
+
+            $user_details = \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first();
+            return view('profiles.enrollment', compact('locations', 'user_details'));
         } else {
             return redirect('/');
         }
@@ -52,6 +72,51 @@ class UserController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function getAddress(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $val = $request->input('val');
+
+            if ($id == 'region') {
+                $select = "province";
+            } else if ($id == 'province') {
+                $select = "lgu";
+            } else {
+                $select = 'lgu';
+            }
+
+            $locate = Location::select($select)->where($id, $val);
+
+            $location = $locate->groupBy($select)->get();
+
+            
+            return response()->json(['error' => false, 'message' => $location, 'new_id' => $select ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function finish_onboarding(Request $request)
+    {
+        try {
+            $address = Location::where('province', $request->input('hidden_province'))
+                                    ->where('lgu', $request->input('hidden_lgu'))
+                                    ->where('region', $request->input('hidden_region'))
+                                    ->first();
+                                    
+
+            UserDetail::where('user_id', \Auth::user()->id)
+                            ->update([
+                                'address_id' => $address->id
+                            ]);
+
+            return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
@@ -91,12 +156,25 @@ class UserController extends Controller
         if(is_null(\Auth::user()->role_id)){
             return redirect('/onboarding');
         } else {
-            $role = \Auth::user()->getAllNavigation()->get();
-            $mode = $role[0]->mode;
-            $profile = $role[0]->profile;
+            // $role = \Auth::user()->getAllNavigation()->get();
+            
+            $role = \Auth::user()->getUserRole();
+            
+            // if(count($role) < 1){
+
+            //     $mode = $role->mode;
+            //     $profile = $role->profile;
+            // } else {
+            //     $mode = $role[0]->mode;
+            //     $profile = $role[0]->profile;
+            // }
+
+            $mode = $role->mode;
+            $profile = $role->profile;
+
             
             $title = ucwords(Auth::user()->name);
-            $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
+            $title_subheading  = ucwords($mode . " : " . $profile);
             $title_icon = 'home';
     
             $active_slug = "";

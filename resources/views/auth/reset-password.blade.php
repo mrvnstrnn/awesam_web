@@ -58,6 +58,7 @@
                                     placeholder="Repeat Password here..." type="password" class="form-control"> --}}
                             </div>
                         </div>
+                        <input type="hidden" name="token" value="{{ request()->route('token') }}">
                     </div>
                 </div>
                 <div class="modal-footer d-block text-center">

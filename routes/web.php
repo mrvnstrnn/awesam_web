@@ -19,9 +19,11 @@ use App\Http\Controllers\InviteController;
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/onboarding', [UserController::class, 'onboarding']);
-    // Route::get('/invite', [UserController::class, 'invitation'])->name('invite.employee');
+    Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');
     Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
     Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
+    Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
+    Route::get('/profile-switcher/{role_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
 });
 
 
@@ -37,5 +39,5 @@ Route::get('/{slug}', [UserController::class, 'show'])
     ->middleware(['auth', 'verified', 'navigation']);
 
 
-Route::view('/profile-switcher/{mode}/{profile}', 'welcome');
+// Route::view('/profile-switcher/{mode}/{profile}', 'welcome');
 

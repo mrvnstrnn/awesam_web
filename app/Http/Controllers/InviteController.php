@@ -11,6 +11,9 @@ use App\Mail\InvitationMail;
 use App\Mail\GTInvitationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\UserDetail;
+use App\Models\Company;
+use App\Models\Invitation;
 
 class InviteController extends Controller
 {
@@ -26,6 +29,8 @@ class InviteController extends Controller
 
             if(\Auth::user()->getUserRole()->profile == 'GT Admin') {
                 $unique = 'unique:users';
+            } else {
+                $unique = '';
             }
 
             $validate = Validator::make($request->all(), array(
@@ -46,7 +51,7 @@ class InviteController extends Controller
 
                     $password = strtolower(substr($request->input('firstname'), 0, 1).substr($request->input('lastname'), 0, 1).$request->input('company').$randomString);
 
-                    User::create([
+                    $user = User::create([
                         'firstname' => $request->input('firstname'),
                         'lastname' => $request->input('lastname'),
                         'name' => $request->input('firstname'). ' ' .$request->input('lastname'),
@@ -55,7 +60,12 @@ class InviteController extends Controller
                         'password' => Hash::make($password)
                     ]);
 
-                    Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('company'), $email));
+                    UserDetail::create([
+                        'user_id' => $user->id,
+                        'mode' => $request->input('mode'),
+                    ]);
+
+                    Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
 
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 }

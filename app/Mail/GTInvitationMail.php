@@ -17,14 +17,14 @@ class GTInvitationMail extends Mailable
      * @return void
      */
 
-    public $url, $name, $password, $company, $email;
+    public $url, $name, $password, $mode, $email;
 
-    public function __construct($url, $name, $password, $company, $email)
+    public function __construct($url, $name, $password, $mode, $email)
     {
         $this->url = $url;
         $this->name = $name;
         $this->password = $password;
-        $this->company = $company;
+        $this->mode = $mode;
         $this->email = $email;
     }
 
