@@ -142,12 +142,25 @@ class UserController extends Controller
         if(is_null(\Auth::user()->role_id)){
             return redirect('/onboarding');
         } else {
-            $role = \Auth::user()->getAllNavigation()->get();
-            $mode = $role[0]->mode;
-            $profile = $role[0]->profile;
+            // $role = \Auth::user()->getAllNavigation()->get();
+            
+            $role = \Auth::user()->getUserRole();
+            
+            // if(count($role) < 1){
+
+            //     $mode = $role->mode;
+            //     $profile = $role->profile;
+            // } else {
+            //     $mode = $role[0]->mode;
+            //     $profile = $role[0]->profile;
+            // }
+
+            $mode = $role->mode;
+            $profile = $role->profile;
+
             
             $title = ucwords(Auth::user()->name);
-            $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
+            $title_subheading  = ucwords($mode . " : " . $profile);
             $title_icon = 'home';
     
             $active_slug = "";
