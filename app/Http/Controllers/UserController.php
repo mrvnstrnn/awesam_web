@@ -27,6 +27,20 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
+    public function profile_switcher($role_id)
+    {
+        try {
+            User::where('id', \Auth::user()->id)
+                    ->update([
+                        'role_id' => $role_id
+                    ]);
+            
+            return redirect('/');
+        } catch (\Throwable $th) {
+            return abort(404, $th);
+        }
+    }
+
     public function onboarding()
     {
         if(is_null(\Auth::user()->role_id)){

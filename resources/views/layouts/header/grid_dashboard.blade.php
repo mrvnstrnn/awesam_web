@@ -11,7 +11,17 @@ class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
 </div>
 <div class="grid-menu grid-menu-xl grid-menu-3col">
     <div class="no-gutters row">
-        <div class="col-sm-6 col-xl-4">
+        <?php $roles = \Auth::user()->allRoles() ?>
+
+        @foreach ($roles as $role)
+            <div class="col-sm-6 col-xl-4">
+                <a href='{{ route('profile.switcher', $role->id) }}' class="btn-icon-vertical btn-square btn-transition btn btn-outline-link">
+                    <i class="pe-7s-{{ $role->mode == 'vendor' ? 'user' : 'global' }} icon-gradient bg-night-fade btn-icon-wrapper btn-icon-lg mb-3"></i>
+                    {{ ucfirst($role->mode) . ' : ' . $role->profile }}
+                </a>
+            </div>
+        @endforeach
+        {{-- <div class="col-sm-6 col-xl-4">
             <a href='/profile-switcher/vendor/head' class="btn-icon-vertical btn-square btn-transition btn btn-outline-link">
                 <i class="pe-7s-user icon-gradient bg-night-fade btn-icon-wrapper btn-icon-lg mb-3"></i>
                 Vendor : Head
@@ -64,7 +74,7 @@ class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
                 <i class="pe-7s-global icon-gradient bg-night-fade btn-icon-wrapper btn-icon-lg mb-3"></i>
                 Globe : Program Staff
             </a>
-        </div>
+        </div> --}}
     </div>
 </div>
 </div>
