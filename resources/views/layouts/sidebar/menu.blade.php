@@ -41,7 +41,7 @@
         <li class="{{ $active_slug == $mainmenus[0]->slug ? 'mm-active' : '' }}">
             <a class="{{ $mainmenus[0]->slug == $active_slug ? 'mm-active' : '' }}" href=" {{ '/'.$mainmenus[0]->slug }} ">
                 <i class="{{ 'metismenu-icon pe-7s-'.$mainmenus[0]->icon }}"></i>
-                {{ ucwords($key) }} 
+                {{ ucwords($mainmenus[0]->title) }} 
             </a>
         </li>
         @endif
@@ -76,44 +76,9 @@
         <li class="{{ $active_slug == $mainmenus[0]->slug ? 'mm-active' : '' }}">
             <a class="{{ $mainmenus[0]->slug == $active_slug ? 'mm-active' : '' }}" href=" {{ '/'.$mainmenus[0]->slug }} ">
                 <i class="{{ 'metismenu-icon pe-7s-'.$mainmenus[0]->icon }}"></i>
-                {{ ucwords($key) }} 
+                {{ ucwords($mainmenus[0]->slug) }} 
             </a>
         </li>
         @endif
     @endforeach
-
-    {{-- @foreach ($program_direct_links as $mainmenu)
-        <li> 
-            @if($mainmenu->submenus > 1)
-                @php
-                $icon = explode(',', $mainmenu->icon);
-                @endphp
-                <a href="#">
-                    <i class="{{ 'metismenu-icon pe-7s-' . $icon[0] }}"></i>
-                    {{ ucwords($mainmenu->mainmenu) }} 
-                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>  
-                <ul>
-                    @foreach ($profile_menu as $submenu)
-                        @if($submenu->level_two == $mainmenu->mainmenu)
-                            <li class="{{ $submenu->slug == $active_slug ? 'mm-active' : '' }}">
-                                <a class="{{ $submenu->slug == $active_slug ? 'mm-active' : '' }}" href=" {{ '/'.$submenu->slug }} ">
-                                    {{ $submenu->menu }}
-                                </a> 
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            @else
-                @foreach ($profile_menu as $submenu)
-                    @if($mainmenu->mainmenu == $submenu->level_two)
-                            <a class="{{ $submenu->slug == $active_slug ? 'mm-active' : '' }}" href=" {{ '/'.$submenu->slug }} ">
-                            <i class="{{ 'metismenu-icon pe-7s-'.$submenu->icon }}"></i>
-                            {{ ucwords($mainmenu->mainmenu) }} 
-                        </a>
-                    @endif
-                @endforeach
-            @endif
-        </li>
-    @endforeach     --}}
 </ul>
