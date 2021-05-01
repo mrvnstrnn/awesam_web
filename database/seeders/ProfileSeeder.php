@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use App\Models\Profile;
 
-class RoleSeeder extends Seeder
+class ProfileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -30,14 +30,14 @@ class RoleSeeder extends Seeder
         ];
 
         for ($i=0; $i < count($globe); $i++) { 
-            Role::create([
+            Profile::create([
                 'mode' => 'globe',
                 'profile' => $globe[$i]
             ]);
         }
 
         for ($i=0; $i < count($vendor); $i++) { 
-            Role::create([
+            Profile::create([
                 'mode' => 'vendor',
                 'profile' => $vendor[$i]
             ]);
