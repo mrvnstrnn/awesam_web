@@ -27,7 +27,7 @@
                             </li>
                             <li class="nav-item step-4-li">
                                 <a href="javascript:void(0)" class="nav-link">
-                                    <em>3</em>
+                                    <em>4</em>
                                     <span>Finish Registration</span>
                                 </a>
                             </li>
