@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\RolePermission;
+use App\Models\ProfilePermission;
 
-class RolePermissionSeeder extends Seeder
+class ProfilePermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -43,11 +43,12 @@ class RolePermissionSeeder extends Seeder
             ['7', '7'],
 
             ['6', '20'],
+            ['5', '20'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
-            RolePermission::create([
-                'role_id' => $data[$i][0],
+            ProfilePermission::create([
+                'profile_id' => $data[$i][0],
                 'permission_id' => $data[$i][1]
             ]);
         }

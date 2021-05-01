@@ -37,7 +37,7 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="mode" class="">Mode</label>
-                                <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="{{ ucfirst(\Auth::user()->getUserRole()->first()->mode) }}" readonly>
+                                <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="{{ ucfirst(\Auth::user()->getUserProfile()->first()->mode) }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">

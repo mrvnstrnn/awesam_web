@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Permission;
-use App\Models\RolePermission;
+use App\Models\ProfilePermission;
 use App\Models\UserDetail;
+use App\Models\Profile;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -25,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'role_id',
+        'profile_id',
         'email_verified_at'
     ];
 
@@ -54,17 +55,16 @@ class User extends Authenticatable implements MustVerifyEmail
         $collection = collect();
         $permissions = Permission::where('slug', $checkPermission)
                                     ->get();
-
         if(is_null($permissions)) {
             return false;
         } else {
             foreach ($permissions as $permission) {
-                $rolePermission = RolePermission::where('role_id', \Auth::user()->role_id)
+                $profilePermission = ProfilePermission::where('profile_id', \Auth::user()->profile_id)
                         ->where('permission_id', $permission->id)
                         ->first();
 
-                if(!is_null($rolePermission)){
-                    $collection->push($rolePermission);
+                if(!is_null($profilePermission)){
+                    $collection->push($profilePermission);
                 }
             }
             
@@ -74,15 +74,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAllNavigation()
     {
-        return RolePermission::join('permissions', 'permissions.id', 'role_permissions.permission_id')
-                                        ->join('roles', 'roles.id', 'role_permissions.role_id')
-                                        ->where('role_permissions.role_id', \Auth::user()->role_id);
+        return ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
+                                        ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
+                                        ->where('profile_permissions.profile_id', \Auth::user()->profile_id);
                                         // ->get();
     }
 
-    public function getUserRole()
+    public function getUserProfile()
     {
-        return Role::find(\Auth::user()->role_id);
+        return Profile::find(\Auth::user()->profile_id);
     }
 
     public function getUserDetail()
@@ -97,6 +97,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function allRoles()
     {
-        return Role::get();
+        return Profile::get();
     }
 }

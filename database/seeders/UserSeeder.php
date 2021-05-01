@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'lastname' => 'Sam',
             'name' => 'Globe Sam',
             'email' => 'sam@globe.ph',
-            'role_id' => 7,
+            'profile_id' => 7,
             'email_verified_at' => Carbon::now()->toDate(),
             'password' => Hash::make('12345678'),
         ]);
