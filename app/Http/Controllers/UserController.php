@@ -104,11 +104,14 @@ class UserController extends Controller
     public function finish_onboarding(Request $request)
     {
         try {
+            if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) == '' || is_null($request->input('hidden_region')) == '') {
+                return response()->json(['error' => true, 'message' => 'Please enter required field.' ]);
+            }
+
             $address = Location::where('province', $request->input('hidden_province'))
                                     ->where('lgu', $request->input('hidden_lgu'))
                                     ->where('region', $request->input('hidden_region'))
                                     ->first();
-                                    
 
             UserDetail::where('user_id', \Auth::user()->id)
                             ->update([
@@ -128,15 +131,6 @@ class UserController extends Controller
         } else {
             
             $role = \Auth::user()->getUserProfile();
-            
-            // if(count($role) < 1){
-
-            //     $mode = $role->mode;
-            //     $profile = $role->profile;
-            // } else {
-            //     $mode = $role[0]->mode;
-            //     $profile = $role[0]->profile;
-            // }
 
             $mode = $role->mode;
             $profile = $role->profile;

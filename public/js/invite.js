@@ -7,12 +7,14 @@ $(document).ready(() => {
         $(".step-1-li").removeClass('active');
         $(".step-1-li").addClass('done');
         $(".step-2-li").addClass('done');
+        $(".step-3-li").addClass('done');
 
         $("#step-1").addClass('d-none');
         $("#step-2").addClass('d-none');
-        $("#step-3").removeClass('d-none');
+        $("#step-3").addClass('d-none');
+        $("#step-4").removeClass('d-none');
 
-        $(".step-3-li").addClass('active');
+        $(".step-4-li").addClass('active');
     }
 
     $("#invite_btn").on('click', function(){
@@ -159,23 +161,33 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(resp) {
-                if (!resp.error){
+                if (!resp.error){   
                     $(".step-1-li").removeClass('active');
                     $(".step-2-li").removeClass('active');
+                    $(".step-3-li").removeClass('active');
 
                     $(".step-1-li").addClass('done');
                     $(".step-2-li").addClass('done');
-                    $(".step-3-li").addClass('active');
+                    $(".step-3-li").addClass('done');
+                    $(".step-4-li").addClass('active');
 
                     $("#step-1").addClass('d-none');
                     $("#step-2").addClass('d-none');
-                    $("#step-3").removeClass('d-none');
+                    $("#step-3").addClass('d-none');
+                    $("#step-4").removeClass('d-none');
 
                     $(".results-title").text($("#mode").val());
 
                     toastr.success(resp.message, 'Success');
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    console.log(resp.message);
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("#" + index + "-error").text(data);
+                        });
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
                 }
             },
             error: function(resp) {
@@ -194,14 +206,47 @@ $(document).ready(() => {
         $("#step-2").addClass('d-none');
     });
 
-    $(".reset-btn").on('click', function(){
+    $("#prev-btn-2").on('click', function(){
         $(".step-1-li").removeClass('done');
         $(".step-1-li").addClass('active');
-        
+
         $(".step-2-li").removeClass('active');
 
         $("#step-1").removeClass('d-none');
         $("#step-2").addClass('d-none');
+    });
+
+    $("#check-non-disclosure").on('change',function(){
+        var atleastCheck = $('#check-non-disclosure:checkbox:checked').length > 0; 
+
+        if(atleastCheck){
+            $("#finish-btn").removeAttr('disabled');
+        } else {
+            $("#finish-btn").attr('disabled', 'disabled');
+        }
+    });
+    
+    $("#prev-btn-3").on('click', function(){
+        $(".step-2-li").removeClass('done');
+        $(".step-2-li").addClass('active');
+
+        $(".step-3-li").removeClass('active');
+
+        $("#step-2").removeClass('d-none');
+        $("#step-3").addClass('d-none');
+    });
+
+    $(".reset-btn").on('click', function(){
+        $(".step-1-li").removeClass('done');
+        $(".step-2-li").removeClass('done');
+        $(".step-1-li").addClass('active');
+        
+        $(".step-2-li").removeClass('active');
+        $(".step-3-li").removeClass('active');
+
+        $("#step-1").removeClass('d-none');
+        $("#step-2").addClass('d-none');
+        $("#step-3").addClass('d-none');
 
         $("#lgu option").remove();
         $("#province option").remove();
@@ -230,6 +275,8 @@ $(document).ready(() => {
             
             $("#step-2").addClass('d-none');
             $("#step-3").removeClass('d-none');
+
+            $(".step-3-li").addClass('active');
         }
     });
 
