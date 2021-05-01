@@ -15,31 +15,33 @@ class ProfileSeeder extends Seeder
     public function run()
     {
 
+        $vendor = [
+            'Vendor Admin',
+            'Agent',
+            'Supervisor',
+        ];
+
         $globe = [
+            'GT Admin',
+            'STS Vendor Admin',
+            'STS Staff',
+            'STS Head',
             'Program Staff',
             'Program Supervisor',
-            'Program Lead'
+            'Program Head',
         ];
-
-        $vendor = [
-            'STS Vendor Manager',
-            'GT Admin',
-            'Vendor Admin',
-            'Supervisor',
-            'Agent'
-        ];
-
-        for ($i=0; $i < count($globe); $i++) { 
-            Profile::create([
-                'mode' => 'globe',
-                'profile' => $globe[$i]
-            ]);
-        }
 
         for ($i=0; $i < count($vendor); $i++) { 
             Profile::create([
                 'mode' => 'vendor',
                 'profile' => $vendor[$i]
+            ]);
+        }
+        
+        for ($i=0; $i < count($globe); $i++) { 
+            Profile::create([
+                'mode' => 'globe',
+                'profile' => $globe[$i]
             ]);
         }
     }
