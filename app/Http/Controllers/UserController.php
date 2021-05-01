@@ -104,7 +104,7 @@ class UserController extends Controller
     public function finish_onboarding(Request $request)
     {
         try {
-            if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) == '' || is_null($request->input('hidden_region')) == '') {
+            if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
                 return response()->json(['error' => true, 'message' => 'Please enter required field.' ]);
             }
 
