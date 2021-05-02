@@ -81,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function getUserProfile()
-    {
+    { 
         return Profile::find(\Auth::user()->profile_id);
     }
 
@@ -89,6 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return UserDetail::join('users', 'users.id', 'user_details.user_id')->where('user_details.user_id', \Auth::user()->id);
     }
+
 
     public function getCompany($id)
     {
