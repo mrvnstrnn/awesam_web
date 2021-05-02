@@ -27,7 +27,7 @@ class InviteController extends Controller
                 $randomString .= $characters[rand(0, $charactersLength - 1)];
             }
 
-            if(\Auth::user()->getUserRole()->profile == 'GT Admin') {
+            if(\Auth::user()->getUserProfile()->profile == 'GT Admin') {
                 $unique = 'unique:users';
             } else {
                 $unique = '';
@@ -46,10 +46,10 @@ class InviteController extends Controller
 
                 $email = $request->input('email');
 
-                if(\Auth::user()->getUserRole()->profile == 'GT Admin') {
+                if(\Auth::user()->getUserProfile()->profile == 'GT Admin') {
                     $url = url('/login');
 
-                    $password = strtolower(substr($request->input('firstname'), 0, 1).substr($request->input('lastname'), 0, 1).$request->input('company').$randomString);
+                    $password = strtolower(substr($request->input('firstname'), 0, 1).substr($request->input('lastname'), 0, 1).$request->input('mode').$randomString);
 
                     $user = User::create([
                         'firstname' => $request->input('firstname'),

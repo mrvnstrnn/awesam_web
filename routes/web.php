@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
     Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
     Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
-    Route::get('/profile-switcher/{role_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
+    Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
 });
 
 

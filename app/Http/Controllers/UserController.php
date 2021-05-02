@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Slug;
 use App\Models\UserProfileMainMenu;
-use App\Models\RolePermission;
 use App\Models\Invitation;
 use App\Models\Company;
 use App\Models\User;
@@ -27,12 +26,12 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
-    public function profile_switcher($role_id)
+    public function profile_switcher($profile_id)
     {
         try {
             User::where('id', \Auth::user()->id)
                     ->update([
-                        'role_id' => $role_id
+                        'profile_id' => $profile_id
                     ]);
             
             return redirect('/');
@@ -43,7 +42,7 @@ class UserController extends Controller
 
     public function onboarding()
     {
-        if(is_null(\Auth::user()->role_id)){
+        if(is_null(\Auth::user()->profile_id)){
             $locate = Location::select('region');
             $locations = $locate->groupBy('region')->get();
 
@@ -105,11 +104,14 @@ class UserController extends Controller
     public function finish_onboarding(Request $request)
     {
         try {
+            if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
+                return response()->json(['error' => true, 'message' => 'Please enter required field.' ]);
+            }
+
             $address = Location::where('province', $request->input('hidden_province'))
                                     ->where('lgu', $request->input('hidden_lgu'))
                                     ->where('region', $request->input('hidden_region'))
                                     ->first();
-                                    
 
             UserDetail::where('user_id', \Auth::user()->id)
                             ->update([
@@ -122,52 +124,13 @@ class UserController extends Controller
         }
     }
 
-    // public function invitation()
-    // {
-    //     $role = \Auth::user()->getAllNavigation()->get();
-    //     $mode = $role[0]->mode;
-    //     $profile = $role[0]->profile;
-    //     $active_slug = "invite.employee";
-
-    //     $title = ucwords(Auth::user()->name);
-    //     $title_subheading  = ucwords($mode . " : " . $role[0]->profile);
-    //     $title_icon = 'paper-plane';
-
-    //     $profile_menu = self::getProfileMenuLinks();
-
-    //     $profile_direct_links = self::getProfileMenuDirectLinks();
-            
-    //     $program_direct_links = self::getProgramMenuDirectLinks();
-    //     return view('profiles.vendor.invite', compact(
-    //         'mode',
-    //         'profile',
-    //         'active_slug',
-    //         'profile_menu',
-    //         'profile_direct_links',
-    //         'program_direct_links',
-    //         'title', 
-    //         'title_subheading', 
-    //         'title_icon'
-    //     ));
-    // }
-
     public function index()
     {
-        if(is_null(\Auth::user()->role_id)){
+        if(is_null(\Auth::user()->profile_id)){
             return redirect('/onboarding');
         } else {
-            // $role = \Auth::user()->getAllNavigation()->get();
             
-            $role = \Auth::user()->getUserRole();
-            
-            // if(count($role) < 1){
-
-            //     $mode = $role->mode;
-            //     $profile = $role->profile;
-            // } else {
-            //     $mode = $role[0]->mode;
-            //     $profile = $role[0]->profile;
-            // }
+            $role = \Auth::user()->getUserProfile();
 
             $mode = $role->mode;
             $profile = $role->profile;
@@ -205,7 +168,7 @@ class UserController extends Controller
 
     public function show($show = null, Request $request){
 
-        if(is_null(\Auth::user()->role_id)){
+        if(is_null(\Auth::user()->profile_id)){
             return redirect('/onboarding');
         } else {
             $path = explode('/', $show);
@@ -272,15 +235,6 @@ class UserController extends Controller
 
 
     private function getProfileMenuLinks(){
-
-        // $profile_menu = Slug::where([
-        //         ['mode', '=', $mode],
-        //         ['profile', '=', $profile]
-        //     ])
-        //     ->orderBy('level_two', 'asc')
-        //     ->orderBy('menu', 'asc')
-        //     ->get();
-
         $profile_menu = \Auth::user()->getAllNavigation()
             ->orderBy('level_two', 'asc')
             ->orderBy('menu', 'asc')
@@ -291,14 +245,6 @@ class UserController extends Controller
     }
 
     private function getProfileMenuDirectLinks(){
-        // $profile_direct_links = UserProfileMainMenu::select('*')
-        //     ->where([
-        //         ['mode', '=', $mode],
-        //         ['profile', '=', $profile],
-        //         ['level_one', '=', 'profile_menu']
-        //     ])
-        //     ->get();
-
         $profile_direct_links = \Auth::user()->getAllNavigation()
                                             ->where('permissions.level_one', 'profile_menu')
                                             ->get();

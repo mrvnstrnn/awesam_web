@@ -1,5 +1,6 @@
-@extends('layouts.team')
+@extends('layouts.main')
 
 @section('content')
+
 
 @endsection

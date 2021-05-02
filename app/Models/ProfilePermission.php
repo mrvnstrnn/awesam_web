@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RolePermission extends Model
+class ProfilePermission extends Model
 {
     use HasFactory;
+
+    protected $table = 'profile_permissions';
 }

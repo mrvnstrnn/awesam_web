@@ -17,7 +17,7 @@ class Navigation
     public function handle(Request $request, Closure $next)
     {
         if(\Auth::check()){
-            if (is_null(\Auth::user()->role_id)) {
+            if (is_null(\Auth::user()->profile_id)) {
                 return redirect('/onboarding');
             } else if($request->path() && !\Auth::user()->can_do($request->path())){
                 abort(404);
