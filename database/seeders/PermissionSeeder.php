@@ -40,13 +40,14 @@ class PermissionSeeder extends Seeder
             ['Users', 'users', 'Users', 'GLOBE Employee List/Add', 'profile_menu', 'users', '', 'users'],
             ['Calendar', 'calendar', 'Calendar', 'Profile Calendar', 'profile_menu', 'schedule', '', 'date'],
             ['New Endorsement', 'new-endorsement', 'New Endorsement', 'Newly Endorsed Sites', 'profile_menu', 'new endorsement', '', 'note2'],
-            ['Sites', 'sites', 'Sites', 'Sites / Assigned Sites', 'profile_menu', 'sites', '', 'global'],
+            ['Universe', 'universe', 'Universe', 'Universe List', 'profile_menu', 'sites', '', 'global'],
             ['Requests', 'requests', 'Requests', 'Schedule Change Request', 'profile_menu', 'schedule', '', 'network'],
             ['Actvities', 'activities', 'Actvities', 'Agent Activities', 'profile_menu', 'activities', '', 'graph1'],
             ['Agents', 'agents', 'Agents', 'Assigned Agents To Sup', 'profile_menu', 'agents', '', 'network'],
-            ['Notifications', 'notifications', 'Notifications', 'Notifications', 'profile_menu', 'notifications', '', 'bell'],
+            // ['Notifications', 'notifications', 'Notifications', 'Notifications', 'profile_menu', 'notifications', '', 'bell'],
             ['Supervisor', 'supervisor', 'Supervisor', 'Supervisor List', 'profile_menu', 'supervisor', '', 'users'],
             ['Vendor', 'vendor', 'Vendor', 'Vendor List', 'profile_menu', 'vendor', '', 'users'],
+            ['Approvals', 'approvals', 'Approvals', 'Approvals List', 'profile_menu', 'sites', '', 'global'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
