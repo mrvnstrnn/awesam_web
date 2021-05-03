@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\VendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
     Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
     Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
+
+    Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
 });
 
 

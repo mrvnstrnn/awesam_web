@@ -46,8 +46,9 @@ class PermissionSeeder extends Seeder
             ['Agents', 'agents', 'Agents', 'Assigned Agents To Sup', 'profile_menu', 'agents', '', 'network'],
             // ['Notifications', 'notifications', 'Notifications', 'Notifications', 'profile_menu', 'notifications', '', 'bell'],
             ['Supervisor', 'supervisor', 'Supervisor', 'Supervisor List', 'profile_menu', 'supervisor', '', 'users'],
-            ['Vendor', 'vendor', 'Vendor', 'Vendor List', 'profile_menu', 'vendor', '', 'users'],
+            ['Vendor List', 'vendorlist', 'Vendor List', 'Vendor List', 'profile_menu', 'vendor', '', 'users'],
             ['Approvals', 'approvals', 'Approvals', 'Approvals List', 'profile_menu', 'sites', '', 'global'],
+            ['New Vendor', 'newvendor', 'New Vender', 'New Vendor', 'profile_menu', 'vendor', '', 'users'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
