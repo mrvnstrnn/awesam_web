@@ -37,6 +37,7 @@ class ProfilePermissionSeeder extends Seeder
             ['5', '5'],
             ['5', '10'],
             ['5', '11'],
+            ['5', '12'],
 
             ['6', '3'],
             ['6', '4'],
