@@ -185,16 +185,18 @@ class UserController extends Controller
             $mode = $role[0]->mode;
             $profile = $role[0]->profile;
 
+            $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
+
             if(count($role)>0){
                 if(count($path) >= 3){
                     $view = $slug_info[0]['view'] . "_param";
                     $title = $path[2];
                 } else if (count($path) == 2) {
                     $title = $role[0]->title;
-                    $view = 'profiles' . '.' .$mode. '.index';
+                    $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.index';
                 } else {
                     $title = $role[0]->title;
-                    $view = 'profiles' . '.' .$mode. '.' .end($path);
+                    $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.' .end($path);
                 }
 
                 $title_subheading  = $role[0]->title_subheading;
@@ -204,7 +206,7 @@ class UserController extends Controller
                 $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
                 $title_subheading  = "Link not available in your profile or still under construction";
                 $title_icon = 'home';
-                $view = 'profiles.' . $mode . '.index';
+                $view = 'profiles.' . $mode. '.' .$profile_for_view. '.index';
             }
 
 
