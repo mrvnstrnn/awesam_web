@@ -180,7 +180,6 @@ $(document).ready(() => {
 
                     toastr.success(resp.message, 'Success');
                 } else {
-                    console.log(resp.message);
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
