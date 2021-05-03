@@ -1,4 +1,4 @@
-@extends('layouts.no-title')
+@extends('layouts.main')
 
 @section('content')
 <div class="main-card mb-3 card">
