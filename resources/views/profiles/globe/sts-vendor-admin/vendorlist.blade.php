@@ -18,15 +18,17 @@
                 @php
                     $vendors = new App\Models\Vendor();
                 @endphp
-                @foreach ($vendors->getAllVendor() as $vendor)
-                    <tr>
-                        <td>{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</td>
-                        <td>{{ $vendor->vendor_fullname }}</td>
-                        <td>{{ $vendor->vendor_admin_email }}</td>
-                        <td>{{ $vendor->vendor_program }}</td>
-                        <td>{{ $vendor->vendor_office_address }}</td>
-                        <td><span class="badge badge-{{ $vendor->vendor_saq_status == 1 ? 'success' : 'warning' }}">{{ $vendor->vendor_saq_status == 1 ? 'Active' : 'Ongoing accreditation' }}</span></td>
-                    </tr>   
+                @foreach ($vendors->getAllVendor()->chunk(100) as $chunk)
+                    @foreach ($chunk as $vendor)
+                        <tr>
+                            <td>{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</td>
+                            <td>{{ $vendor->vendor_fullname }}</td>
+                            <td>{{ $vendor->vendor_admin_email }}</td>
+                            <td>{{ $vendor->vendor_program }}</td>
+                            <td>{{ $vendor->vendor_office_address }}</td>
+                            <td><span class="badge badge-{{ $vendor->vendor_saq_status == 1 ? 'success' : 'warning' }}">{{ $vendor->vendor_saq_status == 1 ? 'Active' : 'Ongoing accreditation' }}</span></td>
+                        </tr>   
+                    @endforeach
                 @endforeach
             </tbody>
             <tfoot>
