@@ -27,6 +27,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
 
     Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
+    Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');
+    Route::get('/vendor-data/{vendor_id}', [VendorController::class, 'get_vendor'])->name('get.vendors');
 });
 
 

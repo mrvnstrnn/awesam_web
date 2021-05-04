@@ -17,7 +17,6 @@
             <tbody>
                 @php
                     $vendors = new App\Models\Vendor();
-                    $vendors->getAllVendor();
                 @endphp
                 @foreach ($vendors->getAllVendor() as $vendor)
                     <tr>
