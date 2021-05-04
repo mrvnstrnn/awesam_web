@@ -61,14 +61,14 @@
                 background-size: 1rem 1rem;
             }
 
-            .app-sidebar.sidebar-shadow:hover {
+            /* .app-sidebar.sidebar-shadow:hover {
                 width: 220px !important;
                 min-width: 220px !important;
             }
             
             .app-sidebar .app-sidebar__inner {
                 padding: 2px 1rem 1rem !important;
-            }
+            } */
         </style>    
     </head>
 
