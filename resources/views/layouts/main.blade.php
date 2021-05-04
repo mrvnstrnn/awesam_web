@@ -73,8 +73,8 @@
     </head>
 
     <body>
-        <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar closed-sidebar-mobile closed-sidebar"> 
-
+        <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar"> 
+            {{-- closed-sidebar-mobile closed-sidebar --}}
             {{-- HEADER MODULE --}}
             {{-- USE LAYOUT INCLUDE --}}
             @include('layouts.header.index')
