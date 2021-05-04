@@ -24,6 +24,7 @@
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">SAM ID</th>
                                         <th class="text-center">Technology</th>
                                         <th>Site</th>
                                         <th>PLA ID</th>
@@ -32,6 +33,9 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L9</div>
                                         </td>
@@ -63,6 +67,9 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L21</div>
                                         </td>
@@ -98,6 +105,9 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L9</div>
                                         </td>
@@ -127,6 +137,9 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L21</div>
                                         </td>
@@ -166,6 +179,9 @@
                                         </td>                                            
                                     </tr>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L9</div>
                                         </td>
@@ -201,6 +217,9 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="text-center">
+                                            COLOC-102200
+                                        </td>
                                         <td class="text-center" style="width: 150px;">
                                             <div class="badge badge-success">L21</div>
                                         </td>
