@@ -10,6 +10,8 @@
         <meta name="description" content="Site Acquisition and Management.">
         <!-- Disable tap highlight on IE -->
         <meta name="msapplication-tap-highlight" content="no">
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> --> 
         <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="/vendors/ionicons-npm/css/ionicons.css">

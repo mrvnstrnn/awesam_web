@@ -179,6 +179,8 @@ return [
         // ADD FORTIFY 
         App\Providers\FortifyServiceProvider::class,
 
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
     ],
 
     /*
@@ -232,6 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Carbon' => 'Carbon\Carbon',
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
     ],
 

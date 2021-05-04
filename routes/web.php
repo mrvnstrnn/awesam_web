@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
     Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');
     Route::get('/vendor-data/{vendor_id}', [VendorController::class, 'get_vendor'])->name('get.vendors');
+
+    
+    Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
+    Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
+    Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');
+
+    Route::get('/all-permission', [ProfileController::class, 'all_permission'])->name('all.permission');
+    Route::get('/edit-permission/{permission}', [ProfileController::class, 'edit_permission'])->name('edit.permission');
+    Route::post('/addupdate-permission', [ProfileController::class, 'addupdate_permission'])->name('addupdate.permission');
+    Route::post('/delete-permission', [ProfileController::class, 'deletePermission'])->name('delete.permission');
 });
 
 

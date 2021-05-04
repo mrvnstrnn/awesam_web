@@ -10,4 +10,5 @@ class ProfilePermission extends Model
     use HasFactory;
 
     protected $table = 'profile_permissions';
+    protected $fillable = ['profile_id', 'permission_id'];
 }

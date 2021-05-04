@@ -50,6 +50,8 @@ class PermissionSeeder extends Seeder
             ['Approvals', 'approvals', 'Approvals', 'Approvals List', 'profile_menu', 'sites', '', 'global'],
             ['New Vendor', 'newvendor', 'New Vendor', 'New Vendor', 'profile_menu', 'vendor', '', 'users'],
             ['Assigned Sites', 'assigned-sites', 'Assigned Sites', 'Assigned Sites', 'profile_menu', 'tasks', '', 'graph1'],
+            ['Profile', 'profile', 'Profile', 'Profile Management', 'profile_menu', 'management', '', 'portfolio'],
+            ['Permission', 'permission', 'Permission', 'Profile Management', 'profile_menu', 'management', '', 'portfolio'],
         ];
 
         for ($i=0; $i < count($data); $i++) { 
