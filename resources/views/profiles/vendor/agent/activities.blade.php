@@ -531,10 +531,10 @@
 
 @section('modals')
 <div class="modal fade" id="list-group-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -553,8 +553,10 @@
 
 @section('js_script')
     <script>
-        $(".list-group-item").on('click', function(){
+        $(".list-group-item").on('click', function(e){
+            e.preventDefault();
             $("#list-group-modal").modal("show");
+            $(".modal-title").text(e.target.children[1].children[0].innerHTML);
         });
     </script>
 @endsection
