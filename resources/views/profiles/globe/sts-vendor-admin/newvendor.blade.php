@@ -4,7 +4,7 @@
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <h5 class="card-title">Add new vendor</h5>
                 <form id="addVendorForm">
                     @csrf
@@ -89,7 +89,7 @@
         
                                 @foreach ($programs as $program)
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="vendor_program_id{{ $program->vendor_program_id  }}" name="vendor_program_id" value="{{ $program->vendor_program_id  }}">
+                                        <input class="form-check-input" type="checkbox" id="vendor_program_id{{ $program->vendor_program_id  }}" name="vendor_program_id" value="{{ $program->vendor_program_id  }}">
                                         <label class="form-check-label" for="vendor_program_id{{ $program->vendor_program_id  }}">{{ $program->vendor_program }}</label>
                                     </div>
                                 @endforeach
@@ -105,10 +105,10 @@
                 </form>
             </div>
             
-            <div class="col-md-2">
+            {{-- <div class="col-md-2">
                 <h5 class="card-title">Review Existing Vendors</h5>
                 <a href="javascript:void(0);" class="list_vendors">Click Here & Show List</a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
