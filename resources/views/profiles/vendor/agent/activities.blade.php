@@ -2,6 +2,12 @@
 
 @section('content')
 
+<style>
+    .list-group-item {
+        cursor: pointer;
+    }
+</style>
+
 <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
     <li class="nav-item">
         <a role="tab" class="nav-link active" id="tab-today" data-toggle="tab" href="#tab-content-today">
@@ -521,6 +527,34 @@
 
 </div>
 
+@endsection
 
+@section('modals')
+<div class="modal fade" id="list-group-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
 
+@section('js_script')
+    <script>
+        $(".list-group-item").on('click', function(){
+            $("#list-group-modal").modal("show");
+        });
+    </script>
 @endsection
