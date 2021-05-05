@@ -23,7 +23,7 @@
         </table>
     </div>
 </div>
-
+  
 @endsection
 
 @section('modals')
