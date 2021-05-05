@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    .list-group-item {
+    .li_title_list {
         cursor: pointer;
     }
 </style>
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
+                                        <div class="widget-heading li_title_list">Create Letter of Intent and Notice to Proceed</div>
                                         <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
                                         <div class="widget-subheading">Due Today</div>
                                     </div>
@@ -67,7 +67,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
+                                        <div class="widget-heading li_title_list">Process RTB Documents</div>
                                         <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
                                         <div class="widget-subheading">Due Friday : Building Permit Application</div>
                                     </div>
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
+                                        <div class="widget-heading li_title_list">Process PAC/DOH</div>
                                         <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
                                         <div class="widget-subheading">Due Friday : DOH Application</div>
                                     </div>
@@ -114,7 +114,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             AYALA TERRACES
                                             <div class="badge badge-warning ml-2">Lessor Negotiation</div>
                                         </div>
@@ -140,7 +140,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             SM FAIRVIEW
                                             <div class="badge badge-focus ml-2">RTB</div>
                                         </div>
@@ -166,7 +166,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             ROBINSONS NOVALICHES
                                             <div class="badge badge-primary ml-2">PAC</div>
                                         </div>
@@ -216,7 +216,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
+                                        <div class="widget-heading li_title_list">Create Letter of Intent and Notice to Proceed</div>
                                         <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
                                         <div class="widget-subheading">Due Today</div>
                                     </div>
@@ -234,7 +234,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
+                                        <div class="widget-heading li_title_list">Process RTB Documents</div>
                                         <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
                                         <div class="widget-subheading">Due Friday : Building Permit Application</div>
                                     </div>
@@ -252,7 +252,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
+                                        <div class="widget-heading li_title_list">Process PAC/DOH</div>
                                         <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
                                         <div class="widget-subheading">Due Friday : DOH Application</div>
                                     </div>
@@ -281,7 +281,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             AYALA TERRACES
                                             <div class="badge badge-warning ml-2">Lessor Negotiation</div>
                                         </div>
@@ -307,7 +307,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             SM FAIRVIEW
                                             <div class="badge badge-focus ml-2">RTB</div>
                                         </div>
@@ -333,7 +333,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             ROBINSONS NOVALICHES
                                             <div class="badge badge-primary ml-2">PAC</div>
                                         </div>
@@ -383,7 +383,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
+                                        <div class="widget-heading li_title_list">Create Letter of Intent and Notice to Proceed</div>
                                         <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
                                         <div class="widget-subheading">Due Today</div>
                                     </div>
@@ -401,7 +401,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
+                                        <div class="widget-heading li_title_list">Process RTB Documents</div>
                                         <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
                                         <div class="widget-subheading">Due Friday : Building Permit Application</div>
                                     </div>
@@ -419,7 +419,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
+                                        <div class="widget-heading li_title_list">Process PAC/DOH</div>
                                         <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
                                         <div class="widget-subheading">Due Friday : DOH Application</div>
                                     </div>
@@ -448,7 +448,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             AYALA TERRACES
                                             <div class="badge badge-warning ml-2">Lessor Negotiation</div>
                                         </div>
@@ -474,7 +474,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             SM FAIRVIEW
                                             <div class="badge badge-focus ml-2">RTB</div>
                                         </div>
@@ -500,7 +500,7 @@
                                     <div class="widget-content-left mr-2">
                                     </div>
                                     <div class="widget-content-left">
-                                        <div class="widget-heading">
+                                        <div class="widget-heading li_title_list">
                                             ROBINSONS NOVALICHES
                                             <div class="badge badge-primary ml-2">PAC</div>
                                         </div>
@@ -553,10 +553,10 @@
 
 @section('js_script')
     <script>
-        $(".list-group-item").on('click', function(e){
+        $(".li_title_list").on('click', function(e){
             e.preventDefault();
             $("#list-group-modal").modal("show");
-            $(".modal-title").text(e.target.children[1].children[0].innerHTML);
+            $(".modal-title").text(e.target.innerText);
         });
     </script>
 @endsection
