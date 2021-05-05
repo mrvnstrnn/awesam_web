@@ -8,7 +8,7 @@
     }
 </style>
 
-<ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+<ul class="tabs-animated body-tabs-animated nav">
     <li class="nav-item">
         <a role="tab" class="nav-link active" id="tab-today" data-toggle="tab" href="#tab-content-today">
             <span>Today</span>
@@ -530,7 +530,7 @@
 @endsection
 
 @section('modals')
-<div class="modal fade" id="list-group-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="list-group-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
