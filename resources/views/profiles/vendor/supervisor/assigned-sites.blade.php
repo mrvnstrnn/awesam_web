@@ -17,342 +17,344 @@
                         <div class="card-header-tab card-header">
                             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                             <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                            Assigned Sites
+                            Endorsements
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Agent</th>
-                                        <th class="text-center">SAM ID</th>
-                                        <th class="text-center">Technology</th>
-                                        <th>Site</th>
-                                        <th>PLA ID</th>
-                                        <th class="text-center" >Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Agent</th>
+                                            <th class="text-center">SAM ID</th>
+                                            <th class="text-center">Technology</th>
+                                            <th>Site</th>
+                                            <th>PLA ID</th>
+                                            <th class="text-center" >Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                            NEOPOLITAN-IV-C1
-                                                            </a>
-                                                        </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td style="width: 30%">
-                                            <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                <div class="progress-bar stage-text stage5 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                            </div>
-                                            POST BUILD DOCUMENTS                                   
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                                            </td>
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L9</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                NEOPOLITAN-IV-C1
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
+                                                </div>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td style="width: 30%">
+                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
+                                                    <div class="progress-bar stage-text stage5 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                            NEOPOLITAN-IV-C1
-                                                            </a>
+                                                POST BUILD DOCUMENTS                                   
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
                                                         </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td>
-                                            <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                            </div>       
-                                            PRE BUILD DOCUMENTS                                     
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                VILLA-VERDE-01
-                                                            </a>                           
-                                                        </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td>
-                                            <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                <div class="progress-bar stage-text stage6 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                            </div>
-                                            CONTRACT                                          
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                                            </td>
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L21</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                NEOPOLITAN-IV-C1
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>    
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                VILLA-VERDE-01
-                                                            </a>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
+                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
+                                                </div>       
+                                                PRE BUILD DOCUMENTS                                     
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
                                                         </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td>
-                                            <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                <div class="progress-bar stage-text stage1 stage-active" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="0" style="width: 18.2%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage2 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage3 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                            </div>
-                                            SITE ENDORSEMENT                                            
-                                        </td>                              
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L9</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                GUADANOVILLE-XX
-                                                            </a>
-                                                        </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td>
-                                            <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                </div>
-                                                <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                </div>
-                                            </div>                                            
-                                            PRE BUILD DOCUMENTS                                       
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left mr-3">
-                                                        <div class="widget-content-left">
-                                                            <img width="40" class="rounded-circle"
-                                                                src="images/avatars/4.jpg" alt="">
+                                            </td>
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L9</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                    VILLA-VERDE-01
+                                                                </a>                           
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
                                                         </div>
                                                     </div>
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">John Doe</div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
+                                                </div>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
+                                                    <div class="progress-bar stage-text stage6 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            COLOC-102200
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="badge badge-success">L21</div>
-                                        </td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">
-                                                            <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                GUADANOVILLE-XX
-                                                            </a>
+                                                CONTRACT                                          
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
                                                         </div>
-                                                        <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            NCR788
-                                        </td>
-                                        <td>
-                                            <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                            </td>    
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L21</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                    VILLA-VERDE-01
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
+                                                    <div class="progress-bar stage-text stage1 stage-active" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="0" style="width: 18.2%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage2 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage3 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
                                                 </div>
-                                                <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                SITE ENDORSEMENT                                            
+                                            </td>                              
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                            </td>
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L9</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                    GUADANOVILLE-XX
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            PRE BUILD DOCUMENTS                                       
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
+                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
+                                                </div>                                            
+                                                PRE BUILD DOCUMENTS                                       
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img width="40" class="rounded-circle"
+                                                                    src="images/avatars/4.jpg" alt="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">John Doe</div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                COLOC-102200
+                                            </td>
+                                            <td class="text-center" style="width: 150px;">
+                                                <div class="badge badge-success">L21</div>
+                                            </td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading">
+                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
+                                                                    GUADANOVILLE-XX
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading opacity-7">Quezon City</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                NCR788
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
+                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
+                                                    </div>
+                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
+                                                    </div>
+                                                </div>
+                                                PRE BUILD DOCUMENTS                                       
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <ul class="pagination pagination-sm" style="margin-bottom: 0px;">
