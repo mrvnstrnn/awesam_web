@@ -2,6 +2,12 @@
 
 @section('content')
 
+<style>
+    .modalDataSite {
+        cursor: pointer;
+    }
+</style>
+
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
@@ -34,7 +40,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102200">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
@@ -73,14 +79,14 @@
                                                 POST BUILD DOCUMENTS                                   
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102201">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                COLOC-102200
+                                                COLOC-102201
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -116,14 +122,14 @@
                                                 PRE BUILD DOCUMENTS                                     
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102202">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                COLOC-102200
+                                                COLOC-102202
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
@@ -153,14 +159,14 @@
                                                 CONTRACT                                          
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102203">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
                                                 </div>
                                             </td>    
                                             <td class="text-center">
-                                                COLOC-102200
+                                                COLOC-102203
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -200,14 +206,14 @@
                                                 SITE ENDORSEMENT                                            
                                             </td>                              
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102204">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                COLOC-102200
+                                                COLOC-102204
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
@@ -243,14 +249,14 @@
                                                 PRE BUILD DOCUMENTS                                       
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataSite" data-sites="COLOC-102205">
                                             <td>
                                                 <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
                                                     <div class="avatar-icon"><i>+</i></div>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                COLOC-102200
+                                                COLOC-102205
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -328,7 +334,39 @@
     </div>
 @endsection
 
+@section('js_script')
+    <script>
+        $(document).on("click", ".modalDataSite", function(){
+            $(".modal-title").text($(this).attr('data-sites'));
+            $("#modal-unassigned-sites").modal("show");
+        });
+    </script>
+@endsection
+
 @section('modals')
+
+
+    <div class="modal fade" id="modal-unassigned-sites" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        Add rows here
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade bd-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none; padding-right: 17px;" aria-hidden="true">
         <div class="modal-dialog modal-lg">
