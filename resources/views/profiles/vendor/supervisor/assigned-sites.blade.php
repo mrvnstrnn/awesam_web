@@ -10,6 +10,10 @@
     .widget-content-wrapper:hover .widget-content-left.flex2 {
         display: block !important;
     }
+    
+    .modalDataSite {
+        cursor: pointer;
+    }
 </style>
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">

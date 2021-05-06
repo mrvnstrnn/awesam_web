@@ -1,6 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
+    <style>
+        .modalDataEndorsement {
+            cursor: pointer;
+        }
+    </style>
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
         <li class="nav-item">
