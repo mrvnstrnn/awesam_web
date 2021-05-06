@@ -33,7 +33,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102200">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
@@ -64,7 +64,7 @@
                                                 NCR788
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102201">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox13" class="custom-control-input">
@@ -72,7 +72,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                COLOC-102200
+                                                COLOC-102201
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -95,7 +95,7 @@
                                                 NCR788
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102202">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox14" class="custom-control-input">
@@ -103,7 +103,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                COLOC-102200
+                                                COLOC-102202
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
@@ -126,7 +126,7 @@
                                                 NCR788
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102203">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox15" class="custom-control-input">
@@ -134,7 +134,7 @@
                                                 </div>
                                             </td>    
                                             <td>
-                                                COLOC-102200
+                                                COLOC-102203
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -157,7 +157,7 @@
                                                 NCR788
                                             </td>                           
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102204">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox15" class="custom-control-input">
@@ -165,7 +165,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                COLOC-102200
+                                                COLOC-102204
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
@@ -188,7 +188,7 @@
                                                 NCR788
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102205">
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="exampleCustomCheckbox16" class="custom-control-input">
@@ -196,7 +196,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                COLOC-102200
+                                                COLOC-102205
                                             </td>
                                             <td class="text-center" style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
@@ -264,7 +264,38 @@
     </div>
 @endsection
 
+@section('js_script')
+    <script>
+        $(document).on("click", ".modalDataEndorsement", function(){
+            $(".modal-title").text($(this).attr('data-endorsement'));
+            $("#modal-endorsement").modal("show");
+        });
+    </script>
+@endsection
+
 @section('modals')
+
+    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        Add rows here
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade bd-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none; padding-right: 17px;" aria-hidden="true">
         <div class="modal-dialog modal-lg">
