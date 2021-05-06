@@ -2,6 +2,16 @@
 
 @section('content')
 
+<style>
+    .widget-content-left.flex2 {
+        display: none;
+    }
+
+    .widget-content-wrapper:hover .widget-content-left.flex2 {
+        display: block !important;
+    }
+</style>
+
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
@@ -25,12 +35,12 @@
                                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Agent</th>
-                                            <th class="text-center">SAM ID</th>
-                                            <th class="text-center">Technology</th>
+                                            <th style="width: 150px;">Agent</th>
+                                            <th>SAM ID</th>
+                                            <th>Technology</th>
                                             <th>Site</th>
                                             <th>PLA ID</th>
-                                            <th class="text-center" >Status</th>
+                                            <th >Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,10 +61,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -101,10 +111,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
@@ -155,10 +165,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -203,10 +213,10 @@
                                                     </div>
                                                 </div>
                                             </td>    
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
@@ -261,10 +271,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -315,10 +325,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
