@@ -30,7 +30,6 @@
                                             <th class="text-center">Technology</th>
                                             <th>Site</th>
                                             <th>PLA ID</th>
-                                            <th class="text-center" >Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,15 +63,6 @@
                                             <td style="width: 150px;">
                                                 NCR788
                                             </td>
-                                            <td style="width: 30%">
-                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                    <div class="progress-bar stage-text stage5 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                </div>
-                                                POST BUILD DOCUMENTS                                   
-                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -103,19 +93,6 @@
                                             </td>
                                             <td style="width: 150px;">
                                                 NCR788
-                                            </td>
-                                            <td>
-                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                </div>       
-                                                PRE BUILD DOCUMENTS                                     
                                             </td>
                                         </tr>
                                         <tr>
@@ -148,13 +125,6 @@
                                             <td style="width: 150px;">
                                                 NCR788
                                             </td>
-                                            <td>
-                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                    <div class="progress-bar stage-text stage6 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                </div>
-                                                CONTRACT                                          
-                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -185,24 +155,7 @@
                                             </td>
                                             <td style="width: 150px;">
                                                 NCR788
-                                            </td>
-                                            <td>
-                                                <div class="progress" style="min-height: 8px; height: 20px; max-width: 100%">
-                                                    <div class="progress-bar stage-text stage1 stage-active" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="0" style="width: 18.2%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage2 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage3 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                </div>
-                                                SITE ENDORSEMENT                                            
-                                            </td>                              
+                                            </td>                           
                                         </tr>
                                         <tr>
                                             <td>
@@ -234,19 +187,6 @@
                                             <td style="width: 150px;">
                                                 NCR788
                                             </td>
-                                            <td>
-                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                </div>                                            
-                                                PRE BUILD DOCUMENTS                                       
-                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -277,19 +217,6 @@
                                             </td>
                                             <td style="width: 150px;">
                                                 NCR788
-                                            </td>
-                                            <td>
-                                                <div class="progress" style="min-height: 8px; height: 20px;  max-width: 100%">
-                                                    <div class="progress-bar stage-text stage3 stage-active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 9.1%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage4 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage5 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 27.3%;">
-                                                    </div>
-                                                    <div class="progress-bar stage-text stage6 stage-disabled" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="17" style="width: 18.2%;">
-                                                    </div>
-                                                </div>
-                                                PRE BUILD DOCUMENTS                                       
                                             </td>
                                         </tr>
                                     </tbody>

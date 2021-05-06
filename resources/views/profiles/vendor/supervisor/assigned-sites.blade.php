@@ -2,6 +2,16 @@
 
 @section('content')
 
+<style>
+    .widget-content-left.flex2 {
+        display: none;
+    }
+
+    .widget-content-wrapper:hover .widget-content-left.flex2 {
+        display: block !important;
+    }
+</style>
+
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
@@ -25,7 +35,7 @@
                                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Agent</th>
+                                            <th style="width: 150px;">Agent</th>
                                             <th class="text-center">SAM ID</th>
                                             <th class="text-center">Technology</th>
                                             <th>Site</th>
