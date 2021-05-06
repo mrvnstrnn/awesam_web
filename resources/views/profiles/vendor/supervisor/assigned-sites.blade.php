@@ -36,11 +36,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 150px;">Agent</th>
-                                            <th class="text-center">SAM ID</th>
-                                            <th class="text-center">Technology</th>
+                                            <th>SAM ID</th>
+                                            <th>Technology</th>
                                             <th>Site</th>
                                             <th>PLA ID</th>
-                                            <th class="text-center" >Status</th>
+                                            <th >Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -61,10 +61,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -111,10 +111,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
@@ -165,10 +165,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -213,10 +213,10 @@
                                                     </div>
                                                 </div>
                                             </td>    
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
@@ -271,10 +271,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L9</div>
                                             </td>
                                             <td>
@@ -325,10 +325,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 COLOC-102200
                                             </td>
-                                            <td class="text-center" style="width: 150px;">
+                                            <td style="width: 150px;">
                                                 <div class="badge badge-success">L21</div>
                                             </td>
                                             <td>
