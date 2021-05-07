@@ -7,10 +7,15 @@
         }
     </style>
 
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+    <ul class="tabs-animated body-tabs-animated nav">
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
                 <span>COLOC</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-1">
+                <span>IBS</span>
             </a>
         </li>
     </ul>
@@ -21,214 +26,35 @@
                     <div class="main-card mb-3 card">
                         <div class="card-header-tab card-header">
                             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                            <i class="header-icon lnr-checkmark-circle   icon-gradient bg-ripe-malin"></i>
                             Approvals
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 5px;"></th>
-                                            <th>SAM ID</th>
-                                            <th class="text-center">Technology</th>
-                                            <th>Site</th>
-                                            <th>PLA ID</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                COLOC-102200
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                NEOPOLITAN-IV-C1
-                                                                </a>
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102201">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox13" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox13">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                COLOC-102201
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L21</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                NEOPOLITAN-IV-C1
-                                                                </a>
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102202">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox14" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox14">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                COLOC-102202
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                    VILLA-VERDE-01
-                                                                </a>                           
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102203">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox15" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox15">&nbsp;</label>
-                                                </div>
-                                            </td>    
-                                            <td>
-                                                COLOC-102203
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L21</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                    VILLA-VERDE-01
-                                                                </a>
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>                           
-                                        </tr>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102204">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox15" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox15">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                COLOC-102204
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                    GUADANOVILLE-XX
-                                                                </a>
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr class="modalDataEndorsement" data-endorsement="COLOC-102205">
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="exampleCustomCheckbox16" class="custom-control-input">
-                                                    <label class="custom-control-label" for="exampleCustomCheckbox16">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                COLOC-102205
-                                            </td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <div class="badge badge-success">L21</div>
-                                            </td>
-                                            <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">
-                                                                <a href="#NEOPOLITAN-IV-C1"  data-toggle="modal" data-target=".bd-example-modal-lg" >
-                                                                    GUADANOVILLE-XX
-                                                                </a>
-                                                            </div>
-                                                            <div class="widget-subheading opacity-7">Quezon City</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 150px;">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="">Vendor</th>
+                                                <th class="d-none d-md-table-cell">SAM ID</th>
+                                                <th>Site</th>
+                                                <th class="d-none d-md-table-cell">Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="4" class="text-center py-3">
+                                                    All Cleared
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+    
                             </div>
 
-                            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 0px;">
+                            {{-- <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 0px;">
                                 <li class="page-item">
                                     <a href="javascript:void(0);" class="page-link" aria-label="Previous">
                                         <span aria-hidden="true">«</span>
@@ -256,12 +82,154 @@
                                         <span class="sr-only">Next</span>
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
-                        <div class="d-block text-center card-footer">
+                        {{-- <div class="d-block text-center card-footer">
                             <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger">Reject</button>
                             <button class="btn-wide btn btn-success">Accept</button>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-card mb-3 card">
+                        <div class="card-header-tab card-header">
+                            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-checkmark-circle   icon-gradient bg-ripe-malin"></i>
+                            Approvals
+                            </div>
                         </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div class="table-responsive">
+                                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="">Vendor</th>
+                                                <th class="d-none d-md-table-cell">SAM ID</th>
+                                                <th>Site</th>
+                                                <th class="d-none d-md-table-cell">Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    Huawei
+                                                </td>
+                                                <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    COLOC-102200
+                                                </td>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    <div><strong>NEOPOLITAN-IV-C1</strong></div>
+                                                    <div><i>NCR > Quezon City</i></div>
+                                                </td>
+                                                <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    Document Approval
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    Huawei
+                                                </td>
+                                                <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    COLOC-102200
+                                                </td>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    <div><strong>NEOPOLITAN-IV-C1</strong></div>
+                                                    <div><i>NCR > Quezon City</i></div>
+                                                </td>
+                                                <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    Document Approval
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    Huawei
+                                                </td>
+                                                <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    COLOC-102200
+                                                </td>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    <div><strong>NEOPOLITAN-IV-C1</strong></div>
+                                                    <div><i>NCR > Quezon City</i></div>
+                                                </td>
+                                                <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    Document Approval
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    Huawei
+                                                </td>
+                                                <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    COLOC-102200
+                                                </td>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    <div><strong>NEOPOLITAN-IV-C1</strong></div>
+                                                    <div><i>NCR > Quezon City</i></div>
+                                                </td>
+                                                <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    Document Approval
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    Huawei
+                                                </td>
+                                                <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    COLOC-102200
+                                                </td>
+                                                <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
+                                                    <div><strong>NEOPOLITAN-IV-C1</strong></div>
+                                                    <div><i>NCR > Quezon City</i></div>
+                                                </td>
+                                                <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
+                                                    Document Approval
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+    
+                            </div>
+
+                            {{-- <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 0px;">
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="javascript:void(0);" class="page-link">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">4</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link">5</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul> --}}
+                        </div>
+                        {{-- <div class="d-block text-center card-footer">
+                            <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger">Reject</button>
+                            <button class="btn-wide btn btn-success">Accept</button>
+                        </div> --}}
                     </div>
                 </div>
             </div>
