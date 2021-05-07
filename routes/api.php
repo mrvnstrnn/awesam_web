@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VendorController;
+use App\Http\Controllers\GlobeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/stored-proc', function () {
-    try {
-        return \DB::connection('mysql2')->select('call test_stored_proc');
-    } catch (\Throwable $th) {
-        throw $th;
-    }
-});
+Route::get('/stored-proc', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');

@@ -32,16 +32,16 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ url('api/stored-proc') }}">
                                     <thead>
                                         <tr>
                                             <th style="width: 15px;">
                                                 <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_0" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_0">&nbsp;</label>
+                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
+                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
                                                 </div>
                                             </th>
-                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
+                                            {{-- <th class="d-none d-md-table-cell">Date Endorsed</th> --}}
                                             <th class="d-none d-md-table-cell">SAM ID</th>
                                             <th>Site</th>
                                             <th class="text-center">Technology</th>
@@ -49,7 +49,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="checkbox_1" class="custom-control-input">
@@ -72,8 +72,8 @@
                                             <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
                                                 NCR788
                                             </td>
-                                        </tr>
-                                        <tr>
+                                        </tr> --}}
+                                        {{-- <tr>
                                             <td>
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="checkbox_2" class="custom-control-input">
@@ -168,7 +168,7 @@
                                             <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
                                                 NCR788
                                             </td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -346,12 +346,7 @@
 @endsection
 
 @section('js_script')
-    <script>
-        $(document).on("click", ".modalDataEndorsement", function(){
-            $(".modal-title").text($(this).attr('data-endorsement'));
-            $("#modal-endorsement").modal("show");
-        });
-    </script>
+    <script src="{{ asset('js/sts-staff.js') }}"></script>
 @endsection
 
 @section('modals')
