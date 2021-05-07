@@ -44,7 +44,9 @@ $(document).ready(() => {
 
         for (const [key, value] of Object.entries(JSON.parse(data_endorsement))) {
             // console.log(key, value);
-            $(".content-data").append('<div class="appendData"><b>' + key + '</b> : <span>' + value + '</span></div>');
+            $(".content-data").append(
+                '<div class="appendData form-row"><label>' + key + '</label>: <input value="'+value+'" name="'+key.toLowerCase()+'" id="'+key.toLowerCase()+'" class="form-control"></div>'
+            );
         }
         $("#modal-endorsement").modal("show");
     });
