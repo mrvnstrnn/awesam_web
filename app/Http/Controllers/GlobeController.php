@@ -11,7 +11,7 @@ class GlobeController extends Controller
     {
         try {
             // vendor_id, program_id, profile_id
-            $stored_procs = \DB::connection('mysql2')->select('call test_pull_new_endorsement(1, 1, 6)');
+            $stored_procs = \DB::connection('mysql2')->select('call test_pull_new_endorsement(1, 1, ' .  $profile_id . ')');
             
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row){
