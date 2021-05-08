@@ -24,6 +24,7 @@ $(document).ready(() => {
                 $(row).attr('data-title', data.sam_id);
                 $(row).attr('data-endorsement', JSON.stringify(JSON.parse(data.site_fields.replace(/&quot;/g,'"'))));
                 $(row).addClass('modalDataEndorsement');
+                $(row).attr('id', data.sam_id);
             },
             columns: [
                 { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
@@ -40,19 +41,50 @@ $(document).ready(() => {
         $(".content-data .appendData").remove();
         $(".modal-title").text($(this)[0].parentElement.attributes[0].nodeValue);
         var data_endorsement = $(this)[0].parentElement.attributes[1].nodeValue;
+
+        console.log(data_endorsement);
+
         // console.log(Object.keys(JSON.parse(data_endorsement)).length);
 
+        allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"]
+
+        $(".content-data").append(
+            "<H1>" + $(".modal-title").text().replace(" ","_") + "</H1>"
+        );
+
         for (const [key, value] of Object.entries(JSON.parse(data_endorsement))) {
-            // console.log(key, value);
-            $(".content-data").append(
-                '<div class="appendData form-row"><label>' + key + '</label>: <input value="'+value+'" name="'+key.toLowerCase()+'" id="'+key.toLowerCase()+'" class="form-control"></div>'
-            );
+
+            // console.log(key + ": " + value);
+
+            if(allowed_keys.includes(key) > 0){
+                $(".content-data").append(
+
+                    '<div class="position-relative form-group">' +
+                        '<label for="' + key.toLowerCase() + '" style="font-size: 11px;">' +  key + '</label>' +
+                        '<input class="form-control"  value="'+value+'" name="' + key.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
+                    '</div>'
+
+                );
+            }
         }
+
+        $("#btn-accept-endorsement").attr('data-sam_id', $(".modal-title").text() );
+
         $("#modal-endorsement").modal("show");
+        $('#modal-endorsement').modal('handleUpdate')
+
     });
 
     $("#checkAll").click(function(){
         $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
+    $("#btn-accept-endorsement").click(function(){
+
+        $("#" + $("#btn-accept-endorsement").attr('data-sam_id')  ).remove();
+        $(".content-data").html('');
+        $("#modal-endorsement").modal('hide');
+
     });
     
 

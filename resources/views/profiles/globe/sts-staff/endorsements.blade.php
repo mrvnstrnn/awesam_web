@@ -256,7 +256,7 @@
 @section('modals')
 
     <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                     <div class="modal-header">
                             <h5 class="modal-title">Modal title</h5>
@@ -265,13 +265,12 @@
                                 </button>
                         </div>
                 <div class="modal-body">
-                    <div class="container-fluid">
-                        Add rows here
-                    </div>
+                        <div class="content-data">
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-accept-endorsement" data-sam_id="TEST ACCEPT">Accept Endorsement</button>
                 </div>
             </div>
         </div>
