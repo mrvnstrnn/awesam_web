@@ -7,12 +7,12 @@ use DataTables;
 
 class GlobeController extends Controller
 {
-    public function getDataNewEndorsement()
+    public function getDataNewEndorsement($profile_id)
     {
         try {
-
-            $stored_procs = \DB::connection('mysql2')->select('call test_stored_proc');
-    
+            // vendor_id, program_id, profile_id
+            $stored_procs = \DB::connection('mysql2')->select('call test_pull_new_endorsement(1, 1, 6)');
+            
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row){
                             $checkbox = "<div class='custom-checkbox custom-control'>";
@@ -22,13 +22,21 @@ class GlobeController extends Controller
     
                             return $checkbox;
                         })
-                        // ->addColumn('site_name', function($row){
-                        //     $technology = "<div class='text-center'><div class='badge badge-success'>" .$row->TECHNOLOGY. "</div></div>" ;
-                        //     return $technology;
-                        // })
                         ->addColumn('technology', function($row){
-                            $technology = "<div class='text-center'><div class='badge badge-success'>" .$row->TECHNOLOGY. "</div></div>" ;
-                            return $technology;
+                            $technology = collect();
+                            foreach (json_decode($row->site_fields, true) as $technologys){
+                                $technology->push($technologys);
+                            }
+                            return "<div class='badge badge-success'>".$technology[13]."</div>";
+                            
+                        })
+                        ->addColumn('pla_id', function($row){
+                            $pla_id = collect();
+                            foreach (json_decode($row->site_fields) as $plaid){
+                                $pla_id->push($plaid);
+                            }
+                            return $pla_id[1];
+                            
                         });
             
             $dt->rawColumns(['checkbox', 'technology']);

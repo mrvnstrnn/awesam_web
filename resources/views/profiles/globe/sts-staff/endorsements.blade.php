@@ -32,7 +32,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ url('api/stored-proc') }}">
+                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ url('api/stored-proc/') }}">
                                     <thead>
                                         <tr>
                                             <th style="width: 15px;">
@@ -54,102 +54,6 @@
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="checkbox_1" class="custom-control-input">
                                                     <label class="custom-control-label" for="checkbox_1">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                COLOC-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr> --}}
-                                        {{-- <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_2" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_2">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                COLOC-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_3" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_3">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                COLOC-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_4" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_4">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                COLOC-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_5" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_5">&nbsp;</label>
                                                 </div>
                                             </td>
                                             <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
