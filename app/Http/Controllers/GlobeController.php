@@ -49,7 +49,19 @@ class GlobeController extends Controller
     public function getNewEndorsement($profile_id)
     {
         try {
-            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, 3, ' .  $profile_id . ')');
+
+           switch($profile_id){
+               case 6: 
+                    $activity_name = "New Endorsement";
+                    break;
+               case 7: 
+                    $activity_name = "STS Approval of Endorsement";
+                    break;
+               default:
+                    $activity_name = "";     
+           }     
+
+            $new_endorsements = \DB::connection('mysql2')->select('call `pull_new_endorsement_1`(1, 3, ' .  $profile_id . ', "' . $activity_name .'")');
 
             $json_output = [];
 
