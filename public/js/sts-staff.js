@@ -43,14 +43,16 @@ $(document).ready(() => {
     
         } );    
 
-        console.log(dataSet[0][5]);
+        // console.log(dataSet[0][5]);
 
     });
       
     $('#new-endoresement-table tbody').on( 'click', 'tr', function () {
 
-        $("#modal-endorsement").modal("show");
         $(".modal-title").text($(this).attr("data-site_name"));
+        $("#btn-accept-endorsement").attr('data-sam_id', $(this).attr("id") );
+
+        $("#modal-endorsement").modal("show");
 
         console.log($(this)[0]);
     } );
