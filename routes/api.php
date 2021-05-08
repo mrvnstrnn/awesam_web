@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/stored-proc/{profile_id}', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');
+
+Route::get('/new-endorsements', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
