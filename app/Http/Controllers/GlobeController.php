@@ -49,7 +49,7 @@ class GlobeController extends Controller
     public function getNewEndorsement($profile_id)
     {
         try {
-            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, 1, ' .  $profile_id . ')');
+            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, 3, ' .  $profile_id . ')');
 
             $json_output = [];
 
