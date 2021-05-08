@@ -45,4 +45,44 @@ class GlobeController extends Controller
             throw $th;
         }
     }
+
+    public function getNewEndorsement()
+    {
+        try {
+            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, 1, 6)');
+
+            $json_output = [];
+
+            for($i=0; $i < count($new_endorsements); $i++ ){
+
+
+                // DECLARE JSON FIELDS AND SKIP
+                $json_fields = array("site_fields", "stage_activities");            
+
+                foreach($new_endorsements[$i] as $xfield => $object){
+                    if(in_array($xfield, $json_fields)===FALSE){
+                        $json[$xfield] = $object;
+                    }
+                }
+
+                // Process JSON FIELDS and add to JSON 
+                $site_fields = json_decode($new_endorsements[$i]->site_fields, TRUE);
+                $stage_activities = json_decode($new_endorsements[$i]->stage_activities, TRUE);
+
+                $json["site_fields"] = $site_fields;           
+                $json["stage_activities"] = $stage_activities;
+
+                $json_output[] = $json;
+
+            }
+            
+            return $json_output;
+
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+    }
+
 }
