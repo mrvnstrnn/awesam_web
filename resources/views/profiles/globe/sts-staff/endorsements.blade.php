@@ -32,7 +32,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ url('api/stored-proc/') }}">
+                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('all.getDataNewEndorsement', \Auth::user()->profile_id) }}">
                                     <thead>
                                         <tr>
                                             <th style="width: 15px;">
@@ -41,7 +41,7 @@
                                                     <label class="custom-control-label" for="checkAll">&nbsp;</label>
                                                 </div>
                                             </th>
-                                            {{-- <th class="d-none d-md-table-cell">Date Endorsed</th> --}}
+                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
                                             <th class="d-none d-md-table-cell">SAM ID</th>
                                             <th>Site</th>
                                             <th class="text-center">Technology</th>
