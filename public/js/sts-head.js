@@ -1,6 +1,6 @@
 $(document).ready(() => {
 
-    profile_id = 6;
+    profile_id = 7;
     
     $.get( "/api/new-endorsements/" + profile_id, function( sites ) {
 
