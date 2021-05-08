@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
+use GuzzleHttp\Client;
+
 
 class GlobeController extends Controller
 {
@@ -96,5 +98,8 @@ class GlobeController extends Controller
         }
 
     }
+
+
+
 
 }
