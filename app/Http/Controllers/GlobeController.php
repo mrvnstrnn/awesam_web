@@ -4,40 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
-use GuzzleHttp\Client;
 
 
 class GlobeController extends Controller
 {
-    public function getDataNewEndorsement($profile_id)
+    public function getDataNewEndorsement($profile_id, $program_id)
     {
         try {
             // vendor_id, program_id, profile_id
-            $stored_procs = \DB::connection('mysql2')->select('call test_pull_new_endorsement(1, 1, ' .  $profile_id . ')');
+            $stored_procs = $this->getNewEndorsement($profile_id, $program_id);
             
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row){
                             $checkbox = "<div class='custom-checkbox custom-control'>";
-                            $checkbox .= "<input type='checkbox' name='checkbox' id='checkbox_".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
-                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
+                            $checkbox .= "<input type='checkbox' name='checkbox' id='checkbox_".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row['sam_id']."'></label>";
                             $checkbox .= "</div>";
     
                             return $checkbox;
                         })
                         ->addColumn('technology', function($row){
-                            $technology = collect();
-                            foreach (json_decode($row->site_fields, true) as $technologys){
-                                $technology->push($technologys);
-                            }
-                            return "<div class='badge badge-success'>".$technology[13]."</div>";
-                            
+                            return "<div class='badge badge-success'>".$row['site_fields'][0]['TECHNOLOGY']."</div>";                            
                         })
                         ->addColumn('pla_id', function($row){
-                            $pla_id = collect();
-                            foreach (json_decode($row->site_fields) as $plaid){
-                                $pla_id->push($plaid);
-                            }
-                            return $pla_id[1];
+                            return $row['site_fields'][0]['PLA_ID'];
                             
                         });
             
@@ -124,7 +114,15 @@ class GlobeController extends Controller
 
     }
 
-
+    public function acceptEndorsement(Request $request)
+    {
+        try {
+            $new_endorsements = \DB::connection('mysql2')->select('call set_new_endorsement("'.$request->input('sam_id').'", true)');
+            return response()->json(['error' => false, 'message' => "Successfully accept endorsement."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
 
 }

@@ -5,6 +5,10 @@
         .modalDataEndorsement {
             cursor: pointer;
         }
+
+        table {
+            width: 100% !important;
+        }
     </style>
 
     <ul class="tabs-animated body-tabs-animated nav">
@@ -32,15 +36,15 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="new-endoresement-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('all.getDataNewEndorsement', \Auth::user()->profile_id) }}">
+                                <table id="new-endoresement-coloc-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 3]) }}">
                                     <thead>
                                         <tr>
-                                            {{-- <th style="width: 15px;">
+                                            <th style="width: 15px;">
                                                 <div class="custom-checkbox custom-control">
                                                     <input type="checkbox" id="checkAll" class="custom-control-input">
                                                     <label class="custom-control-label" for="checkAll">&nbsp;</label>
                                                 </div>
-                                            </th> --}}
+                                            </th>
                                             <th class="d-none d-md-table-cell">Date Endorsed</th>
                                             <th class="d-none d-md-table-cell">SAM ID</th>
                                             <th>Site</th>
@@ -49,30 +53,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_1" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_1">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                COLOC-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -97,9 +77,15 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                <table id="new-endoresement-ibs-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 4]) }}">
                                     <thead>
                                         <tr>
+                                            <th style="width: 15px;">
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
+                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
+                                                </div>
+                                            </th>
                                             <th class="d-none d-md-table-cell">Date Endorsed</th>
                                             <th class="d-none d-md-table-cell">SAM ID</th>
                                             <th>Site</th>
@@ -108,30 +94,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkbox_1" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkbox_1">&nbsp;</label>
-                                                </div>
-                                            </td>
-                                            <td  class="modalDataEndorsement d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                2021-01-01
-                                            </td>
-                                            <td  class="modalDataEndorsement  d-none d-md-table-cell" data-endorsement="COLOC-102200">
-                                                IBS-102200
-                                            </td>
-                                            <td  class="modalDataEndorsement" data-endorsement="COLOC-102200">
-                                                <div><strong>NEOPOLITAN-IV-C1</strong></div>
-                                                <div><i>NCR > Quezon City</i></div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center" data-endorsement="COLOC-102200">
-                                                <div class="badge badge-success">L9</div>
-                                            </td>
-                                            <td  class="modalDataEndorsement text-center  d-none d-sm-table-cell" data-endorsement="COLOC-102200">
-                                                NCR788
-                                            </td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -148,13 +110,13 @@
 @endsection
 
 @section('js_script')
-    <script src="{{ asset('js/sts-head.js') }}"></script>
+    <script src="{{ asset('js/sts-staff.js') }}"></script>
 @endsection
 
 @section('modals')
 
     <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
                     <div class="modal-header">
                             <h5 class="modal-title">Modal title</h5>
@@ -163,12 +125,11 @@
                                 </button>
                         </div>
                 <div class="modal-body">
-                        <div class="content-data">
-                        </div>
+                    <div class="content-data"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btn-accept-endorsement" data-sam_id="TEST ACCEPT">Accept Endorsement</button>
+                    <button type="button" class="btn btn-primary" id="btn-accept-endorsement" data-href="{{ route('accept.endorsement') }}" data-sam_id="TEST ACCEPT">Accept Endorsement</button>
                 </div>
             </div>
         </div>

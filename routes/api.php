@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/stored-proc/{profile_id}', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');
+// Route::group(function () {
+    Route::get('/stored-proc/{profile_id}/{program_id}', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');
+    // Route::get('/new-endorsements/{profile_id}/{program_id}', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
+// });
 
-Route::get('/new-endorsements/{profile_id}/{program_id}', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
