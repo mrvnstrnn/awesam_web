@@ -127,7 +127,7 @@ $(document).ready(() => {
         });
 
         $(".modal-title").text(json_parse.site_name);
-        $("#btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+        $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
         $("#modal-endorsement").modal("show");
     } );
 
@@ -135,14 +135,16 @@ $(document).ready(() => {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-    $("#btn-accept-endorsement").click(function(){
+    $(".btn-accept-endorsement").click(function(){
 
         var sam_id = $(this).attr('data-sam_id');
+        var data_complete = $(this).attr('data-complete');
 
         $.ajax({
             url: $(this).attr('data-href'),
             data: {
-                sam_id : sam_id
+                sam_id : sam_id,
+                data_complete : data_complete
             },
             type: 'POST',
             headers: {
@@ -154,6 +156,7 @@ $(document).ready(() => {
                     toastr.success(resp.message, 'Success');
                     $("#modal-endorsement").modal("hide");
                 } else {
+                    $('.new-endorsement-table').DataTable().ajax.reload();
                     toastr.error(resp.message, 'Error');
                 }
             },
