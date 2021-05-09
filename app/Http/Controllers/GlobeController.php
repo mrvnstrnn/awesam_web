@@ -48,22 +48,47 @@ class GlobeController extends Controller
         }
     }
 
-    public function getNewEndorsement($profile_id)
+    public function getNewEndorsement($profile_id, $program_id)
     {
         try {
 
-           switch($profile_id){
-               case 6: 
-                    $activity_name = "New Endorsement";
-                    break;
-               case 7: 
-                    $activity_name = "STS Approval of Endorsement";
-                    break;
-               default:
-                    $activity_name = "";     
-           }     
 
-            $new_endorsements = \DB::connection('mysql2')->select('call `pull_new_endorsement_1`(1, 3, ' .  $profile_id . ', "' . $activity_name .'")');
+            // TEMPORARY BRACKETING OF ACTIVITY PER PROGRAM
+            // SHOULD BE MIGRATED TO TABLE BASED LOGIC 
+
+            switch($program_id){
+
+                case 3:
+                    switch($profile_id){
+                        case 6: 
+                                $activity_name = "New Endorsement";
+                                break;
+                        case 7: 
+                                $activity_name = "STS Approval of Endorsement";
+                                break;
+                        default:
+                                $activity_name = "";     
+                    }
+                    break;
+
+                case 4:
+                    switch($profile_id){
+                        case 6: 
+                                $activity_name = "New Endorsement";
+                                break;
+                        case 7: 
+                                $activity_name = "STS Approval of Endorsement";
+                                break;
+                        default:
+                                $activity_name = "";     
+                    }
+                    break;
+
+                default:
+
+            }
+
+            $new_endorsements = \DB::connection('mysql2')->select('call `pull_new_endorsement_1`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_name .'")');
 
             $json_output = [];
 
