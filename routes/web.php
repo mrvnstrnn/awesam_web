@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GlobeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/edit-permission/{permission}', [ProfileController::class, 'edit_permission'])->name('edit.permission');
     Route::post('/addupdate-permission', [ProfileController::class, 'addupdate_permission'])->name('addupdate.permission');
     Route::post('/delete-permission', [ProfileController::class, 'deletePermission'])->name('delete.permission');
+
+    
+    Route::post('/accept-endorsement', [GlobeController::class, 'acceptEndorsement'])->name('accept.endorsement');
 });
 
 
