@@ -124,7 +124,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                         </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                     <div class="form-row content-data">
                         
                     </div>
