@@ -125,10 +125,12 @@
                                 </button>
                         </div>
                 <div class="modal-body">
-                    <div class="content-data"></div>
+                    <div class="form-row content-data">
+                        
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                    <button type="button" class="btn btn-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
                     <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}" data-sam_id="TEST ACCEPT">Accept Endorsement</button>
                 </div>
             </div>
