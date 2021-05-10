@@ -64,6 +64,10 @@ $(document).ready(() => {
             $(row).attr('data-site', JSON.stringify(data));
             $(row).addClass('modalDataEndorsement');
         },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
         columns: [
             { data: "checkbox" },
             { data: "site_endorsement_date" },
@@ -92,6 +96,10 @@ $(document).ready(() => {
             $(row).attr('data-site', JSON.stringify(data));
             $(row).addClass('modalDataEndorsement');
         },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
         columns: [
             { data: "checkbox" },
             { data: "site_endorsement_date" },
@@ -117,7 +125,7 @@ $(document).ready(() => {
             Object.entries(value).forEach(([keys, values]) => {
                 if(allowed_keys.includes(keys) > 0){
                     $(".content-data").append(
-                        '<div class="position-relative form-group">' +
+                        '<div class="position-relative form-group col-md-6">' +
                             '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
                             '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
                         '</div>'
