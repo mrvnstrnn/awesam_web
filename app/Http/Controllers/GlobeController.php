@@ -78,7 +78,8 @@ class GlobeController extends Controller
 
             }
 
-            $new_endorsements = \DB::connection('mysql2')->select('call `pull_new_endorsement_1`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_name .'")');
+            // $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_name .'")');
+            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ')');
 
             $json_output = [];
 
@@ -114,11 +115,36 @@ class GlobeController extends Controller
 
     }
 
-    public function acceptEndorsement(Request $request)
+    public function acceptRejectEndorsement(Request $request)
     {
         try {
-            $new_endorsements = \DB::connection('mysql2')->select('call set_new_endorsement("'.$request->input('sam_id').'", true)');
-            return response()->json(['error' => false, 'message' => "Successfully accept endorsement."]);
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::user()->id;
+
+            switch ($profile_id) {
+                case 6:
+                    $profile_return = 6;
+                    $profile_pass = 7;
+                    break;
+
+                case 7:
+                    $profile_return = 6;
+                    $profile_pass = 3;
+                    break;
+                
+                default:
+                    $profile_return = 6;
+                    $profile_pass = 7;
+                    break;
+            }
+
+            $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
+
+            $profile_to_use = $request->input('data_complete') == 'false' ? $profile_return : $profile_pass;
+
+            $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id').'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
+
+            return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
