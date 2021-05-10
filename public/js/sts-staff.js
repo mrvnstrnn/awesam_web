@@ -57,10 +57,10 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function(){
-                $("#loaderModal").modal("show");
+                // $("#loaderModal").modal("show");
             },
             complete: function(){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
             }
         },
         dataSrc: function(json){
