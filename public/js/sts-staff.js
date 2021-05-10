@@ -147,7 +147,7 @@ $(document).ready(() => {
     });
 
     $(".btn-accept-endorsement").click(function(){
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
@@ -167,14 +167,14 @@ $(document).ready(() => {
                     $('.new-endorsement-table').DataTable().ajax.reload();
                     $("#modal-endorsement").modal("hide");
                     toastr.success(resp.message, 'Success');
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
@@ -182,7 +182,7 @@ $(document).ready(() => {
     });
 
     $(".btn-bulk-acceptreject-endorsement").click(function(){
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
@@ -210,15 +210,15 @@ $(document).ready(() => {
                 if(!resp.error){
                     $('.new-endorsement-table').DataTable().ajax.reload();
                     $("#modal-endorsement").modal("hide");
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.success(resp.message, 'Success');
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
