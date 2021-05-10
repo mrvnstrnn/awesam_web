@@ -190,11 +190,12 @@
             <div class="font-icon-wrapper bg-white">
                 <div class="loader-wrapper d-flex justify-content-center align-items-center">
                     <div class="loader">
-                        <div class="ball-pulse-sync">
+                        <div class="line-scale-pulse-out">
                             <div></div>
                             <div></div>
                             <div></div>
                         </div>
+                        <p>Processing...</p>
                     </div>
                 </div>
             </div>

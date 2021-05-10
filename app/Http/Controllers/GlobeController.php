@@ -132,6 +132,11 @@ class GlobeController extends Controller
 
                 case 7:
                     $profile_return = 6;
+                    $profile_pass = 12;
+                    break;
+
+                case 12:
+                    $profile_return = 7;
                     $profile_pass = 3;
                     break;
                 

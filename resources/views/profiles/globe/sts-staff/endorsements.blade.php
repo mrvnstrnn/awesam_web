@@ -58,8 +58,8 @@
                             </div>
                         </div>
                         <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
+                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                         </div>
                     </div>
                 </div>
@@ -99,8 +99,8 @@
                             </div>
                         </div>
                         <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
+                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                         </div>
                     </div>
                 </div>
