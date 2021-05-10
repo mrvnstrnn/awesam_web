@@ -58,8 +58,8 @@
                             </div>
                         </div>
                         <div class="d-block text-right card-footer">
-                            <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger">Reject</button>
-                            <button class="btn-wide btn btn-success">Accept</button>
+                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                         </div>
                     </div>
                 </div>
@@ -99,8 +99,8 @@
                             </div>
                         </div>
                         <div class="d-block text-right card-footer">
-                            <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger">Reject</button>
-                            <button class="btn-wide btn btn-success">Accept</button>
+                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                         </div>
                     </div>
                 </div>

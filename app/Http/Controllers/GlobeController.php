@@ -17,7 +17,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row){
                             $checkbox = "<div class='custom-checkbox custom-control'>";
-                            $checkbox .= "<input type='checkbox' name='checkbox' id='checkbox_".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<input type='checkbox' name='sam_id_checkbox[]' id='checkbox_".$row['sam_id']."' value='".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
                             $checkbox .= "<label class='custom-control-label' for='checkbox_".$row['sam_id']."'></label>";
                             $checkbox .= "</div>";
     
@@ -118,6 +118,9 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
+            if(is_null($request->input('sam_id'))){
+                return response()->json(['error' => true, 'message' => "No data selected."]);
+            }
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
@@ -142,7 +145,9 @@ class GlobeController extends Controller
 
             $profile_to_use = $request->input('data_complete') == 'false' ? $profile_return : $profile_pass;
 
-            $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id').'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
+            for ($i=0; $i < count($request->input('sam_id')); $i++) { 
+                $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id')[$i].'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
+            }
 
             return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);
         } catch (\Throwable $th) {
