@@ -124,16 +124,17 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                         </div>
-                <div class="modal-body">
-                    <div class="content-data"></div>
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                    <div class="form-row content-data">
+                        
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}" data-sam_id="TEST ACCEPT">Accept Endorsement</button>
+                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                 </div>
             </div>
         </div>
     </div>
-
 
 @endsection
