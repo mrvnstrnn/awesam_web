@@ -56,6 +56,12 @@ $(document).ready(() => {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            beforeSend: function(){
+                $("#loaderModal").modal("show");
+            },
+            complete: function(){
+                $("#loaderModal").modal("hide");
+            }
         },
         dataSrc: function(json){
             return json.data;
@@ -110,14 +116,11 @@ $(document).ready(() => {
         ],
     });  
       
-    $('.new-endorsement-table tbody').on( 'click', 'tr', function () {
-        var json_parse = JSON.parse($(this).attr("data-site"));
+    $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
+        // var json_parse = JSON.parse($(this).attr("data-site"));
+        var json_parse = JSON.parse($(this).parent().attr('data-site'));
 
         allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
-
-        // $(".content-data").append(
-        //     "<H1>" + $(".modal-title").text().replace(" ","_") + "</H1>"
-        // );
 
         $(".content-data .position-relative.form-group").remove();
 
@@ -144,8 +147,10 @@ $(document).ready(() => {
     });
 
     $(".btn-accept-endorsement").click(function(){
+        $("#loaderModal").modal("show");
+        $("#modal-endorsement").modal("hide");
 
-        var sam_id = $(this).attr('data-sam_id');
+        var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
 
         $.ajax({
@@ -162,21 +167,62 @@ $(document).ready(() => {
                 if(!resp.error){
                     $('.new-endorsement-table').DataTable().ajax.reload();
                     toastr.success(resp.message, 'Success');
-                    $("#modal-endorsement").modal("hide");
+                    // $("#modal-endorsement").modal("hide");
+                    $("#loaderModal").modal("hide");
                 } else {
-                    $('.new-endorsement-table').DataTable().ajax.reload();
+                    $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
+                $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
 
+    });
 
-        // $("#" + $("#btn-accept-endorsement").attr('data-sam_id')  ).remove();
-        $(".content-data").html('');
-        $("#modal-endorsement").modal('hide');
+    $(".btn-bulk-acceptreject-endorsement").click(function(){
+        $("#loaderModal").modal("show");
+        $("#modal-endorsement").modal("hide");
+
+        var sam_id = $(this).attr('data-sam_id');
+        var data_complete = $(this).attr('data-complete');
+
+        var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
+
+        sam_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                sam_id.push(inputElements[i].value);
+            }
+        }
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#loaderModal").modal("hide");
+                    $('.new-endorsement-table').DataTable().ajax.reload();
+                    toastr.success(resp.message, 'Success');
+                } else {
+                    $("#loaderModal").modal("hide");
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                $("#loaderModal").modal("hide");
+                toastr.error(resp.message, 'Error');
+            }
+        });
 
     });
     
