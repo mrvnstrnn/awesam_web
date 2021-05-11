@@ -25,11 +25,14 @@
             <li class="nav-item">
                 @if ($loop->first)
                     <a role="tab" class="nav-link active" id="tab-{{ $program->vendor_program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->vendor_program_id  }}">
+                        <span>{{ $program->vendor_program }}</span>
+                        <span class="badge badge-pill badge-light">1.2K</span>
+                    </a>
                 @else
                     <a role="tab" class="nav-link" id="tab-{{ $program->vendor_program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->vendor_program_id  }}">
+                        <span>{{ $program->vendor_program }}</span>
+                    </a>
                 @endif
-                    <span>{{ $program->vendor_program }}</span>
-                </a>
             </li>
         @endforeach
 
@@ -53,14 +56,8 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ $program->vendor_program  }} Endorsements
+                                {{ $program->vendor_program  }} Returned Endorsements
                                 </div>
-                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                    <button class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-success mt-2">
-                                        <i class="pe-7s-cloud-upload btn-icon-wrapper"></i>Upload New Sites
-                                    </button>
-                                    {{-- <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="" data-complete="true" id="" data-href="">Upload Sites</button> --}}
-                                </div>       
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -87,7 +84,7 @@
                             </div>
                             <div class="d-block text-right card-footer">
                                 {{-- <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button> --}}
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Re-Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
