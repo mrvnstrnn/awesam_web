@@ -1,5 +1,92 @@
 $(document).ready(() => {
 
+    $('#vendor-list-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#vendor-list-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function(row, data) {
+            $(row).attr('data-id', data.vendor_id);
+            $(row).attr('data-statusb', 'listVendor');
+            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
+            $(row).addClass('modalTerminate');
+        },
+        columns: [
+            { data: "vendor_sec_reg_name" },
+            { data: "vendor_acronym" },
+            { data: "vendor_fullname" },
+            { data: "vendor_admin_email" },
+            { data: "vendor_office_address" },
+            { data: "vendor_saq_status" }
+        ],
+    }); 
+    
+    $('#vendor-list-ongoing-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: $("#vendor-list-ongoing-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function(row, data) {
+            $(row).attr('data-id', data.vendor_id);
+            $(row).attr('data-statusb', 'OngoingOff');
+            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
+            $(row).addClass('modalTerminate');
+        },
+        columns: [
+            { data: "vendor_sec_reg_name" },
+            { data: "vendor_acronym" },
+            { data: "vendor_fullname" },
+            { data: "vendor_admin_email" },
+            { data: "vendor_office_address" },
+            { data: "vendor_saq_status" }
+        ],
+    }); 
+
+    $('#vendor-list-complete-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: $("#vendor-list-complete-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function(row, data) {
+            $(row).attr('data-id', data.vendor_id);
+            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
+            $(row).addClass('modalTerminate');
+        },
+        columns: [
+            { data: "vendor_sec_reg_name" },
+            { data: "vendor_acronym" },
+            { data: "vendor_fullname" },
+            { data: "vendor_admin_email" },
+            { data: "vendor_office_address" },
+            { data: "vendor_saq_status" }
+        ],
+    }); 
+
     $('.add_vendor').on('click', function(){
         var route = $(this).attr('data-href');
 
@@ -103,6 +190,60 @@ $(document).ready(() => {
     $(".resetForm").on('click', function(){
         $("#addVendorForm")[0].reset();
         $(".add_vendor").text('Add vendor');
+    });
+
+    $(document).on('click', '.modalTerminate', function(){
+        var id = $(this).attr('data-id');
+        var data_statusb = $(this).attr('data-statusb');
+        var vendor_sec_reg_name = $(this).attr('data-vendor_sec_reg_name');
+
+        $(".vendor_sec_reg_name").text(vendor_sec_reg_name);
+
+        $("#terminationModal").modal("show");
+
+        $(".terminate_button").attr('data-id', id);
+        $(".terminate_button").attr('data-statusb', data_statusb);
+    });
+
+    $(document).on('click', '.terminate_button', function(){
+        var id = $(this).attr('data-id');
+        var data_statusb = $(this).attr('data-statusb');
+        
+        var var_id = '';
+
+        if(data_statusb == 'listVendor'){
+            var_id = '#vendor-list-table';
+        } else if (data_statusb == 'OngoingOff'){
+            var_id = '#vendor-list-ongoing-table';
+
+        } else if (data_statusb == 'Complete'){
+            var_id = '#vendor-list-complete-table';
+        }
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            method: 'POST',
+            data: {
+                id : id,
+                data_statusb : data_statusb
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if (!resp.error) {
+                    $(var_id).DataTable().ajax.reload(function(){
+                        $("#terminationModal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
     });
 
 });

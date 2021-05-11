@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Vendor;
+use DataTables;
 
 class VendorController extends Controller
 {
@@ -62,6 +63,59 @@ class VendorController extends Controller
             return response()->json([ 'error' => false, 'message' => $vendors ]);
         } catch (\Throwable $th) {
             return response()->json([ 'error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function vendor_list($program_status)
+    {
+        try {
+            if ($program_status == 'listVendor') {
+                $arrayProgram = ['Active', 'Ongoing Accreditation'];
+            } else if($program_status == 'OngoingOff') {
+                $arrayProgram = ['Ongoing Offboarding'];
+            } else if($program_status == 'Complete') {
+                $arrayProgram = ['Complete Offboarding'];
+            }
+            
+            $vendors = \DB::connection('mysql2')->table('vendor')
+                                    // ->join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendor.vendor_program_id')
+                                    ->whereIn('vendor_saq_status', $arrayProgram)
+                                    ->get();
+
+            $dt = DataTables::of($vendors)
+                        ->addColumn('vendor_saq_status', function($row){
+                            $class = $row->vendor_saq_status == 'Active' ? 'success' : 'warning';
+                            return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_saq_status.'</div>';
+                        });
+            
+            $dt->rawColumns(['vendor_saq_status']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function terminate_vendor(Request $request)
+    {
+        try {
+            $status = '';
+
+            // return response()->json(['error' => true, 'message' => $request->input('data_statusb')]);
+            if($request->input('data_statusb') == 'listVendor'){
+                $status = 'Ongoing Offboarding';
+            } else if ($request->input('data_statusb') == 'OngoingOff'){
+                $status = 'Complete Offboarding';
+            }
+
+            \DB::connection('mysql2')->table('vendor')
+                        ->where('vendor_id', $request->input('id'))
+                        ->update([
+                            'vendor_saq_status' => $status
+                        ]);
+
+            return response()->json(['error' => false, 'message' => 'Successfully terminated a vendor.']);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 }
