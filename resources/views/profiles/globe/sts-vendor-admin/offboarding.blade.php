@@ -39,13 +39,7 @@
                                 <table id="new-endoresement-coloc-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 3]) }}">
                                     <thead>
                                         <tr>
-                                            <th style="width: 15px;">
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
+                                            <th class="d-none d-md-table-cell">Vendor</th>
                                             <th class="d-none d-md-table-cell">SAM ID</th>
                                             <th>Site</th>
                                             <th class="text-center">Technology</th>
