@@ -9,12 +9,6 @@ $(document).ready(() => {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            beforeSend: function(){
-                // $("#loaderModal").modal("show");
-            },
-            complete: function(){
-                // $("#loaderModal").modal("hide");
-            }
         },
         dataSrc: function(json){
             return json.data;
@@ -103,7 +97,7 @@ $(document).ready(() => {
     });
 
     $(".btn-accept-endorsement").click(function(){
-        // $("#loaderModal").modal("show");
+        $("#loaderModal").modal("show");
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
@@ -128,15 +122,15 @@ $(document).ready(() => {
                     $(program_div).DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
-                        // $("#loaderModal").modal("hide");
+                        $("#loaderModal").modal("hide");
                     });
                 } else {
-                    // $("#loaderModal").modal("hide");
+                    $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                // $("#loaderModal").modal("hide");
+                $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
@@ -175,19 +169,16 @@ $(document).ready(() => {
                 if(!resp.error){
                     $(program_div).DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        // $("#loaderModal").modal("hide");
+                        $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
                     });
-                    // $("#modal-endorsement").modal("hide");
-                    // $("#loaderModal").modal("hide");
-                    // toastr.success(resp.message, 'Success');
                 } else {
-                    // $("#loaderModal").modal("hide");
+                    $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                // $("#loaderModal").modal("hide");
+                $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
