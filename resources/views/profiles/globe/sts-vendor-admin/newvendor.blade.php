@@ -52,13 +52,13 @@
                                     {{-- <label for="vendor_saq_status">Status of Vendor </label> --}}
                                         <div class="position-relative form-check-inline">
                                             <label class="form-check-label">
-                                                <input name="vendor_saq_status" value="1" id="vendor_saq_status" type="radio" class="form-check-input">
+                                                <input name="vendor_saq_status" value="Active" id="vendor_saq_status" type="radio" class="form-check-input">
                                                 Active
                                             </label>
                                         </div>
                                         <div class="position-relative form-check-inline">
                                             <label class="form-check-label">
-                                                <input name="vendor_saq_status" value="0" id="vendor_saq_status" type="radio" class="form-check-input">
+                                                <input name="vendor_saq_status" value="Ongoing Accreditation" id="vendor_saq_status" type="radio" class="form-check-input">
                                                 Ongoing Accreditation
                                             </label>
                                         </div>

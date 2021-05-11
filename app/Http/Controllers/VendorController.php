@@ -15,7 +15,7 @@ class VendorController extends Controller
             $validate = Validator::make($request->all(), array(
                 'vendor_fullname' => 'required',
                 'vendor_admin_email' => 'required | email',
-                'vendor_program_id' => 'required',
+                // 'vendor_program_id' => 'required',
                 'vendor_sec_reg_name' => 'required',
                 'vendor_acronym' => 'required',
                 'vendor_office_address' => 'required',
@@ -23,14 +23,26 @@ class VendorController extends Controller
             ));
 
             if ($validate->passes()){
-                Vendor::updateOrCreate(
-                    ['vendor_id' => $request->input('vendor_id')]
-                    , $request->all()
+                $arrayData = array(
+                    'vendor_fullname' => $request->input('vendor_fullname'),
+                    'vendor_admin_email' => $request->input('vendor_admin_email'),
+                    'vendor_sec_reg_name' => $request->input('vendor_sec_reg_name'),
+                    'vendor_acronym' => $request->input('vendor_acronym'),
+                    'vendor_office_address' => $request->input('vendor_office_address'),
+                    'vendor_saq_status' => $request->input('vendor_saq_status'),
                 );
-
+                
                 if(is_null($request->input('vendor_id'))) {
+                    \DB::connection('mysql2')->table('vendor')->insert(
+                        $arrayData
+                    );
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
+                    \DB::connection('mysql2')->table('vendor')
+                        ->where('vendor_id', $request->input('vendor_id'))
+                        ->update(
+                            $arrayData
+                        );
                  return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
             } else {
