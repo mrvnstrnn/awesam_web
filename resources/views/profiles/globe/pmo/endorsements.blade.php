@@ -110,7 +110,7 @@
 @endsection
 
 @section('js_script')
-    <script src="{{ asset('js/sts-head.js') }}"></script>
+    <script src="{{ asset('js/pmo.js') }}"></script>
 @endsection
 
 @section('modals')

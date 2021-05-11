@@ -1,51 +1,4 @@
 $(document).ready(() => {
-
-    profile_id = 6;
-    
-    // $.get( "/api/new-endorsements/" + profile_id, function( sites ) {
-
-    //     var dataSet = [];
-
-    //     sites.forEach(function(site){
-
-    //         var row_columns = [];
-
-    //         // Site Columns
-    //         row_columns.push(site['site_endorsement_date']);
-    //         row_columns.push(site['sam_id']);
-    //         row_columns.push(site["site_name"]);
-
-    //         // Site Fields Columns
-    //         row_columns.push(site['site_fields'][0]['TECHNOLOGY']);
-    //         row_columns.push(site['site_fields'][0]['PLA_ID']);
-
-    //         dataSet.push(row_columns);
-        
-    //     });
-
-    //     $('#new-endoresement-coloc-table').DataTable( {
-    //         data: dataSet,
-    //         responsive: true,
-    //         columns: [
-    //             { title: "Endorsement Date" },
-    //             { title: "SAM ID" },
-    //             { title: "Site Name" },
-    //             { title: "Technology" },
-    //             { title: "PLA ID" }
-    //         ],
-
-    //         'createdRow': function( row, dataSet, dataIndex ) {
-    //             $(row).attr('id', dataSet[1]);
-    //             $(row).attr('data-site_name', dataSet[2]);
-    //         },
-          
-    
-    //     } );    
-
-    //     // console.log(dataSet[0][5]);
-
-    // });
-
     $('#new-endoresement-coloc-table').DataTable({
         processing: true,
         serverSide: true,
@@ -57,10 +10,10 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function(){
-                // $("#loaderModal").modal("show");
+                $("#loaderModal").modal("show");
             },
             complete: function(){
-                // $("#loaderModal").modal("hide");
+                $("#loaderModal").modal("hide");
             }
         },
         dataSrc: function(json){
@@ -147,10 +100,13 @@ $(document).ready(() => {
     });
 
     $(".btn-accept-endorsement").click(function(){
-        // $("#loaderModal").modal("show");
+        $("#loaderModal").modal("show");
 
-        var sam_id = [$(this).attr('data-sam_id')];
-        var data_complete = $(this).attr('data-complete');
+        // var sam_id = [$(this).attr('data-sam_id')];
+        // var data_complete = $(this).attr('data-complete');
+        var data_program = $(this).attr('data-program');
+
+        var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -164,17 +120,19 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
-                    $('.new-endorsement-table').DataTable().ajax.reload();
-                    $("#modal-endorsement").modal("hide");
-                    toastr.success(resp.message, 'Success');
-                    // $("#loaderModal").modal("hide");
+                    $(program_div).DataTable().ajax.reload(function(){
+                        $("#modal-endorsement").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                        $("#loaderModal").modal("hide");
+                    });
+                    $("#loaderModal").modal("hide");
                 } else {
-                    // $("#loaderModal").modal("hide");
+                    $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                // $("#loaderModal").modal("hide");
+                $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
@@ -182,10 +140,13 @@ $(document).ready(() => {
     });
 
     $(".btn-bulk-acceptreject-endorsement").click(function(){
-        // $("#loaderModal").modal("show");
+        $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
+        var data_program = $(this).attr('data-program');
+
+        var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
 
         var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
 
@@ -208,17 +169,21 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
-                    $('.new-endorsement-table').DataTable().ajax.reload();
-                    $("#modal-endorsement").modal("hide");
+                    $(program_div).DataTable().ajax.reload(function(){
+                        $("#modal-endorsement").modal("hide");
+                        $("#loaderModal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                    });
+                    // $("#modal-endorsement").modal("hide");
                     // $("#loaderModal").modal("hide");
-                    toastr.success(resp.message, 'Success');
+                    // toastr.success(resp.message, 'Success');
                 } else {
-                    // $("#loaderModal").modal("hide");
+                    $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                // $("#loaderModal").modal("hide");
+                $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
