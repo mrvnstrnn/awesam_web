@@ -20,9 +20,4 @@ class Vendor extends Model
         'vendor_office_address',
         'vendor_saq_status'
     ];
-
-    public function getAllVendor()
-    {
-        return Vendor::join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendors.vendor_program_id')->get();
-    }
 }

@@ -24,7 +24,8 @@ class GlobeController extends Controller
                             return $checkbox;
                         })
                         ->addColumn('technology', function($row){
-                            return "<div class='badge badge-success'>".$row['site_fields'][0]['TECHNOLOGY']."</div>";                            
+                            $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                            return "<div class='badge badge-success'>".$technology."</div>";                            
                         })
                         ->addColumn('pla_id', function($row){
                             return $row['site_fields'][0]['PLA_ID'];
@@ -50,27 +51,57 @@ class GlobeController extends Controller
 
                 case 3:
                     switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
                         case 6: 
-                                $activity_name = "New Endorsement";
-                                break;
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
                         case 7: 
-                                $activity_name = "STS Approval of Endorsement";
-                                break;
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
                         default:
-                                $activity_name = "";     
+                            // $activity_name = "";     
+                            $activity_id = "";     
                     }
                     break;
 
                 case 4:
                     switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
                         case 6: 
-                                $activity_name = "New Endorsement";
-                                break;
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
                         case 7: 
-                                $activity_name = "STS Approval of Endorsement";
-                                break;
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
                         default:
-                                $activity_name = "";     
+                            // $activity_name = "";     
+                            $activity_id = "";     
                     }
                     break;
 
@@ -78,8 +109,8 @@ class GlobeController extends Controller
 
             }
 
-            // $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_name .'")');
-            $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ')');
+            $new_endorsements = \DB::connection('mysql2')->select('call `z_pull_data`(1, ' .  $program_id . ', "' . $activity_id .'")');
+            // $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ')');
 
             $json_output = [];
 
@@ -124,39 +155,41 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
-            switch ($profile_id) {
-                case 12:
-                    $profile_return = 12;
-                    $profile_pass = 6;
-                    break;
+            // switch ($profile_id) {
+            //     case 12:
+            //         $profile_return = 12;
+            //         $profile_pass = 6;
+            //         break;
 
-                case 6:
-                    $profile_return = 12;
-                    $profile_pass = 7;
-                    break;
+            //     case 6:
+            //         $profile_return = 12;
+            //         $profile_pass = 7;
+            //         break;
 
-                case 7:
-                    $profile_return = 12;
-                    $profile_pass = 8;
-                    break;
+            //     case 7:
+            //         $profile_return = 12;
+            //         $profile_pass = 8;
+            //         break;
 
-                case 8:
-                    $profile_return = 12;
-                    $profile_pass = 3;
-                    break;
+            //     case 8:
+            //         $profile_return = 12;
+            //         $profile_pass = 3;
+            //         break;
                 
-                default:
-                    $profile_return = 6;
-                    $profile_pass = 7;
-                    break;
-            }
-
+            //     default:
+            //         $profile_return = 6;
+            //         $profile_pass = 7;
+            //         break;
+            // }
+            
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
-            $profile_to_use = $request->input('data_complete') == 'false' ? $profile_return : $profile_pass;
+            // $profile_to_use = $request->input('data_complete') == 'false' ? $profile_return : $profile_pass;
 
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
-                $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id')[$i].'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
+                // $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id')[$i].'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
+
+                $new_endorsements = \DB::connection('mysql2')->select('call z_update_data("'.$request->input('sam_id')[$i].'", '.$request->input('data_complete').')');
             }
 
             return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);

@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
     Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');
     Route::get('/vendor-data/{vendor_id}', [VendorController::class, 'get_vendor'])->name('get.vendors');
+    Route::get('/getVendorList/{program_status}', [VendorController::class, 'vendor_list'])->name('vendor.list');
+    Route::post('/terminateVendor', [VendorController::class, 'terminate_vendor'])->name('terminate.vendor');
 
     
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
@@ -43,7 +45,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/delete-permission', [ProfileController::class, 'deletePermission'])->name('delete.permission');
 
     
-    Route::post('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
+    Route::get('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
 });
 
 

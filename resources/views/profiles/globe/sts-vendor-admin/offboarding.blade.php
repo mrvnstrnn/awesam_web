@@ -130,5 +130,8 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('js_script')
+    <script src="{{ asset('js/sts-vendor-admin.js') }}"></script>
 @endsection
