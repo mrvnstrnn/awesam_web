@@ -125,18 +125,23 @@ class GlobeController extends Controller
             $id = \Auth::user()->id;
 
             switch ($profile_id) {
+                case 12:
+                    $profile_return = 12;
+                    $profile_pass = 6;
+                    break;
+
                 case 6:
-                    $profile_return = 6;
+                    $profile_return = 12;
                     $profile_pass = 7;
                     break;
 
                 case 7:
-                    $profile_return = 6;
+                    $profile_return = 12;
                     $profile_pass = 8;
                     break;
 
                 case 8:
-                    $profile_return = 7;
+                    $profile_return = 12;
                     $profile_pass = 3;
                     break;
                 
