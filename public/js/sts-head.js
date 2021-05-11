@@ -10,10 +10,10 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function(){
-                $("#loaderModal").modal("show");
+                // $("#loaderModal").modal("show");
             },
             complete: function(){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
             }
         },
         dataSrc: function(json){
@@ -21,6 +21,7 @@ $(document).ready(() => {
         },
         'createdRow': function( row, data, dataIndex ) {
             $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'coloc');
             $(row).addClass('modalDataEndorsement');
         },
         columnDefs: [{
@@ -53,6 +54,7 @@ $(document).ready(() => {
         },
         'createdRow': function( row, data, dataIndex ) {
             $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
             $(row).addClass('modalDataEndorsement');
         },
         columnDefs: [{
@@ -72,6 +74,7 @@ $(document).ready(() => {
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
+        $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
         allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
 
@@ -100,13 +103,15 @@ $(document).ready(() => {
     });
 
     $(".btn-accept-endorsement").click(function(){
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
-        // var sam_id = [$(this).attr('data-sam_id')];
-        // var data_complete = $(this).attr('data-complete');
+        var sam_id = [$(this).attr('data-sam_id')];
+        var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
         var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
+
+        console.log(program_div);
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -123,16 +128,15 @@ $(document).ready(() => {
                     $(program_div).DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
-                        $("#loaderModal").modal("hide");
+                        // $("#loaderModal").modal("hide");
                     });
-                    $("#loaderModal").modal("hide");
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
@@ -140,7 +144,7 @@ $(document).ready(() => {
     });
 
     $(".btn-bulk-acceptreject-endorsement").click(function(){
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
@@ -171,19 +175,19 @@ $(document).ready(() => {
                 if(!resp.error){
                     $(program_div).DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        $("#loaderModal").modal("hide");
+                        // $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
                     });
                     // $("#modal-endorsement").modal("hide");
                     // $("#loaderModal").modal("hide");
                     // toastr.success(resp.message, 'Success');
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
