@@ -112,11 +112,21 @@ class UserController extends Controller
                                     ->where('lgu', $request->input('hidden_lgu'))
                                     ->where('region', $request->input('hidden_region'))
                                     ->first();
-
-            UserDetail::where('user_id', \Auth::user()->id)
+                                    
+            $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
+            if($user_details){
+                UserDetail::where('user_id', \Auth::user()->id)
                             ->update([
                                 'address_id' => $address->id
                             ]);
+            } else {
+                UserDetail::create([
+                    'address_id' => $address->id,
+                    'user_id' => \Auth::user()->id,
+                ]);
+            }
+
+            
 
             return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
         } catch (\Throwable $th) {
