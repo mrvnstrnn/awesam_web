@@ -141,7 +141,7 @@
                                 <input type="hidden" name="hidden_region" id="hidden_region">
                                 <input type="hidden" name="hidden_province" id="hidden_province">
                                 <input type="hidden" name="hidden_lgu" id="hidden_lgu">
-                                <input type="hidden" id="hidden_mode" hidden_mode="mode" value="{{ \Auth::user()->getUserDetail()->first()->mode }}">
+                                <input type="hidden" id="hidden_mode" hidden_mode="mode" value="">
                             </form>
                         </div>
                     </div>
