@@ -32,38 +32,38 @@ $(document).ready(() => {
         ],
     });
     
-    // $('#new-endoresement-ffth-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     // pageLength: 3,
-    //     ajax: {
-    //         url: $("#new-endoresement-ffth-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function( row, data, dataIndex ) {
-    //         $(row).attr('data-site', JSON.stringify(data));
-    //         $(row).attr('data-program', 'coloc');
-    //         $(row).addClass('modalDataEndorsement');
-    //     },
-    //     columnDefs: [{
-    //         "targets": 0,
-    //         "orderable": false
-    //     }],
-    //     columns: [
-    //         { data: "checkbox" },
-    //         { data: "site_endorsement_date" },
-    //         { data: "sam_id" },
-    //         { data: "site_name" },
-    //         { data: "technology" },
-    //         { data: "pla_id" }
-    //     ],
-    // });
+    $('#new-endoresement-ffth-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-ffth-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'coloc');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    });
 
     $('#new-endoresement-ibs-table').DataTable({
         processing: true,
@@ -98,45 +98,45 @@ $(document).ready(() => {
         ],
     }); 
 
-    // $('#new-endoresement-mwan-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     // pageLength: 3,
-    //     ajax: {
-    //         url: $("#new-endoresement-mwan-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function( row, data, dataIndex ) {
-    //         $(row).attr('data-site', JSON.stringify(data));
-    //         $(row).attr('data-program', 'ibs');
-    //         $(row).addClass('modalDataEndorsement');
-    //     },
-    //     columnDefs: [{
-    //         "targets": 0,
-    //         "orderable": false
-    //     }],
-    //     columns: [
-    //         { data: "checkbox" },
-    //         { data: "site_endorsement_date" },
-    //         { data: "sam_id" },
-    //         { data: "site_name" },
-    //         { data: "technology" },
-    //         { data: "pla_id" }
-    //     ],
-    // }); 
-
-    $('#new-endoresement-new sites-table').DataTable({
+    $('#new-endoresement-mwan-table').DataTable({
         processing: true,
         serverSide: true,
         // pageLength: 3,
         ajax: {
-            url: $("#new-endoresement-new sites-table").attr('data-href'),
+            url: $("#new-endoresement-mwan-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    }); 
+
+    $('#new-endoresement-new-sites-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-new-sites-table").attr('data-href'),
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -164,38 +164,38 @@ $(document).ready(() => {
         ],
     }); 
     
-    // $('#new-endoresement-towerco-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     // pageLength: 3,
-    //     ajax: {
-    //         url: $("#new-endoresement-towerco-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function( row, data, dataIndex ) {
-    //         $(row).attr('data-site', JSON.stringify(data));
-    //         $(row).attr('data-program', 'ibs');
-    //         $(row).addClass('modalDataEndorsement');
-    //     },
-    //     columnDefs: [{
-    //         "targets": 0,
-    //         "orderable": false
-    //     }],
-    //     columns: [
-    //         { data: "checkbox" },
-    //         { data: "site_endorsement_date" },
-    //         { data: "sam_id" },
-    //         { data: "site_name" },
-    //         { data: "technology" },
-    //         { data: "pla_id" }
-    //     ],
-    // }); 
+    $('#new-endoresement-towerco-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-towerco-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    }); 
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
@@ -246,7 +246,7 @@ $(document).ready(() => {
         } else if (data_program == 'mwan'){
             program_div = '#new-endoresement-mwan-table';
         } else if (data_program == 'new sites'){
-            program_div = '#new-endoresement-new sites-table';
+            program_div = '#new-endoresement-new-sites-table';
         } else if (data_program == 'towerco'){
             program_div = '#new-endoresement-towerco-table';
         }
@@ -300,7 +300,7 @@ $(document).ready(() => {
         } else if (data_program == 'mwan'){
             program_div = '#new-endoresement-mwan-table';
         } else if (data_program == 'new sites'){
-            program_div = '#new-endoresement-new sites-table';
+            program_div = '#new-endoresement-new-sites-table';
         } else if (data_program == 'towerco'){
             program_div = '#new-endoresement-towerco-table';
         }

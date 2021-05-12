@@ -63,6 +63,16 @@
                 background-size: 1rem 1rem;
             }
 
+            .app-header__logo .logo-src:before {
+                content: "SAM";
+                font-size: 20px;
+                /* vertical-align: middle; */
+            }
+
+            .app-header__logo .logo-src {
+                background: none;
+            }
+
             /* .app-sidebar.sidebar-shadow:hover {
                 width: 220px !important;
                 min-width: 220px !important;
