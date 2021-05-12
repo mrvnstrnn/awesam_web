@@ -172,6 +172,9 @@ $(document).ready(() => {
                         $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
                     });
+                    // $("#modal-endorsement").modal("hide");
+                    // $("#loaderModal").modal("hide");
+                    // toastr.success(resp.message, 'Success');
                 } else {
                     $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');

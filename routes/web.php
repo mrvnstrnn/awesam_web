@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/delete-permission', [ProfileController::class, 'deletePermission'])->name('delete.permission');
 
     
-    Route::get('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
+    Route::post('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
 });
 
 
