@@ -53,7 +53,7 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ $program->vendor_program  }} Endorsements
+                                {{ strtoupper($program->vendor_program)  }} Endorsements
                                 </div>
                                 <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
                                     <button class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-success mt-2">
@@ -64,7 +64,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="new-endoresement-{{ strtolower($program->vendor_program)  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->vendor_program_id]) }}">
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->vendor_program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->vendor_program_id]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">

@@ -1,7 +1,7 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <a href="{{ url('/') }}">
-            <h2>SAM</h2>
+            <div class="logo-src"></div>
         </a>
         <div class="header__pane ml-auto">
             <div>

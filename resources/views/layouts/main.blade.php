@@ -63,6 +63,16 @@
                 background-size: 1rem 1rem;
             }
 
+            .app-header__logo .logo-src:before {
+                content: "SAM";
+                font-size: 20px;
+                /* vertical-align: middle; */
+            }
+
+            .app-header__logo .logo-src {
+                background: none;
+            }
+
             /* .app-sidebar.sidebar-shadow:hover {
                 width: 220px !important;
                 min-width: 220px !important;
@@ -86,8 +96,7 @@
                 {{-- SIDEBAR MODULE --}}
                 <div class="app-sidebar sidebar-shadow">
                     <div class="app-header__logo">
-                        {{-- <div class="logo-src"></div> --}}
-                        <h2>SAM</h2>
+                        <div class="logo-src"></div>
                         <div class="header__pane ml-auto">
                             <div>
                                 <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">

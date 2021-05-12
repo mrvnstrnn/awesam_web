@@ -53,12 +53,12 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ $program->vendor_program  }} Endorsements
+                                {{ strtoupper($program->vendor_program)  }} Endorsements
                                 </div>      
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="new-endoresement-{{ strtolower($program->vendor_program)  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->vendor_program_id]) }}">
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->vendor_program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->vendor_program_id]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">
@@ -88,47 +88,6 @@
                 </div>
             </div>
         @endforeach
-        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-card mb-3 card">
-                        <div class="card-header-tab card-header">
-                            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                            Endorsements
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="new-endoresement-ibs-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 4]) }}">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 15px;">
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                            <th class="d-none d-md-table-cell">SAM ID</th>
-                                            <th>Site</th>
-                                            <th class="text-center">Technology</th>
-                                            <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 @endsection
 
