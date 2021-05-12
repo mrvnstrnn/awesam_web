@@ -185,7 +185,7 @@
     @yield('js_script')
 
 
-    <div class="modal fade" id="loaderModal" tabindex="-1" role="dialog" aria-labelledby="loaderModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index: 3000 !important;">
+    {{-- <div class="modal fade" id="loaderModal" tabindex="-1" role="dialog" aria-labelledby="loaderModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index: 3000 !important;">
         <div class="modal-dialog modal-dialog-centered" role="document" style="box-shadow: none !important; place-content: center;">
             <div class="font-icon-wrapper bg-white">
                 <div class="loader-wrapper d-flex justify-content-center align-items-center">
@@ -200,7 +200,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     @yield('modals')
 </body>
 </html>
