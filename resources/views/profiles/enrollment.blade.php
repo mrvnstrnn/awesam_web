@@ -24,7 +24,7 @@
                             <li class="nav-item step-3-li">
                                 <a href="javascript:void(0)" class="nav-link">
                                     <em>3</em>
-                                    <span>Finish</span>
+                                    <span>Awaiting Validation</span>
                                 </a>
                             </li>
                         </ul>
