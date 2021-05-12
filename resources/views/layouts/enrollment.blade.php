@@ -62,6 +62,16 @@
                 background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
                 background-size: 1rem 1rem;
             }
+
+            .app-header__logo .logo-src:before {
+                content: "SAM";
+                font-size: 20px;
+                /* vertical-align: middle; */
+            }
+
+            .app-header__logo .logo-src {
+                background: none;
+            }
                     </style>    
     </head>
 
