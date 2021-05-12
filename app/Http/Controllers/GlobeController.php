@@ -66,9 +66,14 @@ class GlobeController extends Controller
                             $activity_id = 3;
                             break;
 
-                        case 3: 
+                        case 8: 
                             // $activity_name = "STS Approval of Endorsement";
                             $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
                             break;
 
                         default:
@@ -94,9 +99,14 @@ class GlobeController extends Controller
                             $activity_id = 3;
                             break;
 
-                        case 3: 
+                        case 8: 
                             // $activity_name = "STS Approval of Endorsement";
                             $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
                             break;
 
                         default:
