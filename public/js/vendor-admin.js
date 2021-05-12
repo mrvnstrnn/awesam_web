@@ -1,5 +1,4 @@
 $(document).ready(() => {
-
     $('#for-verification-table').DataTable({
         processing: true,
         serverSide: true,
@@ -23,7 +22,5 @@ $(document).ready(() => {
             { data: "email" },
         ],
     });
-
-
 
 });
