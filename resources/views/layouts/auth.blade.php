@@ -23,6 +23,18 @@
          <link href="/styles/css/base.css" rel="stylesheet">
      </head>
      <body>
+         <style>
+             .app-logo-inverse:before {
+                content: "SAM" !important;
+                font-size: 30px !important;
+                color: white;
+                /* vertical-align: middle; */
+            }
+
+            .app-logo-inverse {
+                background: none !important;
+            }
+         </style>
          <div class="app-container app-theme-white body-tabs-shadow">
              <div class="h-100 bg-plum-plate bg-animation">
                  <div class="d-flex h-100 justify-content-center align-items-center">
