@@ -1,7 +1,7 @@
 $(document).ready(() => {
-    if($("#firsttime_login").val() == 0){
-        $("#firsttimeModal").modal({backdrop: 'static', keyboard: false});
-    }
+    // if($("#firsttime_login").val() == 0){
+    //     $("#firsttimeModal").modal({backdrop: 'static', keyboard: false});
+    // }
 
     if($("#user_detail").val() != ''){
         $(".step-1-li").removeClass('active');
