@@ -30,7 +30,40 @@ $(document).ready(() => {
             { data: "technology" },
             { data: "pla_id" }
         ],
-    });  
+    });
+    
+    $('#new-endoresement-ffth-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-ffth-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'coloc');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    });
 
     $('#new-endoresement-ibs-table').DataTable({
         processing: true,
@@ -63,7 +96,106 @@ $(document).ready(() => {
             { data: "technology" },
             { data: "pla_id" }
         ],
-    });  
+    }); 
+
+    $('#new-endoresement-mwan-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-mwan-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    }); 
+
+    $('#new-endoresement-new-sites-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-new-sites-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    }); 
+    
+    $('#new-endoresement-towerco-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#new-endoresement-towerco-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-site', JSON.stringify(data));
+            $(row).attr('data-program', 'ibs');
+            $(row).addClass('modalDataEndorsement');
+        },
+        columnDefs: [{
+            "targets": 0,
+            "orderable": false
+        }],
+        columns: [
+            { data: "checkbox" },
+            { data: "site_endorsement_date" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "technology" },
+            { data: "pla_id" }
+        ],
+    });   
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
@@ -103,7 +235,21 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
-        var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
+        var program_div = "";
+
+        if (data_program == 'coloc'){
+            program_div = '#new-endoresement-coloc-table';
+        } else if (data_program == 'ffth'){
+            program_div = '#new-endoresement-ffth-table';
+        } else if (data_program == 'ibs'){
+            program_div = '#new-endoresement-ibs-table';
+        } else if (data_program == 'mwan'){
+            program_div = '#new-endoresement-mwan-table';
+        } else if (data_program == 'new sites'){
+            program_div = '#new-endoresement-new-sites-table';
+        } else if (data_program == 'towerco'){
+            program_div = '#new-endoresement-towerco-table';
+        }
 
         console.log(program_div);
 
@@ -144,7 +290,21 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
-        var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
+        var program_div = "";
+
+        if (data_program == 'coloc'){
+            program_div = '#new-endoresement-coloc-table';
+        } else if (data_program == 'ffth'){
+            program_div = '#new-endoresement-ffth-table';
+        } else if (data_program == 'ibs'){
+            program_div = '#new-endoresement-ibs-table';
+        } else if (data_program == 'mwan'){
+            program_div = '#new-endoresement-mwan-table';
+        } else if (data_program == 'new sites'){
+            program_div = '#new-endoresement-new-sites-table';
+        } else if (data_program == 'towerco'){
+            program_div = '#new-endoresement-towerco-table';
+        }
 
         var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
 

@@ -48,6 +48,71 @@ class GlobeController extends Controller
             // SHOULD BE MIGRATED TO TABLE BASED LOGIC 
 
             switch($program_id){
+                case 1:
+                    switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
+                        case 6: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
+                        case 7: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 8: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
+                            break;
+
+                        default:
+                            // $activity_name = "";     
+                            $activity_id = "";     
+                    }
+                    break;
+
+                case 2:
+                    switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
+                        case 6: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
+                        case 7: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 8: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
+                            break;
+
+                        default:
+                            // $activity_name = "";     
+                            $activity_id = "";     
+                    }
+                    break;
 
                 case 3:
                     switch($profile_id){
@@ -83,6 +148,72 @@ class GlobeController extends Controller
                     break;
 
                 case 4:
+                    switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
+                        case 6: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
+                        case 7: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 8: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
+                            break;
+
+                        default:
+                            // $activity_name = "";     
+                            $activity_id = "";     
+                    }
+                    break;
+
+                case 5:
+                    switch($profile_id){
+                        case 12: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 1;
+                            break;
+
+                        case 6: 
+                            // $activity_name = "New Endorsement";
+                            $activity_id = 2;
+                            break;
+
+                        case 7: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 3;
+                            break;
+
+                        case 8: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 4;
+                            break;
+
+                        case 3: 
+                            // $activity_name = "STS Approval of Endorsement";
+                            $activity_id = 5;
+                            break;
+
+                        default:
+                            // $activity_name = "";     
+                            $activity_id = "";     
+                    }
+                    break;
+
+                case 6:
                     switch($profile_id){
                         case 12: 
                             // $activity_name = "New Endorsement";
