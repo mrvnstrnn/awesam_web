@@ -1,6 +1,6 @@
 $(document).ready(() => {
     $('#new-endoresement-coloc-table').DataTable({
-        processing: "Loading...",
+        processing: true,
         serverSide: true,
         // pageLength: 3,
         ajax: {
