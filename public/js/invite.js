@@ -47,34 +47,34 @@ $(document).ready(() => {
         });
     });
 
-    $(".update_password").on('click', function(){
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'POST',
-            data: $("#passwordUpdateForm").serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp) {
-                if (!resp.error) {
-                    $("#passwordUpdateForm")[0].reset();
-                    toastr.success(resp.message, 'Success');
-                    $("#firsttimeModal").modal('hide');
-                } else {
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
-                        });
-                    } else {
-                        toastr.error(resp.message, 'Error');
-                    }
-                }
-            },
-            error: function (resp) {
-                toastr.error(resp.message, 'Error');
-            }
-        });
-    });
+    // $(".update_password").on('click', function(){
+    //     $.ajax({
+    //         url: $(this).attr('data-href'),
+    //         method: 'POST',
+    //         data: $("#passwordUpdateForm").serialize(),
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(resp) {
+    //             if (!resp.error) {
+    //                 $("#passwordUpdateForm")[0].reset();
+    //                 toastr.success(resp.message, 'Success');
+    //                 $("#firsttimeModal").modal('hide');
+    //             } else {
+    //                 if (typeof resp.message === 'object' && resp.message !== null) {
+    //                     $.each(resp.message, function(index, data) {
+    //                         $("#" + index + "-error").text(data);
+    //                     });
+    //                 } else {
+    //                     toastr.error(resp.message, 'Error');
+    //                 }
+    //             }
+    //         },
+    //         error: function (resp) {
+    //             toastr.error(resp.message, 'Error');
+    //         }
+    //     });
+    // });
 
     $("select[name=address]").on('change', function(){
 
