@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\UserDetail;
+use DataTables;
 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -272,5 +273,29 @@ class UserController extends Controller
         
         return $program_direct_links->groupBy('level_two');
     }
+
+    public function forverification_list()
+    {
+        try {
+            $user_details = User::join('user_details', 'user_details.user_id', 'users.id')
+                                    ->where('users.profile_id', null)
+                                    ->get();
+
+            $dt = DataTables::of($user_details);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    // public function setProfile_id(Request $request)
+    // {
+    //     try {
+    //         $user->update(['profile_id' => $request->input]);
+    //         return response()-json(['error'=> false, 'message' => "Successfully set profile."]);
+    //     } catch (\Throwable $th) {
+    //         return response()-json(['error'=> true, 'message' => $th->getMessage()]);
+    //     }
+    // }
 
 }
