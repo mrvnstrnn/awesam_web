@@ -91,7 +91,7 @@
                                         <div class="col-md-4">
                                             <div class="position-relative form-group">
                                                 <label for="region">Mode</label>
-                                                <input type="text" class="form-control" id="mode" name="mode" value="{{ \Auth::user()->getUserDetail()->first()->mode }}" readonly>
+                                                <input type="text" class="form-control" id="mode" name="mode" value="" readonly>
                                             </div>
                                         </div>
                                     </div>
