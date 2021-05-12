@@ -19,7 +19,7 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-users icon-gradient bg-ripe-malin"></i>
-                                 Employee Verification
+                                 Agents
                                 </div>      
                             </div>
                             <div class="card-body">
@@ -61,7 +61,7 @@
         <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Employee Verification</h5>
+                    <h5 class="modal-title">Agent Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
