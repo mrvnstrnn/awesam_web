@@ -1,201 +1,49 @@
 $(document).ready(() => {
-    $('#new-endoresement-coloc-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-coloc-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'coloc');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    });
-    
-    $('#new-endoresement-ffth-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-ffth-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'coloc');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    });
+    var program_lists = [
+        'coloc',
+        'ftth',
+        'ibs',
+        'mwan',
+        'new-sites',
+        'towerco',
+        'renewal',
+        'wireless',
+    ];
 
-    $('#new-endoresement-ibs-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-ibs-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    for (let i = 0; i < program_lists.length; i++) {
+        $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#new-endoresement-'+program_lists[i]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'ibs');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    }); 
-
-    $('#new-endoresement-mwan-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-mwan-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            dataSrc: function(json){
+                return json.data;
             },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'ibs');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    }); 
-
-    $('#new-endoresement-new-sites-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-new-sites-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-site', JSON.stringify(data));
+                $(row).attr('data-program', program_lists[i]);
+                $(row).addClass('modalDataEndorsement');
             },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'ibs');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    }); 
-    
-    $('#new-endoresement-towerco-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#new-endoresement-towerco-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-site', JSON.stringify(data));
-            $(row).attr('data-program', 'ibs');
-            $(row).addClass('modalDataEndorsement');
-        },
-        columnDefs: [{
-            "targets": 0,
-            "orderable": false
-        }],
-        columns: [
-            { data: "checkbox" },
-            { data: "site_endorsement_date" },
-            { data: "sam_id" },
-            { data: "site_name" },
-            { data: "technology" },
-            { data: "pla_id" }
-        ],
-    });  
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "checkbox" },
+                { data: "site_endorsement_date" },
+                { data: "sam_id" },
+                { data: "site_name" },
+                { data: "technology" },
+                { data: "pla_id" }
+            ],
+        });
+    }
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));

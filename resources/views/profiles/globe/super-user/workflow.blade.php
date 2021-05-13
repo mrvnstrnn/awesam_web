@@ -16,6 +16,7 @@
         @php
             // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
             $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
+            // dd($programs);
         @endphp
 
         @foreach ($programs as $program)
@@ -29,12 +30,6 @@
                 </a>
             </li>
         @endforeach
-
-        {{-- <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
-                <span>IBS</span>
-            </a>
-        </li> --}}
     </ul>
     <div class="tab-content">
         @foreach ($programs as $program)
@@ -50,35 +45,24 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ strtoupper($program->program)  }} Endorsements
+                                {{ strtoupper($program->program)  }} Workflow
                                 </div>      
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id]) }}">
+                                    <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
                                             <tr>
-                                                <th style="width: 15px;">
-                                                    <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                        <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                                    </div>
-                                                </th>
-                                                <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                                <th class="d-none d-md-table-cell">SAM ID</th>
-                                                <th>Site</th>
-                                                <th class="text-center">Technology</th>
-                                                <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
+                                                <th>Activity Duration</th>
+                                                <th>Activity Name</th>
+                                                <th>Activity Sequence</th>
+                                                <th>Activity Type</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
@@ -89,10 +73,10 @@
 @endsection
 
 @section('js_script')
-    <script src="{{ asset('js/sts-staff.js') }}"></script>
+    <script src="{{ asset('js/super-user.js') }}"></script>
 @endsection
 
-@section('modals')
+{{-- @section('modals')
 
     <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -116,4 +100,4 @@
         </div>
     </div>
 
-@endsection
+@endsection --}}
