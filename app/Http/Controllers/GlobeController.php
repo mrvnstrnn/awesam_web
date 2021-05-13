@@ -330,7 +330,7 @@ class GlobeController extends Controller
     public function getDataWorkflow($program_id)
     {
         try {
-            $stored_procs = $this->getWorkflow(1);
+            $stored_procs = $this->getWorkflow($program_id);
             
             $dt = DataTables::of($stored_procs);
             return $dt->make(true);
@@ -341,7 +341,7 @@ class GlobeController extends Controller
 
     public function getWorkflow($program_id)
     {
-        return \DB::connection('mysql2')->select('call `stage_activites`('.$program_id . ')');
+        return \DB::connection('mysql2')->select('call `stage_activites`('.$program_id. ')');
     }
 
 
