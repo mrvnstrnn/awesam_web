@@ -47,211 +47,229 @@ class GlobeController extends Controller
             // TEMPORARY BRACKETING OF ACTIVITY PER PROGRAM
             // SHOULD BE MIGRATED TO TABLE BASED LOGIC 
 
-            switch($program_id){
-                case 1:
+            // switch($program_id){
+            //     case 1:
                     switch($profile_id){
                         case 12: 
-                            // $activity_name = "New Endorsement";
                             $activity_id = 1;
                             break;
 
                         case 6: 
-                            // $activity_name = "New Endorsement";
                             $activity_id = 2;
                             break;
 
                         case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
                             $activity_id = 3;
                             break;
 
                         case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
                             $activity_id = 4;
                             break;
 
                         case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
                             $activity_id = 5;
                             break;
 
                         default:
-                            // $activity_name = "";     
                             $activity_id = "";     
+
+                        break;
                     }
-                    break;
 
-                case 2:
-                    switch($profile_id){
-                        case 12: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 1;
-                            break;
+                // case 2:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-                        case 6: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 2;
-                            break;
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
 
-                        case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 3;
-                            break;
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
 
-                        case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 4;
-                            break;
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
 
-                        case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 5;
-                            break;
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
 
-                        default:
-                            // $activity_name = "";     
-                            $activity_id = "";     
-                    }
-                    break;
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
 
-                case 3:
-                    switch($profile_id){
-                        case 12: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 1;
-                            break;
+                // case 3:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-                        case 6: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 2;
-                            break;
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
 
-                        case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 3;
-                            break;
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
 
-                        case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 4;
-                            break;
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
 
-                        case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 5;
-                            break;
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
 
-                        default:
-                            // $activity_name = "";     
-                            $activity_id = "";     
-                    }
-                    break;
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
 
-                case 4:
-                    switch($profile_id){
-                        case 12: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 1;
-                            break;
+                // case 4:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-                        case 6: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 2;
-                            break;
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
 
-                        case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 3;
-                            break;
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
 
-                        case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 4;
-                            break;
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
 
-                        case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 5;
-                            break;
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
 
-                        default:
-                            // $activity_name = "";     
-                            $activity_id = "";     
-                    }
-                    break;
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
 
-                case 5:
-                    switch($profile_id){
-                        case 12: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 1;
-                            break;
+                // case 5:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-                        case 6: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 2;
-                            break;
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
 
-                        case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 3;
-                            break;
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
 
-                        case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 4;
-                            break;
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
 
-                        case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 5;
-                            break;
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
 
-                        default:
-                            // $activity_name = "";     
-                            $activity_id = "";     
-                    }
-                    break;
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
 
-                case 6:
-                    switch($profile_id){
-                        case 12: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 1;
-                            break;
+                // case 6:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-                        case 6: 
-                            // $activity_name = "New Endorsement";
-                            $activity_id = 2;
-                            break;
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
 
-                        case 7: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 3;
-                            break;
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
 
-                        case 8: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 4;
-                            break;
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
 
-                        case 3: 
-                            // $activity_name = "STS Approval of Endorsement";
-                            $activity_id = 5;
-                            break;
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
 
-                        default:
-                            // $activity_name = "";     
-                            $activity_id = "";     
-                    }
-                    break;
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
 
-                default:
+                // case 7:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
 
-            }
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
+
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
+
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
+
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
+
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
+
+                // case 8:
+                //     switch($profile_id){
+                //         case 12: 
+                //             $activity_id = 1;
+                //             break;
+
+                //         case 6: 
+                //             $activity_id = 2;
+                //             break;
+
+                //         case 7: 
+                //             $activity_id = 3;
+                //             break;
+
+                //         case 8: 
+                //             $activity_id = 4;
+                //             break;
+
+                //         case 3: 
+                //             $activity_id = 5;
+                //             break;
+
+                //         default:
+                //             $activity_id = "";     
+                //     }
+                //     break;
+
+                // default:
+
+            // }
 
             $new_endorsements = \DB::connection('mysql2')->select('call `z_pull_data`(1, ' .  $program_id . ', "' . $activity_id .'")');
-            // $new_endorsements = \DB::connection('mysql2')->select('call `test_pull_new_endorsement`(1, ' .  $program_id . ', ' .  $profile_id . ')');
 
             $json_output = [];
 
@@ -295,40 +313,10 @@ class GlobeController extends Controller
             }
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
-
-            // switch ($profile_id) {
-            //     case 12:
-            //         $profile_return = 12;
-            //         $profile_pass = 6;
-            //         break;
-
-            //     case 6:
-            //         $profile_return = 12;
-            //         $profile_pass = 7;
-            //         break;
-
-            //     case 7:
-            //         $profile_return = 12;
-            //         $profile_pass = 8;
-            //         break;
-
-            //     case 8:
-            //         $profile_return = 12;
-            //         $profile_pass = 3;
-            //         break;
-                
-            //     default:
-            //         $profile_return = 6;
-            //         $profile_pass = 7;
-            //         break;
-            // }
             
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
-            // $profile_to_use = $request->input('data_complete') == 'false' ? $profile_return : $profile_pass;
-
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
-                // $new_endorsements = \DB::connection('mysql2')->select('call update_new_endorsement("'.$request->input('sam_id')[$i].'", '.$profile_to_use.', '.$id.', '.$request->input('data_complete').')');
 
                 $new_endorsements = \DB::connection('mysql2')->select('call z_update_data("'.$request->input('sam_id')[$i].'", '.$request->input('data_complete').')');
             }
@@ -337,6 +325,23 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    public function getDataWorkflow($program_id)
+    {
+        try {
+            $stored_procs = $this->getWorkflow($program_id);
+            
+            $dt = DataTables::of($stored_procs);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getWorkflow($program_id)
+    {
+        return \DB::connection('mysql2')->select('call `stage_activites`('.$program_id. ')');
     }
 
 

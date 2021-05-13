@@ -14,37 +14,28 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
+            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
+            $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
         @endphp
 
         @foreach ($programs as $program)
-            {{-- <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="vendor_program_id{{ $program->vendor_program_id  }}" name="vendor_program_id" value="{{ $program->vendor_program_id  }}">
-                <label class="form-check-label" for="vendor_program_id{{ $program->vendor_program_id  }}">{{ $program->vendor_program }}</label>
-            </div> --}}
             <li class="nav-item">
                 @if ($loop->first)
-                    <a role="tab" class="nav-link active" id="tab-{{ $program->vendor_program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->vendor_program_id  }}">
+                    <a role="tab" class="nav-link active" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
                 @else
-                    <a role="tab" class="nav-link" id="tab-{{ $program->vendor_program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->vendor_program_id  }}">
+                    <a role="tab" class="nav-link" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
                 @endif
-                    <span>{{ $program->vendor_program }}</span>
+                    <span>{{ $program->program }}</span>
                 </a>
             </li>
         @endforeach
-
-        {{-- <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
-                <span>IBS</span>
-            </a>
-        </li> --}}
     </ul>
     <div class="tab-content">
         @foreach ($programs as $program)
             @if ($loop->first)
-            <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->vendor_program_id  }}" role="tabpanel">            
+            <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
             @else
-            <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->vendor_program_id  }}" role="tabpanel">
+            <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
             @endif
 
                 <div class="row">
@@ -53,12 +44,12 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ strtoupper($program->vendor_program)  }} Endorsements
+                                {{ strtoupper($program->program)  }} Endorsements
                                 </div>      
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->vendor_program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->vendor_program_id]) }}">
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">
@@ -80,8 +71,8 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->vendor_program) }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->vendor_program) }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
