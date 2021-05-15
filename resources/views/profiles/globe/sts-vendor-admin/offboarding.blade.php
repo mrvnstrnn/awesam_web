@@ -36,25 +36,21 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="new-endoresement-coloc-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 3]) }}">
+                                <table style="width: 100%;" id="vendor-list-ongoing-table" data-href="{{ route('vendor.list', 'OngoingOff') }}" class="table table-hover table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="d-none d-md-table-cell">Vendor</th>
-                                            <th class="d-none d-md-table-cell">SAM ID</th>
-                                            <th>Site</th>
-                                            <th class="text-center">Technology</th>
-                                            <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
+                                            <th>SEC Reg. Name</th>
+                                            <th>Acronym</th>
+                                            <th>Fullname</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
-                        {{-- <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -71,31 +67,21 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="new-endoresement-ibs-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 4]) }}">
+                                <table style="width: 100%;" id="vendor-list-complete-table" data-href="{{ route('vendor.list', 'Complete') }}" class="table table-hover table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th style="width: 15px;">
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                            <th class="d-none d-md-table-cell">SAM ID</th>
-                                            <th>Site</th>
-                                            <th class="text-center">Technology</th>
-                                            <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
+                                            <th>SEC Reg. Name</th>
+                                            <th>Acronym</th>
+                                            <th>Fullname</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
-                        {{-- <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -103,29 +89,24 @@
     </div>
 @endsection
 
-@section('js_script')
-    <script src="{{ asset('js/sts-staff.js') }}"></script>
-@endsection
-
 @section('modals')
-
-    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal fade" id="terminationModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                    <div class="modal-header">
-                            <h5 class="modal-title">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                        </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
-                        
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <p>Are you sure you want to terminate <b class="vendor_sec_reg_name"></b>?</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary terminate_button" data-href="{{ route('terminate.vendor') }}">Terminate</button>
                 </div>
             </div>
         </div>

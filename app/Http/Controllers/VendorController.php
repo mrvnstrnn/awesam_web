@@ -12,7 +12,6 @@ class VendorController extends Controller
     public function add_vendor(Request $request)
     {
         try {
-            // return response()->json(['error' => true, 'message' => count($request->input('vendor_program_id')) ]);
             $validate = Validator::make($request->all(), array(
                 'vendor_firstname' => 'required',
                 'vendor_lastname' => 'required',
@@ -111,7 +110,7 @@ class VendorController extends Controller
 
             $dt = DataTables::of($vendors)
                         ->addColumn('vendor_status', function($row){
-                            $class = $row->vendor_status == 'Active' ? 'success' : 'warning';
+                            $class = $row->vendor_status == 'Active' || $row->vendor_status == 'Complete Offboarding' ? 'success' : 'warning';
                             return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_status.'</div>';
                         })
                         ->addColumn('vendor_name', function($row){
