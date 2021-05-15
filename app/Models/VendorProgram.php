@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class VendorProgram extends Model
 {
     use HasFactory;
+    protected $connection = 'mysql2';
 }

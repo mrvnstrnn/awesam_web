@@ -52,17 +52,17 @@
                                     {{-- <label for="vendor_saq_status">Status of Vendor </label> --}}
                                         <div class="position-relative form-check-inline">
                                             <label class="form-check-label">
-                                                <input name="vendor_saq_status" value="Active" id="vendor_saq_status" type="radio" class="form-check-input">
+                                                <input name="vendor_status" value="Active" id="vendor_status" type="radio" class="form-check-input">
                                                 Active
                                             </label>
                                         </div>
                                         <div class="position-relative form-check-inline">
                                             <label class="form-check-label">
-                                                <input name="vendor_saq_status" value="Ongoing Accreditation" id="vendor_saq_status" type="radio" class="form-check-input">
+                                                <input name="vendor_status" value="Ongoing Accreditation" id="vendor_status" type="radio" class="form-check-input">
                                                 Ongoing Accreditation
                                             </label>
                                         </div>
-                                        <small id="vendor_saq_status-error" class="form-text text-danger"></small>
+                                        <small id="vendor_status-error" class="form-text text-danger"></small>
                                     </div>
                                 </div>
                             </div>
@@ -76,13 +76,13 @@
                                             {{-- <label for="vendor_admin_email">Program</label><br> --}}
                     
                                             @php
-                                                $programs = App\Models\VendorProgram::get();
+                                                $programs = App\Models\Program::get();
                                             @endphp
                     
                                             @foreach ($programs as $program)
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="checkbox" id="vendor_program_id{{ $program->vendor_program_id  }}" name="vendor_program_id" value="{{ $program->vendor_program_id  }}">
-                                                    <label class="form-check-label" for="vendor_program_id{{ $program->vendor_program_id  }}">{{ $program->vendor_program }}</label>
+                                                    <input class="form-check-input" type="checkbox" id="vendor_program_id{{ $program->program_id  }}" name="vendor_program_id[]" value="{{ $program->program_id  }}">
+                                                    <label class="form-check-label" for="vendor_program_id{{ $program->program_id  }}">{{ $program->program }}</label>
                                                 </div>
                                             @endforeach
                         
@@ -96,12 +96,26 @@
                                     <H5>Administrator</H5>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="position-relative form-group">
-                                        <label for="vendor_fullname">Admin Fullname </label>
-                                        <input id="vendor_fullname" type="text" class="form-control" 
-                                            name="vendor_fullname" required placeholder="Vendor system admin fullname here...">
-                    
-                                        <small id="vendor_fullname-error" class="form-text text-danger"></small>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="position-relative form-group">
+                                                <label for="vendor_firstname">Admin Fullname </label>
+                                                <input id="vendor_firstname" type="text" class="form-control" 
+                                                    name="vendor_firstname" required placeholder="Vendor system admin firstname here...">
+                            
+                                                <small id="vendor_firstname-error" class="form-text text-danger"></small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="position-relative form-group">
+                                                <label for="vendor_lastname">Admin Fullname </label>
+                                                <input id="vendor_lastname" type="text" class="form-control" 
+                                                    name="vendor_lastname" required placeholder="Vendor system admin lastname here...">
+                            
+                                                <small id="vendor_lastname-error" class="form-text text-danger"></small>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="position-relative form-group">
                                         <label for="vendor_admin_email">Admin Email Address</label>

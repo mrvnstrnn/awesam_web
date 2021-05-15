@@ -23,10 +23,10 @@ $(document).ready(() => {
         columns: [
             { data: "vendor_sec_reg_name" },
             { data: "vendor_acronym" },
-            { data: "vendor_fullname" },
+            { data: "vendor_name" },
             { data: "vendor_admin_email" },
             { data: "vendor_office_address" },
-            { data: "vendor_saq_status" }
+            { data: "vendor_status" }
         ],
     }); 
     
@@ -52,10 +52,10 @@ $(document).ready(() => {
         columns: [
             { data: "vendor_sec_reg_name" },
             { data: "vendor_acronym" },
-            { data: "vendor_fullname" },
+            { data: "vendor_name" },
             { data: "vendor_admin_email" },
             { data: "vendor_office_address" },
-            { data: "vendor_saq_status" }
+            { data: "vendor_status" }
         ],
     }); 
 
@@ -83,7 +83,7 @@ $(document).ready(() => {
             { data: "vendor_fullname" },
             { data: "vendor_admin_email" },
             { data: "vendor_office_address" },
-            { data: "vendor_saq_status" }
+            { data: "vendor_status" }
         ],
     }); 
 
