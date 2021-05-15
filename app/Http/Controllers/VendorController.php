@@ -13,29 +13,43 @@ class VendorController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), array(
-                'vendor_fullname' => 'required',
-                'vendor_admin_email' => 'required | email',
-                // 'vendor_program_id' => 'required',
+                'vendor_firstname' => 'required',
+                'vendor_lastname' => 'required',
+                'vendor_admin_email' => ['required', 'unique:mysql2.users,email', 'unique:mysql2.vendor,vendor_admin_email'],
+                'vendor_program_id' => 'required',
                 'vendor_sec_reg_name' => 'required',
                 'vendor_acronym' => 'required',
                 'vendor_office_address' => 'required',
-                'vendor_saq_status' => 'required',
+                'vendor_status' => 'required',
             ));
 
             if ($validate->passes()){
                 $arrayData = array(
-                    'vendor_fullname' => $request->input('vendor_fullname'),
+                    'vendor_firstname' => $request->input('vendor_firstname'),
+                    'vendor_lastname' => $request->input('vendor_lastname'),
                     'vendor_admin_email' => $request->input('vendor_admin_email'),
                     'vendor_sec_reg_name' => $request->input('vendor_sec_reg_name'),
                     'vendor_acronym' => $request->input('vendor_acronym'),
                     'vendor_office_address' => $request->input('vendor_office_address'),
-                    'vendor_saq_status' => $request->input('vendor_saq_status'),
+                    'vendor_status' => $request->input('vendor_status'),
                 );
                 
                 if(is_null($request->input('vendor_id'))) {
-                    \DB::connection('mysql2')->table('vendor')->insert(
+                    $vendor_id = \DB::connection('mysql2')->table('vendor')->insertGetId(
                         $arrayData
                     );
+
+                    for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
+                        $arrayProgram = array(
+                            'vendors_id' => $vendor_id,
+                            'programs' => $request->input('vendor_program_id')[$i],
+                        );
+
+                        \DB::connection('mysql2')->table('vendor_programs')->insert(
+                            $arrayProgram
+                        );
+                    }
+
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
                     \DB::connection('mysql2')->table('vendor')
@@ -43,7 +57,7 @@ class VendorController extends Controller
                         ->update(
                             $arrayData
                         );
-                 return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
+                return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -91,16 +105,19 @@ class VendorController extends Controller
             
             $vendors = \DB::connection('mysql2')->table('vendor')
                                     // ->join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendor.vendor_program_id')
-                                    ->whereIn('vendor_saq_status', $arrayProgram)
+                                    ->whereIn('vendor_status', $arrayProgram)
                                     ->get();
 
             $dt = DataTables::of($vendors)
-                        ->addColumn('vendor_saq_status', function($row){
-                            $class = $row->vendor_saq_status == 'Active' ? 'success' : 'warning';
-                            return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_saq_status.'</div>';
+                        ->addColumn('vendor_status', function($row){
+                            $class = $row->vendor_status == 'Active' || $row->vendor_status == 'Complete Offboarding' ? 'success' : 'warning';
+                            return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_status.'</div>';
+                        })
+                        ->addColumn('vendor_name', function($row){
+                            return $row->vendor_firstname. " " .$row->vendor_lastname;
                         });
             
-            $dt->rawColumns(['vendor_saq_status']);
+            $dt->rawColumns(['vendor_status']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
@@ -122,7 +139,7 @@ class VendorController extends Controller
             \DB::connection('mysql2')->table('vendor')
                         ->where('vendor_id', $request->input('id'))
                         ->update([
-                            'vendor_saq_status' => $status
+                            'vendor_status' => $status
                         ]);
 
             return response()->json(['error' => false, 'message' => 'Successfully terminated a vendor.']);

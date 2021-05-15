@@ -9,6 +9,7 @@ class Vendor extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql2';
     protected $primaryKey = 'vendor_id';
     
     protected $fillable = [

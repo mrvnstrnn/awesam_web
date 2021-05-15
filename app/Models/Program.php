@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Program extends Model
 {
-    protected $connection = 'mysql2';
     use HasFactory;
+    protected $connection = 'mysql2';
+    protected $table = 'program';
 }
