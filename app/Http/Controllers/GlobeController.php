@@ -151,5 +151,33 @@ class GlobeController extends Controller
         return \DB::connection('mysql2')->select('call `stage_activites`('.$program_id. ')');
     }
 
+    public function unassignedSites($profile_id, $program_id)
+    {
+        try {
+            $stored_procs = $this->getNewEndorsement($profile_id, $program_id);
+            $dt = DataTables::of($stored_procs)
+                        ->addColumn('checkbox', function($row){
+                            $checkbox = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>";
+                            $checkbox .= "<div class='avatar-icon'><i>+</i></div>";
+                            $checkbox .= "</div>";
+
+                            return $checkbox;
+                        })
+                        ->addColumn('technology', function($row){
+                            $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                            return "<div class='badge badge-success'>".$technology."</div>";                            
+                        })
+                        ->addColumn('pla_id', function($row){
+                            return $row['site_fields'][0]['PLA_ID'];
+                            
+                        });
+            
+            $dt->rawColumns(['checkbox', 'technology']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 
 }
