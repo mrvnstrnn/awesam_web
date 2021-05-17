@@ -48,10 +48,10 @@
                             <input name="check" id="exampleCheck" type="checkbox" class="form-check-input">
                             <label for="exampleCheck" class="form-check-label">Keep me logged in</label>
                         </div> --}}
-                    <div class="divider"></div>
+                    {{-- <div class="divider"></div>
                     <h6 class="mb-0">No account?
                         <a class="text-primary" href="{{ route('register') }}">{{ __('Register Now') }}</a>
-                    </h6>
+                    </h6> --}}
                 </div>
                 <div class="modal-footer clearfix">                                                
                     <div class="float-left">

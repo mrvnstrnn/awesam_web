@@ -5,8 +5,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                Employee Invitation
+                </div>      
+            </div>        
             <div class="card-body">
-                <h5 class="card-title">Invitation Information</h5>
                 <form id="invitation_form">
                     @csrf
                     <div class="form-row">
