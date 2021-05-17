@@ -1,7 +1,7 @@
 @component('mail::message')
 Hi {{ $name }},
 
-This is your invitation link from you company {{ $company }}.
+This is your registration link for your company {{ $company }}.
 
 @component('mail::button', ['url' => $url])
 Accept invitation

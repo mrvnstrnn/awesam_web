@@ -48,8 +48,8 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="company" class="">Company</label>
-                                <input name="company" id="company" value="{{ \Auth::user()->getCompany(2)->vendor_acronym }}" type="text" class="form-control" readonly>
-                                <input name="company_hidden" id="company_hidden" type="hidden" class="form-control" value="2" readonly>
+                                <input name="company" id="company" value="{{ \Auth::user()->getCompany()->vendor_acronym }}" type="text" class="form-control" readonly>
+                                <input name="company_hidden" id="company_hidden" type="hidden" class="form-control" value="{{ \Auth::user()->getCompany()->vendor_id }}" readonly>
                             </div>
                         </div>
                     </div>
