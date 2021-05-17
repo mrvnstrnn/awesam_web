@@ -1,9 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-@extends('layouts.main')
-
-@section('content')
     <style>
         .modalEmployeeVerification {
             cursor: pointer;
