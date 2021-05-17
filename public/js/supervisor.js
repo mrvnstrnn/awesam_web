@@ -290,8 +290,11 @@ $(document).ready(() => {
                 return json.data;
             },
             'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-site', JSON.stringify(data));
+                $(row).attr('data-program', program_lists[i]);
                 $(row).attr('data-id', data.sam_id);
                 $(row).addClass('modalDataUnassigned'+data.sam_id);
+                $(row).addClass('modalDataEndorsement');
             },
             columnDefs: [{
                 "targets": 0,
@@ -308,7 +311,7 @@ $(document).ready(() => {
         });
     }
 
-    $('.unasigned-table').on( 'click', 'tr td:not(:first-child)', function () {
+    $('.unasigned-table').on( 'click', 'tr td:first-child', function () {
         $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
         $("#modal-assign-sites").modal("show");
     });
@@ -318,7 +321,7 @@ $(document).ready(() => {
         $("#modal-assign-sites").modal("hide");
     });
       
-    $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
+    $('.unasigned-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));

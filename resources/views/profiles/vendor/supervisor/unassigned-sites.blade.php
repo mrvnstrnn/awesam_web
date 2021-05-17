@@ -96,7 +96,7 @@
                     </button>
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
+                    <div class="form-row">
                         <select name="" id="" class="form-control">
                             <option value="">Marvin</option>
                             <option value="">Aris</option>
@@ -107,6 +107,28 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="btn-assign-sites">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                    <div class="form-row content-data">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                 </div>
             </div>
         </div>

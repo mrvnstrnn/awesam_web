@@ -157,7 +157,7 @@ class GlobeController extends Controller
             $stored_procs = $this->getNewEndorsement($profile_id, $program_id);
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row){
-                            $checkbox = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>";
+                            $checkbox = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add assign-agent' data-id='".$row['sam_id']."'>";
                             $checkbox .= "<div class='avatar-icon'><i>+</i></div>";
                             $checkbox .= "</div>";
 
