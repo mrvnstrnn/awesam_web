@@ -12,7 +12,7 @@ use App\Mail\GTInvitationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\UserDetail;
-use App\Models\Company;
+use App\Models\Vendor;
 use App\Models\Invitation;
 
 class InviteController extends Controller
@@ -70,7 +70,7 @@ class InviteController extends Controller
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 }
                 
-                $company = Company::where('id', $request->input('company_hidden'))->first();
+                $company = Vendor::where('vendor_id', $request->input('company_hidden'))->first();
 
                 if(is_null($company)){
                     return response()->json(['error' => true, 'message' => "No company found."]);
@@ -94,7 +94,7 @@ class InviteController extends Controller
 
                     $url = route('invite.link', [ $token, $randomString]);
 
-                    Mail::to($email)->send(new InvitationMail($url, $name, $company->company_name));
+                    Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
                     
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 } else {
@@ -109,7 +109,7 @@ class InviteController extends Controller
 
     public function invitation_registration ($token, $invitation_code)
     {
-        $invitations = Invitation::join('companies', 'companies.id', 'invitations.company_id')
+        $invitations = Invitation::join('vendor', 'vendor.vendor_id', 'invitations.company_id')
                                     ->where('invitations.token', $token)
                                     ->where('invitations.invitation_code', $invitation_code)
                                     ->first();

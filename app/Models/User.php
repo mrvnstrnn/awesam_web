@@ -93,9 +93,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function getCompany($id)
+    public function getCompany()
     {
-        return Company::find($id);
+        return Vendor::join('user_details', 'user_details.vendor_id', 'vendor.vendor_id')
+                            ->where('user_details.user_id', \Auth::user()->id)
+                            ->first();
     }
 
     public function allRoles()

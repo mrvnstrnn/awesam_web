@@ -86,7 +86,7 @@
                         <div class="col-md-6">
                             <div class="position-relative form-group">
                                 <input id="company" type="text" class="form-control" 
-                                    name="company" value="{{ $invitations->company_name ? $invitations->company_name : old('company_name') }}" required autocomplete="mode" placeholder="Mode here..." readonly>
+                                    name="company" value="{{ $invitations->vendor_acronym ? $invitations->vendor_acronym : old('vendor_acronym') }}" required autocomplete="mode" placeholder="Vendor Acronymn" readonly>
 
                                     <input type="hidden" name="company_hidden" id="company_hidden" value="{{ $invitations->id }}">
                                     <input type="hidden" name="token_hidden" id="token_hidden" value="{{ $invitations->token }}">
@@ -100,20 +100,9 @@
                             <a href="javascript:void(0);">Terms and Conditions</a>.
                         </label>
                     </div>
-                    <div class="divider row"></div>
-                    <h6 class="mb-0">
-                        Already have an account?
-    
-                        <a href="javascript:void(0);" class="text-primary">Sign in</a> |
-                        @if (Route::has('password.request'))
-                            <a class="text-primary" href="{{ route('password.request') }}">
-                                {{ __('Recover Password?') }}
-                            </a>
-                        @endif
-                    </h6>
                 </div>
                 <div class="modal-footer d-block text-center">
-                    <button class="btn-wide btn-pill btn-shadow btn-hover-shine btn btn-primary btn-lg">Create Account</button>
+                    <button class="btn-wide btn-pill btn-shadow btn-hover-shine btn btn-primary btn-lg">Register Account</button>
                 </div>
             </div>
         </form>
