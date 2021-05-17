@@ -100,20 +100,9 @@
                             <a href="javascript:void(0);">Terms and Conditions</a>.
                         </label>
                     </div>
-                    <div class="divider row"></div>
-                    <h6 class="mb-0">
-                        Already have an account?
-    
-                        <a href="javascript:void(0);" class="text-primary">Sign in</a> |
-                        @if (Route::has('password.request'))
-                            <a class="text-primary" href="{{ route('password.request') }}">
-                                {{ __('Recover Password?') }}
-                            </a>
-                        @endif
-                    </h6>
                 </div>
                 <div class="modal-footer d-block text-center">
-                    <button class="btn-wide btn-pill btn-shadow btn-hover-shine btn btn-primary btn-lg">Create Account</button>
+                    <button class="btn-wide btn-pill btn-shadow btn-hover-shine btn btn-primary btn-lg">Register Account</button>
                 </div>
             </div>
         </form>
