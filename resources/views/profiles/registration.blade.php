@@ -86,7 +86,7 @@
                         <div class="col-md-6">
                             <div class="position-relative form-group">
                                 <input id="company" type="text" class="form-control" 
-                                    name="company" value="{{ $invitations->company_name ? $invitations->company_name : old('company_name') }}" required autocomplete="mode" placeholder="Mode here..." readonly>
+                                    name="company" value="{{ $invitations->vendor_acronym ? $invitations->vendor_acronym : old('vendor_acronym') }}" required autocomplete="mode" placeholder="Vendor here..." readonly>
 
                                     <input type="hidden" name="company_hidden" id="company_hidden" value="{{ $invitations->id }}">
                                     <input type="hidden" name="token_hidden" id="token_hidden" value="{{ $invitations->token }}">
