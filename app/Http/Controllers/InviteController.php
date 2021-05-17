@@ -109,7 +109,7 @@ class InviteController extends Controller
 
     public function invitation_registration ($token, $invitation_code)
     {
-        $invitations = Invitation::join('companies', 'companies.id', 'invitations.company_id')
+        $invitations = Invitation::join('vendor', 'vendor.vendor_id', 'invitations.company_id')
                                     ->where('invitations.token', $token)
                                     ->where('invitations.invitation_code', $invitation_code)
                                     ->first();
