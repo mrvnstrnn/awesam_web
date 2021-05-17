@@ -48,6 +48,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
     
     Route::get('/forverification', [UserController::class, 'forverification_list'])->name('all.forverification');
+
+    
+    Route::get('/workflow-data-proc/{program_id}', [GlobeController::class, 'getDataWorkflow'])->name('all.getDataWorkflow');
 });
 
 

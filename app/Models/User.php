@@ -15,6 +15,8 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
+    protected $connection = 'mysql2';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -81,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function getUserProfile()
-    { 
+    {
         return Profile::find(\Auth::user()->profile_id);
     }
 
