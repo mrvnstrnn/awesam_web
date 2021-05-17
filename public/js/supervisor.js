@@ -273,6 +273,50 @@ $(document).ready(() => {
             ],
         });
     }
+
+    for (let i = 0; i < program_lists.length; i++) {
+        $('#unasigned-'+program_lists[i]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#unasigned-'+program_lists[i]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-id', data.sam_id);
+                $(row).addClass('modalDataUnassigned'+data.sam_id);
+            },
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "checkbox" },
+                { data: "site_endorsement_date" },
+                { data: "sam_id" },
+                { data: "site_name" },
+                { data: "technology" },
+                { data: "pla_id" }
+            ],
+        });
+    }
+
+    $('.unasigned-table').on( 'click', 'tr td:not(:first-child)', function () {
+        $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
+        $("#modal-assign-sites").modal("show");
+    });
+
+    $("#btn-assign-sites").on('click', function(){
+        $('.modalDataUnassigned'+$(this).attr('data-id')).remove();
+        $("#modal-assign-sites").modal("hide");
+    });
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
