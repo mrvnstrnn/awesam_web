@@ -11,7 +11,8 @@ class Vendor extends Model
 
     protected $connection = 'mysql2';
     protected $primaryKey = 'vendor_id';
-    
+    protected $table = 'vendor';
+
     protected $fillable = [
         'vendor_fullname',
         'vendor_admin_email',
