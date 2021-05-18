@@ -15,7 +15,10 @@
 
         @php
             // $programs = App\Models\VendorProgram::orderBy('program')->get();
-            $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
+            $programs = \DB::connection('mysql2')->table('program')
+                ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                ->where('user_programs.user_id', '=', \Auth::user()->id)
+                ->orderBy('program')->get();
         @endphp
 
         @foreach ($programs as $program)
