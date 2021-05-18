@@ -16,13 +16,10 @@
         @php
             // $programs = App\Models\VendorProgram::orderBy('program')->get();
             // $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
-            $programs = \DB::connection('mysql2')
-                                ->table('users')
-                                ->select('program.program_id', 'program.program')
-                                ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->join('program', 'program.program_id', 'user_programs.program')
-                                ->where('users.id', \Auth::user()->id)
-                                ->get();
+            $programs = \DB::connection('mysql2')->table('program')
+                ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                ->where('user_programs.user_id', '=', \Auth::user()->id)
+                ->orderBy('program')->get();
         @endphp
 
         @foreach ($programs as $program)
