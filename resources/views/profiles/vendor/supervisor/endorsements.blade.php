@@ -52,7 +52,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id]) }}">
+                                    @php
+                                        $activity = \Auth::user()->profile_id;
+
+                                        $activity_id = \DB::connection('mysql2')->table('page_route')->where('profile_id', $activity)->where('activity_id', 5)->first();
+                                    @endphp
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 5, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">

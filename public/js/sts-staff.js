@@ -99,8 +99,6 @@ $(document).ready(() => {
             program_div = '#new-endoresement-towerco-table';
         }
 
-        console.log(program_div);
-
         $.ajax({
             url: $(this).attr('data-href'),
             data: {

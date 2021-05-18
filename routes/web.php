@@ -52,7 +52,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/workflow-data-proc/{program_id}', [GlobeController::class, 'getDataWorkflow'])->name('all.getDataWorkflow');
 
-    Route::get('/unassigend-sites-data/{profile_id}/{program_id}', [GlobeController::class, 'unassignedSites'])->name('all.unassignedSites');
+    Route::get('/unassigend-sites-data/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'unassignedSites'])->name('all.unassignedSites');
+
+    Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
 });
 
 
