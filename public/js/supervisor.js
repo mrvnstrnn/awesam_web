@@ -59,15 +59,40 @@ $(document).ready(() => {
 
     $('.unasigned-table').on( 'click', 'tr td:first-child', function () {
         $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
+        $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
+        $("#sam_id").val($(this).parent().attr('data-id'));
         $("#modal-assign-sites").modal("show");
     });
 
-    $("#btn-assign-sites").on('click', function(){
-        $('.modalDataUnassigned'+$(this).attr('data-id')).remove();
-        $("#modal-assign-sites").modal("hide");
+    $(document).on('click',"#btn-assign-sites", function(){
+
+        
+        var data_program = $(this).attr('data-program');
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: $("#agent_form").serialize(),
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#new-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
+                        $("#modal-assign-sites").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
     });
       
-    $('.unasigned-table').on( 'click', 'tr td:not(:first-child)', function () {
+    $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
         // var json_parse = JSON.parse($(this).attr("data-site"));
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
@@ -171,8 +196,6 @@ $(document).ready(() => {
         } else if (data_program == 'towerco'){
             program_div = '#new-endoresement-towerco-table';
         }
-
-        console.log(program_div);
 
         $.ajax({
             url: $(this).attr('data-href'),

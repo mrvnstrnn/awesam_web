@@ -14,15 +14,15 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            // $programs = App\Models\VendorProgram::orderBy('program')->get();
-            // $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
             $programs = \DB::connection('mysql2')
                                 ->table('users')
                                 ->select('program.program_id', 'program.program')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->join('program', 'program.program_id', 'user_programs.program')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
                                 ->where('users.id', \Auth::user()->id)
                                 ->get();
+
+                                // dd($agents);
         @endphp
 
         @foreach ($programs as $program)
@@ -56,7 +56,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table" data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id]) }}">
+                                    @php
+                                        $activity = \Auth::user()->profile_id;
+
+                                        $activity_id = \DB::connection('mysql2')->table('page_route')->where('profile_id', $activity)->where('activity_id', 6)->first();
+                                    @endphp
+                                    <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th class="d-none d-md-table-cell">Agent</th>
@@ -87,27 +92,36 @@
 @section('modals')
 
     <div class="modal fade" id="modal-assign-sites" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-sm" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Assign Sites</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row">
-                        <select name="" id="" class="form-control">
-                            <option value="">Marvin</option>
-                            <option value="">Aris</option>
-                            <option value="">Doc</option>
-                            <option value="">jeff</option>
-                        </select>
+                <form id="agent_form">
+                    <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                        <div class="form-row">
+                        <input type="hidden" id="sam_id" name="sam_id">
+                            @php
+                                $agents = \DB::connection('mysql2')
+                                        ->table('users')
+                                        ->join('user_details', 'user_details.user_id', 'users.id')
+                                        ->where('user_details.IS_id', \Auth::user()->id)
+                                        ->get();
+                            @endphp
+                            <select name="agent_id" id="agent_id" class="form-control">
+                            @foreach ($agents as $agent)
+                                <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                            @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btn-assign-sites">Assign</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btn-assign-sites" data-href="{{ route('assign.agent') }}">Assign</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -125,10 +139,6 @@
                     <div class="form-row content-data">
                         
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
                 </div>
             </div>
         </div>
