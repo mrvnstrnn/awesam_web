@@ -1,233 +1,6 @@
-$(document).ready(() => {
-
-    $(function() {
-        $('#profile-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: $('#profile-table').attr('data-href'),
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                beforeSend: function(){
-                    
-                },
-                complete: function(){
-                    
-                }
-            },
-            dataSrc: function(json){
-                return json.data;
-            },
-            columns: [
-                { data: 'profile', name: 'profile' },
-                { data: 'mode', name: 'mode' },
-                { data: 'action', name: 'action', orderable: false, searchable: false },
-            ]
-        });
-
-        $('#permission-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: $('#permission-table').attr('data-href'),
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                beforeSend: function(){
-                    
-                },
-                complete: function(){
-                    
-                }
-            },
-            dataSrc: function(json){
-                return json.data;
-            },
-            columns: [
-                { data: 'title', name: 'title' },
-                { data: 'title_subheading', name: 'title_subheading' },
-                { data: 'menu', name: 'menu' },
-                { data: 'slug', name: 'slug' },
-                { data: 'level_one', name: 'level_one' },
-                { data: 'level_two', name: 'level_two' },
-                { data: 'level_three', name: 'level_three' },
-                { data: 'icon', name: 'icon' },
-                { data: 'action', name: 'action', orderable: false, searchable: false },
-            ]
-        });
-    });
-
-    $(document).on('click', '.edit_profile', function (){
-        $(".profile_list .col-md-6").remove();
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'GET',
-            success: function(resp){
-                if(!resp.error){
-                    console.log(resp.message);
-                    resp.permissions.forEach(element => {
-                        $(".profile_list").append(
-                            '<div class="col-md-6"><input type="checkbox" name="profile_checkbox[]" class="form-check-input" id="permission'+element.id+'" value="'+element.id+'"><label class="form-check-label" for="permission'+element.id+'">'+element.title+'</label></div>'
-                        );
-                    });
-
-                    resp.message.forEach(element => {
-                        $('.profile_list input:checkbox').filter('[value='+element.id+']').prop('checked', true);
-                    });
-
-                    $("#hidden_id").val(resp.message[0].profile_id);
-                    $("#profile_name").val(resp.message[0].profile);
-                    $("#profileModal").modal('show');
-                } else {
-                    toastr.error(resp.message, 'Error');
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            },
-        });
-    });
-
-    $(".update_pofile").on('click', function(){
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'POST',
-            data: $("#profile_form").serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
-                    $("#profile_form")[0].reset();
-                    $("#profileModal").modal('hide');
-                    $('#profile-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
-                } else {
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
-                        });
-                    } else {
-                        toastr.error(resp.message, 'Error');
-                    }
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            }
-        });
-    });
-
-    $(document).on('click', '.edit_permission', function (){
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'GET',
-            success: function(resp){
-                if(!resp.error){
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index).val(data);
-                        });
-                    }
-                    $("#permissionModal").modal('show');
-                } else {
-                    toastr.error(resp.message, 'Error');
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            },
-        });
-    });
-
-    $(".addnewpermission_btn").on('click', function(){
-        $("#permission_form")[0].reset();
-        $("#permissionModal").modal("show");
-    });
-
-    $(".addupdate_permission").on('click', function(){
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'POST',
-            data: $("#permission_form").serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
-                    $("#permission_form")[0].reset();
-                    $("#permissionModal").modal('hide');
-                    $('#permission-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
-                } else {
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
-                        });
-                    } else {
-                        toastr.error(resp.message, 'Error');
-                    }
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            }
-        });
-    });
-
-    $(document).on('click', '.delete_permission', function (){
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'GET',
-            success: function(resp){
-                if(!resp.error){
-                    $("#hidden_permission_id").val(resp.message.id);
-                    $("b.permission_name").text(resp.message.title);
-                    $("#deletePermissionModal").modal('show');
-                } else {
-                    toastr.error(resp.message, 'Error');
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            },
-        });
-    });
-
-    $(document).on('click', '.confirm_delete_permission', function (){
-        var hidden_permission_id = $("#hidden_permission_id").val();
-        $.ajax({
-            url: $(this).attr('data-href'),
-            method: 'POST',
-            data: {
-                hidden_permission_id : hidden_permission_id
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
-                    $("#hidden_permission_id").val();
-                    $("b.permission_name").text(resp.message.title);
-                    $("#deletePermissionModal").modal('hide');
-                    $('#permission-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
-                } else {
-                    toastr.error(resp.message, 'Error');
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            },
-        });
-    });
-
-});
 
 $(document).ready(() => {
+
     var program_lists = [
         'coloc',
         'ftth',
@@ -239,40 +12,13 @@ $(document).ready(() => {
         'wireless',
     ];
 
-    for (let i = 0; i < program_lists.length; i++) {
-        $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
-            processing: true,
-            serverSide: true,
-            // pageLength: 3,
-            ajax: {
-                url: $('#new-endoresement-'+program_lists[i]+'-table').attr('data-href'),
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-            },
-            dataSrc: function(json){
-                return json.data;
-            },
-            'createdRow': function( row, data, dataIndex ) {
-                $(row).attr('data-site', JSON.stringify(data));
-                $(row).attr('data-program', program_lists[i]);
-                $(row).addClass('modalDataEndorsement');
-            },
-            columnDefs: [{
-                "targets": 0,
-                "orderable": false
-            }],
-            columns: [
-                { data: "checkbox" },
-                { data: "site_endorsement_date" },
-                { data: "sam_id" },
-                { data: "site_name" },
-                { data: "technology" },
-                { data: "pla_id" }
-            ],
-        });
-    }
+
+    /////////////////////////////////////
+    //                                 //  
+    // U N A S S I G N E D   S I T E S //
+    //                                 //  
+    /////////////////////////////////////
+
 
     for (let i = 0; i < program_lists.length; i++) {
         $('#unasigned-'+program_lists[i]+'-table').DataTable({
@@ -348,6 +94,57 @@ $(document).ready(() => {
         $("#modal-endorsement").modal("show");
     } );
 
+    /////////////////////////////////////
+    //                                 //  
+    //           E N D   O F           //  
+    // U N A S S I G N E D   S I T E S //
+    //                                 //  
+    /////////////////////////////////////
+
+
+
+    /////////////////////////////////////
+    //                                 //  
+    // N E W   E N D O R S E M E N T S //
+    //                                 //  
+    /////////////////////////////////////
+
+
+    for (let i = 0; i < program_lists.length; i++) {
+        $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#new-endoresement-'+program_lists[i]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-site', JSON.stringify(data));
+                $(row).attr('data-program', program_lists[i]);
+                $(row).addClass('modalDataEndorsement');
+            },
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "checkbox" },
+                { data: "site_endorsement_date" },
+                { data: "sam_id" },
+                { data: "site_name" },
+                { data: "technology" },
+                { data: "pla_id" }
+            ],
+        });
+    }
+
     $("#checkAll").click(function(){
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
@@ -406,6 +203,7 @@ $(document).ready(() => {
         });
 
     });
+
 
     $(".btn-bulk-acceptreject-endorsement").click(function(){
         $("#loaderModal").modal("show");
@@ -468,6 +266,15 @@ $(document).ready(() => {
         });
 
     });
-    
 
+    /////////////////////////////////////
+    //                                 //  
+    //           E N D   O F           //  
+    // N E W   E N D O R S E M E N T S //
+    //                                 //  
+    /////////////////////////////////////
+
+
+
+    
 });

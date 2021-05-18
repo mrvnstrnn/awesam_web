@@ -69,5 +69,5 @@
 @endsection
 
 @section('js_script')
-    <script src="{{ asset('js/supervisor.js') }}"></script>
+<script src="{{ asset('js/super-user.js') }}"></script>
 @endsection
