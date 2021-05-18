@@ -45,7 +45,8 @@ $(document).ready(() => {
         });
     }
       
-    $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function () {
+    $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function (e) {
+        e.preventDefault();
         // var json_parse = JSON.parse($(this).attr("data-site"));
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
@@ -72,11 +73,13 @@ $(document).ready(() => {
         $("#modal-endorsement").modal("show");
     } );
 
-    $("#checkAll").click(function(){
+    $("#checkAll").click(function(e){
+        e.preventDefault();
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-    $(".btn-accept-endorsement").click(function(){
+    $(".btn-accept-endorsement").click(function(e){
+        e.preventDefault();
         $("#loaderModal").modal("show");
 
         var sam_id = [$(this).attr('data-sam_id')];
@@ -130,7 +133,8 @@ $(document).ready(() => {
 
     });
 
-    $(".btn-bulk-acceptreject-endorsement").click(function(){
+    $(".btn-bulk-acceptreject-endorsement").click(function(e){
+        e.preventDefault();
         $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
