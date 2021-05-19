@@ -55,6 +55,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/unassigend-sites-data/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'unassignedSites'])->name('all.unassignedSites');
 
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
+
+    Route::get('/forverification', [UserController::class, 'forverification_list'])->name('all.forverification');
+
+
 });
 
 

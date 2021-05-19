@@ -45,55 +45,6 @@ class GlobeController extends Controller
         try {
 
 
-            // TEMPORARY BRACKETING OF ACTIVITY PER PROGRAM
-            // SHOULD BE MIGRATED TO TABLE BASED LOGIC 
-
-            // switch($program_id){
-            //     case 1:
-                    // switch($profile_id){
-                    //     case 12: 
-                    //         $activity_id = 1;
-                    //         $what_to_load = "New Endorsement - pmo";
-                    //         break;
-
-                    //     case 6: 
-                    //         $activity_id = 2;
-                    //         $what_to_load = "New Endorsement - sts staff";
-                    //         break;
-
-                    //     case 7: 
-                    //         $activity_id = 3;
-                    //         $what_to_load = "New Endorsement - sts head";
-                    //         break;
-
-                    //     case 8: 
-                    //         $activity_id = 4;
-                    //         $what_to_load = "New Endorsement - program staff";
-                    //         break;
-
-                    //     case 3: 
-                    //         $activity_id = 5;
-                    //         $what_to_load = "New Endorsement - vendor admin";
-                    //         break;
-
-                    //     case 3: 
-                    //         $activity_id = 6;
-                    //         $what_to_load = "Vendor assign to agent";
-                    //         break;
-
-                    //     default:
-                    //         $activity_id = "";   
-                    //         $what_to_load = "";
-
-                    //     break;
-                    // }
-                    
-                    // $profile = \DB::connection('mysql2')->table('profiles')->where('id', $profile_id);
-
-                    // $what_to_load = "New Endorsement - ".strtolower($profile->profile)
-
-            // $new_endorsements = \DB::connection('mysql2')->select('call `z_pull_data`(1, ' .  $program_id . ', "' . $activity_id .'")');
-
             // a_pull_data(VENDOR_ID, PROGRAM_ID, PROFILE_ID, STAGE_ID, WHAT_TO_LOAD)
             $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'")');
 

@@ -58,7 +58,8 @@
 
                                         $activity_id = \DB::connection('mysql2')->table('page_route')->where('profile_id', $activity)->where('activity_id', 6)->first();
                                     @endphp
-                                    <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
+                                    <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" 
+                                            data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th class="d-none d-md-table-cell">Agent</th>
