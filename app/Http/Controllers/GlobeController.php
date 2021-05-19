@@ -12,7 +12,6 @@ class GlobeController extends Controller
     public function getDataNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-            // vendor_id, program_id, profile_id
             $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
             
             $dt = DataTables::of($stored_procs)
@@ -43,7 +42,6 @@ class GlobeController extends Controller
     public function getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-
 
             // a_pull_data(VENDOR_ID, PROGRAM_ID, PROFILE_ID, STAGE_ID, WHAT_TO_LOAD)
             $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'")');
@@ -155,11 +153,17 @@ class GlobeController extends Controller
     public function assign_agent(Request $request)
     {
         try {
-            $profile_id = \Auth::user()->profile_id;
-            $id = \Auth::user()->id;
-            SiteAgent::create($request->all());
-            \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
-            return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
+            $checkAgent = \DB::connection('mysql2')->table('site_agents')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+
+            if(is_null($checkAgent)) {
+                $profile_id = \Auth::user()->profile_id;
+                $id = \Auth::user()->id;
+                SiteAgent::create($request->all());
+                \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
+            } else {
+                return response()->json(['error' => true, 'message' => "Agent already assigned."]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
