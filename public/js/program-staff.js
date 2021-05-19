@@ -86,23 +86,23 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
-        var program_div = "";
+        // var program_div = "";
 
-        if (data_program == 'coloc'){
-            program_div = '#new-endoresement-coloc-table';
-        } else if (data_program == 'ffth'){
-            program_div = '#new-endoresement-ffth-table';
-        } else if (data_program == 'ibs'){
-            program_div = '#new-endoresement-ibs-table';
-        } else if (data_program == 'mwan'){
-            program_div = '#new-endoresement-mwan-table';
-        } else if (data_program == 'new sites'){
-            program_div = '#new-endoresement-new-sites-table';
-        } else if (data_program == 'towerco'){
-            program_div = '#new-endoresement-towerco-table';
-        }
+        // if (data_program == 'coloc'){
+        //     program_div = '#new-endoresement-coloc-table';
+        // } else if (data_program == 'ffth'){
+        //     program_div = '#new-endoresement-ffth-table';
+        // } else if (data_program == 'ibs'){
+        //     program_div = '#new-endoresement-ibs-table';
+        // } else if (data_program == 'mwan'){
+        //     program_div = '#new-endoresement-mwan-table';
+        // } else if (data_program == 'new sites'){
+        //     program_div = '#new-endoresement-new-sites-table';
+        // } else if (data_program == 'towerco'){
+        //     program_div = '#new-endoresement-towerco-table';
+        // }
 
-        console.log(program_div);
+        // console.log(program_div);
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -116,7 +116,7 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
-                    $(program_div).DataTable().ajax.reload(function(){
+                    $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
                         $("#loaderModal").modal("hide");
@@ -142,21 +142,21 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
-        var program_div = "";
+        // var program_div = "";
 
-        if (data_program == 'coloc'){
-            program_div = '#new-endoresement-coloc-table';
-        } else if (data_program == 'ffth'){
-            program_div = '#new-endoresement-ffth-table';
-        } else if (data_program == 'ibs'){
-            program_div = '#new-endoresement-ibs-table';
-        } else if (data_program == 'mwan'){
-            program_div = '#new-endoresement-mwan-table';
-        } else if (data_program == 'new sites'){
-            program_div = '#new-endoresement-new-sites-table';
-        } else if (data_program == 'towerco'){
-            program_div = '#new-endoresement-towerco-table';
-        }
+        // if (data_program == 'coloc'){
+        //     program_div = '#new-endoresement-coloc-table';
+        // } else if (data_program == 'ffth'){
+        //     program_div = '#new-endoresement-ffth-table';
+        // } else if (data_program == 'ibs'){
+        //     program_div = '#new-endoresement-ibs-table';
+        // } else if (data_program == 'mwan'){
+        //     program_div = '#new-endoresement-mwan-table';
+        // } else if (data_program == 'new sites'){
+        //     program_div = '#new-endoresement-new-sites-table';
+        // } else if (data_program == 'towerco'){
+        //     program_div = '#new-endoresement-towerco-table';
+        // }
 
         var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
 
@@ -179,7 +179,7 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
-                    $(program_div).DataTable().ajax.reload(function(){
+                    $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
