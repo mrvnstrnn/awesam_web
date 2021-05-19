@@ -249,7 +249,7 @@ class UserController extends Controller
 
     private function getProfileMenuLinks(){
         $profile_menu = \Auth::user()->getAllNavigation()
-            ->orderBy('level_two', 'asc')
+            ->orderBy('sort', 'asc')
             ->orderBy('menu', 'asc')
             ->get();
 
@@ -260,6 +260,7 @@ class UserController extends Controller
     private function getProfileMenuDirectLinks(){
         $profile_direct_links = \Auth::user()->getAllNavigation()
                                             ->where('permissions.level_one', 'profile_menu')
+                                            ->orderBy('sort', 'asc')
                                             ->get();
 
         return $profile_direct_links->groupBy('level_two');
@@ -269,6 +270,7 @@ class UserController extends Controller
     private function getProgramMenuDirectLinks(){
         $program_direct_links = \Auth::user()->getAllNavigation()
                                             ->where('permissions.level_one', 'program_menu')
+                                            ->orderBy('sort', 'asc')
                                             ->get();
         
         return $program_direct_links->groupBy('level_two');

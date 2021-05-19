@@ -4,12 +4,7 @@ $(document).ready(() => {
     var program_lists = [
         'coloc',
         'ftth',
-        'ibs',
-        'mwan',
-        'new-sites',
-        'towerco',
         'renewal',
-        'wireless',
     ];
 
     
