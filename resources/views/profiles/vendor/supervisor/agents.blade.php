@@ -53,20 +53,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    @php
-                                        $activity = \Auth::user()->profile_id;
-
-                                        $activity_id = \DB::connection('mysql2')->table('page_route')->where('profile_id', $activity)->where('activity_id', 6)->first();
-                                    @endphp
-                                    <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
+                                    <table id="agent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.agent', $program->program_id) }}">
                                         <thead>
                                             <tr>
-                                                <th class="d-none d-md-table-cell">Agent</th>
-                                                <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                                <th class="d-none d-md-table-cell">SAM ID</th>
-                                                <th>Site</th>
-                                                <th class="text-center">Technology</th>
-                                                <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
+                                                <th style="width: 10%;">Photo</th>
+                                                <th>Firstname</th>
+                                                <th>Lastname</th>
+                                                <th>Email</th>
+                                                <th>Areas</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -87,58 +81,5 @@
 @endsection
 
 @section('modals')
-
-    <div class="modal fade" id="modal-assign-sites" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Assign Sites</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="agent_form">
-                    <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                        <div class="form-row">
-                        <input type="hidden" id="sam_id" name="sam_id">
-                            @php
-                                $agents = \DB::connection('mysql2')
-                                        ->table('users')
-                                        ->join('user_details', 'user_details.user_id', 'users.id')
-                                        ->where('user_details.IS_id', \Auth::user()->id)
-                                        ->get();
-                            @endphp
-                            <select name="agent_id" id="agent_id" class="form-control">
-                            @foreach ($agents as $agent)
-                                <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="btn-assign-sites" data-href="{{ route('assign.agent') }}">Assign</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 @endsection
