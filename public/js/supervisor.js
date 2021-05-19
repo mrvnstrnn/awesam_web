@@ -7,6 +7,49 @@ $(document).ready(() => {
         'renewal',
     ];
 
+    
+    /////////////////////////////////////
+    //                                 //  
+    //   A S S I G N E D   S I T E S   //
+    //                                 //  
+    /////////////////////////////////////
+
+    for (let i = 0; i < program_lists.length; i++) {
+        $('#agent-'+program_lists[i]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#agent-'+program_lists[i]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            // 'createdRow': function( row, data, dataIndex ) {
+            //     $(row).attr('data-site', JSON.stringify(data));
+            //     $(row).attr('data-program', program_lists[i]);
+            //     $(row).attr('data-id', data.sam_id);
+            //     $(row).addClass('modalDataUnassigned'+data.sam_id);
+            //     $(row).addClass('modalDataEndorsement');
+            // },
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "photo" },
+                { data: "firstname" },
+                { data: "lastname" },
+                { data: "email" },
+                { data: "null" },
+            ],
+        });
+    }
+
 
     /////////////////////////////////////
     //                                 //  
