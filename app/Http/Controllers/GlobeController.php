@@ -192,9 +192,8 @@ class GlobeController extends Controller
 
                         return $photo;
                     })
-                    ->addColumn('null', function($row){
-                        return null;
-                        
+                    ->addColumn('areas', function($row){
+                        return $row->region. " | " .$row->province;
                     });
             
             $dt->rawColumns(['photo']);
@@ -228,9 +227,8 @@ class GlobeController extends Controller
 
                         return $photo;
                     })
-                    ->addColumn('null', function($row){
+                    ->addColumn('areas', function($row){
                         return null;
-                        
                     });
             
             $dt->rawColumns(['photo']);

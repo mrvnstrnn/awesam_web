@@ -1,16 +1,18 @@
 
 $(document).ready(() => {
 
-    var program_lists = [
-        'coloc',
-        'ftth',
-        'renewal',
-    ];
+    var program_lists = [];
+
+    var program_list = JSON.parse($("#program_lists").val());
+
+    for (let i = 0; i < program_list.length; i++) {
+        program_lists.push(program_list[i].program.replace(" ", "-").toLowerCase());
+    }
 
     
     /////////////////////////////////////
     //                                 //  
-    //   A S S I G N E D   S I T E S   //
+    //     A G E N T S   S I T E S     //
     //                                 //  
     /////////////////////////////////////
 
@@ -45,7 +47,7 @@ $(document).ready(() => {
                 { data: "firstname" },
                 { data: "lastname" },
                 { data: "email" },
-                { data: "null" },
+                { data: "areas" },
             ],
         });
     }

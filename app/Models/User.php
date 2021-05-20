@@ -104,4 +104,19 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Profile::get();
     }
+
+    public function getUserProgram()
+    {
+        return \DB::connection('mysql2')->table('program')
+                        ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                        ->where('user_programs.user_id', '=', \Auth::user()->id)
+                        ->orderBy('program')->get();
+    }
+
+    public function getUserProgramAct($activity)
+    {
+        return \DB::connection('mysql2')->table('page_route')
+                            ->where('profile_id', \Auth::user()->id)
+                            ->where('activity_id', $activity)->first();
+    }
 }

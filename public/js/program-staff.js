@@ -1,14 +1,11 @@
 $(document).ready(() => {
-    var program_lists = [
-        'coloc',
-        'ftth',
-        'ibs',
-        'mwan',
-        'new-sites',
-        'towerco',
-        'renewal',
-        'wireless',
-    ];
+    var program_lists = [];
+
+    var program_list = JSON.parse($("#program_lists").val());
+
+    for (let i = 0; i < program_list.length; i++) {
+        program_lists.push(program_list[i].program.replace(" ", "-").toLowerCase());
+    }
 
     for (let i = 0; i < program_lists.length; i++) {
         $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
