@@ -41,7 +41,7 @@
             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
             @endif
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <div class="main-card mb-3 card">
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
@@ -61,6 +61,19 @@
                                     <tbody>
                                     </tbody>
                                 </table>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="main-card mb-3 card">
+                            <div class="card-header-tab card-header">
+                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                                 Sites Summary
+                                </div>
+                            </div>
+                            <div class="card-body">
+
                             </div>
                         </div>
                     </div>
@@ -148,18 +161,18 @@
                             return col["PROGRAM"];
                     },
                 },
-                {
-                    data : 'site_fields',
-                    name: 'Location', 
-                    render : function(data){
-                        col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                        $field = '<div class="widget-content-left flex2">' +
-                                    '<div class="widget-heading">' + col['REGION'] + '</div>' +
-                                '</div>';
+                // {
+                //     data : 'site_fields',
+                //     name: 'Location', 
+                //     render : function(data){
+                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //         $field = '<div class="widget-content-left flex2">' +
+                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
+                //                 '</div>';
 
-                        return $field;
-                    },
-                },
+                //         return $field;
+                //     },
+                // },
             ];
         } else {
             cols = [];
