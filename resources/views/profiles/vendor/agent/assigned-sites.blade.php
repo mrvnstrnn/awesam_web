@@ -105,26 +105,26 @@
                             return col["TECHNOLOGY"];
                     },
                 },
-                {
-                    data : 'site_fields',
-                    name: 'PLA_ID', 
-                    render : function(data){
-                            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                            return col["PLA_ID"];
-                    },
-                },
-                {
-                    data : 'site_fields',
-                    name: 'Location', 
-                    render : function(data){
-                        col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                        $field = '<div class="widget-content-left flex2">' +
-                                    '<div class="widget-heading">' + col['REGION'] + '</div>' +
-                                    '<div class="widget-subheading opacity-7">' + col['LOCATION'] + '</div>' +
-                                '</div>';
-                        return $field;
-                    },
-                },
+                // {
+                //     data : 'site_fields',
+                //     name: 'PLA_ID', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["PLA_ID"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'Location', 
+                //     render : function(data){
+                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //         $field = '<div class="widget-content-left flex2">' +
+                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
+                //                     '<div class="widget-subheading opacity-7">' + col['LOCATION'] + '</div>' +
+                //                 '</div>';
+                //         return $field;
+                //     },
+                // },
             ];
 
         }
