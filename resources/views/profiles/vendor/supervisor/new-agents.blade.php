@@ -14,13 +14,11 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            // $programs = App\Models\VendorProgram::orderBy('program')->get();
-            // $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
-            $programs = \DB::connection('mysql2')->table('program')
-                ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                ->where('user_programs.user_id', '=', \Auth::user()->id)
-                ->orderBy('program')->get();
+            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
+            $programs = \Auth::user()->getUserProgram();
         @endphp
+
+<input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
         @foreach ($programs as $program)
             <li class="nav-item">

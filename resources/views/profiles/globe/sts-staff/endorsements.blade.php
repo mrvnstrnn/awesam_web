@@ -15,8 +15,10 @@
 
         @php
             // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
-            $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
+            $programs = \Auth::user()->getUserProgram();
         @endphp
+
+<input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
         @foreach ($programs as $program)
             <li class="nav-item">
@@ -56,9 +58,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @php
-                                        $activity = \Auth::user()->profile_id;
-
-                                        $activity_id = \DB::connection('mysql2')->table('page_route')->where('profile_id', $activity)->where('activity_id', 2)->first();
+                                        $activity_id = \Auth::user()->getUserProgramAct(2);
                                     @endphp
                                     <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 2, $activity_id->what_to_load]) }}">
                                         <thead>
