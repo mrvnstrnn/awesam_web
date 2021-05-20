@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Models\SiteAgent;
+use Illuminate\Support\Facades\Schema;
 
 
 class GlobeController extends Controller
@@ -168,5 +169,24 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function agent_assigned_sites($program_id)
+    {
+        $sites = \DB::connection('mysql2')->table('site')
+                    ->join('site_agents', 'site_agents.sam_id', 'site.sam_id')
+                    ->where('program_id', "=", $program_id)
+                    ->where('site_agents.agent_id', "=", \Auth::user()->id)
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+    }
+
+    public function agent_assigned_sites_columns()
+    {
+        $sites = \Schema::connection('mysql2')->getColumnListing('site');
+        return $new_endorsements;
+    }
+
 
 }
