@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Models\SiteAgent;
+use App\Models\UsersArea;
 use Illuminate\Support\Facades\Schema;
+use Validator;
 
 
 class GlobeController extends Controller
@@ -194,6 +196,7 @@ class GlobeController extends Controller
         try {
             $checkAgent = \DB::connection('mysql2')
                                     ->table('users')
+                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
                                     ->join('users_areas', 'users_areas.user_id', 'users.id')
@@ -228,6 +231,7 @@ class GlobeController extends Controller
         try {
             $checkAgent = \DB::connection('mysql2')
                                     ->table('users')
+                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
                                     ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
@@ -254,6 +258,66 @@ class GlobeController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function get_region()
+    {
+        try {
+            $region = \DB::connection('mysql2')->table('location_regions')->get();
+            return response()->json(['error' => false, 'message' => $region]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_location($location_id, $location_type)
+    {
+        try {
+            if($location_type == "region") {
+                $table = 'location_provinces';
+            } else if($location_type == "province") {
+                $table = 'location_lgus';
+            }
+            $location = \DB::connection('mysql2')->table($table)->where($location_type."_id", $location_id)->get();
+
+            return response()->json(['error' => false, 'message' => $location]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function assign_agent_site(Request $request)
+    {
+        try {
+            $provinces = collect();
+            $lgus = collect();
+
+            $region = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('region')));
+
+            $province = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('province')));
+
+            $lgu = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
+
+            $validate = Validator::make($request->all(), array(
+                'region' => 'required',
+                'province' => 'required',
+                'lgu' => 'required',
+            ));
+
+            if($validate->passes()){
+                UsersArea::create([
+                    'user_id' => $request->input('user_id'),
+                    'region' => $region,
+                    'province' => in_array('all', $province) ? '%' : implode(", ", $province),
+                    'lgu' => in_array('all', $lgu) ? '%' : implode(", ", $lgu),
+                ]);
+                return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 

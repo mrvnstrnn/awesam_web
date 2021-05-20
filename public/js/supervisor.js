@@ -31,13 +31,13 @@ $(document).ready(() => {
             dataSrc: function(json){
                 return json.data;
             },
-            // 'createdRow': function( row, data, dataIndex ) {
-            //     $(row).attr('data-site', JSON.stringify(data));
-            //     $(row).attr('data-program', program_lists[i]);
-            //     $(row).attr('data-id', data.sam_id);
-            //     $(row).addClass('modalDataUnassigned'+data.sam_id);
-            //     $(row).addClass('modalDataEndorsement');
-            // },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-id', data.id);
+                if($('#agent-'+program_lists[i]+'-table').attr('data-page') == "new-agent"){
+                    $(row).addClass('modalAssigAgentnSite');
+                    $(row).attr('data-program', program_lists[i]);
+                }
+            },
             columnDefs: [{
                 "targets": 0,
                 "orderable": false
@@ -52,6 +52,139 @@ $(document).ready(() => {
         });
     }
 
+    $('.assign-agent-site-table').on('click', 'tr', function (e) {
+        e.preventDefault();
+        $(".assign-agent-div select#region option").remove();
+        $("#user_id").val($(this).attr('data-id'));
+        $("#assign-agent-site-btn").attr("data-program", $(this).attr('data-program'));
+        $.ajax({
+            url: "/get-region",
+            method: "GET",
+            success: function(resp){
+                if(!resp.error){
+                    $("#assign-agent-site-modal").modal("show");
+                    $(".assign-agent-div select#region").append(
+                        '<option value="">Please select region</option>'
+                    );
+                    resp.message.forEach(element => {
+                        $(".assign-agent-div select#region").append(
+                            '<option value="['+ element.region_name +']'+element.region_id+'">' + element.region_name +
+                            '</option>'
+                        );
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
+    });
+
+    $("select#region").on("change", function(e){
+        e.preventDefault();
+        var val = $(this).val();
+        var location_type = $(this).attr("data-location-type");
+        $(".province_check div").remove();
+        $.ajax({
+            url: "/get-location/"+val.replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
+            method: "GET",
+            success: function(resp){
+                if(!resp.error){
+                    $(".province_check").append(
+                        '<div class="col-3"><input name="province[]" id="provinceAll" type="checkbox" class="provinceInput" value="[all]" ><label for="provinceAll"> All</label></div>'
+                    );
+                    resp.message.forEach(element => {
+                        $(".province_check").append(
+                            '<div class="col-3"><input name="province[]" data-location-type="province" class="provinceInput" id="province'+element.province_id+'" type="checkbox" class="mr-1" value="['+element.province_name+']'+element.province_id+'" ><label for="province'+element.province_id+'"> '+element.province_name+'</label></div>'
+                        );
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
+    });
+
+    $(document).on("change", ".provinceInput", function(e){
+        e.preventDefault();
+        var val = $(this).val();
+        var checkedProvinces = [];
+        var location_type = $(this).attr("data-location-type");
+        $(".lgu_check div").remove();
+        if(this.checked) {
+            if(val != "[all]") {
+                $.each($(".provinceInput:checked"), function(){
+                    if($(this).val() != "[all]"){
+                        checkedProvinces.push($(this).val());
+                    }
+                });
+                for (let i = 0; i < checkedProvinces.length; i++) {
+                    $.ajax({
+                        url: "/get-location/"+checkedProvinces[i].replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
+                        method: "GET",
+                        success: function(resp){
+                            if(!resp.error){
+                                $(".lgu_check").append(
+                                    '<div class="col-3"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
+                                );
+                                resp.message.forEach(element => {
+                                    $(".lgu_check").append(
+                                        '<div class="col-3"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
+                                    );
+                                });
+
+                                $(".lgu_check").append(
+                                    '<div class="col-12"><hr></div>'
+                                );
+                            } else {
+                                toastr.error(resp.message, 'Error');
+                            }
+                        },
+                        error: function(resp){
+                            toastr.error(resp.message, 'Error');
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+    $("#assign-agent-site-btn").on('click', function(e){
+        var data_program = $(this).attr('data-program')
+        $.ajax({
+            url: $(this).attr('data-href'),
+            method: "POST",
+            data: $("#assign-agent-site-form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#agent-"+data_program+"-table").DataTable().ajax.reload(function(){
+                        $("#assign-agent-site-form")[0].reset();
+                        $("#assign-agent-site-modal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                    });
+                } else {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("#" + index + "-error").text(data);
+                        });
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
+    });
 
     /////////////////////////////////////
     //                                 //  
