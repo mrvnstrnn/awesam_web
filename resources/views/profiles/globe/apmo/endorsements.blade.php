@@ -60,7 +60,7 @@
                                     @php
                                         $activity_id = \Auth::user()->getUserProgramAct(1);
                                     @endphp
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 1, $activity_id->what_to_load]) }}">
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 1, 'New Endorsement - apmo']) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">
