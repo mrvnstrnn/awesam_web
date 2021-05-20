@@ -18,6 +18,8 @@
             $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
         @endphp
 
+<input type="hidden" value="{{ json_decode($programs) }}">
+
         @foreach ($programs as $program)
             <li class="nav-item">
                 @if ($loop->first)
@@ -161,5 +163,4 @@
             </div>
         </div>
     </div>
-
 @endsection
