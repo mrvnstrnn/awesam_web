@@ -258,6 +258,5 @@ class GlobeController extends Controller
             throw $th;
         }
     }
->>>>>>> f19a3c6056eeed73d6219cd128fd489f4fd9900d
 
 }
