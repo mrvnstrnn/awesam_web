@@ -62,6 +62,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/forverification', [UserController::class, 'forverification_list'])->name('all.forverification');
 
+    Route::get('/get-region', [GlobeController::class, 'get_region'])->name('get.region');
+    
+    Route::get('/get-location/{location_id}/{location_type}', [GlobeController::class, 'get_location'])->name('get.location');
+
+    Route::post('/assign-agent-site', [GlobeController::class, 'assign_agent_site'])->name('assign.agent_site');
+
     Route::get('/assigned-sites/list/{program_id}', [GlobeController::class, 'agent_assigned_sites'])->name('agent_assigned_sites.list');
     Route::get('/assigned-sites/columns', [GlobeController::class, 'agent_assigned_sites_columns'])->name('agent_assigned_sites.columns');
 
