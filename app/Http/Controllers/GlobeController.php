@@ -175,9 +175,9 @@ class GlobeController extends Controller
     public function agent_assigned_sites($program_id)
     {
         $sites = \DB::connection('mysql2')->table('site')
-                    ->join('site_agents', 'site_agents.sam_id', 'site.sam_id')
+                    ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                     ->where('program_id', "=", $program_id)
-                    ->where('site_agents.agent_id', "=", \Auth::user()->id)
+                    ->where('site_users.agent_id', "=", \Auth::user()->id)
                     ->get();
 
         $dt = DataTables::of($sites);
