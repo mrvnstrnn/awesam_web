@@ -43,8 +43,8 @@ class GlobeController extends Controller
     {
         try {
 
-            // a_pull_data(VENDOR_ID, PROGRAM_ID, PROFILE_ID, STAGE_ID, WHAT_TO_LOAD)
-            $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'")');
+            // a_pull_data(VENDOR_ID,  PROGRAM_ID, PROFILE_ID, STAGE_ID , WHAT_TO_LOAD, USER_ID)
+            $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
             $json_output = [];
 
@@ -153,7 +153,7 @@ class GlobeController extends Controller
     public function assign_agent(Request $request)
     {
         try {
-            $checkAgent = \DB::connection('mysql2')->table('site_agents')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+            $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
             if(is_null($checkAgent)) {
                 $profile_id = \Auth::user()->profile_id;
