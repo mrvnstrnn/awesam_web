@@ -264,7 +264,12 @@ class GlobeController extends Controller
     public function get_region()
     {
         try {
-            $region = \DB::connection('mysql2')->table('location_regions')->get();
+            $is_location = \DB::connection('mysql2')->table('user_details')
+                                                ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
+                                                ->where('user_details.user_id', \Auth::user()->id)
+                                                ->first();
+                                                
+            $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
             return response()->json(['error' => false, 'message' => $region]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
