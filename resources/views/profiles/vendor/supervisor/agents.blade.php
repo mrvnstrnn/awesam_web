@@ -46,7 +46,7 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ strtoupper($program->program)  }} Endorsements
+                                {{ strtoupper($program->program)  }} Agents
                                 </div>      
                             </div>
                             <div class="card-body">
