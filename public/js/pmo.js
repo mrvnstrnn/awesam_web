@@ -1,15 +1,4 @@
 $(document).ready(() => {
-    // var program_lists = [
-    //     'coloc',
-    //     'ftth',
-    //     'ibs',
-    //     'mwan',
-    //     'new-sites',
-    //     'towerco',
-    //     'renewal',
-    //     'wireless',
-    // ];
-
     var program_lists = [];
 
     var program_list = JSON.parse($("#program_lists").val());
@@ -22,7 +11,6 @@ $(document).ready(() => {
         $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
             processing: true,
             serverSide: true,
-            // pageLength: 3,
             ajax: {
                 url: $('#new-endoresement-'+program_lists[i]+'-table').attr('data-href'),
                 type: 'GET',
@@ -55,7 +43,6 @@ $(document).ready(() => {
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
-        // var json_parse = JSON.parse($(this).attr("data-site"));
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
@@ -81,35 +68,19 @@ $(document).ready(() => {
         $("#modal-endorsement").modal("show");
     } );
 
-    $("#checkAll").click(function(e){
+    $(".checkAll").click(function(e){
         e.preventDefault();
-        $('input:checkbox').not(this).prop('checked', this.checked);
+        var val = $(this).val();
+        $('input[name='+val+']').not(this).prop('checked', this.checked);
     });
 
     $(".btn-accept-endorsement").click(function(e){
         e.preventDefault();
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
-
-        // var program_div = "";
-
-        // if (data_program == 'coloc'){
-        //     program_div = '#new-endoresement-coloc-table';
-        // } else if (data_program == 'ffth'){
-        //     program_div = '#new-endoresement-ffth-table';
-        // } else if (data_program == 'ibs'){
-        //     program_div = '#new-endoresement-ibs-table';
-        // } else if (data_program == 'mwan'){
-        //     program_div = '#new-endoresement-mwan-table';
-        // } else if (data_program == 'new sites'){
-        //     program_div = '#new-endoresement-new-sites-table';
-        // } else if (data_program == 'towerco'){
-        //     program_div = '#new-endoresement-towerco-table';
-        // }
-        // var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -126,15 +97,15 @@ $(document).ready(() => {
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
-                        $("#loaderModal").modal("hide");
+                        // $("#loaderModal").modal("hide");
                     });
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
             }
         });
@@ -143,30 +114,23 @@ $(document).ready(() => {
 
     $(".btn-bulk-acceptreject-endorsement").click(function(e){
         e.preventDefault();
-        $("#loaderModal").modal("show");
+        // $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
+        var data_id = $(this).attr('data-id');
 
-        // var program_div = "";
+        // var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
+        var inputElements = document.getElementsByName('program'+data_id);
 
-        // if (data_program == 'coloc'){
-        //     program_div = '#new-endoresement-coloc-table';
-        // } else if (data_program == 'ffth'){
-        //     program_div = '#new-endoresement-ffth-table';
-        // } else if (data_program == 'ibs'){
-        //     program_div = '#new-endoresement-ibs-table';
-        // } else if (data_program == 'mwan'){
-        //     program_div = '#new-endoresement-mwan-table';
-        // } else if (data_program == 'new sites'){
-        //     program_div = '#new-endoresement-new-sites-table';
-        // } else if (data_program == 'towerco'){
-        //     program_div = '#new-endoresement-towerco-table';
-        // }
-        // var program_div = data_program == 'coloc' ? '#new-endoresement-coloc-table' : '#new-endoresement-ibs-table';
+        var id = $(this).attr('id');
 
-        var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
+        var text = id == "reject"+data_program.replace(" ", "-") ? "Reject" : "Endorse New Sites";
+
+        $("#"+id).attr("disabled", "disabled");
+        $("#"+id).text("Processing...");
+
 
         sam_id = [];
         for(var i=0; inputElements[i]; ++i){
@@ -189,17 +153,23 @@ $(document).ready(() => {
                 if(!resp.error){
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        $("#loaderModal").modal("hide");
+                        // $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
+                        $("#"+id).removeAttr("disabled");
+                        $("#"+id).text(text);
                     });
                 } else {
-                    $("#loaderModal").modal("hide");
+                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
+                    $("#"+id).removeAttr("disabled");
+                    $("#"+id).text(text);
                 }
             },
             error: function(resp){
-                $("#loaderModal").modal("hide");
+                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
+                $("#"+id).removeAttr("disabled");
+                $("#"+id).text(text);
             }
         });
 

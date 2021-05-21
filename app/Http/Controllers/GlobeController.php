@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use App\Models\SiteAgent;
 use App\Models\UsersArea;
-use App\Models\ProgramStage;
+use App\Models\Program;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 
@@ -17,11 +17,13 @@ class GlobeController extends Controller
     {
         try {
             $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
+
+            // $program = Program::where('program_id', $program_id)->first();
             
             $dt = DataTables::of($stored_procs)
-                        ->addColumn('checkbox', function($row){
+                        ->addColumn('checkbox', function($row) use($program_id) {
                             $checkbox = "<div class='custom-checkbox custom-control'>";
-                            $checkbox .= "<input type='checkbox' name='sam_id_checkbox[]' id='checkbox_".$row['sam_id']."' value='".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row['sam_id']."' value='".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
                             $checkbox .= "<label class='custom-control-label' for='checkbox_".$row['sam_id']."'></label>";
                             $checkbox .= "</div>";
     
@@ -87,6 +89,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
+            // return response()->json(['error' => true, 'message' =>$request->all()]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -180,11 +183,6 @@ class GlobeController extends Controller
                     ->where('program_id', "=", $program_id)
                     ->where('site_users.agent_id', "=", \Auth::user()->id)
                     ->get();
-
-        // $sites = \DB::connection('mysql2')->table('view_user_sites_with_stage_and_activities')
-        //             ->where('program_id', "=", $program_id)
-        //             ->where('agent_id', "=", \Auth::user()->id)
-        //             ->get();
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
@@ -335,7 +333,5 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-
-
 
 }

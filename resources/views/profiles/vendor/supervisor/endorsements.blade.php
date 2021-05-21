@@ -60,8 +60,8 @@
                                             <tr>
                                                 <th style="width: 15px;">
                                                     <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                        <label class="custom-control-label" for="checkAll">&nbsp;</label>
+                                                        <input type="checkbox" data-checkbox="{{ $program->program_id }}" id="checkAll{{ $program->program_id }}" value="program{{ $program->program_id }}" class="custom-control-input checkAll">
+                                                        <label class="custom-control-label" for="checkAll{{ $program->program_id }}">&nbsp;</label>
                                                     </div>
                                                 </th>
                                                 <th class="d-none d-md-table-cell">Date Endorsed</th>
@@ -77,8 +77,8 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="reject{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
