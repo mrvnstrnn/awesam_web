@@ -129,6 +129,7 @@ $(document).ready(() => {
         // }
 
         if(this.checked) {
+
             if(val != "[all]") {
                 $.each($(".provinceInput:checked"), function(){
                     if($(this).val() != "[all]"){
@@ -168,7 +169,18 @@ $(document).ready(() => {
                 });
             }
         } else {
-            console.log("uncheck");
+            if($('#provinceAll:checkbox:checked').length < 1){
+                $('.provinceInput:checkbox').each(function() {
+                    this.checked = false;                        
+                });
+                $(".lgu_check div").remove();
+            }
+
+            if ($('.provinceInput:checkbox').length != $('.provinceInput:checkbox:checked').length){
+                $('#provinceAll:checkbox').each(function() {
+                    this.checked = false;                        
+                });
+            }
         }
     });
 
