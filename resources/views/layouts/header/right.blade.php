@@ -17,17 +17,17 @@
 
         </div>
 
+
         {{-- HEADER BUTTON : NOTIFICATION --}}
         <div class="dropdown">
 
-            <button type="button" aria-haspopup="true" aria-expanded="false"
-                data-toggle="dropdown" class="p-0 mr-2 btn btn-link">
-                <span class="icon-wrapper icon-wrapper-alt rounded-circle">
-                    <span class="icon-wrapper-bg bg-danger"></span>
-                    <i class="icon text-danger icon-anim-pulse ion-android-notifications"></i>
-                    <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span>
-                </span>
-            </button>
+        <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="p-0 mr-2 btn btn-link">
+            <span class="icon-wrapper icon-wrapper-alt rounded-circle">
+                <span class="icon-wrapper-bg bg-danger"></span>
+                <i class="icon text-danger icon-anim-pulse ion-android-notifications"></i>
+                <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span>
+            </span>
+        </button>        
 
             {{-- HEADER OVERLAY : NOTIFICATIONS --}}
             @include('layouts.header.notification_box')
