@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use App\Models\SiteAgent;
 use App\Models\UsersArea;
+use App\Models\ProgramStage;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 
@@ -174,10 +175,15 @@ class GlobeController extends Controller
 
     public function agent_assigned_sites($program_id)
     {
-        $sites = \DB::connection('mysql2')->table('site')
-                    ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+        // $sites = \DB::connection('mysql2')->table('site')
+        //             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+        //             ->where('program_id', "=", $program_id)
+        //             ->where('site_users.agent_id', "=", \Auth::user()->id)
+        //             ->get();
+
+        $sites = \DB::connection('mysql2')->table('view_user_sites_with_stage_and_activities')
                     ->where('program_id', "=", $program_id)
-                    ->where('site_users.agent_id', "=", \Auth::user()->id)
+                    ->where('agent_id', "=", \Auth::user()->id)
                     ->get();
 
         $dt = DataTables::of($sites);
@@ -320,5 +326,7 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+
 
 }

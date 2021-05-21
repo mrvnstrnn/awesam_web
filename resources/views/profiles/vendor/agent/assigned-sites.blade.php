@@ -69,13 +69,36 @@
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                 Sites Summary
+                                 Sites Stages
                                 </div>
                             </div>
-                            <div class="card-body">
-                                
 
-                            </div>
+                            @php
+                                $program_stages = App\Models\ProgramStage::where("program_id", $program->program_id)
+                                                                        ->orderBy("stage_sequence")
+                                                                        ->get();
+                            @endphp
+                            <ul class="list-group list-group-flush">
+                            @foreach ($program_stages as $stage)
+                                <li class="list-group-item" style="border: 1px solid rgba(0, 0, 0, 0.125);">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">{{ $stage->stage_name }}</div>
+                                                <div class="widget-subheading">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="widget-progress-wrapper mt-1">
+                                            <div class="progress-bar-xs progress-bar-animated-alt progress">
+                                                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">
+                                                </div>
+                                            </div>
+                                        </div>                                                    
+                                    </div>
+                                </li>
+                            @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -111,14 +134,14 @@
                             return col["NOMINATION_ID"];
                     },
                 },
-                {
-                    data : 'site_fields',
-                    name: 'Technology', 
-                    render : function(data){
-                            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                            return col["TECHNOLOGY"];
-                    },
-                },
+                // {
+                //     data : 'site_fields',
+                //     name: 'Technology', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["TECHNOLOGY"];
+                //     },
+                // },
                 // {
                 //     data : 'site_fields',
                 //     name: 'PLA_ID', 
