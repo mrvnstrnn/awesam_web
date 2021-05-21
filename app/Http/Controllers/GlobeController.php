@@ -302,12 +302,16 @@ class GlobeController extends Controller
 
             $province = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('province')));
 
-            $lgu = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
+            $lgus = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
+
+
+            $lgu_validator = in_array('all', $province) ? '' : 'required';
+            $lgu = in_array('all', $province) ? ['all'] : [''];
 
             $validate = Validator::make($request->all(), array(
                 'region' => 'required',
                 'province' => 'required',
-                'lgu' => 'required',
+                'lgu' => $lgu_validator 
             ));
 
             if($validate->passes()){

@@ -140,11 +140,11 @@ $(document).ready(() => {
                         success: function(resp){
                             if(!resp.error){
                                 $(".lgu_check").append(
-                                    '<div class="col-3"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
+                                    '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
                                 );
                                 resp.message.forEach(element => {
                                     $(".lgu_check").append(
-                                        '<div class="col-3"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
+                                        '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
                                     );
                                 });
 
