@@ -135,45 +135,72 @@ $(document).ready(() => {
                         checkedProvinces.push($(this).val());
                     }
                 });
-                for (let i = 0; i < checkedProvinces.length; i++) {
-                    $.ajax({
-                        url: "/get-location/"+checkedProvinces[i].replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
-                        method: "GET",
-                        success: function(resp){
-                            if(!resp.error){
-                                $(".lgu_check").append(
-                                    '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
-                                );
-                                resp.message.forEach(element => {
-                                    $(".lgu_check").append(
-                                        '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
-                                    );
-                                });
 
-                                $(".lgu_check").append(
-                                    '<div class="col-12"><hr></div>'
-                                );
-                            } else {
-                                toastr.error(resp.message, 'Error');
-                            }
-                        },
-                        error: function(resp){
-                            toastr.error(resp.message, 'Error');
-                        }
-                    });
-                }
+                getLocation(checkedProvinces, location_type);
+                
             } else {
                 $('.provinceInput:checkbox').each(function() {
                     this.checked = true;                        
                 });
             }
         } else {
-            console.log("uncheck");
+            if($('#provinceAll:checkbox:checked').length < 1){
+                $('.provinceInput:checkbox').each(function() {
+                    this.checked = false;                        
+                });
+                $(".lgu_check div").remove();
+                
+                $.each($(".provinceInput:checked"), function(){
+                    if($(this).val() != "[all]"){
+                        checkedProvinces.push($(this).val());
+                    }
+                });
+
+                getLocation(checkedProvinces, location_type);
+            }
+
+            if ($('.provinceInput:checkbox').length != $('.provinceInput:checkbox:checked').length){
+                $('#provinceAll:checkbox').each(function() {
+                    this.checked = false;                        
+                });
+            }
         }
     });
 
+    function getLocation(checkedProvinces, location_type){
+        for (let i = 0; i < checkedProvinces.length; i++) {
+            $.ajax({
+                url: "/get-location/"+checkedProvinces[i].replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
+                method: "GET",
+                success: function(resp){
+                    if(!resp.error){
+                        $(".lgu_check").append(
+                            '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
+                        );
+                        resp.message.forEach(element => {
+                            $(".lgu_check").append(
+                                '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
+                            );
+                        });
+
+                        $(".lgu_check").append(
+                            '<div class="col-12"><hr></div>'
+                        );
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
+                },
+                error: function(resp){
+                    toastr.error(resp.message, 'Error');
+                }
+            });
+        }
+    }
+
     $("#assign-agent-site-btn").on('click', function(e){
-        var data_program = $(this).attr('data-program')
+        $("#assign-agent-site-btn").text("Assigning...");
+        $("#assign-agent-site-btn").attr("disabled");
+        var data_program = $(this).attr('data-program');
         $.ajax({
             url: $(this).attr('data-href'),
             method: "POST",
@@ -190,18 +217,26 @@ $(document).ready(() => {
                         $("#assign-agent-site-form")[0].reset();
                         $("#assign-agent-site-modal").modal("hide");
                         toastr.success(resp.message, 'Success');
+                        $("#assign-agent-site-btn").text("Assign agent");
+                        $("#assign-agent-site-btn").removeAttr("disabled");
                     });
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
+                        $("#assign-agent-site-btn").text("Assign agent");
+                        $("#assign-agent-site-btn").removeAttr("disabled");
                     } else {
                         toastr.error(resp.message, 'Error');
+                        $("#assign-agent-site-btn").text("Assign agent");
+                        $("#assign-agent-site-btn").removeAttr("disabled");
                     }
                 }
             },
             error: function(resp){
+                $("#assign-agent-site-btn").text("Assign agent");
+                $("#assign-agent-site-btn").removeAttr("disabled");
                 toastr.error(resp.message, 'Error');
             }
         });
