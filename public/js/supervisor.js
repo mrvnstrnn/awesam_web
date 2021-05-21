@@ -54,6 +54,8 @@ $(document).ready(() => {
 
     $('.assign-agent-site-table').on('click', 'tr', function (e) {
         e.preventDefault();
+        $(".lgu_check div").remove();
+        $(".province_check div").remove();
         $(".assign-agent-div select#region option").remove();
         $("#user_id").val($(this).attr('data-id'));
         $("#assign-agent-site-btn").attr("data-program", $(this).attr('data-program'));
@@ -93,11 +95,11 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $(".province_check").append(
-                        '<div class="col-3"><input name="province[]" id="provinceAll" type="checkbox" class="provinceInput" value="[all]" ><label for="provinceAll"> All</label></div>'
+                        '<div class="col-4"><input name="province[]" id="provinceAll" type="checkbox" class="provinceInput" value="[all]" ><label for="provinceAll"> All</label></div>'
                     );
                     resp.message.forEach(element => {
                         $(".province_check").append(
-                            '<div class="col-3"><input name="province[]" data-location-type="province" class="provinceInput" id="province'+element.province_id+'" type="checkbox" class="mr-1" value="['+element.province_name+']'+element.province_id+'" ><label for="province'+element.province_id+'"> '+element.province_name+'</label></div>'
+                            '<div class="col-4"><input name="province[]" data-location-type="province" class="provinceInput" id="province'+element.province_id+'" type="checkbox" class="mr-1" value="['+element.province_name+']'+element.province_id+'" ><label for="province'+element.province_id+'"> '+element.province_name+'</label></div>'
                         );
                     });
                 } else {
@@ -112,10 +114,20 @@ $(document).ready(() => {
 
     $(document).on("change", ".provinceInput", function(e){
         e.preventDefault();
+
         var val = $(this).val();
         var checkedProvinces = [];
         var location_type = $(this).attr("data-location-type");
         $(".lgu_check div").remove();
+
+        // if ($(this).not(':checked')) {
+            
+        // if($(".provinceInput").length != $(".provinceInput:checked").length){
+        //     $('#provinceAll:checkbox').each(function() {
+        //         this.checked = false;                        
+        //     });
+        // }
+
         if(this.checked) {
             if(val != "[all]") {
                 $.each($(".provinceInput:checked"), function(){
@@ -130,11 +142,11 @@ $(document).ready(() => {
                         success: function(resp){
                             if(!resp.error){
                                 $(".lgu_check").append(
-                                    '<div class="col-3"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
+                                    '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label for="lguAll"> All</label></div>'
                                 );
                                 resp.message.forEach(element => {
                                     $(".lgu_check").append(
-                                        '<div class="col-3"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
+                                        '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
                                     );
                                 });
 
@@ -150,7 +162,13 @@ $(document).ready(() => {
                         }
                     });
                 }
+            } else {
+                $('.provinceInput:checkbox').each(function() {
+                    this.checked = true;                        
+                });
             }
+        } else {
+            console.log("uncheck");
         }
     });
 
@@ -166,6 +184,9 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $("#agent-"+data_program+"-table").DataTable().ajax.reload(function(){
+                        $(".lgu_check div").remove();
+                        $(".province_check div").remove();
+                        $(".assign-agent-div select#region option").remove();
                         $("#assign-agent-site-form")[0].reset();
                         $("#assign-agent-site-modal").modal("hide");
                         toastr.success(resp.message, 'Success');
