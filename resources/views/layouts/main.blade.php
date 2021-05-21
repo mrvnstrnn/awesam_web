@@ -170,8 +170,8 @@
     <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script>
     <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script>
     <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script>
-    {{-- <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script>
-    <script type="text/javascript" src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    {{-- <script type="text/javascript" src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> --}}
