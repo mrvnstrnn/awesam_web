@@ -54,6 +54,8 @@ $(document).ready(() => {
 
     $('.assign-agent-site-table').on('click', 'tr', function (e) {
         e.preventDefault();
+        $(".lgu_check div").remove();
+        $(".province_check div").remove();
         $(".assign-agent-div select#region option").remove();
         $("#user_id").val($(this).attr('data-id'));
         $("#assign-agent-site-btn").attr("data-program", $(this).attr('data-program'));
@@ -165,6 +167,8 @@ $(document).ready(() => {
                     this.checked = true;                        
                 });
             }
+        } else {
+            console.log("uncheck");
         }
     });
 

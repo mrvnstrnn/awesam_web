@@ -306,7 +306,7 @@ class GlobeController extends Controller
 
 
             $lgu_validator = in_array('all', $province) ? '' : 'required';
-            $lgu = in_array('all', $province) ? ['all'] : [''];
+            $lgu = in_array('all', $province) ? ['all'] : $lgus;
 
             $validate = Validator::make($request->all(), array(
                 'region' => 'required',
