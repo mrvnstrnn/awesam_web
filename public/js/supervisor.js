@@ -184,6 +184,9 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $("#agent-"+data_program+"-table").DataTable().ajax.reload(function(){
+                        $(".lgu_check div").remove();
+                        $(".province_check div").remove();
+                        $(".assign-agent-div select#region option").remove();
                         $("#assign-agent-site-form")[0].reset();
                         $("#assign-agent-site-modal").modal("hide");
                         toastr.success(resp.message, 'Success');
