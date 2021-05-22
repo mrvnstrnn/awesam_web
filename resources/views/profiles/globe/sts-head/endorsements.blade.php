@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @php
-                                        $activity_id = \Auth::user()->getUserProgramAct(3);
+                                        $activity_id = \Auth::user()->getUserProgramAct(3, $program->program_id);
                                     @endphp
                                     <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 3, $activity_id->what_to_load]) }}">
                                         <thead>
