@@ -52,21 +52,20 @@
                                     <button class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-success mt-2">
                                         <i class="pe-7s-cloud-upload btn-icon-wrapper"></i>Upload New Sites
                                     </button>
-                                    {{-- <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="" data-complete="true" id="" data-href="">Upload Sites</button> --}}
                                 </div>       
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @php
-                                        $activity_id = \Auth::user()->getUserProgramAct(1);
+                                        $activity_id = \Auth::user()->getUserProgramAct(1, $program->program_id);
                                     @endphp
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 1, 'New Endorsement - apmo']) }}">
+                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, 1, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">
                                                     <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                        <label class="custom-control-label" for="checkAll">&nbsp;</label>
+                                                        <input type="checkbox" data-checkbox="{{ $program->program_id }}" id="checkAll{{ $program->program_id }}" value="program{{ $program->program_id }}" class="custom-control-input checkAll">
+                                                        <label class="custom-control-label" for="checkAll{{ $program->program_id }}">&nbsp;</label>
                                                     </div>
                                                 </th>
                                                 <th class="d-none d-md-table-cell">Date Endorsed</th>
@@ -82,59 +81,21 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                {{-- <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button> --}}
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         @endforeach
-        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-card mb-3 card">
-                        <div class="card-header-tab card-header">
-                            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                            Endorsements
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="new-endoresement-ibs-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, 4]) }}">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 15px;">
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" id="checkAll" class="custom-control-input">
-                                                    <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                            <th class="d-none d-md-table-cell">SAM ID</th>
-                                            <th>Site</th>
-                                            <th class="text-center">Technology</th>
-                                            <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="d-block text-right card-footer">
-                            <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="ibs" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 @endsection
 
 @section('js_script')
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <script src="{{ asset('js/pmo.js') }}"></script>
 @endsection
 
