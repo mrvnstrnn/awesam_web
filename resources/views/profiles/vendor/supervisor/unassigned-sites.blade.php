@@ -52,7 +52,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @php
-                                        $activity_id = \Auth::user()->getUserProgramAct(6);
+                                        $activity_id = \Auth::user()->getUserProgramAct(6, $program->program_id);
                                     @endphp
                                     <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" 
                                             data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
