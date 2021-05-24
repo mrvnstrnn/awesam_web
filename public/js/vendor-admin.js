@@ -1,30 +1,4 @@
 $(document).ready(() => {
-
-
-    $('#for-verification-table').DataTable({
-        processing: true,
-        serverSide: true,
-        // pageLength: 3,
-        ajax: {
-            url: $("#for-verification-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function(row, data) {
-            $(row).attr('data-id', data.id);
-            $(row).addClass('modalSetProfile');
-        },
-        columns: [
-            { data: "name" },
-            { data: "email" },
-        ],
-    });
-
     var program_lists = [];
 
     var program_list = JSON.parse($("#program_lists").val());
@@ -32,10 +6,6 @@ $(document).ready(() => {
     for (let i = 0; i < program_list.length; i++) {
         program_lists.push(program_list[i].program.replace(" ", "-").toLowerCase());
     }
-
-
-
-
 
     for (let i = 0; i < program_lists.length; i++) 
     {
@@ -71,7 +41,4 @@ $(document).ready(() => {
         });
 
     }
-
-
-
 });

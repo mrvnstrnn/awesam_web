@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');
+    Route::get('/get-profile', [ProfileController::class, 'get_profile'])->name('get.profile');
+    Route::post('/assign-profile', [ProfileController::class, 'assign_profile'])->name('assign.profile');
 
     Route::get('/all-permission', [ProfileController::class, 'all_permission'])->name('all.permission');
     Route::get('/edit-permission/{permission}', [ProfileController::class, 'edit_permission'])->name('edit.permission');
@@ -59,8 +61,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/all-newagent/{program_id}', [GlobeController::class, 'newagent'])->name('all.newagent');
 
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
-
-    Route::get('/forverification', [UserController::class, 'forverification_list'])->name('all.forverification');
 
     Route::get('/get-region', [GlobeController::class, 'get_region'])->name('get.region');
     
