@@ -121,4 +121,34 @@ class User extends Authenticatable implements MustVerifyEmail
                             ->where('activity_id', $activity)
                             ->first();
     }
+
+    public function getMyRequest($request_status)
+    {
+
+        if(\Auth::user()->profile_id == 3){
+            return \DB::connection('mysql2')
+                            ->table('request')
+                            ->select(
+                                'request.id',
+                                'request.request_type',
+                                'request.start_date_requested',
+                                'request.end_date_requested',
+                                'request.reason',
+                                'request.leave_status',
+                                'request.date_created',
+                                'users.name',
+                            )
+                            ->join('users', 'users.id', 'request.agent_id')
+                            ->where('request.supervisor_id', \Auth::user()->id)
+                            ->where('request.leave_status', $request_status)
+                            ->get();
+        } else {
+            return \DB::connection('mysql2')
+                            ->table('request')
+                            ->join('users', 'users.id', 'request.agent_id')
+                            ->where('request.agent_id', \Auth::user()->id)
+                            ->where('request.leave_status', $request_status)
+                            ->get();
+        }
+    }
 }
