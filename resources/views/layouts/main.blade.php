@@ -165,7 +165,7 @@
     <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/vendors/moment/moment.js"></script>
-    {{-- <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script> --}}
+    <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
     {{-- <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script> --}}
@@ -191,7 +191,7 @@
     {{-- <script type="text/javascript" src="/js/form-components/toggle-switch.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/tables.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/carousel-slider.js"></script> --}}
-    {{-- <script type="text/javascript" src="/js/app.js"></script> --}}
+    <script type="text/javascript" src="/js/app.js"></script>
 
     {{-- <script type="text/javascript" src="/js/calendar.js"></script> --}}
 

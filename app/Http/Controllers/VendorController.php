@@ -147,4 +147,23 @@ class VendorController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function getMyRequest($request_status)
+    {
+        try {
+            $myrequests = \Auth::user()->getMyRequest($request_status);
+            $dt = DataTables::of($myrequests)
+                        ->addColumn('request_type', function($row){
+                            return '<span class="badge badge-success text-uppercase">'.$row->request_type.'<span>';
+                        })
+                        ->addColumn('requested_date', function($row){
+                            return date('M d, Y', strtotime($row->start_date_requested)). ' - ' .date('M d, Y', strtotime($row->end_date_requested));
+                        });
+
+            $dt->rawColumns(['request_type']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
