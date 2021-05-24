@@ -117,7 +117,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return \DB::connection('mysql2')->table('page_route')
                             ->where('profile_id', \Auth::user()->profile_id)
-                            ->where('program_id', $program_id)
+                            // ->where('program_id', $program_id)
                             ->where('activity_id', $activity)
                             ->first();
     }
