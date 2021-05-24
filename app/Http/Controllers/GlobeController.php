@@ -273,6 +273,7 @@ class GlobeController extends Controller
                                     ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'user_programs.program_id')
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
                                     ->where('user_programs.program_id', $program_id)
+                                    ->where('users.profile_id', 2)
                                     ->get();
                                                         
             $dt = DataTables::of($checkAgent);
