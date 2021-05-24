@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use Validator;
+use App\Models\User;
 use App\Models\Profile;
 use App\Models\Permission;
 use App\Models\ProfilePermission;
@@ -153,6 +154,26 @@ class ProfileController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => 'No data found.' ]);
             }   
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function get_profile()
+    {
+        try {
+            $profiles = Profile::get();
+            return response()->json(['error' => false, 'message' => $profiles ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function assign_profile(Request $request)
+    {
+        try {
+            User::where('id', $request->input('data_id'))->update(['profile_id' => $request->input('val') ]);
+            return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
