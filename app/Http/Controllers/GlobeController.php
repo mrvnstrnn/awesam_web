@@ -231,7 +231,6 @@ class GlobeController extends Controller
 
     public function newagent($program_id)
     {
-
         try {
             $checkAgent = \DB::connection('mysql2')
                                     ->table('users')
@@ -264,6 +263,27 @@ class GlobeController extends Controller
             throw $th;
         }
     }
+
+    public function vendor_agents($program_id)
+    {
+
+        try {
+            $checkAgent = \DB::connection('mysql2')
+                                    ->table('users')
+                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'user_programs.program_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->where('user_programs.program_id', $program_id)
+                                    ->get();
+                                                        
+            $dt = DataTables::of($checkAgent);
+            
+            $dt->rawColumns(['photo']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 
     public function get_region()
     {

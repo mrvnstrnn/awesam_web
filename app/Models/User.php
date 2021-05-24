@@ -121,4 +121,8 @@ class User extends Authenticatable implements MustVerifyEmail
                             ->where('activity_id', $activity)
                             ->first();
     }
+
+
+
+
 }

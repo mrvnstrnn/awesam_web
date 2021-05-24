@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/assigned-sites/list/{program_id}', [GlobeController::class, 'agent_assigned_sites'])->name('agent_assigned_sites.list');
     Route::get('/assigned-sites/columns', [GlobeController::class, 'agent_assigned_sites_columns'])->name('agent_assigned_sites.columns');
 
+    Route::get('/vendor-agents/{program_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
 
 
 });
