@@ -21,12 +21,6 @@ $(document).ready(() => {
             dataSrc: function(json){
                 return json.data;
             },
-            'createdRow': function(row, data) {
-                // $(row).attr('data-id', data.vendor_id);
-                // $(row).attr('data-statusb', vendor_table[i][1]);
-                $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-                // $(row).addClass('modalTerminate');
-            },
             columns: [
                 { data: "vendor_status" },
                 { data: "vendor_sec_reg_name" },
