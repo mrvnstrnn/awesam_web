@@ -7,6 +7,9 @@ use Validator;
 use App\Models\Vendor;
 use DataTables;
 
+use App\Mail\VendorMail;
+use Illuminate\Support\Facades\Mail;
+
 class VendorController extends Controller
 {
     public function add_vendor(Request $request)
@@ -49,6 +52,15 @@ class VendorController extends Controller
                             $arrayProgram
                         );
                     }
+
+                    $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
+
+                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                                        $name,
+                                        $request->input('vendor_admin_email'),
+                                        $request->input('vendor_sec_reg_name'),
+                                        $request->input('vendor_acronym')
+                                    ));
 
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
