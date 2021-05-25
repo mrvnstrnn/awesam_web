@@ -75,8 +75,8 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="false" id="reject{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
