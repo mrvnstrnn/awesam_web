@@ -189,12 +189,23 @@ class VendorController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-    
-    public function site_vendor($vendor_id)
+
+    public function site_vendor_table($vendor_id)
     {
         try {
             $site_vendor = \DB::connection('mysql2')->table('site')->where('site_vendor_id', $vendor_id)->get();
-            $dt = DataTables::of($site_vendor);
+
+            $dt = DataTables::of($site_vendor)
+                        ->addColumn('checkbox', function($row) {
+                            $checkbox = "<div class='custom-checkbox custom-control'>";
+                            $checkbox .= "<input type='checkbox' name='program id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
+                            $checkbox .= "</div>";
+    
+                            return $checkbox;
+                        });
+                        
+            $dt->rawColumns(['checkbox']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;

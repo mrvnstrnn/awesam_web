@@ -33,92 +33,27 @@ $(document).ready(() => {
         });
         
     }
-    // $('#vendor-list-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: {
-    //         url: $("#vendor-list-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function(row, data) {
-    //         $(row).attr('data-id', data.vendor_id);
-    //         $(row).attr('data-statusb', 'listVendor');
-    //         $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-    //         $(row).addClass('modalTerminate');
-    //     },
-    //     columns: [
-    //         { data: "vendor_status" },
-    //         { data: "vendor_sec_reg_name" },
-    //         { data: "vendor_acronym" },
-    //         { data: "vendor_name" },
-    //         { data: "vendor_admin_email" },
-    //         { data: "vendor_office_address" },
-    //         { data: "action" },
-    //     ],
-    // }); 
-    
-    // $('#vendor-list-ongoing-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: {
-    //         url: $("#vendor-list-ongoing-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function(row, data) {
-    //         $(row).attr('data-id', data.vendor_id);
-    //         $(row).attr('data-statusb', 'OngoingOff');
-    //         $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-    //         $(row).addClass('modalTerminate');
-    //     },
-    //     columns: [
-    //         { data: "vendor_sec_reg_name" },
-    //         { data: "vendor_acronym" },
-    //         { data: "vendor_name" },
-    //         { data: "vendor_admin_email" },
-    //         { data: "vendor_office_address" },
-    //         { data: "vendor_status" }
-    //     ],
-    // }); 
 
-    // $('#vendor-list-complete-table').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: {
-    //         url: $("#vendor-list-complete-table").attr('data-href'),
-    //         type: 'GET',
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //     },
-    //     dataSrc: function(json){
-    //         return json.data;
-    //     },
-    //     'createdRow': function(row, data) {
-    //         $(row).attr('data-id', data.vendor_id);
-    //         $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-    //         $(row).addClass('modalTerminate');
-    //     },
-    //     columns: [
-    //         { data: "vendor_sec_reg_name" },
-    //         { data: "vendor_acronym" },
-    //         { data: "vendor_name" },
-    //         { data: "vendor_admin_email" },
-    //         { data: "vendor_office_address" },
-    //         { data: "vendor_status" }
-    //     ],
-    // }); 
+    $('#vendor-sites-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: $("#vendor-sites-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        columns: [
+            { data: "checkbox" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "site_address" },
+        ],
+    }); 
 
     $('.add_vendor').on('click', function(){
         var route = $(this).attr('data-href');
