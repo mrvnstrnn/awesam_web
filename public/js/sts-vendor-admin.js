@@ -126,6 +126,7 @@ $(document).ready(() => {
     //     ],
     // }); 
 
+
     $('.add_vendor').on('click', function(){
         var route = $(this).attr('data-href');
 
