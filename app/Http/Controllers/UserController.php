@@ -206,7 +206,7 @@ class UserController extends Controller
     
 
             $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
-            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.' .end($path);
+            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.index';
 
             
             return view($view, 
