@@ -114,10 +114,14 @@ class VendorController extends Controller
                             return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_status.'</div>';
                         })
                         ->addColumn('action', function($row) use ($program_status){
-                            $button = '<button class="btn btn-primary view-info btn-sm infoVendorModal" data-href="'.route('info.vendor', $row->vendor_id).'" data-id="'.$row->vendor_id.'" title="View Info"><i class="fa fa-eye"></i></button>';
+                            $button = '<button class="btn btn-info view-info btn-sm infoVendorModal" data-href="'.route('info.vendor', $row->vendor_id).'" data-id="'.$row->vendor_id.'" title="View Info"><i class="fa fa-eye"></i></button>';
 
                             if ($program_status != "Complete"){
                                 $button .= ' <button class="btn btn-danger view-info btn-sm modalTerminate" data-vendor_sec_reg_name="'.$row->vendor_sec_reg_name.'" data-statusb="'.$program_status.'" data-id="'.$row->vendor_id.'">Terminate</button>';
+                            }
+
+                            if ($program_status == "OngoingOff") {
+                                $button .= ' <a href="'.route('site.vendor', $row->vendor_id).'" class="btn btn-primary text-white btn-sm">View Sites</a>';
                             }
 
                              return $button;
@@ -183,6 +187,28 @@ class VendorController extends Controller
             return response()->json(['error' => false, 'message' => $vendor]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function site_vendor_table($vendor_id)
+    {
+        try {
+            $site_vendor = \DB::connection('mysql2')->table('site')->where('site_vendor_id', $vendor_id)->get();
+
+            $dt = DataTables::of($site_vendor)
+                        ->addColumn('checkbox', function($row) {
+                            $checkbox = "<div class='custom-checkbox custom-control'>";
+                            $checkbox .= "<input type='checkbox' name='program id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
+                            $checkbox .= "</div>";
+    
+                            return $checkbox;
+                        });
+                        
+            $dt->rawColumns(['checkbox']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }
