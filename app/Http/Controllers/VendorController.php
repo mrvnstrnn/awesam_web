@@ -66,6 +66,18 @@ class VendorController extends Controller
 
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
+
+                    for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
+                        $arrayProgram = array(
+                            'vendors_id' => $vendor_id,
+                            'programs' => $request->input('vendor_program_id')[$i],
+                        );
+
+                        \DB::connection('mysql2')->table('vendor_programs')->insert(
+                            $arrayProgram
+                        );
+                    }
+                    
                     \DB::connection('mysql2')->table('vendor')
                         ->where('vendor_id', $request->input('vendor_id'))
                         ->update(
@@ -134,9 +146,9 @@ class VendorController extends Controller
                                 $button .= ' <button class="btn btn-danger view-info btn-sm modalTerminate" data-vendor_sec_reg_name="'.$row->vendor_sec_reg_name.'" data-statusb="'.$program_status.'" data-id="'.$row->vendor_id.'">Terminate</button>';
                             }
 
-                            if ($program_status == "OngoingOff") {
-                                $button .= ' <a href="'.route('site.vendor', $row->vendor_id).'" class="btn btn-primary text-white btn-sm">View Sites</a>';
-                            }
+                            // if ($program_status == "OngoingOff") {
+                            //     $button .= ' <a href="'.route('site.vendor', $row->vendor_id).'" class="btn btn-primary text-white btn-sm">View Sites</a>';
+                            // }
 
                              return $button;
                         })

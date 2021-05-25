@@ -266,10 +266,23 @@ $(document).ready(() => {
             var_id = '#vendor-list-table';
         } else if (data_statusb == 'OngoingOff'){
             var_id = '#vendor-list-ongoing-table';
-
         } else if (data_statusb == 'Complete'){
             var_id = '#vendor-list-complete-table';
         }
+
+        var textWhile = "";
+        var textAfter = "";
+
+        if(data_statusb == 'listVendor'){
+            textWhile = "Terminating...";
+            textAfter = "Terminate";
+        } else {
+            textWhile = "Completing...";
+            textAfter = "Complete";
+        }
+        $(".terminate_button").text(textWhile);
+
+        $('.terminate_button').attr("disabled", "disabled");
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -283,18 +296,65 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if (!resp.error) {
-                    $(var_id).DataTable().ajax.reload(function(){
-                        $("#terminationModal").modal("hide");
-                        toastr.success(resp.message, 'Success');
-                    });
+                    // $(var_id).DataTable().ajax.reload(function(){
+                    //     $("#terminationModal").modal("hide");
+                    //     toastr.success(resp.message, 'Success');
+                    // });
+
+                    if(data_statusb == 'listVendor'){
+                        $(var_id).DataTable().ajax.reload(function(){
+                            $("#terminationModal").modal("hide");
+                            toastr.success(resp.message, 'Success');
+                            
+                            $(".terminate_button").text(textAfter);
+                            $(".terminate_button").removeAttr("disabled");
+                        });
+                    } else {
+                        $("#vendor-list-ongoing-table").DataTable().ajax.reload(function(){
+                            $("#terminationModal").modal("hide");
+                            toastr.success(resp.message, 'Success');
+                            
+                            $(".terminate_button").text(textAfter);
+                            $(".terminate_button").removeAttr("disabled");
+                        });
+
+                        $("#vendor-list-complete-table").DataTable().ajax.reload();
+                    }
                 } else {
                     toastr.error(resp.message, 'Error');
+                            
+                    $(".terminate_button").text(textAfter);
+                    $(".terminate_button").removeAttr("disabled");
                 }
             },
             error: function(resp){
                 toastr.error(resp.message, 'Error');
+                            
+                $(".terminate_button").text(textAfter);
+                $(".terminate_button").removeAttr("disabled");
             }
         });
     });
+
+
+    // $('#agent-table').DataTable({
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: {
+    //         url: $("#agent-table").attr('data-href'),
+    //         type: 'GET',
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //     },
+    //     dataSrc: function(json){
+    //         return json.data;
+    //     },
+    //     columns: [
+    //         { data: "firstname" },
+    //         { data: "lastname" },
+    //         { data: "email" },
+    //     ],
+    // }); 
 
 });

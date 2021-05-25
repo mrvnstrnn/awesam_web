@@ -12,7 +12,9 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\UserDetail;
+use App\Models\Vendor;
 use DataTables;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -106,30 +108,96 @@ class UserController extends Controller
     {
         try {
             if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
-                return response()->json(['error' => true, 'message' => 'Please enter required field.' ]);
+                return response()->json(['error' => true, 'message' => 'Address field id required.' ]);
             }
 
-            $address = Location::where('province', $request->input('hidden_province'))
-                                    ->where('lgu', $request->input('hidden_lgu'))
-                                    ->where('region', $request->input('hidden_region'))
-                                    ->first();
-                                    
-            $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
-            if($user_details){
-                UserDetail::where('user_id', \Auth::user()->id)
-                            ->update([
-                                'address_id' => $address->id
-                            ]);
+            $validate = \Validator::make($request->all(), array(
+                'firstname' => 'required',
+                // 'middlename' => 'required',
+                'lastname' => 'required',
+                // 'suffix' => 'required',
+                // 'nickname' => 'required',
+                'birthday' => 'required',
+                'gender' => 'required',
+
+                'email' => 'required',
+                'contact_no' => 'required',
+                // 'landline' => 'required',
+
+                'designation' => 'required',
+                'employment_classification' => 'required',
+                'employment_status' => 'required',
+                'hiring_date' => 'required',
+            ));
+
+            if($validate->passes()){
+
+                $address = Location::where('province', $request->input('hidden_province'))
+                                        ->where('lgu', $request->input('hidden_lgu'))
+                                        ->where('region', $request->input('hidden_region'))
+                                        ->first();
+                                        
+                $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
+    
+                User::where('id', \Auth::user()->id)
+                        ->update([
+                            'middlename' => $request->input('middlename'),
+                            'nickname' => $request->input('nickname'),
+                            'suffix' => $request->input('suffix'),
+                            // 'profile_id' => $request->input('designation'),
+                        ]);
+
+                if(!is_null($user_details)){
+                    UserDetail::where('user_id', \Auth::user()->id)
+                                ->update([
+                                    'birthday' => $request->get('birthday'),
+                                    'gender' => $request->get('gender'),
+                                    'contact_no' => $request->get('contact_no'),
+                                    'landline' => $request->get('landline'),
+                                    'designation' => $request->get('designation'),
+                                    'employment_classification' => $request->get('employment_classification'),
+                                    'employment_status' => $request->get('employment_status'),
+                                    'hiring_date' => $request->get('hiring_date'),
+                                    'address_id' => $address->id,
+                                ]);
+
+                    return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
+                } else {
+                    // return response()->json(['error' => false, 'message' => $request->all() ]);
+                    // UserDetail::create([
+                    //     'address_id' => $address->id,
+                    //     'user_id' => \Auth::user()->id,
+                        
+                    //     'birthday' => $request->get('birthday'),
+                    //     'gender' => $request->get('gender'),
+                    //     'contact_no' => $request->get('contact_no'),
+                    //     'landline' => $request->get('landline'),
+                    //     'designation' => $request->get('designation'),
+                    //     'employment_classification' => $request->get('employment_classification'),
+                    //     'employment_status' => $request->get('employment_status'),
+                    //     'hiring_date' => $request->get('hiring_date'),
+                    // ]);
+
+                    $detail = new UserDetail();
+                    $detail->address_id = $address->id;
+                    $detail->user_id = \Auth::user()->id;
+                    $detail->birthday = $request->get('birthday');
+                    $detail->gender = $request->get('gender');
+                    $detail->contact_no = $request->get('contact_no');
+                    $detail->landline = $request->get('landline');
+                    $detail->designation = $request->get('designation');
+                    $detail->employment_classification = $request->get('employment_classification');
+                    $detail->employment_status = $request->get('employment_status');
+                    $detail->hiring_date = $request->get('hiring_date');
+
+                    $detail->save();
+
+                    return response()->json(['error' => false, 'message' => 'Success added details.' ]);
+                }
+
             } else {
-                UserDetail::create([
-                    'address_id' => $address->id,
-                    'user_id' => \Auth::user()->id,
-                ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
-
-            
-
-            return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
@@ -343,14 +411,52 @@ class UserController extends Controller
         }
     }
 
-    // public function setProfile_id(Request $request)
-    // {
-    //     try {
-    //         $user->update(['profile_id' => $request->input]);
-    //         return response()-json(['error'=> false, 'message' => "Successfully set profile."]);
-    //     } catch (\Throwable $th) {
-    //         return response()-json(['error'=> true, 'message' => $th->getMessage()]);
-    //     }
-    // }
+    public function register_user(Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                'firstname' => ['required', 'string', 'max:255'],
+                'lastname' => ['required', 'string', 'max:255'],
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                ],
+                'password' => ['required', 'min:8'],
+            ));
+
+            if($validate->passes()){
+                Invitation::where('token', $request->input('token_hidden'))
+                    ->where('invitation_code', $request->input('invitationcode_hidden'))
+                    ->update(['use' => 1]);
+
+                $user = User::create([
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'name' => $request->input('firstname') . ' ' . $request->input('lastname'),
+                    'email' => $request->input('email'),
+                    'role_id' => 7,
+                    'email_verified_at' => Carbon::now()->toDate(),
+                    'password' => Hash::make($request->input('password')),
+                ]);
+
+                $is = User::where('email', $request->input('is_hidden'))->first();
+                $vendor = Vendor::where('vendor_id', $request->input('company_hidden'))->first();
+
+                $user_details = new UserDetail();
+                $user_details->user_id = $user->id;
+                $user_details->mode = $request->input('mode');
+                $user_details->IS_id = $is->id;
+                $user_details->vendor_id = $vendor->vendor_id;
+                $user_details->save();
+
+                \Auth::login($user);
+                return redirect('/');
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 
 }

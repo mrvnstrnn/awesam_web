@@ -84,9 +84,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/vendor-agents/{program_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
 
-
 });
 
+Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
 
 Route::get('/invitation-link/{token}/{invitation_code}', [InviteController::class, 'invitation_registration'])->name('invite.link')->middleware(['invitation']);
 

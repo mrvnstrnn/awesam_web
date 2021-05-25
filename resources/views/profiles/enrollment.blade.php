@@ -49,18 +49,21 @@
                                                         <label for="firstname">Firstname</label>
                                                         <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" readonly>
                                                     </div>
+                                                    <small class="firstname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="middlename">Middlename</label>
                                                         <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control">
                                                     </div>
+                                                    <small class="middlename-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="lastname">Lastname</label>
                                                         <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" readonly>
                                                     </div>
+                                                    <small class="lastname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
@@ -74,6 +77,7 @@
                                                             <option value="V">V</option>
                                                         </select>
                                                     </div>
+                                                    <small class="suffix-error text-danger"></small>
                                                 </div> 
                                                 <div class="divider"></div>
                                                 <div class="col-md-12">
@@ -81,22 +85,25 @@
                                                         <label for="nickname">Nickname</label>
                                                         <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required>
                                                     </div>
+                                                    <small class="nickname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="birthday">Birthday</label>
                                                         <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required>
                                                     </div>
+                                                    <small class="birthday-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="gender">Gender</label>
                                                         <select name="gender" id="gender"  class="form-control" required>
                                                             <option value="" disabled selected>Gender</option>
-                                                            <option value="Sr">Male</option>
-                                                            <option value="Jr">Female</option>
+                                                            <option value="Male">Male</option>
+                                                            <option value="Female">Female</option>
                                                         </select>
                                                     </div>
+                                                    <small class="gender-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,18 +120,21 @@
                                                         <label for="email">Email</label>
                                                         <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
                                                     </div>
+                                                    <small class="email-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
-                                                        <label for="cellphone">Cellphone</label>
-                                                        <input name="cellphone" id="cellphone" placeholder="0917-XXX-XXX" value="" type="text" class="form-control"  required>
+                                                        <label for="contact_no">Cellphone</label>
+                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX" value="" type="text" class="form-control"  required>
                                                     </div>
+                                                    <small class="contact_no-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="landline">Landline</label>
                                                         <input name="landline" id="landline" placeholder="Telephone Number" value="" type="text" class="form-control">
                                                     </div>
+                                                    <small class="landline-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,13 +187,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
-                                                        <label for="profile_id">Designation</label>
-                                                        <select name="profile_id" id="profile_id"  class="form-control" required>
+                                                        <label for="designation">Designation</label>
+                                                        <select name="designation" id="designation"  class="form-control" required>
                                                             <option value="" disabled selected>Designation</option>
                                                             <option value="2">Agent</option>
                                                             <option value="3">Supervisor</option>
                                                         </select>
                                                     </div>
+                                                    <small class="designation-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
@@ -194,21 +205,24 @@
                                                             <option value="subcon">Sub Contractor</option>
                                                         </select>
                                                     </div>
+                                                    <small class="employment_classification-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
-                                                        <label for="employment_classification">Employment Status</label>
-                                                        <select name="employment_classification" id="employment_classification"  class="form-control" required>
+                                                        <label for="employment_status">Employment Status</label>
+                                                        <select name="employment_status" id="employment_status"  class="form-control" required>
                                                             <option value="" disabled selected>Employment Status</option>
                                                             <option value="active">Active</option>
                                                         </select>
                                                     </div>
+                                                    <small class="employment_status-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="hiring_date">Hiring Date</label>
                                                         <input name="hiring_date" id="hiring_date" placeholder="Hiring Date" type="text" class="flatpicker form-control" style="background-color: white;" required>
                                                     </div>
+                                                    <small class="hiring_date-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -294,7 +308,7 @@
                                             <div class="results-title">You can now submit your details for validation!</div>
                                             <div class="mt-3 mb-3"></div>
                                             <div class="text-center">
-                                                <button id="finish-btn" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">Request Validation</button>
+                                                <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">Request Validation</button>
                                             </div>
                                         </div>                                        
                                     </div>
