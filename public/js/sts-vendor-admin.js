@@ -266,10 +266,13 @@ $(document).ready(() => {
             var_id = '#vendor-list-table';
         } else if (data_statusb == 'OngoingOff'){
             var_id = '#vendor-list-ongoing-table';
-
         } else if (data_statusb == 'Complete'){
             var_id = '#vendor-list-complete-table';
         }
+
+        $(".terminate_button").text("Terminating...");
+
+        $('.terminate_button').attr("disabled", "disabled");
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -283,16 +286,42 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if (!resp.error) {
-                    $(var_id).DataTable().ajax.reload(function(){
-                        $("#terminationModal").modal("hide");
-                        toastr.success(resp.message, 'Success');
-                    });
+                    // $(var_id).DataTable().ajax.reload(function(){
+                    //     $("#terminationModal").modal("hide");
+                    //     toastr.success(resp.message, 'Success');
+                    // });
+
+                    if(data_statusb == 'listVendor'){
+                        $(var_id).DataTable().ajax.reload(function(){
+                            $("#terminationModal").modal("hide");
+                            toastr.success(resp.message, 'Success');
+                            
+                            $(".terminate_button").text("Terminate");
+                            $(".terminate_button").removeAttr("disabled");
+                        });
+                    } else {
+                        $("#vendor-list-ongoing-table").DataTable().ajax.reload(function(){
+                            $("#terminationModal").modal("hide");
+                            toastr.success(resp.message, 'Success');
+                            
+                            $(".terminate_button").text("Terminate");
+                            $(".terminate_button").removeAttr("disabled");
+                        });
+
+                        $("#vendor-list-complete-table").DataTable().ajax.reload();
+                    }
                 } else {
                     toastr.error(resp.message, 'Error');
+                            
+                    $(".terminate_button").text("Terminate");
+                    $(".terminate_button").removeAttr("disabled");
                 }
             },
             error: function(resp){
                 toastr.error(resp.message, 'Error');
+                            
+                $(".terminate_button").text("Terminate");
+                $(".terminate_button").removeAttr("disabled");
             }
         });
     });
