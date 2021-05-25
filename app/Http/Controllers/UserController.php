@@ -204,8 +204,12 @@ class UserController extends Controller
                 
             $program_direct_links = self::getProgramMenuDirectLinks();
     
+
+            $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
+            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.index';
+
             
-            return view('profiles.' . $mode . '.index', 
+            return view($view, 
                 compact(
                     'mode',
                     'profile',

@@ -99,7 +99,7 @@
                                 <div class="form-row">
                                     <div class="col-6">
                                         <div class="position-relative form-group">
-                                            <label for="vendor_firstname">Admin Fullname </label>
+                                            <label for="vendor_firstname">Firstname </label>
                                             <input id="vendor_firstname" type="text" class="form-control" 
                                                 name="vendor_firstname" required placeholder="Vendor system admin firstname here...">
                         
@@ -109,7 +109,7 @@
 
                                     <div class="col-6">
                                         <div class="position-relative form-group">
-                                            <label for="vendor_lastname">Admin Fullname </label>
+                                            <label for="vendor_lastname">Lastname</label>
                                             <input id="vendor_lastname" type="text" class="form-control" 
                                                 name="vendor_lastname" required placeholder="Vendor system admin lastname here...">
                         
