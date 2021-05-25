@@ -214,6 +214,7 @@ $(document).ready(() => {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
+                        toastr.error(resp.message, 'Error');
                     } else {
                         toastr.error(resp.message, 'Error');
                     }

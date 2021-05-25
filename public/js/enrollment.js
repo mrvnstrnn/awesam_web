@@ -255,10 +255,30 @@ $(document).ready(() => {
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
+                            $("." + index + "-error").text(data);
                         });
+
+                        $(".step-1-li").addClass('active');
+                        $(".step-2-li").removeClass('done');
+                        $(".step-3-li").removeClass('done');
+                        $(".step-4-li").removeClass('done');
+
+                        $("#step-1").removeClass('d-none');
+                        $("#step-2").addClass('d-none');
+                        $("#step-3").addClass('d-none');
+                        $("#step-4").addClass('d-none');
                     } else {
                         toastr.error(resp.message, 'Error');
+
+                        $(".step-1-li").addClass('active');
+                        $(".step-2-li").removeClass('done');
+                        $(".step-3-li").removeClass('done');
+                        $(".step-4-li").removeClass('done');
+
+                        $("#step-1").removeClass('d-none');
+                        $("#step-2").addClass('d-none');
+                        $("#step-3").addClass('d-none');
+                        $("#step-4").addClass('d-none');
                     }
                 }
             },
