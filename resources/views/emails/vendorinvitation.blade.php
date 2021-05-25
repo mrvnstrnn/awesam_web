@@ -1,9 +1,9 @@
 @component('mail::message')
 Hi {{ $name }},
 
-This is your login link for your company {{ $vendor_sec_reg_name }} ({{$vendor_acronym}}).
+You have been assigned as a Vendor Administrator for your company {{ $vendor_sec_reg_name }} ({{$vendor_acronym}}).
 
-Here is you credentials:<br>
+Here is your login credentials:<br>
 
 Email: {{ $vendor_admin_email }}<br>
 Password: {{ $password }}
