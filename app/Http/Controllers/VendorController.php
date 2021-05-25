@@ -66,6 +66,18 @@ class VendorController extends Controller
 
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
+
+                    for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
+                        $arrayProgram = array(
+                            'vendors_id' => $vendor_id,
+                            'programs' => $request->input('vendor_program_id')[$i],
+                        );
+
+                        \DB::connection('mysql2')->table('vendor_programs')->insert(
+                            $arrayProgram
+                        );
+                    }
+                    
                     \DB::connection('mysql2')->table('vendor')
                         ->where('vendor_id', $request->input('vendor_id'))
                         ->update(

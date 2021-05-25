@@ -336,4 +336,25 @@ $(document).ready(() => {
         });
     });
 
+
+    // $('#agent-table').DataTable({
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: {
+    //         url: $("#agent-table").attr('data-href'),
+    //         type: 'GET',
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //     },
+    //     dataSrc: function(json){
+    //         return json.data;
+    //     },
+    //     columns: [
+    //         { data: "firstname" },
+    //         { data: "lastname" },
+    //         { data: "email" },
+    //     ],
+    // }); 
+
 });
