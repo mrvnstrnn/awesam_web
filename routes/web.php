@@ -35,6 +35,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/terminateVendor', [VendorController::class, 'terminate_vendor'])->name('terminate.vendor');
 
     
+    Route::get('/info-vendor/{vendor_id}', [VendorController::class, 'info_vendor'])->name('info.vendor');
+
+    
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');

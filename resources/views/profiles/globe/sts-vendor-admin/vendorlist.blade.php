@@ -13,12 +13,13 @@
         <table style="width: 100%;" id="vendor-list-table" data-href="{{ route('vendor.list', 'listVendor') }}" class="table table-hover table-striped table-bordered">
             <thead>
                 <tr>
+                    <th>Status</th>
                     <th>SEC Reg. Name</th>
                     <th>Acronym</th>
                     <th>Fullname</th>
                     <th>Email</th>
                     <th>Address</th>
-                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -46,6 +47,51 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary terminate_button" data-href="{{ route('terminate.vendor') }}">Terminate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="viewInfoForm">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="vendor_sec_reg_name">Sec Reg Name</label>
+                                <input type="text" name="vendor_sec_reg_name" id="vendor_sec_reg_name" readonly class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="vendor_acronym">Acronym</label>
+                                <input type="text" name="vendor_acronym" id="vendor_acronym" readonly class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vendor_office_address">Office Address</label>
+                                <input type="text" name="vendor_office_address" id="vendor_office_address" readonly class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vendor_admin_name">Admin Name</label>
+                                <input type="text" name="vendor_admin_name" id="vendor_admin_name" readonly class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vendor_admin_email">Admin Email</label>
+                                <input type="text" name="vendor_admin_email" id="vendor_admin_email" readonly class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\
                 </div>
             </div>
         </div>
