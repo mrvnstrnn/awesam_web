@@ -16,7 +16,7 @@
                 <div class="card-header-tab card-header">
                     <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="header-icon lnr-exit icon-gradient bg-ripe-malin"></i>
-                    Vendor Sites
+                    Vendor Sites of <b class="text-lowercase ml-2">{{ $user->email }}</b>
                     </div>
                 </div>
                 <div class="card-body">

@@ -159,6 +159,9 @@ class UserController extends Controller
                 $profile_direct_links = self::getProfileMenuDirectLinks();
                     
                 $program_direct_links = self::getProgramMenuDirectLinks();
+
+                
+                $user = User::find($vendor_id);
                 
                 return view('profiles.globe.sts-vendor-admin.vendor-sites', 
                     compact(
@@ -171,7 +174,8 @@ class UserController extends Controller
                         'title', 
                         'title_subheading', 
                         'title_icon',
-                        'vendor_id'
+                        'vendor_id',
+                        'user'
                     )
                 );
             }
