@@ -13,7 +13,8 @@
             <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.forverification') }}">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
                         <th>Email</th>
                     </tr>
                 </thead>

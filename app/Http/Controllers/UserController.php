@@ -12,7 +12,9 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\UserDetail;
+use App\Models\Vendor;
 use DataTables;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -409,14 +411,52 @@ class UserController extends Controller
         }
     }
 
-    // public function setProfile_id(Request $request)
-    // {
-    //     try {
-    //         $user->update(['profile_id' => $request->input]);
-    //         return response()-json(['error'=> false, 'message' => "Successfully set profile."]);
-    //     } catch (\Throwable $th) {
-    //         return response()-json(['error'=> true, 'message' => $th->getMessage()]);
-    //     }
-    // }
+    public function register_user(Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                'firstname' => ['required', 'string', 'max:255'],
+                'lastname' => ['required', 'string', 'max:255'],
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                ],
+                'password' => ['required', 'min:8'],
+            ));
+
+            if($validate->passes()){
+                Invitation::where('token', $request->input('token_hidden'))
+                    ->where('invitation_code', $request->input('invitationcode_hidden'))
+                    ->update(['use' => 1]);
+
+                $user = User::create([
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'name' => $request->input('firstname') . ' ' . $request->input('lastname'),
+                    'email' => $request->input('email'),
+                    'role_id' => 7,
+                    'email_verified_at' => Carbon::now()->toDate(),
+                    'password' => Hash::make($request->input('password')),
+                ]);
+
+                $is = User::where('email', $request->input('is_hidden'))->first();
+                $vendor = Vendor::where('vendor_id', $request->input('company_hidden'))->first();
+
+                $user_details = new UserDetail();
+                $user_details->user_id = $user->id;
+                $user_details->mode = $request->input('mode');
+                $user_details->IS_id = $is->id;
+                $user_details->vendor_id = $vendor->vendor_id;
+                $user_details->save();
+
+                \Auth::login($user);
+                return redirect('/');
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 
 }

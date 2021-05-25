@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="modal-dialog w-100">
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register.user') }}">
             @csrf
             <div class="modal-content">
                 <div class="modal-body">
@@ -88,7 +88,8 @@
                                 <input id="company" type="text" class="form-control" 
                                     name="company" value="{{ $invitations->vendor_acronym ? $invitations->vendor_acronym : old('vendor_acronym') }}" required autocomplete="mode" placeholder="Vendor Acronymn" readonly>
 
-                                    <input type="hidden" name="company_hidden" id="company_hidden" value="{{ $invitations->id }}">
+                                    <input type="hidden" name="company_hidden" id="company_hidden" value="{{ $invitations->company_id }}">
+                                    <input type="hidden" name="is_hidden" id="is_hidden" value="{{ $invitations->vendor_admin_email }}">
                                     <input type="hidden" name="token_hidden" id="token_hidden" value="{{ $invitations->token }}">
                                     <input type="hidden" name="invitationcode_hidden" id="invitationcode_hidden" value="{{ $invitations->invitation_code }}">
                             </div>

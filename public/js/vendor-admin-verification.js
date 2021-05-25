@@ -18,7 +18,8 @@ $(document).ready(() => {
             $(row).addClass('modalSetProfile');
         },
         columns: [
-            { data: "name" },
+            { data: "firstname" },
+            { data: "lastname" },
             { data: "email" },
         ],
     });
