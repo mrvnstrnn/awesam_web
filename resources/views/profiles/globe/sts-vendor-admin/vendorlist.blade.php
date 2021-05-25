@@ -13,7 +13,7 @@
         <table style="width: 100%;" id="vendor-list-table" data-href="{{ route('vendor.list', 'listVendor') }}" class="table table-hover table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Status</th>
+                    {{-- <th>Status</th> --}}
                     <th>SEC Reg. Name</th>
                     <th>Acronym</th>
                     <th>Fullname</th>

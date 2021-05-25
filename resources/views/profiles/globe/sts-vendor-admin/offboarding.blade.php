@@ -39,7 +39,7 @@
                                 <table style="width: 100%;" id="vendor-list-ongoing-table" data-href="{{ route('vendor.list', 'OngoingOff') }}" class="table table-hover table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>SEC Reg. Name</th>
                                             <th>Acronym</th>
                                             <th>Fullname</th>
@@ -71,7 +71,7 @@
                                 <table style="width: 100%;" id="vendor-list-complete-table" data-href="{{ route('vendor.list', 'Complete') }}" class="table table-hover table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>SEC Reg. Name</th>
                                             <th>Acronym</th>
                                             <th>Fullname</th>

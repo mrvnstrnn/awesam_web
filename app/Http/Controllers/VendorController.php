@@ -203,12 +203,42 @@ class VendorController extends Controller
                             $checkbox .= "</div>";
     
                             return $checkbox;
+                        })
+                        ->addColumn('action', function($row) {
+                            $action = "<button class='btn btn-primary btn-sm transferModal' data-id='".$row->sam_id."'>Transfer</button>";
+    
+                            return $action;
                         });
                         
-            $dt->rawColumns(['checkbox']);
+            $dt->rawColumns(['checkbox', 'action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function get_vendor_list()
+    {
+        try {
+            $vendor = Vendor::select('users.id', 'users.email')
+                                ->where('vendor.vendor_status', 'Active')
+                                ->join('users', 'users.email', 'vendor.vendor_admin_email')
+                                ->get();
+            return response()->json(['error' => false, 'message' => $vendor]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function transfer_vendor(Request $request)
+    {
+        try {
+            \DB::connection('mysql2')->table('site')
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->update(['site_vendor_id', $request->input('vendor_id')]);
+            return response()->json(['error' => false, 'message' => "Successfully transfer site."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 }
