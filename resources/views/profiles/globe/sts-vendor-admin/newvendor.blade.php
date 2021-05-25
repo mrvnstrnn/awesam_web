@@ -90,6 +90,32 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="divider"></div>  
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <H5>Vendor Profile</H5>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-row">
+                                    <div class="col-12">
+                                        @php
+                                            $vendor_profiles = \DB::connection('mysql2')->table('vendor_profile')->get();
+                                        @endphp
+
+                                        @foreach ($vendor_profiles as $vendor_profile)
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="vendor_profile_id" id="vendor_profile_id{{ $vendor_profile->id }}" value="{{ $vendor_profile->id }}">
+                                                {{ $vendor_profile->profile_type }}
+                                            </label>
+                                        </div>
+                                        @endforeach
+
+                                        <small id="vendor_profile_id-error" class="form-text text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="divider"></div>                            
                         <div class="form-row">
                             <div class="col-md-3">
@@ -130,8 +156,6 @@
                 <div class="d-block text-right card-footer">
                     <a href="javascript:void(0)" class="btn-shadow btn-wide mr-2 btn-pill btn-hover-shine btn btn-default resetForm">Reset</a>
                     <button class="btn btn-primary add_vendor" type="button" data-href="{{ route('add.vendor') }}">Add vendor</button>
-                    {{-- <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="coloc" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button> --}}
                 </div>
             </form>
         </div>

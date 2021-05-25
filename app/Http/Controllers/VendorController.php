@@ -24,6 +24,7 @@ class VendorController extends Controller
                 'vendor_acronym' => 'required',
                 'vendor_office_address' => 'required',
                 'vendor_status' => 'required',
+                'vendor_profile_id' => 'required',
             ));
 
             if ($validate->passes()){
@@ -35,6 +36,7 @@ class VendorController extends Controller
                     'vendor_acronym' => $request->input('vendor_acronym'),
                     'vendor_office_address' => $request->input('vendor_office_address'),
                     'vendor_status' => $request->input('vendor_status'),
+                    'vendor_profile_id' => $request->input('vendor_profile_id'),
                 );
                 
                 if(is_null($request->input('vendor_id'))) {
