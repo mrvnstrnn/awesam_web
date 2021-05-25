@@ -83,7 +83,6 @@ $(document).ready(() => {
     $(".transfer_button").on("click", function(){
         var vendor_id = $("select#vendor").val();
         var sam_id = $(".transfer_button").attr("data-id");
-        console.log(sam_id);
         $.ajax({
             url: $(this).attr('data-href'),
             method: "POST",
@@ -115,6 +114,8 @@ $(document).ready(() => {
 
         $(this).text("Adding vendor...");
 
+        $('.add_vendor').attr("disabled", "disabled");
+
         $("small").text("");
 
         $.ajax({
@@ -126,6 +127,7 @@ $(document).ready(() => {
                     $("#addVendorForm")[0].reset();
                     toastr.success(resp.message, 'Success');
                     $(".add_vendor").text("Add vendor");
+                    $(".add_vendor").removeAttr("disabled");
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
@@ -135,10 +137,12 @@ $(document).ready(() => {
                         toastr.error(resp.message, 'Error');
                     }
                     $(".add_vendor").text("Add vendor");
+                    $(".add_vendor").removeAttr("disabled");
                 }
             },
             error: function(resp) {
                 toastr.error(resp.message, 'Error');
+                $(".add_vendor").removeAttr("disabled");
                 $(".add_vendor").text("Add vendor");
             }
         });
