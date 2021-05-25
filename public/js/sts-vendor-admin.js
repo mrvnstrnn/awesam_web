@@ -270,7 +270,17 @@ $(document).ready(() => {
             var_id = '#vendor-list-complete-table';
         }
 
-        $(".terminate_button").text("Terminating...");
+        var textWhile = "";
+        var textAfter = "";
+
+        if(data_statusb == 'listVendor'){
+            textWhile = "Terminating...";
+            textAfter = "Terminate";
+        } else {
+            textWhile = "Completing...";
+            textAfter = "Complete";
+        }
+        $(".terminate_button").text(textWhile);
 
         $('.terminate_button').attr("disabled", "disabled");
 
@@ -296,7 +306,7 @@ $(document).ready(() => {
                             $("#terminationModal").modal("hide");
                             toastr.success(resp.message, 'Success');
                             
-                            $(".terminate_button").text("Terminate");
+                            $(".terminate_button").text(textAfter);
                             $(".terminate_button").removeAttr("disabled");
                         });
                     } else {
@@ -304,7 +314,7 @@ $(document).ready(() => {
                             $("#terminationModal").modal("hide");
                             toastr.success(resp.message, 'Success');
                             
-                            $(".terminate_button").text("Terminate");
+                            $(".terminate_button").text(textAfter);
                             $(".terminate_button").removeAttr("disabled");
                         });
 
@@ -313,14 +323,14 @@ $(document).ready(() => {
                 } else {
                     toastr.error(resp.message, 'Error');
                             
-                    $(".terminate_button").text("Terminate");
+                    $(".terminate_button").text(textAfter);
                     $(".terminate_button").removeAttr("disabled");
                 }
             },
             error: function(resp){
                 toastr.error(resp.message, 'Error');
                             
-                $(".terminate_button").text("Terminate");
+                $(".terminate_button").text(textAfter);
                 $(".terminate_button").removeAttr("disabled");
             }
         });
