@@ -149,7 +149,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="region">Region</label>
-                                                        <select class="form-control" name="address" id="region">
+                                                        <select class="form-control" name="address" id="region" autocomplete="off">
                                                             <option value="">Please select region</option>
                                                             @foreach ($locations as $location)
                                                             <option value="{{ $location->region }}">{{ $location->region }}</option>
@@ -160,13 +160,13 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="province">Province</label>
-                                                        <select class="form-control" name="address" id="province" disabled required></select>
+                                                        <select class="form-control" name="address" id="province" disabled required autocomplete="off"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="lgu">City</label>
-                                                        <select class="form-control" name="address" id="lgu" disabled required></select>
+                                                        <select class="form-control" name="address" id="lgu" disabled required autocomplete="off"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
