@@ -3,6 +3,10 @@ $(document).ready(() => {
     //     $("#firsttimeModal").modal({backdrop: 'static', keyboard: false});
     // }
 
+        // FLATPICKR DATE PICKER
+        $(".flatpicker").flatpickr();
+
+
     if($("#user_detail").val() != ''){
         
         // $(".step-1-li").removeClass('active');
@@ -263,6 +267,9 @@ $(document).ready(() => {
             }
         });
     });
+
+
+
 
 
     

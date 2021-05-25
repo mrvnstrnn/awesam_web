@@ -37,48 +37,179 @@
                         <div class="form-wizard-content sw-container tab-content d-block" style="min-height: 353px;">
                             <form id="onboardingForm">
                                 <div id="step-1" class="tab-pane step-content">
+                                    <div class="divider"></div>
                                     <div class="form-row">
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="firstname">Firstname</label>
-                                                <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" readonly>
-                                            </div>
+                                        <div class="col-4">
+                                            <h5>My Details</h5>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="lastname">Lastname</label>
-                                                <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="email">Email</label>
-                                                <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
+                                        <div class="col-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="firstname">Firstname</label>
+                                                        <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="middlename">Middlename</label>
+                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="lastname">Lastname</label>
+                                                        <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="suffix">Suffix</label>
+                                                        <select name="suffix" id="suffix"  class="form-control">
+                                                            <option value="" disabled selected>Suffix</option>
+                                                            <option value="Sr">Sr</option>
+                                                            <option value="Jr">Jr</option>
+                                                            <option value="III">III</option>
+                                                            <option value="IV">IV</option>
+                                                            <option value="V">V</option>
+                                                        </select>
+                                                    </div>
+                                                </div> 
+                                                <div class="divider"></div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="nickname">Nickname</label>
+                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="birthday">Birthday</label>
+                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="gender">Gender</label>
+                                                        <select name="gender" id="gender"  class="form-control" required>
+                                                            <option value="" disabled selected>Gender</option>
+                                                            <option value="Sr">Male</option>
+                                                            <option value="Jr">Female</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="divider"></div>
                                     <div class="form-row">
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="region">Region</label>
-                                                <select class="form-control" name="address" id="region">
-                                                    <option value="">Please select region</option>
-                                                    @foreach ($locations as $location)
-                                                    <option value="{{ $location->region }}">{{ $location->region }}</option>
-                                                    @endforeach
-                                                </select>
+                                        <div class="col-4">
+                                            <h5>Contact Information</h5>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="email">Email</label>
+                                                        <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="cellphone">Cellphone</label>
+                                                        <input name="cellphone" id="cellphone" placeholder="0917-XXX-XXX" value="" type="text" class="form-control"  required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="landline">Landline</label>
+                                                        <input name="landline" id="landline" placeholder="Telephone Number" value="" type="text" class="form-control">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="province">Province</label>
-                                                <select class="form-control" name="address" id="province" disabled required></select>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <h5>Address Details</h5>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="region">Region</label>
+                                                        <select class="form-control" name="address" id="region">
+                                                            <option value="">Please select region</option>
+                                                            @foreach ($locations as $location)
+                                                            <option value="{{ $location->region }}">{{ $location->region }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="province">Province</label>
+                                                        <select class="form-control" name="address" id="province" disabled required></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="lgu">City</label>
+                                                        <select class="form-control" name="address" id="lgu" disabled required></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="address">Address</label>
+                                                        <textarea name="address" id="address" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="position-relative form-group">
-                                                <label for="lgu">City</label>
-                                                <select class="form-control" name="address" id="lgu" disabled required></select>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <h5>Employment Details</h5>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="profile_id">Designation</label>
+                                                        <select name="profile_id" id="profile_id"  class="form-control" required>
+                                                            <option value="" disabled selected>Designation</option>
+                                                            <option value="2">Agent</option>
+                                                            <option value="3">Supervisor</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="employment_classification">Employment Classification</label>
+                                                        <select name="employment_classification" id="employment_classification"  class="form-control" required>
+                                                            <option value="" disabled selected>Employment Classification</option>
+                                                            <option value="regular">Regular</option>
+                                                            <option value="subcon">Sub Contractor</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="employment_classification">Employment Status</label>
+                                                        <select name="employment_classification" id="employment_classification"  class="form-control" required>
+                                                            <option value="" disabled selected>Employment Status</option>
+                                                            <option value="active">Active</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="position-relative form-group">
+                                                        <label for="hiring_date">Hiring Date</label>
+                                                        <input name="hiring_date" id="hiring_date" placeholder="Hiring Date" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -89,45 +220,47 @@
                                     </div>
                                 </div>                                
                                 <div id="step-2" class="tab-pane step-content d-none">
+                                    <div class="divider"></div>
                                     <div class="col-12">
-{{-- <video id="player" controls></video>
-<button id="capture">Capture</button>
-<canvas id="canvas" width=320 height=240></canvas>
-<script>
-  const player = document.getElementById('player');
-  const canvas = document.getElementById('canvas');
-  const context = canvas.getContext('2d');
-  const captureButton = document.getElementById('capture');
+                                        
+                                        {{-- <video id="player" controls></video>
+                                        <button id="capture">Capture</button>
+                                        <canvas id="canvas" width=100% height=100%></canvas>
+                                        <script>
+                                        const player = document.getElementById('player');
+                                        const canvas = document.getElementById('canvas');
+                                        const context = canvas.getContext('2d');
+                                        const captureButton = document.getElementById('capture');
 
-  const constraints = {
-    video: true,
-  };
+                                        const constraints = {
+                                            video: true,
+                                        };
 
-  captureButton.addEventListener('click', () => {
-    // Draw the video frame to the canvas.
-    context.drawImage(player, 0, 0, canvas.width, canvas.height);
+                                        captureButton.addEventListener('click', () => {
+                                            // Draw the video frame to the canvas.
+                                            context.drawImage(player, 0, 0, canvas.width, canvas.height);
 
-    // Stop all video streams.
-    player.srcObject.getVideoTracks().forEach(track => track.stop());
+                                            // Stop all video streams.
+                                            player.srcObject.getVideoTracks().forEach(track => track.stop());
 
-  });
+                                        });
 
-var now = Date.now();
-navigator.mediaDevices.getUserMedia({audio: false, video: true})
-.then(function(stream) {
-  console.log('Got stream, time diff :', Date.now() - now);
-})
-.catch(function(err) {
-  console.log('GUM failed with error, time diff: ', Date.now() - now);
-});
+                                        var now = Date.now();
+                                        navigator.mediaDevices.getUserMedia({audio: false, video: true})
+                                        .then(function(stream) {
+                                        console.log('Got stream, time diff :', Date.now() - now);
+                                        })
+                                        .catch(function(err) {
+                                        console.log('GUM failed with error, time diff: ', Date.now() - now);
+                                        });
 
 
-  // Attach the video stream to the video element and autoplay.
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then((stream) => {
-      player.srcObject = stream;
-    });
-</script>                                     --}}
+                                        // Attach the video stream to the video element and autoplay.
+                                        navigator.mediaDevices.getUserMedia(constraints)
+                                            .then((stream) => {
+                                            player.srcObject = stream;
+                                            });
+                                        </script>                                     --}}
                                     </div>
                                     <div class="divider"></div>
                                     <div class="clearfix">
@@ -220,8 +353,11 @@ navigator.mediaDevices.getUserMedia({audio: false, video: true})
         </div>
     </div>
 </div> --}}
+
+
+
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/enrollment.js') }}"></script>
+    <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection
