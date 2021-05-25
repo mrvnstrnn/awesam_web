@@ -142,7 +142,7 @@ class UserController extends Controller
                             'middlename' => $request->input('middlename'),
                             'nickname' => $request->input('nickname'),
                             'suffix' => $request->input('suffix'),
-                            'profile_id' => $request->input('designation'),
+                            // 'profile_id' => $request->input('designation'),
                         ]);
 
                 if(!is_null($user_details)){

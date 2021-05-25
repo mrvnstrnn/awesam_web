@@ -29,17 +29,17 @@ $(document).ready(() => {
         
         var data_id = $(this).parent().attr('data-id');
 
-        $(".content-data select#profile option").remove();
+        // $(".content-data select#profile option").remove();
         $.ajax({
             url: '/get-profile',
             method: "GET",
             success: function (resp) {
                 if(!resp.error){
-                    resp.message.forEach(element => {
-                        $(".content-data select#profile").append(
-                            '<option value="'+element.id+'">'+element.profile+'</option>'
-                        );
-                    });
+                    // resp.message.forEach(element => {
+                    //     $(".content-data select#profile").append(
+                    //         '<option value="'+element.id+'">'+element.profile+'</option>'
+                    //     );
+                    // });
                     $(".btn-assign-profile").attr('data-id', data_id);
                     $("#modal-employee-verification").modal("show");
                 } else {
