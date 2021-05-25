@@ -82,8 +82,8 @@ $(document).ready(() => {
 
     $(".transfer_button").on("click", function(){
         var vendor_id = $("select#vendor").val();
-        console.log(vendor_id);
         var sam_id = $(".transfer_button").attr("data-id");
+        console.log(sam_id);
         $.ajax({
             url: $(this).attr('data-href'),
             method: "POST",

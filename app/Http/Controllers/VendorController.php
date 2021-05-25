@@ -235,7 +235,7 @@ class VendorController extends Controller
         try {
             \DB::connection('mysql2')->table('site')
                                         ->where('sam_id', $request->input('sam_id'))
-                                        ->update(['site_vendor_id', $request->input('vendor_id')]);
+                                        ->update(['site_vendor_id' => $request->input('vendor_id')]);
             return response()->json(['error' => false, 'message' => "Successfully transfer site."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
