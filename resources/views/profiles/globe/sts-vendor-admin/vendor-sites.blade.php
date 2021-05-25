@@ -33,6 +33,7 @@
                                     <th class="d-none d-md-table-cell">SAM ID</th>
                                     <th>Site</th>
                                     <th class="text-center  d-none d-sm-table-cell">Site Address</th>
+                                    <th class="text-center  d-none d-sm-table-cell">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -45,23 +46,26 @@
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="terminationModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Tranfer Site</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <p>Are you sure you want to conmplete the termination of <b class="vendor_sec_reg_name"></b>?</p>
+                        <div class="form-group">
+                          <label for="vendor"></label>
+                          <select id="vendor" id="vendor" class="form-control"></select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary terminate_button" data-href="{{ route('terminate.vendor') }}">Complete</button>
+                    <button type="button" class="btn btn-primary transfer_button" data-href="{{ route('transfer.vendor') }}">Transfer</button>
                 </div>
             </div>
         </div>

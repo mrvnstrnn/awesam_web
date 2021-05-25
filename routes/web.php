@@ -38,8 +38,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/info-vendor/{vendor_id}', [VendorController::class, 'info_vendor'])->name('info.vendor');
     Route::get('/site-vendor/{vendor_id}', [UserController::class, 'site_vendor'])->name('site.vendor');
     Route::get('/site-vendordata/{vendor_id}', [VendorController::class, 'site_vendor_table'])->name('site.vendortable');
+    Route::get('/get-vendor', [VendorController::class, 'get_vendor_list'])->name('get.vendor');
 
-    
+    Route::post('/transfer-vendor', [VendorController::class, 'transfer_vendor'])->name('transfer.vendor');
+
+
+
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');

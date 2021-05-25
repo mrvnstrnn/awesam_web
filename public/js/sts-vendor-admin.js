@@ -22,7 +22,7 @@ $(document).ready(() => {
                 return json.data;
             },
             columns: [
-                { data: "vendor_status" },
+                // { data: "vendor_status" },
                 { data: "vendor_sec_reg_name" },
                 { data: "vendor_acronym" },
                 { data: "vendor_name" },
@@ -52,9 +52,63 @@ $(document).ready(() => {
             { data: "sam_id" },
             { data: "site_name" },
             { data: "site_address" },
+            { data: "action" },
         ],
     }); 
 
+    $(document).on("click", ".transferModal", function(){
+        $(".transfer_button").attr('data-id', $(this).attr('data-id'));
+        $("select#vendor option").remove();
+        $.ajax({
+            url: '/get-vendor',
+            method: "GET",
+            success: function(resp){
+                if(!resp.error){
+                    resp.message.forEach(element => {
+                        $("select#vendor").append(
+                            '<option value="'+element.id+'">'+element.email+'</option>'
+                        );
+                    });
+                    $("#transferModal").modal("show");
+                }else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
+
+    $(".transfer_button").on("click", function(){
+        var vendor_id = $("select#vendor").val();
+        console.log(vendor_id);
+        var sam_id = $(".transfer_button").attr("data-id");
+        $.ajax({
+            url: $(this).attr('data-href'),
+            method: "POST",
+            data: {
+                vendor_id : vendor_id,
+                sam_id : sam_id
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $('#vendor-sites-table').DataTable().ajax.reload(function(){
+                        toastr.success(resp.message, "Success");
+                        $("#transferModal").modal("hide");
+                    });
+                }else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
 
     $('.add_vendor').on('click', function(){
         var route = $(this).attr('data-href');
