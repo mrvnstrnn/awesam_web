@@ -135,6 +135,55 @@ class UserController extends Controller
         }
     }
 
+    public function site_vendor($vendor_id)
+    {
+        try {
+            if(is_null(\Auth::user()->profile_id)){
+                return redirect('/onboarding');
+            } else {
+                
+                $role = \Auth::user()->getUserProfile();
+    
+                $mode = $role->mode;
+                $profile = $role->profile;
+    
+                
+                $title = ucwords(Auth::user()->name);
+                $title_subheading  = ucwords($mode . " : " . $profile);
+                $title_icon = 'home';
+        
+                $active_slug = "";
+        
+                $profile_menu = self::getProfileMenuLinks();
+    
+                $profile_direct_links = self::getProfileMenuDirectLinks();
+                    
+                $program_direct_links = self::getProgramMenuDirectLinks();
+
+                
+                $user = User::find($vendor_id);
+                
+                return view('profiles.globe.sts-vendor-admin.vendor-sites', 
+                    compact(
+                        'mode',
+                        'profile',
+                        'active_slug',
+                        'profile_menu',
+                        'profile_direct_links',
+                        'program_direct_links',
+                        'title', 
+                        'title_subheading', 
+                        'title_icon',
+                        'vendor_id',
+                        'user'
+                    )
+                );
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function index()
     {
         if(is_null(\Auth::user()->profile_id)){
@@ -159,8 +208,12 @@ class UserController extends Controller
                 
             $program_direct_links = self::getProgramMenuDirectLinks();
     
+
+            $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
+            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.index';
+
             
-            return view('profiles.' . $mode . '.index', 
+            return view($view, 
                 compact(
                     'mode',
                     'profile',

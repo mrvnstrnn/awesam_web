@@ -4,6 +4,7 @@ $(document).ready(() => {
     // }
 
     if($("#user_detail").val() != ''){
+        
         $(".step-1-li").removeClass('active');
         $(".step-1-li").addClass('done');
         $(".step-2-li").addClass('done');

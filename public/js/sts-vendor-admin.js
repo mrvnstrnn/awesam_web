@@ -1,11 +1,44 @@
 $(document).ready(() => {
 
-    $('#vendor-list-table').DataTable({
+    var vendor_table = [
+        'vendor-list',
+        'vendor-list-ongoing',
+        'vendor-list-complete'
+    ];
+
+    for (let i = 0; i < vendor_table.length; i++) {
+        $('#'+vendor_table[i]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#'+vendor_table[i]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            columns: [
+                // { data: "vendor_status" },
+                { data: "vendor_sec_reg_name" },
+                { data: "vendor_acronym" },
+                { data: "vendor_name" },
+                { data: "vendor_admin_email" },
+                { data: "vendor_office_address" },
+                { data: "action" },
+            ],
+        });
+        
+    }
+
+    $('#vendor-sites-table').DataTable({
         processing: true,
         serverSide: true,
-        // pageLength: 3,
         ajax: {
-            url: $("#vendor-list-table").attr('data-href'),
+            url: $("#vendor-sites-table").attr('data-href'),
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -14,78 +47,68 @@ $(document).ready(() => {
         dataSrc: function(json){
             return json.data;
         },
-        'createdRow': function(row, data) {
-            $(row).attr('data-id', data.vendor_id);
-            $(row).attr('data-statusb', 'listVendor');
-            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-            $(row).addClass('modalTerminate');
-        },
         columns: [
-            { data: "vendor_sec_reg_name" },
-            { data: "vendor_acronym" },
-            { data: "vendor_name" },
-            { data: "vendor_admin_email" },
-            { data: "vendor_office_address" },
-            { data: "vendor_status" }
-        ],
-    }); 
-    
-    $('#vendor-list-ongoing-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: $("#vendor-list-ongoing-table").attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function(row, data) {
-            $(row).attr('data-id', data.vendor_id);
-            $(row).attr('data-statusb', 'OngoingOff');
-            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-            $(row).addClass('modalTerminate');
-        },
-        columns: [
-            { data: "vendor_sec_reg_name" },
-            { data: "vendor_acronym" },
-            { data: "vendor_name" },
-            { data: "vendor_admin_email" },
-            { data: "vendor_office_address" },
-            { data: "vendor_status" }
+            { data: "checkbox" },
+            { data: "sam_id" },
+            { data: "site_name" },
+            { data: "site_address" },
+            { data: "action" },
         ],
     }); 
 
-    $('#vendor-list-complete-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: $("#vendor-list-complete-table").attr('data-href'),
-            type: 'GET',
+    $(document).on("click", ".transferModal", function(){
+        $(".transfer_button").attr('data-id', $(this).attr('data-id'));
+        $("select#vendor option").remove();
+        $.ajax({
+            url: '/get-vendor',
+            method: "GET",
+            success: function(resp){
+                if(!resp.error){
+                    resp.message.forEach(element => {
+                        $("select#vendor").append(
+                            '<option value="'+element.id+'">'+element.email+'</option>'
+                        );
+                    });
+                    $("#transferModal").modal("show");
+                }else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
+
+    $(".transfer_button").on("click", function(){
+        var vendor_id = $("select#vendor").val();
+        var sam_id = $(".transfer_button").attr("data-id");
+        console.log(sam_id);
+        $.ajax({
+            url: $(this).attr('data-href'),
+            method: "POST",
+            data: {
+                vendor_id : vendor_id,
+                sam_id : sam_id
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function(row, data) {
-            $(row).attr('data-id', data.vendor_id);
-            $(row).attr('data-vendor_sec_reg_name', data.vendor_sec_reg_name);
-            $(row).addClass('modalTerminate');
-        },
-        columns: [
-            { data: "vendor_sec_reg_name" },
-            { data: "vendor_acronym" },
-            { data: "vendor_name" },
-            { data: "vendor_admin_email" },
-            { data: "vendor_office_address" },
-            { data: "vendor_status" }
-        ],
-    }); 
+            success: function(resp){
+                if(!resp.error){
+                    $('#vendor-sites-table').DataTable().ajax.reload(function(){
+                        toastr.success(resp.message, "Success");
+                        $("#transferModal").modal("hide");
+                    });
+                }else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
 
     $('.add_vendor').on('click', function(){
         var route = $(this).attr('data-href');
@@ -203,6 +226,30 @@ $(document).ready(() => {
 
         $(".terminate_button").attr('data-id', id);
         $(".terminate_button").attr('data-statusb', data_statusb);
+    });
+
+    $(document).on("click", ".infoVendorModal", function(){
+        $("#viewInfoForm")[0].reset();
+        $.ajax({
+            url: $(this).attr("data-href"),
+            method: "GET",
+            success: function(resp){
+                if(!resp.error){
+                    $("#vendor_sec_reg_name").val(resp.message.vendor_sec_reg_name);
+                    $("#vendor_acronym").val(resp.message.vendor_acronym);
+                    $("#vendor_office_address").val(resp.message.vendor_office_address);
+                    $("#vendor_admin_name").val(resp.message.vendor_firstname + " " + resp.message.vendor_lastname);
+                    $("#vendor_admin_email").val(resp.message.vendor_admin_email);
+                    // toastr.success(resp.message, 'Success');
+                } else {
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+            }
+        });
+        $("#viewInfoModal").modal("show");
     });
 
     $(document).on('click', '.terminate_button', function(){

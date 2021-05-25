@@ -113,11 +113,24 @@ class VendorController extends Controller
                             $class = $row->vendor_status == 'Active' || $row->vendor_status == 'Complete Offboarding' ? 'success' : 'warning';
                             return '<div class="badge badge-'.$class.'" ml-2">'.$row->vendor_status.'</div>';
                         })
+                        ->addColumn('action', function($row) use ($program_status){
+                            $button = '<button class="btn btn-info view-info btn-sm infoVendorModal" data-href="'.route('info.vendor', $row->vendor_id).'" data-id="'.$row->vendor_id.'" title="View Info"><i class="fa fa-eye"></i></button>';
+
+                            if ($program_status != "Complete"){
+                                $button .= ' <button class="btn btn-danger view-info btn-sm modalTerminate" data-vendor_sec_reg_name="'.$row->vendor_sec_reg_name.'" data-statusb="'.$program_status.'" data-id="'.$row->vendor_id.'">Terminate</button>';
+                            }
+
+                            if ($program_status == "OngoingOff") {
+                                $button .= ' <a href="'.route('site.vendor', $row->vendor_id).'" class="btn btn-primary text-white btn-sm">View Sites</a>';
+                            }
+
+                             return $button;
+                        })
                         ->addColumn('vendor_name', function($row){
                             return $row->vendor_firstname. " " .$row->vendor_lastname;
                         });
             
-            $dt->rawColumns(['vendor_status']);
+            $dt->rawColumns(['vendor_status', 'action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
@@ -164,6 +177,68 @@ class VendorController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function info_vendor($vendor_id)
+    {
+        try {
+            $vendor = Vendor::find($vendor_id);
+            return response()->json(['error' => false, 'message' => $vendor]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function site_vendor_table($vendor_id)
+    {
+        try {
+            $site_vendor = \DB::connection('mysql2')->table('site')->where('site_vendor_id', $vendor_id)->get();
+
+            $dt = DataTables::of($site_vendor)
+                        ->addColumn('checkbox', function($row) {
+                            $checkbox = "<div class='custom-checkbox custom-control'>";
+                            $checkbox .= "<input type='checkbox' name='program id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
+                            $checkbox .= "</div>";
+    
+                            return $checkbox;
+                        })
+                        ->addColumn('action', function($row) {
+                            $action = "<button class='btn btn-primary btn-sm transferModal' data-id='".$row->sam_id."'>Transfer</button>";
+    
+                            return $action;
+                        });
+                        
+            $dt->rawColumns(['checkbox', 'action']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function get_vendor_list()
+    {
+        try {
+            $vendor = Vendor::select('users.id', 'users.email')
+                                ->where('vendor.vendor_status', 'Active')
+                                ->join('users', 'users.email', 'vendor.vendor_admin_email')
+                                ->get();
+            return response()->json(['error' => false, 'message' => $vendor]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function transfer_vendor(Request $request)
+    {
+        try {
+            \DB::connection('mysql2')->table('site')
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->update(['site_vendor_id' => $request->input('vendor_id')]);
+            return response()->json(['error' => false, 'message' => "Successfully transfer site."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 }
