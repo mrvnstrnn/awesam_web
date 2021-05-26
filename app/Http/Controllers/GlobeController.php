@@ -286,7 +286,6 @@ class GlobeController extends Controller
 
     public function vendor_supervisors($vendor_id)
     {
-
         try {
             $checkAgent = \DB::connection('mysql2')
                                     ->table('user_details')
