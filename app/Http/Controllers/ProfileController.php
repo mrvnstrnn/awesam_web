@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Models\UserProgram;
 use App\Models\Permission;
+use App\Models\UserDetail;
 use App\Models\ProfilePermission;
 
 class ProfileController extends Controller
@@ -173,15 +174,30 @@ class ProfileController extends Controller
     public function assign_profile(Request $request)
     {
         try {
-            User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
+            $validate = \Validator::make($request->all(), array(
+                'checkbox_id' => 'required'
+            ));
 
-            for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
-                UserProgram::create([
-                    "user_id" => $request->input('user_id'),
-                    "program_id" => $request->input('checkbox_id')[$i],
-                ]);
+            if($validate->passes()){
+                User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
+                if(!is_null($request->input('supervisor'))){
+                    UserDetail::where('user_id', $request->input('user_id'))->update([
+                        'IS_id' => $request->input('supervisor'),
+                    ]);
+                }
+    
+                for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
+                    UserProgram::create([
+                        "user_id" => $request->input('user_id'),
+                        "program_id" => $request->input('checkbox_id')[$i],
+                    ]);
+                }
+                return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => "Program required."]);
             }
-            return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
+
+            
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
@@ -195,7 +211,7 @@ class ProfileController extends Controller
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->where('user_details.IS_id', \Auth::user()->id)
                                     ->where('user_details.designation', 3)
-                                    ->where('users.profile_id', null)
+                                    // ->where('users.profile_id', null)
                                     ->get();
 
             return response()->json(['error' => false, 'message' => $supervisors ]);

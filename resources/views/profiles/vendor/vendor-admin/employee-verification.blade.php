@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="form-row supervisor-data d-none">
-                        <select name="supervisor" id="supervisor"></select>
+                        <select name="supervisor" id="supervisor" class="form-control"></select>
                     </div>
 
                     <div class="form-row mt-3">
