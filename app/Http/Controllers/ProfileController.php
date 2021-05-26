@@ -172,7 +172,7 @@ class ProfileController extends Controller
     public function assign_profile(Request $request)
     {
         try {
-            User::where('id', $request->input('data_id'))->update(['profile_id' => $request->input('val') ]);
+            User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
             return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);

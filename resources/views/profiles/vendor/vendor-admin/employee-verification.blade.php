@@ -13,6 +13,8 @@
             <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.forverification') }}">
                 <thead>
                     <tr>
+                        <th>User ID</th>
+                        <th>Profile</th>
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>
@@ -46,14 +48,14 @@
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                     <div class="form-row content-data">
-                        <select name="profile" id="profile" class="form-control">
+                        {{-- <select name="profile" id="profile" class="form-control">
                             <option value="2">Agent</option>
                             <option value="3">Supervisor</option>
-                        </select>
+                        </select> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Assign Profile</button>
+                    <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button>
                 </div>
             </div>
         </div>
