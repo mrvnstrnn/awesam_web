@@ -50,6 +50,10 @@
                     <div class="form-row content-data">
                     </div>
 
+                    <div class="form-row supervisor-data d-none">
+                        <select name="supervisor" id="supervisor"></select>
+                    </div>
+
                     <div class="form-row mt-3">
                         @php
                             $programs = App\Models\Program::get();

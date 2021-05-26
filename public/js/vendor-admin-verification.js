@@ -44,6 +44,26 @@ $(document).ready(() => {
         $('.content-data').html('<H5>Approve ' + $( this ).attr("data-employeename") + "'s account?</H5>");
         $("#modal-employee-verification").modal("show");
 
+        // if($( this ).attr("data-profile_id")){
+        //     $.ajax({
+        //         url: '/get-supervisor',
+        //         method: "GET",
+        //         success: function (resp) {
+        //             if(!resp.error){
+        //                 $('.supervisor-data').removeClass("d-none");
+        //                 resp.message.forEach(element => {
+        //                     console.log(element);
+        //                     $('.supervisor-data').html("<option>"+element.email+"</option>");
+        //                 });
+        //             } else {
+        //                 toastr.error(resp.message, "Error");
+        //             }
+        //         },
+        //         error: function (resp) {
+        //             toastr.error(resp.message, "Error");
+        //         }
+        //     });
+        // }
         // window.location.href = "/chapters/"+data;
     } );
 
