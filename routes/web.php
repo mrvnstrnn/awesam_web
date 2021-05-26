@@ -84,8 +84,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/vendor-agents/{program_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
 
-
-    // Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
+    
+    Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
 
 });
 
