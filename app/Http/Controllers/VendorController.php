@@ -232,7 +232,12 @@ class VendorController extends Controller
     {
         try {
             $vendor = Vendor::find($vendor_id);
-            return response()->json(['error' => false, 'message' => $vendor]);
+
+            $vendor_profiles = AddVendorProfile::join('vendor_profile', 'vendor_profile.id', 'add_vendor_profile.vendor_profile')
+                                                    ->where('add_vendor_profile.vendor_id', $vendor_id)
+                                                    ->get();
+                                                    
+            return response()->json(['error' => false, 'message' => $vendor, 'vendor_profiles' => $vendor_profiles]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

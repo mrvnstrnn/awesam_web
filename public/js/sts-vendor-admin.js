@@ -234,6 +234,8 @@ $(document).ready(() => {
 
     $(document).on("click", ".infoVendorModal", function(){
         $("#viewInfoForm")[0].reset();
+        $(".vendor_profile b").remove();
+        $(".vendor_profile li").remove();
         $.ajax({
             url: $(this).attr("data-href"),
             method: "GET",
@@ -245,6 +247,13 @@ $(document).ready(() => {
                     $("#vendor_admin_name").val(resp.message.vendor_firstname + " " + resp.message.vendor_lastname);
                     $("#vendor_admin_email").val(resp.message.vendor_admin_email);
                     // toastr.success(resp.message, 'Success');
+
+                    $(".vendor_profile").append('<b>Vendor Profile</b>');
+                    resp.vendor_profiles.forEach(element => {
+                        $(".vendor_profile").append(
+                            '<li>'+element.profile_type+'</li>'
+                        );
+                    });
                 } else {
                     toastr.error(resp.message, 'Error');
                 }

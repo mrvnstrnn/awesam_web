@@ -34,7 +34,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Terminate Vendor</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -56,7 +56,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Vendor Info</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -87,6 +87,8 @@
                                 <label for="vendor_admin_email">Admin Email</label>
                                 <input type="text" name="vendor_admin_email" id="vendor_admin_email" readonly class="form-control">
                             </div>
+
+                            <div class="vendor_profile"></div>
                         </div>
                     </form>
                 </div>
