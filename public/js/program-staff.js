@@ -97,9 +97,9 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
-                        // $("#modal-endorsement").modal("hide");
+                        $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
-                        $("#loaderModal").modal("hide");
+                        // $("#loaderModal").modal("hide");
                     });
                 } else {
                     // $("#loaderModal").modal("hide");
