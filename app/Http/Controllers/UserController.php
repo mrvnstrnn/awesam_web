@@ -154,6 +154,7 @@ class UserController extends Controller
                                     'gender' => $request->get('gender'),
                                     'contact_no' => $request->get('contact_no'),
                                     'landline' => $request->get('landline'),
+                                    'address' => $request->get('address'),
                                     'designation' => $request->get('designation'),
                                     'employment_classification' => $request->get('employment_classification'),
                                     'employment_status' => $request->get('employment_status'),
@@ -185,6 +186,7 @@ class UserController extends Controller
                     $detail->gender = $request->get('gender');
                     $detail->contact_no = $request->get('contact_no');
                     $detail->landline = $request->get('landline');
+                    $detail->address = $request->get('address');
                     $detail->designation = $request->get('designation');
                     $detail->employment_classification = $request->get('employment_classification');
                     $detail->employment_status = $request->get('employment_status');
