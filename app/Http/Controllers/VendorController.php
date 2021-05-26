@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Vendor;
+use App\Models\AddVendorProfile;
 use DataTables;
 
 use App\Mail\VendorMail;
@@ -36,7 +37,7 @@ class VendorController extends Controller
                     'vendor_acronym' => $request->input('vendor_acronym'),
                     'vendor_office_address' => $request->input('vendor_office_address'),
                     'vendor_status' => $request->input('vendor_status'),
-                    'vendor_profile_id' => $request->input('vendor_profile_id'),
+                    'vendor_profile_id' => $request->input('vendor_profile_id')[0],
                 );
                 
                 if(is_null($request->input('vendor_id'))) {
@@ -53,6 +54,13 @@ class VendorController extends Controller
                         \DB::connection('mysql2')->table('vendor_programs')->insert(
                             $arrayProgram
                         );
+                    }
+
+                    for ($i=0; $i < count($request->input('vendor_profile_id')); $i++) { 
+                        AddVendorProfile::create([
+                            'vendor_id' => $vendor_id,
+                            'vendor_profile' => $request->input('vendor_profile_id')[$i],
+                        ]);
                     }
 
                     $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
@@ -72,6 +80,13 @@ class VendorController extends Controller
                             'vendors_id' => $vendor_id,
                             'programs' => $request->input('vendor_program_id')[$i],
                         );
+
+                        for ($i=0; $i < count($request->input('vendor_profile_id')); $i++) { 
+                            AddVendorProfile::create([
+                                'vendor_id' => $vendor_id,
+                                'vendor_profile' => $request->input('vendor_profile_id')[$i],
+                            ]);
+                        }
 
                         \DB::connection('mysql2')->table('vendor_programs')->insert(
                             $arrayProgram
