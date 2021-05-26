@@ -7,6 +7,7 @@ use DataTables;
 use Validator;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\UserProgram;
 use App\Models\Permission;
 use App\Models\ProfilePermission;
 
@@ -173,7 +174,31 @@ class ProfileController extends Controller
     {
         try {
             User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
+
+            for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
+                UserProgram::create([
+                    "user_id" => $request->input('user_id'),
+                    "program_id" => $request->input('checkbox_id')[$i],
+                ]);
+            }
             return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function get_supervisor(Request $request)
+    {
+        try {
+            $supervisors = \DB::connection('mysql2')
+                                    ->table('users')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.IS_id', \Auth::user()->id)
+                                    ->where('user_details.designation', 3)
+                                    ->where('users.profile_id', null)
+                                    ->get();
+
+            return response()->json(['error' => false, 'message' => $supervisors ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }

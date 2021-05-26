@@ -14,10 +14,12 @@ $(document).ready(() => {
             return json.data;
         },
         'createdRow': function(row, data) {
+
+            var suffix = data.suffix == null ? "" : data.suffix;
             $(row).attr('data-user_id', data.user_id);
             $(row).attr('data-profile_id', data.designation);
             $(row).attr('data-profile', data.profile);
-            $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + data.suffix);
+            $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + suffix);
             $(row).addClass('modalSetProfile');
         },
         columns: [
@@ -67,10 +69,27 @@ $(document).ready(() => {
         $('.content-data').html('<H5>Approve ' + $( this ).attr("data-employeename") + "'s account?</H5>");
         $("#modal-employee-verification").modal("show");
 
+        // if($( this ).attr("data-profile_id")){
+        //     $.ajax({
+        //         url: '/get-supervisor',
+        //         method: "GET",
+        //         success: function (resp) {
+        //             if(!resp.error){
+        //                 $('.supervisor-data').removeClass("d-none");
+        //                 resp.message.forEach(element => {
+        //                     console.log(element);
+        //                     $('.supervisor-data').html("<option>"+element.email+"</option>");
+        //                 });
+        //             } else {
+        //                 toastr.error(resp.message, "Error");
+        //             }
+        //         },
+        //         error: function (resp) {
+        //             toastr.error(resp.message, "Error");
+        //         }
+        //     });
+        // }
         // window.location.href = "/chapters/"+data;
-
-
-        
     } );
 
     
@@ -116,13 +135,24 @@ $(document).ready(() => {
         var user_id = $(this).attr('data-user_id');
         var profile_id = $(this).attr('data-profile_id');
 
+        
+        var inputElements = document.getElementsByName('vendor_program_id');
+
+        checkbox_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkbox_id.push(inputElements[i].value);
+            }
+        }
+
         // var val = $("select#profile").val();
         $.ajax({
             url: '/assign-profile',
             method: "POST",
             data: {
                 user_id:user_id,
-                profile_id:profile_id
+                profile_id:profile_id,
+                checkbox_id:checkbox_id
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

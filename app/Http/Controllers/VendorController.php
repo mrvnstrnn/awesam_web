@@ -83,6 +83,13 @@ class VendorController extends Controller
                         ->update(
                             $arrayData
                         );
+
+                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                        $name,
+                        $request->input('vendor_admin_email'),
+                        $request->input('vendor_sec_reg_name'),
+                        $request->input('vendor_acronym')
+                    ));
                 return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
             } else {

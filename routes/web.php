@@ -86,6 +86,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/vendor-supervisors/{vendor_id}', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
 
 
+
+    // Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
