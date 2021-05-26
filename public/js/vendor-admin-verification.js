@@ -44,7 +44,7 @@ $(document).ready(() => {
         $('.content-data').html('<H5>Approve ' + $( this ).attr("data-employeename") + "'s account?</H5>");
         $("#modal-employee-verification").modal("show");
 
-        if($( this ).attr("data-profile_id")){
+        if($( this ).attr("data-profile_id") == 2){
             $('.supervisor-data select option').remove();
             $.ajax({
                 url: '/get-supervisor',
