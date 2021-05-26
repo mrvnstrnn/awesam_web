@@ -7,6 +7,7 @@ use DataTables;
 use Validator;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\UserProgram;
 use App\Models\Permission;
 use App\Models\ProfilePermission;
 
@@ -173,6 +174,13 @@ class ProfileController extends Controller
     {
         try {
             User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
+
+            for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
+                UserProgram::create([
+                    "user_id" => $request->input('user_id'),
+                    "program_id" => $request->input('checkbox_id')[$i],
+                ]);
+            }
             return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);

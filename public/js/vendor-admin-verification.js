@@ -14,10 +14,12 @@ $(document).ready(() => {
             return json.data;
         },
         'createdRow': function(row, data) {
+
+            var suffix = data.suffix == null ? "" : data.suffix;
             $(row).attr('data-user_id', data.user_id);
             $(row).attr('data-profile_id', data.designation);
             $(row).attr('data-profile', data.profile);
-            $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + data.suffix);
+            $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + suffix);
             $(row).addClass('modalSetProfile');
         },
         columns: [
@@ -43,9 +45,6 @@ $(document).ready(() => {
         $("#modal-employee-verification").modal("show");
 
         // window.location.href = "/chapters/"+data;
-
-
-        
     } );
 
     
@@ -91,13 +90,24 @@ $(document).ready(() => {
         var user_id = $(this).attr('data-user_id');
         var profile_id = $(this).attr('data-profile_id');
 
+        
+        var inputElements = document.getElementsByName('vendor_program_id');
+
+        checkbox_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkbox_id.push(inputElements[i].value);
+            }
+        }
+
         // var val = $("select#profile").val();
         $.ajax({
             url: '/assign-profile',
             method: "POST",
             data: {
                 user_id:user_id,
-                profile_id:profile_id
+                profile_id:profile_id,
+                checkbox_id:checkbox_id
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
