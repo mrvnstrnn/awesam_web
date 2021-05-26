@@ -82,7 +82,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/table/request/{request_status}', [VendorController::class, 'getMyRequest'])->name('get.requestDate');
 
-    Route::get('/vendor-agents/{program_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
+    Route::get('/vendor-agents/{vendor_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
+    Route::get('/vendor-supervisors/{vendor_id}', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
+
 
 });
 

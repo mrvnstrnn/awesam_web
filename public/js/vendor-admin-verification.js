@@ -30,6 +30,31 @@ $(document).ready(() => {
     });
 
 
+    $('#employee-agents-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $('#employee-agents-table').attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        'createdRow': function(row, data) {
+        },
+        columns: [
+            { data: "user_id" },
+            { data: "firstname" },
+            { data: "lastname" },
+            { data: "email" },
+        ],
+    });
+
+
     $('#for-verification-table tbody').on('click', 'tr', function () {
                 
         var data = $( this ).attr("data-chapter_id");

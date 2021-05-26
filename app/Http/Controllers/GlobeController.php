@@ -264,16 +264,15 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_agents($program_id)
+    public function vendor_agents($vendor_id)
     {
 
         try {
             $checkAgent = \DB::connection('mysql2')
-                                    ->table('users')
-                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'user_programs.program_id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->where('user_programs.program_id', $program_id)
-                                    ->where('users.profile_id', $program_id)
+                                    ->table('user_details')
+                                    ->join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.vendor_id', $vendor_id)
+                                    ->where('users.profile_id', 2)
                                     ->get();
                                                         
             $dt = DataTables::of($checkAgent);
@@ -284,6 +283,27 @@ class GlobeController extends Controller
             throw $th;
         }
     }
+
+    public function vendor_supervisors($vendor_id)
+    {
+
+        try {
+            $checkAgent = \DB::connection('mysql2')
+                                    ->table('user_details')
+                                    ->join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.vendor_id', $vendor_id)
+                                    ->where('users.profile_id', 3)
+                                    ->get();
+                                                        
+            $dt = DataTables::of($checkAgent);
+            
+            $dt->rawColumns(['photo']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 
 
     public function get_region()
