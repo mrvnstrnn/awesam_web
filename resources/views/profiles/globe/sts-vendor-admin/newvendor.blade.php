@@ -103,11 +103,15 @@
                                         @endphp
 
                                         @foreach ($vendor_profiles as $vendor_profile)
-                                        <div class="form-check">
+                                        {{-- <div class="form-check">
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input" name="vendor_profile_id" id="vendor_profile_id{{ $vendor_profile->id }}" value="{{ $vendor_profile->id }}">
                                                 {{ $vendor_profile->profile_type }}
                                             </label>
+                                        </div> --}}
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="vendor_profile_id{{ $vendor_profile->id }}" name="vendor_profile_id[]" value="{{ $vendor_profile->id }}">
+                                            <label class="form-check-label" for="vendor_profile_id{{ $vendor_profile->id }}">{{ $vendor_profile->profile_type }}</label>
                                         </div>
                                         @endforeach
 
