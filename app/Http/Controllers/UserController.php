@@ -400,9 +400,17 @@ class UserController extends Controller
     public function forverification_list()
     {
         try {
-            $user_details = User::join('user_details', 'user_details.user_id', 'users.id')
-                                    ->where('users.profile_id', null)
-                                    ->get();
+
+            $user_details = \DB::connection('mysql2')
+                ->table('users')
+                ->join('user_details', 'user_details.user_id', 'users.id')
+                ->join('profiles', 'user_details.designation', 'profiles.id')
+                ->where('users.profile_id', null)
+                ->get();
+
+            // $user_details = User::join('user_details', 'user_details.user_id', 'users.id')
+            //                         ->where('users.profile_id', null)
+            //                         ->get();
 
             $dt = DataTables::of($user_details);
             return $dt->make(true);
