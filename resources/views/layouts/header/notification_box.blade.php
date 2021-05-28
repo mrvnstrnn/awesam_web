@@ -11,7 +11,7 @@ class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
         </div>
     </div>
 </div>
-<div>
+<div id="notif-box">
 </div>
 <ul class="nav flex-column">
     <li class="nav-item-divider nav-item"></li>
