@@ -20,9 +20,10 @@ class SiteEndorsement implements ShouldBroadcast
      * @return void
      */
     public $endorsement;
-    public function __construct($data)
+    
+    public function __construct($endorsement)
     {
-        $this->endorsement = $data;
+        $this->endorsement = $endorsement;
     }
 
     /**
@@ -32,7 +33,12 @@ class SiteEndorsement implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('site-endorsement');
+        return new Channel('site-endorsement');
+    }
+
+    public function broadcastAs()
+    {
+        return 'SiteEndorsement';
     }
 }
 
