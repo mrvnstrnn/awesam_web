@@ -19,9 +19,10 @@ class SiteEndorsement implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct()
+    public $endorsement;
+    public function __construct($data)
     {
-        //
+        $this->endorsement = $data;
     }
 
     /**
