@@ -168,6 +168,7 @@
     <script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/vendors/moment/moment.js"></script>
     <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
+    
     {{-- <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script> --}}
@@ -198,6 +199,9 @@
     {{-- <script type="text/javascript" src="/js/calendar.js"></script> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+    </script>
 
     @yield('js_script')
 

@@ -66,7 +66,7 @@ $(document).ready(() => {
         $(".btn-assign-profile").attr('data-profile_id', $( this ).attr("data-profile_id"));
         $(".btn-assign-profile").attr('data-profile', $( this ).attr("data-profile"));
         $(".btn-assign-profile").attr('data-employeename', $( this ).attr("data-employeename"));
-        $('.content-data').html('<H5>Approve ' + $( this ).attr("data-employeename") + "'s account?</H5>");
+        $('#fullname').val($( this ).attr("data-employeename"));
         $("#modal-employee-verification").modal("show");
 
         if($( this ).attr("data-profile_id") == 2){
