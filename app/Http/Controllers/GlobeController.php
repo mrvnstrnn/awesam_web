@@ -10,6 +10,8 @@ use App\Models\Program;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 
+use App\Events\SiteEndorsement;
+
 
 class GlobeController extends Controller
 {
@@ -101,6 +103,8 @@ class GlobeController extends Controller
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 // $new_endorsements = \DB::connection('mysql2')->select('call z_update_data("'.$request->input('sam_id')[$i].'", '.$request->input('data_complete').')');
+
+                SiteEndorsement::dispatch($request->input('sam_id')[$i]." already endorsed");
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
