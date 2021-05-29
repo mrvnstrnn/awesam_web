@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SiteEndorsement implements ShouldBroadcast
+class SiteEndorsementEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -41,5 +41,3 @@ class SiteEndorsement implements ShouldBroadcast
         return 'SiteEndorsement';
     }
 }
-
-

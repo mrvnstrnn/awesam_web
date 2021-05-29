@@ -12,5 +12,5 @@
 
   Echo.channel('site-endorsement')
   .listen('.SiteEndorsement', (e) => {
-      $('#notif-box').append('<div p-2>' + e + '<div class="divider"></div></div>');
+      $('#notif-box').append('<div p-2>' + e.endorsement + '<div class="divider"></div></div>');
   });

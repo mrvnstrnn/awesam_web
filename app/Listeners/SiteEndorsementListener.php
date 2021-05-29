@@ -2,11 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\SiteEndorsement;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Events\SiteEndorsementEvent;
+use App\Notifications\SiteEndorsementNotification;
 
-class SendSiteEndorsementNotification
+class SiteEndorsementListener
 {
     /**
      * Create the event listener.
@@ -21,11 +22,11 @@ class SendSiteEndorsementNotification
     /**
      * Handle the event.
      *
-     * @param  SiteEndorsement  $event
+     * @param  SiteEndorsementEvent  $event
      * @return void
      */
-    public function handle(SiteEndorsement $event)
+    public function handle(SiteEndorsementEvent $event)
     {
-        //
+        \Auth::user()->notify(new SiteEndorsementNotification($event->endorsement));
     }
 }

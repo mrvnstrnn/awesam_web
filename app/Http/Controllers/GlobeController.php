@@ -10,7 +10,9 @@ use App\Models\Program;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 
-use App\Events\SiteEndorsement;
+use App\Events\SiteEndorsementEvent;
+use App\Listeners\SiteEndorsementListener;
+use App\Notifications\SiteEndorsementNotification;
 
 
 class GlobeController extends Controller
@@ -91,7 +93,10 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-            // return response()->json(['error' => true, 'message' =>$request->all()]);
+            // (new SiteEndorsementListener())->handle(
+            //     new SiteEndorsementEvent($request->input('sam_id')[0])
+            // );
+
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -104,7 +109,9 @@ class GlobeController extends Controller
 
                 // $new_endorsements = \DB::connection('mysql2')->select('call z_update_data("'.$request->input('sam_id')[$i].'", '.$request->input('data_complete').')');
 
-                SiteEndorsement::dispatch($request->input('sam_id')[$i]." already endorsed");
+                \Auth::user()->notify(new SiteEndorsementNotification($request->input('sam_id')[$i]));
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
