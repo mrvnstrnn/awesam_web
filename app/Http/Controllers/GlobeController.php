@@ -100,18 +100,20 @@ class GlobeController extends Controller
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
+
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
             
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
+            // $user = \DB::connection('mysql2')->table('stage_activities')->where('profile_id', $profile_id)->get();
+
+            // return response()->json(['error' => false, 'message' => $user]);
+
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                // $new_endorsements = \DB::connection('mysql2')->select('call z_update_data("'.$request->input('sam_id')[$i].'", '.$request->input('data_complete').')');
-
-                \Auth::user()->notify(new SiteEndorsementNotification($request->input('sam_id')[$i]));
-
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+                \Auth::user()->notify(new SiteEndorsementNotification($request->input('sam_id')[$i]));
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
