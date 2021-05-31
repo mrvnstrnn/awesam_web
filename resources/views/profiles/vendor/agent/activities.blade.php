@@ -26,6 +26,10 @@
     </li>
 </ul>
 <div class="tab-content">
+    @php
+        $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        // dd($activities);
+    @endphp
     <div class="tab-pane tabs-animation fade show active" id="tab-content-today" role="tabpanel">
         <div class="row">
             <div class="col-md-7">
@@ -38,25 +42,29 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-warning"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                        @for ($i = 0; $i < count($activities); $i++)
+                            @if (($activities[$i]->start_date <= Carbon\Carbon::now()->toDateString()) && ($activities[$i]->end_date >= Carbon\Carbon::now()->toDateString()))
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-warning"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
+                                                    <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">{{ $activities[$i]->activity_name }}</div>
+                                                <div class="widget-subheading">AYALA TERRACES -  {{ $activities[$i]->sam_id }}</div>
+                                                <div class="widget-subheading">{{ $activities[$i]->start_date }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
-                                        <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
-                                        <div class="widget-subheading">Due Today</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
+                                </li>
+                            @endif
+                        @endfor
+                        {{-- <li class="list-group-item">
                             <div class="todo-indicator bg-focus"></div>
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
@@ -91,7 +99,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>                
 
@@ -205,60 +213,32 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-warning"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                        @for ($i = 0; $i < count($activities); $i++)
+                            @if (
+                            ($activities[$i]->start_date <= Carbon\Carbon::now()->endOfWeek())
+                            && 
+                            ($activities[$i]->end_date >= Carbon\Carbon::now()->startOfWeek())
+                            )
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-warning"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
+                                                    <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">{{ $activities[$i]->activity_name }}</div>
+                                                <div class="widget-subheading">AYALA TERRACES -  {{ $activities[$i]->sam_id }}</div>
+                                                <div class="widget-subheading">{{ $activities[$i]->start_date. " to " .$activities[$i]->end_date }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
-                                        <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
-                                        <div class="widget-subheading">Due Today</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-focus"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox1" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox1">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
-                                        <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
-                                        <div class="widget-subheading">Due Friday : Building Permit Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-primary"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox4" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox4">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
-                                        <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
-                                        <div class="widget-subheading">Due Friday : DOH Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                                </li>
+                            @endif
+                        @endfor
                     </ul>
                 </div>                
 
@@ -372,60 +352,32 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-warning"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                        @for ($i = 0; $i < count($activities); $i++)
+                            @if (
+                            ($activities[$i]->start_date <= new Carbon\Carbon('last day of this month'))
+                            && 
+                            ($activities[$i]->end_date >= new Carbon\Carbon('first day of this month'))
+                            )
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-warning"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" id="exampleCustomCheckbox12" class="custom-control-input">
+                                                    <label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">{{ $activities[$i]->activity_name }}</div>
+                                                <div class="widget-subheading">AYALA TERRACES -  {{ $activities[$i]->sam_id }}</div>
+                                                <div class="widget-subheading">{{ $activities[$i]->start_date }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Create Letter of Intent and Notice to Proceed</div>
-                                        <div class="widget-subheading">AYALA TERRACES -  COLOC-2021-100</div>
-                                        <div class="widget-subheading">Due Today</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-focus"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox1" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox1">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
-                                        <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
-                                        <div class="widget-subheading">Due Friday : Building Permit Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-primary"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox4" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox4">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
-                                        <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
-                                        <div class="widget-subheading">Due Friday : DOH Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                                </li>
+                            @endif
+                        @endfor
                     </ul>
                 </div>                
 

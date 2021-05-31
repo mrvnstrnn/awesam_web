@@ -35,6 +35,7 @@ return [
         ],
 
         'database' => [
+            'database' => env('DB_CONNECTION_SECOND', 'mysql2'),
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
