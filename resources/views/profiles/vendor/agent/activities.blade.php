@@ -31,6 +31,7 @@
     @endphp
     <div class="tab-pane tabs-animation fade show active" id="tab-content-today" role="tabpanel">
         <div class="row">
+            
             <div class="col-md-7">
 
                 <div class="main-card mb-3 card">
@@ -56,49 +57,13 @@
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">{{ $activities[$i]->activity_name }}</div>
                                                 <div class="widget-subheading">{{ $activities[$i]->site_name }} -  {{ $activities[$i]->sam_id }}</div>
-                                                <div class="widget-subheading">{{ $activities[$i]->start_date }}</div>
+                                                <div class="widget-subheading"><small>{{ $activities[$i]->start_date }} to {{ $activities[$i]->end_date }}</small></div>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
                             @endif
                         @endfor
-                        {{-- <li class="list-group-item">
-                            <div class="todo-indicator bg-focus"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox1" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox1">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process RTB Documents</div>
-                                        <div class="widget-subheading">SM FAIRVIEW - COLOC-2021-200</div>
-                                        <div class="widget-subheading">Due Friday : Building Permit Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-primary"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox4" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox4">&nbsp;</label>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Process PAC/DOH</div>
-                                        <div class="widget-subheading">ROBINSONS NOVALICHES - COLOC-2021-300</div>
-                                        <div class="widget-subheading">Due Friday : DOH Application</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li> --}}
                     </ul>
                 </div>                
 
@@ -155,6 +120,7 @@
     </div>
     <div class="tab-pane tabs-animation fade" id="tab-content-this-week" role="tabpanel">
         <div class="row">
+
             <div class="col-md-7">
 
                 <div class="main-card mb-3 card">
@@ -280,7 +246,7 @@
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">{{ $activities[$i]->activity_name }}</div>
                                                 <div class="widget-subheading">{{ $activities[$i]->site_name }} -  {{ $activities[$i]->sam_id }}</div>
-                                                <div class="widget-subheading">{{ $activities[$i]->start_date }}</div>
+                                                <div class="widget-subheading"><small>{{ $activities[$i]->start_date }} to {{ $activities[$i]->end_date }}</small></div>
                                             </div>
                                         </div>
                                     </div>
