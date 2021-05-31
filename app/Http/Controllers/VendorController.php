@@ -13,6 +13,20 @@ use Illuminate\Support\Facades\Mail;
 
 class VendorController extends Controller
 {
+
+    public function add_agent_request(Request $request)
+    {
+
+        return  $request;
+
+
+
+
+    }
+
+
+
+    
     public function add_vendor(Request $request)
     {
         try {

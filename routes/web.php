@@ -81,6 +81,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/assigned-sites/columns', [GlobeController::class, 'agent_assigned_sites_columns'])->name('agent_assigned_sites.columns');
     
     Route::get('/table/request/{request_status}', [VendorController::class, 'getMyRequest'])->name('get.requestDate');
+    Route::post('/requests/add', [VendorController::class, 'add_agent_request'])->name('add_agent_request');
+
 
     Route::get('/vendor-agents/{vendor_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors/{vendor_id}', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
