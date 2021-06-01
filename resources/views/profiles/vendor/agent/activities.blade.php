@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        <div id="accordion" class="accordion-wrapper mb-3">
+                        <div id="accordion" class="accordion-wrapper">
                             @for ($m = 0; $m < count($activities); $m++)
                                 @if (($activities[$m]->start_date <= Carbon\Carbon::now()->toDateString()) && ($activities[$m]->end_date >= Carbon\Carbon::now()->toDateString()))
                                     @php
@@ -194,6 +194,14 @@
                             @endfor
                         </div>
                     </ul>
+                    <div class="card-footer justify-content-center">
+                        <a href="/assigned-sites" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg ">
+                            <span class="mr-2 opacity-7">
+                                <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
+                            </span>
+                            <span class="mr-1">View All Sites</span>
+                        </a>
+                    </div>
                 </div>                
 
             </div>
@@ -208,8 +216,9 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        @for ($l = 0; $l < count($activities); $l++)
-                            @if (($activities[$l]->start_date <= Carbon\Carbon::now()->toDateString()) && ($activities[$l]->end_date >= Carbon\Carbon::now()->toDateString()))
+                        @for ($j = 0; $j < count(array_keys($activities_groups)); $j++)
+                        {{-- @for ($l = 0; $l < count($activities); $l++) --}}
+                            @if (($activities_groups[array_keys($activities_groups)[$j]][0]->start_date <= Carbon\Carbon::now()->toDateString()) && ($activities_groups[array_keys($activities_groups)[$j]][0]->end_date >= Carbon\Carbon::now()->toDateString()))
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-warning"></div>
                                 <div class="widget-content p-0">
@@ -218,12 +227,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$l]->site_name }}
-                                                <div class="badge badge-warning ml-2">
-                                                    {{ $activities[$l]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$l]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
@@ -238,7 +248,7 @@
                                 </div>
                                 
                             </li>
-                        @elseif($activities[$l]->start_date <= Carbon\Carbon::now()->toDateString() && $activities[$l]->activity_complete == false)
+                        @elseif($activities_groups[array_keys($activities_groups)[$j]][0]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][0]->activity_complete == false)
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-danger"></div>
                                 <div class="widget-content p-0">
@@ -247,12 +257,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$l]->site_name }}
-                                                <div class="badge badge-danger ml-2">
-                                                    {{ $activities[$l]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$l]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
@@ -289,7 +300,7 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        <div id="accordion" class="accordion-wrapper mb-3">
+                        <div id="accordion" class="accordion-wrapper">
                             @for ($m = 0; $m < count($activities); $m++)
                                 @if ($activities[$m]->start_date <= Carbon\Carbon::now()->endOfWeek() && $activities[$m]->end_date >= Carbon\Carbon::now()->startOfWeek())
                                     @php
@@ -389,6 +400,14 @@
                             @endfor
                         </div>
                     </ul>
+                    <div class="card-footer justify-content-center">
+                        <a href="/assigned-sites" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg ">
+                            <span class="mr-2 opacity-7">
+                                <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
+                            </span>
+                            <span class="mr-1">View Al Sites</span>
+                        </a>
+                    </div>
                 </div>                
 
             </div>
@@ -403,12 +422,15 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        @for ($l = 0; $l < count($activities); $l++)
-                            @if (
+                        @for ($j = 0; $j < count(array_keys($activities_groups)); $j++)
+                        {{-- @for ($l = 0; $l < count($activities); $l++) --}}
+                            @if (($activities_groups[array_keys($activities_groups)[$j]][0]->start_date <= Carbon\Carbon::now()->endOfWeek()) && ($activities_groups[array_keys($activities_groups)[$j]][0]->end_date >= Carbon\Carbon::now()->startOfWeek()))
+                        {{-- @for ($l = 0; $l < count($activities); $l++) --}}
+                            {{-- @if (
                             ($activities[$l]->start_date <= Carbon\Carbon::now()->endOfWeek())
                             && 
                             ($activities[$l]->end_date >= Carbon\Carbon::now()->startOfWeek())
-                            )
+                            ) --}}
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-warning"></div>
                                 <div class="widget-content p-0">
@@ -417,12 +439,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$l]->site_name }}
-                                                <div class="badge badge-warning ml-2">
-                                                    {{ $activities[$l]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$l]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
@@ -437,7 +460,7 @@
                                 </div>
                             </li>
 
-                            @elseif($activities[$l]->start_date <= Carbon\Carbon::now()->startOfWeek() && $activities[$l]->activity_complete == false)
+                            @elseif($activities_groups[array_keys($activities_groups)[$j]][0]->start_date <= Carbon\Carbon::now()->startOfWeek() && $activities_groups[array_keys($activities_groups)[$j]][0]->activity_complete == false)
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-danger"></div>
                                 <div class="widget-content p-0">
@@ -446,12 +469,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$l]->site_name }}
-                                                <div class="badge badge-danger ml-2">
-                                                    {{ $activities[$l]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$l]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
@@ -487,7 +511,7 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">        
-                        <div id="accordion" class="accordion-wrapper mb-3">
+                        <div id="accordion" class="accordion-wrapper">
                             @for ($m = 0; $m < count($activities); $m++)
                                 @if ($activities[$m]->start_date <= new Carbon\Carbon('last day of this month') && $activities[$m]->end_date >= new Carbon\Carbon('first day of this month'))
                                     @php
@@ -587,6 +611,14 @@
                             @endfor
                         </div>
                     </ul>
+                    <div class="card-footer justify-content-center">
+                        <a href="/assigned-sites" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg ">
+                            <span class="mr-2 opacity-7">
+                                <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
+                            </span>
+                            <span class="mr-1">View Al Sites</span>
+                        </a>
+                    </div>
                 </div>                
 
             </div>
@@ -601,11 +633,11 @@
                         </div>
                     </div>
                     <ul class="todo-list-wrapper list-group list-group-flush">
-                        @for ($i = 0; $i < count($activities); $i++)
+                        @for ($j = 0; $j < count(array_keys($activities_groups)); $j++)
                             @if (
-                            ($activities[$i]->start_date <= new Carbon\Carbon('last day of this month'))
+                            ($activities_groups[array_keys($activities_groups)[$j]][0]->start_date <= new Carbon\Carbon('last day of this month'))
                             && 
-                            ($activities[$i]->end_date >= new Carbon\Carbon('first day of this month'))
+                            ($activities_groups[array_keys($activities_groups)[$j]][0]->end_date >= new Carbon\Carbon('first day of this month'))
                             )
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-warning"></div>
@@ -615,12 +647,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$i]->site_name }}
-                                                <div class="badge badge-warning ml-2">
-                                                    {{ $activities[$i]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$i]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
@@ -634,7 +667,7 @@
                                     </div>
                                 </div>
                             </li>
-                            @elseif ($activities[$i]->end_date <= new Carbon\Carbon('first day of this month') && $activities[$i]->activity_complete == false)
+                            @elseif ($activities_groups[array_keys($activities_groups)[$j]][0]->end_date <= new Carbon\Carbon('first day of this month') && $activities_groups[array_keys($activities_groups)[$j]][0]->activity_complete == false)
                             <li class="list-group-item">
                                 <div class="todo-indicator bg-danger"></div>
                                 <div class="widget-content p-0">
@@ -643,12 +676,13 @@
                                         </div>
                                         <div class="widget-content-left">
                                             <div class="widget-heading">
-                                                {{ $activities[$i]->site_name }}
-                                                <div class="badge badge-danger ml-2">
-                                                    {{ $activities[$i]->activity_name }}</div>
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->site_name }}
                                             </div>
                                             <div class="widget-subheading">
-                                                {{ $activities[$i]->sam_id }}
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
+                                            </div>
+                                            <div class="widget-subheading">
+                                                {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                             </div>
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
