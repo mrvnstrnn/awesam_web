@@ -55,6 +55,7 @@
     @endphp
     <div class="tab-pane tabs-animation fade show active" id="tab-content-today" role="tabpanel">
         <div class="row">
+            
             <div class="col-md-7">
 
                 <div class="main-card mb-3 card">
@@ -88,7 +89,7 @@
                                 <div class="card">
                                   <div class="card-header" id="{{ array_keys($activities_groups)[$j] }}">
                                     <h2 class="mb-0">
-                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
+                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#dailycollapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
                                         {{ array_keys($activities_groups)[$j] }}
                                             <div class="badge badge-success ml-2">
                                                 {{ count($activities_groups[array_keys($activities_groups)[$j]]) }}
@@ -97,7 +98,7 @@
                                     </h2>
                                   </div>
                               
-                                  <div id="collapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
+                                  <div id="dailycollapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
 
                                     @for ($k = 0; $k < count($activities_groups[array_keys($activities_groups)[$j]]); $k++)
 
@@ -223,6 +224,7 @@
     </div>
     <div class="tab-pane tabs-animation fade" id="tab-content-this-week" role="tabpanel">
         <div class="row">
+
             <div class="col-md-7">
 
                 <div class="main-card mb-3 card">
@@ -254,7 +256,7 @@
                                 <div class="card">
                                   <div class="card-header" id="{{ array_keys($activities_groups)[$j] }}">
                                     <h2 class="mb-0">
-                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
+                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#weeklycollapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
                                         {{ array_keys($activities_groups)[$j] }}
                                         <div class="badge badge-success ml-2">
                                             {{ count($activities_groups[array_keys($activities_groups)[$j]]) }}
@@ -263,7 +265,7 @@
                                     </h2>
                                   </div>
                               
-                                  <div id="collapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
+                                  <div id="weeklycollapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
 
                                     @for ($k = 0; $k < count($activities_groups[array_keys($activities_groups)[$j]]); $k++)
                                         @if (
@@ -405,8 +407,7 @@
                         Activities
                         </div>
                     </div>
-                    <ul class="todo-list-wrapper list-group list-group-flush">
-                        
+                    <ul class="todo-list-wrapper list-group list-group-flush">        
                         @for ($m = 0; $m < count($activities); $m++)
                             @if ($activities[$m]->start_date <= new Carbon\Carbon('last day of this month') && $activities[$m]->end_date >= new Carbon\Carbon('first day of this month'))
                                 @php
@@ -429,7 +430,7 @@
                                 <div class="card">
                                   <div class="card-header" id="{{ array_keys($activities_groups)[$j] }}">
                                     <h2 class="mb-0">
-                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
+                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#monthlycollapse{{ $j }}" aria-expanded="true" aria-controls="collapse{{ $j }}">
                                         {{ array_keys($activities_groups)[$j] }}
                                         <div class="badge badge-success ml-2">
                                             {{ count($activities_groups[array_keys($activities_groups)[$j]]) }}
@@ -438,7 +439,7 @@
                                     </h2>
                                   </div>
                               
-                                  <div id="collapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
+                                  <div id="monthlycollapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : ""}}" aria-labelledby="{{ array_keys($activities_groups)[$j] }}" data-parent="#{{ array_keys($activities_groups)[$j] }}">
 
                                     @for ($k = 0; $k < count($activities_groups[array_keys($activities_groups)[$j]]); $k++)
                                         @if (
