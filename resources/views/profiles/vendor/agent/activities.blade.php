@@ -232,11 +232,11 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-success">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
@@ -264,11 +264,11 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-danger">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
@@ -448,11 +448,11 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-success">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
@@ -480,11 +480,11 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-danger">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
@@ -660,11 +660,11 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-success">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
@@ -691,12 +691,12 @@
                                             <div class="widget-subheading">
                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][0]->sam_id }}
                                             </div>
-                                            <div class="widget-subheading">
+                                            {{-- <div class="widget-subheading"> --}}
                                                 <div class="badge badge-danger">
                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][0]->activity_name }}
                                                 </div>
                                                 
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                         <div class="widget-content-right widget-content-actions">
                                             <button class="border-0 btn-transition btn btn-outline-success">
