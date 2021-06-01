@@ -38,7 +38,8 @@
             $result = array();
 
             for ($i=0; $i < count($data); $i++) { 
-                if(array_key_exists($key, $data[$i])){
+                // if(array_key_exists($key, $data[$i])){
+                if(isset($key) == $data[$i]) {
                     $result[$data[$i]->$key][] = $data[$i];
                 } else {
                     $result[""][] = $data[$i];
