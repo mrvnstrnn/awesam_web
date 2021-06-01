@@ -123,9 +123,9 @@
                                                                 - 
                                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                             <div class="widget-subheading">
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                 to 
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -155,9 +155,9 @@
                                                                     - 
                                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                                 <div class="widget-subheading">
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                     to 
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -293,9 +293,10 @@
                                                                 - 
                                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                             <div class="widget-subheading">
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                 to 
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,9 +326,9 @@
                                                                     - 
                                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                                 <div class="widget-subheading">
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                     to 
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -467,9 +468,9 @@
                                                                 - 
                                                                 {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                             <div class="widget-subheading">
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                 to 
-                                                                {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -498,9 +499,9 @@
                                                                     - 
                                                                     {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}</div>
                                                                 <div class="widget-subheading">
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }} 
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date)) }} 
                                                                     to 
-                                                                    {{ $activities_groups[array_keys($activities_groups)[$j]][$k]->start_date }}</div>
+                                                                    {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
