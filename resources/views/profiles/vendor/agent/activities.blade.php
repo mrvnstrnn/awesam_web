@@ -125,6 +125,21 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr>
+                                                        <ul>
+                                                        @php
+                                                            $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
+
+                                                            foreach ($json as $sub_activity){
+                                                                if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
+
+                                                                    // $show_sub_activity[] = $sub_activitiy;
+                                                                    echo "<li>" . $sub_activity['sub_activity_name'] . "</li>";
+
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        </ul>
                                                     </li>
 
                                                 @elseif($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete == false)
@@ -155,6 +170,21 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr>
+                                                        <ul>
+                                                        @php
+                                                            $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
+
+                                                            foreach ($json as $sub_activity){
+                                                                if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
+
+                                                                    // $show_sub_activity[] = $sub_activitiy;
+                                                                    echo "<li>" . $sub_activity['sub_activity_name'] . "</li>";
+
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        </ul>
                                                     </li>
                                                 @endif
                                             @endfor
@@ -206,6 +236,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                             </li>
                         @elseif($activities[$l]->start_date <= Carbon\Carbon::now()->toDateString() && $activities[$l]->activity_complete == false)
                             <li class="list-group-item">
