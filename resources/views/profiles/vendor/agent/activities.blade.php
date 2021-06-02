@@ -22,9 +22,13 @@
         margin-right: 3px;
     }
 
-    .sub_activity_box: {
-        background: #e0f3ff;
-        
+    .show_subs_btn {
+        cursor: pointer;
+    }
+    .show_subs_btn:hover {
+        cursor: pointer;
+        font-weight: bold;
+        color: blue;
     }
 
 </style>
@@ -146,11 +150,14 @@
                                                                         to 
                                                                         {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                                 </div>
+                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li">
+                                                                    <i class="lnr-chevron-down-circle"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         
                                                     </li>
-                                                    <li class="list-group-item">
+                                                    <li id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" class="list-group-item d-none">
                                                         <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-danger" >
                                                             <div class="row lister">
                                                                 @php
@@ -211,10 +218,13 @@
                                                                             {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li">
+                                                                    <i class="lnr-chevron-down-circle"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item">
+                                                    <li id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" class="list-group-item d-none sub_activity_li">
                                                         <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-danger" >
                                                             <div class="row lister">
                                                                 @php
@@ -830,6 +840,14 @@
 
 $(document).ready(function() {
 
+
+    
+    $(".show_subs_btn").on('click', function(e){
+        e.preventDefault();
+        $(".sub_activity_li").addClass('d-none');
+        $("#" + $(this).attr("data-show_li")).toggleClass('d-none');
+
+    });
 
     $(".sub_activity").on('click', function(e){
         e.preventDefault();
