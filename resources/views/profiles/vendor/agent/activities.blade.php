@@ -12,6 +12,10 @@
         font-size: 11px;
         padding:3px 10px;
     }
+    .sub_activity:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
 
     .sub_activity::before {
         content: ">";
@@ -45,6 +49,7 @@
 <div class="tab-content">
     @php
         $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        // dd($activities);
 
         function date_sort($a, $b) {
             return strtotime($a->start_date) - strtotime($b->start_date);
@@ -154,7 +159,7 @@
                                                                             if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
     
                                                                                 // $show_sub_activity[] = $sub_activitiy;
-                                                                                echo "<div class='col-md-6 sub_activity'>" . $sub_activity['sub_activity_name'] . "</div>";
+                                                                                echo "<div class='col-md-6 sub_activity' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
     
                                                                             }
                                                                         }
@@ -163,8 +168,6 @@
                                                             </div>
                                                         </div>
                                                     </li>
-
-
                                                 @elseif($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete == false)
                                                     <li class="list-group-item">
                                                         <div class="todo-indicator bg-danger"></div>
@@ -204,7 +207,7 @@
                                                                             if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
     
                                                                                 // $show_sub_activity[] = $sub_activitiy;
-                                                                                echo "<div class='col-md-6 sub_activity'>" . $sub_activity['sub_activity_name'] . "</div>";
+                                                                                echo "<div class='col-md-6 sub_activity' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
     
                                                                             }
                                                                         }
@@ -749,21 +752,22 @@
 @endsection
 
 @section('modals')
-<div class="modal fade" id="list-group-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade" id="modal-sub_activity" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <h5 class="modal-title">Site Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
-                Body
+            <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn btn-outline-success" data-dismiss="modal" aria-label="Close">
+                    Close
+                </button>
+                <button type="button" class="btn btn btn-success" data-complete="false" id="" data-href="">Save</button>
             </div>
         </div>
     </div>
@@ -771,11 +775,45 @@
 @endsection
 
 @section('js_script')
-    {{-- <script>
-        $(".list-group-item").on('click', function(e){
-            e.preventDefault();
-            $("#list-group-modal").modal("show");
-            $(".modal-title").text(e.target.children[1].children[0].innerHTML);
-        });
-    </script> --}}
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+    <script>
+$(document).ready(function() {
+
+
+    $(".sub_activity").on('click', function(e){
+        e.preventDefault();
+        $(".modal-title").text($(this).attr('data-sub_activity_name'));
+
+        $('.modal-body').html("");
+
+        if($(this).attr('data-action')=="doc maker"){
+
+            var content = "";
+
+            $('.modal-body').html('<div id="summernote" name="editordata">' + content + '</div>');
+            $('#summernote').summernote({
+                height: 300,
+                minHeight: null,
+                maxHeight: null,
+                focus: true, 
+            });
+        }
+        else if($(this).attr('data-action')=="doc upload"){
+
+            var content = '<div id="uploader" class="text-center align-middle col-md-12" style="height: 100px; background-color: white; border: 2px dashed blue; vertical-align: middle;">Upload</div>';
+            
+            $('.modal-body').html(content);
+
+        }
+
+        $("#modal-sub_activity").modal("show");
+    });
+
+
+
+});        
+    </script>
 @endsection
