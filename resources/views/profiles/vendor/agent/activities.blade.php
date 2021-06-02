@@ -27,12 +27,6 @@
         
     }
 
-.dropzone { border: 2px dashed #0087F7; border-radius: 5px; background: white; }
-.dropzone .dz-message { font-weight: 400; }
-.dropzone .dz-message .note { font-size: 0.8em; font-weight: 200; display: block; margin-top: 1.4rem; }
-
-
-
 </style>
 
 
@@ -174,19 +168,22 @@
                                                                 @endphp
                                                             </div>
                                                             <div class="row action_box d-none">
-                                                                
-
-
-                                                                <form action="/drop" style="margin-top:0px; 2px dashed rgb(0, 135, 247);" class="col-md-12 p-0 dropzone" id="uploadFile_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <div class="dz-message">
-                                                                        Drag 'n' Drop Files<br>
+                                                                <form class="w-100">                                                          
+                                                                <div class="position-relative form-group mb-2 px-2">
+                                                                    <label id="" for="doc_upload[]" class="doc_upload_label">Email</label>
+                                                                    <div class="input-group">
+                                                                        <input type="file" name="doc_upload[]" class="p-1 form-control">
                                                                     </div>
-                                                                
+                                                                </div>
+                                                                <div class="position-relative form-group w-100 mb-0 px-2">
+                                                                    <button type="button" class="btn btn-sm btn-primary float-right" data-complete="false" id="" data-href="">Upload</button>                                                    
+                                                                    <button type="button" class="cancel_uploader btn btn-sm btn-outline-danger float-right mr-1" data-dismiss="modal" aria-label="Close">
+                                                                        Cancel
+                                                                    </button>
+                                                                </div>
                                                                 </form>
-                                                            
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </li>
                                                 @elseif($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete == false)
                                                     <li class="list-group-item">
