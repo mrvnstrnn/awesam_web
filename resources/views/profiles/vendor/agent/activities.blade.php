@@ -150,8 +150,8 @@
                                                         
                                                     </li>
                                                     <li class="list-group-item">
-                                                        <div class="card-shadow-primary border mb-0 card card-body border-warning">
-                                                            <div class="row">
+                                                        <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-danger" >
+                                                            <div class="row lister">
                                                                 @php
                                                                     $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
                                                                     if ($json != null) {
@@ -159,12 +159,20 @@
                                                                             if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
     
                                                                                 // $show_sub_activity[] = $sub_activitiy;
-                                                                                echo "<div class='col-md-6 sub_activity' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
+                                                                                echo "<div class='col-md-6 sub_activity' data-sam_id='" . $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id ."'  data-activity_id='" . $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
     
                                                                             }
                                                                         }
                                                                     }   
                                                                 @endphp
+                                                            </div>
+                                                            <div class="row action_box d-none">
+                                                                <div class="position-relative form-group pl-3">
+                                                                    <label for="exampleFile" class="">File</label>
+                                                                    <input name="file" id="exampleFile" type="file" class="form-control-file">
+                                                                    <small class="form-text text-muted">
+                                                                    </small>
+                                                                </div>                                                        
                                                             </div>
                                                         </div>
                                                     </li>
@@ -198,8 +206,8 @@
                                                         </div>
                                                     </li>
                                                     <li class="list-group-item">
-                                                        <div class="card-shadow-primary border mb-0 card card-body border-danger">
-                                                            <div class="row">
+                                                        <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-danger" >
+                                                            <div class="row lister">
                                                                 @php
                                                                     $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
                                                                     if ($json != null) {
@@ -207,12 +215,20 @@
                                                                             if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
     
                                                                                 // $show_sub_activity[] = $sub_activitiy;
-                                                                                echo "<div class='col-md-6 sub_activity' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
+                                                                                echo "<div class='col-md-6 sub_activity' data-sam_id='" . $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id ."'  data-activity_id='" . $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
     
                                                                             }
                                                                         }
                                                                     }   
                                                                 @endphp
+                                                            </div>
+                                                            <div class="row action_box d-none">
+                                                                <div class="position-relative form-group pl-3">
+                                                                    <label for="exampleFile" class="">File</label>
+                                                                    <input name="file" id="exampleFile" type="file" class="form-control-file">
+                                                                    <small class="form-text text-muted">
+                                                                    </small>
+                                                                </div>                                                        
                                                             </div>
                                                         </div>
                                                     </li>
@@ -785,11 +801,11 @@ $(document).ready(function() {
 
     $(".sub_activity").on('click', function(e){
         e.preventDefault();
-        $(".modal-title").text($(this).attr('data-sub_activity_name'));
-
-        $('.modal-body').html("");
 
         if($(this).attr('data-action')=="doc maker"){
+
+            $(".modal-title").text($(this).attr('data-sub_activity_name'));
+            $('.modal-body').html("");
 
             var content = "";
 
@@ -800,16 +816,31 @@ $(document).ready(function() {
                 maxHeight: null,
                 focus: true, 
             });
+            $("#modal-sub_activity").modal("show");
         }
+
         else if($(this).attr('data-action')=="doc upload"){
 
-            var content = '<div id="uploader" class="text-center align-middle col-md-12" style="height: 100px; background-color: white; border: 2px dashed blue; vertical-align: middle;">Upload</div>';
+
+            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') ;
+
+            $('.lister').removeClass("d-none");
+            $('.action_box').addClass("d-none");
+
+            $(where + " .lister").toggleClass("d-none");
+            $(where + " .action_box").toggleClass("d-none");
             
-            $('.modal-body').html(content);
+            // console.log( $("#sub_activity_COLOC-000007").attr("class") );
+            
+            
+            // alert("dds");
+
+            // var content = '<div id="uploader" class="text-center align-middle col-md-12" style="height: 100px; background-color: white; border: 2px dashed blue; vertical-align: middle;">Upload</div>';
+            
+            // $('.modal-body').html(content);
 
         }
 
-        $("#modal-sub_activity").modal("show");
     });
 
 
