@@ -235,19 +235,21 @@
                                                                 @endphp
                                                             </div>
                                                             <div class="row action_box d-none">
-                                                                
-
-
-                                                                    <form action="/drop" style="margin-top:0px; 2px dashed rgb(0, 135, 247);" class="col-md-12 p-0 dropzone" id="uploadFile_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="dz-message">
-                                                                            Drag 'n' Drop Files<br>
-                                                                        </div>
-                                                                    
-                                                                    </form>
-                                                                
+                                                                <form class="w-100">                                                          
+                                                                <div class="position-relative form-group mb-2 px-2">
+                                                                    <label id="" for="doc_upload[]" class="doc_upload_label">Email</label>
+                                                                    <div class="input-group">
+                                                                        <input type="file" name="doc_upload[]" class="p-1 form-control">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative form-group w-100 mb-0 px-2">
+                                                                    <button type="button" class="btn btn-sm btn-primary float-right" data-complete="false" id="" data-href="">Upload</button>                                                    
+                                                                    <button type="button" class="cancel_uploader btn btn-sm btn-outline-danger float-right mr-1" data-dismiss="modal" aria-label="Close">
+                                                                        Cancel
+                                                                    </button>
+                                                                </div>
+                                                                </form>
                                                             </div>
-
                                                         </div>
                                                     </li>
                                                 @endif
@@ -798,7 +800,7 @@
             <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn btn-outline-success" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
                     Close
                 </button>
                 <button type="button" class="btn btn btn-success" data-complete="false" id="" data-href="">Save</button>
@@ -810,13 +812,14 @@
 
 <DIV id="preview-template" style="display: none;">
     <DIV class="dz-preview dz-file-preview">
-    <DIV class="dz-image"><IMG data-dz-thumbnail=""></DIV>
-    <DIV class="dz-details">
-    <DIV class="dz-size"><SPAN data-dz-size=""></SPAN></DIV>
-    <DIV class="dz-filename"><SPAN data-dz-name=""></SPAN></DIV></DIV>
-    <DIV class="dz-progress"><SPAN class="dz-upload" 
-    data-dz-uploadprogress=""></SPAN></DIV>
-    <DIV class="dz-error-message"><SPAN data-dz-errormessage=""></SPAN>
+        <DIV class="dz-image"><IMG data-dz-thumbnail=""></DIV>
+        <DIV class="dz-details">
+            <DIV class="dz-size"><SPAN data-dz-size=""></SPAN></DIV>
+            <DIV class="dz-filename"><SPAN data-dz-name=""></SPAN></DIV>
+        </DIV>
+        <DIV class="dz-progress"><SPAN class="dz-upload" data-dz-uploadprogress=""></SPAN></DIV>
+        <DIV class="dz-error-message"><SPAN data-dz-errormessage=""></SPAN></DIV>
+    </DIV>
 </DIV>
 @endsection
 
@@ -825,13 +828,8 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/min/dropzone.min.js"></script>
-
-
 
 <script>
-    Dropzone.autoDiscover = false;
 
 $(document).ready(function() {
 
@@ -867,80 +865,14 @@ $(document).ready(function() {
             $(where + " .lister").toggleClass("d-none");
             $(where + " .action_box").toggleClass("d-none");
 
-            var dropzone = new Dropzone('#uploadFile_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id'), {
-            previewTemplate: document.querySelector('#preview-template').innerHTML,
-            parallelUploads: 3,
-            thumbnailHeight: 180,
-            thumbnailWidth: 180,
-            maxFilesize: 6,
-            filesizeBase: 1500,
-            thumbnail: function (file, dataUrl) {
-                if (file.previewElement) {
-                    file.previewElement.classList.remove("dz-file-preview");
-                    var images = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
-                    for (var i = 0; i < images.length; i++) {
-                        var thumbnailElement = images[i];
-                        thumbnailElement.alt = file.name;
-                        thumbnailElement.src = dataUrl;
-                    }
-                    setTimeout(function () {
-                        file.previewElement.classList.add("dz-image-preview");
-                    }, 1);
-                }
-            }
-        });
-        
-        var minSteps = 6,
-            maxSteps = 60,
-            timeBetweenSteps = 100,
-            bytesPerStep = 100000;
-
-        dropzone.uploadFiles = function (files) {
-            var self = this;
-
-            for (var i = 0; i < files.length; i++) {
-
-                var file = files[i];
-                totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
-
-                for (var step = 0; step < totalSteps; step++) {
-                    var duration = timeBetweenSteps * (step + 1);
-                    setTimeout(function (file, totalSteps, step) {
-                        return function () {
-                            file.upload = {
-                                progress: 100 * (step + 1) / totalSteps,
-                                total: file.size,
-                                bytesSent: (step + 1) * file.size / totalSteps
-                            };
-
-                            self.emit('uploadprogress', file, file.upload.progress, file.upload
-                                .bytesSent);
-                            if (file.upload.progress == 100) {
-                                file.status = Dropzone.SUCCESS;
-                                self.emit("success", file, 'success', null);
-                                self.emit("complete", file);
-                                self.processQueue();
-                            }
-                        };
-                    }(file, totalSteps, step), duration);
-                }
-            }
-        }    
-
-            
-            // console.log( $("#sub_activity_COLOC-000007").attr("class") );
-            
-            
-            // alert("dds");
-
-            // var content = '<div id="uploader" class="text-center align-middle col-md-12" style="height: 100px; background-color: white; border: 2px dashed blue; vertical-align: middle;">Upload</div>';
-            
-            // $('.modal-body').html(content);
-
+            $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
         }
-
     });
 
+    $(".cancel_uploader").on('click', function(e){
+            $('.lister').removeClass("d-none");
+            $('.action_box').addClass("d-none");
+    });
 
 
 
