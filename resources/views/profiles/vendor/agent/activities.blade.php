@@ -27,16 +27,10 @@
         
     }
 
-    .dropzone {
-        margin-top:0px;
-        width: "100%";
-        /* max-width: "100%"; */
-        margin-left: auto;
-        margin-right: auto;
-        margin: 0px 0 0 0;
-        background: #e3e6ff;
-        border: 1px dashed blue;
-    }
+.dropzone { border: 2px dashed #0087F7; border-radius: 5px; background: white; }
+.dropzone .dz-message { font-weight: 400; }
+.dropzone .dz-message .note { font-size: 0.8em; font-weight: 200; display: block; margin-top: 1.4rem; }
+
 
 
 </style>
@@ -180,14 +174,19 @@
                                                                 @endphp
                                                             </div>
                                                             <div class="row action_box d-none">
-                                                                <div class="position-relative form-group pl-3">
-                                                                    <label for="exampleFile" class="">File</label>
-                                                                    <input name="file" id="exampleFile" type="file" class="form-control-file">
-                                                                    <small class="form-text text-muted">
-                                                                    </small>
-                                                                </div>                                                        
-                                                            </div>
+                                                                
+
+
+                                                                <form action="/drop" style="margin-top:0px; 2px dashed rgb(0, 135, 247);" class="col-md-12 p-0 dropzone" id="uploadFile_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    <div class="dz-message">
+                                                                        Drag 'n' Drop Files<br>
+                                                                    </div>
+                                                                
+                                                                </form>
+                                                            
                                                         </div>
+                                                    </div>
                                                     </li>
                                                 @elseif($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete == false)
                                                     <li class="list-group-item">
@@ -239,17 +238,16 @@
                                                                 
 
 
-                                                                    <form action="/drop" style="margin-top:0px;" class="col-md-12 p-0 dropzone" id="uploadFile_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" enctype="multipart/form-data">
+                                                                    <form action="/drop" style="margin-top:0px; 2px dashed rgb(0, 135, 247);" class="col-md-12 p-0 dropzone" id="uploadFile_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <div class="dz-message">
                                                                             Drag 'n' Drop Files<br>
                                                                         </div>
-                                                                    </div>
                                                                     
                                                                     </form>
                                                                 
-                                                                
                                                             </div>
+
                                                         </div>
                                                     </li>
                                                 @endif
@@ -808,6 +806,18 @@
         </div>
     </div>
 </div>
+
+
+<DIV id="preview-template" style="display: none;">
+    <DIV class="dz-preview dz-file-preview">
+    <DIV class="dz-image"><IMG data-dz-thumbnail=""></DIV>
+    <DIV class="dz-details">
+    <DIV class="dz-size"><SPAN data-dz-size=""></SPAN></DIV>
+    <DIV class="dz-filename"><SPAN data-dz-name=""></SPAN></DIV></DIV>
+    <DIV class="dz-progress"><SPAN class="dz-upload" 
+    data-dz-uploadprogress=""></SPAN></DIV>
+    <DIV class="dz-error-message"><SPAN data-dz-errormessage=""></SPAN>
+</DIV>
 @endsection
 
 @section('js_script')
@@ -858,7 +868,7 @@ $(document).ready(function() {
             $(where + " .action_box").toggleClass("d-none");
 
             var dropzone = new Dropzone('#uploadFile_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id'), {
-            // previewTemplate: document.querySelector('#preview-template').innerHTML,
+            previewTemplate: document.querySelector('#preview-template').innerHTML,
             parallelUploads: 3,
             thumbnailHeight: 180,
             thumbnailWidth: 180,
