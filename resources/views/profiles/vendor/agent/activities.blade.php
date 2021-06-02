@@ -18,12 +18,14 @@
     }
 
     .sub_activity::before {
+        font-family: "Linearicons-Free";
         content: ">";
         margin-right: 3px;
     }
 
     .show_subs_btn {
         cursor: pointer;
+        font-size: 20px;
     }
     .show_subs_btn:hover {
         cursor: pointer;
@@ -150,15 +152,15 @@
                                                                         to 
                                                                         {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                                 </div>
-                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li">
+                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" data-chevron="down">
                                                                     <i class="lnr-chevron-down-circle"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         
                                                     </li>
-                                                    <li id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" class="list-group-item d-none">
-                                                        <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-danger" >
+                                                    <li id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" class="list-group-item sub_activity_li d-none">
+                                                        <div id="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}" class="card-shadow-primary border mb-0 card card-body border-warning" >
                                                             <div class="row lister">
                                                                 @php
                                                                     $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
@@ -218,7 +220,7 @@
                                                                             {{ date('M d, Y', strtotime($activities_groups[array_keys($activities_groups)[$j]][$k]->end_date)) }}</div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li">
+                                                                <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->sam_id }}_{{ $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id }}_li" data-chevron="down">
                                                                     <i class="lnr-chevron-down-circle"></i>
                                                                 </div>
                                                             </div>
@@ -844,9 +846,29 @@ $(document).ready(function() {
     
     $(".show_subs_btn").on('click', function(e){
         e.preventDefault();
+        
+        // RESET
         $(".sub_activity_li").addClass('d-none');
+        $('.show_subs_btn').html('<i class="lnr-chevron-down-circle"></i>');
+
+
         $("#" + $(this).attr("data-show_li")).toggleClass('d-none');
 
+        // alert($(this).attr("data-chevron"));
+
+        if($(this).attr("data-chevron") === "down"){
+            var chevronUp = '<i class="lnr-chevron-up-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show Sub Activities"></i>';
+            $(this).attr('data-chevron','up');
+            console.log('down to up');
+        } else {
+            var chevronUp = '<i class="lnr-chevron-down-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show Sub Activities"></i>';
+            $(this).attr('data-chevron','down');
+            console.log('up to down');
+            $(".sub_activity_li").addClass('d-none');
+            
+        }
+
+        $(this).html(chevronUp);
     });
 
     $(".sub_activity").on('click', function(e){
