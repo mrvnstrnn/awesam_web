@@ -2,10 +2,27 @@
 
 @section('content')
 
+
+
 <style>
-    .list-group-item {
+    /* .list-group-item {
         cursor: pointer;
+    } */
+    .sub_activity {
+        font-size: 11px;
+        padding:3px 10px;
     }
+
+    .sub_activity::before {
+        content: ">";
+        margin-right: 3px;
+    }
+
+    .sub_activity_box: {
+        background: #e0f3ff;
+        
+    }
+
 </style>
 
 <ul class="tabs-animated body-tabs-animated nav">
@@ -125,22 +142,28 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <ul>
-                                                        @php
-                                                            $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
-
-                                                            foreach ($json as $sub_activity){
-                                                                if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
-
-                                                                    // $show_sub_activity[] = $sub_activitiy;
-                                                                    echo "<li>" . $sub_activity['sub_activity_name'] . "</li>";
-
-                                                                }
-                                                            }
-                                                        @endphp
-                                                        </ul>
+                                                        
                                                     </li>
+                                                    <li class="list-group-item">
+                                                        <div class="card-shadow-primary border mb-0 card card-body border-warning">
+                                                            <div class="row">
+                                                                @php
+                                                                    $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
+                                                                    if ($json != null) {
+                                                                        foreach ($json as $sub_activity){
+                                                                            if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
+    
+                                                                                // $show_sub_activity[] = $sub_activitiy;
+                                                                                echo "<div class='col-md-6 sub_activity'>" . $sub_activity['sub_activity_name'] . "</div>";
+    
+                                                                            }
+                                                                        }
+                                                                    }   
+                                                                @endphp
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
 
                                                 @elseif($activities_groups[array_keys($activities_groups)[$j]][$k]->start_date <= Carbon\Carbon::now()->toDateString() && $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete == false)
                                                     <li class="list-group-item">
@@ -170,21 +193,25 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        <ul>
-                                                        @php
-                                                            $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
-
-                                                            foreach ($json as $sub_activity){
-                                                                if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
-
-                                                                    // $show_sub_activity[] = $sub_activitiy;
-                                                                    echo "<li>" . $sub_activity['sub_activity_name'] . "</li>";
-
-                                                                }
-                                                            }
-                                                        @endphp
-                                                        </ul>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <div class="card-shadow-primary border mb-0 card card-body border-danger">
+                                                            <div class="row">
+                                                                @php
+                                                                    $json = json_decode($activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity, 1);
+                                                                    if ($json != null) {
+                                                                        foreach ($json as $sub_activity){
+                                                                            if ($sub_activity['activity_id'] == $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id){
+    
+                                                                                // $show_sub_activity[] = $sub_activitiy;
+                                                                                echo "<div class='col-md-6 sub_activity'>" . $sub_activity['sub_activity_name'] . "</div>";
+    
+                                                                            }
+                                                                        }
+                                                                    }   
+                                                                @endphp
+                                                            </div>
+                                                        </div>
                                                     </li>
                                                 @endif
                                             @endfor
@@ -744,11 +771,11 @@
 @endsection
 
 @section('js_script')
-    <script>
+    {{-- <script>
         $(".list-group-item").on('click', function(e){
             e.preventDefault();
             $("#list-group-modal").modal("show");
             $(".modal-title").text(e.target.children[1].children[0].innerHTML);
         });
-    </script>
+    </script> --}}
 @endsection
