@@ -19,7 +19,7 @@
             </div>
             <div class="widget-content-left">
                 <div class="widget-heading">
-                    {{ $sitename }}
+                    <a href="/assigned-sites/">{{ $sitename }}</a>
                 </div>
                 <div class="widget-subheading">
                     {{ $samid }}
