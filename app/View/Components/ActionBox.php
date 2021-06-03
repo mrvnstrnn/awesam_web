@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ActivityListItem extends Component
+class ActionBox extends Component
 {
     /**
      * Create a new component instance.
@@ -13,15 +13,10 @@ class ActivityListItem extends Component
      */
 
 
-    public $what_activity;
 
-    public function __construct($what_activity)
+    public function __construct()
     {
         //
-
-        $this->what_activity = $what_activity;
-
-
     }
 
     /**
@@ -31,6 +26,6 @@ class ActivityListItem extends Component
      */
     public function render()
     {
-        return view('components.activity-list-item');
+        return view('components.action-box');
     }
 }
