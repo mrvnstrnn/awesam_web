@@ -254,6 +254,51 @@ class UserController extends Controller
         }
     }
 
+    public function activities_agent($agent_id = null)
+    {
+        try {
+            if(is_null(\Auth::user()->profile_id)){
+                return redirect('/onboarding');
+            } else {
+                
+                $role = \Auth::user()->getUserProfile();
+    
+                $mode = $role->mode;
+                $profile = $role->profile;
+    
+                
+                $title = ucwords(Auth::user()->name);
+                $title_subheading  = ucwords($mode . " : " . $profile);
+                $title_icon = 'monitor';
+        
+                $active_slug = "activities";
+        
+                $profile_menu = self::getProfileMenuLinks();
+    
+                $profile_direct_links = self::getProfileMenuDirectLinks();
+                    
+                $program_direct_links = self::getProgramMenuDirectLinks();
+                
+                return view('profiles.'.$mode.'.'.strtolower(str_replace(' ', '-', ucfirst($profile))).'.activities', 
+                    compact(
+                        'mode',
+                        'profile',
+                        'active_slug',
+                        'profile_menu',
+                        'profile_direct_links',
+                        'program_direct_links',
+                        'title', 
+                        'title_subheading', 
+                        'title_icon',
+                        'agent_id',
+                    )
+                );
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function index()
     {
         if(is_null(\Auth::user()->profile_id)){

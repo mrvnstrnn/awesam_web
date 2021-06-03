@@ -20,6 +20,7 @@ use App\Http\Controllers\GlobeController;
 
 //ROUTE TO USER'S HOME
 Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
     Route::get('/', [UserController::class, 'index']);
     Route::get('/onboarding', [UserController::class, 'onboarding']);
     Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');
@@ -90,7 +91,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
-
+    Route::get('/get-agent', [ProfileController::class, 'get_agent']);
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

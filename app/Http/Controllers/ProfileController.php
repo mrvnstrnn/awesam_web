@@ -219,4 +219,20 @@ class ProfileController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
+
+    public function get_agent(Request $request)
+    {
+        try {
+            $agents = \DB::connection('mysql2')
+                                    ->table('users')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.IS_id', \Auth::user()->id)
+                                    ->where('user_details.designation', 2)
+                                    ->get();
+
+            return response()->json(['error' => false, 'message' => $agents ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
 }
