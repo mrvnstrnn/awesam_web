@@ -12,7 +12,7 @@
     }
 
 @endphp
-<li class="list-group-item">
+<li class="list-group-item" data-profile="{{ $profile }}" data-agent_id="{{ $agentid }}" data-agent_name="{{ $agentname }}">
     <div class="todo-indicator bg-{{ $color }}"></div>
     <div class="widget-content p-0">
         <div class="widget-content-wrapper">
@@ -30,11 +30,14 @@
                     <div class="widget-subheading">
                         {{ $sitename }} 
                         - 
-                        {{ $samid }}</div>
+                        {{ $samid }}
+                    </div>
                     <div class="widget-subheading">
                         {{ date('M d, Y', strtotime($startdate)) }} 
                         to 
-                        {{ date('M d, Y', strtotime($enddate)) }}</div>
+                        {{ date('M d, Y', strtotime($enddate)) }}
+                    </div>
+                    <small>{{ $agentname }}</small>
                 </div>
             </div>
             <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $samid }}_{{ $activityid }}_li_{{ $mode }}" data-chevron="down">
@@ -45,7 +48,7 @@
 </li>
 
 <li id="sub_activity_{{ $samid }}_{{ $activityid }}_li_{{ $mode }}" class="list-group-item d-none sub_activity_li">
-    <div id="sub_activity_{{ $samid }}_{{ $activityid }}" class="card-shadow-primary border mb-0 card card-body border-{{ $color }}" >
+    <div id="sub_activity_{{ $samid }}_{{ $activityid }}_{{ $mode }}" class="card-shadow-primary border mb-0 card card-body border-{{ $color }}" >
         <div class="row lister">
             @php
                 $json = json_decode($subactivities, 1);
@@ -54,7 +57,7 @@
                         if ($sub_activity['activity_id'] == $activityid){
 
                             // $show_sub_activity[] = $sub_activitiy;
-                            echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
+                            echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
                         }
                     }
                 }   

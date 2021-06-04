@@ -56,16 +56,34 @@
                     @endphp
                 
                     @for ($j = 0; $j < count(array_keys($activities_groups)); $j++)
-                        
+                        @php
+                            $agent_who = $activities_groups[array_keys($activities_groups)[$j]][0];
+                        @endphp 
                         <div class="card">
                             <div id="heading_{{ array_keys($activities_groups)[$j] }}_{{ $mode }}" class="card-header">
                                 <button type="button" data-toggle="collapse" data-target="#{{ $mode }}collapse{{ $j }}" aria-expanded="false" aria-controls="#{{ $mode }}collapse{{ $j }}" class="text-left m-0 p-0 btn btn-link btn-block">
-                                    <h5 class="m-0 p-0">
-                                        {{ array_keys($activities_groups)[$j] }}
-                                        <div class="badge badge-success ml-2">
-                                            {{ count($activities_groups[array_keys($activities_groups)[$j]]) }}
+                                    <div class="row">
+                                        @if($profile=="supervisor")
+                                        <div class=" my-auto" style="max-width: 70px; padding-left:10px;">
+                                            @if($agent_who->agent_id == 82)
+                                                <img width="42" class="rounded-circle" src="/images/avatars/3.jpg" alt="">
+                                            @elseif($agent_who->agent_id == 96)
+                                                <img width="42" class="rounded-circle" src="/images/avatars/4.jpg" alt="">
+                                            @elseif($agent_who->agent_id == 91)
+                                                <img width="42" class="rounded-circle" src="/images/avatars/5.jpg" alt="">
+                                            @endif
+
                                         </div>
-                                    </h5>
+                                        @endif
+                                        <div class="col-md-10  my-auto">
+                                            <h5 class="m-0 p-0">
+                                                {{ array_keys($activities_groups)[$j] }}
+                                                <div class="badge badge-success ml-2">
+                                                    {{ count($activities_groups[array_keys($activities_groups)[$j]]) }}
+                                                </div>
+                                            </h5>
+                                        </div>
+                                    </div>
                                 </button>
                             </div>
                             <div data-parent="#accordion{{ $mode }}" id="{{ $mode }}collapse{{ $j }}" class="collapse {{ $j == 0 ? "show" : "" }}">
@@ -81,9 +99,18 @@
                                         $end_date = $activities_groups[array_keys($activities_groups)[$j]][$k]->end_date;
                                         $sub_activities = $activities_groups[array_keys($activities_groups)[$j]][$k]->sub_activity;
                                         $activity_complete = $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_complete;
+                                    
+                                        if($profile=="supervisor"){
+                                            $agent_id = $activities_groups[array_keys($activities_groups)[$j]][$k]->agent_id;
+                                            $agent_name = $activities_groups[array_keys($activities_groups)[$j]][$k]->agent_name;
+                                        } else {
+                                            $agent_id = "";
+                                            $agent_name = "";
+                                        }
+                                    
                                     @endphp
 
-                                    <x-activity-details :activityid="$activity_id" :activityname="$activity_name" :sitename="$site_name" :samid="$sam_id" :startdate="$start_date" :enddate="$end_date" :subactivities="$sub_activities" :activitycomplete="$activity_complete" mode="{{ $mode }}" />
+                                    <x-activity-details :activityid="$activity_id" :activityname="$activity_name" :sitename="$site_name" :samid="$sam_id" :startdate="$start_date" :enddate="$end_date" :subactivities="$sub_activities" :activitycomplete="$activity_complete" mode="{{ $mode }}" profile="{{ $profile }}" agentid="{{ $agent_id }}" agentname="{{ $agent_name }}" />
                                     
                                 @endfor
                                 </ul>
@@ -116,7 +143,7 @@
                             $activity_complete = $activities_groups[array_keys($activities_groups)[$j]][0]->activity_complete;
                         @endphp
                         
-                        <x-activity-sites :sitename="$site_name" :samid="$sam_id" :activityname="$activity_name" :startdate="$start_date" :enddate="$end_date" :activitycomplete="$activity_complete" mode="{{ $mode }}"/>
+                        <x-activity-sites :sitename="$site_name" :samid="$sam_id" :activityname="$activity_name" :startdate="$start_date" :enddate="$end_date" :activitycomplete="$activity_complete" mode="{{ $mode }}" profile={{ $profile }}/>
 
                     @endfor
                 </ul>
