@@ -337,11 +337,28 @@ class VendorController extends Controller
     public function approvereject_agent_request (Request $request)
     {
         try {
-            // return response()->json(['error' => false, 'message' => $request->input('data_action')]);
-            RequestTable::where('id', $request->input('data_id'))
-                                        ->update(['leave_status' => $request->input('data_action') ]);
 
-            return response()->json(['error' => false, 'message' => "Successfully rejected request."]);
+            if($request->input('data_action') == 'denied'){
+                $valid = 'required';
+            }
+
+            $validate = Validator::make($request->all(), array(
+                'reason' => $valid
+            ));
+
+            if ($validate->passes()){
+                RequestTable::where('id', $request->input('data_id'))
+                ->update([
+                    'leave_status' => $request->input('data_action'),
+                    'comment' => $request->input('reason'),
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully rejected request."]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
+            }
+
+            
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         } 

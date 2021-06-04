@@ -37,6 +37,8 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 5%">#</th>
+                                            <th style="width: 15%">Name</th>
+                                            <th style="width: 15%">Email</th>
                                             <th>Type</th>
                                             <th style="width: 35%">Reason</th>
                                             <th>Start-End Date</th>
@@ -63,7 +65,7 @@
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="modalRequest" tabindex="-1" role="dialog" aria-labelledby="modalRequest" aria-hidden="true">
+    <div class="modal fade" id="modalRequest" tabindex="-1" role="dialog" aria-labelledby="modalRequest" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -74,15 +76,68 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="form-group">
-                          <label for="request_typ">Request Type</label>
-                          <input type="text" name="request_typ" id="request_typ" class="form-control" readonly>
+                        <div class="form-row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                  <label for="request_type">Request Type</label>
+                                  <input type="text" name="request_type" id="request_type" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="start_date">Start Date</label>
+                                  <input type="text" name="start_date" id="start_date" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="end_date">End Date</label>
+                                  <input type="text" name="end_date" id="end_date" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                  <label for="reason">Reason</label>
+                                  <textarea name="reason" id="reason" cols="10" rows="10" readonly class="form-control" ></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary reject_request" data-action="denied" data-href="{{ route('approvereject_agent_request') }}">Reject</button>
+                    <button type="button" class="btn btn-secondary reject_request" data-action="denied">Reject</button>
                     <button type="button" class="btn btn-primary approvereject_request_final"  data-href="{{ route('approvereject_agent_request') }}" data-action="approved">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deniedModal" tabindex="-1" role="dialog" aria-labelledby="deniedModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <p class="denied-name"></p>
+                        <div class="form-group">
+                          <label for="reason">Reason</label>
+                          <textarea class="form-control" name="reason" id="reason" cols="20" rows="10"></textarea>
+                          <small class="text-danger" id="message-error"></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary approvereject_request_final" data-action="denied" data-href="{{ route('approvereject_agent_request') }}">Confirm</button>
                 </div>
             </div>
         </div>
