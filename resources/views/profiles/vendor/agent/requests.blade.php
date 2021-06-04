@@ -150,8 +150,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement"  data-dismiss="modal"  id="btn_modal_cancel" >Cancel</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" id="add_request" data-href="{{ route('add_agent_request') }}">Request</button>
+                    <button type="button" class="btn btn btn-outline-danger"  data-dismiss="modal"  id="btn_modal_cancel" >Cancel</button>
+                    <button type="button" class="btn btn-primary" id="add_request" data-href="{{ route('add_agent_request') }}">Request</button>
                 </div>
             </div>
         </div>

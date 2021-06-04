@@ -38,7 +38,7 @@ $(document).ready(() => {
     $(".add_request_button").on('click', function(){
 
         $('#modal_request').modal('show');
-        $('#loader').addClass('d-none');
+        // $('#loader').addClass('d-none');
         $('#request_form').removeClass('d-none');
         $('#add_request').prop('disabled', false);
         $('#btn_modal_cancel').prop('disabled', false);
@@ -82,12 +82,11 @@ $(document).ready(() => {
                 },
                 success: function(resp){
                     if(!resp.error){
-                        toastr.success("Request Submitted", 'Success');
-                        $('#modal_request').modal('hide');
-                        $('#request_form').trigger("reset");
-
-                        $('#active-request-table').DataTable().ajax.reload();
-
+                        $('#active-request-table').DataTable().ajax.reload(function(){
+                            toastr.success("Request Submitted", 'Success');
+                            $('#modal_request').modal('hide');
+                            $('#request_form').trigger("reset");
+                        });
 
                     } else {
                         toastr.error(resp, 'Error');

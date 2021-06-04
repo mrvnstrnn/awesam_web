@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Vendor;
 use App\Models\AddVendorProfile;
+use App\Models\UserDetail;
+use App\Models\Request as RequestTable;
 use DataTables;
 
 use App\Mail\VendorMail;
@@ -16,12 +18,35 @@ class VendorController extends Controller
 
     public function add_agent_request(Request $request)
     {
+        try {
+            $validate = Validator::make($request->al(), array(
+                'request_type' => 'required',
+                'start_date_requested' => 'required',
+                'end_date_requested' => 'required',
+                'reason' => 'required',
+                'leave_status' => 'required'
+            ));
 
-        return  $request;
-
-
-
-
+            if($validate->passs()){
+                $supervisor = UserDetail::select('IS_id')->where('user_id', \Auth::id())->first();
+    
+                RequestTable::create([
+                    'agent_id' => \Auth::id(),
+                    'supervisor_id' => $supervisor->IS_id,
+                    'request_type' => $request->input('request_type'),
+                    'start_date_requested' => $request->input('start_date_requested'),
+                    'end_date_requested' => $request->input('end_date_requested'),
+                    'reason' => $request->input('reason'),
+                    'leave_status' => "active",
+                ]);
+        
+                return response()->json(['error' => false, 'message' => "Successfully requested." ]);
+            } else {
+                return response()->json(['error' => false, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
     }
 
 
@@ -307,5 +332,35 @@ class VendorController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    public function approvereject_agent_request (Request $request)
+    {
+        try {
+
+            if($request->input('data_action') == 'denied'){
+                $valid = 'required';
+            }
+
+            $validate = Validator::make($request->all(), array(
+                'reason' => $valid
+            ));
+
+            if ($validate->passes()){
+                RequestTable::where('id', $request->input('data_id'))
+                ->update([
+                    'leave_status' => $request->input('data_action'),
+                    'comment' => $request->input('reason'),
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully rejected request."]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
+            }
+
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        } 
     }
 }

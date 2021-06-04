@@ -129,6 +129,8 @@ class User extends Authenticatable implements MustVerifyEmail
             return \DB::connection('mysql2')
                             ->table('request')
                             ->select(
+                                'users.name',
+                                'users.email',
                                 'request.id',
                                 'request.request_type',
                                 'request.start_date_requested',
