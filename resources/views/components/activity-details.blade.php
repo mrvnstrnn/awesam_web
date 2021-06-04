@@ -48,7 +48,7 @@
 </li>
 
 <li id="sub_activity_{{ $samid }}_{{ $activityid }}_li_{{ $mode }}" class="list-group-item d-none sub_activity_li">
-    <div id="sub_activity_{{ $samid }}_{{ $activityid }}" class="card-shadow-primary border mb-0 card card-body border-{{ $color }}" >
+    <div id="sub_activity_{{ $samid }}_{{ $activityid }}_{{ $mode }}" class="card-shadow-primary border mb-0 card card-body border-{{ $color }}" >
         <div class="row lister">
             @php
                 $json = json_decode($subactivities, 1);
@@ -57,7 +57,7 @@
                         if ($sub_activity['activity_id'] == $activityid){
 
                             // $show_sub_activity[] = $sub_activitiy;
-                            echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "'>" . $sub_activity['sub_activity_name'] . "</div>";
+                            echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
                         }
                     }
                 }   

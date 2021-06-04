@@ -187,8 +187,7 @@ $(document).ready(function() {
 
         else if($(this).attr('data-action')=="doc upload"){
 
-
-            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') ;
+            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode') ;
 
             $('.lister').removeClass("d-none");
             $('.action_box').addClass("d-none");
@@ -197,6 +196,9 @@ $(document).ready(function() {
             $(where + " .action_box").toggleClass("d-none");
 
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
+
+            console.log(where);
+            console.log($(where).find(".doc_upload_label").html());
         }
     });
 
