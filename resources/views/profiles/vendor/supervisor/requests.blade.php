@@ -62,6 +62,29 @@
     <script src="{{ asset('js/supervisor-request.js') }}"></script>
 @endsection
 
-@section('modal')
-    
+@section('modals')
+    <div class="modal fade" id="modalRequest" tabindex="-1" role="dialog" aria-labelledby="modalRequest" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Request Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="form-group">
+                          <label for="request_typ">Request Type</label>
+                          <input type="text" name="request_typ" id="request_typ" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary reject_request" data-action="denied" data-href="{{ route('approvereject_agent_request') }}">Reject</button>
+                    <button type="button" class="btn btn-primary approvereject_request_final"  data-href="{{ route('approvereject_agent_request') }}" data-action="approved">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

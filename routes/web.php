@@ -83,12 +83,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/table/request/{request_status}', [VendorController::class, 'getMyRequest'])->name('get.requestDate');
     Route::post('/requests/add', [VendorController::class, 'add_agent_request'])->name('add_agent_request');
+    Route::post('/requests/approve-reject', [VendorController::class, 'approvereject_agent_request'])->name('approvereject_agent_request');
 
 
     Route::get('/vendor-agents/{vendor_id}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors/{vendor_id}', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
-
-
     
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
     Route::get('/get-agent', [ProfileController::class, 'get_agent']);
