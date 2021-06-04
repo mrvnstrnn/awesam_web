@@ -14,12 +14,14 @@ class ActivitiesTab extends Component
 
     public $activities;
     public $mode;
+    public $profile;
 
-    public function __construct($activities, $mode)
+    public function __construct($activities, $mode, $profile)
     {
         //
         $this->activities = $activities;
         $this->mode = $mode;
+        $this->profile = $profile;
     }
 
     /**

@@ -23,10 +23,12 @@ class Activitydetails extends Component
     public $subactivities;
     public $activitycomplete;
     public $mode;
+    public $profile;
+    public $agentid;
+    public $agentname;
 
 
-
-    public function __construct($activityid, $activityname, $sitename, $samid, $startdate, $enddate, $subactivities, $activitycomplete, $mode)
+    public function __construct($activityid, $activityname, $sitename, $samid, $startdate, $enddate, $subactivities, $activitycomplete, $mode, $profile, $agentid, $agentname)
     {
         //
         $this->activityid = $activityid;
@@ -38,6 +40,9 @@ class Activitydetails extends Component
         $this->subactivities = $subactivities;
         $this->activitycomplete = $activitycomplete;
         $this->mode = $mode;
+        $this->profile = $profile;
+        $this->agentid = $agentid;
+        $this->agentname = $agentname;
 
     }
 

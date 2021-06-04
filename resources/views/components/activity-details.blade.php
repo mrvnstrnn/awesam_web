@@ -12,7 +12,7 @@
     }
 
 @endphp
-<li class="list-group-item">
+<li class="list-group-item" data-profile="{{ $profile }}" data-agent_id="{{ $agentid }}" data-agent_name="{{ $agentname }}">
     <div class="todo-indicator bg-{{ $color }}"></div>
     <div class="widget-content p-0">
         <div class="widget-content-wrapper">
@@ -30,11 +30,14 @@
                     <div class="widget-subheading">
                         {{ $sitename }} 
                         - 
-                        {{ $samid }}</div>
+                        {{ $samid }}
+                    </div>
                     <div class="widget-subheading">
                         {{ date('M d, Y', strtotime($startdate)) }} 
                         to 
-                        {{ date('M d, Y', strtotime($enddate)) }}</div>
+                        {{ date('M d, Y', strtotime($enddate)) }}
+                    </div>
+                    <small>{{ $agentname }}</small>
                 </div>
             </div>
             <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity_{{ $samid }}_{{ $activityid }}_li_{{ $mode }}" data-chevron="down">

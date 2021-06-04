@@ -81,9 +81,9 @@
 
     @endphp
 
-    <x-activities-tab :activities="$activities" mode="today" />
-    <x-activities-tab :activities="$activities" mode="week" />
-    <x-activities-tab :activities="$activities" mode="month" />
+    <x-activities-tab :activities="$activities" mode="today" profile="agent" />
+    <x-activities-tab :activities="$activities" mode="week" profile="agent" />
+    <x-activities-tab :activities="$activities" mode="month" profile="agent" />
 
 </div>
 
