@@ -7,6 +7,7 @@ use DataTables;
 use App\Models\SiteAgent;
 use App\Models\UsersArea;
 use App\Models\Program;
+use App\Models\UserDetail;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 
@@ -277,39 +278,34 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_agents($vendor_id)
+    public function vendor_agents()
     {
 
         try {
-            $checkAgent = \DB::connection('mysql2')
-                                    ->table('user_details')
-                                    ->join('users', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.vendor_id', $vendor_id)
+
+            $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
+
+            $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.vendor_id', $vendors->vendor_id)
                                     ->where('users.profile_id', 2)
                                     ->get();
                                                         
             $dt = DataTables::of($checkAgent);
-            
-            $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function vendor_supervisors($vendor_id)
+    public function vendor_supervisors()
     {
         try {
-            $checkAgent = \DB::connection('mysql2')
-                                    ->table('user_details')
-                                    ->join('users', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.vendor_id', $vendor_id)
+            $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.IS_id', \Auth::id())
                                     ->where('users.profile_id', 3)
                                     ->get();
                                                         
-            $dt = DataTables::of($checkAgent);
-            
-            $dt->rawColumns(['photo']);
+            $dt = DataTables::of($checkSupervisor);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;

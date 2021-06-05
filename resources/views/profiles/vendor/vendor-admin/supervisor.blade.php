@@ -21,25 +21,16 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="employee-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="">
+                        <table id="employee-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('vendor_supervisors') }}">
                             <thead>
                                 <tr>
-                                    <th class="d-none d-md-table-cell">First Name</th>
-                                    <th class="d-none d-md-table-cell">Last Name</th>
+                                    <th>User ID</th>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
                                     <th>Email</th>
-                                    <th>Location</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="modalEmployeeVerification">
-                                    <td>Test</td>
-                                    <td>Employee</td>
-                                    <td>test@email.com</td>
-                                    <td>NCR > Quezon City</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>

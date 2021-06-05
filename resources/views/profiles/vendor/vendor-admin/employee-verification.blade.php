@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.forverification') }}">
+            <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table w-100" data-href="{{ route('all.forverification') }}">
                 <thead>
                     <tr>
                         <th>User ID</th>
@@ -74,7 +74,7 @@
                                 <div class="col-md-12">
                                     <div class="position-relative form-group">
                                         <label for="designation">Designation</label>
-                                        <select name="designation" id="designation"  class="form-control" required>
+                                        <select name="designation" id="designation"  class="form-control" readonly required>
                                             <option value="2">Agent</option>
                                             <option value="3">Supervisor</option>
                                         </select>
@@ -84,7 +84,7 @@
                                 <div class="col-md-12">
                                     <div class="position-relative form-group">
                                         <label for="employment_classification">Employment Classification</label>
-                                        <select name="employment_classification" id="employment_classification"  class="form-control" required>
+                                        <select name="employment_classification" id="employment_classification" readonly class="form-control" required>
                                             <option value="regular">Regular</option>
                                             <option value="subcon">Sub Contractor</option>
                                         </select>
@@ -103,7 +103,7 @@
                                 <div class="col-md-12">
                                     <div class="position-relative form-group">
                                         <label for="hiring_date">Hiring Date</label>
-                                        <input name="hiring_date" id="hiring_date" placeholder="2021-05-27" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                        <input name="hiring_date" id="hiring_date" placeholder="2021-05-27" readonly type="text" class="flatpicker form-control" style="background-color: white;" required>
                                     </div>
                                     <small class="hiring_date-error text-danger"></small>
                                 </div>                
@@ -111,18 +111,27 @@
                         </div>
                     </div>
 
-                    <div class="divider"></div>
-                    <div class="form-row mt-3 px-3">
+                    <div class="divider supervisor_area d-none"></div>
+                    <div class="form-row mt-3 px-3 supervisor_area d-none">
                         <div class="col-md-5">
                             <H5>Immediate Supervisor</H5>
                         </div>
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="position-relative form-group">
-                                        <select class="form-control selectpicker" style="width: 100%;">
-                                            <option value=""></option>
-                                            <option value="">Vendor Supervisor (supervisor@vendor.ph)</option>
+                                    <div class="position-relative form-group supervisor_select">
+                                        {{-- @php
+                                            $my_supervisors = App\Models\UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                                                                    ->where('user_details.IS_id', \Auth::id())
+                                                                                    ->where('users.profile_id', 3)
+                                                                                    ->get();
+                                        @endphp --}}
+
+                                        <select class="form-control selectpicker" name="mysupervisor" id="mysupervisor" style="width: 100%;">
+                                            {{-- <option value="">Please select supervisor</option> --}}
+                                            {{-- @foreach ($my_supervisors as $my_supervisor)
+                                                <option value="">{{ $my_supervisor->email }}</option>
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -130,16 +139,19 @@
                         </div>
                     </div>
 
-                    <div class="divider"></div>
-                    <div class="form-row mt-3 px-3">
+                    <div class="divider agent_area d-none"></div>
+                    <div class="form-row mt-3 px-3 agent_area d-none">
                         <div class="col-md-5">
                             <H5>Program</H5>
                         </div>
                         <div class="col-md-7">
                             <div class="row">
-                        
                                 @php
-                                    $programs = App\Models\Program::get();
+                                    $vendors = App\Models\UserDetail::where('user_id', \Auth::id())->first();
+                                    $programs = App\Models\VendorProgram::select('program.program_id', 'program.program')
+                                                        ->join('program', 'program.program_id', 'vendor_programs.programs')
+                                                        ->where('vendor_programs.vendors_id', $vendors->vendor_id)
+                                                        ->get();
                                 @endphp
 
                                 @foreach ($programs as $program)

@@ -14,12 +14,14 @@ class Vendor extends Model
     protected $table = 'vendor';
 
     protected $fillable = [
-        'vendor_fullname',
+        // 'vendor_id',
+        'vendor_firstname',
+        'vendor_lastname',
         'vendor_admin_email',
-        'vendor_program_id',
         'vendor_sec_reg_name',
         'vendor_acronym',
         'vendor_office_address',
-        'vendor_saq_status'
+        'vendor_status',
+        'vendor_profile_id'
     ];
 }

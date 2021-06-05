@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('vendor_agents',[1]) }}">
+            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('vendor_agents') }}">
                 <thead>
                     <tr>
                         <th>User ID</th>
