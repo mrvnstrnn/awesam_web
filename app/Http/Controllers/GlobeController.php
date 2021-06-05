@@ -322,7 +322,11 @@ class GlobeController extends Controller
                                                 ->where('user_details.user_id', \Auth::user()->id)
                                                 ->first();
                                                 
-            $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
+            if(is_null($is_location)){
+                $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
+            } else {
+                $region = \DB::connection('mysql2')->table('location_regions')->get();
+            }
             return response()->json(['error' => false, 'message' => $region]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
