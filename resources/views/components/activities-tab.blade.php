@@ -107,7 +107,7 @@
                             <div id="heading_{{ array_keys($activities_groups)[$j] }}_{{ $mode }}" class="card-header">
                                 <button type="button" data-toggle="collapse" data-target="#{{ $mode }}collapse{{ $j }}" aria-expanded="false" aria-controls="#{{ $mode }}collapse{{ $j }}" class="text-left m-0 p-0 btn btn-link btn-block">
                                     <div class="row">
-                                        
+
                                         {{-- TEMPORARY THUMBNAILS --}}
 
                                         @if($profile=="supervisor")
@@ -122,7 +122,7 @@
 
                                         </div>
                                         @endif
-                                        <div class="col-md-10  my-auto">
+                                        <div class="col-md-10 col-sm-10  my-auto">
                                             <h5 class="m-0 p-0">
                                                 {{ array_keys($activities_groups)[$j] }}
                                                 <div class="badge badge-success ml-2">
@@ -138,6 +138,7 @@
                                 @for ($k = 0; $k < count($activities_groups[array_keys($activities_groups)[$j]]); $k++)
 
                                     @php
+
                                         $activity_id = $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id;
                                         $activity_name = $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_name;
                                         $site_name = $activities_groups[array_keys($activities_groups)[$j]][$k]->site_name;
@@ -188,9 +189,17 @@
                             $start_date = $activities_groups[array_keys($activities_groups)[$j]][0]->start_date;
                             $end_date = $activities_groups[array_keys($activities_groups)[$j]][0]->end_date;
                             $activity_complete = $activities_groups[array_keys($activities_groups)[$j]][0]->activity_complete;
+
+                            if($profile=="supervisor"){
+                                $agent_id = $activities_groups[array_keys($activities_groups)[$j]][0]->agent_id;
+                            } else {
+                                $agent_id = "";
+                            }
+
+
                         @endphp
                         
-                        <x-activity-sites :sitename="$site_name" :samid="$sam_id" :activityname="$activity_name" :startdate="$start_date" :enddate="$end_date" :activitycomplete="$activity_complete" mode="{{ $mode }}" profile={{ $profile }}/>
+                        <x-activity-sites :sitename="$site_name" :samid="$sam_id" :activityname="$activity_name" :startdate="$start_date" :enddate="$end_date" :activitycomplete="$activity_complete" mode="{{ $mode }}" profile={{ $profile }} agentid="{{ $agent_id }}"/>
 
                     @endfor
                 </ul>

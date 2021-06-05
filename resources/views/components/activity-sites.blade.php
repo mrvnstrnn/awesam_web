@@ -11,7 +11,7 @@
     }
 
 @endphp
-<li class="list-group-item">
+<li class="list-group-item agent_card agent_card_{{ $agentid }}">
     <div class="todo-indicator bg-{{ $color }}"></div>
     <div class="widget-content p-0">
         <div class="widget-content-wrapper">
