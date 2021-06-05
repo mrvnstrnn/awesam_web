@@ -77,8 +77,6 @@
             return $result;
         }
 
-        // dd($activities);
-
     @endphp
 
     <x-activities-tab :activities="$activities" mode="today" profile="supervisor"/>

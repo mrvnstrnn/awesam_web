@@ -30,6 +30,29 @@ $(document).ready(function() {
         $(this).html(chevronUp);
     });
 
+
+    $(".activity_agent_filter").on('click', function(e){
+        e.preventDefault();
+
+        who = $(this).attr('data-agent_id');
+
+        $(".agent_card").addClass('d-none');
+        $(".agent_card_" + who).removeClass('d-none');
+
+        $('.show_who').text($(this).text())
+
+    });
+
+    $(".activity_agent_filter_remove").on('click', function(e){
+        e.preventDefault();
+
+        $(".agent_card").removeClass('d-none');
+        $('.show_who').text("ALL")
+
+
+    });
+
+
     $(".sub_activity").on('click', function(e){
         e.preventDefault();
 

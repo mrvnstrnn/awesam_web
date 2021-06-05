@@ -1,5 +1,19 @@
 @php
+
+
     $mode_activities = collect();
+
+
+    // GET AGENTS IF SUPERVISORS
+    if($profile == "supervisor"){
+        $agents = array();
+        for($i=0; $i < count($activities);  $i++){
+            $agents[$i]['agent_id'] = $activities[$i]->agent_id;
+            $agents[$i]['agent_name'] = $activities[$i]->agent_name;
+        }
+        $agents = array_unique($agents, SORT_REGULAR);
+    }
+
 @endphp
 
 <div class="tab-pane tabs-animation fade" id="tab-content-{{ $mode }}" role="tabpanel">
@@ -11,6 +25,31 @@
                     <i class="header-icon lnr-calendar-full icon-gradient bg-ripe-malin"></i>
                     Activities
                     </div>
+                    @if($profile=="supervisor")
+                    <div class="btn-actions-pane-right actions-icon-btn">
+                        <button class="btn-icon btn-icon-only btn btn-link show_who">
+                            ALL
+                        </button>
+                        <div class="btn-group dropdown">
+                            <button type="button" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
+                                <i class="pe-7s-filter btn-icon-wrapper"></i>
+                            </button>
+                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-shadow dropdown-menu-right dropdown-menu-hover-link dropdown-menu" style="">
+                                <h6 tabindex="-1" class="dropdown-header">Agents</h6>
+                                @foreach ($agents as $agent)
+                                    <button type="button" tabindex="0" class="dropdown-item activity_agent_filter" data-agent_id="{{ $agent["agent_id"] }}">
+                                        <i class="dropdown-icon lnr-inbox"></i>
+                                        <span>{{ ucwords($agent['agent_name']) }}</span>
+                                    </button>                                    
+                                @endforeach
+                                <div tabindex="-1" class="dropdown-divider"></div>
+                                <div class="p-0 text-center">
+                                    <button class="btn-shadow btn-sm btn btn-primary activity_agent_filter_remove">All Agents</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif                 
                 </div>
                 <div class="accordion" id="accordion{{ $mode }}">
                     @if($mode=="today")
@@ -57,19 +96,27 @@
                 
                     @for ($j = 0; $j < count(array_keys($activities_groups)); $j++)
                         @php
-                            $agent_who = $activities_groups[array_keys($activities_groups)[$j]][0];
+                            if($profile=="supervisor"){
+                                $agent_who = $activities_groups[array_keys($activities_groups)[$j]][0];
+                                $agent_id = $agent_who->agent_id;
+                            } else {
+                                $agent_id = 0;
+                            }
                         @endphp 
-                        <div class="card">
+                        <div class="card agent_card agent_card_{{ $agent_id }}" data-agent_id={{ $agent_id }}>
                             <div id="heading_{{ array_keys($activities_groups)[$j] }}_{{ $mode }}" class="card-header">
                                 <button type="button" data-toggle="collapse" data-target="#{{ $mode }}collapse{{ $j }}" aria-expanded="false" aria-controls="#{{ $mode }}collapse{{ $j }}" class="text-left m-0 p-0 btn btn-link btn-block">
                                     <div class="row">
+                                        
+                                        {{-- TEMPORARY THUMBNAILS --}}
+
                                         @if($profile=="supervisor")
                                         <div class=" my-auto" style="max-width: 70px; padding-left:10px;">
-                                            @if($agent_who->agent_id == 82)
+                                            @if($agent_id == 82)
                                                 <img width="42" class="rounded-circle" src="/images/avatars/3.jpg" alt="">
-                                            @elseif($agent_who->agent_id == 96)
+                                            @elseif($agent_id == 96)
                                                 <img width="42" class="rounded-circle" src="/images/avatars/4.jpg" alt="">
-                                            @elseif($agent_who->agent_id == 91)
+                                            @elseif($agent_id == 91)
                                                 <img width="42" class="rounded-circle" src="/images/avatars/5.jpg" alt="">
                                             @endif
 
