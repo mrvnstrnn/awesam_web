@@ -23,10 +23,11 @@ class ActivitySites extends Component
     public $activitycomplete;
     public $mode;
     public $profile;
+    public $agentid;
 
 
 
-    public function __construct($sitename, $samid, $activityname, $startdate, $enddate, $activitycomplete, $mode, $profile)
+    public function __construct($sitename, $samid, $activityname, $startdate, $enddate, $activitycomplete, $mode, $profile, $agentid)
     {
         $this->sitename = $sitename;
         $this->samid = $samid;
@@ -36,6 +37,7 @@ class ActivitySites extends Component
         $this->$activitycomplete = $activitycomplete;
         $this->mode = $mode;
         $this->profile = $profile;
+        $this->agentid = $agentid;
 
     }
 
