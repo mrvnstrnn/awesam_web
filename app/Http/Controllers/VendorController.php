@@ -20,7 +20,7 @@ class VendorController extends Controller
     public function add_agent_request(Request $request)
     {
         try {
-            $validate = Validator::make($request->al(), array(
+            $validate = Validator::make($request->all(), array(
                 'request_type' => 'required',
                 'start_date_requested' => 'required',
                 'end_date_requested' => 'required',
@@ -28,7 +28,7 @@ class VendorController extends Controller
                 'leave_status' => 'required'
             ));
 
-            if($validate->passs()){
+            if($validate->passes()){
                 $supervisor = UserDetail::select('IS_id')->where('user_id', \Auth::id())->first();
     
                 RequestTable::create([
