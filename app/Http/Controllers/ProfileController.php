@@ -174,23 +174,32 @@ class ProfileController extends Controller
     public function assign_profile(Request $request)
     {
         try {
+
+            if($request->input('profile_id') == 2){
+                $required = 'required';
+            } else {
+                $required = '';
+            }
             $validate = \Validator::make($request->all(), array(
-                'checkbox_id' => 'required'
+                'checkbox_id' => $required
             ));
+            // return response()->json(['error' => true, 'message' => $request->all()]);
 
             if($validate->passes()){
                 User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
-                if(!is_null($request->input('supervisor'))){
+                if(!is_null($request->input('mysupervisor'))){
                     UserDetail::where('user_id', $request->input('user_id'))->update([
-                        'IS_id' => $request->input('supervisor'),
+                        'IS_id' => $request->input('mysupervisor'),
                     ]);
                 }
     
-                for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
-                    UserProgram::create([
-                        "user_id" => $request->input('user_id'),
-                        "program_id" => $request->input('checkbox_id')[$i],
-                    ]);
+                if($request->input('profile_id') == 2){
+                    for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
+                        UserProgram::create([
+                            "user_id" => $request->input('user_id'),
+                            "program_id" => $request->input('checkbox_id')[$i],
+                        ]);
+                    }
                 }
                 return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
             } else {
@@ -206,12 +215,10 @@ class ProfileController extends Controller
     public function get_supervisor(Request $request)
     {
         try {
-            $supervisors = \DB::connection('mysql2')
-                                    ->table('users')
-                                    ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->where('user_details.designation', 3)
-                                    // ->where('users.profile_id', null)
+
+            $supervisors = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.IS_id', \Auth::id())
+                                    ->where('users.profile_id', 3)
                                     ->get();
 
             return response()->json(['error' => false, 'message' => $supervisors ]);
@@ -223,12 +230,10 @@ class ProfileController extends Controller
     public function get_agent(Request $request)
     {
         try {
-            $agents = \DB::connection('mysql2')
-                                    ->table('users')
-                                    ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->where('user_details.designation', 2)
-                                    ->get();
+            $agents = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                ->where('user_details.IS_id', \Auth::id())
+                                ->where('users.profile_id', 2)
+            ->get();
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {

@@ -453,6 +453,7 @@ class UserController extends Controller
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
                 ->where('users.profile_id', null)
+                ->where('user_details.IS_id', \Auth::id())
                 ->get();
 
             // $user_details = User::join('user_details', 'user_details.user_id', 'users.id')

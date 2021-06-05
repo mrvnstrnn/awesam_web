@@ -7,6 +7,7 @@ use Validator;
 use App\Models\Vendor;
 use App\Models\AddVendorProfile;
 use App\Models\UserDetail;
+use App\Models\VendorProgram;
 use App\Models\Request as RequestTable;
 use DataTables;
 
@@ -68,6 +69,11 @@ class VendorController extends Controller
             ));
 
             if ($validate->passes()){
+
+                // return response()->json(['error' => true, 'message' => $request->all() ]);
+
+                $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
+
                 $arrayData = array(
                     'vendor_firstname' => $request->input('vendor_firstname'),
                     'vendor_lastname' => $request->input('vendor_lastname'),
@@ -78,31 +84,35 @@ class VendorController extends Controller
                     'vendor_status' => $request->input('vendor_status'),
                     'vendor_profile_id' => $request->input('vendor_profile_id')[0],
                 );
-                
+
                 if(is_null($request->input('vendor_id'))) {
                     $vendor_id = \DB::connection('mysql2')->table('vendor')->insertGetId(
                         $arrayData
                     );
 
                     for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
-                        $arrayProgram = array(
-                            'vendors_id' => $vendor_id,
-                            'programs' => $request->input('vendor_program_id')[$i],
-                        );
+                        // VendorProgram::create([
+                        //     'vendors_id' => $vendor_id,
+                        //     'programs' => $request->input('vendor_program_id')[$i],
+                        // ]);
 
-                        \DB::connection('mysql2')->table('vendor_programs')->insert(
-                            $arrayProgram
-                        );
+                        $vendor_program = new VendorProgram();
+                        $vendor_program->vendors_id = $vendor_id;
+                        $vendor_program->programs = $request->input('vendor_program_id')[$i];
+                        $vendor_program->save();
                     }
 
-                    for ($i=0; $i < count($request->input('vendor_profile_id')); $i++) { 
-                        AddVendorProfile::create([
-                            'vendor_id' => $vendor_id,
-                            'vendor_profile' => $request->input('vendor_profile_id')[$i],
-                        ]);
-                    }
+                    for ($j=0; $j < count($request->input('vendor_profile_id')); $j++) { 
+                        // AddVendorProfile::create([
+                        //     'vendor_id' => $vendor_id,
+                        //     'vendor_profile' => $request->input('vendor_profile_id')[$j],
+                        // ]);
 
-                    $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
+                        $vendor_program = new AddVendorProfile();
+                        $vendor_program->vendor_id = $vendor_id;
+                        $vendor_program->vendor_profile = $request->input('vendor_profile_id')[$j];
+                        $vendor_program->save();
+                    }
 
                     Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
                                         $name,
@@ -115,21 +125,17 @@ class VendorController extends Controller
                 } else {
 
                     for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
-                        $arrayProgram = array(
+                        VendorProgram::create([
                             'vendors_id' => $vendor_id,
                             'programs' => $request->input('vendor_program_id')[$i],
-                        );
+                        ]);
+                    }
 
-                        for ($i=0; $i < count($request->input('vendor_profile_id')); $i++) { 
-                            AddVendorProfile::create([
-                                'vendor_id' => $vendor_id,
-                                'vendor_profile' => $request->input('vendor_profile_id')[$i],
-                            ]);
-                        }
-
-                        \DB::connection('mysql2')->table('vendor_programs')->insert(
-                            $arrayProgram
-                        );
+                    for ($i=0; $i < count($request->input('vendor_profile_id')); $i++) { 
+                        AddVendorProfile::create([
+                            'vendor_id' => $vendor_id,
+                            'vendor_profile' => $request->input('vendor_profile_id')[$i],
+                        ]);
                     }
                     
                     \DB::connection('mysql2')->table('vendor')
@@ -144,7 +150,8 @@ class VendorController extends Controller
                         $request->input('vendor_sec_reg_name'),
                         $request->input('vendor_acronym')
                     ));
-                return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
+                
+                    return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
