@@ -363,7 +363,7 @@
                                     <div class="widget-content-left mr-3">
                                         <div class="icon-wrapper m-0">
                                             <div class="progress-circle-wrapper">
-                                                <div class="circle-progress d-inline-block circle-progress-success-sm"><canvas width="40" height="40"></canvas>
+                                                <div class="circle-progress d-inline-block circle-progress-success-sm">
                                                     <small><span>81%<span></span></span></small>
                                                 </div>
                                             </div>
