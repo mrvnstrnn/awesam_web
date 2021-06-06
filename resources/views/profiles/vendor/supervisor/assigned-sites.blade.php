@@ -131,6 +131,7 @@
                 {data : null, name: 'agent'},
                 {data : 'sam_id', name: 'SAM ID'},
                 {data : 'site_name', name: 'Site Name'}, 
+
                 // {
                 //     data : 'site_fields',
                 //     name: 'Nomination ID', 
@@ -167,6 +168,15 @@
                 //         return $field;
                 //     },
                 // },
+                //{
+                //    data : 'site_fields',
+                //    name: 'Nomination ID', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["NOMINATION_ID"];
+                //    },
+                //},
+
             ];
 
         }
@@ -198,10 +208,25 @@
                 //         $field = '<div class="widget-content-left flex2">' +
                 //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
                 //                 '</div>';
-
                 //         return $field;
                 //     },
                 // },
+                //{
+                //    data : 'site_fields',
+                //    name: 'PLA_ID', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["PLA_ID"];
+                //    },
+                //},
+                //{
+                //    data : 'site_fields',
+                //    name: 'PROGRAM', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["PROGRAM"];
+                //    },
+                },
             ];
         } else {
             cols = [];
