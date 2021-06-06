@@ -117,11 +117,11 @@ class GlobeController extends Controller
                 \Auth::user()->notify(new SiteEndorsementNotification($request->input('sam_id')[$i]));
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
+                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
             }
 
             return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);
-        } catch (\Throwable $th) {
+        } catch (\Throwable  $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -194,8 +194,8 @@ class GlobeController extends Controller
     {
         $sites = \DB::connection('mysql2')->table('site')
                     ->join('site_users', 'site_users.sam_id', 'site.sam_id')
-                    ->where('program_id', "=", $program_id)
-                    ->where('site_users.agent_id', "=", \Auth::user()->id)
+                    ->where('site.program_id', "=", $program_id)
+                    ->where('site_users.agent_id', \Auth::user()->id)
                     ->get();
 
         $dt = DataTables::of($sites);
