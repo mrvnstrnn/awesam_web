@@ -1,6 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+    .modalSetProfile {
+        cursor: pointer;
+    }
+</style>
 <div class="main-card mb-3 card">
     <div class="card-header-tab card-header">
         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
@@ -18,6 +23,7 @@
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,19 +126,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="position-relative form-group supervisor_select">
-                                        {{-- @php
-                                            $my_supervisors = App\Models\UserDetail::join('users', 'user_details.user_id', 'users.id')
-                                                                                    ->where('user_details.IS_id', \Auth::id())
-                                                                                    ->where('users.profile_id', 3)
-                                                                                    ->get();
-                                        @endphp --}}
-
-                                        <select class="form-control selectpicker" name="mysupervisor" id="mysupervisor" style="width: 100%;">
-                                            {{-- <option value="">Please select supervisor</option> --}}
-                                            {{-- @foreach ($my_supervisors as $my_supervisor)
-                                                <option value="">{{ $my_supervisor->email }}</option>
-                                            @endforeach --}}
-                                        </select>
+                                        <select class="form-control selectpicker" name="mysupervisor" id="mysupervisor" style="width: 100%;"></select>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +161,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer button-assign">
                     <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button>
                 </div>
             </div>

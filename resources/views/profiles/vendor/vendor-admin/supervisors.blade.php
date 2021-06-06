@@ -1,6 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+    .getListAgent {
+        cursor: pointer;
+    }
+</style>
 <div class="main-card mb-3 card">
     <div class="card-header-tab card-header">
         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
@@ -17,6 +22,7 @@
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>
+                        <th>Number of Agent</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +43,7 @@
 @section('modals')
 
     <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Agents</h5>
@@ -46,7 +52,7 @@
                     </button>
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
+                    <div class="content-data">
                         {{-- <select name="profile" id="profile" class="form-control">
                             <option value="2">Agent</option>
                             <option value="3">Supervisor</option>
@@ -54,7 +60,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button>
+                    {{-- <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button> --}}
+                    <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
