@@ -44,7 +44,7 @@ class VendorController extends Controller
         
                 return response()->json(['error' => false, 'message' => "Successfully requested." ]);
             } else {
-                return response()->json(['error' => false, 'message' => $validate->errors() ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
