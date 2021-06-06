@@ -138,34 +138,6 @@
                             return col["NOMINATION_ID"];
                     },
                 },
-                // {
-                //     data : 'site_fields',
-                //     name: 'Technology', 
-                //     render : function(data){
-                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                //             return col["TECHNOLOGY"];
-                //     },
-                // },
-                // {
-                //     data : 'site_fields',
-                //     name: 'PLA_ID', 
-                //     render : function(data){
-                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                //             return col["PLA_ID"];
-                //     },
-                // },
-                // {
-                //     data : 'site_fields',
-                //     name: 'Location', 
-                //     render : function(data){
-                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                //         $field = '<div class="widget-content-left flex2">' +
-                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
-                //                     '<div class="widget-subheading opacity-7">' + col['LOCATION'] + '</div>' +
-                //                 '</div>';
-                //         return $field;
-                //     },
-                // },
             ];
 
         }
@@ -189,18 +161,6 @@
                             return col["PROGRAM"];
                     },
                 },
-                // {
-                //     data : 'site_fields',
-                //     name: 'Location', 
-                //     render : function(data){
-                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                //         $field = '<div class="widget-content-left flex2">' +
-                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
-                //                 '</div>';
-
-                //         return $field;
-                //     },
-                // },
             ];
         } else {
             cols = [];
@@ -216,8 +176,7 @@
 
         var table = $(activeTable).DataTable({
           processing: true,
-          serverSide: true,          
-        //   ajax: "{{ route('agent_assigned_sites.list', [3]) }}", 
+          serverSide: true,
           
           ajax: {
                 url: $(activeTable).attr('data-href'),
