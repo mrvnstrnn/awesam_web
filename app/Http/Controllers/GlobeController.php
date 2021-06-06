@@ -305,14 +305,33 @@ class GlobeController extends Controller
                                     ->where('users.profile_id', 3)
                                     ->get();
                                                         
-            $dt = DataTables::of($checkSupervisor);
+            $dt = DataTables::of($checkSupervisor)
+                                ->addColumn('number_agent', function($row){
+                                    $agents = UserDetail::select('user_id')->where('IS_id', $row->user_id)->get();
+                                    return count($agents);                            
+                                });
+
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-
+    public function get_agent_of_supervisor($user_id)
+    {
+        try {
+            $getAgentOfSupervisor = UserDetail::select('users.firstname', 'users.lastname', 'users.email', 'users_areas.lgu', 'users_areas.province', 'users_areas.region')
+                                    ->join('users', 'user_details.user_id', 'users.id')
+                                    ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                                    ->where('user_details.IS_id', $user_id)
+                                    // ->where('users.profile_id', 3)
+                                    ->get();
+            
+            return response()->json(["error" => false, "message" => $getAgentOfSupervisor]);
+        } catch (\Throwable $th) {
+            return response()->json(["error" => true, "message" => $th->getMessage()]);
+        }
+    }
 
     public function get_region()
     {

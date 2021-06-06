@@ -91,6 +91,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
     Route::get('/get-agent', [ProfileController::class, 'get_agent']);
+
+
+    Route::get('/get-agent-of-supervisor/{user_id}', [GlobeController::class, 'get_agent_of_supervisor']);
+    
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
