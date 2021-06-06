@@ -191,12 +191,22 @@ class GlobeController extends Controller
     }
 
     public function agent_assigned_sites($program_id)
-    {
-        $sites = \DB::connection('mysql2')->table('site')
-                    ->join('site_users', 'site_users.sam_id', 'site.sam_id')
-                    ->where('site.program_id', "=", $program_id)
-                    ->where('site_users.agent_id', \Auth::user()->id)
-                    ->get();
+    {   
+        if((\Auth::user()->profile_id)==2){
+            $sites = \DB::connection('mysql2')->table('site')
+                        ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                        ->where('program_id', "=", $program_id)
+                        ->where('site_users.agent_id', "=", \Auth::user()->id)
+                        ->get();
+        } else {
+            $sites = \DB::connection('mysql2')->table('site')
+                        ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                        ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
+                        ->where('program_id', "=", $program_id)
+                        ->where('IS_id', "=", \Auth::user()->id)
+                        ->get();
+        }
+
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
@@ -205,7 +215,7 @@ class GlobeController extends Controller
     public function agent_assigned_sites_columns()
     {
         $sites = \Schema::connection('mysql2')->getColumnListing('site');
-        return $new_endorsements;
+        return $sites;
     }
 
     public function agents($program_id)
@@ -385,6 +395,8 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
-    }
+    }    
+
 
 }
+

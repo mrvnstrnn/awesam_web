@@ -22,7 +22,7 @@
         @foreach ($programs as $program)
             <li class="nav-item">
                 @if ($loop->first)
-                    <a role="tab" class="nav-link active" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
+                    <a role="tab" class="nav-link activexxx" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
                 @else
                     <a role="tab" class="nav-link" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
                 @endif
@@ -128,16 +128,55 @@
         if($(activeTable).attr('data-program_id')==='3'){
 
             cols = [
+                {data : null, name: 'agent'},
                 {data : 'sam_id', name: 'SAM ID'},
                 {data : 'site_name', name: 'Site Name'}, 
-                {
-                    data : 'site_fields',
-                    name: 'Nomination ID', 
-                    render : function(data){
-                            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                            return col["NOMINATION_ID"];
-                    },
-                },
+
+                // {
+                //     data : 'site_fields',
+                //     name: 'Nomination ID', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["NOMINATION_ID"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'Technology', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["TECHNOLOGY"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'PLA_ID', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["PLA_ID"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'Location', 
+                //     render : function(data){
+                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //         $field = '<div class="widget-content-left flex2">' +
+                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
+                //                     '<div class="widget-subheading opacity-7">' + col['LOCATION'] + '</div>' +
+                //                 '</div>';
+                //         return $field;
+                //     },
+                // },
+                //{
+                //    data : 'site_fields',
+                //    name: 'Nomination ID', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["NOMINATION_ID"];
+                //    },
+                //},
+
             ];
 
         }
@@ -145,21 +184,48 @@
             cols = [
                 {data : 'sam_id', name: 'SAM ID'},
                 {data : 'site_name', name: 'Site Name'}, 
-                {
-                    data : 'site_fields',
-                    name: 'PLA_ID', 
-                    render : function(data){
-                            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                            return col["PLA_ID"];
-                    },
-                },
-                {
-                    data : 'site_fields',
-                    name: 'PROGRAM', 
-                    render : function(data){
-                            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-                            return col["PROGRAM"];
-                    },
+                // {
+                //     data : 'site_fields',
+                //     name: 'PLA_ID', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["PLA_ID"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'PROGRAM', 
+                //     render : function(data){
+                //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //             return col["PROGRAM"];
+                //     },
+                // },
+                // {
+                //     data : 'site_fields',
+                //     name: 'Location', 
+                //     render : function(data){
+                //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //         $field = '<div class="widget-content-left flex2">' +
+                //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
+                //                 '</div>';
+                //         return $field;
+                //     },
+                // },
+                //{
+                //    data : 'site_fields',
+                //    name: 'PLA_ID', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["PLA_ID"];
+                //    },
+                //},
+                //{
+                //    data : 'site_fields',
+                //    name: 'PROGRAM', 
+                //    render : function(data){
+                //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
+                //            return col["PROGRAM"];
+                //    },
                 },
             ];
         } else {
@@ -176,7 +242,7 @@
 
         var table = $(activeTable).DataTable({
           processing: true,
-          serverSide: true,
+          serverSide: true,          
           
           ajax: {
                 url: $(activeTable).attr('data-href'),
@@ -188,7 +254,7 @@
           
           columns: cols,
           createdRow: function (row, data, dataIndex) {
-             $(row).attr('data-site_fields', data.site_fields.replace(/&quot;/g,'"'));
+            //  $(row).attr('data-site_fields', data.site_fields.replace(/&quot;/g,'"'));
              $(row).attr('data-sam_id', data.sam_id);
              $(row).attr('data-site_name', data.site_name);
           }
@@ -198,27 +264,29 @@
     });
 
 
-    $('.assigned-sites-table').on( 'click', 'tr td', function (e) {
+    $('.assigned-sites-table').on( 'click', 'tr', function (e) {
         e.preventDefault();
-        var json_parse = JSON.parse($(this).parent().attr('data-site_fields'));
-        // console.log(json_parse);
 
-        $("#modal-site_fields").html('');
+        console.log(this);
 
-        Object.entries(json_parse).forEach(([key, value]) => {
-            Object.entries(value).forEach(([keys, values]) => {
-                $("#modal-site_fields").append(
-                    '<div class="position-relative form-group col-md-6">' +
-                        '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
-                        '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
-                    '</div>'
-                );
-            });
-        });
+        // $("#modal-site_fields").html('');
 
-        $("#modal_site_name").text($(this).parent().attr('data-site_name'));
-        $("#modal-site_details").modal("show");
-    } );
+        // Object.entries(json_parse).forEach(([key, value]) => {
+        //     Object.entries(value).forEach(([keys, values]) => {
+        //         $("#modal-site_fields").append(
+        //             '<div class="position-relative form-group col-md-6">' +
+        //                 '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
+        //                 '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
+        //             '</div>'
+        //         );
+        //     });
+        // });
+
+        // $("#modal_site_name").text($(this).parent().attr('data-site_name'));
+        // $("#modal-site_details").modal("show");
+
+        window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
+    });
 
 
 

@@ -170,7 +170,7 @@
     <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
     
     {{-- <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> --}}
-    {{-- <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script> --}}
+    <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script>
     {{-- <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script> --}}
@@ -186,7 +186,7 @@
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
-    {{-- <script type="text/javascript" src="/js/circle-progress.js"></script> --}}
+    <script type="text/javascript" src="/js/circle-progress.js"></script>
     <script type="text/javascript" src="/js/demo.js"></script>
     {{-- <script type="text/javascript" src="/js/scrollbar.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/toastr.js"></script> --}}
