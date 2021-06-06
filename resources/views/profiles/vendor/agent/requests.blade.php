@@ -54,6 +54,9 @@
                                             <th style="width: 5%">#</th>
                                             <th>Type</th>
                                             <th style="width: 35%">Reason</th>
+                                            {{-- @if (array_keys($table_list)[$i] == "denied") --}}
+                                            <th>Comment</th>
+                                            {{-- @endif --}}
                                             <th>Start-End Date</th>
                                             <th>Date Requested</th>
                                         </tr>

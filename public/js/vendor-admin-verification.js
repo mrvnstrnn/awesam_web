@@ -173,7 +173,7 @@ $(document).ready(() => {
                     );
                     resp.message.forEach(element => {
                         $(".content-data ul").append(
-                            '<li class="list-group-item">'+element.firstname+ " "+element.lastname+ ' | '+element.region+' '+element.province+' '+element.lgu+'</span></li>'
+                            '<li class="list-group-item"><i class="fa-2x pe-7s-user icon-gradient bg-malibu-beach"></i> '+element.firstname+ " "+element.lastname+ ' | '+element.region+' '+element.province+' '+element.lgu+'</span></li>'
                         );
                     });
                 } else {
