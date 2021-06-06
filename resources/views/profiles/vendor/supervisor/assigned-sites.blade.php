@@ -226,7 +226,7 @@
                 //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
                 //            return col["PROGRAM"];
                 //    },
-                },
+                //},
             ];
         } else {
             cols = [];
