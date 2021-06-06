@@ -107,7 +107,8 @@ $(document).ready(() => {
                     $('#active-request-table').DataTable().ajax.reload();
                     $('#approved-request-table').DataTable().ajax.reload(function (){
                         toastr.success(resp.message, "Success");
-                        $("#modalRequest").modal("hide");
+                        $("#deniedModal").modal("hide");
+                        $("textarea").val("");
                     });
                 } else {
                     // $('#active-request-table').DataTable().ajax.reload();

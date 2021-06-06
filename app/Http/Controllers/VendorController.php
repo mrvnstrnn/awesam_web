@@ -25,12 +25,13 @@ class VendorController extends Controller
                 'start_date_requested' => 'required',
                 'end_date_requested' => 'required',
                 'reason' => 'required',
-                'leave_status' => 'required'
+                // 'leave_status' => 'required'
             ));
 
             if($validate->passes()){
                 $supervisor = UserDetail::select('IS_id')->where('user_id', \Auth::id())->first();
-    
+                
+                // return response()->json(['error' => true, 'message' => $request->all() ]);
                 RequestTable::create([
                     'agent_id' => \Auth::id(),
                     'supervisor_id' => $supervisor->IS_id,
@@ -43,7 +44,7 @@ class VendorController extends Controller
         
                 return response()->json(['error' => false, 'message' => "Successfully requested." ]);
             } else {
-                return response()->json(['error' => false, 'message' => $validate->errors() ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);

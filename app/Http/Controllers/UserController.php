@@ -462,7 +462,7 @@ class UserController extends Controller
                 ->table('users')
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
-                ->where('users.profile_id', null)
+                // ->where('users.profile_id', null)
                 ->where('user_details.IS_id', \Auth::id())
                 ->get();
 
@@ -470,7 +470,12 @@ class UserController extends Controller
             //                         ->where('users.profile_id', null)
             //                         ->get();
 
-            $dt = DataTables::of($user_details);
+            $dt = DataTables::of($user_details)
+                            ->addColumn('status', function($row){
+                                return is_null($row->profile_id) ? "<div class='badge badge-warning'>Pending</div>" : "<div class='badge badge-success'>Onboarded</div>";                            
+                            });
+                            
+            $dt->rawColumns(['status']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
