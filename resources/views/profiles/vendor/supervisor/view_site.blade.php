@@ -603,9 +603,9 @@
     chart.draw(data, options);
   }
 
-    // $(window).resize(function(){
-    //     drawChart();
-    // });
+  $(window).resize(function(){
+        drawChart();
+    });
 
 </script>
 
@@ -637,6 +637,11 @@
   
       chart.draw(dataTable, options);
     }
+
+    $(window).resize(function(){
+        drawChart();
+    });
+
   </script>
 
 @endsection

@@ -544,7 +544,19 @@ class UserController extends Controller
                         ->where('user_id', '=', $site[0]->agent_id)
                         ->get();
 
-        $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('.\Auth::id().')');
+         $activities = [];               
+
+
+        //  $activities = \DB::connection('mysql2')->select('call `agent_activities`(10)');
+
+        if( \Auth::user()->profile_id==="2"){
+            $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        }
+        elseif( \Auth::user()->profile_id==="3"){
+            $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('. \Auth::id() .')' );
+        }
+
+        // dd($activities);
 
         $site_activities = [];
 
