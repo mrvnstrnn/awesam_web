@@ -43,8 +43,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/transfer-vendor', [VendorController::class, 'transfer_vendor'])->name('transfer.vendor');
 
-
-
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');
@@ -80,7 +78,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/assigned-sites/list/{program_id}', [GlobeController::class, 'agent_assigned_sites'])->name('agent_assigned_sites.list');
     Route::get('/assigned-sites/columns', [GlobeController::class, 'agent_assigned_sites_columns'])->name('agent_assigned_sites.columns');
+
+    Route::get('/assigned-sites/{sam_id}', [UserController::class, 'view_assigned_site'])->name('view_assigned_site');
     
+
     Route::get('/table/request/{request_status}', [VendorController::class, 'getMyRequest'])->name('get.requestDate');
     Route::post('/requests/add', [VendorController::class, 'add_agent_request'])->name('add_agent_request');
     Route::post('/requests/approve-reject', [VendorController::class, 'approvereject_agent_request'])->name('approvereject_agent_request');
@@ -104,8 +105,5 @@ Route::view('/team', 'team');
 
 Route::get('/{slug}', [UserController::class, 'show'])
     ->where('slug', '.*')
-    ->middleware(['auth', 'verified', 'navigation']);
-
-
-// Route::view('/profile-switcher/{mode}/{profile}', 'welcome');
+    ->middleware(['auth', 'verified']);
 

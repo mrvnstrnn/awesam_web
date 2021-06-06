@@ -53,6 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function can_do($checkPermission)
     {
+        // dd($checkPermission);
 
         $collection = collect();
         $permissions = Permission::where('slug', $checkPermission)

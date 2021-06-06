@@ -347,14 +347,19 @@ class UserController extends Controller
 
     public function show($show = null, Request $request){
 
+
         if(is_null(\Auth::user()->profile_id)){
+            
             return redirect('/onboarding');
+
         } else {
+
             $path = explode('/', $show);
             // LIMIT TWO LEVELS OF SLUGS FOR PAGES
             // USE THIRD SLUG LEVEL AS PARAMETER
-            if(count($path) >= 3){
-                $show = $path[0]."/".$path[1];
+            if(count($path) >= 2){
+                // $show = $path[0]."/".$path[1];
+                $show = $path[0];
             }
 
             $role = \Auth::user()->getAllNavigation()
@@ -366,8 +371,13 @@ class UserController extends Controller
 
             $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
 
+
+
             if(count($role)>0){
-                if(count($path) >= 3){
+                if(count($path) >= 2){
+
+                    // dd($path);
+
                     $view = $slug_info[0]['view'] . "_param";
                     $title = $path[2];
                 } else if (count($path) == 2) {
@@ -391,10 +401,10 @@ class UserController extends Controller
 
             $active_slug = $show;
 
+
+
             $profile_menu = self::getProfileMenuLinks();
-
             $profile_direct_links = self::getProfileMenuDirectLinks();
-
             $program_direct_links = self::getProgramMenuDirectLinks();
             
             return view($view, 
@@ -514,5 +524,75 @@ class UserController extends Controller
             throw $th;
         }
     }
+
+    public function view_assigned_site($sam_id)
+    {
+
+        $site = \DB::connection('mysql2')
+                        ->table('site')
+                        ->join('site_users', 'site.sam_id', 'site_users.sam_id')
+                        ->join('users', 'users.id', 'site_users.agent_id')
+                        ->join('profiles', 'users.profile_id', 'profiles.id')
+                        ->where('site.sam_id', "=", $sam_id)
+                        ->get();
+
+        $agent_sites = \DB::connection('mysql2')
+                        ->table('user_details')
+                        ->select('site.sam_id', 'site.site_name')
+                        ->join('site_users', 'user_details.user_id', 'site_users.agent_id')
+                        ->join('site', 'site_users.sam_id', 'site.sam_id')
+                        ->where('user_id', '=', $site[0]->agent_id)
+                        ->get();
+
+        $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('.\Auth::id().')');
+
+        $site_activities = [];
+
+        foreach($activities as $activity){
+            if($activity->sam_id === $sam_id){
+                $site_activities[] = $activity;
+            }
+        }
+
+        $site_fields = json_decode($site[0]->site_fields, true);
+        $activities = $site_activities;
+
+        $what_site = $site[0];
+        $mode = $site[0]->mode;
+        $profile = "supervisor";
+        $active_slug = "assigned-sites";
+        $title = $site[0]->site_name;
+        $title_subheading = $sam_id;
+        $title_icon = "locations";
+
+        $agent_name = $site[0]->firstname . " " . $site[0]->middlename . " " . $site[0]->lastname. " " . $site[0]->suffix;
+
+        $profile_menu = self::getProfileMenuLinks();
+        $profile_direct_links = self::getProfileMenuDirectLinks();
+        $program_direct_links = self::getProgramMenuDirectLinks();
+
+        $view = "profiles." . $mode . "." . $profile . ".view_site";        
+        
+        return view($view, 
+            compact(
+                'activities',
+                'site_fields',
+                'agent_name',
+                'agent_sites',
+                'what_site',
+                'mode',
+                'profile',
+                'active_slug',
+                'profile_menu',
+                'profile_direct_links',
+                'program_direct_links',
+                'title', 
+                'title_subheading', 
+                'title_icon'
+            )
+        );
+
+    }
+
 
 }

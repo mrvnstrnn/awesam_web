@@ -139,6 +139,7 @@
 
                                     @php
 
+
                                         $activity_id = $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_id;
                                         $activity_name = $activities_groups[array_keys($activities_groups)[$j]][$k]->activity_name;
                                         $site_name = $activities_groups[array_keys($activities_groups)[$j]][$k]->site_name;
