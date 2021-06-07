@@ -56,7 +56,7 @@ $(document).ready(() => {
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
-            { data: "number_agent" },
+            // { data: "number_agent" },
         ],
     });
 
@@ -74,6 +74,14 @@ $(document).ready(() => {
         $('#employment_classification').val(data.employment_classification).trigger('change');
         $('#employment_status').val(data.employment_status).trigger('change');
         $('#hiring_date').val(data.hiring_date);
+
+        $('#suffix').val(data.suffix);
+        $('#nickname').val(data.nickname);
+        $('#birthday').val(data.birthday);
+        $('#gender').val(data.gender);
+        $('#email').val(data.email);
+        $('#contact_no').val(data.contact_no);
+        $('#landline').val(data.landline);
 
         $("#modal-employee-verification").modal("show");
         $(".modal-footer.button-assign").removeClass("d-none");
@@ -155,35 +163,35 @@ $(document).ready(() => {
         });
     });
 
-    $('#employee-agents-table tbody').on('click', 'tr', function () {
-        $("#modal-employee-verification").modal("show");
+    // $('#employee-agents-table tbody').on('click', 'tr', function () {
+    //     $("#modal-employee-verification").modal("show");
 
-        $(".content-data ul").remove();
+    //     $(".content-data ul").remove();
 
-        var data_id = $(this).attr("data-id");
+    //     var data_id = $(this).attr("data-id");
 
-        // $(".modal-footer.assign-profile-footer").addClass("d-none");
-        $.ajax({
-            url: "/get-agent-of-supervisor/"+data_id,
-            method: "GET",
-            success: function(resp) {
-                if(!resp.error) {
-                    $(".content-data").append(
-                        '<ul class="list-group"></ul>'
-                    );
-                    resp.message.forEach(element => {
-                        $(".content-data ul").append(
-                            '<li class="list-group-item">'+element.firstname+ " "+element.lastname+ ' | '+element.region+' '+element.province+' '+element.lgu+'</span></li>'
-                        );
-                    });
-                } else {
-                    toastr.error(resp.message, "Error");
-                }
-            },
-            error: function(resp) {
-                toastr.error(resp.message, "Error");
-            }
-        });
-    });
+    //     // $(".modal-footer.assign-profile-footer").addClass("d-none");
+    //     $.ajax({
+    //         url: "/get-agent-of-supervisor/"+data_id,
+    //         method: "GET",
+    //         success: function(resp) {
+    //             if(!resp.error) {
+    //                 $(".content-data").append(
+    //                     '<ul class="list-group"></ul>'
+    //                 );
+    //                 resp.message.forEach(element => {
+    //                     $(".content-data ul").append(
+    //                         '<li class="list-group-item"><i class="fa-2x pe-7s-user icon-gradient bg-malibu-beach"></i> '+element.firstname+ " "+element.lastname+ ' | '+element.region+' '+element.province+' '+element.lgu+'</span></li>'
+    //                     );
+    //                 });
+    //             } else {
+    //                 toastr.error(resp.message, "Error");
+    //             }
+    //         },
+    //         error: function(resp) {
+    //             toastr.error(resp.message, "Error");
+    //         }
+    //     });
+    // });
 
 });

@@ -25,6 +25,7 @@ $(document).ready(() => {
                 { data: "id" },
                 { data: "request_type" },
                 { data: "reason" },
+                { data: "comment" },
                 { data: "requested_date" },
                 { data: "date_created" }
             ],
