@@ -549,6 +549,13 @@ class UserController extends Controller
                         ->where('user_id', '=', $site[0]->agent_id)
                         ->get();
 
+
+        $timeline = \DB::connection('mysql2')
+                        ->select('call site_gantt_chart("'.$sam_id.'")');
+
+
+        $timeline = json_encode($timeline);
+
          $activities = [];               
 
 
@@ -556,9 +563,11 @@ class UserController extends Controller
 
         if( \Auth::user()->profile_id==="2"){
             $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+            $profile = "agent";
         }
         elseif( \Auth::user()->profile_id==="3"){
             $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('. \Auth::id() .')' );
+            $profile = "supervisor";
         }
 
         // dd($activities);
@@ -574,9 +583,10 @@ class UserController extends Controller
         $site_fields = json_decode($site[0]->site_fields, true);
         $activities = $site_activities;
 
+
+
         $what_site = $site[0];
         $mode = $site[0]->mode;
-        $profile = "supervisor";
         $active_slug = "assigned-sites";
         $title = $site[0]->site_name;
         $title_subheading = $sam_id;
@@ -592,6 +602,7 @@ class UserController extends Controller
         
         return view($view, 
             compact(
+                'timeline',
                 'activities',
                 'site_fields',
                 'agent_name',
