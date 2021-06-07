@@ -75,6 +75,14 @@ $(document).ready(() => {
         $('#employment_status').val(data.employment_status).trigger('change');
         $('#hiring_date').val(data.hiring_date);
 
+        $('#suffix').val(data.suffix);
+        $('#nickname').val(data.nickname);
+        $('#birthday').val(data.birthday);
+        $('#gender').val(data.gender);
+        $('#email').val(data.email);
+        $('#contact_no').val(data.contact_no);
+        $('#landline').val(data.landline);
+
         $("#modal-employee-verification").modal("show");
         $(".modal-footer.button-assign").removeClass("d-none");
         if(data.profile_id != null){
