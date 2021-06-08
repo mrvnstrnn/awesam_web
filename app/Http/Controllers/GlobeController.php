@@ -10,6 +10,7 @@ use App\Models\Program;
 use App\Models\UserDetail;
 use Illuminate\Support\Facades\Schema;
 use Validator;
+use PDF;
 
 use App\Events\SiteEndorsementEvent;
 use App\Listeners\SiteEndorsementListener;
@@ -415,6 +416,44 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }    
+
+    public function loi_template()
+    {
+        try {
+            $content = "<img src='".asset('images/globe-logo.png')."' width='150px'><br>";
+            $content .= "<p>October 1, 2019</p>";
+            $content .= "<p>ROSELIO R. ARAN DIA AND YOLANDA DC. ARANDIA</p>";
+            $content .= "<p>Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City</p>";
+            $content .= "<p>Subject: <b>NOTICE TO PROCEED</b></p>";
+            $content .= "<p>Dear <b>Sir/Ma'am</b></p>";
+            $content .= "<p>We would like to seek for your approval to allow Globe Telecom, Inc., its employees, agents or representatives to commence with the enhancement of facilities, equipment and appurtenances located at Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City.</p>";
+
+            $content .= "<p>Kindly signify your confirmation by affixing your signature in the space provided below. Thank you</p>";
+
+
+            return response()->json(['error' => false, 'message' => $content]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function download_pdf(Request $request)
+    {
+        try {
+
+            // dd($request->all());
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf = PDF::loadHTML($request->input('template'));
+            $pdf->setPaper('a4');
+            
+            return $pdf->stream();
+            // $pdf->download('invoice.pdf');
+            
+            return response()->json(['error' => false, 'message' => "Successfully printed to pdf."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
 
 }

@@ -61,16 +61,30 @@ $(document).ready(function() {
             $(".modal-title").text($(this).attr('data-sub_activity_name'));
             $('.modal-body').html("");
 
-            var content = "";
+            $.ajax({
+                url: "/loi-template",
+                method: "GET",
+                success: function(resp){
+                    if(!resp.error){
+                        $('.modal-body').html('<div id="summernote" name="editordata">' + resp.message + '</div>');
 
-            $('.modal-body').html('<div id="summernote" name="editordata">' + content + '</div>');
-            $('#summernote').summernote({
-                height: 300,
-                minHeight: null,
-                maxHeight: null,
-                focus: true, 
+                        $("textarea").text(resp.message);
+                        $('#summernote').summernote({
+                            height: 300,
+                            minHeight: null,
+                            maxHeight: null,
+                            focus: true, 
+                        });
+                        $("#modal-sub_activity").modal("show");
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function(resp){
+                    toastr.error(resp.message, "Error");
+                },
             });
-            $("#modal-sub_activity").modal("show");
+            // var content = "Sample";
         }
 
         else if($(this).attr('data-action')=="doc upload"){
@@ -96,6 +110,31 @@ $(document).ready(function() {
     });
 
 
+    $(".download_pdf").on("click", function(){
+        // console.log($('#summernote').summernote('code'));
+
+        var data_summernote = $('#summernote').summernote('code');
+
+        $.ajax({
+            url: "/download-pdf",
+            data: { data_summernote : data_summernote },
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp) {
+                if(!resp.error){
+                    toastr.success(resp.message, "Success");
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp) {
+                toastr.error(resp.message, "Error");
+            }
+
+        });
+    })
 
 
 });        

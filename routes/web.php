@@ -95,6 +95,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     Route::get('/get-agent-of-supervisor/{user_id}', [GlobeController::class, 'get_agent_of_supervisor']);
+
+
+
+
+    Route::get('/loi-template', [GlobeController::class, 'loi_template']);
+    Route::post('/download-pdf', [GlobeController::class, 'download_pdf']);
     
 });
 
