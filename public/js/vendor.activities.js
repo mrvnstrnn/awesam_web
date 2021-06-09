@@ -134,7 +134,34 @@ $(document).ready(function() {
             }
 
         });
-    })
+    });
+
+    $(".upload_file").on("click", function (e){
+
+        // var file = $("#doc_upload").val();
+
+        var file = $("#doc_upload").val();
+
+        console.log(file);
+        $.ajax({
+            url: "/upload-file",
+            method: "POST", 
+            data: $("#form-upload").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp) {
+                if(!resp.error){
+                    toastr.success(resp.message, "Success");
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function(resp) {
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
 
 
 });        

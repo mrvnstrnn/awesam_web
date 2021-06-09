@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/loi-template', [GlobeController::class, 'loi_template']);
     Route::post('/download-pdf', [GlobeController::class, 'download_pdf']);
+    Route::post('/upload-file', [GlobeController::class, 'fileupload']);
     
 });
 
