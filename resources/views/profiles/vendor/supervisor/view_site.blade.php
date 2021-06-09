@@ -502,7 +502,7 @@
 @endsection
 
 @section('js_script')
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
   google.charts.load('current', {'packages':['gantt']});
@@ -606,6 +606,6 @@
         drawChart();
     });
 
-</script>
+</script> --}}
 
 @endsection
