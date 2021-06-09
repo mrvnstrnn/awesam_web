@@ -8,13 +8,6 @@
     overflow-y: hidden;
 }
 </style>
-
-
-@php
-    // dd($activities);
-                                // dd($site_fields[0]['field_name']);
-
-@endphp
 <div class="row">
     <div class="col-12">
         <div id="example4.2" style="height: 100px;"></div>
@@ -58,6 +51,7 @@
         </ul>
 
         <div class="tab-content">
+
             <div class="tab-pane tabs-animation fade show active" id="tab-content-4" role="tabpanel">
                 <div class="main-card mb-3 card">
                     <div class="card-header-tab card-header">
@@ -68,10 +62,7 @@
                     </div>
                     <div class="card-body">
                         <ul class="todo-list-wrapper list-group list-group-flush">
-                            @foreach ($activities as $activity )
-                                @php
-                                    // dd($activity);
-                                @endphp
+                            {{-- @foreach ($activities as $activity )
                                 <li class="list-group-item" data-activity_type="{{ $activity->activity_type }}" data-cumulative_days="{{ $activity->cumulative_days }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
                                     <div class="todo-indicator bg-danger"></div>
                                     <div class="widget-content p-0">
@@ -102,7 +93,7 @@
                                     </div>
                                 </li>
                                 
-                            @endforeach
+                            @endforeach --}}
                         
                         {{-- <li id="sub_activity___li_" class="list-group-item d-none sub_activity_li">
                             <div id="sub_activity___" class="card-shadow-primary border mb-0 card card-body border-" >
@@ -166,7 +157,7 @@
                         @php
                         @endphp
                         <form>
-                            @foreach ( $site_fields as $site_field )
+                            {{-- @foreach ( $site_fields as $site_field )
                             <div class="form-row mb-1">
                                 <div class="col-5">
                                     <label for="exampleEmail22" class="mr-sm-2">{{ $site_field['field_name'] }}</label>
@@ -175,7 +166,7 @@
                                     <input name="email" id="exampleEmail22" type="text" value="{{ $site_field['value'] }}" class="form-control">
                                 </div>
                             </div>
-                            @endforeach
+                            @endforeach --}}
                         </form>
                     </div>
                     <div class="d-block text-right card-footer">
@@ -512,6 +503,7 @@
 
 @section('js_script')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script type="text/javascript">
   google.charts.load('current', {'packages':['gantt']});
   google.charts.setOnLoadCallback(drawChart);
@@ -614,6 +606,6 @@
         drawChart();
     });
 
-  </script>
+</script>
 
 @endsection

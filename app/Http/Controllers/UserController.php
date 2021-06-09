@@ -557,31 +557,32 @@ class UserController extends Controller
         $timeline = json_encode($timeline);
 
          $activities = [];               
+            $profile = "supervisor";
 
 
         //  $activities = \DB::connection('mysql2')->select('call `agent_activities`(10)');
 
-        if( \Auth::user()->profile_id==="2"){
-            $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
-            $profile = "agent";
-        }
-        elseif( \Auth::user()->profile_id==="3"){
-            $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('. \Auth::id() .')' );
-            $profile = "supervisor";
-        }
+        // if( \Auth::user()->profile_id==="2"){
+        //     $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        //     $profile = "agent";
+        // }
+        // elseif( \Auth::user()->profile_id==="3"){
+        //     $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('. \Auth::id() .')' );
+        //     $profile = "supervisor";
+        // }
 
-        // dd($activities);
+        // // dd($activities);
 
-        $site_activities = [];
+        // $site_activities = [];
 
-        foreach($activities as $activity){
-            if($activity->sam_id === $sam_id){
-                $site_activities[] = $activity;
-            }
-        }
+        // foreach($activities as $activity){
+        //     if($activity->sam_id === $sam_id){
+        //         $site_activities[] = $activity;
+        //     }
+        // }
 
-        $site_fields = json_decode($site[0]->site_fields, true);
-        $activities = $site_activities;
+        // $site_fields = json_decode($site[0]->site_fields, true);
+        // $activities = $site_activities;
 
 
 
@@ -603,8 +604,8 @@ class UserController extends Controller
         return view($view, 
             compact(
                 'timeline',
-                'activities',
-                'site_fields',
+                // 'activities',
+                // 'site_fields',
                 'agent_name',
                 'agent_sites',
                 'what_site',
