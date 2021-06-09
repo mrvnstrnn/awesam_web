@@ -1,6 +1,14 @@
 @extends('layouts.main')
 
 @section('content')
+@php
+    
+
+
+@endphp
+
+
+
 <style>
 .tab-content > .tab-pane:not(.active) {
     display: block;
@@ -491,7 +499,7 @@
             </div>
     </div>
 
-    {{-- <input id="timeline" type="hidden" value="{{ $timeline }}" /> --}}
+    <input id="timeline" type="hidden" value="{{ $timeline }}" />
 
 </div>
 
@@ -502,7 +510,7 @@
 @endsection
 
 @section('js_script')
-{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
 
@@ -512,7 +520,7 @@
 
 </script> --}}
 
-{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
 
@@ -617,6 +625,6 @@ google.charts.setOnLoadCallback(drawChart);
 
 });
 
-</script> --}}
+</script>
 
 @endsection

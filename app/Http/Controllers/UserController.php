@@ -541,6 +541,8 @@ class UserController extends Controller
                         ->where('site.sam_id', "=", $sam_id)
                         ->get();
 
+
+        // dd($site);
         // $agent_sites = \DB::connection('mysql2')
         //                 ->table('user_details')
         //                 ->select('site.sam_id', 'site.site_name')
@@ -577,7 +579,7 @@ class UserController extends Controller
 
         // foreach($activities as $activity){
         //     if($activity->sam_id === $sam_id){
-        //         $site_activities[] = $activity;
+        //         $site_activities[] = $activity;  
         //     }
         // }
 
@@ -587,6 +589,33 @@ class UserController extends Controller
 
 
         $what_site = $site[0];
+
+        $array = json_decode($what_site->timeline);
+        $res = array();
+        foreach ($array as $each) {
+            if (isset($res[$each->stage_name]))
+                array_push($res[$each->stage_name],  array("activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date));
+            else
+                $res[$each->stage_name] = array( array( "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date));
+        }
+    
+        $timeline = array();
+    
+        foreach($res as $re){
+            $first = array_key_first($re);
+            $last = array_key_last($re);
+    
+            $first =$re[$first]["start_date"];
+            $last = ($re[$last]["end_date"]);
+            $key = key($res);
+    
+            next($res);
+            array_push($timeline, array("stage_name" => $key, "start_date" => $first, "end_date" => $last ));
+        }
+    
+        $timeline = json_encode($timeline);    
+
+
         $mode = $site[0]->mode;
         $active_slug = "assigned-sites";
         $title = $site[0]->site_name;
@@ -603,7 +632,7 @@ class UserController extends Controller
         
         return view($view, 
             compact(
-                // 'timeline',
+                'timeline',
                 // 'activities',
                 // 'site_fields',
                 'agent_name',
