@@ -91,7 +91,7 @@
 
 @section('modals')
 <div class="modal fade" id="modal-sub_activity" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Site Details</h5>
@@ -99,14 +99,17 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
-                    Close
-                </button>
-                <button type="button" class="btn btn btn-success" data-complete="false" id="" data-href="">Save</button>
-            </div>
+            <form action="/download-pdf" method="POST" target="_blank">@csrf
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                </div>
+                <textarea name="template" id="template" class="d-none" cols="30" rows="10"></textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn btn-success">Print to PDF</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
