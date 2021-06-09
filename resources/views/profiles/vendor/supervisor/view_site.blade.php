@@ -505,8 +505,23 @@
 {{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
-  google.charts.load('current', {'packages':['gantt']});
-  google.charts.setOnLoadCallback(drawChart);
+
+</script>
+
+<script type="text/javascript">
+
+</script> --}}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(() => {
+
+
+
+google.charts.load('current', {'packages':['gantt']});
+google.charts.setOnLoadCallback(drawChart);
 
   function daysToMilliseconds(days) {
     return days * 24 * 60 * 60 * 1000;
@@ -560,16 +575,11 @@
     chart.draw(data, options);
   }
 
-  $(window).resize(function(){
-        drawChart();
-    });
 
-</script>
-
-<script type="text/javascript">
     google.charts.load("current", {packages:["timeline"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
+    google.charts.setOnLoadCallback(drawChart2);
+
+    function drawChart2() {
       var container = document.getElementById('example4.2');
       var chart = new google.visualization.Timeline(container);
       var dataTable = new google.visualization.DataTable();
@@ -602,10 +612,11 @@
       chart.draw(dataTable, options);
     }
 
-    $(window).resize(function(){
-        drawChart();
-    });
 
-</script> --}}
+
+
+});
+
+</script>
 
 @endsection
