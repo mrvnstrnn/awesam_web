@@ -569,33 +569,63 @@
     data.addColumn('number', 'Percent Complete');
     data.addColumn('string', 'Dependencies');
 
-    console.log($('#timeline').val());
+    var timeline = $('#timeline').val();
+    var obj = jQuery.parseJSON(timeline);
 
-    data.addRows([
-        ['PMO ENDORSEMENT', 'PMO ENDORSEMENT', 'PMO ENDORSEMENT',
-         new Date(2021, 2, 22), new Date(2021, 5, 20), null, 100, null],
+    var times =[];
+    var chain = null;
 
-         ['PRE-NEGOTIATION', 'PRE-NEGOTIATION', 'PRE-NEGOTIATION',
-         new Date(2021, 5, 21), new Date(2021, 8, 20), null, 100, 'PMO ENDORSEMENT'],
+    $.each(obj, function(key,value) {
+        whattopush = [
+            value.stage_name, 
+            value.stage_name, 
+            value.stage_name,
+            new Date(value.start_date), 
+            new Date(value.end_date), 
+            null,
+            100,  
+            chain
+        ];
 
-         ['LESSOR ISSUE', 'LESSOR ISSUE', 'LESSOR ISSUE',
-         new Date(2021, 8, 30), new Date(2021, 9, 30), null, 25, null],
+        chain = value.stage_name    
+        times.push(whattopush);
+    });    
 
-        ['LESSOR NEGOTIATION', 'LESSOR NEGOTIATION', 'LESSOR NEGOTIATION',
-         new Date(2021, 8, 21), new Date(2021, 11, 20), null, 50, 'PRE-NEGOTIATION'],
+    data.addRows(times);
 
-        ['READY TO BUILD', 'READY TO BUILD', 'READY TO BUILD',
-         new Date(2021, 11, 21), new Date(2022, 2, 21), null, 0, 'LESSOR NEGOTIATION'],
 
-        ['PROVISIONAL ACCEPTANCE', 'PROVISIONAL ACCEPTANCE', 'PROVISIONAL ACCEPTANCE',
-         new Date(2022, 2, 22), new Date(2022, 5, 20), null, 0, 'READY TO BUILD'],
+    // var rowss = [
+    //     ['PMO ENDORSEMENT', 'PMO ENDORSEMENT', 'PMO ENDORSEMENT',
+    //      new Date(2021, 2, 22), new Date(2021, 5, 20), null, 100, null],
 
-        ['FINAL ACCEPTANCE', 'FINAL ACCEPTANCE', 'FINAL ACCEPTANCE',
-         new Date(2022, 5, 21), new Date(2022, 8, 20), null, 0, 'PROVISIONAL ACCEPTANCE'],
+    //      ['PRE-NEGOTIATION', 'PRE-NEGOTIATION', 'PRE-NEGOTIATION',
+    //      new Date(2021, 5, 21), new Date(2021, 8, 20), null, 100, 'PMO ENDORSEMENT'],
 
-         ['COMPLETED', 'COMPLETED', 'COMPLETED',
-         new Date(2022, 8, 21), new Date(2022, 9, 21), null, 0, 'FINAL ACCEPTANCE']
-      ]);
+    //      ['LESSOR ISSUE', 'LESSOR ISSUE', 'LESSOR ISSUE',
+    //      new Date(2021, 8, 30), new Date(2021, 9, 30), null, 25, null],
+
+    //     ['LESSOR NEGOTIATION', 'LESSOR NEGOTIATION', 'LESSOR NEGOTIATION',
+    //      new Date(2021, 8, 21), new Date(2021, 11, 20), null, 50, 'PRE-NEGOTIATION'],
+
+    //     ['READY TO BUILD', 'READY TO BUILD', 'READY TO BUILD',
+    //      new Date(2021, 11, 21), new Date(2022, 2, 21), null, 0, 'LESSOR NEGOTIATION'],
+
+    //     ['PROVISIONAL ACCEPTANCE', 'PROVISIONAL ACCEPTANCE', 'PROVISIONAL ACCEPTANCE',
+    //      new Date(2022, 2, 22), new Date(2022, 5, 20), null, 0, 'READY TO BUILD'],
+
+    //     ['FINAL ACCEPTANCE', 'FINAL ACCEPTANCE', 'FINAL ACCEPTANCE',
+    //      new Date(2022, 5, 21), new Date(2022, 8, 20), null, 0, 'PROVISIONAL ACCEPTANCE'],
+
+    //      ['COMPLETED', 'COMPLETED', 'COMPLETED',
+    //      new Date(2022, 8, 21), new Date(2022, 9, 21), null, 0, 'FINAL ACCEPTANCE']
+    //   ];
+
+    //   console.log(rowss);
+
+
+
+
+    // data.addRows(rowss);
 
       var options = {
         height: 415,
@@ -626,15 +656,37 @@
       dataTable.addColumn({ type: 'string', id: 'Name' });
       dataTable.addColumn({ type: 'date', id: 'Start' });
       dataTable.addColumn({ type: 'date', id: 'End' });
-      dataTable.addRows([
-        [ 'COLOC-000001', 'PMO Endorsement', new Date(2021, 3, 1), new Date(2021, 3, 4) ],
-        [ 'COLOC-000001', 'Pre Lessor Negotiation', new Date(2021, 3, 4), new Date(2021, 3, 10) ],
-        [ 'COLOC-000001', 'Lessor Negotiation', new Date(2021, 3, 10), new Date(2021, 3, 20) ],
-        [ 'COLOC-000001', 'Ready to Build', new Date(2021, 3, 20), new Date(2021, 3, 30) ],
-        [ 'COLOC-000001', 'Provisional Authorization', new Date(2021, 3, 30), new Date(2021, 4, 10) ],
-        [ 'COLOC-000001', 'Final Authorization', new Date(2021, 4, 10), new Date(2021, 4, 15) ],
-        [ 'COLOC-000001', 'Completed', new Date(2021, 4, 15), new Date(2021, 4, 16) ],
-      ]);
+
+
+    var timeline = $('#timeline').val();
+    var obj = jQuery.parseJSON(timeline);
+
+    var times =[];
+
+    $.each(obj, function(key,value) {
+        whattopush = [
+            'COLOC-000001',
+            value.stage_name, 
+            new Date(value.start_date), 
+            new Date(value.end_date)
+        ];
+        times.push(whattopush);
+    });    
+
+    dataTable.addRows(times);
+
+    console.log(times);
+
+
+    //   dataTable.addRows([
+    //     [ 'COLOC-000001', 'PMO Endorsement', new Date(2021, 3, 1), new Date(2021, 3, 4) ],
+    //     [ 'COLOC-000001', 'Pre Lessor Negotiation', new Date(2021, 3, 4), new Date(2021, 3, 10) ],
+    //     [ 'COLOC-000001', 'Lessor Negotiation', new Date(2021, 3, 10), new Date(2021, 3, 20) ],
+    //     [ 'COLOC-000001', 'Ready to Build', new Date(2021, 3, 20), new Date(2021, 3, 30) ],
+    //     [ 'COLOC-000001', 'Provisional Authorization', new Date(2021, 3, 30), new Date(2021, 4, 10) ],
+    //     [ 'COLOC-000001', 'Final Authorization', new Date(2021, 4, 10), new Date(2021, 4, 15) ],
+    //     [ 'COLOC-000001', 'Completed', new Date(2021, 4, 15), new Date(2021, 4, 16) ],
+    //   ]);
   
       var options = {
         timeline: { groupByRowLabel: true, showRowLabels: false }
