@@ -535,9 +535,6 @@ class UserController extends Controller
 
         $site = \DB::connection('mysql2')
                         ->table('site')
-                        ->join('site_users', 'site.sam_id', 'site_users.sam_id')
-                        ->join('users', 'users.id', 'site_users.agent_id')
-                        ->join('profiles', 'users.profile_id', 'profiles.id')
                         ->where('site.sam_id', "=", $sam_id)
                         ->get();
 
@@ -552,14 +549,6 @@ class UserController extends Controller
         //                 ->get();
 
 
-        // $timeline = \DB::connection('mysql2')
-        //                 ->select('call site_gantt_chart("'.$sam_id.'")');
-
-
-        // $timeline = json_encode($timeline);
-
-         $activities = [];               
-            $profile = "supervisor";
 
 
         //  $activities = \DB::connection('mysql2')->select('call `agent_activities`(10)');
@@ -573,7 +562,7 @@ class UserController extends Controller
         //     $profile = "supervisor";
         // }
 
-        // // dd($activities);
+        // dd($site);
 
         // $site_activities = [];
 
@@ -586,19 +575,27 @@ class UserController extends Controller
         // $site_fields = json_decode($site[0]->site_fields, true);
         // $activities = $site_activities;
 
-
-
         $what_site = $site[0];
 
-        $array = json_decode($what_site->timeline);
+        $activities = array();
+        
+        $array = json_decode($site[0]->timeline);
         $res = array();
         foreach ($array as $each) {
-            if (isset($res[$each->stage_name]))
+            if (isset($res[$each->stage_name])){
                 array_push($res[$each->stage_name],  array("activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date));
-            else
+            }
+            else{
                 $res[$each->stage_name] = array( array( "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date));
+            }
+            if($each->profile_id == 2){
+                array_push($activities,  array("activity_name" => $each->activity_name,  "activity_complete" => $each->activity_complete, "start_date" => $each->start_date, "end_date" => $each->end_date ));
+            }
         }
     
+
+        // dd($activities);
+
         $timeline = array();
     
         foreach($res as $re){
@@ -613,16 +610,18 @@ class UserController extends Controller
             array_push($timeline, array("stage_name" => $key, "start_date" => $first, "end_date" => $last ));
         }
     
-        $timeline = json_encode($timeline);    
+        $timeline = json_encode($timeline);   
+        // dd($activities);
 
+        $mode = "vendor";
+        $profile = "supervisor";
 
-        $mode = $site[0]->mode;
         $active_slug = "assigned-sites";
         $title = $site[0]->site_name;
         $title_subheading = $sam_id;
         $title_icon = "box2";
 
-        $agent_name = $site[0]->firstname . " " . $site[0]->middlename . " " . $site[0]->lastname. " " . $site[0]->suffix;
+        $agent_name = "Agent 1";
 
         $profile_menu = self::getProfileMenuLinks();
         $profile_direct_links = self::getProfileMenuDirectLinks();
@@ -633,7 +632,7 @@ class UserController extends Controller
         return view($view, 
             compact(
                 'timeline',
-                // 'activities',
+                'activities',
                 // 'site_fields',
                 'agent_name',
                 // 'agent_sites',

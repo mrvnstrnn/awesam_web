@@ -70,8 +70,8 @@
                     </div>
                     <div class="card-body">
                         <ul class="todo-list-wrapper list-group list-group-flush">
-                            {{-- @foreach ($activities as $activity )
-                                <li class="list-group-item" data-activity_type="{{ $activity->activity_type }}" data-cumulative_days="{{ $activity->cumulative_days }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
+                            @foreach ($activities as $activity )
+                                <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">
                                     <div class="todo-indicator bg-danger"></div>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
@@ -81,17 +81,13 @@
                                             <div class="widget-content-left">
                                                 <div class="widget-content-left">
                                                     <div class="widget-heading">
-                                                        {{ $activity->activity_name }}
+                                                        {{ $activity["activity_name"] }}
                                                         <div class="badge badge- ml-2">
                                                         </div>
                                                     </div>
                                                     <div class="widget-subheading">
-                                                        {{ $activity->site_name }}
+                                                        {{ $activity["start_date"] }} to {{ $activity["end_date"] }}
                                                     </div>
-                                                    <div class="widget-subheading">
-                                                        {{ $activity->start_date }} to {{ $activity->end_date }}
-                                                    </div>
-                                                    <small>{{ $activity->sam_id }}</small>
                                                 </div>
                                             </div>
                                             <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity___li_" data-chevron="down">
@@ -101,7 +97,7 @@
                                     </div>
                                 </li>
                                 
-                            @endforeach --}}
+                            @endforeach
                         
                         {{-- <li id="sub_activity___li_" class="list-group-item d-none sub_activity_li">
                             <div id="sub_activity___" class="card-shadow-primary border mb-0 card card-body border-" >
