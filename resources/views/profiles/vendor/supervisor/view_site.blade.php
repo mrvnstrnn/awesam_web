@@ -465,7 +465,7 @@
                         </div>
                     </div>
                 </div>                    
-                <ul class="list-group list-group-flush">
+                {{-- <ul class="list-group list-group-flush">
                     @foreach($agent_sites as $what_site)
                     <li class="list-group-item">
                         <div class="widget-content p-0">
@@ -487,7 +487,7 @@
                         </div>
                     </li>                        
                     @endforeach
-                </ul>
+                </ul> --}}
             </div>
     </div>
 
