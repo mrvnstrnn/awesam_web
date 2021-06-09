@@ -64,7 +64,7 @@
                 <div class="header-btn-lg">
                     <button type="button" class="hamburger hamburger--elastic open-right-drawer">
                         {{-- <span class="hamburger-box"> --}}
-                        <span class="lnr-envelope fa-2x">
+                        <span class="pe-7s-chat fa-2x">
                             {{-- <span class="hamburger-inner"></span> --}}
                         </span>
                     </button>
