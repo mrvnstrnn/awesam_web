@@ -39,6 +39,10 @@ class GlobeController extends Controller
                             $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
                             return "<div class='badge badge-success'>".$technology."</div>";                            
                         });
+                        // ->addColumn('pla_id', function($row){
+                        //     return $row['site_fields'][0]['PLA_ID'];
+                            
+                        // });
             
             $dt->rawColumns(['checkbox', 'technology']);
             return $dt->make(true);
@@ -455,7 +459,7 @@ class GlobeController extends Controller
 
         try {
 
-            return response()->json(['error' => true, 'message' => $request->all()]);
+            return response()->json(['error' => true, 'message' => $request->hasFile('file')]);
             if($request->hasFile('file')) {
    
                 // Upload path
@@ -465,7 +469,7 @@ class GlobeController extends Controller
                 $extension = $request->file('file')->getClientOriginalExtension();
             
                 // Valid extensions
-                $validextensions = array("jpeg","jpg","png","pdf");
+                $validextensions = array("pdf");
             
                 // Check extension
                 if(in_array(strtolower($extension), $validextensions)){
@@ -476,10 +480,11 @@ class GlobeController extends Controller
                     $request->file('file')->move($destinationPath, $fileName); 
             
                 }
+
+                
+                return response()->json(['error' => false, 'message' => "Successfully printed to pdf."]);
         
             }
-
-            return response()->json(['error' => false, 'message' => "Successfully printed to pdf."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
