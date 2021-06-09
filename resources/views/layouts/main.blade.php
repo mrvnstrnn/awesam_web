@@ -172,8 +172,8 @@
                         <div class="drawer-section">
                             <div class="row">
                                 <div class="col">
-                                    <div class="card-hover-shadow-2x mb-3 card">
-                                        <div class="card-header-tab card-header">
+                                    {{-- <div class="card-hover-shadow-2x mb-3 card"> --}}
+                                        {{-- <div class="card-header-tab card-header">
                                             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                                 <i class="header-icon lnr-printer icon-gradient bg-ripe-malin"> </i>Chat Box
                                             </div>
@@ -201,7 +201,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="scroll-area-lg" style="height: 600px !important">
                                             <div class="scrollbar-container ps ps--active-y" style="overflow-y: scroll !important">
                                                 <div class="p-2">
@@ -314,10 +314,10 @@
                                             </div>
                                             {{-- <div class="ps__rail-x" style="left: 0px; bottom: -152px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 152px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 111px; height: 289px;"></div></div></div> --}}
                                         </div>
-                                        <div class="card-footer">
+                                        {{-- <div class="card-footer"> --}}
                                             <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control">
-                                        </div>
-                                    </div>
+                                        {{-- </div> --}}
+                                    {{-- </div> --}}
                                 </div>
                             </div>
                         </div>
