@@ -36,7 +36,6 @@ $(document).ready(() => {
                 { data: "sam_id" },
                 { data: "site_name" },
                 { data: "technology" },
-                { data: "pla_id" }
             ],
         });
     }

@@ -38,10 +38,6 @@ class GlobeController extends Controller
                         ->addColumn('technology', function($row){
                             $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
                             return "<div class='badge badge-success'>".$technology."</div>";                            
-                        })
-                        ->addColumn('pla_id', function($row){
-                            return $row['site_fields'][0]['PLA_ID'];
-                            
                         });
             
             $dt->rawColumns(['checkbox', 'technology']);

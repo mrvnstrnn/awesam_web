@@ -72,7 +72,6 @@
                                                 <th class="d-none d-md-table-cell">SAM ID</th>
                                                 <th>Site</th>
                                                 <th class="text-center">Technology</th>
-                                                <th class="text-center  d-none d-sm-table-cell">PLA ID</th>
                                             </tr>
                                         </thead>
                                         <tbody>
