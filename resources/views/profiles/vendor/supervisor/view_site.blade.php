@@ -491,7 +491,7 @@
             </div>
     </div>
 
-    <input id="timeline" type="hidden" value="{{ $timeline }}" />
+    {{-- <input id="timeline" type="hidden" value="{{ $timeline }}" /> --}}
 
 </div>
 
@@ -512,7 +512,7 @@
 
 </script> --}}
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
 
@@ -617,6 +617,6 @@ google.charts.setOnLoadCallback(drawChart);
 
 });
 
-</script>
+</script> --}}
 
 @endsection

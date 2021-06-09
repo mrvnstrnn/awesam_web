@@ -550,11 +550,11 @@ class UserController extends Controller
         //                 ->get();
 
 
-        $timeline = \DB::connection('mysql2')
-                        ->select('call site_gantt_chart("'.$sam_id.'")');
+        // $timeline = \DB::connection('mysql2')
+        //                 ->select('call site_gantt_chart("'.$sam_id.'")');
 
 
-        $timeline = json_encode($timeline);
+        // $timeline = json_encode($timeline);
 
          $activities = [];               
             $profile = "supervisor";
