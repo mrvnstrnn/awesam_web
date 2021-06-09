@@ -99,14 +99,15 @@ $(document).ready(function() {
 
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
 
+
             console.log(where);
             console.log($(where).find(".doc_upload_label").html());
         }
     });
 
     $(".cancel_uploader").on('click', function(e){
-            $('.lister').removeClass("d-none");
-            $('.action_box').addClass("d-none");
+        $('.lister').removeClass("d-none");
+        $('.action_box').addClass("d-none");
     });
 
 
@@ -138,15 +139,19 @@ $(document).ready(function() {
 
     $(".upload_file").on("click", function (e){
 
-        // var file = $("#doc_upload").val();
+        e.preventDefault();    
+        var file = new FormData(document.getElementById("form-upload"));
 
-        var file = $("#doc_upload").val();
-
-        console.log(file);
+        var asd = document.getElementById("doc_upload").files;
+        console.log(asd);
         $.ajax({
             url: "/upload-file",
             method: "POST", 
-            data: $("#form-upload").serialize(),
+            data: {
+                file : file
+            },
+            contentType: false,
+            processData: false,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

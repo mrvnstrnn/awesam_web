@@ -43,24 +43,37 @@ $(document).ready(() => {
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
         var json_parse = JSON.parse($(this).parent().attr('data-site'));
+
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
         allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
 
         $(".content-data .position-relative.form-group").remove();
 
-        Object.entries(json_parse.site_fields).forEach(([key, value]) => {
-            Object.entries(value).forEach(([keys, values]) => {
-                if(allowed_keys.includes(keys) > 0){
-                    $(".content-data").append(
-                        '<div class="position-relative form-group col-md-6">' +
-                            '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
-                            '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
-                        '</div>'
-                    );
-                }
-            });
-        });
+        for (let i = 0; i < json_parse['site_fields'].length; i++) {
+            if(allowed_keys.includes(json_parse['site_fields'][i].field_name)){
+                $(".content-data").append(
+                    '<div class="position-relative form-group col-md-6">' +
+                        '<label for="' + json_parse['site_fields'][i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  json_parse['site_fields'][i].field_name + '</label>' +
+                        '<input class="form-control"  value="'+json_parse['site_fields'][i].field_name+'" name="' + json_parse['site_fields'][i].field_name.toLowerCase() + '"  id="'+json_parse['site_fields'][i].field_name.toLowerCase()+'" >' +
+                    '</div>'
+                );
+            }
+        }
+
+
+        // Object.entries(json_parse.site_fields).forEach(([key, value]) => {
+        //     Object.entries(value).forEach(([keys, values]) => {
+        //         if(allowed_keys.includes(keys) > 0){
+        //             $(".content-data").append(
+        //                 '<div class="position-relative form-group col-md-6">' +
+        //                     '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
+        //                     '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
+        //                 '</div>'
+        //             );
+        //         }
+        //     });
+        // });
 
         $(".modal-title").text(json_parse.site_name);
         $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
