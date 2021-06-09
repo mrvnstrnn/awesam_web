@@ -541,13 +541,13 @@ class UserController extends Controller
                         ->where('site.sam_id', "=", $sam_id)
                         ->get();
 
-        $agent_sites = \DB::connection('mysql2')
-                        ->table('user_details')
-                        ->select('site.sam_id', 'site.site_name')
-                        ->join('site_users', 'user_details.user_id', 'site_users.agent_id')
-                        ->join('site', 'site_users.sam_id', 'site.sam_id')
-                        ->where('user_id', '=', $site[0]->agent_id)
-                        ->get();
+        // $agent_sites = \DB::connection('mysql2')
+        //                 ->table('user_details')
+        //                 ->select('site.sam_id', 'site.site_name')
+        //                 ->join('site_users', 'user_details.user_id', 'site_users.agent_id')
+        //                 ->join('site', 'site_users.sam_id', 'site.sam_id')
+        //                 ->where('user_id', '=', $site[0]->agent_id)
+        //                 ->get();
 
 
         $timeline = \DB::connection('mysql2')
@@ -607,7 +607,7 @@ class UserController extends Controller
                 // 'activities',
                 // 'site_fields',
                 'agent_name',
-                'agent_sites',
+                // 'agent_sites',
                 'what_site',
                 'mode',
                 'profile',
