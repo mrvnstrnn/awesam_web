@@ -603,7 +603,7 @@ class UserController extends Controller
         
         return view($view, 
             compact(
-                'timeline',
+                // 'timeline',
                 // 'activities',
                 // 'site_fields',
                 'agent_name',
