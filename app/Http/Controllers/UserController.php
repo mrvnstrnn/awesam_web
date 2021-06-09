@@ -590,7 +590,7 @@ class UserController extends Controller
         $active_slug = "assigned-sites";
         $title = $site[0]->site_name;
         $title_subheading = $sam_id;
-        $title_icon = "locations";
+        $title_icon = "box2";
 
         $agent_name = $site[0]->firstname . " " . $site[0]->middlename . " " . $site[0]->lastname. " " . $site[0]->suffix;
 

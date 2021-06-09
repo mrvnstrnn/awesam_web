@@ -212,7 +212,7 @@
                                                                     <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg">
                                                                     </div>
                                                                     <div class="avatar-icon avatar-icon-lg rounded">
-                                                                        <img src="assets/images/avatars/2.jpg" alt="">
+                                                                        <img src="/images/avatars/2.jpg" alt="">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -242,7 +242,7 @@
                                                                         <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg">
                                                                         </div>
                                                                         <div class="avatar-icon avatar-icon-lg rounded">
-                                                                            <img src="assets/images/avatars/3.jpg" alt="">
+                                                                            <img src="/images/avatars/3.jpg" alt="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -254,7 +254,7 @@
                                                                     <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg">
                                                                     </div>
                                                                     <div class="avatar-icon avatar-icon-lg rounded">
-                                                                        <img src="assets/images/avatars/2.jpg" alt="">
+                                                                        <img src="/images/avatars/2.jpg" alt="">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -283,7 +283,7 @@
                                                                         <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg">
                                                                         </div>
                                                                         <div class="avatar-icon avatar-icon-lg rounded">
-                                                                            <img src="assets/images/avatars/2.jpg" alt="">
+                                                                            <img src="/images/avatars/2.jpg" alt="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -303,7 +303,7 @@
                                                                         <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg">
                                                                         </div>
                                                                         <div class="avatar-icon avatar-icon-lg rounded">
-                                                                            <img src="assets/images/avatars/2.jpg" alt="">
+                                                                            <img src="/images/avatars/2.jpg" alt="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
