@@ -103,14 +103,10 @@
                             <div id="sub_activity___" class="card-shadow-primary border mb-0 card card-body border-" >
                                 <div class="row lister">
                                     @php
-                                        // dd($activities);
-
                                         $json = json_decode($activities->sub_activities, 1);
                                         if ($json != null) {
                                             foreach ($json as $sub_activity){
                                                 if ($sub_activity['activity_id'] == $activityid){
-                        
-                                                    // $show_sub_activity[] = $sub_activitiy;
                                                     echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
                                                 }
                                             }
