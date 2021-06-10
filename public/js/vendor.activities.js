@@ -126,10 +126,12 @@ $(document).ready(function() {
                             '<ul></ul>'
                         );
 
-                        // var ext = "";
+                        var ext = "";
                         resp.message.forEach(element => {
+                            ext = element.value.split('.').pop();
+                            console.log(ext);
                             $(".row.action_box ul").append(
-                                '<li>'+element.value+'</li>'
+                                '<li><i class="fa fa-file-'+ext+'"></i> '+element.value+'</li>'
                             );
                         });
                     } else {

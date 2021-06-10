@@ -460,7 +460,7 @@ class GlobeController extends Controller
 
         try {
             $validate = Validator::make($request->all(), array(
-                'file' => 'required | mimes:pdf',
+                'file' => 'required',
             ));
             
             if($validate->passes()){
@@ -473,19 +473,19 @@ class GlobeController extends Controller
                     $extension = $request->file('file')->getClientOriginalExtension();
                 
                     // Valid extensions
-                    $validextensions = array("pdf");
+                    // $validextensions = array("pdf");
                 
                     // Check extension
-                    if(in_array(strtolower($extension), $validextensions)){
+                    // if(in_array(strtolower($extension), $validextensions)){
                         // Rename file 
                         // $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
                         $fileName = time().$request->file('file')->getClientOriginalName();
 
                         // Uploading file to given path
                         $request->file('file')->move($destinationPath, $fileName); 
-                    }
+                    // }
                     
-                    return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf.", "file" => $fileName]);
+                    return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
             
                 }
             } else {
