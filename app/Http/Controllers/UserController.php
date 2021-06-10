@@ -565,8 +565,6 @@ class UserController extends Controller
         }
 
         $sub_activities = $res;
-
-
         $what_site = $site[0];
 
         $activities = array();
@@ -584,6 +582,19 @@ class UserController extends Controller
             // if($each->profile_id == 2){
 
                 if(array_key_exists($each->activity_id, $sub_activities)==true){
+
+                    if(date('Y-m-d') < date($each->start_date)){
+                        $color = "success";
+                    } else {
+                        if(date('Y-m-d') < date($each->end_date)){
+                            $color = "warning";
+                        } else {
+                            $color = "danger";
+                        }
+                    }
+
+                    // dd(date('Y-m-d') . " " . date($each->end_date));
+
                     array_push($activities,  
                         array(
                             "activity_name" => $each->activity_name,  
@@ -591,7 +602,8 @@ class UserController extends Controller
                             "activity_complete" => $each->activity_complete, 
                             "start_date" => $each->start_date, 
                             "end_date" => $each->end_date, 
-                            "sub_activities" => $sub_activities[$each->activity_id]
+                            "sub_activities" => $sub_activities[$each->activity_id],
+                            "color" => $color
                         )
                     );
                 }

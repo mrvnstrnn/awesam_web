@@ -12,7 +12,7 @@
     cursor: pointer;
     color: royalblue;
 }
-.subactivity_action:hover {
+.subactivity_action_switch:hover {
     cursor: pointer;
     color: royalblue;
 }
@@ -26,49 +26,47 @@
 </div>                        
 
 <div class="row">
+        <div class="col-12 pl-5">
+            <ul class="tabs-animated body-tabs-animated nav">
+                <li class="nav-item">
+                    <a role="tab" class="nav-link active" id="tab-4" data-toggle="tab" href="#tab-content-4">
+                        <span>Activities</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-0">
+                        <span>Forecast</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                        <span>Details</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-3" data-toggle="tab" href="#tab-content-3">
+                        <span>Files</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
+                        <span>Issues</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-5" data-toggle="tab" href="#tab-content-5">
+                        <span>Site Chat</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-    <div class="col-md-8">
+    <div class="col-lg-8 col-md-12 col-sm-12">
         <div class="main-card mb-3 card">
             <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
                     {{ $title }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 pl-5">
-                    <ul class="tabs-animated body-tabs-animated nav">
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link active" id="tab-4" data-toggle="tab" href="#tab-content-4">
-                                <span>Activities</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-0">
-                                <span>Forecast</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
-                                <span>Details</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-3" data-toggle="tab" href="#tab-content-3">
-                                <span>Files</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
-                                <span>Issues</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-5" data-toggle="tab" href="#tab-content-5">
-                                <span>Site Chat</span>
-                            </a>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div class="card-body">
@@ -78,11 +76,8 @@
                     <div class="tab-pane tabs-animation fade show active" id="tab-content-4" role="tabpanel">
                         <ul class="todo-list-wrapper list-group list-group-flush">
                             @foreach ($activities as $activity )
-                                @php
-                                    // dd($activity);
-                                @endphp
                                 <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">
-                                    <div class="todo-indicator bg-danger"></div>
+                                    <div class="todo-indicator bg-{{ $activity["color"] }}"></div>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left mr-2">
@@ -107,13 +102,13 @@
                                     </div>
                                 </li>
                                 <li class="list-group-item d-none subactivity" id="subactivity_{{ $activity["activity_id"] }}">
-                                    <div class="card-shadow-primary border mb-0 card card-body border-danger" >
+                                    <div class="card-shadow-primary border mb-0 card card-body border-{{ $activity["color"] }}" >
                                         <div class="row subactivity_action_list">
                                             @php
                                                 $sub_activities = $activity["sub_activities"];
                                             @endphp
                                             @foreach ( $sub_activities as $sub_activity)
-                                                <div class="col-md-6 subactivity_action" data-sam_id="{{ $title_subheading }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
+                                                <div class="col-md-6 subactivity_action_switch" data-sam_id="{{ $title_subheading }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
                                             @endforeach
                                         </div>
                                         <div class="row subactivity_action d-none">
@@ -152,11 +147,64 @@
                     </div>
 
                     <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
-                        <p>With supporting text below as a natural lead-in to additional content.</p>
-                        <p class="mb-0">
-                            Lorem Ipsum has been the industry's standard dummy text ever since the
-                            1500s, when an unknown printer took a galley of type and scrambled.
-                        </p>
+                        <div class="row">
+                            <div class="col-12">
+                                <button id="btn_add_issue_switch" class="mt-1 btn btn-danger float-right" type="button">Add Issue</button>
+                                <form class="add_issue_form mb-2 d-none">
+                                    <div class="form-row mb-1">
+                                        <div class="col-5">
+                                            <label for="exampleEmail22" class="mr-sm-2">Issue Type</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <div class="col-5">
+                                            <label for="exampleEmail22" class="mr-sm-2">Issue</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <div class="col-5">
+                                            <label for="exampleEmail22" class="mr-sm-2">Issue Details</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <div class="col-12">
+                                            <button class="mt-1 btn btn-danger float-right" type="button">Add Issue</button>
+                                            <button id="btn_add_issue_cancel" class="mt-1 btn btn-outline-danger mr-1 float-right" type="button">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{-- <div class="divider"></div> --}}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="card-title">Issue List</h5>
+                                <table class="mb-0 table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Start Date</th>
+                                            <th>Issue</th>
+                                            <th>Details</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4">No Issue</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
@@ -385,7 +433,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-lg-4 col-md-12 col-sm-12">
         <div class="mb-3 profile-responsive card">
             <div class="dropdown-menu-header">
                 <div class="dropdown-menu-header-inner bg-dark">
@@ -450,17 +498,34 @@
             console.log(show_what);
     
             $(".subactivity").addClass("d-none");
+            $('.subactivity_action_list').removeClass('d-none');
+            $('.subactivity_action').addClass('d-none');
+
+
             $(show_what).removeClass("d-none");
+
     
         });
     
     
-        $('.subactivity_action').on( 'click', function (e) {
-    
-            console.log();
+        $('.subactivity_action_switch').on( 'click', function (e) {
+            $('.subactivity_action_list').addClass('d-none');
+            $('.subactivity_action').removeClass('d-none');
     
         });
     
+        $('#btn_add_issue_cancel').on( 'click', function (e) {
+            $('.add_issue_form').addClass('d-none');
+            $('#btn_add_issue_switch').removeClass('d-none');
+        });
+
+        $('#btn_add_issue_switch').on( 'click', function (e) {
+            $('.add_issue_form').removeClass('d-none');
+            $(this).addClass('d-none');
+        });
+        
+        
+
     });
     
     </script>
@@ -554,9 +619,6 @@
             ];
             times.push(whattopush);
         });    
-
-        times.push(["Issue", ]);
-
 
         dataTable.addRows(times);
     
