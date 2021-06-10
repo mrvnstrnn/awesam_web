@@ -441,8 +441,14 @@ class GlobeController extends Controller
     public function download_pdf(Request $request)
     {
         try {
+            SubActivityValue::create([
+                'sam_id' => $request->input("sam_id"),
+                'sub_activity_id' => $request->input("sub_activity_id"),
+                'value' => $request->input("template"),
+                'user_id' => \Auth::id(),
+                'status' => "pending",
+            ]);    
 
-            // dd($request->all());
             $pdf = \App::make('dompdf.wrapper');
             $pdf = PDF::loadHTML($request->input('template'));
             $pdf->setPaper('a4');

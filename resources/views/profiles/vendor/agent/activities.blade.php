@@ -110,12 +110,14 @@
             <form action="/download-pdf" method="POST" target="_blank">@csrf
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                 </div>
+                <input type="hidden" name="sam_id" id="sam_id">
+                <input type="hidden" name="sub_activity_id" id="sub_activity_id">
                 <textarea name="template" id="template" class="d-none" cols="30" rows="10"></textarea>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
                         Close
                     </button>
-                    <button type="submit" class="btn btn btn-success">Print to PDF</button>
+                    <button type="submit" class="btn btn btn-success print_to_pdf">Print to PDF</button>
                 </div>
             </form>
         </div>

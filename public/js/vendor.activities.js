@@ -56,6 +56,10 @@ $(document).ready(function() {
     $(".sub_activity").on('click', function(e){
         e.preventDefault();
 
+        var sam_id = $(this).attr('data-sam_id');
+        var sub_activity_id = $(this).attr('data-sub_activity_id');
+
+
         if($(this).attr('data-action')=="doc maker"){
 
             $(".modal-title").text($(this).attr('data-sub_activity_name'));
@@ -67,6 +71,9 @@ $(document).ready(function() {
                 success: function(resp){
                     if(!resp.error){
                         $('.modal-body').html('<div id="summernote" name="editordata">' + resp.message + '</div>');
+
+                        $("input[name=sam_id]").val(sam_id);
+                        $("input[name=sub_activity_id]").val(sub_activity_id);
 
                         $("textarea").text(resp.message);
                         $('#summernote').summernote({
@@ -90,8 +97,6 @@ $(document).ready(function() {
         else if($(this).attr('data-action')=="doc upload"){
 
             var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode');
-            var sam_id = $(this).attr('data-sam_id');
-            var sub_activity_id = $(this).attr('data-sub_activity_id');
 
             $('.lister').removeClass("d-none");
             $('.action_box').addClass("d-none");
