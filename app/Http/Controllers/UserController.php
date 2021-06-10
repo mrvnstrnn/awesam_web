@@ -540,13 +540,12 @@ class UserController extends Controller
 
 
         // dd($site);
-        // $agent_sites = \DB::connection('mysql2')
-        //                 ->table('user_details')
-        //                 ->select('site.sam_id', 'site.site_name')
-        //                 ->join('site_users', 'user_details.user_id', 'site_users.agent_id')
-        //                 ->join('site', 'site_users.sam_id', 'site.sam_id')
-        //                 ->where('user_id', '=', $site[0]->agent_id)
-        //                 ->get();
+        $agent_sites = \DB::connection('mysql2')
+                        ->table('site')
+                        ->select('site.sam_id', 'site.site_name')
+                        ->join('site', 'site_users.sam_id', 'site.sam_id')
+                        ->where('agent_id', '=', $site[0]->agent_id)
+                        ->get();
 
 
 
@@ -598,7 +597,9 @@ class UserController extends Controller
         $title_subheading = $sam_id;
         $title_icon = "box2";
 
-        $agent_name = "Agent 1";
+        $agent = json_decode($site[0]->site_agent);
+        $agent = $agent[0];
+        $agent_name = $agent->firstname . " " .$agent->middlename . " " . $agent->lastname . " " . $agent->suffix;
 
         $profile_menu = self::getProfileMenuLinks();
         $profile_direct_links = self::getProfileMenuDirectLinks();
@@ -612,7 +613,7 @@ class UserController extends Controller
                 'activities',
                 'site_fields',
                 'agent_name',
-                // 'agent_sites',
+                'agent_sites',
                 'what_site',
                 'mode',
                 'profile',
