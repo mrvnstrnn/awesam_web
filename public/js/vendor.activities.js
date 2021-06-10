@@ -127,15 +127,18 @@ $(document).ready(function() {
                             var ext = "";
                             var status = "";
                             console.log(resp.message[0].status);
-                            if(resp.message[0].status == 'approved'){
-                                $(".dropzone").addClass("d-none");
-                                $(".upload_file").addClass("d-none");
-                                $(".hr-border").removeClass("d-none");
-                            }
+
                             $(".row.action_box .list-uploaded").append(
                                 '<ul></ul>'
                             );
                             resp.message.forEach(element => {
+
+                                if(element.status == 'approved'){
+                                    $(".dropzone").addClass("d-none");
+                                    $(".upload_file").addClass("d-none");
+                                    $(".hr-border").removeClass("d-none");
+                                }
+
                                 if(element.value.split('.').pop() == 'pdf'){
                                     ext = "fa-file-pdf";
                                 } else {
