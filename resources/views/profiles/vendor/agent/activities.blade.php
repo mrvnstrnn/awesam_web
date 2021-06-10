@@ -62,6 +62,8 @@
             return strtotime($a->start_date) - strtotime($b->start_date);
         }
         usort($activities, "date_sort");
+
+        // dd($activities);
         
         function group_by($key, $data) {
             $result = array();
@@ -148,7 +150,8 @@
         },
         success: function (file, resp) {
             $("#form-upload  #file_name").val(resp.file);
-            toastr.success(resp.message, "Success");
+            // toastr.success(resp.message, "Success");
+            console.log(resp.message);
         },
         error: function (file, response) {
             toastr.error(resp.message, "Error");

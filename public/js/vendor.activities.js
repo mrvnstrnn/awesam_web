@@ -89,8 +89,11 @@ $(document).ready(function() {
 
         else if($(this).attr('data-action')=="doc upload"){
 
-            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode') ;
+            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode');
+            var sam_id = $(this).attr('data-sam_id');
+            var sub_activity_id = $(this).attr('data-sub_activity_id');
 
+            
             $('.lister').removeClass("d-none");
             $('.action_box').addClass("d-none");
 
@@ -98,19 +101,52 @@ $(document).ready(function() {
             $(where + " .action_box").toggleClass("d-none");
 
             $("#form-upload #sam_id").val($(this).attr('data-sam_id'));
-            $("#form-upload #activity_id").val($(this).attr('data-activity_id'));
+            $("#form-upload #sub_activity_id").val($(this).attr('data-sub_activity_id'));
 
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
 
+            $(".row.action_box ul").remove();
+            $.ajax({
+                url: "/get-my-uploaded-file",
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    sam_id : sam_id,
+                    sub_activity_id : sub_activity_id,
+                },
+                success: function(resp){
 
-            console.log(where);
-            console.log($(where).find(".doc_upload_label").html());
+                    if(!resp.error){
+
+                        console.log(resp.message);
+
+                        $(".row.action_box").append(
+                            '<ul></ul>'
+                        );
+
+                        // var ext = "";
+                        resp.message.forEach(element => {
+                            $(".row.action_box ul").append(
+                                '<li>'+element.value+'</li>'
+                            );
+                        });
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function(resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
         }
     });
 
     $(".cancel_uploader").on('click', function(e){
         $('.lister').removeClass("d-none");
         $('.action_box').addClass("d-none");
+        $("a.dz-remove").trigger("click");
     });
 
 
@@ -145,7 +181,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         var sam_id = $("#form-upload #sam_id").val();
-        var activity_id = $("#form-upload #activity_id").val();
+        var sub_activity_id = $("#form-upload #sub_activity_id").val();
         var file_name = $("#form-upload #file_name").val();
 
         $.ajax({
@@ -153,7 +189,7 @@ $(document).ready(function() {
             method: "POST", 
             data: {
                 sam_id : sam_id,
-                activity_id : activity_id,
+                sub_activity_id : sub_activity_id,
                 file_name : file_name,
             },
             headers: {
@@ -162,7 +198,7 @@ $(document).ready(function() {
             success: function(resp) {
                 if(!resp.error){
                     sam_id = $("#form-upload #sam_id").val("");
-                    activity_id = $("#form-upload #activity_id").val("");
+                    sub_activity_id = $("#form-upload #sub_activity_id").val("");
                     file_name = $("#form-upload #file_name").val("");
 
                     $(".cancel_uploader").trigger("click");

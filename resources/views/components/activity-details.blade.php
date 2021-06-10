@@ -55,9 +55,9 @@
                 if ($json != null) {
                     foreach ($json as $sub_activity){
                         if ($sub_activity['activity_id'] == $activityid){
-
+                            // echo $sub_activity;
                             // $show_sub_activity[] = $sub_activitiy;
-                            echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
+                            echo "<div class='col-md-6 sub_activity' data-sub_activity_id='" . $sub_activity['sub_activity_id'] ."' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
                         }
                     }
                 }   

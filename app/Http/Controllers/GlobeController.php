@@ -478,7 +478,8 @@ class GlobeController extends Controller
                     // Check extension
                     if(in_array(strtolower($extension), $validextensions)){
                         // Rename file 
-                        $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
+                        // $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
+                        $fileName = time().$request->file('file')->getClientOriginalName();
 
                         // Uploading file to given path
                         $request->file('file')->move($destinationPath, $fileName); 
@@ -507,7 +508,7 @@ class GlobeController extends Controller
 
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => $request->input("activity_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => $request->input("file_name"),
                     'user_id' => \Auth::id(),
                     'status' => "pending",
@@ -517,6 +518,20 @@ class GlobeController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_my_uploade_file(Request $request)
+    {
+        try {
+            $sub_activity_files = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                                        ->where('sub_activity_id', $request->input('sub_activity_id'))
+                                                        ->where('user_id', \Auth::id())
+                                                        ->get();
+
+            return response()->json(['error' => false, 'message' => $sub_activity_files]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
