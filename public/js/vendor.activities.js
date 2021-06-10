@@ -97,6 +97,9 @@ $(document).ready(function() {
             $(where + " .lister").toggleClass("d-none");
             $(where + " .action_box").toggleClass("d-none");
 
+            $("#form-upload #sam_id").val($(this).attr('data-sam_id'));
+            $("#form-upload #activity_id").val($(this).attr('data-activity_id'));
+
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
 
 
@@ -139,24 +142,30 @@ $(document).ready(function() {
 
     $(".upload_file").on("click", function (e){
 
-        e.preventDefault();    
-        var file = new FormData(document.getElementById("form-upload"));
+        e.preventDefault();
 
-        var asd = document.getElementById("doc_upload").files;
-        console.log(asd);
+        var sam_id = $("#form-upload #sam_id").val();
+        var activity_id = $("#form-upload #activity_id").val();
+        var file_name = $("#form-upload #file_name").val();
+
         $.ajax({
-            url: "/upload-file",
+            url: "/upload-my-file",
             method: "POST", 
             data: {
-                file : file
+                sam_id : sam_id,
+                activity_id : activity_id,
+                file_name : file_name,
             },
-            contentType: false,
-            processData: false,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(resp) {
                 if(!resp.error){
+                    sam_id = $("#form-upload #sam_id").val("");
+                    activity_id = $("#form-upload #activity_id").val("");
+                    file_name = $("#form-upload #file_name").val("");
+
+                    $(".cancel_uploader").trigger("click");
                     toastr.success(resp.message, "Success");
                 } else {
                     toastr.error(resp.message, "Error");

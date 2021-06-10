@@ -8,6 +8,7 @@ use App\Models\SiteAgent;
 use App\Models\UsersArea;
 use App\Models\Program;
 use App\Models\UserDetail;
+use App\Models\SubActivityValue;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -458,8 +459,6 @@ class GlobeController extends Controller
     public function fileupload(Request $request){
 
         try {
-
-            return response()->json(['error' => true, 'message' => $request->hasFile('file')]);
             if($request->hasFile('file')) {
    
                 // Upload path
@@ -473,16 +472,14 @@ class GlobeController extends Controller
             
                 // Check extension
                 if(in_array(strtolower($extension), $validextensions)){
-            
                     // Rename file 
                     $fileName = $request->file('file')->getClientOriginalName().time() .'.' . $extension;
+
                     // Uploading file to given path
                     $request->file('file')->move($destinationPath, $fileName); 
-            
                 }
-
                 
-                return response()->json(['error' => false, 'message' => "Successfully printed to pdf."]);
+                return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf.", "file" => $fileName]);
         
             }
         } catch (\Throwable $th) {
@@ -490,6 +487,32 @@ class GlobeController extends Controller
         }
     }
 
+    public function upload_my_file(Request $request)
+    {
+        try {
+
+            $validate = Validator::make($request->all(), array(
+                'file_name' => 'required',
+            ));
+
+            if($validate->passes()){
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("activity_id"),
+                    'value' => $request->input("file_name"),
+                    'user_id' => \Auth::id(),
+                    'status' => "pending",
+                ]);            
+                
+                return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf."]);
+            } else {
+                return response()->json(['error' => true, 'message' => "Please upload a file."]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
 }
 
