@@ -1,13 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-@php
-    
-// dd($site_fields[0]->field_name);
-
-@endphp
-
-
 
 <style>
 .tab-content > .tab-pane:not(.active) {
@@ -15,62 +8,79 @@
     height: 0;
     overflow-y: hidden;
 }
+.subactivity_switch:hover {
+    cursor: pointer;
+    color: royalblue;
+}
+.subactivity_action:hover {
+    cursor: pointer;
+    color: royalblue;
+}
+
 </style>
+
 <div class="row">
     <div class="col-12">
-        <div id="example4.2" style="height: 100px;"></div>
+        <div id="example4.2" style="height: 150px;"></div>
     </div>
 </div>                        
 
-<div class="row" style="margin-top: -30px;">
+<div class="row">
+
     <div class="col-md-8">
-        <ul class="tabs-animated body-tabs-animated nav">
-            <li class="nav-item">
-                <a role="tab" class="nav-link active" id="tab-4" data-toggle="tab" href="#tab-content-4">
-                    <span>Activities</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-0">
-                    <span>Timeline</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
-                    <span>Details</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-3" data-toggle="tab" href="#tab-content-3">
-                    <span>Files</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
-                    <span>Issues</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-5" data-toggle="tab" href="#tab-content-5">
-                    <span>Site Chat</span>
-                </a>
-            </li>
+        <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                    <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
+                    {{ $title }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 pl-5">
+                    <ul class="tabs-animated body-tabs-animated nav">
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link active" id="tab-4" data-toggle="tab" href="#tab-content-4">
+                                <span>Activities</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-0">
+                                <span>Forecast</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                                <span>Details</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-3" data-toggle="tab" href="#tab-content-3">
+                                <span>Files</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
+                                <span>Issues</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-5" data-toggle="tab" href="#tab-content-5">
+                                <span>Site Chat</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
 
-        </ul>
+                <div class="tab-content">
 
-        <div class="tab-content">
-
-            <div class="tab-pane tabs-animation fade show active" id="tab-content-4" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade show active" id="tab-content-4" role="tabpanel">
                         <ul class="todo-list-wrapper list-group list-group-flush">
                             @foreach ($activities as $activity )
+                                @php
+                                    // dd($activity);
+                                @endphp
                                 <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">
                                     <div class="todo-indicator bg-danger"></div>
                                     <div class="widget-content p-0">
@@ -90,74 +100,43 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="widget-content-right show_subs_btn"  data-show_li="sub_activity___li_" data-chevron="down">
-                                                <i class="lnr-chevron-down-circle"></i>
+                                            <div class="widget-content-right subactivity_switch" id="subactivity_switch_{{ $activity["activity_id"] }}" data-activity_id="{{ $activity["activity_id"] }}">
+                                                <i class="lnr-chevron-down-circle" style="font-size: 20px;"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                
+                                <li class="list-group-item d-none subactivity" id="subactivity_{{ $activity["activity_id"] }}">
+                                    <div class="card-shadow-primary border mb-0 card card-body border-danger" >
+                                        <div class="row subactivity_action_list">
+                                            @php
+                                                $sub_activities = $activity["sub_activities"];
+                                            @endphp
+                                            @foreach ( $sub_activities as $sub_activity)
+                                                <div class="col-md-6 subactivity_action" data-sam_id="{{ $title_subheading }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
+                                            @endforeach
+                                        </div>
+                                        <div class="row subactivity_action d-none">
+                                            xxx
+                                            {{-- <x-action-box/> --}}
+                                        </div>
+                                    </div>
+                                </li>
+                                        
                             @endforeach
                         
-                        {{-- <li id="sub_activity___li_" class="list-group-item d-none sub_activity_li">
-                            <div id="sub_activity___" class="card-shadow-primary border mb-0 card card-body border-" >
-                                <div class="row lister">
-                                    @php
-                                        // dd($activities);
-
-                                        $json = json_decode($activities->sub_activities, 1);
-                                        if ($json != null) {
-                                            foreach ($json as $sub_activity){
-                                                if ($sub_activity['activity_id'] == $activityid){
-                        
-                                                    // $show_sub_activity[] = $sub_activitiy;
-                                                    echo "<div class='col-md-6 sub_activity' data-sam_id='" . $samid ."'  data-activity_id='" . $activityid ."' data-sub_activity_name='" . $sub_activity['sub_activity_name'] . "' data-action='" . $sub_activity['action'] . "' data-mode='" . $mode ."'>" . $sub_activity['sub_activity_name'] . "</div>";
-                                                }
-                                            }
-                                        }   
-                                    @endphp
-                                </div>
-                                <div class="row action_box d-none">
-                                    <x-action-box/>
-                                </div>
-                            </div>
-                        </li> --}}
                         </ul>
                     </div>
-                    <div class="d-block text-right card-footer">
-                        <button class="mr-2 btn btn-link btn-sm">Cancel</button>
-                        <button class="btn btn-success btn-lg">Save</button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="tab-pane tabs-animation fade " id="tab-content-0" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-calendar-full icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade " id="tab-content-0" role="tabpanel">
                         <div class="row">
                             <div class="col-md-12">
                                 <div id="chart_div"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-list icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
                         <form>
                             @foreach ( $site_fields as $site_field )
                             <div class="form-row mb-1">
@@ -171,44 +150,16 @@
                             @endforeach
                         </form>
                     </div>
-                    <div class="d-block text-right card-footer">
-                        <button class="mr-2 btn btn-link btn-sm">Cancel</button>
-                        <button class="btn btn-success btn-lg">Save</button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
                         <p>With supporting text below as a natural lead-in to additional content.</p>
                         <p class="mb-0">
                             Lorem Ipsum has been the industry's standard dummy text ever since the
                             1500s, when an unknown printer took a galley of type and scrambled.
                         </p>
                     </div>
-                    <div class="d-block text-right card-footer">
-                        <button class="mr-2 btn btn-link btn-sm">Cancel</button>
-                        <button class="btn btn-success btn-lg">Save</button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-cloud-upload icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
                                 <div class="font-icon-wrapper py-4">
@@ -314,18 +265,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-pane tabs-animation fade" id="tab-content-5" role="tabpanel">
-                <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
-                            {{ $title }}
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="tab-pane tabs-animation fade" id="tab-content-5" role="tabpanel">
                         <div class="scrollbar-container ps ps--active-y">
                             <div class="p-2">
                                 <div class="chat-wrapper p-1">
@@ -437,188 +378,197 @@
                                 </div>
                             </div>
                         <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 265px;"></div></div></div>
+                    </div>
 
-                    </div>
-                    <div class="d-block text-right card-footer">
-                        <button class="mr-2 btn btn-link btn-sm">Cancel</button>
-                        <button class="btn btn-success btn-lg">Save</button>
-                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="col-md-4">
-            <div class="mb-3 profile-responsive card" style="margin-top: 80px;">
-                <div class="dropdown-menu-header">
-                    <div class="dropdown-menu-header-inner bg-dark">
-                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                        <div class="menu-header-content btn-pane-right">
-                            <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
-                                <div class="avatar-icon rounded">
-                                    <img src="/images/avatars/3.jpg" alt="Avatar 5">
-                                </div>
-                            </div>
-                            <div>
-                                <h5 class="menu-header-title">{{ $agent_name }}</h5>
-                                <h6 class="menu-header-subtitle">Agent</h6>
+        <div class="mb-3 profile-responsive card">
+            <div class="dropdown-menu-header">
+                <div class="dropdown-menu-header-inner bg-dark">
+                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                    <div class="menu-header-content btn-pane-right">
+                        <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
+                            <div class="avatar-icon rounded">
+                                <img src="/images/avatars/3.jpg" alt="Avatar 5">
                             </div>
                         </div>
+                        <div>
+                            <h5 class="menu-header-title">{{ $agent_name }}</h5>
+                            <h6 class="menu-header-subtitle">Agent</h6>
+                        </div>
                     </div>
-                </div>                    
-                {{-- <ul class="list-group list-group-flush">
-                    @foreach($agent_sites as $what_site)
-                    <li class="list-group-item">
-                        <div class="widget-content p-0">
-                            <div class="widget-content-wrapper">
-                                <div class="widget-content-left mr-3">
-                                    <div class="icon-wrapper m-0">
-                                        <div class="progress-circle-wrapper">
-                                            <div class="circle-progress d-inline-block circle-progress-success-sm">
-                                                <small><span>81%<span></span></span></small>
-                                            </div>
+                </div>
+            </div>                    
+            <ul class="list-group list-group-flush">
+                @foreach($agent_sites as $what_site)
+                <li class="list-group-item">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-wrapper">
+                            <div class="widget-content-left mr-3">
+                                <div class="icon-wrapper m-0">
+                                    <div class="progress-circle-wrapper">
+                                        <div class="circle-progress d-inline-block circle-progress-success-sm">
+                                            <small><span>81%<span></span></span></small>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="widget-content-left">
-                                    <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div>
-                                    <div class="widget-subheading">{{ $what_site->sam_id }}</div>
-                                </div>
+                            </div>
+                            <div class="widget-content-left">
+                                <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div>
+                                <div class="widget-subheading">{{ $what_site->sam_id }}</div>
                             </div>
                         </div>
-                    </li>                        
-                    @endforeach
-                </ul> --}}
-            </div>
+                    </div>
+                </li>                        
+                @endforeach
+            </ul>
+        </div>
     </div>
 
     <input id="timeline" type="hidden" value="{{ $timeline }}" />
 
 </div>
 
-
-
-
-
 @endsection
 
 @section('js_script')
+
+
+<script type="text/javascript">
+
+    $(document).ready(() => {
+    
+        // subactivity_switch
+    
+        $('.subactivity_switch').on( 'click', function (e) {
+    
+            var show_what = "#subactivity_" + $(this).attr("data-activity_id");
+            console.log(show_what);
+    
+            $(".subactivity").addClass("d-none");
+            $(show_what).removeClass("d-none");
+    
+        });
+    
+    
+        $('.subactivity_action').on( 'click', function (e) {
+    
+            console.log();
+    
+        });
+    
+    });
+    
+    </script>
+    
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function daysToMilliseconds(days) {
+        return days * 24 * 60 * 60 * 1000;
+    }
+
+    function drawChart() {
+
+        var data = new google.visualization.DataTable();
+        
+        data.addColumn('string', 'Task ID');
+        data.addColumn('string', 'Task Name');
+        data.addColumn('string', 'Resource');
+        data.addColumn('date', 'Start Date');
+        data.addColumn('date', 'End Date');
+        data.addColumn('number', 'Duration');
+        data.addColumn('number', 'Percent Complete');
+        data.addColumn('string', 'Dependencies');
+
+        var timeline = $('#timeline').val();
+        var obj = jQuery.parseJSON(timeline);
+
+        var times =[];
+        var chain = null;
+
+        $.each(obj, function(key,value) {
+            whattopush = [
+                value.stage_name, 
+                value.stage_name, 
+                value.stage_name,
+                new Date(value.start_date), 
+                new Date(value.end_date), 
+                null,
+                100,  
+                chain
+            ];
+
+            chain = value.stage_name    
+            times.push(whattopush);
+        });    
+
+        data.addRows(times);
+        var options = {
+            height: 415,
+            gantt: {
+            }
+        };
+
+        var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
 
 </script>
 
 <script type="text/javascript">
-
-</script> --}}
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script type="text/javascript">
-
-$(document).ready(() => {
-
-
-
-google.charts.load('current', {'packages':['gantt']});
-google.charts.setOnLoadCallback(drawChart);
-
-  function daysToMilliseconds(days) {
-    return days * 24 * 60 * 60 * 1000;
-  }
-
-
-  function drawChart() {
-
-    var data = new google.visualization.DataTable();
-    
-    data.addColumn('string', 'Task ID');
-    data.addColumn('string', 'Task Name');
-    data.addColumn('string', 'Resource');
-    data.addColumn('date', 'Start Date');
-    data.addColumn('date', 'End Date');
-    data.addColumn('number', 'Duration');
-    data.addColumn('number', 'Percent Complete');
-    data.addColumn('string', 'Dependencies');
-
-    var timeline = $('#timeline').val();
-    var obj = jQuery.parseJSON(timeline);
-
-    var times =[];
-    var chain = null;
-
-    $.each(obj, function(key,value) {
-        whattopush = [
-            value.stage_name, 
-            value.stage_name, 
-            value.stage_name,
-            new Date(value.start_date), 
-            new Date(value.end_date), 
-            null,
-            100,  
-            chain
-        ];
-
-        chain = value.stage_name    
-        times.push(whattopush);
-    });    
-
-    data.addRows(times);
-      var options = {
-        height: 415,
-        gantt: {
-        }
-      };
-
-    var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
-
-    chart.draw(data, options);
-  }
-
-
     google.charts.load("current", {packages:["timeline"]});
     google.charts.setOnLoadCallback(drawChart2);
 
     function drawChart2() {
-      var container = document.getElementById('example4.2');
-      var chart = new google.visualization.Timeline(container);
-      var dataTable = new google.visualization.DataTable();
-  
-      dataTable.addColumn({ type: 'string', id: 'Role' });
-      dataTable.addColumn({ type: 'string', id: 'Name' });
-      dataTable.addColumn({ type: 'date', id: 'Start' });
-      dataTable.addColumn({ type: 'date', id: 'End' });
-      var timeline = $('#timeline').val();
-    var obj = jQuery.parseJSON(timeline);
 
-    var times =[];
+        var container = document.getElementById('example4.2');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+    
+        dataTable.addColumn({ type: 'string', id: 'Role' });
+        dataTable.addColumn({ type: 'string', id: 'Name' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
 
-    $.each(obj, function(key,value) {
-        whattopush = [
-            'COLOC-000001',
-            value.stage_name, 
-            new Date(value.start_date), 
-            new Date(value.end_date)
-        ];
-        times.push(whattopush);
-    });    
+        var timeline = $('#timeline').val();
+        var obj = jQuery.parseJSON(timeline);
 
-    dataTable.addRows(times);
-  
-      var options = {
-        timeline: { groupByRowLabel: true, showRowLabels: false }
-      };
-  
-      chart.draw(dataTable, options);
+        var times =[];
+
+        $.each(obj, function(key,value) {
+            whattopush = [
+                'Timeline',
+                value.stage_name, 
+                new Date(value.start_date), 
+                new Date(value.end_date)
+            ];
+            times.push(whattopush);
+        });    
+
+        times.push(["Issue", ]);
+
+
+        dataTable.addRows(times);
+    
+        var options = {
+            timeline: { groupByRowLabel: true, showRowLabels: true }
+        };
+    
+        chart.draw(dataTable, options);
+
     }
 
-
-
-
-});
-
 </script>
+
 
 @endsection
