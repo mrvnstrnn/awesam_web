@@ -93,10 +93,9 @@ $(document).ready(function() {
             var sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
 
-            
             $('.lister').removeClass("d-none");
             $('.action_box').addClass("d-none");
-
+            
             $(where + " .lister").toggleClass("d-none");
             $(where + " .action_box").toggleClass("d-none");
 
@@ -105,7 +104,7 @@ $(document).ready(function() {
 
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
 
-            $(".row.action_box ul").remove();
+            $(".row.action_box .list-uploaded ul").remove();
             $.ajax({
                 url: "/get-my-uploaded-file",
                 method: "POST",
@@ -119,21 +118,39 @@ $(document).ready(function() {
                 success: function(resp){
 
                     if(!resp.error){
-
-                        console.log(resp.message);
-
-                        $(".row.action_box").append(
-                            '<ul></ul>'
-                        );
-
-                        var ext = "";
-                        resp.message.forEach(element => {
-                            ext = element.value.split('.').pop();
-                            console.log(ext);
-                            $(".row.action_box ul").append(
-                                '<li><i class="fa fa-file-'+ext+'"></i> '+element.value+'</li>'
+                        if(resp.message.length < 1) {
+                            $(".dropzone").removeClass("d-none");
+                            $(".upload_file").removeClass("d-none");
+                            $(".hr-border").addClass("d-none");
+                        } else {
+                            $(".dropzone").addClass("d-none");
+                            $(".upload_file").addClass("d-none");
+                            $(".hr-border").removeClass("d-none");
+                            var ext = "";
+                            var status = "";
+                            $(".row.action_box .list-uploaded").append(
+                                '<ul></ul>'
                             );
-                        });
+                            resp.message.forEach(element => {
+                                if(element.value.split('.').pop() == 'pdf'){
+                                    ext = "fa-file-pdf";
+                                } else {
+                                    ext = "fa-file";
+                                }
+
+                                if(element.status == "pending") {
+                                    status = "fa-spinner text-warning";
+                                } else if (element.status == "approved") {
+                                    status = "fa-check text-success";
+                                } else if (element.status == "denied"){
+                                    status = "fa-times text-danger";
+                                }
+
+                                $(".row.action_box .list-uploaded ul").append(
+                                    '<li><i class="fa '+ext+'"></i> '+element.value+'<i class="ml-4 fa '+status+'"></i></li>'
+                                );
+                            });
+                        }
                     } else {
                         toastr.error(resp.message, "Error");
                     }

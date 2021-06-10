@@ -5,6 +5,8 @@
             <input type="file" name="doc_upload" id="doc_upload" class="p-1 form-control">
         </div>
     </div> --}}
+    <div class="list-uploaded"></div>
+    <hr class="hr-border">
     <div class="dropzone"></div>
     <input type="hidden" name="sam_id" id="sam_id">
     <input type="hidden" name="sub_activity_id" id="sub_activity_id">

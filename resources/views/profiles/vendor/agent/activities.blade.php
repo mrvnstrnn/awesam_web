@@ -33,6 +33,12 @@
         color: blue;
     }
 
+    .dropzone {
+        min-height: 20px !important;
+        border: 1px dashed #3f6ad8 !important;
+        padding: unset !important;
+    }
+
 </style>
 
 
@@ -150,7 +156,6 @@
         },
         success: function (file, resp) {
             $("#form-upload  #file_name").val(resp.file);
-            // toastr.success(resp.message, "Success");
             console.log(resp.message);
         },
         error: function (file, response) {
