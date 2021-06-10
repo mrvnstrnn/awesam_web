@@ -550,31 +550,6 @@ class UserController extends Controller
 
 
 
-
-        //  $activities = \DB::connection('mysql2')->select('call `agent_activities`(10)');
-
-        // if( \Auth::user()->profile_id==="2"){
-        //     $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
-        //     $profile = "agent";
-        // }
-        // elseif( \Auth::user()->profile_id==="3"){
-        //     $activities = \DB::connection('mysql2')->select('call `supervisor_team_activities`('. \Auth::id() .')' );
-        //     $profile = "supervisor";
-        // }
-
-        // dd($site);
-
-        // $site_activities = [];
-
-        // foreach($activities as $activity){
-        //     if($activity->sam_id === $sam_id){
-        //         $site_activities[] = $activity;  
-        //     }
-        // }
-
-        // $site_fields = json_decode($site[0]->site_fields, true);
-        // $activities = $site_activities;
-
         $what_site = $site[0];
 
         $activities = array();
@@ -594,8 +569,6 @@ class UserController extends Controller
         }
     
 
-        // dd($activities);
-
         $timeline = array();
     
         foreach($res as $re){
@@ -610,8 +583,12 @@ class UserController extends Controller
             array_push($timeline, array("stage_name" => $key, "start_date" => $first, "end_date" => $last ));
         }
     
-        $timeline = json_encode($timeline);   
-        // dd($activities);
+        $timeline = json_encode($timeline);
+
+        $site_fields = json_decode($site[0]->site_fields);
+
+        // dd($site_fields);
+
 
         $mode = "vendor";
         $profile = "supervisor";
@@ -633,7 +610,7 @@ class UserController extends Controller
             compact(
                 'timeline',
                 'activities',
-                // 'site_fields',
+                'site_fields',
                 'agent_name',
                 // 'agent_sites',
                 'what_site',
