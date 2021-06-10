@@ -459,28 +459,36 @@ class GlobeController extends Controller
     public function fileupload(Request $request){
 
         try {
-            if($request->hasFile('file')) {
-   
-                // Upload path
-                $destinationPath = 'files/';
+            $validate = Validator::make($request->all(), array(
+                'file' => 'required | mimes:pdf',
+            ));
             
-                // Get file extension
-                $extension = $request->file('file')->getClientOriginalExtension();
-            
-                // Valid extensions
-                $validextensions = array("pdf");
-            
-                // Check extension
-                if(in_array(strtolower($extension), $validextensions)){
-                    // Rename file 
-                    $fileName = $request->file('file')->getClientOriginalName().time() .'.' . $extension;
-
-                    // Uploading file to given path
-                    $request->file('file')->move($destinationPath, $fileName); 
-                }
+            if($validate->passes()){
+                if($request->hasFile('file')) {
+    
+                    // Upload path
+                    $destinationPath = 'files/';
                 
-                return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf.", "file" => $fileName]);
-        
+                    // Get file extension
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                
+                    // Valid extensions
+                    $validextensions = array("pdf");
+                
+                    // Check extension
+                    if(in_array(strtolower($extension), $validextensions)){
+                        // Rename file 
+                        $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
+
+                        // Uploading file to given path
+                        $request->file('file')->move($destinationPath, $fileName); 
+                    }
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf.", "file" => $fileName]);
+            
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
