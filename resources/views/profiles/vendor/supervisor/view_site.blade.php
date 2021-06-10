@@ -26,7 +26,7 @@
 </div>                        
 
 <div class="row">
-        <div class="col-12 pl-5">
+        <div class="col-12">
             <ul class="tabs-animated body-tabs-animated nav">
                 <li class="nav-item">
                     <a role="tab" class="nav-link active" id="tab-4" data-toggle="tab" href="#tab-content-4">
@@ -87,7 +87,8 @@
                                                 <div class="widget-content-left">
                                                     <div class="widget-heading">
                                                         {{ $activity["activity_name"] }}
-                                                        <div class="badge badge- ml-2">
+                                                        <div class="badge badge-{{ $activity["color"] }} ml-2">
+                                                            {{ $activity["badge"] }}
                                                         </div>
                                                     </div>
                                                     <div class="widget-subheading">

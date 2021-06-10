@@ -585,11 +585,14 @@ class UserController extends Controller
 
                     if(date('Y-m-d') < date($each->start_date)){
                         $color = "success";
+                        $badge = "UPCOMING";
                     } else {
                         if(date('Y-m-d') < date($each->end_date)){
                             $color = "warning";
+                            $badge = "ON SCHEDULE";
                         } else {
                             $color = "danger";
+                            $badge = "DELAYED";
                         }
                     }
 
@@ -603,7 +606,8 @@ class UserController extends Controller
                             "start_date" => $each->start_date, 
                             "end_date" => $each->end_date, 
                             "sub_activities" => $sub_activities[$each->activity_id],
-                            "color" => $color
+                            "color" => $color,
+                            "badge" => $badge
                         )
                     );
                 }
