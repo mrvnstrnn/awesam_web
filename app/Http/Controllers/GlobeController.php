@@ -529,6 +529,7 @@ class GlobeController extends Controller
             $sub_activity_files = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                                         ->where('sub_activity_id', $request->input('sub_activity_id'))
                                                         ->where('user_id', \Auth::id())
+                                                        ->orderBy('date_created', 'desc')
                                                         ->get();
 
             return response()->json(['error' => false, 'message' => $sub_activity_files]);

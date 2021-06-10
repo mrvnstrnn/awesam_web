@@ -118,16 +118,20 @@ $(document).ready(function() {
                 success: function(resp){
 
                     if(!resp.error){
+                        console.log(resp.message);
                         if(resp.message.length < 1) {
                             $(".dropzone").removeClass("d-none");
                             $(".upload_file").removeClass("d-none");
                             $(".hr-border").addClass("d-none");
                         } else {
-                            $(".dropzone").addClass("d-none");
-                            $(".upload_file").addClass("d-none");
-                            $(".hr-border").removeClass("d-none");
                             var ext = "";
                             var status = "";
+                            console.log(resp.message[0].status);
+                            if(resp.message[0].status == 'approved'){
+                                $(".dropzone").addClass("d-none");
+                                $(".upload_file").addClass("d-none");
+                                $(".hr-border").removeClass("d-none");
+                            }
                             $(".row.action_box .list-uploaded").append(
                                 '<ul></ul>'
                             );
