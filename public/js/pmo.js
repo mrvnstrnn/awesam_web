@@ -7,12 +7,14 @@ $(document).ready(() => {
         program_lists.push(program_list[i].program.replace(" ", "-").toLowerCase());
     }
 
-    for (let i = 0; i < program_lists.length; i++) {
-        $('#new-endoresement-'+program_lists[i]+'-table').DataTable({
+    // for (let i = 0; i < program_lists.length; i++) {
+
+    if(program_lists.length >= 1){
+        $('#new-endoresement-'+program_lists[0]+'-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: $('#new-endoresement-'+program_lists[i]+'-table').attr('data-href'),
+                url: $('#new-endoresement-'+program_lists[0]+'-table').attr('data-href'),
                 type: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -23,7 +25,7 @@ $(document).ready(() => {
             },
             'createdRow': function( row, data, dataIndex ) {
                 $(row).attr('data-site', JSON.stringify(data));
-                $(row).attr('data-program', program_lists[i]);
+                $(row).attr('data-program', program_lists[0]);
                 $(row).addClass('modalDataEndorsement');
             },
             columnDefs: [{
@@ -39,6 +41,42 @@ $(document).ready(() => {
             ],
         });
     }
+    // }
+
+    $(".nav-link").on("click", function(){
+        if ( ! $.fn.DataTable.isDataTable('#new-endoresement-'+$(this).attr("data-program")+'-table') ) {
+            $('#new-endoresement-'+$(this).attr("data-program")+'-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: $('#new-endoresement-'+$(this).attr("data-program")+'-table').attr('data-href'),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-site', JSON.stringify(data));
+                    $(row).attr('data-program', $(this).attr("data-program"));
+                    $(row).addClass('modalDataEndorsement');
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "checkbox" },
+                    { data: "site_endorsement_date" },
+                    { data: "sam_id" },
+                    { data: "site_name" },
+                    { data: "technology" },
+                ],
+            });
+        }
+    });
       
     $('.new-endorsement-table').on( 'click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
