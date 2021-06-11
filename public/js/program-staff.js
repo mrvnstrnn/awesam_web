@@ -52,25 +52,14 @@ $(document).ready(() => {
 
         $(".content-data .position-relative.form-group").remove();
 
-        // Object.entries(json_parse.site_fields).forEach(([key, value]) => {
-        //     Object.entries(value).forEach(([keys, values]) => {
-        //         if(allowed_keys.includes(keys) > 0){
-        //             $(".content-data").append(
-        //                 '<div class="position-relative form-group col-md-6">' +
-        //                     '<label for="' + keys.toLowerCase() + '" style="font-size: 11px;">' +  keys + '</label>' +
-        //                     '<input class="form-control"  value="'+values+'" name="' + keys.toLowerCase() + '"  id="'+key.toLowerCase()+'" >' +
-        //                 '</div>'
-        //             );
-        //         }
-        //     });
-        // });
+        var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
 
-        for (let i = 0; i < json_parse['site_fields'].length; i++) {
-            if(allowed_keys.includes(json_parse['site_fields'][i].field_name)){
+        for (let i = 0; i < new_json.length; i++) {
+            if(allowed_keys.includes(new_json[i].field_name)){
                 $(".content-data").append(
                     '<div class="position-relative form-group col-md-6">' +
-                        '<label for="' + json_parse['site_fields'][i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  json_parse['site_fields'][i].field_name + '</label>' +
-                        '<input class="form-control"  value="'+json_parse['site_fields'][i].field_name+'" name="' + json_parse['site_fields'][i].field_name.toLowerCase() + '"  id="'+json_parse['site_fields'][i].field_name.toLowerCase()+'" >' +
+                        '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
+                        '<input class="form-control"  value="'+new_json[i].field_name+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
                     '</div>'
                 );
             }

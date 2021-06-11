@@ -23,21 +23,29 @@ class GlobeController extends Controller
     public function getDataNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-            $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
+            // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
+
+            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
             // $program = Program::where('program_id', $program_id)->first();
             
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row) use($program_id) {
                             $checkbox = "<div class='custom-checkbox custom-control'>";
-                            $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row['sam_id']."' value='".$row['sam_id']."' class='custom-control-input checkbox-new-endorsement'>";
-                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row['sam_id']."'></label>";
+                            $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
                             $checkbox .= "</div>";
     
                             return $checkbox;
                         })
                         ->addColumn('technology', function($row){
-                            $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                            // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                            if(isset($row->technology)){
+                                $technology = $row->technology;
+                            } else {
+                                $technology = "";
+                            }
+                            // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
                             return "<div class='badge badge-success'>".$technology."</div>";                            
                         });
                         // ->addColumn('pla_id', function($row){
@@ -75,7 +83,7 @@ class GlobeController extends Controller
 
                 // Process JSON FIELDS and add to JSON 
                 $site_fields = json_decode($new_endorsements[$i]->site_fields, TRUE);
-                $stage_activities = json_decode($new_endorsements[$i]->stage_activities, TRUE);
+                $stage_activities = json_decode($new_endorsements[$i]->stage_activities ? $new_endorsements[$i]->stage_activities  : "", TRUE);
 
                 $json["site_fields"] = $site_fields;           
                 $json["stage_activities"] = $stage_activities;
