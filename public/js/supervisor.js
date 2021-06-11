@@ -90,7 +90,7 @@ $(document).ready(() => {
         }
     });
 
-    $('.assign-agent-site-table').on('click', 'tr', function (e) {
+    $('.assign-agent-site-table').on('click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
         $(".lgu_check div").remove();
         $(".province_check div").remove();
@@ -311,7 +311,7 @@ $(document).ready(() => {
                 { data: "sam_id" },
                 { data: "site_name" },
                 { data: "technology" },
-                { data: "pla_id" }
+                // { data: "pla_id" }
             ],
         });
     }
