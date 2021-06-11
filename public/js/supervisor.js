@@ -16,13 +16,13 @@ $(document).ready(() => {
     //                                 //  
     /////////////////////////////////////
 
-    for (let i = 0; i < program_lists.length; i++) {
-        $('#agent-'+program_lists[i]+'-table').DataTable({
+    if(program_lists.length >= 1){
+        $('#agent-'+program_lists[0]+'-table').DataTable({
             processing: true,
             serverSide: true,
             // pageLength: 3,
             ajax: {
-                url: $('#agent-'+program_lists[i]+'-table').attr('data-href'),
+                url: $('#agent-'+program_lists[0]+'-table').attr('data-href'),
                 type: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -33,7 +33,7 @@ $(document).ready(() => {
             },
             'createdRow': function( row, data, dataIndex ) {
                 $(row).attr('data-id', data.id);
-                if($('#agent-'+program_lists[i]+'-table').attr('data-page') == "new-agent"){
+                if($('#agent-'+program_lists[0]+'-table').attr('data-page') == "new-agent"){
                     $(row).addClass('modalAssigAgentnSite');
                     $(row).attr('data-program', program_lists[i]);
                 }
@@ -51,6 +51,44 @@ $(document).ready(() => {
             ],
         });
     }
+
+    $(".nav-link.agent").on("click", function(){
+        if ( ! $.fn.DataTable.isDataTable('#agent-'+$(this).attr("data-program")+'-table') ) {
+            $('#agent-'+$(this).attr("data-program")+'-table').DataTable({
+                processing: true,
+                serverSide: true,
+                // pageLength: 3,
+                ajax: {
+                    url: $('#agent-'+$(this).attr("data-program")+'-table').attr('data-href'),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-id', data.id);
+                    if($('#agent-'+$(this).attr("data-program")+'-table').attr('data-page') == "new-agent"){
+                        $(row).addClass('modalAssigAgentnSite');
+                        $(row).attr('data-program', program_lists[i]);
+                    }
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "photo" },
+                    { data: "firstname" },
+                    { data: "lastname" },
+                    { data: "email" },
+                    { data: "areas" },
+                ],
+            });
+        }
+    });
 
     $('.assign-agent-site-table').on('click', 'tr', function (e) {
         e.preventDefault();
@@ -241,13 +279,13 @@ $(document).ready(() => {
     /////////////////////////////////////
 
 
-    for (let i = 0; i < program_lists.length; i++) {
-        $('#unasigned-'+program_lists[i]+'-table').DataTable({
+    if(program_lists.length >= 1){
+        $('#unasigned-'+program_lists[0]+'-table').DataTable({
             processing: true,
             serverSide: true,
             // pageLength: 3,
             ajax: {
-                url: $('#unasigned-'+program_lists[i]+'-table').attr('data-href'),
+                url: $('#unasigned-'+program_lists[0]+'-table').attr('data-href'),
                 type: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -258,7 +296,7 @@ $(document).ready(() => {
             },
             'createdRow': function( row, data, dataIndex ) {
                 $(row).attr('data-site', JSON.stringify(data));
-                $(row).attr('data-program', program_lists[i]);
+                $(row).attr('data-program', program_lists[0]);
                 $(row).attr('data-id', data.sam_id);
                 $(row).addClass('modalDataUnassigned'+data.sam_id);
                 $(row).addClass('modalDataEndorsement');
@@ -277,6 +315,41 @@ $(document).ready(() => {
             ],
         });
     }
+
+    $(".nav-link.unasigned").on("click", function(){
+        if ( ! $.fn.DataTable.isDataTable('#unasigned-'+$(this).attr("data-program")+'-table') ) {
+            $('#unasigned-'+$(this).attr("data-program")+'-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: $('#unasigned-'+$(this).attr("data-program")+'-table').attr('data-href'),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-site', JSON.stringify(data));
+                    $(row).attr('data-program', $(this).attr("data-program"));
+                    $(row).addClass('modalDataEndorsement');
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "checkbox" },
+                    { data: "site_endorsement_date" },
+                    { data: "sam_id" },
+                    { data: "site_name" },
+                    { data: "technology" },
+                ],
+            });
+        }
+    });
 
     $('.unasigned-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
@@ -373,7 +446,7 @@ $(document).ready(() => {
         });
     }
     
-    $(".nav-link").on("click", function(){
+    $(".nav-link.new-endoresement").on("click", function(){
         if ( ! $.fn.DataTable.isDataTable('#new-endoresement-'+$(this).attr("data-program")+'-table') ) {
             $('#new-endoresement-'+$(this).attr("data-program")+'-table').DataTable({
                 processing: true,

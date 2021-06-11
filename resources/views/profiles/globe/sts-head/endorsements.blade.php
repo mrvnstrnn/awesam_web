@@ -21,7 +21,7 @@
 <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
         @foreach ($programs as $program)
             <li class="nav-item">
-                <a role="tab" class="nav-link {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
+                <a role="tab" class="nav-link new-endoresement {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
                     <span>{{ $program->program }}</span>
                 </a>
             </li>

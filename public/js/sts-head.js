@@ -40,7 +40,7 @@ $(document).ready(() => {
         });
     }
     
-    $(".nav-link").on("click", function(){
+    $(".nav-link.new-endoresement").on("click", function(){
         if ( ! $.fn.DataTable.isDataTable('#new-endoresement-'+$(this).attr("data-program")+'-table') ) {
             $('#new-endoresement-'+$(this).attr("data-program")+'-table').DataTable({
                 processing: true,
