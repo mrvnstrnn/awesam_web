@@ -123,7 +123,6 @@ $(document).ready(function() {
                 success: function(resp){
 
                     if(!resp.error){
-                        console.log(resp.message);
                         if(resp.message.length < 1) {
                             $(".dropzone").removeClass("d-none");
                             $(".upload_file").removeClass("d-none");
@@ -131,37 +130,48 @@ $(document).ready(function() {
                         } else {
                             var ext = "";
                             var status = "";
-                            console.log(resp.message[0].status);
+                            
+                            if(resp.message[0].status == "approved" || resp.message[0].status == "pending"){
+                                $(".dropzone").addClass("d-none");
+                                $(".upload_file").addClass("d-none");
+                                $(".hr-border").removeClass("d-none");
 
-                            $(".row.action_box .list-uploaded").append(
-                                '<ul></ul>'
-                            );
-                            resp.message.forEach(element => {
-
-                                if(element.status == 'approved'){
-                                    $(".dropzone").addClass("d-none");
-                                    $(".upload_file").addClass("d-none");
-                                    $(".hr-border").removeClass("d-none");
-                                }
-
-                                if(element.value.split('.').pop() == 'pdf'){
-                                    ext = "fa-file-pdf";
-                                } else {
-                                    ext = "fa-file";
-                                }
-
-                                if(element.status == "pending") {
-                                    status = "fa-spinner text-warning";
-                                } else if (element.status == "approved") {
-                                    status = "fa-check text-success";
-                                } else if (element.status == "denied"){
-                                    status = "fa-times text-danger";
-                                }
-
-                                $(".row.action_box .list-uploaded ul").append(
-                                    '<li><i class="fa '+ext+'"></i> '+element.value+'<i class="ml-4 fa '+status+'"></i></li>'
+                                $(".row.action_box .list-uploaded").append(
+                                    '<ul></ul>'
                                 );
-                            });
+
+                                resp.message.forEach(element => {
+                                    // if(element.status == 'approved'){
+                                    //     $(".dropzone").addClass("d-none");
+                                    //     $(".upload_file").addClass("d-none");
+                                    //     $(".hr-border").removeClass("d-none");
+                                    // }
+    
+                                    if(element.value.split('.').pop() == 'pdf'){
+                                        ext = "fa-file-pdf";
+                                    } else {
+                                        ext = "fa-file";
+                                    }
+    
+                                    if(element.status == "pending") {
+                                        status = "fa-spinner text-warning";
+                                    } else if (element.status == "approved") {
+                                        status = "fa-check text-success";
+                                    } else if (element.status == "denied"){
+                                        status = "fa-times text-danger";
+                                    }
+    
+                                    $(".row.action_box .list-uploaded ul").append(
+                                        '<li><i class="fa '+ext+'"></i> '+element.value+'<i class="ml-4 fa '+status+'"></i></li>'
+                                    );
+                                });
+                            } else if(resp.message[0].status == "rejected") {
+                                $(".dropzone").addClass("d-none");
+                                $(".upload_file").removeClass("d-none");
+                            } else {
+                                $(".dropzone").addClass("d-none");
+                                $(".upload_file").removeClass("d-none");
+                            }
                         }
                     } else {
                         toastr.error(resp.message, "Error");
