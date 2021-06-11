@@ -441,24 +441,29 @@ class GlobeController extends Controller
     public function download_pdf(Request $request)
     {
         try {
-            SubActivityValue::create([
-                'sam_id' => $request->input("sam_id"),
-                'sub_activity_id' => $request->input("sub_activity_id"),
-                'value' => $request->input("template"),
-                'user_id' => \Auth::id(),
-                'status' => "pending",
-            ]);    
-
-            $pdf = \App::make('dompdf.wrapper');
-            $pdf = PDF::loadHTML($request->input('template'));
-            $pdf->setPaper('a4');
-            
-            return $pdf->stream();
-            // $pdf->download('invoice.pdf');
-            
-            return response()->json(['error' => false, 'message' => "Successfully printed to pdf."]);
+            // $sub_act = SubActivityValue::where('sam_id', $request->input("sam_id"))
+            //                             ->where('sub_activity_id', $request->input("sub_activity_id"))
+            //                             ->where('user_id', \Auth::id())
+            //                             ->first();
+            // if(is_null($sub_act)){
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => $request->input("template"),
+                    'user_id' => \Auth::id(),
+                    'status' => "pending",
+                ]);
+    
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf = PDF::loadHTML($request->input('template'));
+                $pdf->setPaper('a4');
+                
+                return $pdf->stream();
+            // } else {
+            //     abort(403, 'Unable to print this to pdf.');
+            // }
         } catch (\Throwable $th) {
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+            abort(403, $th->getMessage());
         }
     }
 

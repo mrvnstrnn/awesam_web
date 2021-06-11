@@ -1,10 +1,4 @@
 <form class="w-100" id="form-upload" enctype="multipart/form-data">@csrf
-    {{-- <div class="position-relative form-group mb-2 px-2">
-        <label for="doc_upload" class="doc_upload_label">labeler</label>
-        <div class="input-group">
-            <input type="file" name="doc_upload" id="doc_upload" class="p-1 form-control">
-        </div>
-    </div> --}}
     <div class="list-uploaded"></div>
     <hr class="hr-border">
     <div class="dropzone"></div>
