@@ -14,16 +14,16 @@ $(document).ready(function() {
             $('.modal-body').html("");
 
             $.ajax({
-                url: "/loi-template",
+                url: "/loi-template/"+sam_id+"/"+sub_activity_id,
                 method: "GET",
                 success: function(resp){
                     if(!resp.error){
-                        $('.modal-body').html('<div id="summernote" name="editordata">' + resp.message + '</div>');
+                        $('.modal-body').html('<textarea id="summernote" name="editordata">' + resp.message + '</textarea>');
 
                         $("input[name=sam_id]").val(sam_id);
                         $("input[name=sub_activity_id]").val(sub_activity_id);
 
-                        $("textarea").text(resp.message);
+                        // $("textarea").text(resp.message);
                         $('#summernote').summernote({
                             height: 300,
                             minHeight: null,
@@ -168,5 +168,36 @@ $(document).ready(function() {
         });
     });
 
+    // $('#template_form').on('submit', function(e){
+    //     e.preventDefault();
+        
+    //     var template = $('#summernote').summernote('code');
+    //     var sam_id = $("#form-upload #sam_id").val();
+    //     var sub_activity_id = $("#form-upload #sub_activity_id").val();
+
+    //     $.ajax({
+    //         url: "/download-pdf",
+    //         method: "POST", 
+    //         data: {
+    //             template : template,
+    //             sam_id : sam_id,
+    //             sub_activity_id : sub_activity_id,
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(resp) {
+    //             if(!resp.error){
+                    
+    //             } else {
+    //                 toastr.error(resp.message, "Error");
+    //             }
+    //         },
+    //         error: function(resp) {
+    //             toastr.error(resp.message, "Error");
+    //         }
+    //     });
+
+    // });
 
 });

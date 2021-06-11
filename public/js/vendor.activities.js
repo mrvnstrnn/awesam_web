@@ -70,12 +70,12 @@ $(document).ready(function() {
                 method: "GET",
                 success: function(resp){
                     if(!resp.error){
-                        $('.modal-body').html('<div id="summernote" name="editordata">' + resp.message + '</div>');
+                        $('.modal-body').html('<textarea id="summernote" name="editordata">' + resp.message + '</textarea>');
 
                         $("input[name=sam_id]").val(sam_id);
                         $("input[name=sub_activity_id]").val(sub_activity_id);
 
-                        $("textarea").text(resp.message);
+                        // $("textarea").text(resp.message);
                         $('#summernote').summernote({
                             height: 300,
                             minHeight: null,

@@ -112,7 +112,7 @@
                 </div>
                 <input type="hidden" name="sam_id" id="sam_id">
                 <input type="hidden" name="sub_activity_id" id="sub_activity_id">
-                <textarea name="template" id="template" class="d-none" cols="30" rows="10"></textarea>
+                {{-- <textarea name="template" id="template" class="d-none" cols="30" rows="10"></textarea> --}}
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
                         Close

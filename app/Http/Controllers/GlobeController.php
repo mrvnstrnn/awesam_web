@@ -418,21 +418,31 @@ class GlobeController extends Controller
         }
     }    
 
-    public function loi_template()
+    public function loi_template($sam_id = "", $sub_activity_id = "")
     {
         try {
-            $content = "<img src='".asset('images/globe-logo.png')."' width='150px'><br>";
-            $content .= "<p>October 1, 2019</p>";
-            $content .= "<p>ROSELIO R. ARAN DIA AND YOLANDA DC. ARANDIA</p>";
-            $content .= "<p>Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City</p>";
-            $content .= "<p>Subject: <b>NOTICE TO PROCEED</b></p>";
-            $content .= "<p>Dear <b>Sir/Ma'am</b></p>";
-            $content .= "<p>We would like to seek for your approval to allow Globe Telecom, Inc., its employees, agents or representatives to commence with the enhancement of facilities, equipment and appurtenances located at Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City.</p>";
 
-            $content .= "<p>Kindly signify your confirmation by affixing your signature in the space provided below. Thank you</p>";
-
-
-            return response()->json(['error' => false, 'message' => $content]);
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('user_id', \Auth::id())
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->first();
+            if(is_null($sub_activity_files)){
+                $content = "<img src='".asset('images/globe-logo.png')."' width='150px'><br>";
+                $content .= "<p>October 1, 2019</p>";
+                $content .= "<p>ROSELIO R. ARAN DIA AND YOLANDA DC. ARANDIA</p>";
+                $content .= "<p>Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City</p>";
+                $content .= "<p>Subject: <b>NOTICE TO PROCEED</b></p>";
+                $content .= "<p>Dear <b>Sir/Ma'am</b></p>";
+                $content .= "<p>We would like to seek for your approval to allow Globe Telecom, Inc., its employees, agents or representatives to commence with the enhancement of facilities, equipment and appurtenances located at Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City.</p>";
+    
+                $content .= "<p>Kindly signify your confirmation by affixing your signature in the space provided below. Thank you</p>";
+    
+    
+                return response()->json(['error' => false, 'message' => $content]);
+            } else {
+                return response()->json(['error' => false, 'message' => $sub_activity_files->value]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -441,27 +451,35 @@ class GlobeController extends Controller
     public function download_pdf(Request $request)
     {
         try {
-            // $sub_act = SubActivityValue::where('sam_id', $request->input("sam_id"))
-            //                             ->where('sub_activity_id', $request->input("sub_activity_id"))
-            //                             ->where('user_id', \Auth::id())
-            //                             ->first();
-            // if(is_null($sub_act)){
+            $sub_act = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                        ->where('user_id', \Auth::id())
+                                        ->first();
+
+                                        // dd($sub_act);
+            if(is_null($sub_act)){
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
-                    'value' => $request->input("template"),
+                    'value' => $request->input("editordata"),
                     'user_id' => \Auth::id(),
                     'status' => "pending",
                 ]);
-    
-                $pdf = \App::make('dompdf.wrapper');
-                $pdf = PDF::loadHTML($request->input('template'));
-                $pdf->setPaper('a4');
-                
-                return $pdf->stream();
-            // } else {
+            } else {
             //     abort(403, 'Unable to print this to pdf.');
-            // }
+                SubActivityValue::where('id', $sub_act->id)
+                                    ->update([
+                                        'value' => $request->input("editordata"),
+                                        'status' => "pending",
+                                    ]);
+            }
+
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf = PDF::loadHTML($request->input('editordata'));
+            $pdf->setPaper('a4');
+            
+            return $pdf->stream();
+
         } catch (\Throwable $th) {
             abort(403, $th->getMessage());
         }

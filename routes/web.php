@@ -100,7 +100,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     // File management
-    Route::get('/loi-template', [GlobeController::class, 'loi_template']);
+    Route::get('/loi-template/{sam_id?}/{sub_activity_id?}', [GlobeController::class, 'loi_template']);
     Route::post('/download-pdf', [GlobeController::class, 'download_pdf']);
     Route::post('/upload-file', [GlobeController::class, 'fileupload']);
     Route::post('/upload-my-file', [GlobeController::class, 'upload_my_file']);
