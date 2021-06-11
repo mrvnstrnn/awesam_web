@@ -22,11 +22,7 @@
 
         @foreach ($programs as $program)
             <li class="nav-item">
-                @if ($loop->first)
-                    <a role="tab" class="nav-link active" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
-                @else
-                    <a role="tab" class="nav-link" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
-                @endif
+                <a role="tab" class="nav-link new-endoresement {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
                     <span>{{ $program->program }}</span>
                 </a>
             </li>
@@ -34,12 +30,7 @@
     </ul>
     <div class="tab-content">
         @foreach ($programs as $program)
-            @if ($loop->first)
-            <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
-            @else
-            <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
-            @endif
-
+            <div class="tab-pane tabs-animation fade {{ $loop->first ? 'active show' : '' }}" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
