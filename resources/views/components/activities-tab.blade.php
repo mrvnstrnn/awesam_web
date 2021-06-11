@@ -119,7 +119,6 @@
                                             @elseif($agent_id == 91)
                                                 <img width="42" class="rounded-circle" src="/images/avatars/5.jpg" alt="">
                                             @endif
-
                                         </div>
                                         @endif
                                         <div class="col-md-10 col-sm-10  my-auto">

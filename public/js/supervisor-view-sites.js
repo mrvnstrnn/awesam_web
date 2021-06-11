@@ -1,59 +1,7 @@
 $(document).ready(function() {
 
-    $('#tab-content-today').addClass('show');
-    $('#tab-content-today').addClass('active');
-    
-    $(".show_subs_btn").on('click', function(e){
-        e.preventDefault();
-        
-        // RESET
-        $(".sub_activity_li").addClass('d-none');
-        $('.show_subs_btn').html('<i class="float-right lnr-chevron-down-circle"></i>');
 
-
-        $("#" + $(this).attr("data-show_li")).toggleClass('d-none');
-
-        // alert($(this).attr("data-chevron"));
-
-        if($(this).attr("data-chevron") === "down"){
-            var chevronUp = '<i class="lnr-chevron-up-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show Sub Activities"></i>';
-            $(this).attr('data-chevron','up');
-            console.log('down to up');
-        } else {
-            var chevronUp = '<i class="lnr-chevron-down-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show Sub Activities"></i>';
-            $(this).attr('data-chevron','down');
-            console.log('up to down');
-            $(".sub_activity_li").addClass('d-none');
-            
-        }
-
-        $(this).html(chevronUp);
-    });
-
-
-    $(".activity_agent_filter").on('click', function(e){
-        e.preventDefault();
-
-        who = $(this).attr('data-agent_id');
-
-        $(".agent_card").addClass('d-none');
-        $(".agent_card_" + who).removeClass('d-none');
-
-        $('.show_who').text($(this).text())
-
-    });
-
-    $(".activity_agent_filter_remove").on('click', function(e){
-        e.preventDefault();
-
-        $(".agent_card").removeClass('d-none');
-        $('.show_who').text("ALL")
-
-
-    });
-
-
-    $(".sub_activity").on('click', function(e){
+    $(".subactivity_action_switch").on('click', function(e){
         e.preventDefault();
 
         var sam_id = $(this).attr('data-sam_id');
@@ -66,7 +14,7 @@ $(document).ready(function() {
             $('.modal-body').html("");
 
             $.ajax({
-                url: "/loi-template",
+                url: "/loi-template/"+sam_id+"/"+sub_activity_id,
                 method: "GET",
                 success: function(resp){
                     if(!resp.error){
@@ -96,20 +44,23 @@ $(document).ready(function() {
 
         else if($(this).attr('data-action')=="doc upload"){
 
-            var where = '#sub_activity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode');
+            // var where = '#subactivity_' + $(this).attr('data-sam_id') + "_" + $(this).attr('data-activity_id') + "_" + $(this).attr('data-mode');
+            var where = '#subactivity_' + $(this).attr('data-activity_id');
 
-            $('.lister').removeClass("d-none");
-            $('.action_box').addClass("d-none");
+            $('.subactivity_action_list').removeClass("d-none");
+            $('.subactivity_action').addClass("d-none");
+
+            console.log(where);
             
-            $(where + " .lister").toggleClass("d-none");
-            $(where + " .action_box").toggleClass("d-none");
+            $(where + " .subactivity_action_list").toggleClass("d-none");
+            $(where + " .subactivity_action").toggleClass("d-none");
 
             $("#form-upload #sam_id").val($(this).attr('data-sam_id'));
             $("#form-upload #sub_activity_id").val($(this).attr('data-sub_activity_id'));
 
             $(where).find(".doc_upload_label").html($(this).attr('data-sub_activity_name'));
 
-            $(".row.action_box .list-uploaded ul").remove();
+            $(".row.subactivity_action .list-uploaded ul").remove();
             $.ajax({
                 url: "/get-my-uploaded-file",
                 method: "POST",
@@ -133,7 +84,7 @@ $(document).ready(function() {
                             var status = "";
                             console.log(resp.message[0].status);
 
-                            $(".row.action_box .list-uploaded").append(
+                            $(".row.subactivity_action .list-uploaded").append(
                                 '<ul></ul>'
                             );
                             resp.message.forEach(element => {
@@ -158,7 +109,7 @@ $(document).ready(function() {
                                     status = "fa-times text-danger";
                                 }
 
-                                $(".row.action_box .list-uploaded ul").append(
+                                $(".row.subactivity_action .list-uploaded ul").append(
                                     '<li><i class="fa '+ext+'"></i> '+element.value+'<i class="ml-4 fa '+status+'"></i></li>'
                                 );
                             });
@@ -175,36 +126,9 @@ $(document).ready(function() {
     });
 
     $(".cancel_uploader").on('click', function(e){
-        $('.lister').removeClass("d-none");
-        $('.action_box').addClass("d-none");
-        $("a.dz-remove").trigger("click");
-    });
-
-
-    $(".download_pdf").on("click", function(){
-        // console.log($('#summernote').summernote('code'));
-
-        var data_summernote = $('#summernote').summernote('code');
-
-        $.ajax({
-            url: "/download-pdf",
-            data: { data_summernote : data_summernote },
-            method: "POST",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp) {
-                if(!resp.error){
-                    toastr.success(resp.message, "Success");
-                } else {
-                    toastr.error(resp.message, "Error");
-                }
-            },
-            error: function(resp) {
-                toastr.error(resp.message, "Error");
-            }
-
-        });
+        $('.subactivity_action_list').removeClass("d-none");
+        $('.subactivity_action').addClass("d-none");
+        // $("a.dz-remove").trigger("click");
     });
 
     $(".upload_file").on("click", function (e){
@@ -244,5 +168,36 @@ $(document).ready(function() {
         });
     });
 
+    // $('#template_form').on('submit', function(e){
+    //     e.preventDefault();
+        
+    //     var template = $('#summernote').summernote('code');
+    //     var sam_id = $("#form-upload #sam_id").val();
+    //     var sub_activity_id = $("#form-upload #sub_activity_id").val();
 
-});        
+    //     $.ajax({
+    //         url: "/download-pdf",
+    //         method: "POST", 
+    //         data: {
+    //             template : template,
+    //             sam_id : sam_id,
+    //             sub_activity_id : sub_activity_id,
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(resp) {
+    //             if(!resp.error){
+                    
+    //             } else {
+    //                 toastr.error(resp.message, "Error");
+    //             }
+    //         },
+    //         error: function(resp) {
+    //             toastr.error(resp.message, "Error");
+    //         }
+    //     });
+
+    // });
+
+});

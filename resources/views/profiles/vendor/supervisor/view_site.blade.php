@@ -17,6 +17,12 @@
     color: royalblue;
 }
 
+.dropzone {
+    min-height: 20px !important;
+    border: 1px dashed #3f6ad8 !important;
+    padding: unset !important;
+}
+
 </style>
 
 <div class="row">
@@ -109,18 +115,31 @@
                                                 $sub_activities = $activity["sub_activities"];
                                             @endphp
                                             @foreach ( $sub_activities as $sub_activity)
-                                                <div class="col-md-6 subactivity_action_switch" data-sam_id="{{ $title_subheading }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
+                                                <div class="col-md-6 subactivity_action_switch" data-sam_id="{{ $title_subheading }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
                                             @endforeach
                                         </div>
                                         <div class="row subactivity_action d-none">
-                                            xxx
+                                            {{-- xxx --}}
                                             {{-- <x-action-box/> --}}
+                                            <form class="w-100" id="form-upload" enctype="multipart/form-data">@csrf
+                                                <div class="list-uploaded"></div>
+                                                <hr class="hr-border">
+                                                <div class="dropzone"></div>
+                                                <input type="hidden" name="sam_id" id="sam_id">
+                                                <input type="hidden" name="sub_activity_id" id="sub_activity_id">
+                                                <input type="hidden" name="file_name" id="file_name">
+                                                <div class="position-relative form-group w-100 mb-0 mt-3">
+                                                    <button type="button" class="btn btn-sm btn-primary float-right upload_file">Upload</button>
+                                                    <button type="button" class="cancel_uploader btn btn-sm btn-outline-danger float-right mr-1" data-dismiss="modal" aria-label="Close">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </li>
                                         
                             @endforeach
-                        
                         </ul>
                     </div>
 
@@ -484,10 +503,62 @@
 
 @endsection
 
+@section('modals')
+<div class="modal fade" id="modal-sub_activity" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Site Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/download-pdf" method="POST" target="_blank">@csrf
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                </div>
+                <input type="hidden" name="sam_id" id="sam_id">
+                <input type="hidden" name="sub_activity_id" id="sub_activity_id">
+                {{-- <textarea name="template" id="template" class="d-none" cols="30" rows="10"></textarea> --}}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn btn-success print_to_pdf">Print to PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
 @section('js_script')
 
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js" integrity="sha512-VQQXLthlZQO00P+uEu4mJ4G4OAgqTtKG1hri56kQY1DtdLeIqhKUp9W/lllDDu3uN3SnUNawpW7lBda8+dSi7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<script src="{{ asset('js/supervisor-view-sites.js') }}"></script>
 <script type="text/javascript">
+
+    Dropzone.autoDiscover = false;
+    $(".dropzone").dropzone({
+        addRemoveLinks: true,
+        maxFiles: 1,
+        maxFilesize: 5,
+        paramName: "file",
+        url: "/upload-file",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (file, resp) {
+            $("#form-upload  #file_name").val(resp.file);
+            console.log(resp.message);
+        },
+        error: function (file, response) {
+            toastr.error(resp.message, "Error");
+        }
+    });
+
 
     $(document).ready(() => {
     
@@ -496,8 +567,6 @@
         $('.subactivity_switch').on( 'click', function (e) {
     
             var show_what = "#subactivity_" + $(this).attr("data-activity_id");
-            console.log(show_what);
-    
             $(".subactivity").addClass("d-none");
             $('.subactivity_action_list').removeClass('d-none');
             $('.subactivity_action').addClass('d-none');
@@ -509,11 +578,11 @@
         });
     
     
-        $('.subactivity_action_switch').on( 'click', function (e) {
-            $('.subactivity_action_list').addClass('d-none');
-            $('.subactivity_action').removeClass('d-none');
+        // $('.subactivity_action_switch').on( 'click', function (e) {
+        //     $('.subactivity_action_list').addClass('d-none');
+        //     $('.subactivity_action').removeClass('d-none');
     
-        });
+        // });
     
         $('#btn_add_issue_cancel').on( 'click', function (e) {
             $('.add_issue_form').addClass('d-none');
