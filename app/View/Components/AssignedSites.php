@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class VendorAssignedSite extends Component
+class AssignedSites extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class VendorAssignedSite extends Component
      */
     public function render()
     {
-        return view('components.vendor-assigned-site');
+        return view('components.assigned-sites');
     }
 }

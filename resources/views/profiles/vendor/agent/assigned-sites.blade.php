@@ -2,12 +2,12 @@
 
 @section('content')
 
-    <x-vendor-assigned-site />
+    <x-assigned-sites />
 
 @endsection
 
 @section('js_script')
 
-    <script type="text/javascript" src="/js/vendor-assigned-sites.js"></script>  
+    <script type="text/javascript" src="/js/assigned-sites.js"></script>  
 
 @endsection
