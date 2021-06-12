@@ -200,21 +200,31 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_assigned_sites($program_id)
+    public function vendor_assigned_sites($program_id, $mode)
     {   
-        if((\Auth::user()->profile_id)==2){
-            $sites = \DB::connection('mysql2')->table('site')
-                        ->join('site_users', 'site_users.sam_id', 'site.sam_id')
-                        ->where('program_id', "=", $program_id)
-                        ->where('site_users.agent_id', "=", \Auth::user()->id)
-                        ->get();
+        if($mode == "vendor"){
+            if((\Auth::user()->profile_id)==2){
+                $sites = \DB::connection('mysql2')->table('site')
+                            ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('program_id', "=", $program_id)
+                            ->where('site_users.agent_id', "=", \Auth::user()->id)
+                            ->get();
+            } else {
+                $sites = \DB::connection('mysql2')->table('site')
+                            ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
+                            ->where('program_id', "=", $program_id)
+                            ->where('IS_id', "=", \Auth::user()->id)
+                            ->get();
+            }    
         } else {
+
             $sites = \DB::connection('mysql2')->table('site')
-                        ->join('site_users', 'site_users.sam_id', 'site.sam_id')
-                        ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
-                        ->where('program_id', "=", $program_id)
-                        ->where('IS_id', "=", \Auth::user()->id)
-                        ->get();
+            ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+            ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
+            ->where('program_id', "=", $program_id)
+            ->get();
+
         }
 
 
