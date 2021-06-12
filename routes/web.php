@@ -105,6 +105,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/upload-file', [GlobeController::class, 'fileupload']);
     Route::post('/upload-my-file', [GlobeController::class, 'upload_my_file']);
     Route::post('/get-my-uploaded-file', [GlobeController::class, 'get_my_uploade_file']);
+
+
+    // Calendar
+    Route::get('/get-my-calendar', [UserController::class, 'my_calendar']);
     
 });
 

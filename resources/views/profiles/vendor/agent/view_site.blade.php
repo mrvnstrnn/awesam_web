@@ -69,9 +69,6 @@
                     <div class="card-body">
                         <ul class="todo-list-wrapper list-group list-group-flush">
                             @foreach ($activities as $activity )
-                                @php
-                                    // dd($activity);
-                                @endphp
                                 <li class="list-group-item" data-activity_type="{{ $activity->activity_type }}" data-cumulative_days="{{ $activity->cumulative_days }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
                                     <div class="todo-indicator bg-danger"></div>
                                     <div class="widget-content p-0">

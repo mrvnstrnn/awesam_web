@@ -8,3 +8,7 @@
 </div>
 
 @endsection
+
+@section('js_script')
+    <script type="text/javascript" src="/js/calendar.js"></script>
+@endsection
