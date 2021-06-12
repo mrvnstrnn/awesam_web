@@ -234,15 +234,15 @@ $(document).ready(() => {
             var random_color = colors[Math.floor(Math.random() * colors.length)];
 
             start_date = events[j][k].start_date;
-            end_date = events[j][k].end_date+"T23:59:00";
+            end_date = events[j][k].end_date +"T23:59:00";
 
             event_to_display.push({
               start: start_date,
               end: end_date,
               // overlap: true,
               color: "var(--"+random_color+")",
-              // title: events[j][k].activity_name,
-              title: events[j][k].start_date + "=" + events[j][k].end_date,
+              title: events[j][k].activity_name,
+              // title: events[j][k].start_date + "=" + events[j][k].end_date,
             });
           }
         }
@@ -260,6 +260,7 @@ $(document).ready(() => {
           bootstrapFontAwesome: true,
           defaultDate: new Date(),
           navLinks: true,
+          displayEventTime: false,
           // businessHours: true,
           // editable: true,
           events: 
