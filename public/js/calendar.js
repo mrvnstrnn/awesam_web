@@ -228,6 +228,7 @@ $(document).ready(() => {
         start_date = "";
         end_date = "";
 
+        // console.log(events);
 
         for (let j = 0; j < events.length; j++) {
           for (let k = 0; k < events[j].length; k++) {
@@ -241,14 +242,11 @@ $(document).ready(() => {
               end: end_date,
               // overlap: true,
               color: "var(--"+random_color+")",
-              title: events[j][k].activity_name,
+              title: events[j][k].site_name + " : " + events[j][k].activity_name,
               // title: events[j][k].start_date + "=" + events[j][k].end_date,
             });
           }
         }
-
-        console.log(event_to_display);
-
 
         $("#calendar-bg-events").fullCalendar({
           header: {
