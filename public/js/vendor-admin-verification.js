@@ -28,7 +28,39 @@ $(document).ready(() => {
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
-            { data: "status" },
+            // { data: "status" },
+        ],
+    });
+
+    $('#pending-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#pending-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        // 'createdRow': function(row, data) {
+
+        //     var suffix = data.suffix == null ? "" : data.suffix;
+        //     $(row).attr('data-user_id', data.user_id);
+        //     $(row).attr('data-profile_id', data.designation);
+        //     $(row).attr("data-info", JSON.stringify(data));
+        //     $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + suffix);
+        //     $(row).addClass('modalSetProfile');
+        // },
+        columns: [
+            // { data: "user_id" },
+            // { data: "profile" },
+            { data: "firstname" },
+            { data: "lastname" },
+            { data: "email" },
         ],
     });
 
