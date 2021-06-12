@@ -67,8 +67,6 @@ $(document).ready(() => {
 
         var data = JSON.parse($( this ).attr("data-info"));
 
-        console.log(data);
-
         $("#fullname").val(data.firstname+" "+data.lastname);
         $('#designation').val(data.designation).trigger('change');
         $('#employment_classification').val(data.employment_classification).trigger('change');
@@ -84,8 +82,9 @@ $(document).ready(() => {
         $('#landline').val(data.landline);
 
         $("#modal-employee-verification").modal("show");
-        $(".modal-footer.button-assign").removeClass("d-none");
-        if(data.profile_id != null){
+        $(".modal-footer .btn-assign-profile").removeClass("d-none");
+
+        if(data.designation != null){
             if($( this ).attr("data-profile_id") == 2){
                 $(".supervisor_area").removeClass('d-none');
                 $(".agent_area").removeClass('d-none');
@@ -128,6 +127,9 @@ $(document).ready(() => {
         
         var inputElements = document.getElementsByName('vendor_program_id');
 
+        $(this).attr('disabled', 'disabled');
+        $(this).text('Processing...');
+
         checkbox_id = [];
         for(var i=0; inputElements[i]; ++i){
             if(inputElements[i].checked){
@@ -152,13 +154,20 @@ $(document).ready(() => {
                     $('#for-verification-table').DataTable().ajax.reload(function(){
                         toastr.success(resp.message, "Success");
                         $("#modal-employee-verification").modal("hide");
+
+                        $(".btn-assign-profile").removeAttr('disabled');
+                        $(".btn-assign-profile").text('Approve Employee');
                     });
                 } else {
                     toastr.error(resp.message, "Error");
+                    $(".btn-assign-profile").removeAttr('disabled');
+                    $(".btn-assign-profile").text('Approve Employee');
                 }
             },
             error: function (resp) {
                 toastr.error(resp.message, "Error");
+                $(".btn-assign-profile").removeAttr('disabled');
+                $(".btn-assign-profile").text('Approve Employee');
             }
         });
     });
