@@ -1,5 +1,11 @@
 <form>
-    @foreach ( $site_fields as $site_field )
+    @foreach ( $sitefields as $site_field )
+
+    @php
+        // dd($site_field->field_name);
+
+    @endphp
+
     <div class="form-row mb-1">
         <div class="col-5">
             <label for="exampleEmail22" class="mr-sm-2">{{ $site_field->field_name }}</label>

@@ -7,7 +7,7 @@
                     <label for="exampleEmail22" class="mr-sm-2">Issue Type</label>
                 </div>
                 <div class="col-7">
-                    <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                    <input name="email" id="exampleEmail22" type="text" value="" class="form-control">
                 </div>
             </div>
             <div class="form-row mb-1">
@@ -15,7 +15,7 @@
                     <label for="exampleEmail22" class="mr-sm-2">Issue</label>
                 </div>
                 <div class="col-7">
-                    <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                    <input name="email" id="exampleEmail22" type="text" value="" class="form-control">
                 </div>
             </div>
             <div class="form-row mb-1">
@@ -23,7 +23,7 @@
                     <label for="exampleEmail22" class="mr-sm-2">Issue Details</label>
                 </div>
                 <div class="col-7">
-                    <input name="email" id="exampleEmail22" type="text" value="{{ $site_field->value }}" class="form-control">
+                    <input name="email" id="exampleEmail22" type="text" value="" class="form-control">
                 </div>
             </div>
             <div class="form-row mb-1">
