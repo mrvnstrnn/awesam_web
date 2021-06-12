@@ -645,9 +645,6 @@ class UserController extends Controller
         }
 
 
-
-
-
         $site_fields = json_decode($site[0]->site_fields);
 
         $role = \Auth::user()->getAllNavigation()

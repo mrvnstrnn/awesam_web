@@ -13,11 +13,14 @@ class AgentSites extends Component
      */
 
     public $agentsites;
+    public $agentname;
 
-    public function __construct($agentsites)
+    public function __construct($agentsites, $agentname)
     {
         //
         $this->agentsites = $agentsites;
+        $this->agentname = $agentname;
+
     }
 
     /**

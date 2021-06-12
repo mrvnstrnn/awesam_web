@@ -97,7 +97,7 @@
                         <x-site-issues />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
-                        <x-site-fields />
+                        <x-site-files />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-5" role="tabpanel">
                         <x-site-chat />
@@ -108,7 +108,7 @@
     </div>
 
     <div class="col-lg-4 col-md-12 col-sm-12">
-        <x-agent-sites :agentsites="$agent_sites" />
+        <x-agent-sites :agentsites="$agent_sites" :agentname="$agent_name" />
     </div>
 
     <input id="timeline" type="hidden" value="{{ $timeline }}" />

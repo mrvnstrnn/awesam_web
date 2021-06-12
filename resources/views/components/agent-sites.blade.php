@@ -9,14 +9,14 @@
                     </div>
                 </div>
                 <div>
-                    <h5 class="menu-header-title">{{ $agent_name }}</h5>
+                    <h5 class="menu-header-title">{{ $agentname }}</h5>
                     <h6 class="menu-header-subtitle">Agent</h6>
                 </div>
             </div>
         </div>
     </div>                    
     <ul class="list-group list-group-flush">
-        @foreach($agent_sites as $what_site)
+        @foreach($agentsites as $what_site)
         <li class="list-group-item">
             <div class="widget-content p-0">
                 <div class="widget-content-wrapper">
