@@ -694,13 +694,14 @@ class UserController extends Controller
             
             $timelines = \DB::connection('mysql2')
                             ->table('site')
-                            ->select('site.timeline')
+                            ->select('site.timeline', 'site.site_name')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->where('agent_id', '=', \Auth::id())
                             ->get();
 
             foreach ($timelines as $timeline) {
-                $arrayTimeline->push($timeline->timeline);
+                // $arrayTimeline->push($timeline->timeline);
+                $arrayTimeline->push($timeline);
             }
 
             return response()->json([ "error" => false, "message" => $timelines ]);
