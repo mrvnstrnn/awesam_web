@@ -351,8 +351,8 @@
     {{-- <script type="text/javascript" src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/slick-carousel/slick/slick.min.js"></script> --}}
-    <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script>
-
+    {{-- <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js" integrity="sha512-iusSCweltSRVrjOz+4nxOL9OXh2UA0m8KdjsX8/KUUiJz+TCNzalwE0WE6dYTfHDkXuGuHq3W9YIhDLN7UNB0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
