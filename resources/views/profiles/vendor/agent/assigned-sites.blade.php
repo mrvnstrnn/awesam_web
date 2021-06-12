@@ -14,7 +14,6 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
             $programs = \Auth::user()->getUserProgram();
         @endphp
         <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
