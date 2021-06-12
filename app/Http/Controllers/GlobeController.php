@@ -200,7 +200,7 @@ class GlobeController extends Controller
         }
     }
 
-    public function agent_assigned_sites($program_id)
+    public function vendor_assigned_sites($program_id)
     {   
         if((\Auth::user()->profile_id)==2){
             $sites = \DB::connection('mysql2')->table('site')
@@ -216,6 +216,9 @@ class GlobeController extends Controller
                         ->where('IS_id', "=", \Auth::user()->id)
                         ->get();
         }
+
+
+        // dd($sites);
 
 
         $dt = DataTables::of($sites);
