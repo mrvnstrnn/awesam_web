@@ -237,6 +237,9 @@
                     </form>
                 </div>
                 <div class="modal-footer button-assign">
+                    <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
                     <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button>
                 </div>
             </div>

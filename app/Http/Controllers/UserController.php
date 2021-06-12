@@ -147,8 +147,11 @@ class UserController extends Controller
                             // 'profile_id' => $request->input('designation'),
                         ]);
 
+
+                        return response()->json(['error' => true, 'message' => \Auth::id() ]);
+
                 if(!is_null($user_details)){
-                    UserDetail::where('user_id', \Auth::user()->id)
+                    UserDetail::where('user_id', \Auth::id())
                                 ->update([
                                     'birthday' => $request->get('birthday'),
                                     'gender' => $request->get('gender'),
@@ -164,20 +167,6 @@ class UserController extends Controller
 
                     return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
                 } else {
-                    // return response()->json(['error' => false, 'message' => $request->all() ]);
-                    // UserDetail::create([
-                    //     'address_id' => $address->id,
-                    //     'user_id' => \Auth::user()->id,
-                        
-                    //     'birthday' => $request->get('birthday'),
-                    //     'gender' => $request->get('gender'),
-                    //     'contact_no' => $request->get('contact_no'),
-                    //     'landline' => $request->get('landline'),
-                    //     'designation' => $request->get('designation'),
-                    //     'employment_classification' => $request->get('employment_classification'),
-                    //     'employment_status' => $request->get('employment_status'),
-                    //     'hiring_date' => $request->get('hiring_date'),
-                    // ]);
 
                     $detail = new UserDetail();
                     $detail->address_id = $address->id;
@@ -462,7 +451,7 @@ class UserController extends Controller
                 ->table('users')
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
-                // ->where('users.profile_id', null)
+                ->where('users.profile_id', null)
                 ->where('user_details.IS_id', \Auth::id())
                 ->get();
 
@@ -472,7 +461,7 @@ class UserController extends Controller
 
             $dt = DataTables::of($user_details)
                             ->addColumn('status', function($row){
-                                return is_null($row->profile_id) ? "<div class='badge badge-warning'>Pending</div>" : "<div class='badge badge-success'>Onboarded</div>";                            
+                                return is_null($row->designation) ? "<div class='badge badge-warning'>Pending</div>" : "<div class='badge badge-success'>Onboarded</div>";                            
                             });
                             
             $dt->rawColumns(['status']);
