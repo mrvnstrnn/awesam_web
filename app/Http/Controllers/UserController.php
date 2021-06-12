@@ -693,12 +693,18 @@ class UserController extends Controller
     public function my_calendar()
     {
         try {
+            $arrayTimeline = collect();
+            
             $timelines = \DB::connection('mysql2')
                             ->table('site')
                             ->select('site.timeline')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->where('agent_id', '=', \Auth::id())
                             ->get();
+
+            foreach ($timelines as $timeline) {
+                $arrayTimeline->push($timeline->timeline);
+            }
 
             return response()->json([ "error" => false, "message" => $timelines ]);
         } catch (\Throwable $th) {

@@ -145,19 +145,111 @@ $(document).ready(() => {
   //   ],
   // });
 
+  // $("#calendar-bg-events").fullCalendar({
+  //   header: {
+  //     left: "prev,next today",
+  //     center: "title",
+  //     right: "month,agendaWeek,agendaDay,listMonth",
+  //   },
+  //   themeSystem: "bootstrap4",
+  //   bootstrapFontAwesome: true,
+  //   defaultDate: "2021-03-12",
+  //   navLinks: true,
+  //   businessHours: true,
+  //   editable: true,
+  //   events: [
+  //     {
+  //       title: "Business Lunch",
+  //       start: "2021-03-03T13:00:00",
+  //       constraint: "businessHours",
+  //     },
+  //     {
+  //       title: "Meeting",
+  //       start: "2021-03-13T11:00:00",
+  //       constraint: "availableForMeeting",
+  //       color: "#257e4a",
+  //     },
+  //     {
+  //       title: "Conference",
+  //       start: "2021-03-18",
+  //       end: "2021-03-20",
+  //     },
+  //     {
+  //       title: "Party",
+  //       start: "2021-03-29T20:00:00",
+  //     },
+  //     {
+  //       id: "availableForMeeting",
+  //       start: "2021-03-11T10:00:00",
+  //       end: "2021-03-11T16:00:00",
+  //       rendering: "background",
+  //     },
+  //     {
+  //       id: "availableForMeeting",
+  //       start: "2021-03-13T10:00:00",
+  //       end: "2021-03-13T16:00:00",
+  //       rendering: "background",
+  //     },
+  //     {
+  //       start: "2021-03-24",
+  //       end: "2021-03-28",
+  //       overlap: false,
+  //       rendering: "background",
+  //       color: "var(--danger)",
+  //     },
+  //     {
+  //       start: "2021-03-06",
+  //       end: "2021-03-08",
+  //       overlap: false,
+  //       rendering: "background",
+  //       color: "var(--success)",
+  //     },
+  //   ],
+  // });
+
   $.ajax({
     url: "/get-my-calendar",
     method: "GET",
     success: function (resp){
       if(!resp.error){
-
         var events = [];
 
-        resp.message.forEach(element => {
-          events.push({ start: element.timeline })
-        });
+        var event_to_display = [];
 
-        console.log(events);
+        var colors = [
+            'success', 'primary', 'secondary',
+            'danger', 'warning'
+        ];
+
+        resp.message.forEach(element => {
+          events.push(JSON.parse(element.timeline));
+        });
+        
+        start_date = "";
+        end_date = "";
+
+
+        for (let j = 0; j < events.length; j++) {
+          for (let k = 0; k < events[j].length; k++) {
+            var random_color = colors[Math.floor(Math.random() * colors.length)];
+
+            start_date = events[j][k].start_date;
+            end_date = events[j][k].end_date +"T23:59:00";
+
+            event_to_display.push({
+              start: start_date,
+              end: end_date,
+              // overlap: true,
+              color: "var(--"+random_color+")",
+              title: events[j][k].activity_name,
+              // title: events[j][k].start_date + "=" + events[j][k].end_date,
+            });
+          }
+        }
+
+        console.log(event_to_display);
+
+
         $("#calendar-bg-events").fullCalendar({
           header: {
             left: "prev,next today",
@@ -166,19 +258,14 @@ $(document).ready(() => {
           },
           themeSystem: "bootstrap4",
           bootstrapFontAwesome: true,
-          defaultDate: "2021-03-12",
+          defaultDate: new Date(),
           navLinks: true,
-          businessHours: true,
-          editable: true,
-          events: [
-            {
-              start: "2021-03-06",
-              end: "2021-03-08",
-              overlap: false,
-              rendering: "background",
-              color: "var(--success)",
-            },
-          ],
+          displayEventTime: false,
+          // businessHours: true,
+          // editable: true,
+          events: 
+            event_to_display
+          ,
         });
       } else {
         toastr.error(resp.message);
@@ -188,6 +275,4 @@ $(document).ready(() => {
       toastr.error(resp.message);
     }
   });
-
-  
 });
