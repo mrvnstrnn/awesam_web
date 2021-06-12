@@ -91,7 +91,11 @@
             .app-sidebar .app-sidebar__inner {
                 padding: 2px 1rem 1rem !important;
             } */
+
         </style>    
+        
+        @yield('style')
+
     </head>
 
     <body>
