@@ -228,11 +228,12 @@ $(document).ready(() => {
         start_date = "";
         end_date = "";
 
-        // console.log(events);
+        console.log(events);
 
         for (let j = 0; j < events.length; j++) {
+          
+          var random_color = colors[Math.floor(Math.random() * colors.length)];
           for (let k = 0; k < events[j].length; k++) {
-            var random_color = colors[Math.floor(Math.random() * colors.length)];
 
             start_date = events[j][k].start_date;
             end_date = events[j][k].end_date +"T23:59:00";

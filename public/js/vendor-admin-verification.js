@@ -28,7 +28,39 @@ $(document).ready(() => {
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
-            { data: "status" },
+            // { data: "status" },
+        ],
+    });
+
+    $('#pending-table').DataTable({
+        processing: true,
+        serverSide: true,
+        // pageLength: 3,
+        ajax: {
+            url: $("#pending-table").attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        // 'createdRow': function(row, data) {
+
+        //     var suffix = data.suffix == null ? "" : data.suffix;
+        //     $(row).attr('data-user_id', data.user_id);
+        //     $(row).attr('data-profile_id', data.designation);
+        //     $(row).attr("data-info", JSON.stringify(data));
+        //     $(row).attr('data-employeename', data.firstname + " " + data.lastname + " " + suffix);
+        //     $(row).addClass('modalSetProfile');
+        // },
+        columns: [
+            // { data: "user_id" },
+            // { data: "profile" },
+            { data: "firstname" },
+            { data: "lastname" },
+            { data: "email" },
         ],
     });
 
@@ -61,59 +93,62 @@ $(document).ready(() => {
     });
 
 
-    $('#for-verification-table tbody').on('click', 'tr', function () {
+    $('#for-verification-table tbody').on('click', 'tr td:not(first-child)', function () {
         $(".btn-assign-profile").attr('data-user_id', $( this ).attr("data-user_id"));
         $(".btn-assign-profile").attr('data-profile_id', $( this ).attr("data-profile_id"));
 
-        var data = JSON.parse($( this ).attr("data-info"));
+        if($( this ).attr("colspan") != 5){
+            var data = JSON.parse($( this ).attr("data-info"));
 
-        $("#fullname").val(data.firstname+" "+data.lastname);
-        $('#designation').val(data.designation).trigger('change');
-        $('#employment_classification').val(data.employment_classification).trigger('change');
-        $('#employment_status').val(data.employment_status).trigger('change');
-        $('#hiring_date').val(data.hiring_date);
-
-        $('#suffix').val(data.suffix);
-        $('#nickname').val(data.nickname);
-        $('#birthday').val(data.birthday);
-        $('#gender').val(data.gender);
-        $('#email').val(data.email);
-        $('#contact_no').val(data.contact_no);
-        $('#landline').val(data.landline);
-
-        $("#modal-employee-verification").modal("show");
-        $(".modal-footer .btn-assign-profile").removeClass("d-none");
-
-        if(data.designation != null){
-            if($( this ).attr("data-profile_id") == 2){
-                $(".supervisor_area").removeClass('d-none');
-                $(".agent_area").removeClass('d-none');
-
-                $('.supervisor-data select option').remove();
-                $.ajax({
-                    url: '/get-supervisor',
-                    method: "GET",
-                    success: function (resp) {
-                        if(!resp.error){
-                            $('.supervisor-data').removeClass("d-none");
-                            resp.message.forEach(element => {
-                                $('.supervisor_select select').append("<option value="+element.id+">"+element.email+"</option>");
-                            });
-                        } else {
+            $("#fullname").val(data.firstname+" "+data.lastname);
+            $('#designation').val(data.designation).trigger('change');
+            $('#employment_classification').val(data.employment_classification).trigger('change');
+            $('#employment_status').val(data.employment_status).trigger('change');
+            $('#hiring_date').val(data.hiring_date);
+    
+            $('#suffix').val(data.suffix);
+            $('#nickname').val(data.nickname);
+            $('#birthday').val(data.birthday);
+            $('#gender').val(data.gender);
+            $('#email').val(data.email);
+            $('#contact_no').val(data.contact_no);
+            $('#landline').val(data.landline);
+    
+            $("#modal-employee-verification").modal("show");
+            $(".modal-footer .btn-assign-profile").removeClass("d-none");
+    
+            if(data.designation != null){
+                if($( this ).attr("data-profile_id") == 2){
+                    $(".supervisor_area").removeClass('d-none');
+                    $(".agent_area").removeClass('d-none');
+    
+                    $('.supervisor-data select option').remove();
+                    $.ajax({
+                        url: '/get-supervisor',
+                        method: "GET",
+                        success: function (resp) {
+                            if(!resp.error){
+                                $('.supervisor-data').removeClass("d-none");
+                                resp.message.forEach(element => {
+                                    $('.supervisor_select select').append("<option value="+element.id+">"+element.email+"</option>");
+                                });
+                            } else {
+                                toastr.error(resp.message, "Error");
+                            }
+                        },
+                        error: function (resp) {
                             toastr.error(resp.message, "Error");
                         }
-                    },
-                    error: function (resp) {
-                        toastr.error(resp.message, "Error");
-                    }
-                });
+                    });
+                } else {
+                    $(".supervisor_area").addClass('d-none');
+                    $(".agent_area").addClass('d-none');
+                }
             } else {
-                $(".supervisor_area").addClass('d-none');
-                $(".agent_area").addClass('d-none');
+                $(".modal-footer.button-assign").addClass("d-none");
             }
-        } else {
-            $(".modal-footer.button-assign").addClass("d-none");
         }
+        
         // window.location.href = "/chapters/"+data;
     } );
 

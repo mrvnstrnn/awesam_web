@@ -6,29 +6,75 @@
         cursor: pointer;
     }
 </style>
-<div class="main-card mb-3 card">
-    <div class="card-header-tab card-header">
-        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-        <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-        For Verification
-        </div>      
+<ul class="tabs-animated body-tabs-animated nav">
+    <li class="nav-item">
+        <a role="tab" class="nav-link for-verification active" id="tab-for-verification" data-toggle="tab" href="#tab-content-for-verification">
+            <span>Onboarded</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a role="tab" class="nav-link pending" id="tab-pending" data-toggle="tab" href="#tab-content-pending">
+            <span>Onboarded</span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane tabs-animation fade active show" id="tab-content-for-verification" role="tabpanel">
+        <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                For Verification
+                </div>      
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table w-100" data-href="{{ route('all.forverification') }}">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Profile</th>
+                                <th>Firstname</th>
+                                <th>Lastname</th>
+                                <th>Email</th>
+                                {{-- <th>Status</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="for-verification-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table w-100" data-href="{{ route('all.forverification') }}">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Profile</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+
+    <div class="tab-pane tabs-animation fade" id="tab-content-pending" role="tabpanel">
+        <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                Pending Onboarding
+                </div>      
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="pending-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table w-100" data-href="{{ route('all.forpendingonboarding') }}">
+                        <thead>
+                            <tr>
+                                {{-- <th>User ID</th> --}}
+                                {{-- <th>Profile</th> --}}
+                                <th>Firstname</th>
+                                <th>Lastname</th>
+                                <th>Email</th>
+                                {{-- <th>Status</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
