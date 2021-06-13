@@ -51,8 +51,8 @@
                                         <small id="email-error" class="text-danger"></small>
                                     </div> --}}
 
+                                    <label for="email" class="">Email</label>
                                     <div class="position-relative form-group input-group">
-                                        <label for="email" class="">Email</label><br>
                                         <input name="email" id="email" placeholder="johndoe@gmail.com" type="text" class="form-control">
                                         <div class="input-group-append">
                                             <span class="input-group-text">{{ "@".substr(strstr(\Auth::user()->email, '@'), 1) }}</span>
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="position-relative form-group">
+                                    <div class="form-group">
                                         <label for="company" class="">Company</label>
                                         <input name="company" id="company" value="{{ \Auth::user()->getCompany()->vendor_acronym }}" type="text" class="form-control" readonly>
                                         <input name="company_hidden" id="company_hidden" type="hidden" class="form-control" value="{{ \Auth::user()->getCompany()->vendor_id }}" readonly>
