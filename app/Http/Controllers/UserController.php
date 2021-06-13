@@ -451,7 +451,7 @@ class UserController extends Controller
                 ->table('users')
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
-                ->where('users.profile_id', null)
+                // ->where('users.profile_id', null)
                 ->where('user_details.IS_id', \Auth::id())
                 ->get();
 
@@ -474,7 +474,10 @@ class UserController extends Controller
 
             $user_details = \DB::connection('mysql2')
                 ->table('invitations')
-                ->where('company_id', $is_vendor->vendor_id)
+                ->select('invitations.firstname', 'invitations.lastname', 'invitations.email')
+                ->leftjoin('users', 'users.email', 'invitations.email')
+                ->where('invitations.company_id', $is_vendor->vendor_id)
+                ->whereNull('users.email')
                 ->get();
 
             $dt = DataTables::of($user_details);
