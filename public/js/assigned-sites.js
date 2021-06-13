@@ -7,7 +7,7 @@ function getCols(active_program){
 
 
     $.ajax({
-        url: "/datatables-columns/"+active_program,
+        url: "/datatables-columns/"+active_program+"/assigned_sites",
         method: 'GET',
         async: false,
 
