@@ -20,6 +20,9 @@ class InviteController extends Controller
     public function send_invitation(Request $request)
     {
         try {
+
+            // substr(strstr(\Auth::user()->email, '@'), 1)
+
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
             $randomString = '';
@@ -34,7 +37,7 @@ class InviteController extends Controller
             }
 
             $validate = Validator::make($request->all(), array(
-                'email' => ['required', 'email', $unique],
+                'email' => ['required', $unique],
                 'firstname' => 'required | max:255',
                 'lastname' => 'required | max:255',
             ));
@@ -44,7 +47,16 @@ class InviteController extends Controller
             if($validate->passes()){
                 $name = $request->input('firstname') . ' ' . $request->input('lastname');
 
-                $email = $request->input('email');
+                if(filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+                    if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($request->input('email'), '@'), 1)){
+                        return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1)." or you can ignore inputting domain email." ]);
+                    }
+                } else {
+                    $email = $request->input('email')."@".substr(strstr(\Auth::user()->email, '@'), 1);
+                    if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($email, '@'), 1)){
+                        return response()->json(['error' => true, 'message' => "erro" ]);
+                    }
+                }
 
                 if(\Auth::user()->getUserProfile()->profile == 'GT Admin') {
                     $url = url('/login');
@@ -55,7 +67,7 @@ class InviteController extends Controller
                         'firstname' => $request->input('firstname'),
                         'lastname' => $request->input('lastname'),
                         'name' => $request->input('firstname'). ' ' .$request->input('lastname'),
-                        'email' => $request->input('email'),
+                        'email' => $email,
                         'email_verified_at' => Carbon::now()->toDate(),
                         'password' => Hash::make($password)
                     ]);
@@ -78,7 +90,7 @@ class InviteController extends Controller
 
                 $useCheck = Invitation::where('mode', $request->input('mode'))
                                             ->where('company_id', $request->input('company_hidden'))
-                                            ->where('email', $request->input('email'))
+                                            ->where('email', $email)
                                             ->first();
 
                 if(is_null($useCheck)){
@@ -88,7 +100,7 @@ class InviteController extends Controller
                         'company_id' => $request->input('company_hidden'),
                         'firstname' => $request->input('firstname'),
                         'lastname' => $request->input('lastname'),
-                        'email' => $request->input('email'),
+                        'email' => $email,
                         'token' => $token
                     ]);
 

@@ -45,11 +45,21 @@
                         <div class="col-md-8">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="position-relative form-group">
+                                    {{-- <div class="position-relative form-group">
                                         <label for="email" class="">Email</label>
                                         <input name="email" id="email" placeholder="johndoe@gmail.com" type="email" class="form-control">
                                         <small id="email-error" class="text-danger"></small>
+                                    </div> --}}
+
+                                    <div class="position-relative form-group input-group">
+                                        <label for="email" class="">Email</label><br>
+                                        <input name="email" id="email" placeholder="johndoe@gmail.com" type="text" class="form-control">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">{{ "@".substr(strstr(\Auth::user()->email, '@'), 1) }}</span>
+                                        </div>
+                                        <small id="email-error" class="text-danger"></small>
                                     </div>
+
                                 </div>        
                                 <div class="col-md-6">
                                     <div class="position-relative form-group">
