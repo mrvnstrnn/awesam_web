@@ -216,10 +216,10 @@ $(document).ready(() => {
 
         var event_to_display = [];
 
-        var colors = [
-            'success', 'primary', 'secondary',
-            'danger', 'warning'
-        ];
+        // var colors = [
+        //     'success', 'primary', 'secondary',
+        //     'danger', 'warning'
+        // ];
 
         resp.message.forEach(element => {
           events.push(JSON.parse(element.timeline));
@@ -228,11 +228,23 @@ $(document).ready(() => {
         start_date = "";
         end_date = "";
 
-        console.log(events);
+        var color = "";
 
         for (let j = 0; j < events.length; j++) {
           
-          var random_color = colors[Math.floor(Math.random() * colors.length)];
+          if (j == 0 || j == 5) {
+            color = "success";
+          } else if (j == 1 || j == 6) {
+            color = "primary";
+          } else if (j == 2 || j == 7) {
+            color = "secondary";
+          } else if (j == 3 || j == 8) {
+            color = "danger";
+          } else if (j == 4 || j == 9) {
+            color = "warning";
+          }
+
+          // var random_color = colors[Math.floor(Math.random() * colors.length)];
           for (let k = 0; k < events[j].length; k++) {
 
             start_date = events[j][k].start_date;
@@ -242,12 +254,13 @@ $(document).ready(() => {
               start: start_date,
               end: end_date,
               // overlap: true,
-              color: "var(--"+random_color+")",
+              color: "var(--"+color+")",
               title: events[j][k].site_name + " : " + events[j][k].activity_name,
-              // title: events[j][k].start_date + "=" + events[j][k].end_date,
             });
           }
         }
+
+        console.log(event_to_display);
 
         $("#calendar-bg-events").fullCalendar({
           header: {
@@ -265,6 +278,11 @@ $(document).ready(() => {
           events: 
             event_to_display
           ,
+          // eventRender: function(event, element, calEvent) {
+          //   console.log(event);
+          //   console.log(element);
+          //   console.log(calEvent);
+          // }
         });
       } else {
         toastr.error(resp.message);
