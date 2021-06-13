@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class AssignedSites extends Component
+class AgentSites extends Component
 {
     /**
      * Create a new component instance.
@@ -12,12 +12,15 @@ class AssignedSites extends Component
      * @return void
      */
 
-    public $mode;
+    public $agentsites;
+    public $agentname;
 
-    public function __construct($mode)
+    public function __construct($agentsites, $agentname)
     {
         //
-        $this->mode = $mode;
+        $this->agentsites = $agentsites;
+        $this->agentname = $agentname;
+
     }
 
     /**
@@ -27,6 +30,6 @@ class AssignedSites extends Component
      */
     public function render()
     {
-        return view('components.assigned-sites');
+        return view('components.agent-sites');
     }
 }

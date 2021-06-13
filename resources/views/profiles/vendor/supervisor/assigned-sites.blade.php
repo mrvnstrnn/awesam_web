@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-assigned-sites />
+    <x-assigned-sites mode="vendor"/>
 
 @endsection
 

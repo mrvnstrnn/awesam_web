@@ -1,142 +1,128 @@
-var cols = [];
+
+
+
+function getCols(active_program){
+
+    var cols = [];
+
+
+    $.ajax({
+        url: "/datatables-columns/"+active_program,
+        method: 'GET',
+        async: false,
+
+        success: function (resp) {
+
+            if(resp.length > 0){
+                resp.forEach(function(field){
+
+                    switch(field['source_field']){
+                        case "site_fields":
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+    
+                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        var results = $.map( col, function(e,i){
+                                            if( e.field_name === field['search_field'] ) 
+                                            return e; 
+                                        });
+                                        return results[0]['value'];
+                                    
+                                    }
+                                }
+                            );
+                            break;
+
+                        case 'site_agent':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
+                                        return agent;
+                                    }
+                                }
+                            );
+                            break;
+
+                        default:
+                            cols.push({data : field['source_field'], name: field['field_name']});
+
+                    }
+
+                });    
+            }
+
+        },
+
+        error: function (resp) {
+            console.log(resp);
+        }
+
+    });
+
+
+    console.log(cols);
+
+    return cols;
+
+}
 
 
 $('.assigned-sites-table').each(function(i, obj) {
 
     var activeTable = document.getElementById(obj.id)
 
+    active_program = $(activeTable).attr('data-program_id');
 
-    if($(activeTable).attr('data-program_id')==='3'){
 
-        cols = [
-            {data : null, name: 'agent'},
-            {data : 'sam_id', name: 'SAM ID'},
-            {data : 'site_name', name: 'Site Name'}, 
+    // Get Active Tab Where Table is located
+    var active_tab =  $(activeTable).closest('div').attr('id');
 
-            // {
-            //     data : 'site_fields',
-            //     name: 'Nomination ID', 
-            //     render : function(data){
-            //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //             return col["NOMINATION_ID"];
-            //     },
-            // },
-            // {
-            //     data : 'site_fields',
-            //     name: 'Technology', 
-            //     render : function(data){
-            //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //             return col["TECHNOLOGY"];
-            //     },
-            // },
-            // {
-            //     data : 'site_fields',
-            //     name: 'PLA_ID', 
-            //     render : function(data){
-            //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //             return col["PLA_ID"];
-            //     },
-            // },
-            // {
-            //     data : 'site_fields',
-            //     name: 'Location', 
-            //     render : function(data){
-            //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //         $field = '<div class="widget-content-left flex2">' +
-            //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
-            //                     '<div class="widget-subheading opacity-7">' + col['LOCATION'] + '</div>' +
-            //                 '</div>';
-            //         return $field;
-            //     },
-            // },
-            //{
-            //    data : 'site_fields',
-            //    name: 'Nomination ID', 
-            //    render : function(data){
-            //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //            return col["NOMINATION_ID"];
-            //    },
-            //},
+    if($(activeTable).attr('data-table_loaded') === "false" && $("#"+active_tab).hasClass('show')){
 
-        ];
+        var cols = getCols(active_program);
 
+        if(cols.length > 0){
+            // Add Column Headers
+            $.each(cols, function (k, colObj) {
+                    str = '<th>' + colObj.name + '</th>';
+                    $(str).appendTo($(activeTable).find("thead>tr"));
+            });
+
+            // Load Datatable
+            $(activeTable).DataTable({
+                processing: true,
+                serverSide: true,          
+                
+                ajax: {
+                        url: $(activeTable).attr('data-href'),
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                },
+                
+                language: {
+                    "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+                },
+    
+                columns: cols,
+                createdRow: function (row, data, dataIndex) {
+                    $(row).attr('data-sam_id', data.sam_id);
+                }
+            }); 
+
+            // Set Table setting to loaded
+            $(activeTable).attr('data-table_loaded', "true");
+
+        }
     }
-    else if($(activeTable).attr('data-program_id')==='4'){
-        cols = [
-            {data : 'sam_id', name: 'SAM ID'},
-            {data : 'site_name', name: 'Site Name'}, 
-            // {
-            //     data : 'site_fields',
-            //     name: 'PLA_ID', 
-            //     render : function(data){
-            //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //             return col["PLA_ID"];
-            //     },
-            // },
-            // {
-            //     data : 'site_fields',
-            //     name: 'PROGRAM', 
-            //     render : function(data){
-            //             col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //             return col["PROGRAM"];
-            //     },
-            // },
-            // {
-            //     data : 'site_fields',
-            //     name: 'Location', 
-            //     render : function(data){
-            //         col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //         $field = '<div class="widget-content-left flex2">' +
-            //                     '<div class="widget-heading">' + col['REGION'] + '</div>' +
-            //                 '</div>';
-            //         return $field;
-            //     },
-            // },
-            //{
-            //    data : 'site_fields',
-            //    name: 'PLA_ID', 
-            //    render : function(data){
-            //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //            return col["PLA_ID"];
-            //    },
-            //},
-            //{
-            //    data : 'site_fields',
-            //    name: 'PROGRAM', 
-            //    render : function(data){
-            //            col = JSON.parse(data.replace(/&quot;/g,'"'))[0];
-            //            return col["PROGRAM"];
-            //    },
-            //},
-        ];
-    } else {
-        cols = [];
-    }
-
-    $.each(cols, function (k, colObj) {
-            str = '<th>' + colObj.name + '</th>';
-            $(str).appendTo($(activeTable).find("thead>tr"));
-    });
-
-
-    var table = $(activeTable).DataTable({
-      processing: true,
-      serverSide: true,          
-      
-      ajax: {
-            url: $(activeTable).attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        },
-      
-      columns: cols,
-      createdRow: function (row, data, dataIndex) {
-         $(row).attr('data-sam_id', data.sam_id);
-      }
-  });
-
 
 });
 
@@ -147,3 +133,57 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
     window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
 });
 
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+    var active_tab = $(this).attr('href');
+    var activeTable = "#" + $(active_tab).find('table').attr('id');
+    var active_program = $(activeTable).attr('data-program_id');
+
+
+    var cols = getCols(active_program);
+
+    if( $(activeTable).attr('data-table_loaded') === "false" && cols.length > 0 ){
+
+
+        // Add Column Headers
+        $.each(cols, function (k, colObj) {
+            str = '<th>' + colObj.name + '</th>';
+            $(str).appendTo($(activeTable).find("thead>tr"));
+        });
+
+    
+        // Load Datatable
+        $(activeTable).DataTable({
+            processing: true,
+            serverSide: true,          
+            
+            ajax: {
+                url: $(activeTable).attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+
+            language: {
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+            },
+            
+            columns: cols,
+
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-sam_id', data.sam_id);
+            }
+
+        }); 
+
+        // Set Table setting to loaded
+        $(activeTable).attr('data-table_loaded', "true");
+
+    } else {
+        console.log('Program Columns Not');
+    }
+
+  
+})

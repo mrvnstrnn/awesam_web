@@ -264,7 +264,7 @@ $(document).ready(() => {
           header: {
             left: "prev,next today",
             center: "title",
-            right: "month,agendaWeek,agendaDay,listMonth",
+            right: "month,agendaWeek,listMonth",
           },
           themeSystem: "bootstrap4",
           bootstrapFontAwesome: true,

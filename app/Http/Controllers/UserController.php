@@ -655,14 +655,17 @@ class UserController extends Controller
         }
 
 
-
-
-
         $site_fields = json_decode($site[0]->site_fields);
 
+        $role = \Auth::user()->getAllNavigation()
+                                ->get();
 
-        $mode = "vendor";
-        $profile = "supervisor";
+        $mode = $role[0]->mode;
+        $profile = $role[0]->profile;
+        $profile = strtolower(str_replace(' ', '-', ucfirst($profile)));
+
+        // $mode = "vendor";
+        // $profile = "supervisor";
 
         $active_slug = "assigned-sites";
         $title = $site[0]->site_name;
