@@ -148,7 +148,7 @@ class UserController extends Controller
                         ]);
 
 
-                        return response()->json(['error' => true, 'message' => \Auth::id() ]);
+                        // return response()->json(['error' => true, 'message' => \Auth::id() ]);
 
                 if(!is_null($user_details)){
                     UserDetail::where('user_id', \Auth::id())

@@ -247,7 +247,7 @@ $(document).ready(() => {
           // var random_color = colors[Math.floor(Math.random() * colors.length)];
           for (let k = 0; k < events[j].length; k++) {
 
-            start_date = events[j][k].start_date;
+            start_date = events[j][k].start_date +"T00:00:00";
             end_date = events[j][k].end_date +"T23:59:00";
 
             event_to_display.push({
@@ -259,8 +259,6 @@ $(document).ready(() => {
             });
           }
         }
-
-        console.log(event_to_display);
 
         $("#calendar-bg-events").fullCalendar({
           header: {
