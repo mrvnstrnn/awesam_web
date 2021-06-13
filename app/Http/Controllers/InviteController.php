@@ -50,6 +50,8 @@ class InviteController extends Controller
                 if(filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
                     if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($request->input('email'), '@'), 1)){
                         return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1)." or you can ignore inputting domain email." ]);
+                    } else {
+                        $email = $request->input('email');
                     }
                 } else {
                     $email = $request->input('email')."@".substr(strstr(\Auth::user()->email, '@'), 1);
