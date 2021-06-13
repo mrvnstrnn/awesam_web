@@ -14,7 +14,7 @@
     </li>
     <li class="nav-item">
         <a role="tab" class="nav-link pending" id="tab-pending" data-toggle="tab" href="#tab-content-pending">
-            <span>Onboarded</span>
+            <span>Pending</span>
         </a>
     </li>
 </ul>
