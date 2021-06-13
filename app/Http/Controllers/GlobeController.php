@@ -596,7 +596,6 @@ class GlobeController extends Controller
                     ->orderBy('field_sort', 'asc')
                     ->get();
 
-
         return $cols;
 
     }

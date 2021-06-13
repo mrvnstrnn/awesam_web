@@ -1,22 +1,5 @@
-var cols = [];
 
 
-function getSiteFieldValue(data, field){
-    col = JSON.parse(data.replace(/&quot;/g,'"'));
-    var results = $.map( col, function(e,i){
-        if( e.field_name === field ) 
-        return e; 
-    });
-    return results[0]['value'];
-}
-
-function getSiteAgent(data){
-
-    col = JSON.parse(data.replace(/&quot;/g,'"'));
-    agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
-    return agent;
-
-}
 
 function getCols(active_program){
 
@@ -59,7 +42,9 @@ function getCols(active_program){
                                     data : field['source_field'], 
                                     name: field['field_name'],
                                     render : function(data){
-                                        return getSiteAgent(data);
+                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
+                                        return agent;
                                     }
                                 }
                             );
@@ -68,7 +53,6 @@ function getCols(active_program){
                         default:
                             cols.push({data : field['source_field'], name: field['field_name']});
 
-    
                     }
 
                 });    
@@ -77,8 +61,7 @@ function getCols(active_program){
         },
 
         error: function (resp) {
-            // console.log(resp);
-            // whatCols = [];
+            console.log(resp);
         }
 
     });
@@ -125,6 +108,10 @@ $('.assigned-sites-table').each(function(i, obj) {
                         },
                 },
                 
+                language: {
+                    "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+                },
+    
                 columns: cols,
                 createdRow: function (row, data, dataIndex) {
                     $(row).attr('data-sam_id', data.sam_id);
@@ -172,24 +159,30 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             serverSide: true,          
             
             ajax: {
-                    url: $(activeTable).attr('data-href'),
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                url: $(activeTable).attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+            },
+
+            language: {
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+            },
             
             columns: cols,
+
             createdRow: function (row, data, dataIndex) {
                 $(row).attr('data-sam_id', data.sam_id);
             }
+
         }); 
 
         // Set Table setting to loaded
         $(activeTable).attr('data-table_loaded', "true");
 
     } else {
-        console.log('Program Columns Not Set');
+        console.log('Program Columns Not');
     }
 
   
