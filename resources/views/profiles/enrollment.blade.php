@@ -254,7 +254,9 @@
                                                         <input type="hidden" name="capture_image">
                                                         <small class="image_capture-error text-danger"></small>
                                                                 
-                                                        <button id="shoot_camera" type="button" class="btn-shadow btn-wide btn btn-danger btn-lg" data-href="">Take Photo</button>
+                                                        <button id="shoot_camera" type="button" class="btn-shadow mt-3 btn-wide btn btn-danger btn-sm">Take Photo</button>
+
+                                                        <button type="button" id="change_photo" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Change photo</button>
 
                                                     </div>
                                                 </div>
@@ -374,6 +376,10 @@
 
 @section('scripts')
     <script>
+
+        
+        $("#change_photo").addClass("d-none");
+
         const player = document.getElementById('player');
 
         var btnCapture = document.getElementById( "shoot_camera" );
@@ -400,17 +406,31 @@
 
             var dataUrl = capture.toDataURL( "image/png" );
             img.src = capture.toDataURL( "image/png" );
-            img.width = 240;
+            // img.width = 240;
+            img.setAttribute("class", "w-100 h-auto");
 
             snapshot.innerHTML = '';
 
             snapshot.appendChild( img );
 
-            // var url = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
             $("input[name=capture_image]").val(dataUrl);
 
-            console.log(url);
+            $("#snapshot").removeClass("d-none");
+            $("#player").addClass("d-none");
+            $("#shoot_camera").addClass("d-none");
+
+            $("#change_photo").removeClass("d-none");
         }
+
+        $("#change_photo").on("click", function(){
+            $("#snapshot").addClass("d-none");
+
+            $("#player").removeClass("d-none");
+            $("#shoot_camera").removeClass("d-none");
+
+
+            $("#change_photo").addClass("d-none");
+        });
     </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection
