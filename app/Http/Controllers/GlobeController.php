@@ -588,5 +588,18 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_datatable_columns($program_id)
+    {
+        $cols = \DB::connection('mysql2')
+                    ->table("table_fields")
+                    ->where('program_id', $program_id)
+                    ->orderBy('field_sort', 'asc')
+                    ->get();
+
+
+        return $cols;
+
+    }
+
 }
 

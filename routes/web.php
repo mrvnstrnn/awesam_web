@@ -98,6 +98,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-agent-of-supervisor/{user_id}', [GlobeController::class, 'get_agent_of_supervisor']);
 
 
+    //Dynamic Datatable Program Columns
+    Route::get('/datatables-columns/{program_id}', [GlobeController::class, 'get_datatable_columns']);
+
 
 
     // File management

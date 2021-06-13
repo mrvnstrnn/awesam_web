@@ -20,87 +20,71 @@ function getSiteAgent(data){
 
 function getCols(active_program){
 
-
     var cols = [];
 
-    switch(active_program){
 
-        case "1":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+    $.ajax({
+        url: "/datatables-columns/"+active_program,
+        method: 'GET',
+        async: false,
 
-        case "2":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+        success: function (resp) {
 
-        case "3":
-            // cols.push(
-            //     {
-            //         data : "site_agent", 
-            //         name: 'Agent',
-            //         render : function(data){
-            //             return getSiteAgent(data);
-            //         }
-            //     }
-            // );
-            cols.push(
-                {
-                    data : "site_fields", 
-                    name: 'Technology',
-                    render : function(data){
-                        return getSiteFieldValue(data, 'TECHNOLOGY');
+            if(resp.length > 0){
+                resp.forEach(function(field){
+
+                    switch(field['source_field']){
+                        case "site_fields":
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+    
+                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        var results = $.map( col, function(e,i){
+                                            if( e.field_name === field['search_field'] ) 
+                                            return e; 
+                                        });
+                                        return results[0]['value'];
+                                    
+                                    }
+                                }
+                            );
+                            break;
+
+                        case 'site_agent':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        return getSiteAgent(data);
+                                    }
+                                }
+                            );
+                            break;
+
+                        default:
+                            cols.push({data : field['source_field'], name: field['field_name']});
+
+    
                     }
-                }
-            );
-            cols.push({data : 'site_name', name: 'Site Name'});
-            cols.push(
-                {
-                    data : "site_fields", 
-                    name: 'Nomination ID',
-                    render : function(data){
-                        return getSiteFieldValue(data, 'NOMINATION_ID');
-                    }
-                }
-            );
-            cols.push(
-                {
-                    data : "site_fields", 
-                    name: 'PLA ID',
-                    render : function(data){
-                        return getSiteFieldValue(data, 'PLA_ID');
-                    }
-                }
-            );
-            break;
-        
-        case "4":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
 
-        case "5":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+                });    
+            }
 
-        case "6":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+        },
 
-        case "7":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+        error: function (resp) {
+            // console.log(resp);
+            // whatCols = [];
+        }
 
-        case "8":
-            cols.push({data : 'sam_id', name: 'SAM ID'});
-            cols.push({data : 'site_name', name: 'Site Name'});
-            break;
+    });
 
-    }
+
+    console.log(cols);
 
     return cols;
 
@@ -113,42 +97,44 @@ $('.assigned-sites-table').each(function(i, obj) {
 
     active_program = $(activeTable).attr('data-program_id');
 
-    var cols = getCols(active_program);
-
 
     // Get Active Tab Where Table is located
     var active_tab =  $(activeTable).closest('div').attr('id');
 
-    if(cols.length > 0 && $(activeTable).attr('data-table_loaded') === "false" && $("#"+active_tab).hasClass('show')){
+    if($(activeTable).attr('data-table_loaded') === "false" && $("#"+active_tab).hasClass('show')){
 
+        var cols = getCols(active_program);
 
-        // Add Column Headers
-        $.each(cols, function (k, colObj) {
-                str = '<th>' + colObj.name + '</th>';
-                $(str).appendTo($(activeTable).find("thead>tr"));
-        });
+        if(cols.length > 0){
+            // Add Column Headers
+            $.each(cols, function (k, colObj) {
+                    str = '<th>' + colObj.name + '</th>';
+                    $(str).appendTo($(activeTable).find("thead>tr"));
+            });
 
-        // Load Datatable
-        $(activeTable).DataTable({
-            processing: true,
-            serverSide: true,          
-            
-            ajax: {
-                    url: $(activeTable).attr('data-href'),
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+            // Load Datatable
+            $(activeTable).DataTable({
+                processing: true,
+                serverSide: true,          
+                
+                ajax: {
+                        url: $(activeTable).attr('data-href'),
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                 },
-            
-            columns: cols,
-            createdRow: function (row, data, dataIndex) {
-                $(row).attr('data-sam_id', data.sam_id);
-            }
-        }); 
+                
+                columns: cols,
+                createdRow: function (row, data, dataIndex) {
+                    $(row).attr('data-sam_id', data.sam_id);
+                }
+            }); 
 
-        // Set Table setting to loaded
-        $(activeTable).attr('data-table_loaded', "true");
+            // Set Table setting to loaded
+            $(activeTable).attr('data-table_loaded', "true");
+
+        }
     }
 
 });
@@ -168,10 +154,10 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     var active_program = $(activeTable).attr('data-program_id');
 
 
+    var cols = getCols(active_program);
 
-    if( $(activeTable).attr('data-table_loaded') === "false" ){
+    if( $(activeTable).attr('data-table_loaded') === "false" && cols.length > 0 ){
 
-        var cols = getCols(active_program);
 
         // Add Column Headers
         $.each(cols, function (k, colObj) {
@@ -202,6 +188,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // Set Table setting to loaded
         $(activeTable).attr('data-table_loaded', "true");
 
+    } else {
+        console.log('Program Columns Not Set');
     }
 
   
