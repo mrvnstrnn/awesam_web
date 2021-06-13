@@ -20,6 +20,7 @@ $(document).ready(() => {
 
     $("#invite_btn").on('click', function(){
         $(this).text('Sending...');
+        $("small").text('');
         $.ajax({
             url: $(this).attr('data-href'),
             method: 'POST',
