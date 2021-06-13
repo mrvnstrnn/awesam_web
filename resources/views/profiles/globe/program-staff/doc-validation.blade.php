@@ -16,11 +16,6 @@
 
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <iframe src="http://docs.google.com/gview?url=http://www.pdf995.com/samples/pdf.pdf&embedded=true" frameborder="0" style="width:100%; height:480px;"></iframe>                        
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
@@ -35,6 +30,7 @@
 
 @section('js_script')
 
+    <script type="text/javascript" src="/js/getCols.js"></script>  
     <script type="text/javascript" src="/js/doc-validations.js"></script>  
 
 @endsection

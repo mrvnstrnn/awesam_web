@@ -1,99 +1,44 @@
 
+function makeDT(whatTable, whatCols) {
 
-    function getCols(active_program){
-
-        var cols = [];
-
-
-        $.ajax({
-            url: "/datatables-columns/"+active_program+"/doc_validation",
-            method: 'GET',
-            async: false,
-
-            success: function (resp) {
-
-                if(resp.length > 0){
-                    resp.forEach(function(field){
-
-                        switch(field['source_field']){
-                            case "site_fields":
-                                cols.push(
-                                    {
-                                        data : field['source_field'], 
-                                        name: field['field_name'],
-                                        render : function(data){
+    // Load Datatable
+    $(whatTable).DataTable({
+        processing: true,
+        serverSide: true,          
         
-                                            col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                            var results = $.map( col, function(e,i){
-                                                if( e.field_name === field['search_field'] ) 
-                                                return e; 
-                                            });
-                                            return results[0]['value'];
-                                        
-                                        }
-                                    }
-                                );
-                                break;
+        ajax: {
+                url: $(whatTable).attr('data-href'),
+                type: 'GET',
 
-                            case 'site_agent':
-                                cols.push(
-                                    {
-                                        data : field['source_field'], 
-                                        name: field['field_name'],
-                                        render : function(data){
-                                            col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                            agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
-                                            return agent;
-                                        }
-                                    }
-                                );
-                                break;
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+        },
+        
+        language: {
+            "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+        },
 
-                            case 'action':
-                                cols.push(
-                                    {
-                                        data : field['source_field'], 
-                                        name: field['field_name'],
-                                        render : function(data){
-                                            data_icon = data;
-                                            return data_icon;
-                                        }
-                                    }
-                                );
-                                break;
+        columns: whatCols,
+        createdRow: function (row, data, dataIndex) {
+            $(row).attr('data-sam_id', data.sam_id);
+            $(row).attr('data-value_id', data.value_id);
+            $(row).attr('data-value', data.value);
+            $(row).attr('data-action', data.action);
 
-                            default:
-                                cols.push({data : field['source_field'], name: field['field_name']});
-
-                        }
-
-                    });    
-                }
-
-            },
-
-            error: function (resp) {
-                console.log(resp);
-            }
-
-        });
+        }
+    }); 
 
 
-        console.log(cols);
-
-        return cols;
-
-    }
+    
+    
+}
 
 $(document).ready(() => {
 
-
-
     $('.assigned-sites-table').each(function(i, obj) {
 
-
         var activeTable = document.getElementById(obj.id)
-
 
         active_program = $(activeTable).attr('data-program_id');
 
@@ -113,29 +58,7 @@ $(document).ready(() => {
                         $(str).appendTo($(activeTable).find("thead>tr"));
                 });
 
-                // Load Datatable
-                $(activeTable).DataTable({
-                    processing: true,
-                    serverSide: true,          
-                    
-                    ajax: {
-                            url: $(activeTable).attr('data-href'),
-                            type: 'GET',
-
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                    },
-                    
-                    language: {
-                        "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
-                    },
-        
-                    columns: cols,
-                    createdRow: function (row, data, dataIndex) {
-                        $(row).attr('data-sam_id', data.sam_id);
-                    }
-                }); 
+                makeDT(activeTable, cols);
 
                 // Set Table setting to loaded
                 $(activeTable).attr('data-table_loaded', "true");
@@ -149,7 +72,18 @@ $(document).ready(() => {
     $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
         e.preventDefault();
 
-        $('#viewInfoModal').modal('show')
+        showfile = $(this).attr('data-value');
+        showaction = $(this).attr('data-action');
+
+        $('.modal-body').html('');
+
+        iframe =  '<div class="embed-responsive" style="height: 460px;">' +
+                    '<iframe class="embed-responsive-item" src="files/' + showfile + '" allowfullscreen></iframe>' +
+                  '</div>';
+
+        $('.modal-body').html(iframe);
+
+        $('#viewInfoModal').modal('show');
 
         // window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
     });
@@ -160,7 +94,6 @@ $(document).ready(() => {
         var active_tab = $(this).attr('href');
         var activeTable = "#" + $(active_tab).find('table').attr('id');
         var active_program = $(activeTable).attr('data-program_id');
-
 
         var cols = getCols(active_program);
 
@@ -173,32 +106,8 @@ $(document).ready(() => {
                 $(str).appendTo($(activeTable).find("thead>tr"));
             });
 
+            makeDT(activeTable, cols);
         
-            // Load Datatable
-            $(activeTable).DataTable({
-                processing: true,
-                serverSide: true,          
-                
-                ajax: {
-                    url: $(activeTable).attr('data-href'),
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                },
-
-                language: {
-                    "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
-                },
-                
-                columns: cols,
-
-                createdRow: function (row, data, dataIndex) {
-                    $(row).attr('data-sam_id', data.sam_id);
-                }
-
-            }); 
-
             // Set Table setting to loaded
             $(activeTable).attr('data-table_loaded', "true");
 
