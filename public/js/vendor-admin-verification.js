@@ -118,7 +118,7 @@ $(document).ready(() => {
             $(".modal-footer .btn-assign-profile").removeClass("d-none");
     
             if(data.designation != null){
-                if($( this ).attr("data-profile_id") == 2){
+                if($( this ).parent().attr("data-profile_id") == 2){
                     $(".supervisor_area").removeClass('d-none');
                     $(".agent_area").removeClass('d-none');
     
