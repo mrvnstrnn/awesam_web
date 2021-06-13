@@ -588,16 +588,28 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_datatable_columns($program_id)
+    public function get_datatable_columns($program_id, $table_name)
     {
         $cols = \DB::connection('mysql2')
                     ->table("table_fields")
                     ->where('program_id', $program_id)
+                    ->where('table_name', $table_name)
                     ->orderBy('field_sort', 'asc')
                     ->get();
 
         return $cols;
 
+    }
+
+    public function get_doc_validations($program_id)
+    {
+        $sites = \DB::connection('mysql2')
+                    ->table("view_doc_validation")
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+            
     }
 
 }
