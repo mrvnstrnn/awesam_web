@@ -35,7 +35,7 @@
                             </li>
                         </ul>
                         <div class="form-wizard-content sw-container tab-content d-block" style="min-height: 353px;">
-                            <form id="onboardingForm">
+                            <form id="onboardingForm" enctype="multipart/form-data">
                                 <div id="step-1" class="tab-pane step-content">
                                     <div class="divider"></div>
                                     <div class="form-row">
@@ -48,22 +48,22 @@
                                                     <div class="position-relative form-group">
                                                         <label for="firstname">Firstname</label>
                                                         <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" readonly>
+                                                        <small class="firstname-error text-danger"></small>
                                                     </div>
-                                                    <small class="firstname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="middlename">Middlename</label>
                                                         <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control">
+                                                        <small class="middlename-error text-danger"></small>
                                                     </div>
-                                                    <small class="middlename-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="lastname">Lastname</label>
                                                         <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" readonly>
+                                                        <small class="lastname-error text-danger"></small>
                                                     </div>
-                                                    <small class="lastname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
@@ -76,23 +76,23 @@
                                                             <option value="IV">IV</option>
                                                             <option value="V">V</option>
                                                         </select>
+                                                        <small class="suffix-error text-danger"></small>
                                                     </div>
-                                                    <small class="suffix-error text-danger"></small>
                                                 </div> 
                                                 <div class="divider"></div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="nickname">Nickname</label>
                                                         <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required>
+                                                        <small class="nickname-error text-danger"></small>
                                                     </div>
-                                                    <small class="nickname-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="birthday">Birthday</label>
                                                         <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                        <small class="birthday-error text-danger"></small>
                                                     </div>
-                                                    <small class="birthday-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
@@ -102,8 +102,8 @@
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
                                                         </select>
+                                                        <small class="gender-error text-danger"></small>
                                                     </div>
-                                                    <small class="gender-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,22 +119,22 @@
                                                     <div class="position-relative form-group">
                                                         <label for="email">Email</label>
                                                         <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
+                                                        <small class="email-error text-danger"></small>
                                                     </div>
-                                                    <small class="email-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="contact_no">Cellphone</label>
                                                         <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX" value="" type="text" class="form-control"  required>
+                                                        <small class="contact_no-error text-danger"></small>
                                                     </div>
-                                                    <small class="contact_no-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="landline">Landline</label>
                                                         <input name="landline" id="landline" placeholder="Telephone Number" value="" type="text" class="form-control">
+                                                        <small class="landline-error text-danger"></small>
                                                     </div>
-                                                    <small class="landline-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -193,8 +193,8 @@
                                                             <option value="2">Agent</option>
                                                             <option value="3">Supervisor</option>
                                                         </select>
+                                                        <small class="designation-error text-danger"></small>
                                                     </div>
-                                                    <small class="designation-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
@@ -204,8 +204,8 @@
                                                             <option value="regular">Regular</option>
                                                             <option value="subcon">Sub Contractor</option>
                                                         </select>
+                                                        <small class="employment_classification-error text-danger"></small>
                                                     </div>
-                                                    <small class="employment_classification-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
@@ -214,15 +214,16 @@
                                                             <option value="" disabled selected>Employment Status</option>
                                                             <option value="active">Active</option>
                                                         </select>
+                                                        <small class="employment_status-error text-danger"></small>
                                                     </div>
-                                                    <small class="employment_status-error text-danger"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="hiring_date">Hiring Date</label>
                                                         <input name="hiring_date" id="hiring_date" placeholder="Hiring Date" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                        
+                                                        <small class="hiring_date-error text-danger"></small>
                                                     </div>
-                                                    <small class="hiring_date-error text-danger"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,21 +244,17 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
-                                                        <label for="firstname">Webcam Shot</label>
+                                                        <label for="player">Webcam Shot</label>
                                                         <video id="player" autoplay style="width:100%"></video>
-                                                        <script>
-                                                          const player = document.getElementById('player');
-                                                        
-                                                          const constraints = {
-                                                            video: true,
-                                                          };
-                                                        
-                                                          navigator.mediaDevices.getUserMedia(constraints)
-                                                            .then((stream) => {
-                                                              player.srcObject = stream;
-                                                            });
-                                                        </script>        
-                                                        <button id="shoot_camera" class="btn-shadow btn-wide btn btn-danger btn-lg" data-href="">Take Photo</button>
+
+                                                        <canvas id="canvas" class="d-none"></canvas>
+
+                                                        <div id="snapshot"></div>
+
+                                                        <input type="hidden" name="capture_image">
+                                                        <small class="image_capture-error text-danger"></small>
+                                                                
+                                                        <button id="shoot_camera" type="button" class="btn-shadow btn-wide btn btn-danger btn-lg" data-href="">Take Photo</button>
 
                                                     </div>
                                                 </div>
@@ -376,5 +373,44 @@
 @endsection
 
 @section('scripts')
+    <script>
+        const player = document.getElementById('player');
+
+        var btnCapture = document.getElementById( "shoot_camera" );
+        var stream = document.getElementById( "player" );
+
+        btnCapture.addEventListener( "click", captureSnapshot );
+
+        var capture = document.getElementById( "canvas" );
+
+        const constraints = {
+            video: true,
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            player.srcObject = stream;
+        });
+
+        function captureSnapshot() {
+            var ctx = capture.getContext( '2d' );
+            var img = new Image();
+
+            ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+
+            var dataUrl = capture.toDataURL( "image/png" );
+            img.src = capture.toDataURL( "image/png" );
+            img.width = 240;
+
+            snapshot.innerHTML = '';
+
+            snapshot.appendChild( img );
+
+            // var url = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+            $("input[name=capture_image]").val(dataUrl);
+
+            console.log(url);
+        }
+    </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection

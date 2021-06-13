@@ -107,6 +107,21 @@ class UserController extends Controller
     public function finish_onboarding(Request $request)
     {
         try {
+
+            $img = $request->input('capture_image');
+
+            if (preg_match('/^data:image\/(\w+);base64,/', $img)) {
+                $data = substr($img, strpos($img, ',') + 1);
+            
+                $data = base64_encode($data);
+                $imageName = \Str::random(10).'.'.'png';
+
+                \Storage::disk('local')->put($imageName, $data);
+
+                $path = \Storage::disk('local')->getAdapter()->getPathPrefix();
+            }
+
+
             if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
                 return response()->json(['error' => true, 'message' => 'Address field id required.' ]);
             }
@@ -144,11 +159,7 @@ class UserController extends Controller
                             'middlename' => $request->input('middlename'),
                             'nickname' => $request->input('nickname'),
                             'suffix' => $request->input('suffix'),
-                            // 'profile_id' => $request->input('designation'),
                         ]);
-
-
-                        // return response()->json(['error' => true, 'message' => \Auth::id() ]);
 
                 if(!is_null($user_details)){
                     UserDetail::where('user_id', \Auth::id())
@@ -163,6 +174,7 @@ class UserController extends Controller
                                     'employment_status' => $request->get('employment_status'),
                                     'hiring_date' => $request->get('hiring_date'),
                                     'address_id' => $address->id,
+                                    'image' => $imageName,
                                 ]);
 
                     return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
@@ -180,6 +192,7 @@ class UserController extends Controller
                     $detail->employment_classification = $request->get('employment_classification');
                     $detail->employment_status = $request->get('employment_status');
                     $detail->hiring_date = $request->get('hiring_date');
+                    $detail->image = $imageName;
 
                     $detail->save();
 
