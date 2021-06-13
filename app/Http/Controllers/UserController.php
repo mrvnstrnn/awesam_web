@@ -474,7 +474,10 @@ class UserController extends Controller
 
             $user_details = \DB::connection('mysql2')
                 ->table('invitations')
-                ->where('company_id', $is_vendor->vendor_id)
+                ->select('invitations.firstname', 'invitations.lastname', 'invitations.email')
+                ->leftjoin('users', 'users.email', 'invitations.email')
+                ->where('invitations.company_id', $is_vendor->vendor_id)
+                ->whereNull('users.email')
                 ->get();
 
             $dt = DataTables::of($user_details);
