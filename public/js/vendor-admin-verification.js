@@ -94,11 +94,11 @@ $(document).ready(() => {
 
 
     $('#for-verification-table tbody').on('click', 'tr td:not(first-child)', function () {
-        $(".btn-assign-profile").attr('data-user_id', $( this ).attr("data-user_id"));
-        $(".btn-assign-profile").attr('data-profile_id', $( this ).attr("data-profile_id"));
+        $(".btn-assign-profile").attr('data-user_id', $( this ).parent().attr("data-user_id"));
+        $(".btn-assign-profile").attr('data-profile_id', $( this ).parent().attr("data-profile_id"));
 
         if($( this ).attr("colspan") != 5){
-            var data = JSON.parse($( this ).attr("data-info"));
+            var data = JSON.parse($( this ).parent().attr("data-info"));
 
             $("#fullname").val(data.firstname+" "+data.lastname);
             $('#designation').val(data.designation).trigger('change');
