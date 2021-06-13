@@ -18,10 +18,16 @@
     @foreach ($programs as $program)
         <li class="nav-item">
             @if ($loop->first)
-                <a role="tab" class="nav-link active" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
+                @php
+                    $active = "active";
+                @endphp
             @else
-                <a role="tab" class="nav-link" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
+                @php
+                    $active = "";
+                @endphp                
             @endif
+            
+            <a role="tab" class="nav-link {{ $active }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
                 <span>{{ $program->program }}</span>
             </a>
         </li>
