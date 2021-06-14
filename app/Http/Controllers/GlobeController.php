@@ -619,5 +619,18 @@ class GlobeController extends Controller
             
     }
 
+    public function doc_validation_approvals($id, $action)
+    {
+        try {
+            SubActivityValue::where('id', $id)->update([
+                'status' => $action == "rejected" ? "denied" : "approved"
+            ]);
+            
+            return response()->json(['error' => false, 'message' => "Successfully ".$action." docs." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
 }
 
