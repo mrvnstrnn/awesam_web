@@ -4,7 +4,7 @@ function makeDT(whatTable, whatCols) {
     // Load Datatable
     $(whatTable).DataTable({
         processing: true,
-        serverSide: true,          
+        serverSide: false,          
         
         ajax: {
                 url: $(whatTable).attr('data-href'),
@@ -77,7 +77,7 @@ $(document).ready(() => {
 
         $('.modal-body').html('');
 
-        iframe =  '<div class="embed-responsive" style="height: 460px;">' +
+        iframe =  '<div class="embed-responsive" style="height: 460px; text-center;">' +
                     '<iframe class="embed-responsive-item" src="files/' + showfile + '" allowfullscreen></iframe>' +
                   '</div>';
 
