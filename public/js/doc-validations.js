@@ -4,7 +4,7 @@ function makeDT(whatTable, whatCols) {
     // Load Datatable
     $(whatTable).DataTable({
         processing: true,
-        serverSide: false,          
+        serverSide: true,          
         
         ajax: {
             url: $(whatTable).attr('data-href'),
@@ -77,6 +77,8 @@ $(document).ready(() => {
             showaction = $(this).attr('data-action');
             data_value_id = $(this).attr('data-value_id');
             data_table = $(this).parent().parent()[0].id;
+
+            console.log(showfile);
     
             $(".btn_reject_approve").attr("data-id", data_value_id);
             $(".btn_reject_approve").attr("data-table", data_table);
