@@ -7,8 +7,9 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left mr-3">
-                            <img width="42" class="rounded-circle"
-                                src="/images/avatars/3.jpg"  alt="">
+                            <img width="42" height="42" class="rounded-circle" src="{{ 
+                                \Auth::user()->getUserDetail()->first()->image != '' ? asset('files/' .  \Auth::user()->getUserDetail()->first()->image) : 'images/avatars/4.jpg'
+                            }}" alt="">
                         </div>
                         <div class="widget-content-left">
                             <div class="widget-heading">{{ ucwords(Auth::user()->name) }}</div>

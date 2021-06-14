@@ -33,7 +33,15 @@
                         <div class="widget-content-left">
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                    <img width="42" class="rounded-circle" src="/images/avatars/3.jpg" alt="">
+                                    <img width="42" height="42" class="rounded-circle" src="{{ 
+                                            \Auth::user()->getUserDetail()->first()->image != '' ? asset('files/' .  \Auth::user()->getUserDetail()->first()->image) : 'images/avatars/4.jpg'
+                                        }}" alt="">
+
+                                    {{-- @if (\Auth::user()->getUserDetail()->first()->image == "")
+                                        <img width="42" class="rounded-circle" src="/images/avatars/4.jpg" alt="">
+                                    @else
+                                        <img width="42" class="rounded-circle" src="{{ asset('files/' + \Auth::user()->getUserDetail()->first()->image) }}" alt="">
+                                    @endif --}}
                                     <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                 </a>
         
