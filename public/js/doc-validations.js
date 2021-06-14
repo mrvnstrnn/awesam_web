@@ -70,26 +70,30 @@ $(document).ready(() => {
     });
 
 
-    $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
+    $('.assigned-sites-table').on( 'click', 'tbody tr td', function (e) {
         e.preventDefault();
 
-        showfile = $(this).attr('data-value');
-        showaction = $(this).attr('data-action');
-        data_value_id = $(this).attr('data-value_id');
-        data_table = $(this).parent().parent()[0].id;
+        if($(this).attr("colspan") != 4){
 
-        $(".btn_reject_approve").attr("data-id", data_value_id);
-        $(".btn_reject_approve").attr("data-table", data_table);
 
-        $('.modal-body').html('');
-
-        iframe =  '<div class="embed-responsive" style="height: 460px;">' +
-                    '<iframe class="embed-responsive-item" src="files/' + showfile + '" allowfullscreen></iframe>' +
-                  '</div>';
-
-        $('.modal-body').html(iframe);
-
-        $('#viewInfoModal').modal('show');
+            showfile = $(this).attr('data-value');
+            showaction = $(this).attr('data-action');
+            data_value_id = $(this).attr('data-value_id');
+            data_table = $(this).parent().parent()[0].id;
+    
+            $(".btn_reject_approve").attr("data-id", data_value_id);
+            $(".btn_reject_approve").attr("data-table", data_table);
+    
+            $('.modal-body').html('');
+    
+            iframe =  '<div class="embed-responsive" style="height: 460px;">' +
+                        '<iframe class="embed-responsive-item" src="files/' + showfile + '" allowfullscreen></iframe>' +
+                      '</div>';
+    
+            $('.modal-body').html(iframe);
+    
+            $('#viewInfoModal').modal('show');
+        }
 
         // window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
     });
