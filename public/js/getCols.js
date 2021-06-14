@@ -62,7 +62,6 @@ function getCols(active_program){
 
                         default:
                             cols.push({data : field['source_field'], name: field['field_name']});
-
                     }
 
                 });    

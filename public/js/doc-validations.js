@@ -4,7 +4,7 @@ function makeDT(whatTable, whatCols) {
     // Load Datatable
     $(whatTable).DataTable({
         processing: true,
-        serverSide: true,          
+        serverSide: false,          
         
         ajax: {
             url: $(whatTable).attr('data-href'),
@@ -74,8 +74,6 @@ $(document).ready(() => {
         e.preventDefault();
 
         if($(this).attr("colspan") != 4){
-
-
             showfile = $(this).attr('data-value');
             showaction = $(this).attr('data-action');
             data_value_id = $(this).attr('data-value_id');
