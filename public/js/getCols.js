@@ -12,20 +12,21 @@ function getCols(active_program){
 
             if(resp.length > 0){
                 resp.forEach(function(field){
-
                     switch(field['source_field']){
                         case "site_fields":
+
                             cols.push(
                                 {
                                     data : field['source_field'], 
                                     name: field['field_name'],
                                     render : function(data){
-    
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        
                                         var results = $.map( col, function(e,i){
                                             if( e.field_name === field['search_field'] ) 
                                             return e; 
                                         });
+
                                         return results[0]['value'];
                                     
                                     }
@@ -76,7 +77,7 @@ function getCols(active_program){
     });
 
 
-    console.log(cols);
+    // console.log(cols);
 
     return cols;
 

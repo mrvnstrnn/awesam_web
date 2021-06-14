@@ -70,10 +70,9 @@ $(document).ready(() => {
     });
 
 
-    $('.assigned-sites-table').on( 'click', 'tbody tr td', function (e) {
+    $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
         e.preventDefault();
-
-        if($(this).attr("colspan") != 4){
+        if($(this).find("td").attr("colspan") != 4){
             showfile = $(this).attr('data-value');
             showaction = $(this).attr('data-action');
             data_value_id = $(this).attr('data-value_id');
