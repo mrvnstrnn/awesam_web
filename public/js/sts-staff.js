@@ -93,7 +93,7 @@ $(document).ready(() => {
                 $(".content-data").append(
                     '<div class="position-relative form-group col-md-6">' +
                         '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
-                        '<input class="form-control"  value="'+new_json[i].field_name+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                        '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
                     '</div>'
                 );
             }

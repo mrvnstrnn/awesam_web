@@ -50,7 +50,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane tabs-animation fade show active" id="tab-content-4" role="tabpanel">
-                        <x-view-site-activities :activities="$activities" samid="$title_subheading"/>
+                        <x-view-site-activities :activities="$activities" :samid="$title_subheading"/>
                     </div>
                     <div class="tab-pane tabs-animation fade " id="tab-content-0" role="tabpanel">
                         <div class="row">
