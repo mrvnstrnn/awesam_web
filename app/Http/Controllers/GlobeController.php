@@ -197,7 +197,7 @@ class GlobeController extends Controller
                 $profile_id = \Auth::user()->profile_id;
                 $id = \Auth::user()->id;
                 SiteAgent::create($request->all());
-                \DB::connection('mysql2')->select('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
                 return response()->json(['error' => true, 'message' => "Agent already assigned."]);
