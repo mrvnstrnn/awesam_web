@@ -19,8 +19,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger">Reject</button>
-                <button type="button" class="btn btn-primary">Approve</button>        
+                <button type="button" class="btn btn-danger btn_reject_approve" data-action="false">Reject</button>
+                <button type="button" class="btn btn-primary btn_reject_approve" data-action="true">Approve</button>        
             </div>
         </div>
     </div>
