@@ -306,7 +306,7 @@ $(document).ready(() => {
                 "orderable": false
             }],
             columns: [
-                { data: "checkbox" },
+                { data: "photo" },
                 { data: "site_endorsement_date" },
                 { data: "sam_id" },
                 { data: "site_name" },
@@ -341,7 +341,7 @@ $(document).ready(() => {
                     "orderable": false
                 }],
                 columns: [
-                    { data: "checkbox" },
+                    { data: "photo" },
                     { data: "site_endorsement_date" },
                     { data: "sam_id" },
                     { data: "site_name" },

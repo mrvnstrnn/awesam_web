@@ -74,6 +74,9 @@ $(document).ready(() => {
 
         showfile = $(this).attr('data-value');
         showaction = $(this).attr('data-action');
+        data_value_id = $(this).attr('data-value_id');
+
+        $(".btn_reject_approve").attr("data-id", data_value_id);
 
         $('.modal-body').html('');
 

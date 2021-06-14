@@ -17,7 +17,10 @@
                         </div>      
                     </div>
                     <div class="card-body" style="overflow-x: scroll">
-                        <x-dar-table />
+
+                        <div class="table-responsive">
+                            <x-dar-table />
+                        </div>
                     </div>
                 </div>
             </div>

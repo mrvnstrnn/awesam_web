@@ -156,25 +156,32 @@ class GlobeController extends Controller
     public function unassignedSites($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-            $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
-            $dt = DataTables::of($stored_procs)
-                        ->addColumn('checkbox', function($row){
-                            $checkbox = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add assign-agent' data-id='".$row['sam_id']."'>";
-                            $checkbox .= "<div class='avatar-icon'><i>+</i></div>";
-                            $checkbox .= "</div>";
+            // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
-                            return $checkbox;
-                        })
-                        ->addColumn('technology', function($row){
-                            $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-                            return "<div class='badge badge-success'>".$technology."</div>";                            
-                        })
-                        ->addColumn('pla_id', function($row){
-                            return $row['site_fields'][0]['PLA_ID'];
-                            
-                        });
+            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
+
+            $dt = DataTables::of($stored_procs)
+                            ->addColumn('photo', function($row){
+                                $photo = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>";
+                                $photo .= "<div class='avatar-icon'>";
+                                $photo .= "<i>+</i>";
+
+                                $photo .= "</div></div>";
+
+                                return $photo;
+                            })
+                            ->addColumn('technology', function($row){
+                                // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                                if(isset($row->technology)){
+                                    $technology = $row->technology;
+                                } else {
+                                    $technology = "";
+                                }
+                                // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
+                                return "<div class='badge badge-success'>".$technology."</div>";                            
+                            });
             
-            $dt->rawColumns(['checkbox', 'technology']);
+            $dt->rawColumns(['photo', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
