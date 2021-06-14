@@ -113,12 +113,12 @@ class UserController extends Controller
             if (preg_match('/^data:image\/(\w+);base64,/', $img)) {
                 $data = substr($img, strpos($img, ',') + 1);
             
-                $data = base64_encode($data);
+                $data = base64_decode($data);
                 $imageName = \Str::random(10).'.'.'png';
 
                 \Storage::disk('local')->put($imageName, $data);
 
-                $path = \Storage::disk('local')->getAdapter()->getPathPrefix();
+                // $path = \Storage::disk('local')->getAdapter()->getPathPrefix();
             }
 
 
