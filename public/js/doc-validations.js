@@ -73,11 +73,14 @@ $(document).ready(() => {
     $('.assigned-sites-table').on( 'click', 'tbody tr td', function (e) {
         e.preventDefault();
 
-        if($(this).attr("colspan") != 4){
+        if($(this).attr("colspan") != 4){   
+
             showfile = $(this).attr('data-value');
             showaction = $(this).attr('data-action');
             data_value_id = $(this).attr('data-value_id');
             data_table = $(this).parent().parent()[0].id;
+
+            console.log(showfile);
     
             $(".btn_reject_approve").attr("data-id", data_value_id);
             $(".btn_reject_approve").attr("data-table", data_table);
