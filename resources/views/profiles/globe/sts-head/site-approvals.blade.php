@@ -16,7 +16,7 @@
 @section('js_script')
     <script>
         //////////////////////////////////////
-        var profile_id = 10;
+        var profile_id = 7;
         var table_to_load = 'site_approvals';
         //////////////////////////////////////
     </script>

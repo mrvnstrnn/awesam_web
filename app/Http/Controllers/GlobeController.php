@@ -595,7 +595,7 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_datatable_columns($program_id, $table_name)
+    public function get_datatable_columns($program_id, $table_name, $profile_id)
     {
         $cols = \DB::connection('mysql2')
                     ->table("table_fields")
@@ -631,6 +631,38 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+
+    public function get_site_approvals($program_id, $profile_id)
+    {
+        $sites = \DB::connection('mysql2')
+                    ->table("site_milestone")
+                    ->where('program_id', $program_id)
+                    ->where('activity_complete', 'false')
+                    ->where('profile_id', $profile_id)
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+            
+    }
+
+
+    public function get_site_milestones($program_id, $profile_id, $activity_type)
+    {
+        $sites = \DB::connection('mysql2')
+                    ->table("site_milestone")
+                    ->where('program_id', $program_id)
+                    ->where('activity_complete', 'false')
+                    ->where('profile_id', $profile_id)
+                    ->where('activity_type', $activity_type)
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+            
+    }
+
 
 }
 

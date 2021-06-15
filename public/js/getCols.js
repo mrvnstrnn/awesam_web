@@ -1,10 +1,10 @@
-function getCols(active_program){
+function getCols(active_program, active_table, active_profile){
 
     var cols = [];
 
 
     $.ajax({
-        url: "/datatables-columns/"+active_program+"/doc_validation",
+        url: "/datatables-columns/"+active_program+"/"+active_table+"/"+active_profile,
         method: 'GET',
         async: false,
 
@@ -43,19 +43,6 @@ function getCols(active_program){
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
                                         agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
                                         return agent;
-                                    }
-                                }
-                            );
-                            break;
-
-                        case 'action':
-                            cols.push(
-                                {
-                                    data : field['source_field'], 
-                                    name: field['field_name'],
-                                    render : function(data){
-                                        data_icon = data;
-                                        return data_icon;
                                     }
                                 }
                             );

@@ -2,35 +2,48 @@
 
 @section('content')
 
-    <x-doc-validation />
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Document Validation" activitytype="doc validation"/>
 
 @endsection
 
 
 @section('modals')
 
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" >
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger btn_reject_approve" data-action="rejected">Reject</button>
-                <button type="button" class="btn btn-primary btn_reject_approve" data-action="approved">Approve</button>        
-            </div>
-        </div>
-    </div>
-</div>
+    <x-milestone-modal />
 
 @endsection
 
 @section('js_script')
+<script>
+    //////////////////////////////////////
+    var profile_id = 8;
+    var table_to_load = 'doc_validation';
+    //////////////////////////////////////
+</script>
 
-    <script type="text/javascript" src="/js/getCols.js"></script>  
-    <script type="text/javascript" src="/js/doc-validations.js"></script>  
+<script type="text/javascript" src="/js/getCols.js"></script>  
+<script type="text/javascript" src="/js/DTmaker.js"></script>  
+
+<script>
+    $(document).ready(() => {
+
+        $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
+            e.preventDefault();
+            if($(this).find("td").attr("colspan") != 4){
+                
+                $('.modal-body').html('');
+
+                iframe =  '';
+
+                $('.modal-body').html(iframe);
+
+                $('#viewInfoModal').modal('show');
+            }
+
+            // window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
+        });
+
+    });    
+</script>
 
 @endsection

@@ -99,12 +99,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     //Dynamic Datatable Program Columns
-    Route::get('/datatables-columns/{program_id}/{table_name}', [GlobeController::class, 'get_datatable_columns']);
+    Route::get('/datatables-columns/{program_id}/{table_name}/{profile_id}', [GlobeController::class, 'get_datatable_columns']);
 
     // Sites with documents for validation
     Route::get('/doc-validation/{program_id}', [GlobeController::class, 'get_doc_validations'])->name('doc_validations.list');
 
+    // Sites for Approval
+    Route::get('/site-approvals/{program_id}/{profile_id}/', [GlobeController::class, 'get_site_approvals'])->name('get_site_approvals.list');
 
+    // Milestone Datatable Source
+    Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
 
     // File management
