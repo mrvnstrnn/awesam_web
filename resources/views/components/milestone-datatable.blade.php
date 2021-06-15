@@ -56,7 +56,7 @@
                         @endif
                                 <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
                                     class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
-                                    data-href="/site-milestones/{{ $program->program_id }}/{{ \Auth::user()->profile_id }}/{{ $activitytype }}"
+                                    data-href="/{{ $ajaxdatatablesource }}/{{ $program->program_id }}/{{ \Auth::user()->profile_id }}/{{ $activitytype }}"
                                     data-program_id="{{ $program->program_id  }}" data-table_loaded="false">
                                     <thead>
                                         <tr></tr>
