@@ -21,6 +21,7 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
@@ -76,7 +77,14 @@
             .app-header__logo .logo-src {
                 background: none;
             }
-                    </style>    
+
+            .dropzone {
+                min-height: 20px !important;
+                border: 1px dashed #3f6ad8 !important;
+                padding: unset !important;
+            }
+        
+        </style>    
     </head>
 
     <body>
@@ -107,41 +115,43 @@
     <script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/vendors/moment/moment.js"></script>
     <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
-    <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
-    <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script>
-    <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
-    <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script>
-    <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script>
-    <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script>
-    <script type="text/javascript" src="./vendors/smartwizard/dist/js/jquery.smartWizard.min.js"></script>
+    {{-- <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script> --}}
+    {{-- <script type="text/javascript" src="./vendors/smartwizard/dist/js/jquery.smartWizard.min.js"></script> --}}
 
 
-    <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    {{-- <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="/vendors/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-    <script type="text/javascript" src="/vendors/slick-carousel/slick/slick.min.js"></script>
+    <script type="text/javascript" src="/vendors/slick-carousel/slick/slick.min.js"></script> --}}
 
 
     <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     <!-- custome.js -->
-    <script type="text/javascript" src="/js/charts/apex-charts.js"></script>
+    {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script>
     <script type="text/javascript" src="/js/circle-progress.js"></script>
     <script type="text/javascript" src="/js/demo.js"></script>
     <script type="text/javascript" src="/js/scrollbar.js"></script>
     <script type="text/javascript" src="/js/toastr.js"></script>
     <script type="text/javascript" src="/js/treeview.js"></script>
-    <script type="text/javascript" src="/js/form-components/toggle-switch.js"></script>
+    <script type="text/javascript" src="/js/form-components/toggle-switch.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/form-components/form-wizard.js"></script> --}}
 
-    <script type="text/javascript" src="/js/tables.js"></script>
-    <script type="text/javascript" src="/js/carousel-slider.js"></script>
+    {{-- <script type="text/javascript" src="/js/tables.js"></script>
+    <script type="text/javascript" src="/js/carousel-slider.js"></script> --}}
     <script type="text/javascript" src="/js/app.js"></script>
 
-    <script type="text/javascript" src="/js/calendar.js"></script>
+    {{-- <script type="text/javascript" src="/js/calendar.js"></script> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 

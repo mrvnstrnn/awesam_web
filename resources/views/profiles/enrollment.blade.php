@@ -244,19 +244,35 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
-                                                        <label for="player">Webcam Shot</label>
-                                                        <video id="player" autoplay style="width:100%"></video>
 
-                                                        <canvas id="canvas" class="d-none"></canvas>
+                                                        <div class="justify-content-center mb-3 upload-take-button">
+                                                            <button id="take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
+                                                             or 
+                                                            <button id="upload_phto" type="button" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Upload photo</button>
+                                                        </div>
 
-                                                        <div id="snapshot"></div>
+                                                        <div class="d-none upload-photo-div">
+                                                            <div class="dropzone"></div>
 
-                                                        <input type="hidden" name="capture_image">
-                                                        <small class="image_capture-error text-danger"></small>
-                                                                
-                                                        <button id="shoot_camera" type="button" class="btn-shadow mt-3 btn-wide btn btn-danger btn-sm">Take Photo</button>
+                                                            <button id="drop_take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
+                                                        </div>
 
-                                                        <button type="button" id="change_photo" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Change photo</button>
+                                                        <div class="d-none webcam-div">
+                                                            <label for="player">Webcam Shot</label>
+                                                            <video id="player" autoplay style="width:100%"></video>
+    
+                                                            <canvas id="canvas" class="d-none"></canvas>
+    
+                                                            <div id="snapshot"></div>
+                                                            
+                                                            <input type="hidden" name="capture_image">
+    
+                                                            <button id="shoot_camera" type="button" class="btn-shadow mt-3 btn-wide btn btn-danger btn-sm">Take Photo</button>
+    
+                                                            <button type="button" id="change_photo" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Change photo</button>
+
+                                                            <button id="web_upload_phto" type="button" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Upload photo</button>
+                                                        </div>
 
                                                     </div>
                                                 </div>
@@ -369,68 +385,104 @@
         </div>
     </div>
 </div> --}}
-
-
-
 @endsection
 
 @section('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js" integrity="sha512-VQQXLthlZQO00P+uEu4mJ4G4OAgqTtKG1hri56kQY1DtdLeIqhKUp9W/lllDDu3uN3SnUNawpW7lBda8+dSi7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
 
-        
+        $("#take_photo, #drop_take_photo").on("click", function(){
+            console.log("take photo");
+            $(".webcam-div").removeClass("d-none");
+            $(".upload-photo-div").addClass("d-none");
+            $(".upload-take-button").addClass("d-none");
+        });
+
+        $("#upload_phto, #web_upload_phto").on("click", function(){
+            console.log("upload photo");
+            $(".webcam-div").addClass("d-none");
+            $(".upload-photo-div").removeClass("d-none");
+            $(".upload-take-button").addClass("d-none");
+        });
+
+
+
+    Dropzone.autoDiscover = false;  
+        $(".dropzone").dropzone({
+            addRemoveLinks: true,
+            maxFiles: 1,
+            maxFilesize: 1,
+            acceptedFiles: '.jpg, .jpeg, png',
+            paramName: "file",
+            url: "/upload-image-file",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (file, resp) {
+                $("input[name=capture_image]").val(resp.file);
+                console.log(resp.message);
+            },
+            error: function (file, resp) {
+                $("input[name=capture_image]").val("");
+                toastr.error(resp, "Error");
+            }
+        });
+            
+    $("#change_photo").addClass("d-none");
+
+    const player = document.getElementById('player');
+
+    var btnCapture = document.getElementById( "shoot_camera" );
+    var stream = document.getElementById( "player" );
+
+    btnCapture.addEventListener( "click", captureSnapshot );
+
+    var capture = document.getElementById( "canvas" );
+
+    const constraints = {
+        video: true,
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+        player.srcObject = stream;
+    });
+
+    function captureSnapshot() {
+        var ctx = capture.getContext( '2d' );
+        var img = new Image();
+
+        ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+
+        var dataUrl = capture.toDataURL( "image/png" );
+        img.src = capture.toDataURL( "image/png" );
+        // img.width = 240;
+        img.setAttribute("class", "w-100 h-auto");
+
+        snapshot.innerHTML = '';
+
+        snapshot.appendChild( img );
+
+        $("input[name=capture_image]").val(dataUrl);
+
+        $("#snapshot").removeClass("d-none");
+        $("#player").addClass("d-none");
+        $("#shoot_camera").addClass("d-none");
+
+        $("#change_photo").removeClass("d-none");
+    }
+
+    $("#change_photo").on("click", function(){
+        $("#snapshot").addClass("d-none");
+
+        $("#player").removeClass("d-none");
+        $("#shoot_camera").removeClass("d-none");
+
+
         $("#change_photo").addClass("d-none");
-
-        const player = document.getElementById('player');
-
-        var btnCapture = document.getElementById( "shoot_camera" );
-        var stream = document.getElementById( "player" );
-
-        btnCapture.addEventListener( "click", captureSnapshot );
-
-        var capture = document.getElementById( "canvas" );
-
-        const constraints = {
-            video: true,
-        };
-
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then((stream) => {
-            player.srcObject = stream;
-        });
-
-        function captureSnapshot() {
-            var ctx = capture.getContext( '2d' );
-            var img = new Image();
-
-            ctx.drawImage( stream, 0, 0, capture.width, capture.height );
-
-            var dataUrl = capture.toDataURL( "image/png" );
-            img.src = capture.toDataURL( "image/png" );
-            // img.width = 240;
-            img.setAttribute("class", "w-100 h-auto");
-
-            snapshot.innerHTML = '';
-
-            snapshot.appendChild( img );
-
-            $("input[name=capture_image]").val(dataUrl);
-
-            $("#snapshot").removeClass("d-none");
-            $("#player").addClass("d-none");
-            $("#shoot_camera").addClass("d-none");
-
-            $("#change_photo").removeClass("d-none");
-        }
-
-        $("#change_photo").on("click", function(){
-            $("#snapshot").addClass("d-none");
-
-            $("#player").removeClass("d-none");
-            $("#shoot_camera").removeClass("d-none");
-
-
-            $("#change_photo").addClass("d-none");
-        });
+    });    
     </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection
