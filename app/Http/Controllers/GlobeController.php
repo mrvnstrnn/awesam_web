@@ -513,7 +513,8 @@ class GlobeController extends Controller
         }
     }
 
-    public function fileupload(Request $request){
+    public function fileupload(Request $request)
+    {
 
         try {
             $validate = Validator::make($request->all(), array(

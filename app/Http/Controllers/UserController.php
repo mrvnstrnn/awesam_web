@@ -119,6 +119,8 @@ class UserController extends Controller
                 \Storage::disk('local')->put($imageName, $data);
 
                 // $path = \Storage::disk('local')->getAdapter()->getPathPrefix();
+            } else {
+                $imageName = $request->input('capture_image');
             }
 
 
@@ -736,6 +738,36 @@ class UserController extends Controller
         }
 
         // dd($timelines[0]->timeline);
+    }
+
+
+    public function upload_image_file(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file' => 'required',
+            ));
+            
+            if($validate->passes()){
+                if($request->hasFile('file')) {
+    
+                    $destinationPath = 'files/';
+                
+                    $extension = $request->file('file')->getClientOriginalExtension();
+            
+                    $fileName = time().$request->file('file')->getClientOriginalName();
+
+                    $request->file('file')->move($destinationPath, $fileName); 
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
+            
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
     }
 
 

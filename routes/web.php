@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
     Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
     Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
+    Route::post('/upload-image-file', [UserController::class, 'upload_image_file']);
 
     Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
     Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');

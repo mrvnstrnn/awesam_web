@@ -160,7 +160,7 @@
             $("#form-upload  #file_name").val(resp.file);
             console.log(resp.message);
         },
-        error: function (file, response) {
+        error: function (file, resp) {
             toastr.error(resp.message, "Error");
         }
     });
