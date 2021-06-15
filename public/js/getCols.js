@@ -19,6 +19,8 @@ function getCols(active_program, active_table, active_profile){
                                 {
                                     data : field['source_field'], 
                                     name: field['field_name'],
+                                    searchable: true,
+                                    regex: true,
                                     render : function(data){
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
                                         

@@ -4,7 +4,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
     // Load Datatable
     $(whatTable).DataTable({
         processing: true,
-        serverSide: true,          
+        serverSide: true,
+        filter: true,
         
         ajax: {
             url: $(whatTable).attr('data-href'),

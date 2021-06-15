@@ -1,3 +1,7 @@
+@php
+    // dd($activities);
+@endphp
+
 <ul class="todo-list-wrapper list-group list-group-flush">
     @foreach ($activities as $activity )
         <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">

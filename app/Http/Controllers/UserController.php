@@ -563,6 +563,7 @@ class UserController extends Controller
                         ->where('site.sam_id', "=", $sam_id)
                         ->get();
 
+        // dd($site);
 
         $agent = json_decode($site[0]->site_agent);
         $agent = $agent[0];
@@ -592,53 +593,94 @@ class UserController extends Controller
         $sub_activities = $res;
         $what_site = $site[0];
 
-        $activities = array();
 
         $array = json_decode($site[0]->timeline);        
         $res = array();
+
+        // dd($array);
+
+        // $what_count = 0;
+
         foreach ($array as $each) {
+            // $what_count++;
+
             if (isset($res[$each->stage_name])){
-                array_push($res[$each->stage_name],  array("activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date));
+
+                array_push($res[$each->stage_name],  array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
+
             }
             else{
-                $res[$each->stage_name] = array( array( "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date));
+                $res[$each->stage_name] = array( array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
             }
 
             // if($each->profile_id == 2){
 
-                if(array_key_exists($each->activity_id, $sub_activities)==true){
+            // }
 
-                    if(date('Y-m-d') < date($each->start_date)){
-                        $color = "success";
-                        $badge = "UPCOMING";
+        }
+
+
+        $activities = array();
+
+        foreach($res as $re){
+            foreach($re as $r){
+
+                if(date('Y-m-d') < date($r['start_date'])){
+                    $color = "success";
+                    $badge = "UPCOMING";
+                } else {
+                    if(date('Y-m-d') < date($r['end_date'])){
+                        $color = "warning";
+                        $badge = "ON SCHEDULE";
                     } else {
-                        if(date('Y-m-d') < date($each->end_date)){
-                            $color = "warning";
-                            $badge = "ON SCHEDULE";
-                        } else {
-                            $color = "danger";
-                            $badge = "DELAYED";
-                        }
+                        $color = "danger";
+                        $badge = "DELAYED";
                     }
+                }
+            if(array_key_exists($r['activity_id'], $sub_activities)==true){
+
 
                     // dd(date('Y-m-d') . " " . date($each->end_date));
 
+                    // dd($each);
+
                     array_push($activities,  
                         array(
-                            "activity_name" => $each->activity_name,  
-                            "activity_id" => $each->activity_id,  
-                            "activity_complete" => $each->activity_complete, 
-                            "start_date" => $each->start_date, 
-                            "end_date" => $each->end_date, 
-                            "sub_activities" => $sub_activities[$each->activity_id],
+                            "activity_name" => $r['activity_name'],  
+                            "activity_id" => $r['activity_id'],  
+                            "activity_complete" => $r['activity_complete'], 
+                            "start_date" => $r['start_date'], 
+                            "end_date" => $r['end_date'], 
+                            "sub_activities" => $sub_activities[$r['activity_id']],
                             "color" => $color,
                             "badge" => $badge
                         )
                     );
-                }
-            // }
+                    
 
+
+                } else {
+                    array_push($activities,  
+                        array(
+                            "activity_name" => $r['activity_name'],  
+                            "activity_id" => $r['activity_id'],  
+                            "activity_complete" => $r['activity_complete'], 
+                            "start_date" => $r['start_date'], 
+                            "end_date" => $r['end_date'], 
+                            "sub_activities" => [],
+                            "color" => $color,
+                            "badge" => $badge
+                        )
+                    );
+
+                }
+
+            }
         }
+
+        // dd($activities);
+
+        // dd($what_count);
 
         $timeline = array();
     
