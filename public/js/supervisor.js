@@ -35,7 +35,7 @@ $(document).ready(() => {
                 $(row).attr('data-id', data.id);
                 if($('#agent-'+program_lists[0]+'-table').attr('data-page') == "new-agent"){
                     $(row).addClass('modalAssigAgentnSite');
-                    $(row).attr('data-program', program_lists[i]);
+                    $(row).attr('data-program', program_lists[0]);
                 }
             },
             columnDefs: [{
@@ -72,7 +72,7 @@ $(document).ready(() => {
                     $(row).attr('data-id', data.id);
                     if($('#agent-'+$(this).attr("data-program")+'-table').attr('data-page') == "new-agent"){
                         $(row).addClass('modalAssigAgentnSite');
-                        $(row).attr('data-program', program_lists[i]);
+                        $(row).attr('data-program', $(this).attr("data-program"));
                     }
                 },
                 columnDefs: [{
