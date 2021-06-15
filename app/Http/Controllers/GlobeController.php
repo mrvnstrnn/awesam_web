@@ -664,6 +664,23 @@ class GlobeController extends Controller
             
     }
 
+    public function get_site_doc_validation($program_id, $profile_id, $activity_type)
+    {
+        $sites = \DB::connection('mysql2')
+                    ->table("site_milestone")
+                    ->where('program_id', $program_id)
+                    ->where('activity_complete', 'false')
+                    ->where('profile_id', $profile_id)
+                    ->where('activity_type', $activity_type)
+                    ->where('pending_count', '>', 0)
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+            
+    }
+
+
 
 }
 

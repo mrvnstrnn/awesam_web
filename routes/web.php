@@ -112,6 +112,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
 
+    // Milestone Datatable Source - Document Validation
+    Route::get('/site-doc-validation/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_doc_validation'])->name('get_site_doc_validation.list');
+
+
     // File management
     Route::get('/loi-template/{sam_id?}/{sub_activity_id?}', [GlobeController::class, 'loi_template']);
     Route::post('/download-pdf', [GlobeController::class, 'download_pdf']);
