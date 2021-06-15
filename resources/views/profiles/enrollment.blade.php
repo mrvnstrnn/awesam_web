@@ -54,7 +54,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="middlename">Middlename</label>
-                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control">
+                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control" value="{{ \Auth::user()->getUserDetail()->first()->middlename ? \Auth::user()->getUserDetail()->first()->middlename : "" }}">
                                                         <small class="middlename-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -69,7 +69,7 @@
                                                     <div class="position-relative form-group">
                                                         <label for="suffix">Suffix</label>
                                                         <select name="suffix" id="suffix"  class="form-control">
-                                                            <option value="" disabled selected>Suffix</option>
+                                                            <option  disabled selected>Suffix</option>
                                                             <option value="Sr">Sr</option>
                                                             <option value="Jr">Jr</option>
                                                             <option value="III">III</option>
@@ -83,22 +83,22 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="nickname">Nickname</label>
-                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required>
+                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required value="{{ \Auth::user()->getUserDetail()->first()->nickname ? \Auth::user()->getUserDetail()->first()->nickname : "" }}">
                                                         <small class="nickname-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="birthday">Birthday</label>
-                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required value="{{ \Auth::user()->getUserDetail()->first()->birthday ? \Auth::user()->getUserDetail()->first()->birthday : "" }}">
                                                         <small class="birthday-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="gender">Gender</label>
-                                                        <select name="gender" id="gender"  class="form-control" required>
-                                                            <option value="" disabled selected>Gender</option>
+                                                        <select name="gender" id="gender" class="form-control" required>
+                                                            <option  disabled selected>Gender</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
                                                         </select>
@@ -125,14 +125,14 @@
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="contact_no">Cellphone</label>
-                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX" value="" type="text" class="form-control"  required>
+                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX"  type="text" class="form-control" value="{{ \Auth::user()->getUserDetail()->first()->contact_no ? \Auth::user()->getUserDetail()->first()->contact_no : "" }}" required>
                                                         <small class="contact_no-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="landline">Landline</label>
-                                                        <input name="landline" id="landline" placeholder="Telephone Number" value="" type="text" class="form-control">
+                                                        <input name="landline" id="landline" value="{{ \Auth::user()->getUserDetail()->first()->landline ? \Auth::user()->getUserDetail()->first()->landline : "" }}" placeholder="Telephone Number"  type="text" class="form-control">
                                                         <small class="landline-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -150,7 +150,7 @@
                                                     <div class="position-relative form-group">
                                                         <label for="region">Region</label>
                                                         <select class="form-control" name="address" id="region" autocomplete="off">
-                                                            <option value="">Please select region</option>
+                                                            <option >Please select region</option>
                                                             @foreach ($locations as $location)
                                                             <option value="{{ $location->region }}">{{ $location->region }}</option>
                                                             @endforeach
@@ -172,7 +172,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="address">Address</label>
-                                                        <textarea name="address" id="address" class="form-control"></textarea>
+                                                        <textarea name="address" id="address" value="{{ \Auth::user()->getUserDetail()->first()->address ? \Auth::user()->getUserDetail()->first()->address : "" }}" class="form-control"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -189,7 +189,7 @@
                                                     <div class="position-relative form-group">
                                                         <label for="designation">Designation</label>
                                                         <select name="designation" id="designation"  class="form-control" required>
-                                                            <option value="" disabled selected>Designation</option>
+                                                            <option  disabled selected>Designation</option>
                                                             <option value="2">Agent</option>
                                                             <option value="3">Supervisor</option>
                                                         </select>
@@ -200,7 +200,7 @@
                                                     <div class="position-relative form-group">
                                                         <label for="employment_classification">Employment Classification</label>
                                                         <select name="employment_classification" id="employment_classification"  class="form-control" required>
-                                                            <option value="" disabled selected>Employment Classification</option>
+                                                            <option  disabled selected>Employment Classification</option>
                                                             <option value="regular">Regular</option>
                                                             <option value="subcon">Sub Contractor</option>
                                                         </select>
@@ -211,7 +211,7 @@
                                                     <div class="position-relative form-group">
                                                         <label for="employment_status">Employment Status</label>
                                                         <select name="employment_status" id="employment_status"  class="form-control" required>
-                                                            <option value="" disabled selected>Employment Status</option>
+                                                            <option  disabled selected>Employment Status</option>
                                                             <option value="active">Active</option>
                                                         </select>
                                                         <small class="employment_status-error text-danger"></small>
@@ -335,7 +335,7 @@
                                 <input type="hidden" name="hidden_region" id="hidden_region">
                                 <input type="hidden" name="hidden_province" id="hidden_province">
                                 <input type="hidden" name="hidden_lgu" id="hidden_lgu">
-                                <input type="hidden" id="hidden_mode" hidden_mode="mode" value="">
+                                <input type="hidden" id="hidden_mode" hidden_mode="mode" >
                             </form>
                         </div>
                     </div>
