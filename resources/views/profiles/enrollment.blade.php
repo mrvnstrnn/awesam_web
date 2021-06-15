@@ -395,6 +395,8 @@
 
         $("#take_photo, #drop_take_photo").on("click", function(){
             console.log("take photo");
+            
+            $("input[name=capture_image]").val("");
             $(".webcam-div").removeClass("d-none");
             $(".upload-photo-div").addClass("d-none");
             $(".upload-take-button").addClass("d-none");
@@ -402,6 +404,8 @@
 
         $("#upload_phto, #web_upload_phto").on("click", function(){
             console.log("upload photo");
+            
+            $("input[name=capture_image]").val("");
             $(".webcam-div").addClass("d-none");
             $(".upload-photo-div").removeClass("d-none");
             $(".upload-take-button").addClass("d-none");
@@ -481,6 +485,7 @@
         $("#shoot_camera").removeClass("d-none");
 
 
+        $("input[name=capture_image]").val("");
         $("#change_photo").addClass("d-none");
     });    
     </script>
