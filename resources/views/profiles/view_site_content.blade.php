@@ -77,7 +77,7 @@
     </div>
 
     <div class="col-lg-4 col-md-12 col-sm-12">
-        <x-agent-sites :agentsites="$agent_sites" :agentname="$agent_name" />
+        <x-agent-sites :agentsites="$agent_sites" :agentname="$agent_name" :completedactivities="$completed_activities" />   
     </div>
 
     <input id="timeline" type="hidden" value="{{ $timeline }}" />

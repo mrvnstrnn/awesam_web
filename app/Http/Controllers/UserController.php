@@ -622,63 +622,69 @@ class UserController extends Controller
 
         $activities = array();
 
+
+
+        $activity_count = 0;
+        $done_activity_count = 0;
+
         foreach($res as $re){
+
             foreach($re as $r){
 
-                if(date('Y-m-d') < date($r['start_date'])){
+                $activity_count++;
+                
+                if($r['activity_complete'] === 'true'){
                     $color = "success";
-                    $badge = "UPCOMING";
+                    $badge = "DONE";
+
+                    $done_activity_count++;
+
                 } else {
-                    if(date('Y-m-d') < date($r['end_date'])){
-                        $color = "warning";
-                        $badge = "ON SCHEDULE";
+
+                    if($r['activity_complete'] === 'false'){
+                        $color = "primary";
+                        $badge = "ACTIVE TASK";
                     } else {
-                        $color = "danger";
-                        $badge = "DELAYED";
+                        if(date('Y-m-d') < date($r['start_date'])){
+                            $color = "secondary";
+                            $badge = "UPCOMING";
+                        } else {
+                            if(date('Y-m-d') < date($r['end_date'])){
+                                $color = "warning";
+                                $badge = "ON SCHEDULE";
+                            } else {
+                                $color = "danger";
+                                $badge = "DELAYED";
+                            }
+        
+                        }        
                     }
+
                 }
-            if(array_key_exists($r['activity_id'], $sub_activities)==true){
 
-
-                    // dd(date('Y-m-d') . " " . date($each->end_date));
-
-                    // dd($each);
-
-                    array_push($activities,  
-                        array(
-                            "activity_name" => $r['activity_name'],  
-                            "activity_id" => $r['activity_id'],  
-                            "activity_complete" => $r['activity_complete'], 
-                            "start_date" => $r['start_date'], 
-                            "end_date" => $r['end_date'], 
-                            "sub_activities" => $sub_activities[$r['activity_id']],
-                            "color" => $color,
-                            "badge" => $badge
-                        )
-                    );
-                    
-
-
+                if(array_key_exists($r['activity_id'], $sub_activities)==true){
+                    $what_subactivities = $sub_activities[$r['activity_id']];
                 } else {
-                    array_push($activities,  
-                        array(
-                            "activity_name" => $r['activity_name'],  
-                            "activity_id" => $r['activity_id'],  
-                            "activity_complete" => $r['activity_complete'], 
-                            "start_date" => $r['start_date'], 
-                            "end_date" => $r['end_date'], 
-                            "sub_activities" => [],
-                            "color" => $color,
-                            "badge" => $badge
-                        )
-                    );
-
+                    $what_subactivities = [];
                 }
+
+                array_push($activities,  
+                    array(
+                        "activity_name" => $r['activity_name'],  
+                        "activity_id" => $r['activity_id'],  
+                        "activity_complete" => $r['activity_complete'], 
+                        "start_date" => $r['start_date'], 
+                        "end_date" => $r['end_date'], 
+                        "sub_activities" => $what_subactivities,
+                        "color" => $color,
+                        "badge" => $badge
+                    )
+                );
 
             }
         }
 
-        // dd($activities);
+        $completed_activities = $done_activity_count / $activity_count;
 
         // dd($what_count);
 
@@ -751,7 +757,8 @@ class UserController extends Controller
                 'program_direct_links',
                 'title', 
                 'title_subheading', 
-                'title_icon'
+                'title_icon',
+                'completed_activities'
             )
         );
 

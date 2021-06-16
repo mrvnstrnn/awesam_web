@@ -5,4 +5,25 @@
 
 <script src="{{ asset('js/supervisor-view-sites.js') }}"></script>
 <script src="{{ asset('js/view_site.js') }}"></script>
+<script>
 
+  var progress = $('#completed_activities').text();
+  
+//   alert(progress);
+
+  $(".circle-progress-primary")
+    .circleProgress({
+      value: parseFloat(progress) / 100.0,
+      size: 200,
+      lineCap: "round",
+      fill: { color: "#3f6ad8" },
+    })
+    .on("circle-animation-progress", function (event, progress, stepValue) {
+      $(this)
+        .find("small")
+        .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+    });
+
+
+
+</script>

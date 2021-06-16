@@ -19,21 +19,18 @@ function makeDT(whatTable, whatCols, table_to_load) {
         language: {
             "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
         },
+        dataSrc: function(json){
+            return json.data;
+        },
 
-        columns: whatCols,
         createdRow: function (row, data, dataIndex) {
 
-            if(table_to_load == "doc_validation"){
-                $(row).attr('data-program', whatTable);
                 $(row).attr('data-sam_id', data.sam_id);
-                $(row).attr('data-value_id', data.value_id);
-                $(row).attr('data-value', data.value);
-                $(row).attr('data-action', data.action);    
-            } else {
-                $(row).attr('data-sam_id', data.sam_id);
-            }
 
-        }
+        },
+
+        columns: whatCols
+
     }); 
 
 
