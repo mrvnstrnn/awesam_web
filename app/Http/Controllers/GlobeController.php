@@ -639,6 +639,7 @@ class GlobeController extends Controller
     {
         $sites = \DB::connection('mysql2')
                     ->table("site_milestone")
+                    ->select("program_id, sam_id, stage_name, activity_name, activity_type, activity_complete, profile_id, stage_id, pending_count, site_name, site_fields, site_agent")
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
                     ->where('profile_id', $profile_id)

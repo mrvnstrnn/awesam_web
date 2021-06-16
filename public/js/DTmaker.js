@@ -4,7 +4,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
     // Load Datatable
     $(whatTable).DataTable({
         processing: true,
-        serverSide: true,          
+        serverSide: true,
+        filter: true,
         
         ajax: {
             url: $(whatTable).attr('data-href'),
@@ -18,8 +19,10 @@ function makeDT(whatTable, whatCols, table_to_load) {
         language: {
             "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
         },
+        dataSrc: function(json){
+            return json.data;
+        },
 
-        columns: whatCols,
         createdRow: function (row, data, dataIndex) {
             if(table_to_load == "doc_validation"){
                 $(row).attr('data-site', data.site_name);
@@ -32,8 +35,10 @@ function makeDT(whatTable, whatCols, table_to_load) {
             } else {
                 $(row).attr('data-sam_id', data.sam_id);
             }
+        },
 
-        }
+        columns: whatCols
+
     }); 
 
 

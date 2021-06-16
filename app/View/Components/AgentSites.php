@@ -14,12 +14,14 @@ class AgentSites extends Component
 
     public $agentsites;
     public $agentname;
+    public $completedactivities;
 
-    public function __construct($agentsites, $agentname)
+    public function __construct($agentsites, $agentname, $completedactivities)
     {
         //
         $this->agentsites = $agentsites;
         $this->agentname = $agentname;
+        $this->completedactivities = $completedactivities;
 
     }
 

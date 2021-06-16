@@ -1,3 +1,7 @@
+@php
+    // dd($activities);
+@endphp
+
 <ul class="todo-list-wrapper list-group list-group-flush">
     @foreach ($activities as $activity )
         <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">
@@ -20,9 +24,11 @@
                             </div>
                         </div>
                     </div>
+                    @if(count($activity['sub_activities']) > 0)
                     <div class="widget-content-right subactivity_switch" id="subactivity_switch_{{ $activity["activity_id"] }}" data-activity_id="{{ $activity["activity_id"] }}">
                         <i class="lnr-chevron-down-circle" style="font-size: 20px;"></i>
                     </div>
+                    @endif
                 </div>
             </div>
         </li>
