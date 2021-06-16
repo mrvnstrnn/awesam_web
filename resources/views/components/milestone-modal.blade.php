@@ -10,7 +10,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 {{-- <button type="button" class="btn btn-danger btn_reject_approve" data-action="rejected">Reject</button>
                 <button type="button" class="btn btn-primary btn_reject_approve" data-action="approved">Approve</button>         --}}
             </div>
