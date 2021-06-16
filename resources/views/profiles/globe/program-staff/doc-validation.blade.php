@@ -62,7 +62,7 @@
                 var data_info = JSON.parse($(this).attr('data-info').replace(/&quot;/g,'"'));
 
                 var sam_id = $(this).attr('data-sam_id');
-                $('.modal-body').html('');
+                // $('.modal-body').html('');
 
                 $.ajax({
                     url: "/get-all-docs",
@@ -75,66 +75,16 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (resp){
-                        if(!resp.error){
-                            var iframe =  '';
 
-                            $('.modal-body').html(
-                                '<div class="row"><div class="col-lg-8 col-md-8 col-12 col_iframe">' +
-                                    '<div class="mt-5"><button type="button" class="btn btn-danger btn_reject_approve" data-action="denied">Reject</button>' +
-                                    ' <button type="button" class="btn btn-primary btn_reject_approve" data-action="approved">Approve</button></div></div><div class="col-lg-4 col-md-4 col-12 col_list"></div></div>'
-                            );
+                        console.log(this);
 
-                            iframe =  '<h4>File preview.</h4><div class="embed-responsive mt-3" style="height: 460px;">' +
-                                '<iframe class="embed-responsive-item" src="files/' + resp.message[0].value + '" allowfullscreen></iframe>' +
-                            '</div>';
+                        $('#viewInfoModal').modal('show');
+                        $('.modal-content').html(resp);
 
-                            $('.modal-body .col_iframe').prepend(iframe);
-                            
-                            $(".btn_reject_approve").attr("data-id", resp.message[0].id);
+                         
 
-                            // $('.modal-body .col_list').html(
-                            //     '<div class="row"><div class="col-lg-4 col-md-4 col-12 col_child_list"></div></div>'
-                            // );
+                        $('.file_list_item').first().click();
 
-                            var ext = "";
-                            var done = "";
-                            var color_val = "";
-
-                            $(".modal-body .col_list").html(
-                                '<div class="row"><h4>Related file uploaded to this site.</h4></div>'
-                            );
-
-                            for (let i = 0; i < resp.message.length; i++) {
-                                if(resp.message[i].value.split('.').pop() == "pdf") {
-                                    ext = "fa fa-file-pdf fa-3x";
-                                } else {
-                                    ext = "fa fa-file fa-3x";
-                                }
-
-                                if(resp.message[i].status == "denied") {
-                                    done = "<i class='pe-7s-close text-danger'></i> ";
-                                } else if (resp.message[i].status == "approved") {
-                                    done = "<i class='fa fa-check text-success'></i> ";
-                                } else {
-                                    done = ''
-                                }
-
-                                $('.modal-body .col_list .row').append(
-                                    // '<i class="'+ext+'"></i>' + "<p class='d-flex mt-3 mb-0'><i class='"+done+"'></i>" + resp.message[i].value + "</p> <p class='mt-0'><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p><br>"
-                                    '<div class="col_child mt-5 col-12 "><i class="'+ext+'"></i>' +
-                                    "<div class='mt-3 mb-0 details_file'>"+
-                                        "<p class='d-flex mt-0 text-left mb-0 file_name' data-id='"+resp.message[i].id+"'><b>"
-                                            +done + resp.message[i].value + 
-                                            "</b></p><p class='text-left d-flex'><b>Agent: </b> "
-                                            +resp.message[i].name +"</p></div>"
-                                );
-                            }
-
-                            $('#viewInfoModal').modal('show');
-
-                        } else {
-                            toastr.error(resp.message, "Error");
-                        }
                     },
                     error: function (resp){
                         toastr.error(resp.message, "Error");
@@ -142,6 +92,33 @@
                 });
             }
         });
+
+        
+        $(document).on("click", ".file_list_item", function (e){
+            e.preventDefault();
+            console.log(this);
+
+            $(".file_list_item").removeClass('active');
+            $(this).addClass('active');
+            
+            $('.modal_preview_marker').text($(this).attr('data-sub_activity_name') + " : " + $(this).attr('data-value'))
+
+            var extensions = ["pdf", "jpg", "png"];
+
+            if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
+
+                htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+                $('.modal_preview_content').html(htmltoload);
+
+            } else {
+                htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+                $('.modal_preview_content').html(htmltoload);
+            }
+
+
+
+        });
+
 
         $(document).on("click", ".btn_reject_approve", function (e){
             e.preventDefault();
