@@ -780,11 +780,12 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_my_issue()
+    public function get_my_issue($sam_id)
     {
         try {
             $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('site_issue.user_id', \Auth::id())
+                            ->where('site_issue.sam_id', $sam_id)
                             ->get();
 
             $dt = DataTables::of($data);
