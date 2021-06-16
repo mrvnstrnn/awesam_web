@@ -766,5 +766,33 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_issue_details($issue_id)
+    {
+        try {
+            $data = IssueType::join('site_issue', 'site_issue.issue_type_id', 'issue_type.issue_type_id')
+                            ->where('site_issue.issue_id', $issue_id)
+                            ->first();
+                            
+            return response()->json(['error' => false, 'message' => $data ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function cancel_issue($issue_id)
+    {
+        try {
+            Issue::where('issue_id', $issue_id)
+                        ->update([
+                            'issue_status' => "cancelled"
+                        ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully cancelled issue." ]);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
 }
 

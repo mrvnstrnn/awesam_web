@@ -130,7 +130,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Issue management
     Route::get('/get-issue/{issue_name}', [GlobeController::class, 'get_issue']);
+    Route::get('/get-issue/details/{issue_id}', [GlobeController::class, 'get_issue_details']);
     Route::get('/get-my-issue', [GlobeController::class, 'get_my_issue']);
+    Route::get('/cancel-my-issue/{issue_id}', [GlobeController::class, 'cancel_issue']);
     Route::post('/add-issue', [GlobeController::class, 'add_issue']);
 
 

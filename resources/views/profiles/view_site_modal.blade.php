@@ -35,12 +35,38 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    Add rows here
+                    <form class="view_issue_form mb-2">
+                        <input type="hidden" name="issue_id">
+                        <div class="form-row mb-1">
+                            <div class="col-4">
+                                <label for="issue_type" class="mr-sm-2">Issue Type</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" name="issue_type" id="issue_type" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row mb-1">
+                            <div class="col-4">
+                                <label for="issue" class="mr-sm-2">Issue</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" name="issue" id="issue" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row mb-1">
+                            <div class="col-4">
+                                <label for="issue_details" class="mr-sm-2">Issue Details</label>
+                            </div>
+                            <div class="col-8">
+                                <textarea name="issue_details" id="issue_details" cols="30" rows="10" class="form-control" disabled></textarea>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Cancel Issue</button>
+                <button type="button" class="btn btn-primary cancel_issue">Cancel Issue</button>
             </div>
         </div>
     </div>

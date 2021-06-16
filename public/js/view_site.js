@@ -61,8 +61,6 @@ $(document).ready(() => {
                 method: "GET",
                 success: function (resp){
                     if(!resp.error){
-                        console.log(resp.message);
-    
                         resp.message.forEach(element => {
                             $("select[name=issue]").append(
                                 '<option value="'+element.issue_type_id+'">'+element.issue+'</option>'
@@ -118,6 +116,9 @@ $(document).ready(() => {
         dataSrc: function(json){
             return json.data;
         },
+        'createdRow': function( row, data, dataIndex ) {
+            $(row).attr('data-id', data.issue_id);
+        },
         columns: [
             { data: "date_created" },
             { data: "issue" },
@@ -129,7 +130,61 @@ $(document).ready(() => {
     $('.my_table_issue').on("click", "tr td", function(){
         if($(this).attr("colspan") != 4){
             $("#modal_issue").modal("show");
+
+            $.ajax({
+                url: "/get-issue/details/"+$(this).parent().attr('data-id'),
+                method: "GET",
+                success: function (resp){
+                    if(!resp.error){
+                        if(resp.message.issue_status == "cancelled"){
+                            $(".cancel_issue").addClass("d-none");
+                        } else {
+                            $(".cancel_issue").removeClass("d-none");
+                        }
+                        $(".cancel_issue").attr("data-id", resp.message.issue_id);
+
+                        $(".view_issue_form input[name=issue]").val(resp.message.issue);
+                        $(".view_issue_form input[name=issue_type]").val(resp.message.issue_type);
+                        $(".view_issue_form textarea[name=issue_details]").text(resp.message.issue_details);
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
+            
+            $("#view_issue_form issue input[name=issue_id]").val();
         }
+    });
+
+    $(".cancel_issue").on("click", function(){
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+        $.ajax({
+            url: "/cancel-my-issue/"+$(this).attr('data-id'),
+            method: "GET",
+            success: function (resp){
+                if(!resp.error){
+                    $('.my_table_issue').DataTable().ajax.reload(function(){
+                        toastr.success(resp.message, "Succes");
+                        $("#modal_issue").modal("hide");
+                        $(".cancel_issue").removeAttr("disabled");
+                        $(".cancel_issue").text("Cancel Issue");
+                    });
+                } else {
+                    toastr.error(resp.message, "Error");
+                    $(".cancel_issue").removeAttr("disabled");
+                    $(".cancel_issue").text("Cancel Issue");
+                }
+            },
+            error: function (resp){
+                toastr.error(resp.message, "Error");
+                $(".cancel_issue").removeAttr("disabled");
+                $(".cancel_issue").text("Cancel Issue");
+            }
+        });
     });
     
 
