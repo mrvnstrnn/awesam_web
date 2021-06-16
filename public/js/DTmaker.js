@@ -21,8 +21,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
 
         columns: whatCols,
         createdRow: function (row, data, dataIndex) {
-
             if(table_to_load == "doc_validation"){
+                $(row).attr('data-info', data.sub_activity);
                 $(row).attr('data-program', whatTable);
                 $(row).attr('data-sam_id', data.sam_id);
                 $(row).attr('data-value_id', data.value_id);

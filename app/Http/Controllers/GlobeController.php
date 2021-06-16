@@ -12,6 +12,7 @@ use App\Models\SubActivityValue;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
+use Carbon;
 
 use App\Events\SiteEndorsementEvent;
 use App\Listeners\SiteEndorsementListener;
@@ -680,7 +681,44 @@ class GlobeController extends Controller
             
     }
 
+    public function get_all_docs(Request $request)
+    {
+        try {
+            $data = collect();
+            for ($i=0; $i < count($request->input('data_info')); $i++) {
 
+                if($request->input('data_info')[$i]['action'] == 'doc upload'){
+                    $sub_activity_files = SubActivityValue::join('users', 'users.id', 'sub_activity_value.user_id')
+                                        ->where('sub_activity_value.sam_id', $request->input('sam_id'))
+                                        ->where('sub_activity_value.sub_activity_id', $request->input('data_info')[$i]['sub_activity_id'])
+                                        ->first();
+    
+                    if(!is_null($sub_activity_files)){
+                        $data->push($sub_activity_files);
+                    }
+                }
+            }
+            return response()->json(['error' => false, 'message' => $data ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_docs($data_id, $data_action)
+    {
+        try {
+            SubActivityValue::where('id', $data_id)
+                            ->update([
+                                'status' => $data_action,
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => Carbon::now()->toDate(),
+                            ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully " .$data_action. "."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
 }
 

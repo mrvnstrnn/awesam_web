@@ -136,6 +136,9 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
 
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
         $.ajax({
             url: $(this).attr('data-href'),
             data: {
@@ -151,16 +154,23 @@ $(document).ready(() => {
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
+
+                        $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                        $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
                         // $("#loaderModal").modal("hide");
                     });
                 } else {
                     // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
+                    $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                    $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
                 }
             },
             error: function(resp){
                 // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
+                $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
             }
         });
 
