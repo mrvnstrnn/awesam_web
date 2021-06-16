@@ -353,10 +353,13 @@ $(document).ready(() => {
 
     $('.unasigned-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
-        $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
-        $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
-        $("#sam_id").val($(this).parent().attr('data-id'));
-        $("#modal-assign-sites").modal("show");
+
+        if ($(this).attr("colspan") != 5) {
+            $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
+            $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
+            $("#sam_id").val($(this).parent().attr('data-id'));
+            $("#modal-assign-sites").modal("show");
+        }
     });
 
     $(document).on('click',"#btn-assign-sites", function(e){

@@ -15,9 +15,17 @@
             overflow-y: initial !important
         }
 
-        .modal-body{
-            height: 80vh;
+        .modal-body {
+            max-height: calc(100vh - 210px);
             overflow-y: auto;
+        }
+
+        .details_file {
+            display: none !important;
+        }
+
+        .col_child:hover .details_file {
+            display: block !important;
         }
     </style>
 
@@ -43,9 +51,13 @@
             e.preventDefault();
             if($(this).find("td").attr("colspan") != 4){
 
+                $("#viewInfoModal .modal-title").text($(this).attr("data-site"));
+
                 $('.modal-body .col_list .col_child_list i, .modal-body .col_list .col_child_list p').remove();
 
                 var data_info = JSON.parse($(this).attr('data-info').replace(/&quot;/g,'"'));
+
+                console.log(data_info);
                 var sam_id = $(this).attr('data-sam_id');
                 $('.modal-body').html('');
 
@@ -64,16 +76,16 @@
                             var iframe =  '';
 
                             $('.modal-body').html(
-                                '<div class="row"><div class="col-lg-7 col-md-7 col-12 col_iframe">' +
-                                    '<button type="button" class="btn btn-danger btn_reject_approve" data-action="denied">Reject</button>' +
-                                    ' <button type="button" class="btn btn-primary btn_reject_approve" data-action="approved">Approve</button></div><div class="col-lg-5 col-md-5 col-12 col_list"></div></div>'
+                                '<div class="row"><div class="col-lg-8 col-md-8 col-12 col_iframe">' +
+                                    '<div class="mt-5"><button type="button" class="btn btn-danger btn_reject_approve" data-action="denied">Reject</button>' +
+                                    ' <button type="button" class="btn btn-primary btn_reject_approve" data-action="approved">Approve</button></div></div><div class="col-lg-4 col-md-4 col-12 col_list"></div></div>'
                             );
 
-                            iframe =  '<div class="embed-responsive mt-3" style="height: 460px;">' +
+                            iframe =  '<h4>File preview.</h4><div class="embed-responsive mt-3" style="height: 460px;">' +
                                 '<iframe class="embed-responsive-item" src="files/' + resp.message[0].value + '" allowfullscreen></iframe>' +
                             '</div>';
 
-                            $('.modal-body .col_iframe').append(iframe);
+                            $('.modal-body .col_iframe').prepend(iframe);
                             
                             $(".btn_reject_approve").attr("data-id", resp.message[0].id);
 
@@ -83,6 +95,12 @@
 
                             var ext = "";
                             var done = "";
+                            var color_val = "";
+
+                            $(".modal-body .col_list").html(
+                                '<div class="row"><h4>Related file uploaded to this site.</h4></div>'
+                            );
+
                             for (let i = 0; i < resp.message.length; i++) {
                                 if(resp.message[i].value.split('.').pop() == "pdf") {
                                     ext = "fa fa-file-pdf fa-3x";
@@ -91,15 +109,17 @@
                                 }
 
                                 if(resp.message[i].status == "denied") {
-                                    done = "pe-7s-close";
+                                    done = "<i class='pe-7s-close text-danger'></i> ";
                                 } else if (resp.message[i].status == "approved") {
-                                    done = "fa fa-check";
+                                    done = "<i class='fa fa-check text-success'></i> ";
                                 } else {
-                                    done = "";
+                                    done = ''
                                 }
                                 
-                                $('.modal-body .col_list').append(
-                                    '<i class="'+ext+'"></i>' + "<p class='d-flex mt-3 mb-0'><i class='"+done+"'></i>" + resp.message[i].value + "</p> <p class='mt-0'><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p><br>"
+                                $('.modal-body .col_list .row').append(
+                                    // '<i class="'+ext+'"></i>' + "<p class='d-flex mt-3 mb-0'><i class='"+done+"'></i>" + resp.message[i].value + "</p> <p class='mt-0'><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p><br>"
+                                    '<div class="col_child text-center mt-5 col-lg-4 col-md-4 col-12 "><i class="'+ext+'"></i>' +
+                                    "<div class='d-flex mt-3 mb-0 details_file'><p class='mt-0 text-left'><p class='d-flex mt-3 mb-0 '>"+done + resp.message[i].value + "</p><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p></div>"
                                 );
                             }
 
