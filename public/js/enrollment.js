@@ -3,8 +3,20 @@ $(document).ready(() => {
     //     $("#firsttimeModal").modal({backdrop: 'static', keyboard: false});
     // }
 
-        // FLATPICKR DATE PICKER
-        $(".flatpicker").flatpickr();
+    // FLATPICKR DATE PICKER
+    $(".flatpicker").flatpickr();
+
+    $("input[name=birthday]").flatpickr(
+        { 
+          maxDate: new Date()
+        }
+    );
+
+    $("input[name=hiring_date]").flatpickr(
+        { 
+          maxDate: new Date()
+        }
+    );
 
 
     if($("#user_detail").val() != ''){

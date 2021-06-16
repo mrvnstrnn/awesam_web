@@ -127,7 +127,7 @@ $(document).ready(() => {
             $(row).attr('data-id', data.issue_id);
         },
         columns: [
-            { data: "date_created" },
+            { data: "start_date" },
             { data: "issue" },
             { data: "issue_details" },
             { data: "issue_status" },
@@ -151,6 +151,7 @@ $(document).ready(() => {
                         $(".cancel_issue").attr("data-id", resp.message.issue_id);
 
                         $(".view_issue_form input[name=issue]").val(resp.message.issue);
+                        $(".view_issue_form input[name=start_date]").val(resp.message.start_date);
                         $(".view_issue_form input[name=issue_type]").val(resp.message.issue_type);
                         $(".view_issue_form textarea[name=issue_details]").text(resp.message.issue_details);
                     } else {
