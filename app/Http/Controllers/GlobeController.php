@@ -688,7 +688,8 @@ class GlobeController extends Controller
             for ($i=0; $i < count($request->input('data_info')); $i++) {
 
                 if($request->input('data_info')[$i]['action'] == 'doc upload'){
-                    $sub_activity_files = SubActivityValue::join('users', 'users.id', 'sub_activity_value.user_id')
+                    $sub_activity_files = SubActivityValue::select('users.name', 'sub_activity_value.*')
+                                        ->join('users', 'users.id', 'sub_activity_value.user_id')
                                         ->where('sub_activity_value.sam_id', $request->input('sam_id'))
                                         ->where('sub_activity_value.sub_activity_id', $request->input('data_info')[$i]['sub_activity_id'])
                                         ->first();

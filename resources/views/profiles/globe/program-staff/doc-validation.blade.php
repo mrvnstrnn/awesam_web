@@ -27,6 +27,10 @@
         .col_child:hover .details_file {
             display: block !important;
         }
+
+        .file_name {
+            cursor: pointer;
+        }
     </style>
 
     <x-milestone-modal />
@@ -57,7 +61,6 @@
 
                 var data_info = JSON.parse($(this).attr('data-info').replace(/&quot;/g,'"'));
 
-                console.log(data_info);
                 var sam_id = $(this).attr('data-sam_id');
                 $('.modal-body').html('');
 
@@ -115,11 +118,15 @@
                                 } else {
                                     done = ''
                                 }
-                                
+
                                 $('.modal-body .col_list .row').append(
                                     // '<i class="'+ext+'"></i>' + "<p class='d-flex mt-3 mb-0'><i class='"+done+"'></i>" + resp.message[i].value + "</p> <p class='mt-0'><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p><br>"
-                                    '<div class="col_child text-center mt-5 col-lg-4 col-md-4 col-12 "><i class="'+ext+'"></i>' +
-                                    "<div class='d-flex mt-3 mb-0 details_file'><p class='mt-0 text-left'><p class='d-flex mt-3 mb-0 '>"+done + resp.message[i].value + "</p><b>Agent:</b> "+resp.message[i].firstname + " " +resp.message[i].lastname +"</p></div>"
+                                    '<div class="col_child mt-5 col-12 "><i class="'+ext+'"></i>' +
+                                    "<div class='mt-3 mb-0 details_file'>"+
+                                        "<p class='d-flex mt-0 text-left mb-0 file_name' data-id='"+resp.message[i].id+"'><b>"
+                                            +done + resp.message[i].value + 
+                                            "</b></p><p class='text-left d-flex'><b>Agent: </b> "
+                                            +resp.message[i].name +"</p></div>"
                                 );
                             }
 
@@ -166,6 +173,12 @@
                 }
             });
         });
+
+        $(document).on("click", ".file_name", function(){
+            console.log($(this).attr("data-id"));
+            $("iframe").attr("src", "files/"+ $(this).text().replace(" ", ""));
+            $(".btn_reject_approve").attr("data-id", $(this).attr("data-id"));
+        })
 
     });    
 </script>
