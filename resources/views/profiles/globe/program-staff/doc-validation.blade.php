@@ -76,19 +76,18 @@
                     },
                     success: function (resp){
 
-                        console.log(this);
-
-                        $('#viewInfoModal').modal('show');
                         $('.modal-content').html(resp);
 
-                         
-
-                        $('.file_list_item').first().click();
+                        
 
                     },
                     error: function (resp){
                         toastr.error(resp.message, "Error");
                     }
+                })
+                .done(function(){
+                    $('#viewInfoModal').modal('show');
+                    $('.file_list_item').first().click();
                 });
             }
         });
@@ -97,6 +96,7 @@
         $(document).on("click", ".file_list_item", function (e){
             e.preventDefault();
             console.log(this);
+
 
             $(".file_list_item").removeClass('active');
             $(this).addClass('active');
@@ -107,7 +107,7 @@
 
             if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
 
-                htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+                htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
                 $('.modal_preview_content').html(htmltoload);
 
             } else {
