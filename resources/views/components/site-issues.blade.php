@@ -65,7 +65,7 @@
 <div class="row">
     <div class="col-12">
         <h5 class="card-title">Issue List</h5>
-        <table class="mb-0 table table-bordered my_table_issue" data-href="/get-my-issue">
+        <table class="mb-0 table table-bordered my_table_issue w-100" data-href="/get-my-issue">
             <thead>
                 <tr>
                     <th>Start Date</th>
