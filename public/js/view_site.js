@@ -79,6 +79,7 @@ $(document).ready(() => {
 
 
     $(".add_issue").on("click", function (){
+        $("small").text("");
         $.ajax({
             url: "/add-issue",
             method: "POST",
@@ -94,7 +95,13 @@ $(document).ready(() => {
                         toastr.success(resp.message, "Success");
                     });
                 } else {
-                    toastr.error(resp.message, "Error");
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("." + index + "-error").text(data);
+                        });
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
                 }
             },
             error: function (resp){

@@ -20,6 +20,7 @@
                             <option value="{{ $type_array[$i]  }}">{{ $type_array[$i] }}</option>
                         @endfor
                     </select>
+                    <small class="text-danger issue_type-error"></small>
                 </div>
             </div>
             <div class="form-row mb-1">
@@ -28,6 +29,7 @@
                 </div>
                 <div class="col-8">
                     <select name="issue" id="issue" class="form-control"></select>
+                    <small class="text-danger issue-error"></small>
                 </div>
             </div>
             <div class="form-row mb-1">
@@ -36,6 +38,7 @@
                 </div>
                 <div class="col-8">
                     <textarea name="issue_details" id="issue_details" cols="30" rows="10" class="form-control"></textarea>
+                    <small class="text-danger issue_details-error"></small>
                 </div>
             </div>
             <div class="form-row mb-1">

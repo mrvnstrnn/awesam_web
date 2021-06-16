@@ -738,15 +738,30 @@ class GlobeController extends Controller
     {
         try {
             // return response()->json(['error' => false, 'message' => $request->all() ]);
-            $issue_type = Issue::create([
-                'issue_type_id' => $request->input('issue'),
-                'sam_id' => $request->input('hidden_sam_id'),
-                'what_activity_id' => 1,
-                'issue_details' => $request->input('issue_details'),
-                'issue_status' => "active",
-                'user_id' => \Auth::id(),
-            ]);
-            return response()->json(['error' => false, 'message' => "Successfully added issue." ]);
+
+            
+
+            $validate = Validator::make($request->all(), array(
+                'issue_type' => 'required',
+                'issue' => 'required',
+                'issue_details' => 'required'
+            ));
+
+            if($validate->passes()){
+                $issue_type = Issue::create([
+                    'issue_type_id' => $request->input('issue'),
+                    'sam_id' => $request->input('hidden_sam_id'),
+                    'what_activity_id' => 1,
+                    'issue_details' => $request->input('issue_details'),
+                    'issue_status' => "active",
+                    'user_id' => \Auth::id(),
+                ]);
+                return response()->json(['error' => false, 'message' => "Successfully added issue." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+
+            
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
