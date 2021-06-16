@@ -24,9 +24,17 @@ function makeDT(whatTable, whatCols, table_to_load) {
         },
 
         createdRow: function (row, data, dataIndex) {
-
+            if(table_to_load == "doc_validation"){
+                $(row).attr('data-site', data.site_name);
+                $(row).attr('data-info', data.sub_activity);
+                $(row).attr('data-program', whatTable);
                 $(row).attr('data-sam_id', data.sam_id);
-
+                $(row).attr('data-value_id', data.value_id);
+                $(row).attr('data-value', data.value);
+                $(row).attr('data-action', data.action);    
+            } else {
+                $(row).attr('data-sam_id', data.sam_id);
+            }
         },
 
         columns: whatCols

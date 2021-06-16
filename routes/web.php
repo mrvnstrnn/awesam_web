@@ -124,6 +124,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-my-uploaded-file', [GlobeController::class, 'get_my_uploade_file']);
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
+    Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
+
+    Route::get('/doc-validation-approve-reject/{data_id}/{data_action}', [GlobeController::class, 'approve_reject_docs']);
+
 
     // Calendar
     Route::get('/get-my-calendar', [UserController::class, 'my_calendar']);
