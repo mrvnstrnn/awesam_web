@@ -11,6 +11,7 @@ use App\Models\UserDetail;
 use App\Models\SubActivityValue;
 use App\Models\IssueType;
 use App\Models\Issue;
+use App\Models\Chat;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -805,7 +806,21 @@ class GlobeController extends Controller
                         ]);
 
             return response()->json(['error' => false, 'message' => "Successfully cancelled issue." ]);
-            return $dt->make(true);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function chat_send(Request $request)
+    {
+        try {
+            Chat::create([
+                'sam_id' => $request->input('sam_id'),
+                'user_id' => \Auth::id(),
+                'comment' => $request->input('comment'),
+            ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully send a message." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

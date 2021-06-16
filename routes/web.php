@@ -135,6 +135,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/cancel-my-issue/{issue_id}', [GlobeController::class, 'cancel_issue']);
     Route::post('/add-issue', [GlobeController::class, 'add_issue']);
 
+    // Chat
+    Route::post('/chat-send', [GlobeController::class, 'chat_send']);
 
     // Calendar
     Route::get('/get-my-calendar', [UserController::class, 'my_calendar']);
