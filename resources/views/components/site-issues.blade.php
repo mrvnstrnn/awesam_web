@@ -32,6 +32,17 @@
                     <small class="text-danger issue-error"></small>
                 </div>
             </div>
+
+            <div class="form-row mb-1">
+                <div class="col-4">
+                    <label for="start_date" class="mr-sm-2">Issue Started</label>
+                </div>
+                <div class="col-8">
+                    <input type="text" name="start_date" id="start_date" class="form-control flatpicker">
+                    <small class="text-danger start_date-error"></small>
+                </div>
+            </div>
+
             <div class="form-row mb-1">
                 <div class="col-4">
                     <label for="issue_details" class="mr-sm-2">Issue Details</label>

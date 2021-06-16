@@ -53,6 +53,16 @@
                                 <input type="text" name="issue" id="issue" class="form-control" disabled>
                             </div>
                         </div>
+
+                        <div class="form-row mb-1">
+                            <div class="col-4">
+                                <label for="start_date" class="mr-sm-2">Issue Started</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" name="start_date" id="start_date" class="form-control" disabled>
+                            </div>
+                        </div>
+
                         <div class="form-row mb-1">
                             <div class="col-4">
                                 <label for="issue_details" class="mr-sm-2">Issue Details</label>
@@ -71,12 +81,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $('#exampleModal').on('show.bs.modal', event => {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-        // Use above variables to manipulate the DOM
-        
-    });
-</script>

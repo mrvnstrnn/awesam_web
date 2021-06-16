@@ -737,7 +737,7 @@ class GlobeController extends Controller
     public function add_issue(Request $request)
     {
         try {
-            // return response()->json(['error' => false, 'message' => $request->all() ]);
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             
 
@@ -751,7 +751,7 @@ class GlobeController extends Controller
                 $issue_type = Issue::create([
                     'issue_type_id' => $request->input('issue'),
                     'sam_id' => $request->input('hidden_sam_id'),
-                    'what_activity_id' => 1,
+                    'start_date' => $request->input('start_date'),
                     'issue_details' => $request->input('issue_details'),
                     'issue_status' => "active",
                     'user_id' => \Auth::id(),
@@ -775,6 +775,7 @@ class GlobeController extends Controller
                             ->get();
 
             $dt = DataTables::of($data);
+
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
