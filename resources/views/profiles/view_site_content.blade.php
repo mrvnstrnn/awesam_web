@@ -63,7 +63,7 @@
                         <x-site-fields :sitefields="$site_fields" />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
-                        <x-site-issues />
+                        <x-site-issues :site="$site" />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
                         <x-site-files />

@@ -740,9 +740,10 @@ class UserController extends Controller
         $program_direct_links = self::getProgramMenuDirectLinks();
 
         $view = "profiles." . $mode . "." . $profile . ".view_site";        
-        
+
         return view($view, 
             compact(
+                'site',
                 'timeline',
                 'activities',
                 'site_fields',
