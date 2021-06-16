@@ -51,6 +51,86 @@ $(document).ready(() => {
         $('.add_issue_form').removeClass('d-none');
         $(this).addClass('d-none');
     });
+
+    $("#issue_type").on("change", function (){
+        // $(this).val();
+        if($(this).val() != ""){
+            $("select[name=issue] option").remove();
+            $.ajax({
+                url: "/get-issue/"+$(this).val(),
+                method: "GET",
+                success: function (resp){
+                    if(!resp.error){
+                        console.log(resp.message);
+    
+                        resp.message.forEach(element => {
+                            $("select[name=issue]").append(
+                                '<option value="'+element.issue_type_id+'">'+element.issue+'</option>'
+                            );
+                        });
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
+        }
+    });
+
+
+    $(".add_issue").on("click", function (){
+        $.ajax({
+            url: "/add-issue",
+            method: "POST",
+            data: $(".add_issue_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp){
+                if(!resp.error){
+                    $('.my_table_issue').DataTable().ajax.reload(function(){
+                        $(".add_issue_form")[0].reset();
+                        $('#btn_add_issue_cancel').trigger("click");
+                        toastr.success(resp.message, "Success");
+                    });
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function (resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
+    });
+
+    $('.my_table_issue').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: $('.my_table_issue').attr('data-href'),
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        },
+        dataSrc: function(json){
+            return json.data;
+        },
+        columns: [
+            { data: "date_created" },
+            { data: "issue" },
+            { data: "issue_details" },
+            { data: "issue_status" },
+        ],
+    });
+
+    $('.my_table_issue').on("click", "tr td", function(){
+        if($(this).attr("colspan") != 4){
+            $("#modal_issue").modal("show");
+        }
+    });
     
 
     google.charts.load('current', {'packages':['gantt']});

@@ -9,6 +9,8 @@ use App\Models\UsersArea;
 use App\Models\Program;
 use App\Models\UserDetail;
 use App\Models\SubActivityValue;
+use App\Models\IssueType;
+use App\Models\Issue;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -719,6 +721,48 @@ class GlobeController extends Controller
             return response()->json(['error' => false, 'message' => "Successfully " .$data_action. "."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_issue($issue_name)
+    {
+        try {
+            $issue_type = IssueType::where('issue_type', $issue_name)->get();
+            return response()->json(['error' => false, 'message' => $issue_type ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_issue(Request $request)
+    {
+        try {
+            // return response()->json(['error' => false, 'message' => $request->all() ]);
+            $issue_type = Issue::create([
+                'issue_type_id' => $request->input('issue'),
+                'sam_id' => $request->input('hidden_sam_id'),
+                'what_activity_id' => 1,
+                'issue_details' => $request->input('issue_details'),
+                'issue_status' => "active",
+                'user_id' => \Auth::id(),
+            ]);
+            return response()->json(['error' => false, 'message' => "Successfully added issue." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_my_issue()
+    {
+        try {
+            $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+                            ->where('site_issue.user_id', \Auth::id())
+                            ->get();
+
+            $dt = DataTables::of($data);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
