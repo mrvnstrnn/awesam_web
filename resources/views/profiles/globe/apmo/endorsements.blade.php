@@ -111,7 +111,7 @@
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button> --}}
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Site</button>
+                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Site</button>
                 </div>
             </div>
         </div>

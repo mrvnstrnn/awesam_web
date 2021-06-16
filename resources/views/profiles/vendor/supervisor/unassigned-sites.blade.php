@@ -127,6 +127,11 @@
                         
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
