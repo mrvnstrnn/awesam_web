@@ -561,6 +561,7 @@ class GlobeController extends Controller
     public function upload_my_file(Request $request)
     {
         try {
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
