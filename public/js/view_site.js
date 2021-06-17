@@ -286,46 +286,52 @@ $(document).ready(() => {
         };
     
         chart.draw(dataTable, options);
-
     }
 
-    $('.message_enter').keypress(function (e) {
-        var key = e.which;
-        if(key == 13) {
-            var message = $(this).val();
+    $(".send_message").on("click", function (e){
+        e.preventDefault();
 
-            if (message != ""){
-                var sam_id = $("input[name=hidden_sam_id]").val();
-            
-                $.ajax({
-                    url: "/chat-send",
-                    method: "POST",
-                    data: {
-                        comment : message,
-                        sam_id : sam_id,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp){
-                        if (!resp.error){
-                            $(".message_enter").val("");
-                            $(".chat-content").load(window.location.href + " .chat-content" );
-                            // chat-content
-                            // $(".chat-wrapper").fadeOut(800, function(){
-                            //     $(".chat-wrapper").html(resp).fadeIn().delay(2000);
-    
-                            // });
+        var sam_id = $("input[name=hidden_sam_id]").val();
 
-                            console.log(resp.message);
-                        } else {
-                            toastr.error(resp.message, "Error");
-                        }
-                    },
-                    error: function (resp) {
+        var message = $('.message_enter').val();
+
+        if (message != ""){
+
+            $.ajax({
+                url: "/chat-send",
+                method: "POST",
+                data: {
+                    comment : message,
+                    sam_id : sam_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error){
+                        $(".message_enter").val("");
+                        $(".chat-content").load(window.location.href + " .chat-content" );
+                        console.log(resp.message);
+                    } else {
                         toastr.error(resp.message, "Error");
                     }
-                });
+                },
+                error: function (resp) {
+                    toastr.error(resp.message, "Error");
+                }
+            });
+        }
+
+    });
+
+    $('.message_enter').keypress(function (e) {
+
+        var key = e.which;
+        if(key == 13) {
+            var message = $('.message_enter').val();
+
+            if (message != ""){
+                $(".send_message").trigger("click");
             }
         }
     });  
