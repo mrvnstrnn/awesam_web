@@ -46,7 +46,7 @@
                     <form class="w-100" id="form-upload" enctype="multipart/form-data">@csrf
                         <div class="list-uploaded"></div>
                         <hr class="hr-border">
-                        <div class="dropzone"></div>
+                        <div class="dropzone dropzone_activity"></div>
                         <input type="hidden" name="sam_id" id="sam_id">
                         <input type="hidden" name="sub_activity_id" id="sub_activity_id">
                         <input type="hidden" name="file_name" id="file_name">
