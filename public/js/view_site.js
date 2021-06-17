@@ -1,5 +1,5 @@
 Dropzone.autoDiscover = false;
-$(".dropzone").dropzone({
+$(".dropzone_activity").dropzone({
     addRemoveLinks: true,
     maxFiles: 1,
     maxFilesize: 5,
@@ -11,6 +11,7 @@ $(".dropzone").dropzone({
     success: function (file, resp) {
         $("#form-upload  #file_name").val(resp.file);
         console.log(resp.message);
+        
     },
     error: function (file, response) {
         toastr.error(resp.message, "Error");
