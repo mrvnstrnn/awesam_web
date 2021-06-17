@@ -11,9 +11,12 @@ class ModalDocumentPreview extends Component
      *
      * @return void
      */
-    public function __construct()
+
+    public $mode;
+
+    public function __construct($mode)
     {
-        //
+        $this->mode = $mode;
     }
 
     /**

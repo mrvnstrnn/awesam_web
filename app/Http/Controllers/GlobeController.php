@@ -687,26 +687,15 @@ class GlobeController extends Controller
     public function get_all_docs(Request $request)
     {
         try {
-            $data = collect();
-            for ($i=0; $i < count($request->input('data_info')); $i++) {
-
-                if($request->input('data_info')[$i]['action'] == 'doc upload'){
-                    $sub_activity_files = SubActivityValue::select('users.name', 'sub_activity_value.*', 'sub_activity.sub_activity_name')
-                                        ->join('users', 'users.id', 'sub_activity_value.user_id')
-                                        ->join('sub_activity', 'sub_activity.sub_activity_id', 'sub_activity_value.sub_activity_id')
-                                        ->where('sub_activity_value.sam_id', $request->input('sam_id'))
-                                        ->where('sub_activity_value.sub_activity_id', $request->input('data_info')[$i]['sub_activity_id'])
-                                        ->first();
-                    if(!is_null($sub_activity_files)){
-                        $data->push($sub_activity_files);
-                    }
-                }
-            }
-
-            // dd($data);
+            $data = \DB::connection('mysql2')
+                    ->table('sub_activity_value')
+                    ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                    ->where('sam_id', '=', $request['sam_id'])
+                    ->where('action', '=', 'doc upload')
+                    ->get();
 
             return \View::make('components.modal-document-preview')
-                ->with('file_list', $data)
+                ->with(['file_list' => $data,  'mode'=>$request['mode']])
                 ->render();
 
             // return response()->json(['error' => false, 'message' => $data ]);
@@ -716,10 +705,10 @@ class GlobeController extends Controller
         }
     }
 
-    public function ModalDocumentPreview($data)
-    {
-        return View::make('components.modal-document-preview', ['file_list' => $data]);
-    }
+    // public function ModalDocumentPreview($data)
+    // {
+    //     return View::make('components.modal-document-preview', ['file_list' => $data]);
+    // }
 
     public function approve_reject_docs($data_id, $data_action)
     {

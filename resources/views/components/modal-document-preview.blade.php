@@ -29,29 +29,33 @@
 
 </style>
 
-<div class="modal-header">
+{{-- <div class="modal-header">
+    <div class="modal-title"></div>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-</div>
+</div> --}}
 <div class="modal-body">
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-sm-12">
-            <button type="button" class="btn btn-primary btn_reject_approve pull-left mr-1" data-action="approved">Approve</button>        
-            <button type="button" class="btn btn-danger btn_reject_approve pull-left" data-action="rejected">Reject</button>        
         </div>
     </div>
-    <div class="divider"></div>
+
     <div class="row">
         <div class="col-sm-8 modal_preview">
-            <div class="modal_preview_content"  style="max-height: 400px;">
+            <div class="modal_preview_content" style="max-height: 380px;">
                 {{-- <iframe class="embed-responsive-item" style="width:100%; min-height: 400px;" src="/ViewerJS/#../files/{{ $file_list[0]->value }}" allowfullscreen></iframe> --}}
             </div>
+            @if($mode=='doc_validation')
+            <button type="button" class="btn btn-danger btn_reject_approve pull-left" data-action="rejected">Reject Document</button> 
+            <button type="button" class="btn btn-primary btn_reject_approve pull-left mr-1" data-action="approved">Approve Document</button>        
+            @endif        
         </div>
-        <div class="col-sm-4" id="modal_filelist" style="max-height: 400px; overflow: scroll;">
+
+        <div class="col-sm-4" id="modal_filelist"  style="max-height: 400px; overflow: scroll;">
             <ul class="list-group">
             @foreach ( $file_list as $file )
-                <li class="list-group-item file_list_item" data-value="{{ $file->value }}" data-sub_activity_name="{{ $file->sub_activity_name }}">
+                <li class="list-group-item file_list_item" data-status="{{ $file->status }}" data-value="{{ $file->value }}" data-sub_activity_name="{{ $file->sub_activity_name }}">
                     <div class="widget-content p-0">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left mr-3">
@@ -65,7 +69,7 @@
                             </div>
                             <div class="widget-content-left">
                                 <div class="widget-heading">{{ $file->sub_activity_name }}</div>
-                                <div class="widget-subheading">{{ $file->value }}</div>
+                                {{-- <div class="widget-subheading">{{ $file->value }}</div> --}}
                             </div>
                         </div>
                     </div>
@@ -77,9 +81,10 @@
     </div>    
 </div>
 <div class="modal-footer">
-    <div class="modal_preview_marker  text-left">
-        {{ $file_list[0]->sub_activity_name }} : {{ $file_list[0]->value }}
-    </div>
+    @if($mode!='doc_validation')
+    <button type="button" class="btn btn-success btn_reject_approve" data-action="approved">Approve Site Documents</button>
+    {{-- <button type="button" class="btn btn-danger btn_reject_approve" data-action="rejected">Reject Site</button> --}}
+    @endif    
 </div>
 
 
