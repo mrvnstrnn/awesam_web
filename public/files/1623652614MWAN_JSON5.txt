@@ -1,0 +1,308 @@
+[
+    {
+        "show": null,
+        "value": "MWAN-001",
+        "field_name": "NOMINATION_ID",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "NEW (VERSION 8.2)",
+        "field_name": "MDB_ENDORSEMENT",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "L9ABOIRENPBINOUT",
+        "field_name": "TECHNOLOGY_SITENAME",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "SL2180",
+        "field_name": "PLA_ID",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "SLZ",
+        "field_name": "REGION",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "ABOIRENPBINOUT",
+        "field_name": "SITENAME",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "ABOIRENPBINOUT",
+        "field_name": "ADDRESS",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "LOCATION",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "HT",
+        "field_name": "VENDOR",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "L9",
+        "field_name": "TECHNOLOGY",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "2020-10-20",
+        "field_name": "ENDORSEMENT_DATE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": "null",
+        "value": "Mobile",
+        "field_name": "PROGRAM",
+        "field_sort": "null",
+        "field_type": "null",
+        "category_sort": "null",
+        "field_category": "null"
+    },
+    {
+        "show": null,
+        "value": "2020 2H",
+        "field_name": "ENDORSEMENT_TAGGING",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "3G to 4G Migration (Wave 3)",
+        "field_name": "BASELINE_ENDORSEMENT_TAGGING",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "HT",
+        "field_name": "SAQ_VENDOR",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "ROOFTOP",
+        "field_name": "SITE_TYPE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "CLEAN A/RTB",
+        "field_name": "GT_SAQ_MILESTONE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "RTB'D YR 2021",
+        "field_name": "GT_SAQ_MILESTONE_CATEGORY",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "2021-03-15",
+        "field_name": "RTB_ACTUAL_DATE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "Scenario 5 - For SAQ",
+        "field_name": "BUILD_SCENARIO_CATEGORY",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "DATE_ISSUE_ESCALATED",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "SAQ_MILESTONE_UPDATES",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "N/A",
+        "field_name": "RTB_FORECAST",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "2021-03-01",
+        "field_name": "RTB_MONTH_YEAR",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "DOABLE",
+        "field_name": "ISSUE_REPORTED",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "Need fiberization of the whole building",
+        "field_name": "ISSUE_STATUS",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "CBD_NONCBD",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "MIGRATION",
+        "field_name": "HIGHLEVEL_TECH",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "RTB_AGEING",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "AGING",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "DOABLE_NOTDOABLE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "RTB_FORECAST_CATEGORY",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "RTB_AGEING_CATEGORY",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    },
+    {
+        "show": null,
+        "value": "",
+        "field_name": "RTBD_SCOPE",
+        "field_sort": null,
+        "field_type": null,
+        "category_sort": null,
+        "field_category": null
+    }
+]

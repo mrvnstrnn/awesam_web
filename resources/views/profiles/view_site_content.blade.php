@@ -44,7 +44,12 @@
             <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
-                    {{ $title }}
+                    {{ $title }} 
+                    @if($site[0]->site_category != null)
+                        <div class="badge badge-secondary ml-2">
+                            {{ $site[0]->site_category }}
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">
