@@ -6,7 +6,7 @@
             @endphp
 
             <div class="chat-content">
-                @foreach ($chats as $chat)
+                @forelse ($chats as $chat)
                     @if ($chat->user_id == \Auth::id())
                         <div class="">
                             <div class="chat-box-wrapper chat-box-wrapper-right float-right">
@@ -50,7 +50,10 @@
                             </div>
                         </div>
                     @endif
-                @endforeach
+
+                @empty
+                    <h1 class="text-center">No message here</h1>
+                @endforelse
             </div>
         </div>
     </div>
