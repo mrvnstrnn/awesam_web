@@ -2,7 +2,12 @@
     <div class="p-2">
         <div class="chat-wrapper p-1">
             @php
-                $chats = \App\Models\Chat::where('sam_id', $site[0]->sam_id)->orderBy("timesptamp", "asc")->get();
+                $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.timesptamp')
+                                            ->join('users', 'users.id', 'chat.user_id')
+                                            ->join('profiles', 'profiles.id', 'users.profile_id')
+                                            ->where('chat.sam_id', $site[0]->sam_id)
+                                            ->orderBy("chat.timesptamp", "asc")
+                                            ->get();
             @endphp
 
             <div class="chat-content">
@@ -15,6 +20,7 @@
                                         {{ $chat->comment }}
                                     </div>
                                     <small class="opacity-6">
+                                        {{ $chat->profile }} : {{ $chat->name }}<br>
                                         <i class="fa fa-calendar-alt mr-1"></i>
                                         {{ $chat->timesptamp }}
                                     </small>
@@ -59,5 +65,9 @@
     </div>
 </div>
 <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
-<input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter">
+{{-- <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter"> --}}
+<div class="d-flex">
+    <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter">
+    <button class="btn btn-primary pl-5 pr-5 send_message">Send</button>
+</div>
 {{-- <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 265px;"></div></div></div> --}}
