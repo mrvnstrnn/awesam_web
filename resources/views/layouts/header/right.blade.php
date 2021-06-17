@@ -73,14 +73,12 @@
                     <div class="widget-subheading"> {{ ucwords(Auth::user()->getUserProfile()->profile) }}</div>
                 </div>
 
-                <div class="header-btn-lg">
+                {{-- <div class="header-btn-lg">
                     <button type="button" class="hamburger hamburger--elastic open-right-drawer">
-                        {{-- <span class="hamburger-box"> --}}
                         <span class="pe-7s-chat fa-2x">
-                            {{-- <span class="hamburger-inner"></span> --}}
                         </span>
                     </button>
-                </div>
+                </div> --}}
                 
             </div>
         </div>
