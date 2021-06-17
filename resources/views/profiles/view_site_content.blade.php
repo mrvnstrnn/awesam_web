@@ -66,7 +66,7 @@
                         <x-site-issues :site="$site" />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
-                        <x-site-files />
+                        <x-site-files :site="$site" />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-5" role="tabpanel">
                         <x-site-chat  :site="$site" />

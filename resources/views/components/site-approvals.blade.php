@@ -46,24 +46,21 @@
             <div class="card-body">
                 <div class="tab-content">
                     @foreach ($programs as $program)
-                        @php
-                            // dd(route('doc_validations.list', [$program->program_id]));
-                        @endphp
                         @if ($loop->first)
                             <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
                         @else
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif
-                                <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
-                                    class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
-                                    data-href="{{ route('get_site_approvals.list', [$program->program_id, \Auth::user()->profile_id]) }}"
-                                    data-program_id="{{ $program->program_id  }}" data-table_loaded="false">
-                                    <thead>
-                                        <tr></tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>                        
+                            <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
+                                class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
+                                data-href="{{ route('get_site_approvals.list', [$program->program_id, \Auth::user()->profile_id]) }}"
+                                data-program_id="{{ $program->program_id  }}" data-table_loaded="false">
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>                        
                            </div>
                     @endforeach
                 </div>                
