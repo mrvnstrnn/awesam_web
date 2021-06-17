@@ -127,7 +127,7 @@ $(document).ready(() => {
             $(row).attr('data-id', data.issue_id);
         },
         columns: [
-            { data: "date_created" },
+            { data: "start_date" },
             { data: "issue" },
             { data: "issue_details" },
             { data: "issue_status" },
@@ -151,6 +151,7 @@ $(document).ready(() => {
                         $(".cancel_issue").attr("data-id", resp.message.issue_id);
 
                         $(".view_issue_form input[name=issue]").val(resp.message.issue);
+                        $(".view_issue_form input[name=start_date]").val(resp.message.start_date);
                         $(".view_issue_form input[name=issue_type]").val(resp.message.issue_type);
                         $(".view_issue_form textarea[name=issue_details]").text(resp.message.issue_details);
                     } else {
@@ -288,6 +289,45 @@ $(document).ready(() => {
 
     }
 
+    $('.message_enter').keypress(function (e) {
+        var key = e.which;
+        if(key == 13) {
+            var message = $(this).val();
+
+            if (message != ""){
+                var sam_id = $("input[name=hidden_sam_id]").val();
+            
+                $.ajax({
+                    url: "/chat-send",
+                    method: "POST",
+                    data: {
+                        comment : message,
+                        sam_id : sam_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+                        if (!resp.error){
+                            $(".message_enter").val("");
+                            $(".chat-content").load(window.location.href + " .chat-content" );
+                            // chat-content
+                            // $(".chat-wrapper").fadeOut(800, function(){
+                            //     $(".chat-wrapper").html(resp).fadeIn().delay(2000);
     
+                            // });
+
+                            console.log(resp.message);
+                        } else {
+                            toastr.error(resp.message, "Error");
+                        }
+                    },
+                    error: function (resp) {
+                        toastr.error(resp.message, "Error");
+                    }
+                });
+            }
+        }
+    });  
 
 });

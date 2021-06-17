@@ -74,7 +74,7 @@
                         <x-site-files />
                     </div>
                     <div class="tab-pane tabs-animation fade" id="tab-content-5" role="tabpanel">
-                        <x-site-chat />
+                        <x-site-chat  :site="$site" />
                     </div>
                 </div>
             </div>
