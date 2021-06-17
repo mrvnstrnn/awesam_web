@@ -4,13 +4,17 @@
             if($(this).find("td").attr("colspan") != 4){
 
                 console.log($(this).attr("data-site"));
-                $("#viewInfoModal .modal-title").text($(this).attr("data-site"));
+
                 var sam_id = $(this).attr('data-sam_id');
+                var activity = $(this).attr('data-activity');
+
+                $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
                 $.ajax({
                     url: "/get-all-docs",
                     method: "POST",
                     data: {
+                        activity : activity,
                         mode : table_to_load,
                         sam_id : sam_id,
                     },
@@ -36,7 +40,7 @@
 
         
         $(document).on("click", ".file_list_item", function (e){
-            
+
             e.preventDefault();
             console.log(this);
 

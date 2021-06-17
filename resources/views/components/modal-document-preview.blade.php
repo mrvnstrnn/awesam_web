@@ -27,29 +27,24 @@
 
 
 
-</style>
+</style>    
 
-{{-- <div class="modal-header">
-    <div class="modal-title"></div>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div> --}}
+@if(count($file_list) > 0)
+
 <div class="modal-body">
     <div class="row mb-2">
         <div class="col-sm-12">
+            <button type="button" class="btn btn-danger btn_reject_approve pull-left" data-action="rejected">Reject Document</button> 
+            @if($activity =='RTB Docs Validation')
+            <button type="button" class="btn btn-primary btn_reject_approve pull-left mr-1" data-action="approved">Approve Document</button> 
+            @endif
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-8 modal_preview">
             <div class="modal_preview_content" style="max-height: 380px;">
-                {{-- <iframe class="embed-responsive-item" style="width:100%; min-height: 400px;" src="/ViewerJS/#../files/{{ $file_list[0]->value }}" allowfullscreen></iframe> --}}
             </div>
-            @if($mode=='doc_validation')
-            <button type="button" class="btn btn-danger btn_reject_approve pull-left" data-action="rejected">Reject Document</button> 
-            <button type="button" class="btn btn-primary btn_reject_approve pull-left mr-1" data-action="approved">Approve Document</button>        
-            @endif        
         </div>
 
         <div class="col-sm-4" id="modal_filelist"  style="max-height: 400px; overflow: scroll;">
@@ -74,17 +69,25 @@
                         </div>
                     </div>
                 </li>            
-               {{-- <li class="list-group-item ">  </li> --}}
             @endforeach
             </ul>
         </div>
     </div>    
 </div>
 <div class="modal-footer">
-    @if($mode!='doc_validation')
+    @if($activity!='RTB Docs Validation')
     <button type="button" class="btn btn-success btn_reject_approve" data-action="approved">Approve Site Documents</button>
     {{-- <button type="button" class="btn btn-danger btn_reject_approve" data-action="rejected">Reject Site</button> --}}
     @endif    
 </div>
 
+@else
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12 text-center display-5">
+            Error: Site has no documents
+        </div>
+    </div>
+</div>
+@endif
 

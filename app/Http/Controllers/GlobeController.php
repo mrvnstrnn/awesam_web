@@ -696,7 +696,7 @@ class GlobeController extends Controller
                     ->get();
 
             return \View::make('components.modal-document-preview')
-                ->with(['file_list' => $data,  'mode'=>$request['mode']])
+                ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity']])
                 ->render();
 
             // return response()->json(['error' => false, 'message' => $data ]);
