@@ -687,29 +687,50 @@ class GlobeController extends Controller
 
     public function get_all_docs(Request $request)
     {
-        try {
-            $data = \DB::connection('mysql2')
-                    ->table('sub_activity_value')
-                    ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                    ->where('sam_id', '=', $request['sam_id'])
-                    ->where('action', '=', 'doc upload')
-                    ->get();
 
-            return \View::make('components.modal-document-preview')
-                ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity']])
-                ->render();
+        $documents = array("RTB Docs Validation", "RTB Docs Approval");
+        $rtb = array("RTB Declaration", "RTB Declaration Approval");
 
-            // return response()->json(['error' => false, 'message' => $data ]);
 
-        } catch (\Throwable $th) {
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        if(in_array($request['activity'], $documents)){
+
+            try {
+                $data = \DB::connection('mysql2')
+                        ->table('sub_activity_value')
+                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                        ->where('sam_id', '=', $request['sam_id'])
+                        ->where('action', '=', 'doc upload')
+                        ->get();
+
+                return \View::make('components.modal-document-preview')
+                    ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
+                    ->render();
+
+                // return response()->json(['error' => false, 'message' => $data ]);
+
+            } catch (\Throwable $th) {
+                return response()->json(['error' => true, 'message' => $th->getMessage()]);
+            }
         }
+
+        elseif(in_array($request['activity'], $rtb)){
+
+            try{
+
+                return \View::make('components.modal-site-rtb')
+                        ->with(['mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
+                        ->render();
+
+
+            } catch (\Throwable $th) {
+                return response()->json(['error' => true, 'message' => $th->getMessage()]);
+            }
+
+
+        }
+
     }
 
-    // public function ModalDocumentPreview($data)
-    // {
-    //     return View::make('components.modal-document-preview', ['file_list' => $data]);
-    // }
 
     public function approve_reject_docs($data_id, $data_action)
     {

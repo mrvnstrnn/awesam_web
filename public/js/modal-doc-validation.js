@@ -6,7 +6,8 @@
                 console.log($(this).attr("data-site"));
 
                 var sam_id = $(this).attr('data-sam_id');
-                var activity = $(this).attr('data-activity');
+                var activity = $(this).attr('data-activity')
+                var site = $(this).attr("data-site");
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -14,6 +15,7 @@
                     url: "/get-all-docs",
                     method: "POST",
                     data: {
+                        site : site,
                         activity : activity,
                         mode : table_to_load,
                         sam_id : sam_id,
@@ -24,7 +26,8 @@
                     success: function (resp){
 
                         console.log(resp);
-                        $('.ajax_content_box').html(resp);                        
+                        $('.ajax_content_box').html(resp);   
+
 
                     },
                     error: function (resp){

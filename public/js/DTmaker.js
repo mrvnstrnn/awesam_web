@@ -6,7 +6,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
         processing: true,
         serverSide: true,
         filter: true,
-        
+        searching: false,
+        lengthChange: false,
         ajax: {
             url: $(whatTable).attr('data-href'),
             type: 'GET',
