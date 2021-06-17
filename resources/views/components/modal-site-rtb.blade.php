@@ -1,58 +1,47 @@
 <style>
 
-    .modal-dialog{
-        overflow-y: initial !important
-    }
-
-    .modal-body {
-        max-height: calc(100vh - 210px);
-        overflow-y: auto;
-    }
-
-    .details_file {
-        display: none !important;
-    }
-
-    .col_child:hover .details_file {
-        display: block !important;
-    }
-
-    .file_list_item {
-        cursor: pointer;
-    }
-
-    #toolbarRight {
-        display: none !important;
-    }
-
     .ui-datepicker.ui-datepicker-inline {
    width: 100% !important;
  }
 </style>    
 
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ $site }} : {{ $activity}} </h5>
+                <h5 class="modal-title">{{ $activity}} </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-lg-12">
+                        <H4>{{ $site }}</H4>
                         <div id="datepicker"></div>
                     </div>
-                    <div class="col-md-6">
-                        <form>
-                            
-                        </form>
+                    <div class="col-lg-12 mt-2">
+                        <form class="">
+                            <div class="position-relative form-group">
+                                <label for="exampleSelect" class="">RTB Declaration</label>
+                                <select name="select" id="exampleSelect" class="form-control">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                        </form>                        
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                test
+                @if($activity !='RTB Declaration')
+                    <button type="button" class="btn btn-success btn_reject_approve" data-action="approved">Approve RTB Declaration</button>
+                @else
+                    <button type="button" class="btn btn-success btn_reject_approve" data-action="approved">Declare RTB Date</button>
+                @endif
             </div>
         </div>
     </div>

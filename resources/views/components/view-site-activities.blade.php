@@ -2,6 +2,12 @@
     // dd($activities);
 @endphp
 
+<style>
+    .subactivity_action_switch::before {
+        content: url(\images\add_icon.png);
+    }
+</style>
+
 <ul class="todo-list-wrapper list-group list-group-flush">
     @foreach ($activities as $activity )
         <li class="list-group-item" data-start_date="{{ $activity["start_date"] }}" data-end_date="{{ $activity["end_date"] }}">
@@ -39,7 +45,7 @@
                         $sub_activities = $activity["sub_activities"];
                     @endphp
                     @foreach ( $sub_activities as $sub_activity)
-                        <div class="col-md-6 subactivity_action_switch" data-sam_id="{{ $samid }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}">{{ $sub_activity->sub_activity_name }}</div>
+                        <div class="col-md-6 py-2 subactivity_action_switch" data-sam_id="{{ $samid }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}"><i class="fa fa-fw text-secondary mr-2" aria-hidden="true"></i>{{ $sub_activity->sub_activity_name }}</div>
                     @endforeach
                 </div>
                 <div class="row subactivity_action d-none">

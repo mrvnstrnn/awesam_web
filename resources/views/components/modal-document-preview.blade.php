@@ -85,7 +85,7 @@
             </div>
             <div class="modal-footer">
                 @if($activity!='RTB Docs Validation')
-                <button type="button" class="btn btn-success btn_reject_approve" data-action="approved">Approve Site Documents</button>
+                <button type="button" class="btn btn-success" data-action="approved">Approve Site Documents</button>
                 {{-- <button type="button" class="btn btn-danger btn_reject_approve" data-action="rejected">Reject Site</button> --}}
                 @endif    
             </div>
