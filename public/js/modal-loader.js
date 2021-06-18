@@ -16,7 +16,6 @@
                 $.blockUI({ message: loader });
 
 
-
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
                 $.ajax({
