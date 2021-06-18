@@ -44,7 +44,6 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
       success: function (file, resp) {
-        // $("#form-upload  #file_name").val(resp.file);
         var sam_id = this.element.attributes[1].value;
         var sub_activity_id = this.element.attributes[2].value;
         var file_name = resp.file;
@@ -62,7 +61,7 @@
           },
           success: function (resp) {
             if (!resp.error){
-              $(".file_lists").load(window.location.href + " .file_lists" );
+              $(".child_div_"+sub_activity_id).load(window.location.href + " .child_div_"+sub_activity_id );
               console.log(resp.message);
             } else {
               toastr.error(resp.message, "Error");
@@ -74,7 +73,7 @@
         });
           
       },
-      error: function (file, response) {
+      error: function (file, resp) {
           toastr.error(resp.message, "Error");
       }
   });
