@@ -4,8 +4,6 @@
 
             if($(this).find("td").hasClass('dataTables_empty') == false){
 
-                $.blockUI({ message: 'Loading' });
-
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
                 var site = $(this).attr("data-site");
@@ -14,7 +12,8 @@
                 console.log(activity);
                 console.log(site);
 
-
+                loader = '<div class="p-2">Loading...</div>';
+                $.blockUI({ message: loader });
 
 
 
