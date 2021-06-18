@@ -48,3 +48,77 @@
     </div>
     @endforelse
 </div>
+<script src="/js/dropzone/dropzone.js"></script>
+
+<script>
+
+    
+
+  
+    Dropzone.autoDiscover = false;
+    $(".dropzone_files").dropzone({
+        addRemoveLinks: true,
+        maxFiles: 1,
+        maxFilesize: 1,
+        paramName: "file",
+        url: "/upload-file",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (file, resp) {
+            var sam_id = this.element.attributes[1].value;
+            var sub_activity_id = this.element.attributes[2].value;
+            var file_name = resp.file;
+
+            $.ajax({
+            url: "/upload-my-file",
+            method: "POST",
+            data: {
+                sam_id : sam_id,
+                sub_activity_id : sub_activity_id,
+                file_name : file_name,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+                    $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
+                    console.log(resp.message);
+                    toastr.success(resp.message, "Success");
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function (file, response) {
+                toastr.error(resp.message, "Error");
+            }
+            });
+            
+        },
+        error: function (file, resp) {
+            toastr.error(resp.message, "Error");
+        }
+    });
+    
+
+
+    $(".view_file").on("click", function (){
+        $("#view_file_modal").modal("show");
+
+        var extensions = ["pdf", "jpg", "png"];
+        // console.log(extensions.includes($(this).attr('data-value').split('.').pop()) == true);
+        if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
+          htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        // htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+                
+        $('.modal-body .container-fluid').html(htmltoload); 
+    });
+
+</script>
+

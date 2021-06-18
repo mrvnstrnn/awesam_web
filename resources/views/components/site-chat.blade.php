@@ -71,3 +71,57 @@
     <button class="btn btn-primary pl-5 pr-5 send_message">Send</button>
 </div>
 {{-- <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 265px;"></div></div></div> --}}
+
+<script>
+    //chat
+    $(".send_message").on("click", function (e){
+        e.preventDefault();
+
+        var sam_id = $("input[name=hidden_sam_id]").val();
+
+        var message = $('.message_enter').val();
+
+        if (message != ""){
+
+            $.ajax({
+                url: "/chat-send",
+                method: "POST",
+                data: {
+                    comment : message,
+                    sam_id : sam_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error){
+                        $(".message_enter").val("");
+                        // $(".chat-content").load(window.location.href + " .chat-content" );
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp.message, "Error");
+                }
+            });
+        }
+
+    });
+
+    $('.message_enter').keypress(function (e) {
+
+        var key = e.which;
+        if(key == 13) {
+            var message = $('.message_enter').val();
+
+            if (message != ""){
+                $(".send_message").trigger("click");
+            }
+        }
+    });  
+
+
+    // end chat
+
+</script>

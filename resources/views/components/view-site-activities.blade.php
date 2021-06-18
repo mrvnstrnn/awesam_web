@@ -48,7 +48,7 @@
                         <div class="col-md-6 py-2 subactivity_action_switch" data-sam_id="{{ $samid }}" data-activity_id="{{ $activity["activity_id"] }}" data-subactivity_id="{{ $sub_activity->sub_activity_id }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}"><i class="fa fa-fw text-secondary mr-2" aria-hidden="true"></i>{{ $sub_activity->sub_activity_name }}</div>
                     @endforeach
                 </div>
-                <div class="row subactivity_action d-none">
+                {{-- <div class="row subactivity_action d-none">
                     <form class="w-100" id="form-upload" enctype="multipart/form-data">@csrf
                         <div class="list-uploaded"></div>
                         <hr class="hr-border">
@@ -63,7 +63,7 @@
                             </button>
                         </div>
                     </form>
-                </div>
+                </div> --}}
             </div>
         </li>
                 

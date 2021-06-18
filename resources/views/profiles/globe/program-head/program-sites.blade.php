@@ -27,16 +27,5 @@
 <script type="text/javascript" src="/js/modal-loader.js"></script>  
 
 
-{{-- <script>
-
-    
-$('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
-    e.preventDefault();
-
-    window.location.href = "/assigned-sites/" + $(this).attr('data-sam_id');
-});
-</script> --}}
-
-
 
 @endsection
