@@ -64,7 +64,8 @@
                         </div>
                     </div> --}}
                     <div class="widget-content-left">
-                        <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div>
+                        {{-- <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div> --}}
+                        <div class="widget-heading"><a href="">{{ $what_site->site_name }}</a></div>
                         <div class="widget-subheading">{{ $what_site->sam_id }}</div>
                     </div>
                 </div>

@@ -9,5 +9,6 @@
 @section('js_script')
 
     <script type="text/javascript" src="/js/assigned-sites.js"></script>  
+    
 
 @endsection
