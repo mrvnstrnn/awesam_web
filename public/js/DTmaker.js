@@ -2,37 +2,44 @@
 function makeDT(whatTable, whatCols, table_to_load) {
 
     // Load Datatable
-    $(whatTable).DataTable({
-        processing: true,
-        serverSide: true,
-        filter: true,
-        searching: false,
-        lengthChange: false,
-        ajax: {
-            url: $(whatTable).attr('data-href'),
-            type: 'GET',
+        $(whatTable).DataTable({
+            processing: true,
+            serverSide: false,
+            filter: true,
+            searching: true,
+            lengthChange: true,
+            regex: true,
+            ajax: {
+                url: $(whatTable).attr('data-href'),
+                type: 'GET',
 
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
-        },
-        
-        language: {
-            "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
+            
+            language: {
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
 
-        createdRow: function (row, data, dataIndex) {
-                $(row).attr('data-activity', data.activity_name);
-                $(row).attr('data-site', data.site_name);
-                $(row).attr('data-sam_id', data.sam_id);
-        },
+            createdRow: function (row, data, dataIndex) {
+                    $(row).attr('data-activity', data.activity_name);
+                    $(row).attr('data-site', data.site_name);
+                    $(row).attr('data-sam_id', data.sam_id);
+            },
 
-        columns: whatCols
+            columns: whatCols
 
-    }); 
+        }); 
+
+
+    // $('#DTsearch').on( 'keyup', function () {
+    //     XDT.search( this.value ).draw();
+    // } );
+
 
 
     
@@ -42,6 +49,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
 
 
 $(document).ready(() => {
+
 
     $('.assigned-sites-table').each(function(i, obj) {
 
@@ -69,7 +77,6 @@ $(document).ready(() => {
 
                 // Set Table setting to loaded
                 $(activeTable).attr('data-table_loaded', "true");
-
             }
         }
 
@@ -104,7 +111,5 @@ $(document).ready(() => {
 
     
     });
-
-
 
 });
