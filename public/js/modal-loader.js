@@ -7,7 +7,7 @@
                 var activity = $(this).attr('data-activity')
                 var site = $(this).attr("data-site");
 
-                loader = '<div class="p-2">Loading...</div>';
+                loader = '<div class="p-2">Loading...</div>';W
                 $.blockUI({ message: loader });
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
