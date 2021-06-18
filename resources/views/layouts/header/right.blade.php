@@ -24,8 +24,11 @@
         <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="p-0 mr-2 btn btn-link">
             <span class="icon-wrapper icon-wrapper-alt rounded-circle">
                 <span class="icon-wrapper-bg bg-danger"></span>
-                <i class="icon text-danger icon-anim-pulse ion-android-notifications"></i>
-                <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span>
+                {{-- <i class="icon text-danger icon-anim-pulse ion-android-notifications"></i> --}}
+                <i class="icon text-danger ion-android-notifications"></i>
+                {{-- <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span> --}}
+                {{-- <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span> --}}
+
             </span>
         </button>        
 

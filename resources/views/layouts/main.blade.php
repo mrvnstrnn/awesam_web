@@ -165,13 +165,13 @@
                     </div>    
 
                     {{-- Footer --}}
-                    @include('layouts.footer.index')
+                    {{-- @include('layouts.footer.index') --}}
 
                 </div>
             </div>       
         </div>
 
-        <div class="app-drawer-overlay d-none animated fadeIn"></div>
+        {{-- <div class="app-drawer-overlay d-none animated fadeIn"></div> --}}
 
     <!-- plugin dependencies -->
     <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
@@ -185,7 +185,7 @@
     {{-- <script type="text/javascript" src="/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/toastr/build/toastr.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script> --}}
-    {{-- <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script> --}}
+    <script type="text/javascript" src="/vendors/apexcharts/dist/apexcharts.min.js"></script>
     {{-- <script type="text/javascript" src="/vendors/bootstrap-table/dist/bootstrap-table.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> --}}
@@ -198,7 +198,7 @@
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/circle-progress.js"></script> --}}
-    <script type="text/javascript" src="/js/demo.js"></script>
+    {{-- <script type="text/javascript" src="/js/demo.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/scrollbar.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/toastr.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/treeview.js"></script> --}}

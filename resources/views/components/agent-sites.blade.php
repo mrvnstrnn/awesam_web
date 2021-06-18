@@ -37,14 +37,17 @@
             </div>
         </li>                        
         @endforeach
-    </ul> --}}
-    <div class="card-body text-center">
+    </ul> --}}    
+    {{-- <div class="card-body text-center">
         <div class="progress-circle-wrapper">
             <div class="circle-progress d-inline-block circle-progress-primary">
                 <small><span id='completed_activities'>{{ $completedactivities * 100 }}%<span></span></span></small>
             </div>
         </div>
-        Completed Activities
+    </div> --}}
+    <div class="text-center">
+        <div id="chart"></div>
+        Completed Activities    
     </div>
     <ul class="list-group list-group-flush">
         @foreach($agentsites as $what_site)
@@ -69,5 +72,5 @@
         </li>                        
         @endforeach
     </ul>
-
 </div>
+

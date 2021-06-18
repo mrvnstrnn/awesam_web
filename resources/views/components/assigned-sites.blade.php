@@ -54,7 +54,7 @@
                         @else
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif
-                                <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
+                                <table id="sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
                                     class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
                                     data-href="{{ route('vendor_assigned_sites.list', [$program->program_id, $mode]) }}"
                                     data-program_id="{{ $program->program_id  }}" data-table_loaded="false">

@@ -26,8 +26,43 @@
     }
 
 
-
 </style>    
+
+<script>
+    $(document).on("click", ".file_list_item", function (e){
+
+        e.preventDefault();
+        console.log(this);
+
+
+        $(".file_list_item").removeClass('active');
+        $(this).addClass('active');
+
+        if($(this).attr('data-status')=="approved"){
+            $('.btn_reject_approve').prop('disabled', true);
+        } else {
+            $('.btn_reject_approve').prop('disabled', false);
+        }
+
+        $('.modal_preview_marker').text($(this).attr('data-sub_activity_name') + " : " + $(this).attr('data-value'))
+
+        var extensions = ["pdf", "jpg", "png"];
+
+        if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
+
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+            $('.modal_preview_content').html(htmltoload);
+
+        } else {
+            htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+            $('.modal_preview_content').html(htmltoload);
+        }
+
+
+
+    });
+
+</script>
 
 
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -99,7 +134,7 @@
                 </div>
             </div>
             @endif
-                    </div>
+        </div>
     </div>
 </div>
 
