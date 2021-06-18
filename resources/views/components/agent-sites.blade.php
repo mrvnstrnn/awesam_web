@@ -15,63 +15,91 @@
             </div>
         </div>
     </div>                    
-    {{-- <ul class="list-group list-group-flush">
-        @foreach($agentsites as $what_site)
-        <li class="list-group-item">
-            <div class="widget-content p-0">
-                <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-3">
-                        <div class="icon-wrapper m-0">
-                            <div class="progress-circle-wrapper">
-                                <div class="circle-progress d-inline-block circle-progress-success-sm">
-                                    <small><span>81%<span></span></span></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-content-left">
-                        <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div>
-                        <div class="widget-subheading">{{ $what_site->sam_id }}</div>
-                    </div>
-                </div>
-            </div>
-        </li>                        
-        @endforeach
-    </ul> --}}    
-    {{-- <div class="card-body text-center">
-        <div class="progress-circle-wrapper">
-            <div class="circle-progress d-inline-block circle-progress-primary">
-                <small><span id='completed_activities'>{{ $completedactivities * 100 }}%<span></span></span></small>
-            </div>
-        </div>
-    </div> --}}
-    <div class="text-center">
-        <div id="chart"></div>
-        Completed Activities    
-    </div>
-    <ul class="list-group list-group-flush">
-        @foreach($agentsites as $what_site)
-        <li class="list-group-item">
-            <div class="widget-content p-0">
-                <div class="widget-content-wrapper">
-                    {{-- <div class="widget-content-left mr-3">
-                        <div class="icon-wrapper m-0">
-                            <div class="progress-circle-wrapper">
-                                <div class="circle-progress d-inline-block circle-progress-success-sm">
-                                    <small><span>81%<span></span></span></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <div class="widget-content-left">
-                        {{-- <div class="widget-heading"><a href="{{ route('view_assigned_site',[$what_site->sam_id]) }}">{{ $what_site->site_name }}</a></div> --}}
-                        <div class="widget-heading"><a href="">{{ $what_site->site_name }}</a></div>
-                        <div class="widget-subheading">{{ $what_site->sam_id }}</div>
-                    </div>
-                </div>
-            </div>
-        </li>                        
-        @endforeach
-    </ul>
-</div>
 
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="widget-content pt-2 pl-0 pb-2 pr-0">
+                <div class="text-center">
+                    <h5 class="widget-heading opacity-4 mb-0">Assigned Sites</h5>
+                </div>
+            </div>
+        </li>
+        <li class="p-0 list-group-item">
+            <ul class="list-group list-group-flush">
+                @foreach($agentsites as $what_site)
+                <li class="list-group-item agent_sites">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-wrapper">
+                            <div class="widget-content-left">
+                                <div class="widget-heading"><a href="#" data-sam_id="{{ $what_site->sam_id }}" data-site="{{ $what_site->site_name }}" data-activity="">{{ $what_site->site_name }}</a></div>
+                                <div class="widget-subheading">{{ $what_site->sam_id }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>                        
+                @endforeach
+            </ul>
+
+        </li>
+    </ul>   
+</div> 
+<script>
+        $('.agent_sites').on( 'click', 'a', function (e) {
+            $('#viewInfoModal').modal("hide");
+
+
+                var sam_id = $(this).attr('data-sam_id');
+                var activity = $(this).attr('data-activity')
+                var site = $(this).attr("data-site");
+
+                console.log(sam_id);
+                console.log(activity);
+                console.log(site);
+
+                loader = '<div class="p-2">Loading...</div>';
+                $.blockUI({ message: loader });
+
+
+                $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
+
+                $.ajax({
+                    url: "/get-all-docs",
+                    method: "POST",
+                    data: {
+                        site : site,
+                        activity : activity,
+                        mode : table_to_load,
+                        sam_id : sam_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                     },
+          
+                    success: function (resp){
+
+                        $('.ajax_content_box').html("");   
+                        $('.ajax_content_box').html(resp);   
+
+                        $.unblockUI();
+                        $('#viewInfoModal').modal('show');
+
+
+                    },
+                    complete: function(){
+                        // $('#loader_modal').modal('hide');
+                        // $('.modal-backdrop').hide();
+                    },
+                    error: function (resp){
+                        toastr.error(resp.message, "Error");
+                    }
+                })
+                .done(function(){
+                    $('.file_list_item').first().click();
+                });
+
+
+        });
+</script>

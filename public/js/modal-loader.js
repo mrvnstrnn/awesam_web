@@ -3,12 +3,12 @@
             e.preventDefault();
 
             if($(this).find("td").hasClass('dataTables_empty') == false){
-
-                // console.log($(this).attr("data-site"));
-
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
                 var site = $(this).attr("data-site");
+
+                loader = '<div class="p-2">Loading...</div>';
+                $.blockUI({ message: loader });
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -25,22 +25,19 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function() {
-                        $('#loader_modal').modal('show');
                      },
           
                     success: function (resp){
-
-                        // console.log(resp);
-                        // $('#loader_modal').modal('hide');
-
                         $('.ajax_content_box').html("");   
                         $('.ajax_content_box').html(resp);   
 
+                        $.unblockUI();
                         $('#viewInfoModal').modal('show');
+
 
                     },
                     complete: function(){
-                        $('#loader_modal').modal('hide');
+                        // $('#loader_modal').modal('hide');
                         // $('.modal-backdrop').hide();
                     },
                     error: function (resp){

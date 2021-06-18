@@ -209,6 +209,7 @@
     {{-- <script type="text/javascript" src="/vendors/slick-carousel/slick/slick.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js" integrity="sha512-iusSCweltSRVrjOz+4nxOL9OXh2UA0m8KdjsX8/KUUiJz+TCNzalwE0WE6dYTfHDkXuGuHq3W9YIhDLN7UNB0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="/vendors/block-ui/jquery.blockUI.js"></script>
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
@@ -226,9 +227,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-    <script>
-    </script>
 
     @yield('js_script')
 
@@ -250,23 +248,6 @@
         </div>
     </div> --}}
     @yield('modals')
-
-
-    <script>
-
-    $(document).ready(() => {
-
-        $(document).on('hidden.bs.modal', '.modal', function () {
-            $(".modal-backdrop").remove();
-            // console.log($(".modal-backdrop").length);
-            // if ($(".modal-backdrop").length > -1) {
-            //     $(".modal-backdrop").not(':first').remove();
-            // }
-        });
-
-    });        
-
-    </script>    
-
+    
 </body>
 </html>

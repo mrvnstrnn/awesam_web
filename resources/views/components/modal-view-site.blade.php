@@ -23,8 +23,7 @@
                         <div class="main-card mb-3 card">
                             <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                    <i class="header-icon lnr-question-circle icon-gradient bg-ripe-malin"></i>
-                                        {{ $site[0]->site_name }}
+                                    <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>                                    {{ $site[0]->site_name }}
                                     @if($site[0]->site_category != null)
                                         <div class="badge badge-secondary ml-2">
                                             {{ $site[0]->site_category }}
@@ -100,6 +99,28 @@
                     </div>
                 
                     <div class="col-lg-4 col-md-12 col-sm-12">
+
+                        <div class="mb-3 profile-responsive card">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-dark">
+                                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                    <div class="menu-header-content btn-pane-right">
+                                        <div>
+                                            <h5 class="menu-header-title">{{ $site[0]->site_name }}</h5>
+                                            @if($site[0]->site_category != null)
+                                                <h6 class="menu-header-subtitle">{{ $site[0]->site_category }}</h6>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                    
+                            <div class="text-center">
+                                <div id="chart"></div>
+                                <div class="mb-4">Completed Activities</div>
+                            </div>
+                        </div>
+                        
+                        
                         <x-agent-sites :agentsites="$agent_sites" :agentname="$agent_name" :completedactivities="$completed_activities" />   
                     </div>
                 
