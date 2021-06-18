@@ -34,17 +34,16 @@
           
                     success: function (resp){
 
-                        console.log(resp);
-                        // $('#loader_modal').modal('hide');
+                        $('#loader_modal').modal('hide');
 
                         $('.ajax_content_box').html("");   
                         $('.ajax_content_box').html(resp);   
 
-                        $('#viewInfoModal').modal('show');
+                        // $('#viewInfoModal').modal('show');
 
                     },
                     complete: function(){
-                        $('#loader_modal').modal('hide');
+                        // $('#loader_modal').modal('hide');
                         // $('.modal-backdrop').hide();
                     },
                     error: function (resp){

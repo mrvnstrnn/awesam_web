@@ -251,17 +251,40 @@
     </div> --}}
     @yield('modals')
 
+    <div id="loader_modal" class="modal fade loader" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="loader-wrapper border-primary d-flex justify-content-center align-items-center rounded">
+                    <div class="loader">
+                        <div class="ball-grid-pulse">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div class='mt-5'>
+                        SAMtool             
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+
 
     <script>
 
     $(document).ready(() => {
 
-        $(document).on('hidden.bs.modal', '.modal', function () {
-            $(".modal-backdrop").remove();
-            // console.log($(".modal-backdrop").length);
-            // if ($(".modal-backdrop").length > -1) {
-            //     $(".modal-backdrop").not(':first').remove();
-            // }
+        $(document).on('hidden.bs.modal', '#loader_modal', function () {
+
+            $('#viewInfoModal').modal('show');
+
         });
 
     });        
