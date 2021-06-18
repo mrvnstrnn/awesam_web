@@ -46,11 +46,8 @@
             <div class="card-body">
                 <div class="tab-content">
                     @foreach ($programs as $program)
-                        @php
-                            // dd(route('vendor_assigned_sites.list', [$program->program_id, $mode]));
-                        @endphp
                         @if ($loop->first)
-                            <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
+                            <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @else
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif

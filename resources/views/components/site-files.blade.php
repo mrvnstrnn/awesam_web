@@ -42,28 +42,6 @@
             </div>
         @endforeach
     @endif
-        {{-- @if (is_null($data->files))
-            <div class="col-md-4 col-sm-4 col-12">
-                <div class="dropzone dropzone_files" data-sam_id="{{ $data->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}"></div>
-            </div>
-        @else
-            @php
-                if (pathinfo($data->value, PATHINFO_EXTENSION) == "pdf") {
-                    $extension = "fa-file-pdf";
-                } else if (pathinfo($data->value, PATHINFO_EXTENSION) == "png" || pathinfo($data->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data->value, PATHINFO_EXTENSION) == "jpg") {
-                    $extension = "fa-file-image";
-                } else {
-                    $extension = "fa-file";
-                }
-            @endphp
-            <div class="col-md-4 col-sm-4 col-12 view_file" style="cursor: pointer;" data-value="{{ $data->value }}">
-                <div class="font-icon-wrapper py-4">
-                    <i class="fa {{ $extension }}"></i><br>
-                    <small>{{ $data->value }}</small>
-                    <p>{{ $data->sub_activity_name }}</p>
-                </div>
-            </div>
-        @endif --}}
     @empty
     <div class="col-12 text-center">
         <h3>No files here.</h3>

@@ -32,7 +32,7 @@
     $(document).on("click", ".file_list_item", function (e){
 
         e.preventDefault();
-        console.log(this);
+        // console.log(this);
 
 
         $(".file_list_item").removeClass('active');
