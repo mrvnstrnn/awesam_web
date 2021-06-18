@@ -84,6 +84,7 @@
                         $('.ajax_content_box').html(resp);   
 
                         $.unblockUI();
+                        $('.modal-backdrop').remove();
                         $('#viewInfoModal').modal('show');
 
 
