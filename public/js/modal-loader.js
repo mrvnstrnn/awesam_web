@@ -4,15 +4,11 @@
 
             if($(this).find("td").hasClass('dataTables_empty') == false){
 
-                console.log($(this).attr("data-site"));
+                // console.log($(this).attr("data-site"));
 
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
                 var site = $(this).attr("data-site");
-
-                console.log(sam_id);
-                console.log(activity);
-                console.log(site);
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -34,7 +30,7 @@
           
                     success: function (resp){
 
-                        console.log(resp);
+                        // console.log(resp);
                         // $('#loader_modal').modal('hide');
 
                         $('.ajax_content_box').html("");   
