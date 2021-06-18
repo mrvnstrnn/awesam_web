@@ -1,7 +1,8 @@
         $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
 
             e.preventDefault();
-            if($(this).find("td").attr("colspan") != 4){
+
+            if($(this).find("td").hasClass('dataTables_empty') == false){
 
                 console.log($(this).attr("data-site"));
 
@@ -27,22 +28,32 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    beforeSend: function() {
+                        $('#loader_modal').modal('show');
+                     },
+          
                     success: function (resp){
 
                         console.log(resp);
+                        // $('#loader_modal').modal('hide');
+
+                        $('.ajax_content_box').html("");   
                         $('.ajax_content_box').html(resp);   
 
+                        $('#viewInfoModal').modal('show');
 
+                    },
+                    complete: function(){
+                        $('#loader_modal').modal('hide');
+                        // $('.modal-backdrop').hide();
                     },
                     error: function (resp){
                         toastr.error(resp.message, "Error");
                     }
                 })
                 .done(function(){
-                    $('#viewInfoModal').modal('show');
                     $('.file_list_item').first().click();
                 });
             }
         });
 
-        

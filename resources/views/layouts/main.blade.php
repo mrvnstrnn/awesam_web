@@ -86,6 +86,9 @@
                 background: none;
             }
 
+            .modal { overflow: auto !important; }
+
+
             /* .app-sidebar.sidebar-shadow:hover {
                 width: 220px !important;
                 min-width: 220px !important;
@@ -94,6 +97,18 @@
             .app-sidebar .app-sidebar__inner {
                 padding: 2px 1rem 1rem !important;
             } */
+
+    .loader .modal-dialog{
+        display: table;
+        position: relative;
+        margin: 0 auto;
+        top: calc(50% - 24px);
+    }
+
+    .bd-example-modal-lg .modal-dialog .modal-content{
+        background-color: transparent;
+        border: none;
+    }            
 
         </style>    
         
@@ -235,5 +250,23 @@
         </div>
     </div> --}}
     @yield('modals')
+
+
+    <script>
+
+    $(document).ready(() => {
+
+        $(document).on('hidden.bs.modal', '.modal', function () {
+            $(".modal-backdrop").remove();
+            // console.log($(".modal-backdrop").length);
+            // if ($(".modal-backdrop").length > -1) {
+            //     $(".modal-backdrop").not(':first').remove();
+            // }
+        });
+
+    });        
+
+    </script>    
+
 </body>
 </html>
