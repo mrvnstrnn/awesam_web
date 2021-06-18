@@ -4,7 +4,7 @@
 
             if($(this).find("td").hasClass('dataTables_empty') == false){
 
-                console.log($(this).attr("data-site"));
+                $.blockUI({ message: 'Loading' });
 
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
@@ -13,6 +13,10 @@
                 console.log(sam_id);
                 console.log(activity);
                 console.log(site);
+
+
+
+
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -29,17 +33,16 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function() {
-                        $('#loader_modal').modal('show');
                      },
           
                     success: function (resp){
 
-                        $('#loader_modal').modal('hide');
-
                         $('.ajax_content_box').html("");   
                         $('.ajax_content_box').html(resp);   
 
-                        // $('#viewInfoModal').modal('show');
+                        $.unblockUI();
+                        $('#viewInfoModal').modal('show');
+
 
                     },
                     complete: function(){

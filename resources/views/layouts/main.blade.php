@@ -209,6 +209,7 @@
     {{-- <script type="text/javascript" src="/vendors/slick-carousel/slick/slick.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js" integrity="sha512-iusSCweltSRVrjOz+4nxOL9OXh2UA0m8KdjsX8/KUUiJz+TCNzalwE0WE6dYTfHDkXuGuHq3W9YIhDLN7UNB0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="/vendors/block-ui/jquery.blockUI.js"></script>
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
@@ -226,9 +227,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-    <script>
-    </script>
 
     @yield('js_script')
 
@@ -250,46 +248,6 @@
         </div>
     </div> --}}
     @yield('modals')
-
-    <div id="loader_modal" class="modal fade loader" data-backdrop="static" data-keyboard="false" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="loader-wrapper border-primary d-flex justify-content-center align-items-center rounded">
-                    <div class="loader">
-                        <div class="ball-grid-pulse">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                        <div class='mt-5'>
-                        SAMtool             
-                        </div>
-                    </div>
-                </div> 
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-
-    $(document).ready(() => {
-
-        $(document).on('hidden.bs.modal', '#loader_modal', function () {
-
-            $('#viewInfoModal').modal('show');
-
-        });
-
-    });        
-
-    </script>    
-
+    
 </body>
 </html>
