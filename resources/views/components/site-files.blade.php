@@ -14,11 +14,15 @@
 
     {{-- {{ dd($data) }} --}}
     @if (is_null($data->files))
-        <div class="col-md-4 col-sm-4 col-12 dropzone_div_{{ $data->sub_activity_id }}">
-            <div class="child_div_{{ $data->sub_activity_id }}">
-                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}"></div>
-                <p>{{ $data->sub_activity_name }}</p>
-            </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
+                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                    <div class="dz-message">
+                        <i class="fa fa-plus fa-2x"></i>
+                        <p><small>{{ $data->sub_activity_name }}</small></p>
+
+                    </div>
+                </div>
+                {{-- <p>{{ $data->sub_activity_name }}</p> --}}
         </div>
     @else
         @foreach (json_decode($data->files) as $item)
@@ -31,14 +35,16 @@
                     $extension = "fa-file";
                 }
             @endphp
-            <div class="col-md-4 col-sm-4 col-12 view_file dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $item->value }}">
-                <div class="child_div_{{ $data->sub_activity_id }}">
-                    <div class="font-icon-wrapper py-4">
-                        <i class="fa {{ $extension }}"></i><br>
-                        <small>{{ $item->value }}</small>
-                        <p>{{ $data->sub_activity_name }}</p>
+            <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $item->value }}">
+                {{-- <div class="child_div_{{ $data->sub_activity_id }}"> --}}
+                    <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
+                        <div>
+                        <i class="fa {{ $extension }} fa-2x text-primary"></i><br>
+                        {{-- <small>{{ $item->value }}</small> --}}
+                        <p><small>{{ $data->sub_activity_name }}</small></p>
+                        </div>
                     </div>
-                </div>
+                {{-- </div> --}}
             </div>
         @endforeach
     @endif
@@ -50,11 +56,7 @@
 </div>
 <script src="/js/dropzone/dropzone.js"></script>
 
-<script>
-
-    
-
-  
+<script>  
     Dropzone.autoDiscover = false;
     $(".dropzone_files").dropzone({
         addRemoveLinks: true,
