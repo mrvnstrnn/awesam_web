@@ -1,5 +1,5 @@
 <div class="scrollbar-container ps ps--active-y" style="height: 400px; overflow-y: scroll !important;">
-    <div class="p-2">
+    <div class="chat_div p-2">
         <div class="chat-wrapper p-1">
             @php
                 $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.timesptamp')
@@ -10,10 +10,10 @@
                                             ->get();
             @endphp
 
-            <div class="chat-content">
+            <div class="chat-content chat_content{{ $site[0]->sam_id }}">
                 @forelse ($chats as $chat)
                     @if ($chat->user_id == \Auth::id())
-                        <div class="">
+                        <div class="chat_user_id{{ $chat->user_id }}">
                             <div class="chat-box-wrapper chat-box-wrapper-right float-right">
                                 <div>
                                     <div class="chat-box">
@@ -36,23 +36,25 @@
                             </div>
                         </div>
                     @else
-                        <div class="chat-box-wrapper">
-                            <div>
-                                <div class="avatar-icon-wrapper mr-1">
-                                    <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>
-                                    <div class="avatar-icon avatar-icon-lg rounded">
-                                        <img src="/images/avatars/2.jpg" alt="">
+                        <div class="chat_user_id{{ $chat->user_id }}">
+                            <div class="chat-box-wrapper">
+                                <div>
+                                    <div class="avatar-icon-wrapper mr-1">
+                                        <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>
+                                        <div class="avatar-icon avatar-icon-lg rounded">
+                                            <img src="/images/avatars/2.jpg" alt="">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <div class="chat-box">
-                                    {{ $chat->comment }}
+                                <div>
+                                    <div class="chat-box">
+                                        {{ $chat->comment }}
+                                    </div>
+                                    <small class="opacity-6">
+                                        <i class="fa fa-calendar-alt mr-1"></i>
+                                        {{ $chat->timesptamp }}
+                                    </small>
                                 </div>
-                                <small class="opacity-6">
-                                    <i class="fa fa-calendar-alt mr-1"></i>
-                                    {{ $chat->timesptamp }}
-                                </small>
                             </div>
                         </div>
                     @endif
@@ -84,6 +86,8 @@
 
         var message = $('.message_enter').val();
 
+        var user_id = "{{ Auth::id() }}";
+
         if (message != ""){
 
             $.ajax({
@@ -99,6 +103,41 @@
                 success: function (resp){
                     if (!resp.error){
                         $(".message_enter").val("");
+                        console.log(resp.chat);
+                        var class_name = "";
+                        if (resp.chat.user_id == user_id){
+                            class_name = "chat-box-wrapper-right float-right";
+                        } else {
+                            class_name = "";
+                        }
+
+                        $(".chat-content.chat_content"+resp.chat.sam_id).append(
+                            '<div class="chat_user_id{{ $chat->user_id }}">' +
+                                '<div class="chat-box-wrapper '+class_name+' ">' +
+                                    '<div>' +
+                                        '<div class="chat-box">' +
+                                            resp.chat.comment +
+                                        '</div>' +
+                                        '<small class="opacity-6">' +
+                                            resp.chat.profile + " : " + resp.chat.name + '<br>' +
+                                            '<i class="fa fa-calendar-alt mr-1"></i>' +
+                                            resp.chat.timesptamp +
+                                        '</small>' +
+                                    '</div>' +
+                                    '<div>' +
+                                        '<div class="avatar-icon-wrapper ml-1">' +
+                                            '<div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>' +
+                                            '<div class="avatar-icon avatar-icon-lg rounded">' +
+                                                '<img src="/images/avatars/2.jpg" alt="">' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>'
+                        );
+
+                        $(".scrollbar-container.ps.ps--active-y").scrollTop($(".chat-wrapper").height() * $(".chat-wrapper").height());
+
                         // $(".chat-content").load(window.location.href + " .chat-content" );
                     } else {
                         toastr.error(resp.message, "Error");

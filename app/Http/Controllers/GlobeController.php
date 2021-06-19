@@ -1046,13 +1046,18 @@ class GlobeController extends Controller
     public function chat_send(Request $request)
     {
         try {
-            Chat::create([
+            $chat = Chat::create([
                 'sam_id' => $request->input('sam_id'),
                 'user_id' => \Auth::id(),
                 'comment' => $request->input('comment'),
             ]);
 
-            return response()->json(['error' => false, 'message' => "Successfully send a message." ]);
+            $chat_data = Chat::join('users', 'users.id', 'chat.user_id')
+                                ->join('profiles', 'profiles.id', 'users.profile_id')
+                                ->where('chat.id', $chat->id)
+                                ->first();
+
+            return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
