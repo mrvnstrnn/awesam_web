@@ -524,6 +524,8 @@ class GlobeController extends Controller
             $validate = Validator::make($request->all(), array(
                 'file' => 'required',
             ));
+
+            return response()->json(['error' => true, 'message' => $request->all() ]);
             
             if($validate->passes()){
                 if($request->hasFile('file')) {
@@ -533,19 +535,13 @@ class GlobeController extends Controller
                 
                     // Get file extension
                     $extension = $request->file('file')->getClientOriginalExtension();
-                
-                    // Valid extensions
-                    // $validextensions = array("pdf");
-                
-                    // Check extension
-                    // if(in_array(strtolower($extension), $validextensions)){
-                        // Rename file 
-                        // $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
-                        $fileName = time().$request->file('file')->getClientOriginalName();
+                    
+                    // Rename file 
+                    // $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
+                    $fileName = time().$request->file('file')->getClientOriginalName();
 
-                        // Uploading file to given path
-                        $request->file('file')->move($destinationPath, $fileName); 
-                    // }
+                    // Uploading file to given path
+                    $request->file('file')->move($destinationPath, $fileName);
                     
                     return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
             
@@ -561,8 +557,6 @@ class GlobeController extends Controller
     public function upload_my_file(Request $request)
     {
         try {
-            // return response()->json(['error' => true, 'message' => $request->all() ]);
-
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
