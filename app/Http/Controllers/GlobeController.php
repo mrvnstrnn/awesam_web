@@ -660,8 +660,8 @@ class GlobeController extends Controller
 
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
-            ->distinct()
             ->table("site_milestone")
+            ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
             ->get();
@@ -681,11 +681,11 @@ class GlobeController extends Controller
             ->table("site_milestone")
             ->distinct()
             ->where('program_id', $program_id)
-            ->where('activity_complete', 'false')
-            ->where('profile_id', $profile_id)
             ->where($search_column, \Auth::id())
+            ->where('activity_complete', 'false')
             ->get();
 
+            // return \Auth::user()->profile_id;
         }
 
         else {
