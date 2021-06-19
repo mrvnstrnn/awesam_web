@@ -1,3 +1,10 @@
+<div class="row file_preview d-none">
+    <div class="col-12">
+        <button id="btn_back_to_file_list" class="mb-2 btn btn-danger float-right" type="button">Back to files</button>
+    </div>
+    <div class="col-12 file_viewer">
+    </div>
+</div>
 <div class="row file_lists">
     @php
         $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '", ' .  $site[0]->program_id . ', "")');
@@ -129,19 +136,40 @@
 
 
     $(".view_file").on("click", function (){
-        $("#view_file_modal").modal("show");
 
         var extensions = ["pdf", "jpg", "png"];
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 5f9046b8c2802b47838b7b6b3a07abc338c8d83e
         if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
-          htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+          
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
 
         } else {
+
           htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
+<<<<<<< HEAD
+=======
+
+        htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+>>>>>>> 5f9046b8c2802b47838b7b6b3a07abc338c8d83e
                 
-        $('.modal-body .container-fluid').html(htmltoload); 
+        $('.file_viewer').html('');
+        $('.file_viewer').html(htmltoload);
+
+        $('.file_lists').addClass('d-none');
+        $('.file_preview').removeClass('d-none');
+
     });
+
+    $("#btn_back_to_file_list").on("click", function (){
+        $('.file_lists').removeClass('d-none');
+        $('.file_preview').addClass('d-none');
+    });
+
 
 </script>
 

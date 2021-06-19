@@ -60,7 +60,10 @@
                     @endif
 
                 @empty
-                    <h1 class="text-center no_message">No message here</h1>
+                    <div class="text-center pt-5"> 
+                        <i class="fa fa-envelope fa-4x"></i>
+                        <h3 class="text-center">no message</h3>    
+                    </div>
                 @endforelse
             </div>
         </div>
@@ -70,7 +73,7 @@
 <input type="hidden" name="hidden_user_id" value="{{ \Auth::id() }}">
 
 <div class="d-flex">
-    <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter">
+    <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter mr-2">
     <button class="btn btn-primary pl-5 pr-5 send_message">Send</button>
 </div>
 

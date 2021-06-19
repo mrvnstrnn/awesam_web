@@ -651,13 +651,48 @@ class GlobeController extends Controller
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
-        $sites = \DB::connection('mysql2')
-                    ->table("site_milestone")
-                    ->where('program_id', $program_id)
-                    ->where('activity_complete', 'false')
-                    ->where('profile_id', $profile_id)
-                    ->where('activity_type', $activity_type)
-                    ->get();
+
+        if($activity_type == 'all'){
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'false')
+            ->get();
+
+        }
+
+        elseif($activity_type == 'mine'){
+
+            if(\Auth::user()->profile_id == 2){
+                $search_column = "site_agent_id";
+            }
+            elseif(\Auth::user()->profile_id == 3){
+                $search_column = "site_IS_id";
+            }
+
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where($search_column, \Auth::id())
+            ->where('activity_complete', 'false')
+            ->get();
+
+            // return \Auth::user()->profile_id;
+        }
+
+        else {
+
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'false')
+            ->where('profile_id', $profile_id)
+            ->where('activity_type', $activity_type)
+            ->get();
+        }
 
         $dt = DataTables::of($sites);
         return $dt->make(true);

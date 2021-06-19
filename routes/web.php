@@ -99,6 +99,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-agent-of-supervisor/{user_id}', [GlobeController::class, 'get_agent_of_supervisor']);
 
 
+    ////////////////////////////////////////////////
+
+
     //Dynamic Datatable Program Columns
     Route::get('/datatables-columns/{program_id}/{table_name}/{profile_id}', [GlobeController::class, 'get_datatable_columns']);
 
@@ -115,6 +118,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Milestone Datatable Source - Document Validation
     Route::get('/site-doc-validation/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_doc_validation'])->name('get_site_doc_validation.list');
 
+    ////////////////////////////////////////////////
 
     // File management
     Route::get('/loi-template/{sam_id?}/{sub_activity_id?}', [GlobeController::class, 'loi_template']);

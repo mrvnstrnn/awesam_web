@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                             </div>                    
-                            <div class="text-center">
+                            <div class="text-center w-100">
                                 <div id="chart"></div>
                                 <div class="mb-4">Completed Activities</div>
                             </div>
@@ -147,17 +147,18 @@
 {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
 
 <script>  
+$(document).ready(() => {
 
-    var complete = $('#completed').val();
+    var complete = $('#completed').val() * 100;
 
     // alert(complete);
     var options = {
-          series: [complete * 100],
-          chart: {
-          height: 350,
+          series: [complete],
+          chart: {  
+          height: 250,
           type: 'radialBar',
           toolbar: {
-            show: true
+            show: false
           }
         },
         plotOptions: {
@@ -229,11 +230,11 @@
           lineCap: 'round'
         },
         labels: ['Percent'],
-        };
+    };
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();  
-
+    });
 </script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.10.0/viewer.min.js" integrity="sha512-11Ip09cPitpyapqTnApnxupcQdX1fzWkRZZoEU+I0+IxrVxORGThseKL6O2s+qbBN7aTw7SDbk+rWFZ/LVmB7g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
