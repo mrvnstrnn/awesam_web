@@ -17,7 +17,6 @@
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
-            
                 <div class="row">
                     <div class="col-lg-8 col-md-12 col-sm-12">
                         <div class="main-card mb-3 card">
