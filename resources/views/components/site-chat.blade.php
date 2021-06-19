@@ -58,7 +58,10 @@
                     @endif
 
                 @empty
-                    <h1 class="text-center">No message here</h1>
+                    <div class="text-center pt-5"> 
+                        <i class="fa fa-envelope fa-4x"></i>
+                        <h3 class="text-center">no message</h3>    
+                    </div>
                 @endforelse
             </div>
         </div>
@@ -67,7 +70,7 @@
 <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
 {{-- <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter"> --}}
 <div class="d-flex">
-    <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter">
+    <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter mr-2">
     <button class="btn btn-primary pl-5 pr-5 send_message">Send</button>
 </div>
 {{-- <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 265px;"></div></div></div> --}}

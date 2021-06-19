@@ -1,3 +1,10 @@
+<div class="row file_preview d-none">
+    <div class="col-12">
+        <button id="btn_back_to_file_list" class="mb-2 btn btn-danger float-right" type="button">Back to files</button>
+    </div>
+    <div class="col-12 file_viewer">
+    </div>
+</div>
 <div class="row file_lists">
     @php
         // $datas = \App\Models\SubActivityValue::leftjoin("sub_activity", 'sub_activity.sub_activity_id', 'sub_activity_value.sub_activity_id')
@@ -35,7 +42,7 @@
                     $extension = "fa-file";
                 }
             @endphp
-            <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $item->value }}">
+            <div class="view_file col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $item->value }}">
                 {{-- <div class="child_div_{{ $data->sub_activity_id }}"> --}}
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -106,21 +113,33 @@
 
 
     $(".view_file").on("click", function (){
-        $("#view_file_modal").modal("show");
 
         var extensions = ["pdf", "jpg", "png"];
-        // console.log(extensions.includes($(this).attr('data-value').split('.').pop()) == true);
+        
         if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
-          htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+          
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
 
         } else {
+
           htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
 
-        // htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 380px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
+        htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
                 
-        $('.modal-body .container-fluid').html(htmltoload); 
+        $('.file_viewer').html('');
+        $('.file_viewer').html(htmltoload);
+
+        $('.file_lists').addClass('d-none');
+        $('.file_preview').removeClass('d-none');
+
     });
+
+    $("#btn_back_to_file_list").on("click", function (){
+        $('.file_lists').removeClass('d-none');
+        $('.file_preview').addClass('d-none');
+    });
+
 
 </script>
 

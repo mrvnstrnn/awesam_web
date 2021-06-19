@@ -35,6 +35,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
 
         }); 
 
+        console.log(whatCols);
+
 
     // $('#DTsearch').on( 'keyup', function () {
     //     XDT.search( this.value ).draw();

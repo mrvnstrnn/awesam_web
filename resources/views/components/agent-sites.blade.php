@@ -16,7 +16,6 @@
         </div>
     </div>                    
 
-
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <div class="widget-content pt-2 pl-0 pb-2 pr-0">
@@ -25,7 +24,7 @@
                 </div>
             </div>
         </li>
-        <li class="p-0 list-group-item">
+        <li class="p-0 list-group-item">            
             <ul class="list-group list-group-flush">
                 @foreach($agentsites as $what_site)
                 <li class="list-group-item agent_sites">
@@ -45,62 +44,61 @@
     </ul>   
 </div> 
 <script>
-        $('.agent_sites').on( 'click', 'a', function (e) {
-            $('#viewInfoModal').modal("hide");
+    $('.agent_sites').on( 'click', 'a', function (e) {
+        $('#viewInfoModal').modal("hide");
+
+            var sam_id = $(this).attr('data-sam_id');
+            var activity = $(this).attr('data-activity')
+            var site = $(this).attr("data-site");
+
+            console.log(sam_id);
+            console.log(activity);
+            console.log(site);
+
+            loader = '<div class="p-2">Loading...</div>';
+            $.blockUI({ message: loader });
 
 
-                var sam_id = $(this).attr('data-sam_id');
-                var activity = $(this).attr('data-activity')
-                var site = $(this).attr("data-site");
+            $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
-                console.log(sam_id);
-                console.log(activity);
-                console.log(site);
-
-                loader = '<div class="p-2">Loading...</div>';
-                $.blockUI({ message: loader });
-
-
-                $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
-
-                $.ajax({
-                    url: "/get-all-docs",
-                    method: "POST",
-                    data: {
-                        site : site,
-                        activity : activity,
-                        mode : table_to_load,
-                        sam_id : sam_id,
+            $.ajax({
+                url: "/get-all-docs",
+                method: "POST",
+                data: {
+                    site : site,
+                    activity : activity,
+                    mode : table_to_load,
+                    sam_id : sam_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
                     },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function() {
-                     },
-          
-                    success: function (resp){
+        
+                success: function (resp){
 
-                        $('.ajax_content_box').html("");   
-                        $('.ajax_content_box').html(resp);   
+                    $('.ajax_content_box').html("");   
+                    $('.ajax_content_box').html(resp);   
 
-                        $.unblockUI();
-                        $('.modal-backdrop').remove();
-                        $('#viewInfoModal').modal('show');
+                    $.unblockUI();
+                    $('.modal-backdrop').remove();
+                    $('#viewInfoModal').modal('show');
 
 
-                    },
-                    complete: function(){
-                        // $('#loader_modal').modal('hide');
-                        // $('.modal-backdrop').hide();
-                    },
-                    error: function (resp){
-                        toastr.error(resp.message, "Error");
-                    }
-                })
-                .done(function(){
-                    $('.file_list_item').first().click();
-                });
+                },
+                complete: function(){
+                    // $('#loader_modal').modal('hide');
+                    // $('.modal-backdrop').hide();
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            })
+            .done(function(){
+                $('.file_list_item').first().click();
+            });
 
 
-        });
+    });
 </script>

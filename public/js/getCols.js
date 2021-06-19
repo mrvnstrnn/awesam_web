@@ -50,8 +50,31 @@ function getCols(active_program, active_table, active_profile){
                             );
                             break;
 
+                        case 'site_name':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        site_name = "</strong>" + data + '</strong>';
+                                        return site_name;
+                                    }
+                                }
+                            );
+                            break;
+
                         default:
-                            cols.push({data : field['source_field'], name: field['field_name']});
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        site_name = "</strong>" + data + '</strong>';
+                                        return site_name;
+                                    }
+                                }
+                            );
+                            // cols.push({data : field['source_field'], name: field['field_name']});
                     }
 
                 });    
