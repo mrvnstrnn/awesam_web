@@ -60,22 +60,23 @@
                     @endif
 
                 @empty
-                    <h1 class="text-center">No message here</h1>
+                    <h1 class="text-center no_message">No message here</h1>
                 @endforelse
             </div>
         </div>
     </div>
 </div>
 <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
-{{-- <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter"> --}}
+<input type="hidden" name="hidden_user_id" value="{{ \Auth::id() }}">
+
 <div class="d-flex">
     <input placeholder="Write here and hit enter to send..." type="text" class="form-control-sm form-control message_enter">
     <button class="btn btn-primary pl-5 pr-5 send_message">Send</button>
 </div>
-{{-- <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 265px;"></div></div></div> --}}
 
-<script>
-    //chat
+<script src="{{ asset("js/chat.js") }}"></script>
+
+{{-- <script>
     $(".send_message").on("click", function (e){
         e.preventDefault();
 
@@ -100,7 +101,6 @@
                 success: function (resp){
                     if (!resp.error){
                         $(".message_enter").val("");
-                        console.log(resp.chat);
                         var class_name = "";
                         if (resp.chat.user_id == user_id){
                             class_name = "chat-box-wrapper-right float-right";
@@ -135,7 +135,6 @@
 
                         $(".scrollbar-container.ps.ps--active-y").scrollTop($(".chat-wrapper").height() * $(".chat-wrapper").height());
 
-                        // $(".chat-content").load(window.location.href + " .chat-content" );
                     } else {
                         toastr.error(resp.message, "Error");
                     }
@@ -160,7 +159,4 @@
         }
     });  
 
-
-    // end chat
-
-</script>
+</script> --}}
