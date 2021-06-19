@@ -84,10 +84,10 @@
 <script>
     // issues
 
-    // $("#start_date").flatpickr(
-    // { 
-    //     maxDate: new Date()
-    // });
+    $("#start_date").flatpickr(
+    { 
+        maxDate: new Date()
+    });
 
 
     $('.my_table_issue').DataTable({
