@@ -525,7 +525,7 @@ class GlobeController extends Controller
                 'file' => 'required',
             ));
 
-            return response()->json(['error' => true, 'message' => $request->all() ]);
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
             
             if($validate->passes()){
                 if($request->hasFile('file')) {

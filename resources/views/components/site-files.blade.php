@@ -13,7 +13,7 @@
     @forelse ($datas as $data)
         @if (is_null($data->files))
             <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                <div class="dropzone dropzone_files" data-sub_activity_name="{{ $data->sub_activity_name }}" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-2x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
@@ -49,6 +49,9 @@
             <h3>No files here.</h3>
         </div>
     @endforelse
+
+    <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
+    <input type="hidden" name="hidden_sub_activity_name">
 </div>
 <script src="/js/dropzone/dropzone.js"></script>
 
@@ -59,9 +62,11 @@
         maxFiles: 1,
         maxFilesize: 1,
         paramName: "file",
-        // params: {
-        //     foo: $(".")
-        // },
+        params: {
+            // sam_id: this.element.attributes[2].value
+            sam_id: $("input[name=hidden_sam_id]").val(),
+            sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
+        },
         url: "/upload-file",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -138,11 +143,6 @@
     $(".view_file").on("click", function (){
 
         var extensions = ["pdf", "jpg", "png"];
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> 5f9046b8c2802b47838b7b6b3a07abc338c8d83e
         if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
           
             htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
@@ -151,11 +151,6 @@
 
           htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
-<<<<<<< HEAD
-=======
-
-        htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
->>>>>>> 5f9046b8c2802b47838b7b6b3a07abc338c8d83e
                 
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
@@ -170,6 +165,10 @@
         $('.file_preview').addClass('d-none');
     });
 
+
+    $(".dropzone_files").on("click", function (){
+        $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
+    });
 
 </script>
 
