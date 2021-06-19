@@ -660,22 +660,14 @@ class GlobeController extends Controller
 
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
-            ->distinct()
             ->table("site_milestone")
+            ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
             ->get();
-
         }
 
         elseif($activity_type == 'mine'){
-
-            if(\Auth::user()->profile_id == 2){
-                $search_column = "site_agent_id";
-            }
-            elseif(\Auth::user()->profile_id == 3){
-                $search_column = "site_IS_id";
-            }
 
             $sites = \DB::connection('mysql2')
             ->table("site_milestone")
@@ -683,8 +675,33 @@ class GlobeController extends Controller
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
             ->where('profile_id', $profile_id)
-            ->where($search_column, \Auth::id())
+            ->where("site_agent_id", \Auth::id())
             ->get();
+
+        }
+
+        elseif($activity_type == 'is'){
+
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'false')
+            ->where("site_IS_id", \Auth::id())
+            ->get();
+
+        }
+
+
+        elseif($activity_type == 'doc validation'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("site_milestone")
+                    ->distinct()
+                    ->where('program_id', $program_id)
+                    ->where('activity_complete', 'false')
+                    ->where('pending_count', '>', 0)
+                    ->get();
 
         }
 
@@ -698,6 +715,7 @@ class GlobeController extends Controller
             ->where('profile_id', $profile_id)
             ->where('activity_type', $activity_type)
             ->get();
+
         }
 
         $dt = DataTables::of($sites);
@@ -709,10 +727,9 @@ class GlobeController extends Controller
     {
         $sites = \DB::connection('mysql2')
                     ->table("site_milestone")
+                    ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
-                    ->where('profile_id', $profile_id)
-                    ->where('activity_type', $activity_type)
                     ->where('pending_count', '>', 0)
                     ->get();
 
@@ -726,9 +743,9 @@ class GlobeController extends Controller
 
         $documents = array("RTB Docs Validation", "RTB Docs Approval");
         $rtb = array("RTB Declaration", "RTB Declaration Approval");
+        $vendor_profiles = array(2, 3);
 
-
-        if(in_array($request['activity'], $documents)){
+        if(in_array($request['activity'], $documents) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false){
 
             try {
                 $data = \DB::connection('mysql2')
@@ -749,7 +766,7 @@ class GlobeController extends Controller
             }
         }
 
-        elseif(in_array($request['activity'], $rtb)){
+        elseif(in_array($request['activity'], $rtb) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false){
 
             try{
 
@@ -763,8 +780,10 @@ class GlobeController extends Controller
             }
 
 
-        } else {
-
+        } 
+        
+        else {
+            // VIEW SITE MAKER
             try{
 
                 $site = \DB::connection('mysql2')
@@ -783,8 +802,6 @@ class GlobeController extends Controller
                                 ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                                 ->where('agent_id', '=', $agent->user_id)
                                 ->get();
-
-                // dd($agent_sites);
 
 
                 $array = json_decode($site[0]->sub_activity);        

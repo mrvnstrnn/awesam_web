@@ -42,9 +42,14 @@ function getCols(active_program, active_table, active_profile){
                                     data : field['source_field'], 
                                     name: field['field_name'],
                                     render : function(data){
-                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                        agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
-                                        return agent;
+                                        if(data != null){
+                                            col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                            console.log(col);
+                                            agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
+                                            return agent;    
+                                        } else {
+                                            return "";
+                                        }
                                     }
                                 }
                             );
