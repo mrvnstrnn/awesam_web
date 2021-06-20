@@ -561,17 +561,24 @@ class GlobeController extends Controller
                 'file_name' => 'required',
             ));
 
+            $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
+
+            $new_file = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
+
+            \Storage::move( $request->input("file_name"), strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext );
+
+            // sub_activity_name
             if($validate->passes()){
 
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
-                    'value' => $request->input("file_name"),
+                    'value' => $new_file,
                     'user_id' => \Auth::id(),
                     'status' => "pending",
                 ]);            
                 
-                return response()->json(['error' => false, 'message' => "Successfully uploaded a pdf."]);
+                return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
