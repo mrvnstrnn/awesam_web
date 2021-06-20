@@ -45,8 +45,12 @@
                                             </h5>
                                         </div>
                                         <div class="btn-actions-pane-right">
-                                            <span class="ml-1 badge badge-light text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
-                                            <span class="badge badge-danger text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                            @if($main_activity == "")
+                                                <span class="ml-1 badge badge-light text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                                <span class="badge badge-danger text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                            @else
+                                                <span class="badge badge-primary text-sm mb-0 p-2">{{ $main_activity }}</span>
+                                            @endif
                                         </div>                                            
                                     </div>
                                 </div>
@@ -123,7 +127,7 @@
                                         @endif
 
                                     </div>
-                                    <div class="row pt-3 border-top">
+                                    <div class="row pt-3 border-top"> 
                                         <div class="col-12 text-center">
                                             <button class="btn-icon btn-pill btn btn-focus" id="site_action_view_switch">
                                                 <i class="pe-7s-angle-down-circle pe-2x btn-icon-wrapper"></i>Show Site Details
@@ -132,10 +136,15 @@
                                     </div>
                                 </div>
                                 <div id="site_details_view"  class="{{ $site_details_view }}">
-                                    <div class="row">
+                                    <div class="row">                    
                                         <div class="col-12 text-center">
                                             <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
-                                                <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>{{ $site[0]->activity_name }}
+                                                <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
+                                                @if($main_activity == "")
+                                                    {{ $site[0]->activity_name }}
+                                                @else
+                                                    {{ $main_activity }}
+                                                @endif
                                             </button>
                                         </div>
                                     </div>
