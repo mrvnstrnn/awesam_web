@@ -782,8 +782,10 @@ class GlobeController extends Controller
             try{
 
                 $site = \DB::connection('mysql2')
-                ->table('site')
-                ->where('site.sam_id', "=", $request['sam_id'])
+                ->table('site_milestone')
+                ->distinct()
+                ->where('activity_complete', "=", 'false')
+                ->where('sam_id', "=", $request['sam_id'])
                 ->get();
 
 
