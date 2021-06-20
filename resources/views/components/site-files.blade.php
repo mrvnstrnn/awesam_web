@@ -1,6 +1,6 @@
 <div class="row file_preview d-none">
     <div class="col-12">
-        <button id="btn_back_to_file_list" class="mb-2 btn btn-danger float-right" type="button">Back to files</button>
+        <button id="btn_back_to_file_list" class="mb-2 btn btn-danger" type="button">Back to files</button>
     </div>
     <div class="col-12 file_viewer">
     </div>

@@ -34,6 +34,10 @@
                                                     @endif
                                                 </h5>
                                             </div>
+                                            <div class="btn-actions-pane-right">
+                                                <span class="ml-1 badge badge-light text-lg mb-0 p-2" style="font-size: 12px;">{{ $site[0]->stage_name }}</span>
+                                                <span class="badge badge-danger text-lg mb-0 p-2" style="font-size: 12px;">{{ $site[0]->activity_name }}</span>
+                                            </div>                                            
                                         </div>
                                     </div>
                                 </div>                    
@@ -65,6 +69,7 @@
                                         </div>
                                     </div>
                                     <div class="divider"></div>
+
                                     <div class="tab-content">
                                         <div class="tab-pane tabs-animation fade " id="tab-content-site_activities" role="tabpanel">
                                             {{-- <x-view-site-activities :activities="$activities" :samid="$sam_id"/> --}}
@@ -80,10 +85,7 @@
                                             <iframe width="100%" height="300" style="border:0" loading="lazy" allowfullscreen
                                             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&q={{ $site[0]->site_address }}">
                                           </iframe>
-    
-                                            <span class="badge badge-dark text-lg mt-3 p-2" style="font-size: 12px;">{{ $site[0]->stage_name }}</span>
-                                            <span class="badge badge-danger text-lg mt-3 p-2" style="font-size: 12px;">{{ $site[0]->activity_name }}</span>
-                                            <div id="accordion" class="accordion-wrapper mt-3">
+                                                <div id="accordion" class="accordion-wrapper mt-3">
                                                 <div class="card">
                                                     <div id="headingTwo" class="b-radius-0 card-header">
                                                         <button type="button" data-toggle="collapse" data-target="#collapseDetails" aria-expanded="true" aria-controls="collapseTwo" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
@@ -198,7 +200,7 @@
                                         <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                         <div class="menu-header-content btn-pane-right">
                                             <div>
-                                                <h5 class="menu-header-title">Site Status</h5>
+                                                <h5 class="menu-header-title">{{ $site[0]->activity_name }}</h5>
                                             </div>
                                         </div>
                                     </div>
