@@ -62,7 +62,7 @@
     </div>
 </div>
 {{-- <div class="divider"></div> --}}
-<div class="row">
+<div class="row" id="issue_table">
     <div class="col-12">
         <h5 class="card-title">Issue List</h5>
         <table class="mb-0 table table-bordered my_table_issue w-100" data-href="/get-my-issue/{{ $site[0]->sam_id }}">
@@ -78,6 +78,7 @@
         </table>
     </div>
 </div>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -117,11 +118,14 @@
     $('#btn_add_issue_cancel').on( 'click', function (e) {
         $('.add_issue_form').addClass('d-none');
         $('#btn_add_issue_switch').removeClass('d-none');
+        $('#issue_table').removeClass('d-none');
+
     });
 
     $('#btn_add_issue_switch').on( 'click', function (e) {
         $('.add_issue_form').removeClass('d-none');
         $(this).addClass('d-none');
+        $('#issue_table').addClass('d-none');
     });
 
     $("#issue_type").on("change", function (){
@@ -163,6 +167,10 @@
                         $(".add_issue_form")[0].reset();
                         $('#btn_add_issue_cancel').trigger("click");
                         toastr.success(resp.message, "Success");
+                        $( "#issue_table" ).fadeIn( "slow", function() {
+                            $('#issue_table').removeClass('d-none');
+                        });
+
                     });
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {

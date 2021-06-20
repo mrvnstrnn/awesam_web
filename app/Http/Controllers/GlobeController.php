@@ -787,146 +787,146 @@ class GlobeController extends Controller
                 ->get();
 
 
-                $agent = json_decode($site[0]->site_agent);
-                $agent = $agent[0];
-                $agent_name = $agent->firstname . " " .$agent->middlename . " " . $agent->lastname . " " . $agent->suffix;
+                // $agent = json_decode($site[0]->site_agent);
+                // $agent = $agent[0];
+                // $agent_name = $agent->firstname . " " .$agent->middlename . " " . $agent->lastname . " " . $agent->suffix;
                         
-                $agent_sites = \DB::connection('mysql2')
-                                ->table('site')
-                                ->select('site.sam_id', 'site.site_name')
-                                ->join('site_users', 'site_users.sam_id', 'site.sam_id')
-                                ->where('agent_id', '=', $agent->user_id)
-                                ->get();
+                // $agent_sites = \DB::connection('mysql2')
+                //                 ->table('site')
+                //                 ->select('site.sam_id', 'site.site_name')
+                //                 ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                //                 ->where('agent_id', '=', $agent->user_id)
+                //                 ->get();
 
 
-                $array = json_decode($site[0]->sub_activity);        
-                $res = array();
-                foreach ($array as $each) {
-                    if (isset($res[$each->activity_id])){
-                        array_push($res[$each->activity_id], $each );
-                    }
-                    else{
-                        $res[$each->activity_id] = array($each);
-                    }
-                }
+                // $array = json_decode($site[0]->sub_activity);        
+                // $res = array();
+                // foreach ($array as $each) {
+                //     if (isset($res[$each->activity_id])){
+                //         array_push($res[$each->activity_id], $each );
+                //     }
+                //     else{
+                //         $res[$each->activity_id] = array($each);
+                //     }
+                // }
 
-                $sub_activities = $res;
-                $what_site = $site[0];
+                // $sub_activities = $res;
+                // $what_site = $site[0];
 
                 // dd($what_site);
 
-                $array = json_decode($site[0]->timeline);        
-                $res = array();
+                // $array = json_decode($site[0]->timeline);        
+                // $res = array();
 
                 // dd($array);
 
 
-                foreach ($array as $each) {
+                // foreach ($array as $each) {
 
-                    if (isset($res[$each->stage_name])){
+                //     if (isset($res[$each->stage_name])){
 
-                        array_push($res[$each->stage_name],  array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
+                //         array_push($res[$each->stage_name],  array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name,"start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
 
-                    }
-                    else{
-                        $res[$each->stage_name] = array( array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
-                    }
-                }
+                //     }
+                //     else{
+                //         $res[$each->stage_name] = array( array("stage_id" => $each->stage_id, "stage_name" => $each->stage_name, "activity_id" => $each->activity_id, "activity_name" => $each->activity_name, "start_date" => $each->start_date, "end_date" => $each->end_date, "activity_complete" => $each->activity_complete));
+                //     }
+                // }
 
 
-                $activities = array();
+                // $activities = array();
 
-                $activity_count = 0;
-                $done_activity_count = 0;
+                // $activity_count = 0;
+                // $done_activity_count = 0;
 
-                foreach($res as $re){
+                // foreach($res as $re){
 
-                    foreach($re as $r){
+                //     foreach($re as $r){
 
-                        $activity_count++;
+                //         $activity_count++;
                         
-                        if($r['activity_complete'] === 'true'){
-                            $color = "success";
-                            $badge = "DONE";
+                //         if($r['activity_complete'] === 'true'){
+                //             $color = "success";
+                //             $badge = "DONE";
 
-                            $done_activity_count++;
+                //             $done_activity_count++;
 
-                        } else {
+                //         } else {
 
-                            if($r['activity_complete'] === 'false'){
-                                $color = "primary";
-                                $badge = "ACTIVE TASK";
-                            } else {
-                                if(date('Y-m-d') < date($r['start_date'])){
-                                    $color = "secondary";
-                                    $badge = "UPCOMING";
-                                } else {
-                                    if(date('Y-m-d') < date($r['end_date'])){
-                                        $color = "warning";
-                                        $badge = "ON SCHEDULE";
-                                    } else {
-                                        $color = "danger";
-                                        $badge = "DELAYED";
-                                    }
+                //             if($r['activity_complete'] === 'false'){
+                //                 $color = "primary";
+                //                 $badge = "ACTIVE TASK";
+                //             } else {
+                //                 if(date('Y-m-d') < date($r['start_date'])){
+                //                     $color = "secondary";
+                //                     $badge = "UPCOMING";
+                //                 } else {
+                //                     if(date('Y-m-d') < date($r['end_date'])){
+                //                         $color = "warning";
+                //                         $badge = "ON SCHEDULE";
+                //                     } else {
+                //                         $color = "danger";
+                //                         $badge = "DELAYED";
+                //                     }
 
-                                }        
-                            }
+                //                 }        
+                //             }
 
-                        }
+                //         }
 
-                        if(array_key_exists($r['activity_id'], $sub_activities)==true){
-                            $what_subactivities = $sub_activities[$r['activity_id']];
-                        } else {
-                            $what_subactivities = [];
-                        }
+                //         if(array_key_exists($r['activity_id'], $sub_activities)==true){
+                //             $what_subactivities = $sub_activities[$r['activity_id']];
+                //         } else {
+                //             $what_subactivities = [];
+                //         }
 
-                        array_push($activities,  
-                            array(
-                                "activity_name" => $r['activity_name'],  
-                                "activity_id" => $r['activity_id'],  
-                                "activity_complete" => $r['activity_complete'], 
-                                "start_date" => $r['start_date'], 
-                                "end_date" => $r['end_date'], 
-                                "sub_activities" => $what_subactivities,
-                                "color" => $color,
-                                "badge" => $badge
-                            )
-                        );
+                //         array_push($activities,  
+                //             array(
+                //                 "activity_name" => $r['activity_name'],  
+                //                 "activity_id" => $r['activity_id'],  
+                //                 "activity_complete" => $r['activity_complete'], 
+                //                 "start_date" => $r['start_date'], 
+                //                 "end_date" => $r['end_date'], 
+                //                 "sub_activities" => $what_subactivities,
+                //                 "color" => $color,
+                //                 "badge" => $badge
+                //             )
+                //         );
 
-                    }
-                }
+                //     }
+                // }
 
-                $completed_activities = $done_activity_count / $activity_count;
+                // $completed_activities = $done_activity_count / $activity_count;
 
                 // dd($what_count);
 
-                $timeline = array();
+                // $timeline = array();
 
-                foreach($res as $re){
-                    $first = array_key_first($re);
-                    $last = array_key_last($re);
+                // foreach($res as $re){
+                //     $first = array_key_first($re);
+                //     $last = array_key_last($re);
 
-                    $first =$re[$first]["start_date"];
-                    $last = ($re[$last]["end_date"]);
-                    $key = key($res);
+                //     $first =$re[$first]["start_date"];
+                //     $last = ($re[$last]["end_date"]);
+                //     $key = key($res);
 
-                    next($res);
-                    array_push($timeline, array("stage_name" => $key, "start_date" => $first, "end_date" => $last ));
-                }
+                //     next($res);
+                //     array_push($timeline, array("stage_name" => $key, "start_date" => $first, "end_date" => $last ));
+                // }
 
-                $timeline = json_encode($timeline);
+                // $timeline = json_encode($timeline);
 
 
-                $array = json_decode($site[0]->sub_activity);        
-                $res = array();
-                foreach ($array as $each) {
-                    if (isset($res[$each->activity_id])){
-                        array_push($res[$each->activity_id], $each );
-                    }
-                    else{
-                        $res[$each->activity_id] = array($each);
-                    }
-                }
+                // $array = json_decode($site[0]->sub_activity);        
+                // $res = array();
+                // foreach ($array as $each) {
+                //     if (isset($res[$each->activity_id])){
+                //         array_push($res[$each->activity_id], $each );
+                //     }
+                //     else{
+                //         $res[$each->activity_id] = array($each);
+                //     }
+                // }
 
                 $site_fields = json_decode($site[0]->site_fields);
 
@@ -934,12 +934,12 @@ class GlobeController extends Controller
                         ->with([
                             'site' => $site,
                             'sam_id' => $request['sam_id'],
-                            'timeline' => $timeline,
+                            // 'timeline' => $timeline,
                             'site_fields' => $site_fields,
-                            'activities' => $activities,
-                            'agent_sites' => $agent_sites,
-                            'agent_name' => $agent_name,
-                            'completed_activities' => $completed_activities
+                            // 'activities' => $activities,
+                            // 'agent_sites' => $agent_sites,
+                            // 'agent_name' => $agent_name,
+                            // 'completed_activities' => $completed_activities
                         ])
                         ->render();
 

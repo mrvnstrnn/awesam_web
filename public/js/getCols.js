@@ -44,7 +44,6 @@ function getCols(active_program, active_table, active_profile){
                                     render : function(data){
                                         if(data != null){
                                             col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                            console.log(col);
                                             agent = col[0]['firstname'] + " " + col[0]['middlename'] + " " + col[0]['lastname'];
                                             return agent;    
                                         } else {
