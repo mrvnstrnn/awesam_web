@@ -21,28 +21,29 @@
                 </div>
             </div>
         @else
-            @foreach (json_decode($data->files) as $item)
-                @php
-                    if (pathinfo($item->value, PATHINFO_EXTENSION) == "pdf") {
-                        $extension = "fa-file-pdf";
-                    } else if (pathinfo($item->value, PATHINFO_EXTENSION) == "png" || pathinfo($item->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($item->value, PATHINFO_EXTENSION) == "jpg") {
-                        $extension = "fa-file-image";
-                    } else {
-                        $extension = "fa-file";
-                    }
-                @endphp
-                <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $item->value }}">
-                    <div class="child_div_{{ $data->sub_activity_id }}">
-                        <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
-                            <div>
-                            <i class="fa {{ $extension }} fa-2x text-primary"></i><br>
-                            {{-- <small>{{ $item->value }}</small> --}}
-                            <p><small>{{ $data->sub_activity_name }}</small></p>
-                            </div>
+            @php
+                $uploaded_files = json_decode($data->files);
+
+                if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                    $extension = "fa-file-pdf";
+                } else if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                    $extension = "fa-file-image";
+                } else {
+                    $extension = "fa-file";
+                }
+
+            @endphp
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $uploaded_files[0]->value }}">
+                <div class="child_div_{{ $data->sub_activity_id }}">
+                    <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
+                        <div>
+                        <i class="fa {{ $extension }} fa-2x text-primary"></i><br>
+                        {{-- <small>{{ $item->value }}</small> --}}
+                        <p><small>{{ $data->sub_activity_name }}</small></p>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            </div>
         @endif
     @empty
         <div class="col-12 text-center">
@@ -138,8 +139,6 @@
         }
     });
     
-
-
     $(".view_file").on("click", function (){
 
         var extensions = ["pdf", "jpg", "png"];
