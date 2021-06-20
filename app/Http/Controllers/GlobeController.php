@@ -750,156 +750,186 @@ class GlobeController extends Controller
         $vendor_profiles = array(2, 3);
 
 
-        if(in_array( $request['main_activity'], $doc_preview_main_activities )){
-
-            try {
-                $site = \DB::connection('mysql2')
-                        ->table('site_milestone')
-                        ->distinct()
-                        ->where('sam_id', '=', $request['sam_id'])
-                        ->where('activity_complete', "=", 'false')
-                        ->get();
-
-                $site_fields = json_decode($site[0]->site_fields);
-
-                if($request['main_activity'] == "doc_validation"){
-                    $mainactivity = "Document Validation";
-                }
-
-                return \View::make('components.modal-document-preview')
-                    ->with([
-                        'site' => $site,
-                        'sam_id' => $request['sam_id'],
-                        'site_fields' => $site_fields,
-                        'main_activity' => $request['main_activity']
-                    ])
-
-                    // ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
-                    ->render();
-
-                // return response()->json(['error' => false, 'message' => $data ]);
-
-            } catch (\Throwable $th) {
-                return response()->json(['error' => true, 'message' => $th->getMessage()]);
-            }
-
-        
-
-        }
-
-        elseif(in_array( $request['main_activity'], $site_view_main_actiivities )){
-
-            // VIEW SITE MAKER
-            try{
-
-                $site = \DB::connection('mysql2')
-                ->table('site_milestone')
-                ->distinct()
-                ->where('activity_complete', "=", 'false')
-                ->where('sam_id', "=", $request['sam_id'])
-                ->get();
-
-                $site_fields = json_decode($site[0]->site_fields);
-
-                return \View::make('components.modal-view-site')
-                        ->with([
-                            'site' => $site,
-                            'sam_id' => $request['sam_id'],
-                            'site_fields' => $site_fields,
-                            'main_activity' => $request['main_activity']
-                        ])
-                        ->render();
-
-
-            } catch (\Throwable $th) {
-                return response()->json(['error' => true, 'message' => $th->getMessage()]);
-            }
-
-
-        }
-        
-        else {
-
-            if((in_array($request['activity'], $documents) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false)){
-
-                try {
-                    $site = \DB::connection('mysql2')
-                            ->table('site_milestone')
-                            ->distinct()
-                            ->where('sam_id', '=', $request['sam_id'])
-                            ->where('activity_complete', "=", 'false')
-                            ->get();
-    
-                    $site_fields = json_decode($site[0]->site_fields);
-    
-                    return \View::make('components.modal-document-preview')
-                        ->with([
-                            'site' => $site,
-                            'sam_id' => $request['sam_id'],
-                            'site_fields' => $site_fields,
-                            'main_activity' => $request['main_activity']
-                        ])
-    
-                        // ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
-                        ->render();
-    
-                    // return response()->json(['error' => false, 'message' => $data ]);
-    
-                } catch (\Throwable $th) {
-                    return response()->json(['error' => true, 'message' => $th->getMessage()]);
-                }
-            }
-    
-            elseif(in_array($request['activity'], $rtb) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false){
-    
-                try{
-    
-                    return \View::make('components.modal-site-rtb')
-                            ->with(['mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
-                            ->render();
-    
-    
-                } catch (\Throwable $th) {
-                    return response()->json(['error' => true, 'message' => $th->getMessage()]);
-                }
-    
-    
-            } 
-            
-            else {
-
-
-                // VIEW SITE MAKER
-                try{
-    
-                    $site = \DB::connection('mysql2')
+        try {
+            $site = \DB::connection('mysql2')
                     ->table('site_milestone')
                     ->distinct()
+                    ->where('sam_id', '=', $request['sam_id'])
                     ->where('activity_complete', "=", 'false')
-                    ->where('sam_id', "=", $request['sam_id'])
                     ->get();
-    
-                    $site_fields = json_decode($site[0]->site_fields);
-    
-                    return \View::make('components.modal-view-site')
-                            ->with([
-                                'site' => $site,
-                                'sam_id' => $request['sam_id'],
-                                'site_fields' => $site_fields,
-                                'main_activity' => $request['main_activity']
 
-                            ])
-                            ->render();
-    
-    
-                } catch (\Throwable $th) {
-                    return response()->json(['error' => true, 'message' => $th->getMessage()]);
-                }
-    
+            $site_fields = json_decode($site[0]->site_fields);
+
+            if($request['main_activity'] == "doc_validation"){
+                $mainactivity = "Document Validation";
             }
+
+            return \View::make('components.modal-view-site')
+                ->with([
+                    'site' => $site,
+                    'sam_id' => $request['sam_id'],
+                    'site_fields' => $site_fields,
+                    'main_activity' => $request['main_activity']
+                ])
+                ->render();
+
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+
+
+
+        // if(in_array( $request['main_activity'], $doc_preview_main_activities )){
+
+        //     try {
+        //         $site = \DB::connection('mysql2')
+        //                 ->table('site_milestone')
+        //                 ->distinct()
+        //                 ->where('sam_id', '=', $request['sam_id'])
+        //                 ->where('activity_complete', "=", 'false')
+        //                 ->get();
+
+        //         $site_fields = json_decode($site[0]->site_fields);
+
+        //         if($request['main_activity'] == "doc_validation"){
+        //             $mainactivity = "Document Validation";
+        //         }
+
+        //         return \View::make('components.modal-document-preview')
+        //             ->with([
+        //                 'site' => $site,
+        //                 'sam_id' => $request['sam_id'],
+        //                 'site_fields' => $site_fields,
+        //                 'main_activity' => $request['main_activity']
+        //             ])
+
+        //             // ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
+        //             ->render();
+
+        //         // return response()->json(['error' => false, 'message' => $data ]);
+
+        //     } catch (\Throwable $th) {
+        //         return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        //     }
+
+        
+
+        // }
+
+        // elseif(in_array( $request['main_activity'], $site_view_main_actiivities )){
+
+        //     // VIEW SITE MAKER
+        //     try{
+
+        //         $site = \DB::connection('mysql2')
+        //         ->table('site_milestone')
+        //         ->distinct()
+        //         ->where('activity_complete', "=", 'false')
+        //         ->where('sam_id', "=", $request['sam_id'])
+        //         ->get();
+
+        //         $site_fields = json_decode($site[0]->site_fields);
+
+        //         return \View::make('components.modal-view-site')
+        //                 ->with([
+        //                     'site' => $site,
+        //                     'sam_id' => $request['sam_id'],
+        //                     'site_fields' => $site_fields,
+        //                     'main_activity' => $request['main_activity']
+        //                 ])
+        //                 ->render();
+
+
+        //     } catch (\Throwable $th) {
+        //         return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        //     }
+
+
+        // }
+        
+        // else {
+
+        //     if((in_array($request['activity'], $documents) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false)){
+
+        //         try {
+        //             $site = \DB::connection('mysql2')
+        //                     ->table('site_milestone')
+        //                     ->distinct()
+        //                     ->where('sam_id', '=', $request['sam_id'])
+        //                     ->where('activity_complete', "=", 'false')
+        //                     ->get();
+    
+        //             $site_fields = json_decode($site[0]->site_fields);
+    
+        //             return \View::make('components.modal-document-preview')
+        //                 ->with([
+        //                     'site' => $site,
+        //                     'sam_id' => $request['sam_id'],
+        //                     'site_fields' => $site_fields,
+        //                     'main_activity' => $request['main_activity']
+        //                 ])
+    
+        //                 // ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
+        //                 ->render();
+    
+        //             // return response()->json(['error' => false, 'message' => $data ]);
+    
+        //         } catch (\Throwable $th) {
+        //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        //         }
+        //     }
+    
+        //     elseif(in_array($request['activity'], $rtb) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false){
+    
+        //         try{
+    
+        //             return \View::make('components.modal-site-rtb')
+        //                     ->with(['mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
+        //                     ->render();
+    
+    
+        //         } catch (\Throwable $th) {
+        //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        //         }
+    
+    
+        //     } 
+            
+        //     else {
+
+
+        //         // VIEW SITE MAKER
+        //         try{
+    
+        //             $site = \DB::connection('mysql2')
+        //             ->table('site_milestone')
+        //             ->distinct()
+        //             ->where('activity_complete', "=", 'false')
+        //             ->where('sam_id', "=", $request['sam_id'])
+        //             ->get();
+    
+        //             $site_fields = json_decode($site[0]->site_fields);
+    
+        //             return \View::make('components.modal-view-site')
+        //                     ->with([
+        //                         'site' => $site,
+        //                         'sam_id' => $request['sam_id'],
+        //                         'site_fields' => $site_fields,
+        //                         'main_activity' => $request['main_activity']
+
+        //                     ])
+        //                     ->render();
+    
+    
+        //         } catch (\Throwable $th) {
+        //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        //         }
+    
+        //     }
     
 
-        }
+        // }
 
 
     }

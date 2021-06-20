@@ -4,19 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class SiteStatus extends Component
+class SiteRtbDeclaration extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-
-    public $completed;
-
-    public function __construct($completed)
+    public function __construct()
     {
-        $this->completed = $completed;
+        //
     }
 
     /**
@@ -26,6 +23,6 @@ class SiteStatus extends Component
      */
     public function render()
     {
-        return view('components.site-status');
+        return view('components.site-rtb-declaration');
     }
 }

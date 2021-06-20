@@ -1,6 +1,8 @@
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
         <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+        {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
+        <button id="btn_back_to_file_list" class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger" type="button">Reject Document</button>
     </div>
     <div class="col-12 file_viewer">
     </div>

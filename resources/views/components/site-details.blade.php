@@ -1,5 +1,5 @@
 <iframe width="100%" height="300" style="border:0" loading="lazy" allowfullscreen
-src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&q={{ $site[0]->site_address }}">
+src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&q={{ str_replace("#","", $site[0]->site_address) }}">
 </iframe>
     <div id="accordion" class="accordion-wrapper mt-3">
     <div class="card">
