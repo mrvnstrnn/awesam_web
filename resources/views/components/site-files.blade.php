@@ -13,7 +13,7 @@
     @forelse ($datas as $data)
         @if (is_null($data->files))
             <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sub_activity_name="{{ $data->sub_activity_name }}" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-2x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
@@ -52,7 +52,6 @@
     @endforelse
 
     <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
-    <input type="hidden" name="hidden_sub_activity_name">
 </div>
 <script src="/js/dropzone/dropzone.js"></script>
 
@@ -63,11 +62,10 @@
         maxFiles: 1,
         maxFilesize: 1,
         paramName: "file",
-        params: {
-            // sam_id: this.element.attributes[2].value
-            sam_id: $("input[name=hidden_sam_id]").val(),
-            sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
-        },
+        // params: {
+        //     sam_id: $("input[name=hidden_sam_id]").val(),
+        //     sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
+        // },
         url: "/upload-file",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -76,9 +74,10 @@
             if (!resp.error){
                 var sam_id = this.element.attributes[1].value;
                 var sub_activity_id = this.element.attributes[2].value;
+                var sub_activity_name = this.element.attributes[3].value;
                 var file_name = resp.file;
 
-                var sub_activity_name = $("small.sub_activity_name"+sub_activity_id).text();
+                // var sub_activity_name = $(this).attr("data-sub_activity_name");
 
                 $.ajax({
                     url: "/upload-my-file",
@@ -87,6 +86,7 @@
                         sam_id : sam_id,
                         sub_activity_id : sub_activity_id,
                         file_name : file_name,
+                        sub_activity_name : sub_activity_name
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
