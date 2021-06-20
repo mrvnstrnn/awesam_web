@@ -1,7 +1,11 @@
 
 function makeDT(whatTable, whatCols, table_to_load) {
 
-    // Load Datatable
+        if (typeof main_activity === 'undefined') {
+            main_activity = "";
+        }
+        
+        // Load Datatable
         $(whatTable).DataTable({
             processing: true,
             serverSide: false,
@@ -29,7 +33,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     $(row).attr('data-activity', data.activity_name);
                     $(row).attr('data-site', data.site_name);
                     $(row).attr('data-sam_id', data.sam_id);
-                    $(row).attr('data-main_activity', table_to_load);
+                    $(row).attr('data-main_activity', main_activity);
                     $(row).attr('data-profile', data.profile_id);
             },
 

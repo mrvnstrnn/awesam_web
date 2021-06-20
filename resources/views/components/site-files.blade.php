@@ -1,8 +1,12 @@
 <div class="row file_preview d-none">
-    <div class="col-12">
-        <button id="btn_back_to_file_list" class="mb-2 btn btn-danger" type="button">Back to files</button>
+    <div class="col-12 mb-3">
+        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+        <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button>
+        <button id="btn_back_to_file_list" class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger" type="button">Reject Document</button>
     </div>
     <div class="col-12 file_viewer">
+    </div>
+    <div class="col-12 file_viewer_list pt-3">
     </div>
 </div>
 <div class="row file_lists">
@@ -15,7 +19,7 @@
             <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
                 <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                     <div class="dz-message">
-                        <i class="fa fa-plus fa-2x"></i>
+                        <i class="fa fa-plus fa-3x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
                     </div>
                 </div>
@@ -32,16 +36,28 @@
                     $extension = "fa-file";
                 }
 
+                $icon_color = "";
+                foreach($uploaded_files as $approved){
+                    if($approved->status == "approved"){
+                        $icon_color = "success";
+                    } else {
+                        $icon_color = "secondary";
+                    }
+                }
+
             @endphp
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ $uploaded_files[0]->value }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}">
                 <div class="child_div_{{ $data->sub_activity_id }}">
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
-                        <i class="fa {{ $extension }} fa-2x text-primary"></i><br>
+                        <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
                         {{-- <small>{{ $item->value }}</small> --}}
                         <p><small>{{ $data->sub_activity_name }}</small></p>
                         </div>
                     </div>
+                     @if($icon_color == "success")   
+                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @endif
                 </div>
             </div>
         @endif
@@ -142,17 +158,45 @@
     $(".view_file").on("click", function (){
 
         var extensions = ["pdf", "jpg", "png"];
-        if( extensions.includes($(this).attr('data-value').split('.').pop()) == true) {     
-          
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 420px; height: 100%" src="/ViewerJS/#../files/' + $(this).attr('data-value') + '" allowfullscreen></iframe>';
 
+        var values = JSON.parse($(this).attr('data-value'));
+
+        if( extensions.includes(values[0].value.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
         } else {
-
-          htmltoload = '<div class="text-center my-5"><a href="/files/' + $(this).attr('data-value') + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
                 
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
+
+        $('.file_viewer_list').html('');
+
+        values.forEach(function(item, index){
+            
+            htmllist = "<tr>" + 
+                            "<td>"  + item.id + "</td>" +
+                            "<td>"  + item.value + "</td>" +
+                            "<td>"  + item.status + "</td>" +
+                            "<td>"  + item.date_created + "</td>" +
+                        "</tr>";
+        });
+
+        htmllist = "<table class='table-bordered mb-0 table'>" + 
+                        "<thead>" +
+                            "<tr>" +                           
+                                "<th>#</th>"+
+                                "<th>file</th>"+
+                                "<th>status</th>"+
+                                "<th>timestamp</th>"+
+                            "</tr>" +                           
+                        "</thead>" +
+                        "<tbody>" +
+                            htmllist + 
+                        "</tbody>" +
+                    "</table>";
+
+        $('.file_viewer_list').html(htmllist);
 
         $('.file_lists').addClass('d-none');
         $('.file_preview').removeClass('d-none');

@@ -5,6 +5,7 @@
             if($(this).find("td").hasClass('dataTables_empty') == false){
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
+                var main_activity = $(this).attr('data-main_activity')
                 var site = $(this).attr("data-site");
 
                 loader = '<div class="p-2">Loading...</div>';
@@ -18,6 +19,7 @@
                     data: {
                         site : site,
                         activity : activity,
+                        main_activity : main_activity,
                         mode : table_to_load,
                         sam_id : sam_id,
                     },

@@ -1,3 +1,8 @@
+<div class="row mb-3">
+    <div class="col-12 align-right border-bottom">
+        <button id="btn_add_issue_switch" class=" mb-3 btn btn-danger float-right" type="button">Add Issue</button>
+    </div>
+</div>
 <div class="row">
     <div class="col-12">
         <form class="add_issue_form mb-2 d-none">
@@ -75,8 +80,6 @@
             </thead>
             <tbody></tbody>
         </table>
-        <hr>
-        <button id="btn_add_issue_switch" class="float-right mt-1 btn btn-danger float-right" type="button">Add Issue</button>
     </div>
 </div>
 <script src="/js/site-issues.js"></script>

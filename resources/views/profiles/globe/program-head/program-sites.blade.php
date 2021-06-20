@@ -21,6 +21,7 @@
     //////////////////////////////////////
     var profile_id = 7;
     var table_to_load = 'program_sites';
+    var main_activity = "Program Sites";
     //////////////////////////////////////
 </script>
 

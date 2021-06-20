@@ -29,6 +29,10 @@ function getCols(active_program, active_table, active_profile){
                                             return e; 
                                         });
 
+                                        console.log(field['source_field']);
+                                        console.log(field['search_field']);
+                                        console.log(field['field_name']);
+
                                         return results[0]['value'];
                                     
                                     }

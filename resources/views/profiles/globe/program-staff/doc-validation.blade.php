@@ -18,6 +18,8 @@
     //////////////////////////////////////
     var profile_id = 8;
     var table_to_load = 'doc_validation';
+    var main_activity = 'Document Validation';
+ 
     //////////////////////////////////////
 </script>
 
