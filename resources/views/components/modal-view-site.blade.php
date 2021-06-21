@@ -116,7 +116,7 @@
 
                                             <x-site-rtb-docs-validation  :site="$site"/>
 
-                                        @else()
+                                        @else
 
                                             @if($main_activity == "Document Validation")
     
