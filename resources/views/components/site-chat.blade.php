@@ -81,6 +81,10 @@
 
 <script src="{{ asset("js/chat.js") }}"></script>
 
+<script>
+    $(".scrollbar-container.ps.ps--active-y").scrollTop($(".chat-wrapper").height() * $(".chat-wrapper").height());
+</script>
+
 {{-- <script>
     $(".send_message").on("click", function (e){
         e.preventDefault();

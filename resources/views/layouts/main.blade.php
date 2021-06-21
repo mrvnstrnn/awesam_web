@@ -217,7 +217,7 @@
 
 
     <!-- custome.js -->
-    <script type="text/javascript" src="/js/charts/apex-charts.js"></script>
+    {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/circle-progress.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/demo.js"></script> --}}
     {{-- <script type="text/javascript" src="/js/scrollbar.js"></script> --}}

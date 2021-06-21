@@ -69,6 +69,12 @@
 
     <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
 </div>
+<div class="row mb-3 border-top pt-3">
+    <div class="col-12 align-right">
+        <button class="float-right btn btn-shadow btn-success">Approve RTB Documents</button>                                            
+    </div>
+</div>
+
 <script src="/js/dropzone/dropzone.js"></script>
 
 <script>  
