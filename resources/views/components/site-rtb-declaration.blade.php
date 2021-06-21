@@ -41,4 +41,4 @@
     <div class="col-12">
         <button class="float-right btn btn-shadow btn-success">Declare RTB</button>                                            
     </div>
-</div> --}}
+</div>
