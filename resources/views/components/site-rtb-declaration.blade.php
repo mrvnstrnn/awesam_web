@@ -37,8 +37,8 @@
         </form>
     </div>
 </div>
-<div class="row mb-3">
-    <div class="col-12 align-right">
+<div class="row mb-3 border-top pt-3">
+    <div class="col-12">
         <button class="float-right btn btn-shadow btn-success">Declare RTB</button>                                            
     </div>
-</div>
+</div> --}}

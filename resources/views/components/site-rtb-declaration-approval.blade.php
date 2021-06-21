@@ -37,7 +37,7 @@
         </form>
     </div>
 </div>
-<div class="row mb-3">
+<div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
         <button class="float-right btn btn-shadow btn-success">Approve RTB Declaration</button>                                            
         <button class="float-right btn btn-shadow btn-danger mr-2">Reject</button>                                            
