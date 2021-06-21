@@ -45,7 +45,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     "visible": true,
                     "searchable": true,
                     "render": function ( data, type, row ) {
-                        return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] +'</small>';
+                        return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] + '</small>';
                     },
                 },
                 {
@@ -151,7 +151,7 @@ $(document).ready(() => {
 
             // Add Column Headers
             $.each(cols, function (k, colObj) {
-                str = '<th>' + colObj.name + '</th>';
+                str = '<th class="' + colObj.data + '">' + colObj.name + '</th>';
                 $(str).appendTo($(activeTable).find("thead>tr"));
             });
 
