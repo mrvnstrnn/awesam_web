@@ -21,7 +21,7 @@
     //////////////////////////////////////
     var profile_id = 3;
     var table_to_load = 'assigned_sites_is';
-    var main_activity = "Assigned Sites";
+    // var main_activity = "Assigned Sites";
     //////////////////////////////////////
 </script>
 

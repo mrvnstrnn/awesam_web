@@ -45,11 +45,20 @@
                                             </h5>
                                         </div>
                                         <div class="btn-actions-pane-right">
+                                            @php
+                                                if($site[0]->end_date > now()){
+                                                    $badge_color = "success";
+                                                } else {
+                                                    $badge_color = "danger";
+                                                }
+
+                                            @endphp
+
                                             @if($main_activity == "")
                                                 <span class="ml-1 badge badge-light text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
-                                                <span class="badge badge-danger text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
                                             @else
-                                                <span class="badge badge-primary text-sm mb-0 p-2">{{ $main_activity }}</span>
+                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
                                             @endif
                                         </div>                                            
                                     </div>

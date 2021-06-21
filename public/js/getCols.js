@@ -28,11 +28,6 @@ function getCols(active_program, active_table, active_profile){
                                             if( e.field_name === field['search_field'] ) 
                                             return e; 
                                         });
-
-                                        // console.log(field['source_field']);
-                                        // console.log(field['search_field']);
-                                        // console.log(field['field_name']);
-
                                         return results[0]['value'];
                                     
                                     }
@@ -58,28 +53,15 @@ function getCols(active_program, active_table, active_profile){
                             );
                             break;
 
-                        case 'site_name':
-                            cols.push(
-                                {
-                                    data : field['source_field'], 
-                                    name: field['field_name'],
-                                    render : function(data){
-                                        site_name = "</strong>" + data + '</strong>';
-                                        return site_name;
-                                    }
-                                }
-                            );
-                            break;
-
                         default:
                             cols.push(
                                 {
                                     data : field['source_field'], 
                                     name: field['field_name'],
-                                    render : function(data){
-                                        site_name = "</strong>" + data + '</strong>';
-                                        return site_name;
-                                    }
+                                    // render : function(data){
+                                    //     site_name = "</strong>" + data + '</strong>';
+                                    //     return site_name;
+                                    // }
                                 }
                             );
                             // cols.push({data : field['source_field'], name: field['field_name']});

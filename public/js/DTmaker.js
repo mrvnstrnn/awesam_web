@@ -36,8 +36,55 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     $(row).attr('data-main_activity', main_activity);
                     $(row).attr('data-profile', data.profile_id);
             },
+            
+            columns: whatCols,
 
-            columns: whatCols
+            columnDefs: [ 
+                {
+                    "targets": [ "site_name" ],
+                    "visible": true,
+                    "searchable": true,
+                    "render": function ( data, type, row ) {
+                        return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] +'</small>';
+                    },
+                },
+                {
+                    "targets": [ "sam_id" ],
+                    "visible": false,
+                    "searchable": true,
+                },
+                {
+                    "targets": [ "activity_name" ],
+                    "visible": true,
+                    "searchable": true,
+                    "render": function ( data, type, row ) {
+
+                        var varDate = new Date(row['end_date']);
+                        var today = new Date();
+                        today.setHours(0,0,0,0);
+
+                        if(varDate >= today) {
+                            // console.log('Greater: ' + row['end_date']);
+                            badge_color = "success";
+                            date_text = row['start_date'] + ' to ' +row['end_date'];
+
+                        } else {
+                            // console.log('Lower: ' + row['end_date']);
+                            badge_color = "danger";
+                            const diffTime = Math.abs(today - varDate);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                            date_text = diffDays + " days delayed";
+                                                        
+                        }
+
+                        
+                        return '<div class="badge badge-' + badge_color + ' text-sm mb-0 px-2 py-1">' + data +'</div>' + 
+                                '<div><small>'+ date_text +'</small></div>'
+                    },
+                }
+
+            ]
+    
 
         }); 
 
@@ -75,7 +122,9 @@ $(document).ready(() => {
             if(cols.length > 0){
                 // Add Column Headers
                 $.each(cols, function (k, colObj) {
-                        str = '<th>' + colObj.name + '</th>';
+
+
+                        str = '<th class="' + colObj.data + '">' + colObj.name + '</th>';
                         $(str).appendTo($(activeTable).find("thead>tr"));
                 });
 
