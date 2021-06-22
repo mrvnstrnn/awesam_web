@@ -301,11 +301,11 @@
         if(mode == 'today'){
 
             if($(element).attr('data-profile_id') != "2"){
-                // $(element).addClass('d-none');
+                $(element).addClass('d-none');
             }
 
             if($(element).attr('data-activity_complete') == "true"){
-                $(element).addClass('d-none');
+                // $(element).addClass('d-none');
             }
             else {
 

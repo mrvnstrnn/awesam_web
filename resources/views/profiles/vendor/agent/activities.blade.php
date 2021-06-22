@@ -105,16 +105,10 @@
         <div class="tab-pane tabs-animation fade" id="tab-content-today" role="tabpanel">
             <div class="row">
                 <div class="col-md-6">
+                    <div class="main-card mb-3 card">
                     <div class="card-header">
                         <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
                         Site Activities
-                        <div class="btn-actions-pane-right actions-icon-btn">
-                            <div role="group" class="btn-group-sm nav btn-group">
-                                <a data-toggle="tab" href="#tab-eg2-0" class="btn-pill pl-3 active btn btn-focus">Today</a>
-                                <a data-toggle="tab" href="#tab-eg2-1" class="btn btn-focus">This Week</a>
-                                <a data-toggle="tab" href="#tab-eg2-2" class="btn-pill pr-3  btn btn-focus">This Month</a>
-                            </div>
-                        </div>
                     </div>
                     <div id="accordion" class="accordion-wrapper mb-3">
                         @foreach ($sites as $site)
@@ -168,7 +162,7 @@
 
                                         @endphp
 
-                                        <li class="list-group-item activity_list_item" data-sam_id="{{ $site->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
+                                        <li class="list-group-item activity_list_item" data-sam_id="{{ $site->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
                                             <div class="todo-indicator bg-{{ $activity_color }}"></div>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -207,7 +201,7 @@
                         </div>
                         @endforeach
                     </div>                    
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,40 +283,8 @@
 
         // console.log(lastday_week);
 
-        if(mode == 'today'){
-
-            if($(element).attr('data-activity_complete') == "true"){
+        if($(element).attr('data-profile_id') != "2"){
                 $(element).addClass('d-none');
-            }
-            else {
-
-                if(start_date.getTime() >= date_today.getTime() && date_today.getTime() <= end_date.getTime()    ){
-
-                    $(element).addClass('d-none');
-
-                }
-                else if(start_date > date_today){
-
-                    $(element).addClass('d-none');
-
-                }
-
-            }
-
-        }
-        else if(mode == 'this week'){
-            if($(element).attr('data-activity_complete') == "true"){
-                $(element).addClass('d-none');
-            }
-            else {
-
-                if(start_date > lastday_week ){
-
-                    $(element).addClass('d-none');
-
-                }
-
-            }
         }
 
     });
