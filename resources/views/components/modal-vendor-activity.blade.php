@@ -24,6 +24,11 @@
     .btn_switch_show_action {
         cursor: pointer;
     }
+
+    .contact-lessor:hover {
+        color: blue;
+        cursor: pointer;
+    }
     
 </style>    
     
@@ -121,7 +126,94 @@
                                             <textarea id="summernote" name="editordata" style="height:300px;"></textarea>
                                             <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Print to PDF</button> 
                                         </div>                                        
-                                        
+                                        <div id="action_lessor_engagement" class='d-none'>
+                                            <div class="row py-5 px-4" id="control_box">
+                                                <div class="col-md-3 text-center contact-lessor">
+                                                    <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
+                                                    <div class="pt-3"><small>Call</small></div>
+                                                </div>
+                                                <div class="col-md-3 text-center contact-lessor">
+                                                    <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
+                                                    <div class="pt-3"><small>Text</small></div>
+                                                </div>
+                                                <div class="col-md-3 text-center contact-lessor">
+                                                    <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
+                                                    <div class="pt-3"><small>Email</small></div>
+                                                </div>
+                                                <div class="col-md-3 text-center contact-lessor">
+                                                    <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
+                                                    <div class="pt-3"><small>Site Visit</small></div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row py-3 px-5 d-none" id="control_form">
+                                                <div class="col-12 py-3">
+                                                <form class="">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleSelect" class="col-sm-3 col-form-label">Date</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleSelect" class="col-sm-3 col-form-label">Method</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleText" class="col-sm-3 col-form-label">Remarks</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea name="text" id="exampleText" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleText" class="col-sm-3 col-form-label">Approval</label>
+                                                        <div class="col-sm-9">
+                                                            <select name="select" id="exampleSelect" class="form-control">
+                                                                <option value="false">Approval not yet secured</option>
+                                                                <option value="true">Approval Secured</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group ">
+                                                        <div class="col-sm-10 offset-sm-3">
+                                                            <button class="btn btn-secondary">Save Engagement</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Method</th>
+                                                                <th>Remarks</th>
+                                                                <th>Approved</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>2021-01-01</td>
+                                                                <td>Call</td>
+                                                                <td>Lessor not available</td>
+                                                                <td>No</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2021-01-05</td>
+                                                                <td>Call</td>
+                                                                <td>Lessor went to Hong Kong</td>
+                                                                <td>No</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>                                                                                
                                     </div>
                                 </div>
                             </div>
@@ -135,10 +227,19 @@
 
     <script>
 
+
+        $(".contact-lessor").on("click", function(){
+            $('#control_box').addClass('d-none');
+            $('#control_form').removeClass('d-none');
+        });
+
         $(".btn_switch_back_to_actions").on("click", function(){
             $("#actions_box").addClass('d-none');
             $("#actions_list").removeClass('d-none');
             $("#action_doc_maker").addClass('d-none');
+
+            $("#control_form").addClass('d-none');
+            $("#control_box").removeClass('d-none');
             
             // $("#doc_upload_button").addClass('d-none');
             // $('#doc_maker_button').removeClass('d-none');
@@ -156,8 +257,13 @@
                 $('#action_doc_upload').removeClass('d-none');
                 $('.doc_maker_button').removeClass('d-none');
                 $('.doc_upload_button').addClass('d-none')
+            }
+            else if($(this).attr('data-action')=="lessor engagement"){
 
-            } else {
+                $('#action_lessor_engagement').removeClass('d-none');
+
+            } 
+            else {
                 $('#action_doc_upload').addClass('d-none');
                 $('.doc_maker_button').addClass('d-none');
                 
