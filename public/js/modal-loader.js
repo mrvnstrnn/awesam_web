@@ -2,6 +2,9 @@
 
             e.preventDefault();
 
+            
+            $(".ajax_content_box").attr("data-what_table", $(this).attr('data-what_table'));
+
             if($(this).find("td").hasClass('dataTables_empty') == false){
                 var sam_id = $(this).attr('data-sam_id');
                 var activity = $(this).attr('data-activity')
@@ -31,7 +34,7 @@
           
                     success: function (resp){
                         $('.ajax_content_box').html("");   
-                        $('.ajax_content_box').html(resp);   
+                        $('.ajax_content_box').html(resp);
 
                         $.unblockUI();
                         $('#viewInfoModal').modal('show');

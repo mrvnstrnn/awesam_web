@@ -71,7 +71,7 @@
 </div>
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success">Approve RTB Documents</button>                                            
+        <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}">Approve RTB Documents</button>                                            
     </div>
 </div>
 
@@ -217,6 +217,51 @@
 
     $(".dropzone_files").on("click", function (){
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
+    });
+
+    $("#btn-accept-endorsement").click(function(e){
+        e.preventDefault();
+
+        var sam_id = [$(this).attr('data-sam_id')];
+        var data_complete = $(this).attr('data-complete');
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $.ajax({
+            url: '/accept-reject-endorsement',
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
+                        $("#viewInfoModal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+
+                        $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                        $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                        // $("#loaderModal").modal("hide");
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                    $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                    $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                }
+            },
+            error: function(resp){
+                // $("#loaderModal").modal("hide");
+                toastr.error(resp.message, 'Error');
+                $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+            }
+        });
+
     });
 
 </script>

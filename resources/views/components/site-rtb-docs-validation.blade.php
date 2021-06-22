@@ -305,9 +305,6 @@
                         resp.message[0],
                         'error'
                     )
-
-                    // $(".file_lists").removeClass("d-none");
-                    // $(".confirmation_message").addClass("d-none");
                 }
             },
             error: function (resp){
