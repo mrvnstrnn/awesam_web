@@ -52,3 +52,59 @@
             }
         });
 
+        
+        $('.show_activity_modal').on( 'click', function (e) {
+
+            e.preventDefault();
+
+
+            var sam_id = $(this).attr('data-sam_id');
+            var activity = $(this).attr('data-activity')
+            var activity_id = $(this).attr('data-activity_id')
+            var site = $(this).attr("data-site");
+            var main_activity = $(this).attr('data-main_activity')
+
+            console.log(activity_id);
+
+
+            loader = '<div class="p-2">Loading...</div>';
+            $.blockUI({ message: loader });
+
+            $.ajax({
+                url: "/get-all-docs",
+                method: "POST",
+                data: {
+                    site : site,
+                    activity : activity,
+                    activity_id : activity_id,
+                    main_activity : main_activity,
+                    sam_id : sam_id,
+                    vendor_mode : true
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                 },
+      
+                success: function (resp){
+                    $('.ajax_content_box').html("");   
+                    $('.ajax_content_box').html(resp);   
+
+                    $.unblockUI();
+                    $('#viewInfoModal').modal('show');
+
+
+                },
+                complete: function(){
+                    // $('#loader_modal').modal('hide');
+                    // $('.modal-backdrop').hide();
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
+
+
+
+        });
