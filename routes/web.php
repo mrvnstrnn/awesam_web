@@ -150,6 +150,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //RTB Declaration
     Route::post('/declare-rtb', [GlobeController::class, 'declare_rtb']);
+    Route::post('/approve-reject-rtb', [GlobeController::class, 'approve_reject_rtb']);
     
 });
 

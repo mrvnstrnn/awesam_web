@@ -7,7 +7,7 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="rtb_declaration_date" class="">Date Declaration</label>
+                        <label for="rtb_declaration_date">Date Declaration</label>
                         <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" class="form-control" readonly />
                         <small class="rtb_declaration_date-error text-danger"></small>
                     </div>        

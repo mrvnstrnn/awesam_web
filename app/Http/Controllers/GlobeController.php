@@ -781,11 +781,14 @@ class GlobeController extends Controller
                 $mainactivity = "Document Validation";
             }
 
+            $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->first();
+
             return \View::make('components.modal-view-site')
                 ->with([
                     'site' => $site,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
+                    'rtbdeclaration' => $rtbdeclaration,
                     'main_activity' => $request['main_activity']
                 ])
                 ->render();
@@ -1111,6 +1114,44 @@ class GlobeController extends Controller
                 } else {
                     return response()->json(['error' => true, 'message' => "RTB already declared." ]);
                 }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_rtb (Request $request)
+    {
+        try {
+            $required = "";
+            if ($request->input('action') == "false" ) {
+                $required = "required";
+            }
+
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => $required,
+            ));
+
+            if ($validate->passes()){
+
+                SiteEndorsementEvent::dispatch( $request->input('sam_id') );
+                \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
+
+                // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('action').'")');
+
+
+                RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                ->update([
+                    'status'=> $request->input('action') == "false" ? "denied" : "approved",
+                    'remarks'=> $request->input('remarks'),
+                    'approver_id'=> \Auth::id(),
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
+
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
