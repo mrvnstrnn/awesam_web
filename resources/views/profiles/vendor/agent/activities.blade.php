@@ -60,22 +60,19 @@
     </li>
 </ul> --}}
 <div class="tab-content">
-    @php
+    {{-- @php
         $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
-        // dd($activities);
 
         function date_sort($a, $b) {
             return strtotime($a->start_date) - strtotime($b->start_date);
         }
         usort($activities, "date_sort");
 
-        // dd($activities);
         
         function group_by($key, $data) {
             $result = array();
 
             for ($i=0; $i < count($data); $i++) { 
-                // if(array_key_exists($key, $data[$i])){
                 if(isset($key) == $data[$i]) {
                     $result[$data[$i]->$key][] = $data[$i];
                 } else {
@@ -84,7 +81,7 @@
             }
             return $result;
         }
-    @endphp
+    @endphp --}}
 
     @php
         $sites = \DB::connection('mysql2')
@@ -107,9 +104,9 @@
 
         <div class="tab-pane tabs-animation fade" id="tab-content-today" role="tabpanel">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <div class="card-header">
-                        <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                        <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
                         Site Activities
                         <div class="btn-actions-pane-right actions-icon-btn">
                             <div role="group" class="btn-group-sm nav btn-group">
@@ -125,9 +122,13 @@
                         <div class="card">
                             <div id="headingOne" class="card-header">
                                 <button type="button" data-toggle="collapse" data-target="#collapse-{{ $site->sam_id }}" aria-expanded="true" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link text-dark btn-block">
-                                        
-                                        <h5 class="m-0 p-0"><i class="fa fa-map-marker fa-xl mb-2 mr-2" aria-hidden="true"></i>{{ $site->site_name }}</h5>
-                                        <div class='pl-4    '><small>{{ $site->sam_id }} {{ $site->site_category }}</small></div>
+                                    <div class="row">
+                                        <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                                        <div class="">
+                                            <h6 class="m-0 p-0">{{ $site->site_name }}</h6>
+                                            <small>{{ $site->sam_id }} {{ $site->site_category }}</small>
+                                        </div>   
+                                    </div>
                                 </button>
                             </div>
                             <div data-parent="#accordion" id="collapse-{{ $site->sam_id }}" aria-labelledby="heading-{{ $site->sam_id }}" class="collapse" style="">
@@ -135,7 +136,7 @@
 
                                      @foreach($activities as $activity)
 
-                                        @if($site->sam_id == $activity->sam_id  && $activity->start_date <=  Carbon::today() && ($activity->activity_complete == 'false' ||  $activity->activity_complete == null ) )
+                                        @if($site->sam_id == $activity->sam_id  )
 
                                         @php
                                             if($activity->activity_complete == 'true'){
@@ -149,14 +150,25 @@
                                                     $activity_badge = "delayed";
                                                 } 
                                                 else {
-                                                    $activity_color = 'warning';
-                                                    $activity_badge = "On Schedule";
+
+                                                    if($activity->start_date >  Carbon::today()){
+
+                                                        $activity_color = 'secondary';
+                                                        $activity_badge = "Upcoming";
+
+                                                    } 
+                                                    else {
+
+                                                        $activity_color = 'warning';
+                                                        $activity_badge = "On Schedule";
+
+                                                    }
                                                 }
                                             }
 
                                         @endphp
 
-                                        <li class="list-group-item">
+                                        <li class="list-group-item activity_list_item" data-sam_id="{{ $site->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
                                             <div class="todo-indicator bg-{{ $activity_color }}"></div>
                                             <div class="widget-content p-0">
                                                 <div class="widget-content-wrapper">
@@ -176,9 +188,9 @@
                                                         </div>
                                                     </div>
                                                     @if(in_array($activity->profile_id, array("2", "3")))
-                                                    <div class="widget-content-right widget-content-actions">
-                                                        <button class="border-0 btn-transition btn btn-outline-success show_activity_modal" data-sam_id='{{ $site->sam_id }}' data-site='{{ $site->site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
-                                                            <i class="fa fa-angle-double-right fa-xl"></i>
+                                                    <div class="widget-content-right">
+                                                        <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $site->sam_id }}' data-site='{{ $site->site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
+                                                            <i class="fa fa-angle-double-right fa-lg"></i>
                                                         </button>
                                                     </div>
                                                     @endif
@@ -262,6 +274,60 @@
 <script src="js/modal-loader.js"></script>
 
 <script>
+
+    var mode = "today";
+    
+
+    $('.activity_list_item').each(function(index, element){
+
+        start_date = new Date($(element).attr('data-start_date'));
+        end_date = new Date($(element).attr('data-end_date'));
+        date_today = new Date();
+
+        var firstday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay()));
+        var lastday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay() + 6));
+
+        console.log(lastday_week);
+
+        if(mode == 'today'){
+
+            if($(element).attr('data-activity_complete') == "true"){
+                $(element).addClass('d-none');
+            }
+            else {
+
+                if(start_date.getTime() >= date_today.getTime() && date_today.getTime() <= end_date.getTime()    ){
+
+                    $(element).addClass('d-none');
+
+                }
+                else if(start_date > date_today){
+
+                    $(element).addClass('d-none');
+
+                }
+
+            }
+
+        }
+        else if(mode == 'this week'){
+            if($(element).attr('data-activity_complete') == "true"){
+                $(element).addClass('d-none');
+            }
+            else {
+
+                if(start_date > lastday_week ){
+
+                    $(element).addClass('d-none');
+
+                }
+
+            }
+        }
+
+    });
+
+
     Dropzone.autoDiscover = false;
     $(".dropzone").dropzone({
         addRemoveLinks: true,

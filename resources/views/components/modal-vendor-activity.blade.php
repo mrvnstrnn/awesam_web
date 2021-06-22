@@ -57,6 +57,8 @@
                                         </div>
                                         <div class="btn-actions-pane-right">
                                             @php
+
+                                                // dd($site);
                                                 if($site[0]->end_date > now()){
                                                     $badge_color = "success";
                                                 } else {
@@ -92,8 +94,8 @@
                                     <div class="row p-2 pt-3    ">
                                         @foreach ($sub_activities as $sub_activity)
                                             @if($sub_activity->activity_id == $activity_id)
-                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sub_activity="{{ $sub_activity->sub_activity_name }}"  data-action="{{ $sub_activity->action }}">
-                                                <H6><i class="pe-7s-cloud-upload pe-xl mr-2"></i>{{ $sub_activity->sub_activity_name }}</H6>
+                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sub_activity="{{ $sub_activity->sub_activity_name }}"  data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
+                                                <H6><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</H6>
                                                 </div>
                                             @endif                                    
                                         @endforeach
@@ -108,7 +110,8 @@
                                             <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
                                         </div>
                                         <div class="col-6 align-right  text-right">
-                                            <button class="doc_maker_button btn btn-outline btn-outline-primary btn-sm mb-3 d-none">Document Maker</button>                                            
+                                            <button class="doc_maker_button btn btn-outline btn-outline-primary btn-sm mb-3 d-none">Document Maker</button>     
+
                                             <button class="doc_upload_button btn btn-outline btn-outline-primary btn-sm mb-3 d-none">Upload Document</button>                                            
                                         </div>
                                     </div>
@@ -262,7 +265,14 @@
 
             if($(this).attr('data-action')=="doc upload"){
                 $('#action_doc_upload').removeClass('d-none');
-                $('.doc_maker_button').removeClass('d-none');
+                
+                if($(this).attr('data-with_doc_maker')=="1"){
+                    $('.doc_maker_button').removeClass('d-none');
+                }
+                else {
+                    $('.doc_maker_button').addClass('d-none');
+                }
+
                 $('.doc_upload_button').addClass('d-none')
             }
             else if($(this).attr('data-action')=="lessor engagement"){
