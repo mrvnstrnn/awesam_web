@@ -47,7 +47,7 @@
 
 <script>
     $(function() {
-    $("#datepicker").datepicker();
+        $("#datepicker").datepicker();
         $("#datepicker").on("change",function(){
             var selected = $(this).val();
             $("#date_declaration").val(selected);

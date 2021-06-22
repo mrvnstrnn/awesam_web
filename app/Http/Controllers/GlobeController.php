@@ -12,6 +12,7 @@ use App\Models\SubActivityValue;
 use App\Models\IssueType;
 use App\Models\Issue;
 use App\Models\Chat;
+use App\Models\RTBDeclaration;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -1068,6 +1069,51 @@ class GlobeController extends Controller
                                 ->first();
 
             return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function declare_rtb(Request $request)
+    {
+        try {
+
+            $validate = \Validator::make($request->all(), array(
+                'rtb_declaration_date' => 'required',
+                'rtb_declaration' => 'required',
+            ));
+
+            if ($validate->passes()){
+
+                $rtb = RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                                        ->where('user_id', \Auth::id())
+                                        ->first();
+
+                if (is_null($rtb)){
+
+                    SiteEndorsementEvent::dispatch( $request->input('sam_id') );
+                    \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
+
+                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+
+                    RTBDeclaration::create([
+                        'sam_id' => $request->input('sam_id'),
+                        'rtb_declaration_date' => date('Y-m-d', strtotime($request->input('rtb_declaration_date'))),
+                        'rtb_declaration' => $request->input('rtb_declaration'),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'remarks' => $request->input('remarks'),
+                    ]);
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
+                } else {
+                    return response()->json(['error' => true, 'message' => "RTB already declared." ]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
