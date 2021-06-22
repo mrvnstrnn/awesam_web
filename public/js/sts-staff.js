@@ -113,7 +113,6 @@ $(document).ready(() => {
 
     $(".btn-accept-endorsement").click(function(e){
         e.preventDefault();
-        // $("#loaderModal").modal("show");
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');

@@ -7,16 +7,16 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="exampleSelect" class="">RTB Declaration</label>
-                        <input type="text" class="form-control"/>
+                        <label for="date_declaration" class="">RTB Declaration</label>
+                        <input type="text" id="date_declaration" name="date_declaration" class="form-control" readonly />
                     </div>        
                 </div>
             </div>
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="exampleSelect" class="">RTB Declaration</label>
-                        <select name="select" id="exampleSelect" class="form-control">
+                        <label for="rtb_declaration" class="">RTB Declaration</label>
+                        <select name="rtb_declaration" id="rtb_declaration" class="form-control">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -29,8 +29,8 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="exampleSelect" rows="6" class="">Remarks</label>
-                        <textarea class="form-control" style="height: 95px;"></textarea>
+                        <label for="remarks" rows="6" class="">Remarks</label>
+                        <textarea class="form-control" id="remarks" name="remarks" style="height: 95px;"></textarea>
                     </div>        
                 </div>
             </div>
@@ -43,3 +43,14 @@
         <button class="float-right btn btn-shadow btn-danger mr-2">Reject</button>                                            
     </div>
 </div>
+
+
+<script>
+    $(function() {
+    $("#datepicker").datepicker();
+        $("#datepicker").on("change",function(){
+            var selected = $(this).val();
+            $("#date_declaration").val(selected);
+        });
+    });
+</script>

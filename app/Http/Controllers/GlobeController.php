@@ -626,14 +626,30 @@ class GlobeController extends Controller
             
     }
 
-    public function doc_validation_approvals($id, $action)
+    // public function doc_validation_approvals($id, $action)
+    public function doc_validation_approvals(Request $request)
     {
         try {
-            SubActivityValue::where('id', $id)->update([
-                'status' => $action == "rejected" ? "denied" : "approved"
-            ]);
-            
-            return response()->json(['error' => false, 'message' => "Successfully ".$action." docs." ]);
+            $required = "";
+            if ($request->input('action') == "rejected") {
+                $required = "required";
+            }
+
+            $validate = Validator::make($request->all(), array(
+                'reason' => $required
+            ));
+
+            if ($validate->passes()) {
+                SubActivityValue::where('id', $request->input('id'))->update([
+                    'status' => $request->input('action') == "rejected" ? "denied" : "approved",
+                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all() ]);
+            }
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

@@ -35,6 +35,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     $(row).attr('data-sam_id', data.sam_id);
                     $(row).attr('data-main_activity', main_activity);
                     $(row).attr('data-profile', data.profile_id);
+                    $(row).attr('data-what_table', $(whatTable).attr('id'));
             },
             
             columns: whatCols,
