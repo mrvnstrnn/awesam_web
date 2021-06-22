@@ -792,7 +792,8 @@ class GlobeController extends Controller
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
-                    'activity_id' => $request['activity_id']
+                    'activity_id' => $request['activity_id'],
+                    'main_activity' => $request['main_activity'],
                 ])
                 ->render();
 

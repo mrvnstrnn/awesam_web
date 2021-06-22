@@ -67,9 +67,6 @@
             var site = $(this).attr("data-site");
             var main_activity = $(this).attr('data-main_activity')
 
-            console.log(activity_id);
-
-
             loader = '<div class="p-2">Loading...</div>';
             $.blockUI({ message: loader });
 

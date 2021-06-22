@@ -287,7 +287,7 @@
         var firstday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay()));
         var lastday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay() + 6));
 
-        console.log(lastday_week);
+        // console.log(lastday_week);
 
         if(mode == 'today'){
 
