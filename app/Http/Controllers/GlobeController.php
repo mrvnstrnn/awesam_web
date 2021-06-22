@@ -782,16 +782,37 @@ class GlobeController extends Controller
             }
 
             $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
+            if($request['vendor_mode']){
+                
+                $what_modal = "components.modal-vendor-activity";
 
-            return \View::make('components.modal-view-site')
+                return \View::make($what_modal)
                 ->with([
                     'site' => $site,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
-                    'main_activity' => $request['main_activity']
+                    'activity_id' => $request['activity_id']
                 ])
                 ->render();
+
+            } else {
+
+                $what_modal = "components.modal-view-site";
+
+                return \View::make($what_modal)
+                ->with([
+                    'site' => $site,
+                    'sam_id' => $request['sam_id'],
+                    'site_fields' => $site_fields,
+                    'rtbdeclaration' => $rtbdeclaration,
+                    'main_activity' => $request['main_activity'],
+                ])
+                ->render();
+    
+            }
+
+
 
 
         } catch (\Throwable $th) {
