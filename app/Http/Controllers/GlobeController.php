@@ -781,7 +781,7 @@ class GlobeController extends Controller
                 $mainactivity = "Document Validation";
             }
 
-            $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->first();
+            $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
 
             return \View::make('components.modal-view-site')
                 ->with([
@@ -1090,6 +1090,7 @@ class GlobeController extends Controller
 
                 $rtb = RTBDeclaration::where('sam_id', $request->input('sam_id'))
                                         ->where('user_id', \Auth::id())
+                                        ->where('status', "pending")
                                         ->first();
 
                 if (is_null($rtb)){

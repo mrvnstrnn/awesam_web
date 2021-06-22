@@ -41,7 +41,7 @@
 </div>
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success declaration_approve_reject" id="declaration_approve" data-action="true" data-sam_id="{{ $rtbdeclaration->sam_id }}" data-sam_id="{{ $rtbdeclaration->sam_id }}">Approve RTB Declaration</button>                                            
+        <button class="float-right btn btn-shadow btn-success declaration_approve_reject" id="declaration_approve" data-action="true" data-sam_id="{{ $rtbdeclaration->sam_id }}">Approve RTB Declaration</button>                                            
         <button class="float-right btn btn-shadow btn-danger mr-2 declaration_approve_reject" id="declaration_reject" data-action="false" data-sam_id="{{ $rtbdeclaration->sam_id }}">Reject</button>                                            
     </div>
 </div>
