@@ -71,95 +71,95 @@
 </div>
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success">Approve RTB Documents</button>                                            
+        <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}">Approve RTB Documents</button>                                            
     </div>
 </div>
 
 <script src="/js/dropzone/dropzone.js"></script>
 
 <script>  
-    Dropzone.autoDiscover = false;
-    $(".dropzone_files").dropzone({
-        addRemoveLinks: true,
-        maxFiles: 1,
-        maxFilesize: 1,
-        paramName: "file",
-        // params: {
-        //     sam_id: $("input[name=hidden_sam_id]").val(),
-        //     sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
-        // },
-        url: "/upload-file",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (file, resp) {
-            if (!resp.error){
-                var sam_id = this.element.attributes[1].value;
-                var sub_activity_id = this.element.attributes[2].value;
-                var sub_activity_name = this.element.attributes[3].value;
-                var file_name = resp.file;
 
-                // var sub_activity_name = $(this).attr("data-sub_activity_name");
+    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
+        Dropzone.autoDiscover = false;
+        $(".dropzone_files").dropzone({
+            addRemoveLinks: true,
+            maxFiles: 1,
+            maxFilesize: 1,
+            paramName: "file",
+            url: "/upload-file",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (file, resp) {
+                if (!resp.error){
+                    var sam_id = this.element.attributes[1].value;
+                    var sub_activity_id = this.element.attributes[2].value;
+                    var sub_activity_name = this.element.attributes[3].value;
+                    var file_name = resp.file;
 
-                $.ajax({
-                    url: "/upload-my-file",
-                    method: "POST",
-                    data: {
-                        sam_id : sam_id,
-                        sub_activity_id : sub_activity_id,
-                        file_name : file_name,
-                        sub_activity_name : sub_activity_name
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp) {
-                        if (!resp.error){
+                    // var sub_activity_name = $(this).attr("data-sub_activity_name");
 
-                            var ext = file_name.split('.').pop();
+                    $.ajax({
+                        url: "/upload-my-file",
+                        method: "POST",
+                        data: {
+                            sam_id : sam_id,
+                            sub_activity_id : sub_activity_id,
+                            file_name : file_name,
+                            sub_activity_name : sub_activity_name
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error){
 
-                            var class_name = "";
+                                var ext = file_name.split('.').pop();
 
-                            if (ext == "pdf") {
-                                class_name = "fa-file-pdf";
-                            } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
-                                class_name = "fa-file-image";
-                            } else {
-                                class_name = "fa-file";
-                            }
+                                var class_name = "";
 
-                            $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
+                                if (ext == "pdf") {
+                                    class_name = "fa-file-pdf";
+                                } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
+                                    class_name = "fa-file-image";
+                                } else {
+                                    class_name = "fa-file";
+                                }
 
-                            $(".dropzone_div_"+sub_activity_id).append(
-                                '<div class="child_div_'+sub_activity_id+'">' +
-                                    '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
-                                        '<div>' +
-                                            '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
-                                            '<p><small>'+sub_activity_name+'</small></p>' +
+                                $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
+
+                                $(".dropzone_div_"+sub_activity_id).append(
+                                    '<div class="child_div_'+sub_activity_id+'">' +
+                                        '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
+                                            '<div>' +
+                                                '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
+                                                '<p><small>'+sub_activity_name+'</small></p>' +
+                                            '</div>' +
                                         '</div>' +
-                                    '</div>' +
-                                '</div>'
-                            );
-                            
-                            // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
-                            
-                            toastr.success(resp.message, "Success");
-                        } else {
+                                    '</div>'
+                                );
+                                
+                                // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
+                                
+                                toastr.success(resp.message, "Success");
+                            } else {
+                                toastr.error(resp.message, "Error");
+                            }
+                        },
+                        error: function (file, response) {
                             toastr.error(resp.message, "Error");
                         }
-                    },
-                    error: function (file, response) {
-                        toastr.error(resp.message, "Error");
-                    }
-                });
-            } else {
+                    });
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function (file, resp) {
                 toastr.error(resp.message, "Error");
             }
-        },
-        error: function (file, resp) {
-            toastr.error(resp.message, "Error");
-        }
-    });
+        });
+
+    }
     
     $(".view_file").on("click", function (){
 
@@ -217,6 +217,51 @@
 
     $(".dropzone_files").on("click", function (){
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
+    });
+
+    $("#btn-accept-endorsement").click(function(e){
+        e.preventDefault();
+
+        var sam_id = [$(this).attr('data-sam_id')];
+        var data_complete = $(this).attr('data-complete');
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $.ajax({
+            url: '/accept-reject-endorsement',
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
+                        $("#viewInfoModal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+
+                        $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                        $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                        // $("#loaderModal").modal("hide");
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                    $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                    $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                }
+            },
+            error: function(resp){
+                // $("#loaderModal").modal("hide");
+                toastr.error(resp.message, 'Error');
+                $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+            }
+        });
+
     });
 
 </script>

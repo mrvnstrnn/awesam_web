@@ -215,6 +215,8 @@
     <script type="text/javascript" src="/vendors/block-ui/jquery.blockUI.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script> --}}
