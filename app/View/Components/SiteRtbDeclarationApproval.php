@@ -11,9 +11,11 @@ class SiteRtbDeclarationApproval extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $rtbdeclaration;
+
+    public function __construct($rtbdeclaration)
     {
-        //
+        $this->rtbdeclaration = $rtbdeclaration;
     }
 
     /**

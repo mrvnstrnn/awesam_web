@@ -111,7 +111,7 @@
 
                                         @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "")
 
-                                            <x-site-rtb-declaration-approval />
+                                            <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" />
 
                                         @elseif($site[0]->activity_name == "RTB Declaration" && $main_activity == "")
 

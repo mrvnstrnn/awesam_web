@@ -12,6 +12,7 @@ use App\Models\SubActivityValue;
 use App\Models\IssueType;
 use App\Models\Issue;
 use App\Models\Chat;
+use App\Models\RTBDeclaration;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -780,6 +781,7 @@ class GlobeController extends Controller
                 $mainactivity = "Document Validation";
             }
 
+            $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
             if($request['vendor_mode']){
                 
                 $what_modal = "components.modal-vendor-activity";
@@ -789,9 +791,8 @@ class GlobeController extends Controller
                     'site' => $site,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
-                    'main_activity' => $request['main_activity'],
+                    'rtbdeclaration' => $rtbdeclaration,
                     'activity_id' => $request['activity_id']
-
                 ])
                 ->render();
 
@@ -804,6 +805,7 @@ class GlobeController extends Controller
                     'site' => $site,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
+                    'rtbdeclaration' => $rtbdeclaration,
                     'main_activity' => $request['main_activity'],
                 ])
                 ->render();
@@ -1091,6 +1093,90 @@ class GlobeController extends Controller
                                 ->first();
 
             return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function declare_rtb(Request $request)
+    {
+        try {
+
+            $validate = \Validator::make($request->all(), array(
+                'rtb_declaration_date' => 'required',
+                'rtb_declaration' => 'required',
+            ));
+
+            if ($validate->passes()){
+
+                $rtb = RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                                        ->where('user_id', \Auth::id())
+                                        ->where('status', "pending")
+                                        ->first();
+
+                if (is_null($rtb)){
+
+                    SiteEndorsementEvent::dispatch( $request->input('sam_id') );
+                    \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
+
+                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+
+                    RTBDeclaration::create([
+                        'sam_id' => $request->input('sam_id'),
+                        'rtb_declaration_date' => date('Y-m-d', strtotime($request->input('rtb_declaration_date'))),
+                        'rtb_declaration' => $request->input('rtb_declaration'),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'remarks' => $request->input('remarks'),
+                    ]);
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
+                } else {
+                    return response()->json(['error' => true, 'message' => "RTB already declared." ]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_rtb (Request $request)
+    {
+        try {
+            $required = "";
+            if ($request->input('action') == "false" ) {
+                $required = "required";
+            }
+
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => $required,
+            ));
+
+            if ($validate->passes()){
+
+                SiteEndorsementEvent::dispatch( $request->input('sam_id') );
+                \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
+
+                // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('action').'")');
+
+
+                RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                ->update([
+                    'status'=> $request->input('action') == "false" ? "denied" : "approved",
+                    'remarks'=> $request->input('remarks'),
+                    'approver_id'=> \Auth::id(),
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
