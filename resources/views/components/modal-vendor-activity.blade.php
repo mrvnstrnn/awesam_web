@@ -21,8 +21,10 @@
         font-size: 1.3em;
     }
 
-    .btn_switch_show_action {
+
+    .btn_switch_show_action:hover {
         cursor: pointer;
+        color: blue;
     }
 
     .contact-lessor:hover {
@@ -79,13 +81,18 @@
                                     $sub_activities = json_decode($site[0]->sub_activity);
                                 @endphp
                                 <div id="actions_list" class="">
-
-                                    <H5>Actions to Complete</H5>
-                                    <hr>
-                                    <div class="row p-2">
+                                    <div class="row border-bottom">
+                                        <div class="col-8">
+                                            <H5>Actions to Complete</H5>
+                                        </div>
+                                        <div class="col-4">
+                                            {{-- <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                             --}}
+                                        </div>
+                                    </div>
+                                    <div class="row p-2 pt-3    ">
                                         @foreach ($sub_activities as $sub_activity)
                                             @if($sub_activity->activity_id == $activity_id)
-                                                <div class="col-md-6 btn_switch_show_action py-2" data-sub_activity="{{ $sub_activity->sub_activity_name }}"  data-action="{{ $sub_activity->action }}">
+                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sub_activity="{{ $sub_activity->sub_activity_name }}"  data-action="{{ $sub_activity->action }}">
                                                 <H6><i class="pe-7s-cloud-upload pe-xl mr-2"></i>{{ $sub_activity->sub_activity_name }}</H6>
                                                 </div>
                                             @endif                                    
@@ -128,19 +135,19 @@
                                         </div>                                        
                                         <div id="action_lessor_engagement" class='d-none'>
                                             <div class="row py-5 px-4" id="control_box">
-                                                <div class="col-md-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
                                                     <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Call</small></div>
                                                 </div>
-                                                <div class="col-md-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
                                                     <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Text</small></div>
                                                 </div>
-                                                <div class="col-md-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor">
                                                     <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Email</small></div>
                                                 </div>
-                                                <div class="col-md-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
                                                     <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Site Visit</small></div>
 
