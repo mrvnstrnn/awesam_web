@@ -562,11 +562,37 @@ class GlobeController extends Controller
                 'file_name' => 'required',
             ));
 
+
             $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
 
-            $new_file = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
+            $file_name = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
 
-            \Storage::move( $request->input("file_name"), strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext );
+            if (file_exists( public_path()."/files/".$file_name )) {
+
+
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+                
+                // $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', "coloc-000001-fac-01.txt");
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  "01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+
+            } else {
+
+                $new_file = $file_name;
+
+            }
+
+            \Storage::move( $request->input("file_name"), $new_file );
 
             // sub_activity_name
             if($validate->passes()){
