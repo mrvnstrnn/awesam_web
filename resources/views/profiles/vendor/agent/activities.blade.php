@@ -92,6 +92,12 @@
             ->orderBy('sam_id') 
             ->get();
         
+        $site_status = \DB::connection('mysql2')
+            ->table('site_milestone_status')
+            ->where('site_agent_id', "=", \Auth::id())
+            ->orderBy('sam_id') 
+            ->get();
+
         $activities = \DB::connection('mysql2')
             ->table('site_milestone')
             ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
@@ -106,29 +112,28 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="main-card mb-3 card">
-                    <div class="card-header">
-                        <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
-                        Site Activities
-                    </div>
-                    <div id="accordion" class="accordion-wrapper mb-3">
-                        @foreach ($sites as $site)
+                        <div class="card-header">
+                            <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
+                            My Activities
+                        </div>
+                        <div id="accordion" class="accordion-wrapper mb-3">
+                            @foreach ($sites as $site)
 
-                        <div class="card">
-                            <div id="headingOne" class="card-header">
-                                <button type="button" data-toggle="collapse" data-target="#collapse-{{ $site->sam_id }}" aria-expanded="true" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link text-dark btn-block">
-                                    <div class="row">
-                                        <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
-                                        <div class="">
-                                            <h6 class="m-0 p-0">{{ $site->site_name }}</h6>
-                                            <small>{{ $site->sam_id }} {{ $site->site_category }}</small>
-                                        </div>   
-                                    </div>
-                                </button>
-                            </div>
-                            <div data-parent="#accordion" id="collapse-{{ $site->sam_id }}" aria-labelledby="heading-{{ $site->sam_id }}" class="collapse" style="">
+                            <div class="card">
+                                {{-- <div id="headingOne" class="card-header">
+                                    <button type="button" data-toggle="collapse" data-target="#collapse-{{ $site->sam_id }}" aria-expanded="true" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link text-dark btn-block">
+                                        <div class="row">
+                                            <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                                            <div class="">
+                                                <h6 class="m-0 p-0">{{ $site->site_name }}</h6>
+                                                <small>{{ $site->sam_id }} {{ $site->site_category }}</small>
+                                            </div>   
+                                        </div>
+                                    </button>
+                                </div> --}}
                                 <ul class="todo-list-wrapper list-group list-group-flush">
 
-                                     @foreach($activities as $activity)
+                                    @foreach($activities as $activity)
 
                                         @if($site->sam_id == $activity->sam_id  )
 
@@ -173,12 +178,16 @@
                                                         <div class="widget-heading">
                                                             {{ $activity->activity_name }}
                                                             <div class="badge badge-{{ $activity_color }} ml-2">{{ $activity_badge }}</div>
-                                                            @if ($activity->activity_complete == 'false')
+                                                            {{-- @if ($activity->activity_complete == 'false')
                                                             <div class="badge badge-primary ml-0">Active</div>                                                                
-                                                            @endif
+                                                            @endif --}}
+                                                        </div>
+                                                        <div class="widget-subheading">
+                                                            <h6 class="m-0 p-0">{{ $site->site_name }}</h6>
                                                         </div>
                                                         <div class="widget-subheading">
                                                             <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
+
                                                         </div>
                                                     </div>
                                                     @if(in_array($activity->profile_id, array("2", "3")))
@@ -194,13 +203,42 @@
 
                                         @endif
 
-                                     @endforeach
+                                    @endforeach
                                     
                                 </ul>                            
+
+                                {{-- <div data-parent="#accordion" id="collapse-{{ $site->sam_id }}" aria-labelledby="heading-{{ $site->sam_id }}" class="collapse" style="">
+                                </div> --}}
                             </div>
+                            @endforeach
+                        </div>                    
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="main-card mb-3 card">
+                        
+                        <div class="card-header">
+                            <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                            Site Status
                         </div>
-                        @endforeach
-                    </div>                    
+                        <div id="accordion" class="accordion-wrapper mb-3">
+                            @foreach ($site_status as $site_)
+                                <div class="row pl-3 py-2 border-bottom mx-1">
+                                    <div class="circle-progress circle-progress-primary d-inline-block">
+                                        <small><span class="site_progress">{{ $site_->progress }}</span></small>
+                                    </div>
+                                    {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
+                                    <div class="ml-0 col">
+                                        <div class=""><H6 class='mb-0' style="font-weight: bold;">{{ $site_->site_name }} {{ $site_->site_category }}</H6></div>
+                                        {{-- <div>
+                                        {{ $site_->sam_id }} {{ $site_->site_category }}
+                                        </div> --}}
+                                        <div class="badge badge-dark">{{ $site_->activity_name }}</div>
+                                        
+                                    </div>   
+                                </div>
+                            @endforeach
+                        </div>                    
                     </div>
                 </div>
             </div>
@@ -270,7 +308,7 @@
 <script>
 
     var mode = "today";
-    
+
 
     $('.activity_list_item').each(function(index, element){
 
@@ -286,6 +324,36 @@
         if($(element).attr('data-profile_id') != "2"){
                 $(element).addClass('d-none');
         }
+
+
+        if($(element).attr('data-activity_complete') == "true"){
+                $(element).addClass('d-none');
+        }
+
+        if($(element).attr('data-activity_complete') == ""){
+                $(element).addClass('d-none');
+        }
+
+    });
+
+
+    $('.circle-progress').each(function(index, element){
+        var progress = $(element).find('.site_progress').text();
+
+        // console.log(progress);
+
+        $(element)
+            .circleProgress({
+            value: progress,
+            size: 50,
+            lineCap: "round",
+            fill: { gradient: ["#ff1e41"] },
+            })
+            .on("circle-animation-progress", function (event, progress, stepValue) {
+            $(this)
+                .find("small")
+                .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+            });
 
     });
 
