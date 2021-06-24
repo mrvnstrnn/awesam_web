@@ -166,6 +166,11 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
+                                                    <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-activities">
+                                                        <span>Forecast</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
                                                     <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-files">
                                                         <span>Files</span>
                                                     </a>
@@ -187,8 +192,10 @@
                                         <div class="tab-pane tabs-animation fade show active" id="tab-content-details" role="tabpanel">
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
+                                        <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
+                                            <x-site-activities :site="$site" />
+                                        </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
-                                            
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
