@@ -164,7 +164,7 @@
                                                     <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Email</small></div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Site Visi">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Site Visit">
                                                     <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Site Visit</small></div>
 
@@ -196,7 +196,7 @@
                                                         <label for="lesor_approval" class="col-sm-3 col-form-label">Approval</label>
                                                         <div class="col-sm-9">
                                                             <select name="lessor_approval" id="lessor_approval" class="form-control">
-                                                                <option value="pending">Approval not yet secured</option>
+                                                                <option value="active">Approval not yet secured</option>
                                                                 <option value="approved">Approval Secured</option>
                                                                 <option value="denied">Lessor Rejected</option>
                                                             </select>
@@ -283,6 +283,8 @@
             $("#actions_list").addClass('d-none');
             $('#active_action').text($(this).attr('data-sub_activity'));
 
+            $(".table_uploaded").removeAttr("id");
+
             if($(this).attr('data-action')=="doc upload"){
                 $('#action_doc_upload').removeClass('d-none');
 
@@ -293,10 +295,9 @@
 
                 $(".table_uploaded").attr("id", "table_uploaded_files_"+$(this).attr("data-sub_activity_id"));
 
+                console.log('#table_uploaded_files_'+$(this).attr("data-sub_activity_id"));
 
-                // console.log(! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")));
-                if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")) ){
-
+                if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")) ){   
                     $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable({
                         processing: true,
                         serverSide: true,
@@ -321,6 +322,8 @@
                             { data: "date_created" },
                         ],
                     });
+                } else {
+                    $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable().ajax.reload();
                 }
 
                 Dropzone.autoDiscover = false;
@@ -338,6 +341,7 @@
                             var sam_id = $(".ajax_content_box").attr("data-sam_id");
                             var sub_activity_id = this.element.attributes[1].value;
                             var sub_activity_name = this.element.attributes[2].value;
+
                             var file_name = resp.file;
 
                             $.ajax({
@@ -357,35 +361,7 @@
 
                                         $(".table_uploaded_parent").removeClass("d-none");
 
-                                        if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+sub_activity_id) ){
-
-                                            $('#table_uploaded_files_'+sub_activity_id).DataTable({
-                                                processing: true,
-                                                serverSide: true,
-                                                ajax: {
-                                                    url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+sam_id,
-                                                    type: 'GET',
-                                                    headers: {
-                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                    },
-                                                },
-                                                dataSrc: function(json){
-                                                    return json.data;
-                                                },
-                                                'createdRow': function( row, data, dataIndex ) {
-                                                    $(row).attr('data-value', data.value);
-                                                    $(row).attr('style', 'cursor: pointer');
-                                                },
-                                                columns: [
-                                                    { data: "id" },
-                                                    { data: "value" },
-                                                    { data: "status" },
-                                                    { data: "date_created" },
-                                                ],
-                                            });
-                                        } else {
-                                            $('#table_uploaded_files_'+sub_activity_id).DataTable().ajax.reload();
-                                        }
+                                        $('#table_uploaded_files_'+sub_activity_id).DataTable().ajax.reload();
 
                                         $(".dropzone_files_activities").addClass("d-none");
                                         
