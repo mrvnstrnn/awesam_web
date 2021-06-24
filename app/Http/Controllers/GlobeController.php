@@ -1229,9 +1229,21 @@ class GlobeController extends Controller
     public function get_my_uploade_file_data($sub_activity_id, $sam_id)
     {
         try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
-                                                        ->where('user_id', \Auth::id())
+                                                        ->whereIn('user_id', $array_id)
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 

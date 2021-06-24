@@ -288,8 +288,6 @@
             if($(this).attr('data-action')=="doc upload"){
                 $('#action_doc_upload').removeClass('d-none');
 
-                $(".dropzone_files_activities").removeClass("d-none");
-
                 $(".dropzone_files_activities").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
                 $(".dropzone_files_activities").attr("data-sub_activity_name", $(this).attr("data-sub_activity"));
 
@@ -326,83 +324,89 @@
                     $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable().ajax.reload();
                 }
 
-                Dropzone.autoDiscover = false;
-                $(".dropzone_files_activities").dropzone({
-                    addRemoveLinks: true,
-                    maxFiles: 1,
-                    maxFilesize: 1,
-                    paramName: "file",
-                    url: "/upload-file",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (file, resp) {
-                        if (!resp.error){
-                            var sam_id = $(".ajax_content_box").attr("data-sam_id");
-                            var sub_activity_id = this.element.attributes[1].value;
-                            var sub_activity_name = this.element.attributes[2].value;
+                if ("{{ \Auth::user()->getUserProfile()->id }}" == 3) {
+                    $(".dropzone_files_activities").addClass("d-none");
+                } else {
+                    $(".dropzone_files_activities").removeClass("d-none");
+                    
+                    Dropzone.autoDiscover = false;
+                    $(".dropzone_files_activities").dropzone({
+                        addRemoveLinks: true,
+                        maxFiles: 1,
+                        maxFilesize: 1,
+                        paramName: "file",
+                        url: "/upload-file",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (file, resp) {
+                            if (!resp.error){
+                                var sam_id = $(".ajax_content_box").attr("data-sam_id");
+                                var sub_activity_id = this.element.attributes[1].value;
+                                var sub_activity_name = this.element.attributes[2].value;
 
-                            var file_name = resp.file;
+                                var file_name = resp.file;
 
-                            $.ajax({
-                                url: "/upload-my-file",
-                                method: "POST",
-                                data: {
-                                    sam_id : sam_id,
-                                    sub_activity_id : sub_activity_id,
-                                    file_name : file_name,
-                                    sub_activity_name : sub_activity_name
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success: function (resp) {
-                                    if (!resp.error){
+                                $.ajax({
+                                    url: "/upload-my-file",
+                                    method: "POST",
+                                    data: {
+                                        sam_id : sam_id,
+                                        sub_activity_id : sub_activity_id,
+                                        file_name : file_name,
+                                        sub_activity_name : sub_activity_name
+                                    },
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success: function (resp) {
+                                        if (!resp.error){
 
-                                        $(".table_uploaded_parent").removeClass("d-none");
+                                            $(".table_uploaded_parent").removeClass("d-none");
 
-                                        $('#table_uploaded_files_'+sub_activity_id).DataTable().ajax.reload();
+                                            $('#table_uploaded_files_'+sub_activity_id).DataTable().ajax.reload();
 
-                                        $(".dropzone_files_activities").addClass("d-none");
-                                        
-                                        Swal.fire(
-                                            'Success',
-                                            resp.message,
-                                            'success'
-                                        )
-                                    } else {
+                                            $(".dropzone_files_activities").addClass("d-none");
+                                            
+                                            Swal.fire(
+                                                'Success',
+                                                resp.message,
+                                                'success'
+                                            )
+                                        } else {
+                                            Swal.fire(
+                                                'Error',
+                                                resp.message,
+                                                'error'
+                                            )
+                                        }
+                                    },
+                                    error: function (file, response) {
                                         Swal.fire(
                                             'Error',
                                             resp.message,
                                             'error'
                                         )
                                     }
-                                },
-                                error: function (file, response) {
-                                    Swal.fire(
-                                        'Error',
-                                        resp.message,
-                                        'error'
-                                    )
-                                }
-                            });
-                        } else {
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (file, resp) {
+                            // toastr.error(resp.message, "Error");
                             Swal.fire(
                                 'Error',
                                 resp.message,
                                 'error'
                             )
                         }
-                    },
-                    error: function (file, resp) {
-                        // toastr.error(resp.message, "Error");
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                    }
-                });
+                    });
+                }
                 
                 if($(this).attr('data-with_doc_maker')=="1"){
                     $('.doc_maker_button').removeClass('d-none');
