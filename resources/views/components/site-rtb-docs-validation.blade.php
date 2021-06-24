@@ -11,7 +11,7 @@
 </div>
 <div class="row file_lists">
     @php
-        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '", ' .  $site[0]->program_id . ', "")');
+        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
     @endphp
 
     @forelse ($datas as $data)
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}">
+                    <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
                         <div class="child_div_{{ $data->sub_activity_id }}">
                             <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                                 <div>
@@ -184,7 +184,9 @@
 
         $(".approve_reject_doc_btn").attr("data-id", $(this).attr("data-id"));
 
-        $(".approve_reject_doc_btn").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"))
+        $(".approve_reject_doc_btn").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
+        
+        $(".approve_reject_doc_btn").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
 
         if ($(this).attr("data-status") == "pending"){
             $(".approve_reject_doc_btn").removeClass("d-none");
@@ -259,6 +261,7 @@
         $(".confirmation_message span.sub_activity_name").text($(this).attr("data-sub_activity_name"));
         $(".approve_reject_doc_btn_final").attr("data-action", $(this).attr("data-action") == "reject" ? "rejected" : "approved");
         $(".approve_reject_doc_btn_final").attr("data-id", $(this).attr("data-id"));
+        $(".approve_reject_doc_btn_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
 
         if ($(this).attr("data-action") == "reject"){
             $(".confirmation_message textarea").removeClass("d-none");
@@ -274,6 +277,7 @@
     $(document).on("click", ".approve_reject_doc_btn_final", function (){
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
+        var sub_activity_id = $(this).attr("data-sub_activity_id");
 
         var text_area_reason = $("#text_area_reason").val();
 
@@ -297,12 +301,18 @@
                     )
                     $("#text_area_reason").val("");
 
+                    if (data_action == "approved") {
+                        $(".child_div_"+sub_activity_id).append(
+                            '<i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i><br>'
+                        );
+                    }
+                    
                     $(".file_lists").removeClass("d-none");
                     $(".confirmation_message").addClass("d-none");
                 } else {
                     Swal.fire(
                         'Error',
-                        resp.message[0],
+                        resp.message,
                         'error'
                     )
                 }

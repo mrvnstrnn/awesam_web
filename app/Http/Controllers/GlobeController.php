@@ -688,6 +688,7 @@ class GlobeController extends Controller
                 SubActivityValue::where('id', $request->input('id'))->update([
                     'status' => $request->input('action') == "rejected" ? "denied" : "approved",
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                    'approver_id' => \Auth::id(),
                 ]);
                 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
@@ -696,7 +697,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+            return response()->json(['error' => false, 'message' => $th->getMessage()]);
         }
     }
 
