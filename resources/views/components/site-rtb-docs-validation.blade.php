@@ -284,6 +284,9 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
         $.ajax({
             url: "/doc-validation-approval",
             method: "POST",
@@ -297,6 +300,9 @@
             },
             success: function (resp){
                 if (!resp.error){
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
+
                     Swal.fire(
                         'Success',
                         resp.message,
@@ -318,6 +324,8 @@
                         resp.message,
                         'error'
                     )
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
                 }
             },
             error: function (resp){
@@ -326,6 +334,8 @@
                     resp.message,
                     'error'
                 )
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
             },
         });
     });
