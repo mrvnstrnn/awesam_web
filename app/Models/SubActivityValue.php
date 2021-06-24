@@ -12,5 +12,5 @@ class SubActivityValue extends Model
     public $timestamps = false;
     protected $connection = 'mysql2';
     protected $table = 'sub_activity_value';
-    protected $fillable = ['sam_id', 'sub_activity_id', 'sub_activity_id', 'value', 'status', 'user_id'];
+    protected $fillable = ['sam_id', 'sub_activity_id', 'sub_activity_id', 'value', 'status', 'user_id', 'type'];
 }
