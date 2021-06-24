@@ -1,7 +1,11 @@
 <form>
+    @php
+        // dd($sitefields);
+    @endphp
     @foreach ( $sitefields as $site_field )
 
     @php
+
 
         $what = str_replace(' ', '_', $site_field->field_name);
 

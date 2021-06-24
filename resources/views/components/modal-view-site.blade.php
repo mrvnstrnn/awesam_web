@@ -270,6 +270,23 @@ $(document).ready(() => {
         }
     });
 
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#site-modal-site_fields').html("");   
+            $('#site-modal-site_fields').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+
+    
+
     
 });
 
