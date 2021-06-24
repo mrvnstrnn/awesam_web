@@ -9,8 +9,8 @@
 </div>
 <div class="row file_lists">
     @php
-        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '", ' .  $site[0]->program_id . ', "")');
-        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '", ' .  $program_id . ', "")');
+        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '")');
 
     @endphp
 

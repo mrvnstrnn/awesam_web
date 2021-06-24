@@ -86,7 +86,15 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
         </div>
         <div data-parent="#accordion" id="collapseSiteFields" class="collapse" style="">
             <div class="card-body" id="site-modal-site_fields">
-                {{-- <x-site-fields :sitefields="$sitefields" /> --}}
+                <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                    <div class="loader">
+                        <div class="ball-scale-multiple">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>        
             </div>
         </div>
     </div>
