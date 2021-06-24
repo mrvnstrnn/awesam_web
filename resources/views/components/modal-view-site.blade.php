@@ -25,7 +25,7 @@
     
     <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
 
-    <div class="modal fade" id="viewInfoModal" {{ $site[0]->activity_name }} tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+    <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row">

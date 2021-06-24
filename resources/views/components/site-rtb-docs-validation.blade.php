@@ -46,6 +46,7 @@
                 }
             @endphp
 
+{{-- {{ print_r($uploaded_files) }} --}}
             @foreach ($uploaded_files as $item)
                 @if ($item->status == "denied")
                     <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
@@ -57,19 +58,21 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
-                        <div class="child_div_{{ $data->sub_activity_id }}">
-                            <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
-                                <div>
-                                <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                <p><small>{{ $data->sub_activity_name }}</small></p>
+                    @if($loop->first)
+                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                            <div class="child_div_{{ $data->sub_activity_id }}">
+                                <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
+                                    <div>
+                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                                    <p><small>{{ $data->sub_activity_name }}</small></p>
+                                    </div>
                                 </div>
+                                @if($icon_color == "success")   
+                                <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                @endif
                             </div>
-                            @if($icon_color == "success")   
-                            <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                            @endif
                         </div>
-                    </div>
+                    @endif
                 @endif
             @endforeach
         @endif
@@ -281,6 +284,9 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
         $.ajax({
             url: "/doc-validation-approval",
             method: "POST",
@@ -294,6 +300,9 @@
             },
             success: function (resp){
                 if (!resp.error){
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
+
                     Swal.fire(
                         'Success',
                         resp.message,
@@ -315,6 +324,8 @@
                         resp.message,
                         'error'
                     )
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
                 }
             },
             error: function (resp){
@@ -323,6 +334,8 @@
                     resp.message,
                     'error'
                 )
+                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btn_final").text("Confirm");
             },
         });
     });
