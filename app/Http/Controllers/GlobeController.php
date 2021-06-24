@@ -846,7 +846,7 @@ class GlobeController extends Controller
     public function get_all_docs(Request $request)
     {
 
-        $documents = array("RTB Docs Validation", "RTB Docs Approval");
+        $documents = array("RTB Docs Validation", "RTB Docs Approval", "PAC Approval");
         $doc_preview_main_activities = array("Document Validation");
         $site_view_main_actiivities = array("Program Sites", "Assigned Sites");
         $rtb = array("RTB Declaration", "RTB Declaration Approval");

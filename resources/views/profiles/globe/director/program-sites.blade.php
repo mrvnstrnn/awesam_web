@@ -20,7 +20,7 @@
     //////////////////////////////////////
     var profile_id = 14;
     var table_to_load = 'program_sites';
-    var main_activity = 'PAC APPROVAL';
+    var main_activity = '';
 
     //////////////////////////////////////
 </script>

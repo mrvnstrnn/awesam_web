@@ -25,7 +25,7 @@
     
     <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
 
-    <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+    <div class="modal fade" id="viewInfoModal" {{ $site[0]->activity_name }} tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row">
@@ -75,7 +75,13 @@
                                                         "RTB Declaration Approval", 
                                                         "RTB Declaration",
                                                         "RTB Docs Approval",
-                                                        "RTB Docs Validation"
+                                                        "RTB Docs Validation",
+                                                        "PAC Approval",
+                                                        "PAC Director Approval",
+                                                        "PAC VP Approval",
+                                                        "FAC Approval",
+                                                        "FAC Director Approval",
+                                                        "FAC VP Approval"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -116,6 +122,17 @@
                                         @elseif($site[0]->activity_name == "RTB Declaration" && $main_activity == "")
 
                                             <x-site-rtb-declaration />
+
+                                        @elseif(
+                                        $site[0]->activity_name == "PAC Approval" && $main_activity == "" || 
+                                        $site[0]->activity_name == "PAC Director Approval" && $main_activity == "" || 
+                                        $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
+                                        $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
+                                        $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
+                                        $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""
+                                        )
+
+                                            <x-site-p-a-c-approvals :site="$site" />
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
 
