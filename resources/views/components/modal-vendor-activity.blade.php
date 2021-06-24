@@ -293,7 +293,7 @@
 
                 $(".table_uploaded").attr("id", "table_uploaded_files_"+$(this).attr("data-sub_activity_id"));
 
-                console.log('#table_uploaded_files_'+$(this).attr("data-sub_activity_id"));
+                console.log(! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")));
 
                 if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")) ){   
                     $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable({
@@ -347,6 +347,8 @@
 
                                 var file_name = resp.file;
 
+                                this.removeFile(file);
+                                
                                 $.ajax({
                                     url: "/upload-my-file",
                                     method: "POST",
