@@ -355,24 +355,24 @@
                 }
             });
 
+            $("#site_action_view_switch").on("click", function(){
+                $("#site_action_view").addClass('d-none');
+                $("#site_details_view").removeClass('d-none');
+                $("#site_details_view_switch").removeClass('d-none');             
+            });
+
+            $("#site_details_view_switch").on("click", function(){
+                $("#site_action_view").removeClass('d-none');
+                $("#site_details_view").addClass('d-none');
+                $("#site_details_view_switch").addClass('d-none');             
+            });
+
+            $( "#datepicker" ).datepicker();
             
 
             
         });
 
-        $("#site_action_view_switch").on("click", function(){
-            $("#site_action_view").addClass('d-none');
-            $("#site_details_view").removeClass('d-none');
-            $("#site_details_view_switch").removeClass('d-none');             
-        });
-
-        $("#site_details_view_switch").on("click", function(){
-            $("#site_action_view").removeClass('d-none');
-            $("#site_details_view").addClass('d-none');
-            $("#site_details_view_switch").addClass('d-none');             
-        });
-
-        $( "#datepicker" ).datepicker();
     
 
     </script>

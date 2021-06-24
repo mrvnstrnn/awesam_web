@@ -820,6 +820,13 @@ class GlobeController extends Controller
                         ->render();
      
             } 
+            elseif($component == 'agent-activities'){
+
+                $what_modal = "components.agent-activity-list";      
+                return \View::make($what_modal)
+                        ->render();
+          
+            } 
             elseif($component == 'tab-content-activities'){
 
                 $what_modal = "components.site-activities";      
