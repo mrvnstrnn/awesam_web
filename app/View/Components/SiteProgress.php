@@ -4,21 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class SiteStatus extends Component
+class SiteProgress extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-
-    public $completed;
-    public $samid;
-
-    public function __construct($completed, $samid)
+    public function __construct()
     {
-        $this->completed = $completed;
-        $this->samid = $samid;
+        //
     }
 
     /**
@@ -28,6 +23,6 @@ class SiteStatus extends Component
      */
     public function render()
     {
-        return view('components.site-status');
+        return view('components.site-progress');
     }
 }

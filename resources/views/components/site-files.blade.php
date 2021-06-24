@@ -1,6 +1,6 @@
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
-        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+        <button id="btn_back_to_file_list_2" class="mt-0 btn btn-secondary" type="button">Back to files</button>
     </div>
     <div class="col-12 file_viewer">
     </div>
@@ -11,12 +11,13 @@
     @php
         // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '", ' .  $site[0]->program_id . ', "")');
         $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+
     @endphp
 
     @forelse ($datas as $data)
         @if (is_null($data->files))
             <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
+                <div class="dropzone dropzone_files" data-sam_id="{{ $sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-3x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
@@ -66,9 +67,9 @@
         </div>
     @endforelse
 
-    <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
+    <input type="hidden" name="hidden_sam_id" value="{{ $sam_id }}">
 </div>
-<script src="/js/dropzone/dropzone.js"></script>
+{{-- <script src="/js/dropzone/dropzone.js"></script> --}}
 
 <script>  
     // Dropzone.autoDiscover = false;
@@ -202,7 +203,7 @@
 
     });
 
-    $("#btn_back_to_file_list").on("click", function (){
+    $("#btn_back_to_file_list_2").on("click", function (){
         $('.file_lists').removeClass('d-none');
         $('.file_preview').addClass('d-none');
     });

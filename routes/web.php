@@ -118,6 +118,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Milestone Datatable Source - Document Validation
     Route::get('/site-doc-validation/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_doc_validation'])->name('get_site_doc_validation.list');
 
+
+    // Milestone Modal Site Status
+    Route::get('/modal-view-site-component/{sam_id}/{component}', [GlobeController::class, 'modal_view_site_components'])->name('modal_view_site_components');
+
+
     ////////////////////////////////////////////////
 
     // File management
