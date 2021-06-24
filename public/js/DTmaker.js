@@ -43,6 +43,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
             columnDefs: [ 
                 {
                     "targets": [ "site_name" ],
+                    "width": "25%",
                     "visible": true,
                     "searchable": true,
                     "render": function ( data, type, row ) {
