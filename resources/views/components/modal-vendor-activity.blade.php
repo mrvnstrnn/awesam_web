@@ -202,8 +202,8 @@
 
                                             </div>
                                             <div class="row">
-                                                <div class="col-12 table-responsive">
-                                                    <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
+                                                <div class="col-12 table-responsive table_lessor_parent">
+                                                    {{-- <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
@@ -212,7 +212,7 @@
                                                                 <th>Approved</th>
                                                             </tr>
                                                         </thead>
-                                                    </table>
+                                                    </table> --}}
                                                 </div>
                                             </div>
                                         </div>                                                                                
@@ -275,6 +275,7 @@
             $(".table_uploaded").removeAttr("id");
 
             if($(this).attr('data-action')=="doc upload"){
+                
                 $('#action_doc_upload').removeClass('d-none');
 
                 $(".dropzone_files_activities").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
@@ -424,6 +425,19 @@
 
                 $('.doc_upload_button').addClass('d-none')
             } else if($(this).attr('data-action')=="lessor engagement"){
+
+                $(".table_lessor_parent").html(
+                    '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th>Date</th>' +
+                                '<th>Method</th>' +
+                                '<th>Remarks</th>' +
+                                '<th>Approved</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>'
+                );
 
                 $(".table_lessor").attr("id", "table_lessor_"+$(this).attr("data-sub_activity_id"));
                 
