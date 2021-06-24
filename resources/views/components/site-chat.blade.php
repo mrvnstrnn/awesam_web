@@ -52,6 +52,7 @@
                                         {{ $chat->comment }}
                                     </div>
                                     <small class="opacity-6">
+                                        {{ $chat->profile }} : {{ $chat->name }}<br>
                                         <i class="fa fa-calendar-alt mr-1"></i>
                                         {{ $chat->timesptamp }}
                                     </small>

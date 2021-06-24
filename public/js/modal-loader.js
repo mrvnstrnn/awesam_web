@@ -70,6 +70,8 @@
             loader = '<div class="p-2">Loading...</div>';
             $.blockUI({ message: loader });
 
+            $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
+
             $.ajax({
                 url: "/get-all-docs",
                 method: "POST",

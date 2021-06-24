@@ -129,7 +129,9 @@ class GlobeController extends Controller
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
-                \Auth::user()->notify(new SiteEndorsementNotification($request->input('sam_id')[$i]));
+                // $when = Carbon::now()->addMinutes(3);
+
+                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i]));
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
@@ -564,9 +566,51 @@ class GlobeController extends Controller
 
             $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
 
-            $new_file = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
+            $file_name = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
 
-            \Storage::move( $request->input("file_name"), strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext );
+            if (file_exists( public_path()."/files/".$file_name )) {
+
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  strtolower(str_replace(" ", "-", $request->input("sub_activity_name")))."-01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+
+                while (file_exists( public_path()."/files/". $new_file)) {
+                    $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+
+                    $exploaded_name = explode("-", $withoutExt);
+
+                    if ( is_numeric( end( $exploaded_name) ) ) {
+                        $counter =  end( $exploaded_name) + "01";
+                    } else {
+                        $counter =  "01";
+                    }
+
+                    $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                    $new_file = $imploded_name . "-" . $counter . "." .$ext;
+                }
+
+                // $new_file = $new_file;
+
+            } else {
+
+                $new_file = $file_name;
+
+            }
+
+            // return response()->json(['error' => true, 'message' => $new_file ]);
+
+            \Storage::move( $request->input("file_name"), $new_file );
 
             // sub_activity_name
             if($validate->passes()){
@@ -644,6 +688,7 @@ class GlobeController extends Controller
                 SubActivityValue::where('id', $request->input('id'))->update([
                     'status' => $request->input('action') == "rejected" ? "denied" : "approved",
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                    'approver_id' => \Auth::id(),
                 ]);
                 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
@@ -655,7 +700,6 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-
 
     public function get_site_approvals($program_id, $profile_id)
     {
@@ -831,7 +875,7 @@ class GlobeController extends Controller
     public function get_all_docs(Request $request)
     {
 
-        $documents = array("RTB Docs Validation", "RTB Docs Approval");
+        $documents = array("RTB Docs Validation", "RTB Docs Approval", "PAC Approval");
         $doc_preview_main_activities = array("Document Validation");
         $site_view_main_actiivities = array("Program Sites", "Assigned Sites");
         $rtb = array("RTB Declaration", "RTB Declaration Approval");
@@ -1047,7 +1091,6 @@ class GlobeController extends Controller
 
     }
 
-
     public function approve_reject_docs($data_id, $data_action)
     {
         try {
@@ -1248,6 +1291,73 @@ class GlobeController extends Controller
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_my_uploade_file_data($sub_activity_id, $sam_id)
+    {
+        try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        ->where('sub_activity_id', $sub_activity_id)
+                                                        ->whereIn('user_id', $array_id)
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                                ->addColumn('value', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor_remarks'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                });
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function save_engagement(Request $request)
+    {
+        try {
+
+            $validate = Validator::make($request->all(), array(
+                "lessor_approval" => "required",
+                "lessor_remarks" => "required",
+            ));
+
+            // return response()->json(['error' => true, 'message' => json_encode($request->all()) ]);
+
+            if ($validate->passes()) {
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'status' => $request->input('lessor_approval'),
+                ]); 
+
+            } else {
+                return response()->json(['error' => false, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

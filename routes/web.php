@@ -134,6 +134,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
     
+    Route::get('/get-my-uploaded-file-data/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploade_file_data']);
+
+    
     Route::post('/doc-validation-approval', [GlobeController::class, 'doc_validation_approvals']);
 
     Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
@@ -156,6 +159,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //RTB Declaration
     Route::post('/declare-rtb', [GlobeController::class, 'declare_rtb']);
     Route::post('/approve-reject-rtb', [GlobeController::class, 'approve_reject_rtb']);
+    
+    // Lessor Engagement
+    Route::post('/add-engagement', [GlobeController::class, 'save_engagement']);
+    Route::get('/get-engagement', [GlobeController::class, 'get_engagement']);
     
 });
 
