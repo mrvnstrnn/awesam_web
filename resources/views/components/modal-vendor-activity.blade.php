@@ -133,18 +133,7 @@
                                             {{-- <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Upload Document</button>  --}}
                                             
                                             <div class="file_viewer d-none"></div>
-                                            <div class="table-responsive table_uploaded_parent">
-                                                <table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 5%">#</th>
-                                                            <th>Filename</th>
-                                                            <th style="width: 35%">Status</th>
-                                                            <th>Date Uploaded</th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-                                            </div>
+                                            <div class="table-responsive table_uploaded_parent"></div>
                                         </div>
                                         <div id="action_doc_maker" class='d-none'>
                                             <textarea id="summernote" name="editordata" style="height:300px;"></textarea>
@@ -291,10 +280,26 @@
                 $(".dropzone_files_activities").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
                 $(".dropzone_files_activities").attr("data-sub_activity_name", $(this).attr("data-sub_activity"));
 
+
+                $(".table_uploaded_parent").html(
+                    '<div class="table-responsive table_uploaded_parent">' +
+                        '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                            '<thead>' +
+                                '<tr>' +
+                                    '<th style="width: 5%">#</th>' +
+                                    '<th>Filename</th>' +
+                                    '<th style="width: 35%">Status</th>' +
+                                    '<th>Date Uploaded</th>' +
+                                '</tr>' +
+                            '</thead>' +
+                        '</table>' +
+                    '</div>'
+                );
+
                 $(".table_uploaded").attr("id", "table_uploaded_files_"+$(this).attr("data-sub_activity_id"));
+                console.log( ! $.fn.DataTable.isDataTable( '#table_uploaded_files_'+$(this).attr("data-sub_activity_id") ) );
 
-                console.log(! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")));
-
+                
                 if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")) ){   
                     $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable({
                         processing: true,
