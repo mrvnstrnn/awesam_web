@@ -248,6 +248,15 @@
                             </div>
                             <div class="p-0 card-body align-center text-center py-5" style="position: relative;">                        
                                 <div id="modal_site_right">
+                                    <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                        <div class="loader">
+                                            <div class="ball-scale-multiple">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>                                    
                                 </div>
                             </div>
                         </div> 

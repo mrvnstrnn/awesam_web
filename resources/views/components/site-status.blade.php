@@ -6,6 +6,8 @@
 
     // dd($site_status[0]->progress);
 
+    
+
 @endphp
 
 
@@ -38,7 +40,7 @@
 
 <script>
 
-        var progress = $('.site_progress_view_site').text();
+        // var progress = $('.site_progress_view_site').text();
 
         // console.log(progress);
 
@@ -52,7 +54,7 @@
             value: progress,
             size: 250,
             lineCap: "round",
-            fill: { gradient: ["#ff1e41"] },
+            fill: { gradient: ["#ff1e41", "#f81e41", "#fa1e41"] },
             })
             .on("circle-animation-progress", function (event, progress, stepValue) {
             $(this)
