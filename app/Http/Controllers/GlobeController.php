@@ -768,7 +768,12 @@ class GlobeController extends Controller
             if($component == 'site-status'){
 
                 $what_modal = "components.site-status";           
-                return \View::make($what_modal)->render();
+                return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $sam_id,
+                            'site_name' => "test",
+                        ])        
+                        ->render();
      
             } 
             elseif($component == 'tab-content-activities'){
