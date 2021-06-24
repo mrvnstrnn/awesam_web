@@ -7,8 +7,11 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
+                        @php
+                            $json = json_decode($rtbdeclaration->value, true);
+                        @endphp
                         <label for="rtb_declaration_date">Date Declaration</label>
-                        <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" value="{{ date("m/d/Y", strtotime($rtbdeclaration->rtb_declaration_date )) }}" class="form-control" readonly />
+                        <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" value="{{ date("m/d/Y", strtotime($json['rtb_declaration_date'] )) }}" class="form-control" readonly />
                     </div>        
                 </div>
             </div>
@@ -23,7 +26,7 @@
                             <option>4</option>
                             <option>5</option>
                         </select> --}}
-                        <input type="text" name="rtb_declaration" id="rtb_declaration" value="{{ $rtbdeclaration->rtb_declaration }}" class="form-control" readonly>
+                        <input type="text" name="rtb_declaration" id="rtb_declaration" value="{{ $json['rtb_declaration'] }}" class="form-control" readonly>
                     </div>        
                 </div>
             </div>

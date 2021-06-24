@@ -903,7 +903,13 @@ class GlobeController extends Controller
                 $mainactivity = "Document Validation";
             }
 
-            $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
+            // $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
+
+            $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('status', "pending")
+                                        ->where('type', "rtb_declaration")
+                                        ->first();
+
             if($request['vendor_mode']){
                 
                 $what_modal = "components.modal-vendor-activity";
@@ -1231,9 +1237,10 @@ class GlobeController extends Controller
 
             if ($validate->passes()){
 
-                $rtb = RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                $rtb = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('user_id', \Auth::id())
                                         ->where('status', "pending")
+                                        ->where('type', "rtb_declaration")
                                         ->first();
 
                 if (is_null($rtb)){
@@ -1245,14 +1252,23 @@ class GlobeController extends Controller
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
 
-                    RTBDeclaration::create([
-                        'sam_id' => $request->input('sam_id'),
-                        'rtb_declaration_date' => date('Y-m-d', strtotime($request->input('rtb_declaration_date'))),
-                        'rtb_declaration' => $request->input('rtb_declaration'),
-                        'status' => 'pending',
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
                         'user_id' => \Auth::id(),
-                        'remarks' => $request->input('remarks'),
-                    ]);
+                        'status' => "pending",
+                        'type' => "rtb_declaration",
+                    ]); 
+                    
+                    // RTBDeclaration::create([
+                    //     'sam_id' => $request->input('sam_id'),
+                    //     'rtb_declaration_date' => date('Y-m-d', strtotime($request->input('rtb_declaration_date'))),
+                    //     'rtb_declaration' => $request->input('rtb_declaration'),
+                    //     'status' => 'pending',
+                    //     'user_id' => \Auth::id(),
+                    //     'remarks' => $request->input('remarks'),
+                    // ]);
                     
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 } else {
@@ -1273,7 +1289,7 @@ class GlobeController extends Controller
             if ($request->input('action') == "false" ) {
                 $required = "required";
             }
-
+            
             $validate = \Validator::make($request->all(), array(
                 'remarks' => $required,
             ));
@@ -1283,16 +1299,24 @@ class GlobeController extends Controller
                 SiteEndorsementEvent::dispatch( $request->input('sam_id') );
                 \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
 
+                // return response()->json(['error' => true, 'message' => $request->all() ]);
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('action').'")');
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('action').'")');
 
+                $rtb = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', "rtb_declaration")
+                                        ->update([
+                                            'status'=> $request->input('action') == "false" ? "denied" : "approved",
+                                            'reason'=> $request->input('remarks'),
+                                            'approver_id'=> \Auth::id(),
+                                        ]);
 
-                RTBDeclaration::where('sam_id', $request->input('sam_id'))
-                ->update([
-                    'status'=> $request->input('action') == "false" ? "denied" : "approved",
-                    'remarks'=> $request->input('remarks'),
-                    'approver_id'=> \Auth::id(),
-                ]);
+                // RTBDeclaration::where('sam_id', $request->input('sam_id'))
+                // ->update([
+                //     'status'=> $request->input('action') == "false" ? "denied" : "approved",
+                //     'remarks'=> $request->input('remarks'),
+                //     'approver_id'=> \Auth::id(),
+                // ]);
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
 
