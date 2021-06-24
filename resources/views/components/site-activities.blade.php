@@ -44,7 +44,7 @@
             ->table('site_milestone')
             ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
             ->distinct()
-            ->where('sam_id', "=", $site[0]->sam_id)
+            ->where('sam_id', "=", $sam_id)
             ->get();
 
         // dd($sites);
@@ -97,7 +97,7 @@
 
                         @endphp
 
-                        <li class="list-group-item activity_list_item" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
+                        <li class="list-group-item activity_list_item" data-sam_id="{{ $sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
                             <div class="todo-indicator bg-{{ $activity_color }}"></div>
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
@@ -118,7 +118,7 @@
                                         </div>
                                     </div>
                                     <div class="widget-content-right">
-                                        <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $site[0]->sam_id }}' data-site='{{ $site[0]->site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
+                                        <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $sam_id }}' data-site='{{ $site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
                                             @if($activity->activity_complete == 'true')
                                                 <i class="fa fa-check fa-lg"></i>
                                             @elseif($activity->activity_complete == 'false')

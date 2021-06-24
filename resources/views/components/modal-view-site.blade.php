@@ -23,7 +23,7 @@
     
 </style>    
     
-
+    <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
@@ -193,13 +193,13 @@
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
-                                            <x-site-activities :site="$site" />
+                                            {{-- <x-site-activities :site="$site" /> --}}
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
-                                            <x-site-files :site="$site" />
+                                            {{-- <x-site-files :site="$site" /> --}}
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
                                             <x-site-chat  :site="$site" />
@@ -207,11 +207,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 
-                    <div class="col-lg-4 col-md-12 col-sm-12">
-                        <x-site-status :completed="35"/>
+                    <div class="col-lg-4 col-md-12 col-sm-12" id="modal_site_right">
+                        {{-- <x-site-status :completed="35" :samid="$site[0]->sam_id"/> --}}
                     </div>                
                 </div>
             </div>
@@ -220,6 +220,60 @@
 
 
     <script>
+$(document).ready(() => {
+
+    var sam_id = $('#modal_sam_id').val();
+
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/site-status",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#modal_site_right').html("");   
+            $('#modal_site_right').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#tab-content-activities').html("");   
+            $('#tab-content-activities').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+
+    
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#tab-content-files').html("");   
+            $('#tab-content-files').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+
+    
+});
+
+
 
         $("#site_action_view_switch").on("click", function(){
             $("#site_action_view").addClass('d-none');
@@ -234,4 +288,6 @@
         });
 
         $( "#datepicker" ).datepicker();
+    
+
     </script>

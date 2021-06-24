@@ -228,7 +228,7 @@ class GlobeController extends Controller
                             ->where('program_id', "=", $program_id)
                             ->where('IS_id', "=", \Auth::user()->id)
                             ->get();
-            }    
+            } 
         } else {
 
             $sites = \DB::connection('mysql2')->table('site')
@@ -756,6 +756,47 @@ class GlobeController extends Controller
         $dt = DataTables::of($sites);
         return $dt->make(true);
             
+    }
+
+
+
+
+    public function modal_view_site_components($sam_id, $component)
+    {
+        try{
+
+            if($component == 'site-status'){
+
+                $what_modal = "components.site-status";           
+                return \View::make($what_modal)->render();
+     
+            } 
+            elseif($component == 'tab-content-activities'){
+
+                $what_modal = "components.site-activities";      
+                return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $sam_id,
+                            'site_name' => "test",
+                        ])
+                        ->render();
+          
+            } 
+            elseif($component == 'tab-content-files'){
+
+                $what_modal = "components.site-files";      
+                return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $sam_id,
+                        ])
+                        ->render();
+          
+            } 
+
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
     }
 
     public function get_all_docs(Request $request)
