@@ -812,7 +812,12 @@ class GlobeController extends Controller
             if($component == 'site-status'){
 
                 $what_modal = "components.site-status";           
-                return \View::make($what_modal)->render();
+                return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $sam_id,
+                            'site_name' => "test",
+                        ])        
+                        ->render();
      
             } 
             elseif($component == 'tab-content-activities'){
@@ -836,6 +841,30 @@ class GlobeController extends Controller
                         ->render();
           
             } 
+            elseif($component == 'site-modal-site_fields'){
+
+                $sites = \DB::connection('mysql2')
+                ->table("site_milestone")
+                ->select('site_fields')
+                ->distinct()
+                ->where('sam_id', $sam_id)
+                ->where('activity_complete', 'false')
+                ->get();
+
+                // dd($sites[0]->site_fields);
+                
+
+                $what_modal = "components.site-fields";      
+                return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $sam_id,
+                            'sitefields' => json_decode($sites[0]->site_fields),
+                        ])
+                        ->render();
+          
+            } 
+
+        
 
 
         } catch (\Throwable $th) {

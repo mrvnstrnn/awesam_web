@@ -207,16 +207,40 @@
                                     </div>
                                     <div class="tab-content">
                                         <div class="tab-pane tabs-animation fade show active" id="tab-content-details" role="tabpanel">
+                                            <div id="">
+
+                                            </div>
+                                            <div id="">
+
+                                            </div>
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
                                             {{-- <x-site-activities :site="$site" /> --}}
+                                            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                                <div class="loader">
+                                                    <div class="ball-scale-multiple">
+                                                        <div></div>
+                                                        <div></div>
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                            </div>        
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
                                             {{-- <x-site-files :site="$site" /> --}}
+                                            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                                <div class="loader">
+                                                    <div class="ball-scale-multiple">
+                                                        <div></div>
+                                                        <div></div>
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                            </div>        
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
                                             <x-site-chat  :site="$site" />
@@ -227,7 +251,35 @@
                         </div> 
                     </div>
                 
-                    <div class="col-lg-4 col-md-12 col-sm-12" id="modal_site_right">
+                    <div class="col-lg-4 col-md-12 col-sm-12">
+
+                        <div class="mb-3 profile-responsive card">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-dark">
+                                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg'); background-size: cover;"></div>
+                                    <div class="menu-header-content btn-pane-right">
+                                        <div>
+                                            <h5 class="menu-header-title">Site Status</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-0 card-body align-center text-center py-5" style="position: relative;">                        
+                                <div id="modal_site_right">
+                                    <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                        <div class="loader">
+                                            <div class="ball-scale-multiple">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div> 
+
+                        
                         {{-- <x-site-status :completed="35" :samid="$site[0]->sam_id"/> --}}
                     </div>                
                 </div>
@@ -237,60 +289,76 @@
 
 
     <script>
-$(document).ready(() => {
 
-    var sam_id = $('#modal_sam_id').val();
+        $(document).ready(() => {
 
-    $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/site-status",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
-            $('#modal_site_right').html("");   
-            $('#modal_site_right').html(resp);
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });
+            var sam_id = $('#modal_sam_id').val();
 
-    $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
-            $('#tab-content-activities').html("");   
-            $('#tab-content-activities').html(resp);
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/site-status",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $('#modal_site_right').html("");   
+                    $('#modal_site_right').html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
 
-    
-    $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
-            $('#tab-content-files').html("");   
-            $('#tab-content-files').html(resp);
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $('#tab-content-activities').html("");   
+                    $('#tab-content-activities').html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
 
-    
-});
+            
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $('#tab-content-files').html("");   
+                    $('#tab-content-files').html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
 
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $('#site-modal-site_fields').html("");   
+                    $('#site-modal-site_fields').html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
 
+            
+
+            
+        });
 
         $("#site_action_view_switch").on("click", function(){
             $("#site_action_view").addClass('d-none');
