@@ -697,7 +697,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => false, 'message' => $th->getMessage()]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 
