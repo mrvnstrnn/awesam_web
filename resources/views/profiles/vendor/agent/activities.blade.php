@@ -358,24 +358,24 @@
     });
 
 
-    Dropzone.autoDiscover = false;
-    $(".dropzone").dropzone({
-        addRemoveLinks: true,
-        maxFiles: 1,
-        maxFilesize: 5,
-        paramName: "file",
-        url: "/upload-file",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (file, resp) {
-            $("#form-upload  #file_name").val(resp.file);
-            console.log(resp.message);
-        },
-        error: function (file, resp) {
-            toastr.error(resp.message, "Error");
-        }
-    });
+    // Dropzone.autoDiscover = false;
+    // $(".dropzone").dropzone({
+    //     addRemoveLinks: true,
+    //     maxFiles: 1,
+    //     maxFilesize: 5,
+    //     paramName: "file",
+    //     url: "/upload-file",
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     },
+    //     success: function (file, resp) {
+    //         $("#form-upload  #file_name").val(resp.file);
+    //         console.log(resp.message);
+    //     },
+    //     error: function (file, resp) {
+    //         toastr.error(resp.message, "Error");
+    //     }
+    // });
 </script>
 
 

@@ -94,7 +94,7 @@
                                     <div class="row p-2 pt-3    ">
                                         @foreach ($sub_activities as $sub_activity)
                                             @if($sub_activity->activity_id == $activity_id)
-                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sub_activity="{{ $sub_activity->sub_activity_name }}"  data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
+                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
                                                 <H6><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</H6>
                                                 </div>
                                             @endif                                    
@@ -124,13 +124,27 @@
                                     <div class="action_box_content">
 
                                         <div id="action_doc_upload" class='d-none'>
-                                            <div class="dropzone dropzone_files mt-0">
+                                            <div class="dropzone dropzone_files_activities mt-0 mb-5">
                                                 <div class="dz-message">
                                                     <i class="fa fa-plus fa-3x"></i>
                                                     <p><small class="sub_activity_name">Drag and Drop files here</small></p>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Upload Document</button> 
+                                            {{-- <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Upload Document</button>  --}}
+                                            
+                                            <div class="file_viewer d-none"></div>
+                                            <div class="table-responsive table_uploaded_parent">
+                                                <table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 5%">#</th>
+                                                            <th>Filename</th>
+                                                            <th style="width: 35%">Status</th>
+                                                            <th>Date Uploaded</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div id="action_doc_maker" class='d-none'>
                                             <textarea id="summernote" name="editordata" style="height:300px;"></textarea>
@@ -138,19 +152,19 @@
                                         </div>                                        
                                         <div id="action_lessor_engagement" class='d-none'>
                                             <div class="row py-5 px-4" id="control_box">
-                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Call">
                                                     <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Call</small></div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Text">
                                                     <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Text</small></div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor" data-value="Email">
                                                     <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Email</small></div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor">
+                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Site Visi">
                                                     <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
                                                     <div class="pt-3"><small>Site Visit</small></div>
 
@@ -160,35 +174,38 @@
                                                 <div class="col-12 py-3">
                                                 <form class="">
                                                     <div class="position-relative row form-group">
-                                                        <label for="exampleSelect" class="col-sm-3 col-form-label">Date</label>
+                                                        <label for="lessor_date" class="col-sm-3 col-form-label">Date</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" class="form-control">
+                                                            <input type="text" id="lessor_date" name="lessor_date" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
-                                                        <label for="exampleSelect" class="col-sm-3 col-form-label">Method</label>
+                                                        <label for="lessor_method" class="col-sm-3 col-form-label">Method</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" class="form-control">
+                                                            <input type="text" class="form-control" id="lessor_method" name="lessor_method" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
-                                                        <label for="exampleText" class="col-sm-3 col-form-label">Remarks</label>
+                                                        <label for="lessor_remarks" class="col-sm-3 col-form-label">Remarks</label>
                                                         <div class="col-sm-9">
-                                                            <textarea name="text" id="exampleText" class="form-control"></textarea>
+                                                            <textarea name="lessor_remarks" id="lessor_remarks" class="form-control"></textarea>
+                                                            <small class="text-danger lessor_remarks-errors"></small>
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
-                                                        <label for="exampleText" class="col-sm-3 col-form-label">Approval</label>
+                                                        <label for="lesor_approval" class="col-sm-3 col-form-label">Approval</label>
                                                         <div class="col-sm-9">
-                                                            <select name="select" id="exampleSelect" class="form-control">
-                                                                <option value="false">Approval not yet secured</option>
-                                                                <option value="true">Approval Secured</option>
+                                                            <select name="lessor_approval" id="lessor_approval" class="form-control">
+                                                                <option value="pending">Approval not yet secured</option>
+                                                                <option value="approved">Approval Secured</option>
+                                                                <option value="denied">Lessor Rejected</option>
                                                             </select>
+                                                            <small class="text-danger lessor_approval-errors"></small>
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group ">
                                                         <div class="col-sm-10 offset-sm-3">
-                                                            <button class="btn btn-secondary">Save Engagement</button>
+                                                            <button class="btn btn-secondary save_engagement" type="button">Save Engagement</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -196,8 +213,8 @@
 
                                             </div>
                                             <div class="row">
-                                                <div class="col-12">
-                                                    <table class="table">
+                                                <div class="col-12 table-responsive">
+                                                    <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
@@ -206,20 +223,6 @@
                                                                 <th>Approved</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>2021-01-01</td>
-                                                                <td>Call</td>
-                                                                <td>Lessor not available</td>
-                                                                <td>No</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>2021-01-05</td>
-                                                                <td>Call</td>
-                                                                <td>Lessor went to Hong Kong</td>
-                                                                <td>No</td>
-                                                            </tr>
-                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -234,13 +237,27 @@
         </div>
     </div>
 
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
 
+    $(document).ready(function(){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+        
 
         $(".contact-lessor").on("click", function(){
+
             $('#control_box').addClass('d-none');
             $('#control_form').removeClass('d-none');
+
+            $("#lessor_method").val($(this).attr("data-value"));
+            $("#lessor_date").val(today);
         });
 
         $(".btn_switch_back_to_actions").on("click", function(){
@@ -248,11 +265,16 @@
             $("#actions_list").removeClass('d-none');
             $("#action_doc_maker").addClass('d-none');
 
+            // $("#action_lessor_engagement").removeClass('d-none');
+
             $("#control_form").addClass('d-none');
             $("#control_box").removeClass('d-none');
             
             // $("#doc_upload_button").addClass('d-none');
             // $('#doc_maker_button').removeClass('d-none');
+
+            // $(".table_uploaded_parent").addClass('d-none');
+            $('.file_viewer').addClass("d-none");
 
         });
 
@@ -260,11 +282,151 @@
             $("#actions_box").removeClass('d-none');
             $("#actions_list").addClass('d-none');
             $('#active_action').text($(this).attr('data-sub_activity'));
-            
-
 
             if($(this).attr('data-action')=="doc upload"){
                 $('#action_doc_upload').removeClass('d-none');
+
+                $(".dropzone_files_activities").removeClass("d-none");
+
+                $(".dropzone_files_activities").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
+                $(".dropzone_files_activities").attr("data-sub_activity_name", $(this).attr("data-sub_activity"));
+
+                $(".table_uploaded").attr("id", "table_uploaded_files_"+$(this).attr("data-sub_activity_id"));
+
+
+                // console.log(! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")));
+                if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")) ){
+
+                    $('#table_uploaded_files_'+$(this).attr("data-sub_activity_id")).DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "/get-my-uploaded-file-data/"+$(this).attr("data-sub_activity_id")+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                            type: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                        },
+                        dataSrc: function(json){
+                            return json.data;
+                        },
+                        'createdRow': function( row, data, dataIndex ) {
+                            $(row).attr('data-value', data.value);
+                            $(row).attr('style', 'cursor: pointer');
+                        },
+                        columns: [
+                            { data: "id" },
+                            { data: "value" },
+                            { data: "status" },
+                            { data: "date_created" },
+                        ],
+                    });
+                }
+
+                Dropzone.autoDiscover = false;
+                $(".dropzone_files_activities").dropzone({
+                    addRemoveLinks: true,
+                    maxFiles: 1,
+                    maxFilesize: 1,
+                    paramName: "file",
+                    url: "/upload-file",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (file, resp) {
+                        if (!resp.error){
+                            var sam_id = $(".ajax_content_box").attr("data-sam_id");
+                            var sub_activity_id = this.element.attributes[1].value;
+                            var sub_activity_name = this.element.attributes[2].value;
+                            var file_name = resp.file;
+
+                            $.ajax({
+                                url: "/upload-my-file",
+                                method: "POST",
+                                data: {
+                                    sam_id : sam_id,
+                                    sub_activity_id : sub_activity_id,
+                                    file_name : file_name,
+                                    sub_activity_name : sub_activity_name
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (resp) {
+                                    if (!resp.error){
+
+                                        $(".table_uploaded_parent").removeClass("d-none");
+
+                                        if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+sub_activity_id) ){
+
+                                            $('#table_uploaded_files_'+sub_activity_id).DataTable({
+                                                processing: true,
+                                                serverSide: true,
+                                                ajax: {
+                                                    url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+sam_id,
+                                                    type: 'GET',
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                    },
+                                                },
+                                                dataSrc: function(json){
+                                                    return json.data;
+                                                },
+                                                'createdRow': function( row, data, dataIndex ) {
+                                                    $(row).attr('data-value', data.value);
+                                                    $(row).attr('style', 'cursor: pointer');
+                                                },
+                                                columns: [
+                                                    { data: "id" },
+                                                    { data: "value" },
+                                                    { data: "status" },
+                                                    { data: "date_created" },
+                                                ],
+                                            });
+                                        } else {
+                                            $('#table_uploaded_files_'+sub_activity_id).DataTable().ajax.reload();
+                                        }
+
+                                        $(".dropzone_files_activities").addClass("d-none");
+                                        
+                                        Swal.fire(
+                                            'Success',
+                                            resp.message,
+                                            'success'
+                                        )
+                                    } else {
+                                        Swal.fire(
+                                            'Error',
+                                            resp.message,
+                                            'error'
+                                        )
+                                    }
+                                },
+                                error: function (file, response) {
+                                    Swal.fire(
+                                        'Error',
+                                        resp.message,
+                                        'error'
+                                    )
+                                }
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function (file, resp) {
+                        // toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                });
                 
                 if($(this).attr('data-with_doc_maker')=="1"){
                     $('.doc_maker_button').removeClass('d-none');
@@ -274,13 +436,41 @@
                 }
 
                 $('.doc_upload_button').addClass('d-none')
-            }
-            else if($(this).attr('data-action')=="lessor engagement"){
+            } else if($(this).attr('data-action')=="lessor engagement"){
 
+                $(".table_lessor").attr("id", "table_lessor_"+$(this).attr("data-sub_activity_id"));
+                
+                if (! $.fn.DataTable.isDataTable('#table_lessor_'+$(this).attr("data-sub_activity_id")) ){
+                    $('#table_lessor_'+$(this).attr("data-sub_activity_id")).DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "/get-my-uploaded-file-data/"+$(this).attr("data-sub_activity_id")+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                            type: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                        },
+                        dataSrc: function(json){
+                            return json.data;
+                        },
+                        // 'createdRow': function( row, data, dataIndex ) {
+                        //     $(row).attr('data-value', data.value);
+                        //     $(row).attr('style', 'cursor: pointer');
+                        // },
+                        columns: [
+                            { data: "date_created" },
+                            { data: "value" },
+                            { data: "status" },
+                            { data: "date_created" },
+                        ],
+                    });
+                } 
+
+                $(".save_engagement").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
                 $('#action_lessor_engagement').removeClass('d-none');
 
-            } 
-            else {
+            } else {
                 $('#action_doc_upload').addClass('d-none');
                 $('.doc_maker_button').addClass('d-none');
                 
@@ -298,14 +488,91 @@
             $('#action_doc_upload').removeClass('d-none');
             $('#action_doc_maker').addClass('d-none');
             $(this).addClass('d-none');
-            $('.doc_maker_button').removeClass('d-none')
+            $('.doc_maker_button').removeClass('d-none');
         });
 
+        $('.table_uploaded').on( 'click', 'tr td', function (e) {
+            var extensions = ["pdf", "jpg", "png"];
 
+            var values = $(this).parent().attr('data-value');
+
+            console.log(values.split('.').pop());
+
+            if( extensions.includes(values.split('.').pop()) == true) {     
+                htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
+            } else {
+                htmltoload = '<div class="text-center my-5"><a href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+            }
+                    
+            $('.file_viewer').html('');
+            $('.file_viewer').html(htmltoload);
+
+            $('.file_viewer').removeClass("d-none");
+        });
+
+        $(".save_engagement").on("click", function (e){
+            e.preventDefault();
+
+            var lessor_method = $("#lessor_method").val();
+            var lessor_approval = $("#lessor_approval").val();
+            var lessor_remarks = $("#lessor_remarks").val();
+            var sam_id = $(".ajax_content_box").attr("data-sam_id");
+            var sub_activity_id = $(this).attr("data-sub_activity_id");
+
+            $.ajax({
+                url: "/add-engagement",
+                method: "POST",
+                data: {
+                    lessor_method : lessor_method,
+                    lessor_approval : lessor_approval,
+                    lessor_remarks : lessor_remarks,
+                    sam_id : sam_id,
+                    sub_activity_id : sub_activity_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+
+                        $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            $("#lessor_remarks").val("");
+                        });
+                        
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("." + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                    }
+                },
+                error: function (resp){
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            });
+        });
 
         $('#summernote').summernote({
             height: 300,
             focus: true
         });
+    });
 
     </script>
