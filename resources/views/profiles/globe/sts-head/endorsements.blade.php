@@ -14,11 +14,10 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
             $programs = \Auth::user()->getUserProgram();
         @endphp
 
-<input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
+        <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
         @foreach ($programs as $program)
             <li class="nav-item">
                 <a role="tab" class="nav-link new-endoresement {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
