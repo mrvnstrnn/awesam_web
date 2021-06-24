@@ -8,10 +8,11 @@
     </div>
 </div>
 <div class="row file_lists">
-    @php
+    @php/
         // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '", ' .  $site[0]->program_id . ', "")');
         $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
 
+        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '")');
     @endphp
 
     @forelse ($datas as $data)
@@ -69,91 +70,91 @@
 
     <input type="hidden" name="hidden_sam_id" value="{{ $sam_id }}">
 </div>
-{{-- <script src="/js/dropzone/dropzone.js"></script> --}}
+<script src="/js/dropzone/dropzone.js"></script>
 
 <script>  
-    // Dropzone.autoDiscover = false;
-    // $(".dropzone_files").dropzone({
-    //     addRemoveLinks: true,
-    //     maxFiles: 1,
-    //     maxFilesize: 1,
-    //     paramName: "file",
-    //     // params: {
-    //     //     sam_id: $("input[name=hidden_sam_id]").val(),
-    //     //     sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
-    //     // },
-    //     url: "/upload-file",
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     },
-    //     success: function (file, resp) {
-    //         if (!resp.error){
-    //             var sam_id = this.element.attributes[1].value;
-    //             var sub_activity_id = this.element.attributes[2].value;
-    //             var sub_activity_name = this.element.attributes[3].value;
-    //             var file_name = resp.file;
+    Dropzone.autoDiscover = false;
+    $(".dropzone_files").dropzone({
+        addRemoveLinks: true,
+        maxFiles: 1,
+        maxFilesize: 1,
+        paramName: "file",
+        // params: {
+        //     sam_id: $("input[name=hidden_sam_id]").val(),
+        //     sub_activity_name: $("input[name=hidden_sub_activity_name]").val(),
+        // },
+        url: "/upload-file",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (file, resp) {
+            if (!resp.error){
+                var sam_id = this.element.attributes[1].value;
+                var sub_activity_id = this.element.attributes[2].value;
+                var sub_activity_name = this.element.attributes[3].value;
+                var file_name = resp.file;
 
-    //             // var sub_activity_name = $(this).attr("data-sub_activity_name");
+                // var sub_activity_name = $(this).attr("data-sub_activity_name");
 
-    //             $.ajax({
-    //                 url: "/upload-my-file",
-    //                 method: "POST",
-    //                 data: {
-    //                     sam_id : sam_id,
-    //                     sub_activity_id : sub_activity_id,
-    //                     file_name : file_name,
-    //                     sub_activity_name : sub_activity_name
-    //                 },
-    //                 headers: {
-    //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //                 },
-    //                 success: function (resp) {
-    //                     if (!resp.error){
+                $.ajax({
+                    url: "/upload-my-file",
+                    method: "POST",
+                    data: {
+                        sam_id : sam_id,
+                        sub_activity_id : sub_activity_id,
+                        file_name : file_name,
+                        sub_activity_name : sub_activity_name
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp) {
+                        if (!resp.error){
 
-    //                         var ext = file_name.split('.').pop();
+                            var ext = file_name.split('.').pop();
 
-    //                         var class_name = "";
+                            var class_name = "";
 
-    //                         if (ext == "pdf") {
-    //                             class_name = "fa-file-pdf";
-    //                         } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
-    //                             class_name = "fa-file-image";
-    //                         } else {
-    //                             class_name = "fa-file";
-    //                         }
+                            if (ext == "pdf") {
+                                class_name = "fa-file-pdf";
+                            } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
+                                class_name = "fa-file-image";
+                            } else {
+                                class_name = "fa-file";
+                            }
 
-    //                         $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
+                            $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
 
-    //                         $(".dropzone_div_"+sub_activity_id).append(
-    //                             '<div class="child_div_'+sub_activity_id+'">' +
-    //                                 '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
-    //                                     '<div>' +
-    //                                         '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
-    //                                         '<p><small>'+sub_activity_name+'</small></p>' +
-    //                                     '</div>' +
-    //                                 '</div>' +
-    //                             '</div>'
-    //                         );
+                            $(".dropzone_div_"+sub_activity_id).append(
+                                '<div class="child_div_'+sub_activity_id+'">' +
+                                    '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
+                                        '<div>' +
+                                            '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
+                                            '<p><small>'+sub_activity_name+'</small></p>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>'
+                            );
                             
-    //                         // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
+                            // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
                             
-    //                         toastr.success(resp.message, "Success");
-    //                     } else {
-    //                         toastr.error(resp.message, "Error");
-    //                     }
-    //                 },
-    //                 error: function (file, response) {
-    //                     toastr.error(resp.message, "Error");
-    //                 }
-    //             });
-    //         } else {
-    //             toastr.error(resp.message, "Error");
-    //         }
-    //     },
-    //     error: function (file, resp) {
-    //         toastr.error(resp.message, "Error");
-    //     }
-    // });
+                            toastr.success(resp.message, "Success");
+                        } else {
+                            toastr.error(resp.message, "Error");
+                        }
+                    },
+                    error: function (file, response) {
+                        toastr.error(resp.message, "Error");
+                    }
+                });
+            } else {
+                toastr.error(resp.message, "Error");
+            }
+        },
+        error: function (file, resp) {
+            toastr.error(resp.message, "Error");
+        }
+    });
     
     $(".view_file").on("click", function (){
 
