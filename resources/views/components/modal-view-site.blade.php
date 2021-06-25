@@ -82,9 +82,11 @@
                                                         "FAC Approval",
                                                         "FAC Director Approval",
                                                         "FAC VP Approval",
-                                                        "STS Assessment",
-                                                        "STS Head Endorsement to RAM",
-                                                        "Vendor Awarding by RAM"
+
+                                                        "Create PR",
+                                                        "RAM Head PR Approval",
+                                                        "NAM PR Approval",
+                                                        "Vendor Awarding"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -127,21 +129,31 @@
                                             <x-site-rtb-declaration />
 
                                         @elseif(
+
+                                            // COLOC APPROVALS 
                                             $site[0]->activity_name == "PAC Approval" && $main_activity == "" || 
                                             $site[0]->activity_name == "PAC Director Approval" && $main_activity == "" || 
                                             $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
                                             $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
                                             $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
-                                            $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""
                                             
-                                            $site[0]->activity_name == "STS Assessment" && $main_activity == "" ||
-                                            $site[0]->activity_name == "STS Head Endorsement to RAM" && $main_activity == ""  ||
-                                            $site[0]->activity_name == "Vendor Awarding by RAM" && $main_activity == ""
-
-                                             
                                         )
                                             
                                             <x-site-p-a-c-approvals :site="$site" />
+
+                                        @elseif(
+
+                                            // NEW SITES APPROVALS                                             
+                                            $site[0]->activity_name == "Create PR" && $main_activity == "" ||
+                                            $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
+
+                                        )
+
+                                            <x-site-p-a-c-approvals :site="$site" />
+    
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
 
