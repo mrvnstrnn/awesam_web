@@ -150,9 +150,9 @@
                                             $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
 
-                                        )
+                                        )   
 
-                                            <x-site-p-a-c-approvals :site="$site" />
+                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
     
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
