@@ -304,6 +304,7 @@ $(document).ready(() => {
                 $(row).addClass('modalDataUnassigned'+data.sam_id);
                 $(row).addClass('modalDataEndorsement');
                 $(row).attr('data-site_name', data.sitename);
+                $(row).attr('data-site_vendor_id', data.site_vendor_id);
             },
             columnDefs: [{
                 "targets": 0,
@@ -362,6 +363,7 @@ $(document).ready(() => {
 
         if ($(this).attr("colspan") != 5) {
             $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
+            $("#btn-assign-sites").attr('data-site_vendor_id', $(this).parent().attr('data-site_vendor_id'));
             $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
             $("#sam_id").val($(this).parent().attr('data-id'));
             $("#btn-assign-sites").attr("data-site_name", $(this).parent().attr('data-site_name'));
@@ -382,6 +384,7 @@ $(document).ready(() => {
         var data_program = $(this).attr('data-program');
         var site_name = $(this).attr('data-site_name');
         var activity_name = $(this).attr('data-activity_name');
+        var site_vendor_id = $(this).attr('data-site_vendor_id');
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -389,7 +392,9 @@ $(document).ready(() => {
                 sam_id : sam_id,
                 agent_id : agent_id,
                 site_name : site_name,
-                activity_name : activity_name
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                data_program : data_program
             },
             method: "POST",
             headers: {
@@ -529,6 +534,7 @@ $(document).ready(() => {
 
         $(".modal-title").text(json_parse.site_name);
         $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+        $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.site_vendor_id);
         $("#modal-endorsement").modal("show");
     } );
 
@@ -546,6 +552,7 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
         var activity_name = $(this).attr('data-activity_name');
+        var site_vendor_id = [$(this).attr('data-site_vendor_id')];
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -555,7 +562,9 @@ $(document).ready(() => {
             data: {
                 sam_id : sam_id,
                 data_complete : data_complete,
-                activity_name : activity_name
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                data_program : data_program,
             },
             type: 'POST',
             headers: {
@@ -586,7 +595,6 @@ $(document).ready(() => {
 
     });
 
-
     $(".btn-bulk-acceptreject-endorsement").click(function(e){
         e.preventDefault();
         // $("#loaderModal").modal("show");
@@ -607,9 +615,11 @@ $(document).ready(() => {
         $("#"+id).text("Processing...");
 
         sam_id = [];
+        site_vendor_id = [];
         for(var i=0; inputElements[i]; ++i){
             if(inputElements[i].checked){
                 sam_id.push(inputElements[i].value);
+                site_vendor_id.push(inputElements[i].attributes[5].value);
             }
         }
 
@@ -618,7 +628,9 @@ $(document).ready(() => {
             data: {
                 sam_id : sam_id,
                 data_complete : data_complete,
-                activity_name : activity_name
+                activity_name : activity_name,
+                data_program : data_program,
+                site_vendor_id : site_vendor_id,
             },
             type: 'POST',
             headers: {

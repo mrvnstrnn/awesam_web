@@ -224,6 +224,8 @@
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
+        var site_vendor_id = [$("#modal_site_vendor_id").val()];
+        var program_id = [$("#modal_program_id").val()];
         var activity_name = "rtb_docs_approval";
 
         $(this).attr("disabled", "disabled");
@@ -234,7 +236,9 @@
             data: {
                 sam_id : sam_id,
                 data_complete : data_complete,
-                activity_name : activity_name
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                program_id : program_id,
             },
             type: 'POST',
             headers: {
