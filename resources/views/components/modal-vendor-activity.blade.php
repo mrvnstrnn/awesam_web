@@ -81,7 +81,15 @@
 
                             <div class="card-body">
                                 @php
-                                    $sub_activities = json_decode($site[0]->sub_activity);
+
+                                    $sub_activities = \DB::connection('mysql2')
+                                                ->table('sub_activity')
+                                                ->where('program_id', $site[0]->program_id)
+                                                ->where('activity_id', $site[0]->activity_id)
+                                                ->get();
+
+                                    // dd($site[0]->activity_id) ;
+                                    // $sub_activities = json_decode($site[0]->sub_activity);
                                 @endphp
                                 <div id="actions_list" class="">
                                     <div class="row border-bottom">
@@ -89,7 +97,7 @@
                                             <H5>Actions to Complete</H5>
                                         </div>
                                         <div class="col-4">
-                                            {{-- <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                             --}}
+                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
                                         </div>
                                     </div>
                                     <div class="row p-2 pt-3    ">
@@ -100,7 +108,7 @@
                                                 </div>
                                             @endif                                    
                                         @endforeach
-                                        <div class="col-12 mt-3">
+                                        <div class="col-12 mt-5">
                                         <small>* Required actions are in bold letters</small>
                                         </div>
                                     </div>

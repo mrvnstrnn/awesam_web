@@ -22,6 +22,10 @@
     }
     
 </style>    
+
+    @php
+        // dd($site);
+    @endphp
     
     <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
     <input id="modal_activity_name" type="hidden" value="{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}">
@@ -32,6 +36,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row">
+                    
                     <div class="col-lg-8 col-md-12 col-sm-12">
                         <div class="main-card mb-3 card ">
 
@@ -86,13 +91,11 @@
                                                         "FAC Director Approval",
                                                         "FAC VP Approval",
 
-                                                        "STS Assessment",
-                                                        "STS Head Endorsement to RAM",
-
                                                         "Create PR",
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
-                                                        "Vendor Awarding"
+                                                        "Vendor Awarding",
+                                                        "Advance Site Hunting"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -154,7 +157,8 @@
                                             $site[0]->activity_name == "Create PR" && $main_activity == "" ||
                                             $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
-                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
+                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == "" ||
+                                            $site[0]->activity_name == "Advance Site Hunting" && $main_activity == ""
 
                                         )   
 
@@ -243,7 +247,6 @@
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
-                                            {{-- <x-site-activities :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">
@@ -258,7 +261,6 @@
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
-                                            {{-- <x-site-files :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">
@@ -304,11 +306,9 @@
                                     </div>                                    
                                 </div>
                             </div>
-                        </div> 
-
-                        
-                        {{-- <x-site-status :completed="35" :samid="$site[0]->sam_id"/> --}}
+                        </div>                         
                     </div>                
+
                 </div>
             </div>
         </div>
