@@ -83,7 +83,8 @@
                                                         "FAC Director Approval",
                                                         "FAC VP Approval",
                                                         "STS Assessment",
-                                                        "STS Head Endorsement to RAM "
+                                                        "STS Head Endorsement to RAM",
+                                                        "Vendor Awarding by RAM"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -134,7 +135,8 @@
                                             $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""  ||
                                             
                                             $site[0]->activity_name == "STS Assessment" && $main_activity == "" ||
-                                            $site[0]->activity_name == "STS Head Endorsement to RAM" && $main_activity == ""
+                                            $site[0]->activity_name == "STS Head Endorsement to RAM" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "Vendor Awarding by RAM" && $main_activity == ""
 
                                              
                                         )
