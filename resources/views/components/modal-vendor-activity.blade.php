@@ -238,9 +238,6 @@
 
     $(document).ready(function(){
 
-
-
-
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -347,7 +344,7 @@
                     $(".dropzone_files_activities").dropzone({
                         addRemoveLinks: true,
                         maxFiles: 1,
-                        maxFilesize: 1,
+                        // maxFilesize: 1,
                         paramName: "file",
                         url: "/upload-file",
                         headers: {
@@ -415,9 +412,10 @@
                         },
                         error: function (file, resp) {
                             // toastr.error(resp.message, "Error");
+                            // console.log(resp);
                             Swal.fire(
                                 'Error',
-                                resp.message,
+                                resp,
                                 'error'
                             )
                         }
@@ -527,6 +525,10 @@
             var lessor_remarks = $("#lessor_remarks").val();
             var sam_id = $(".ajax_content_box").attr("data-sam_id");
             var sub_activity_id = $(this).attr("data-sub_activity_id");
+            var site_name = $("#viewInfoModal .menu-header-title").text();
+
+            $(this).attr('disabled', 'disabled');
+            $(this).text('Processing...');
 
             $.ajax({
                 url: "/add-engagement",
@@ -537,6 +539,7 @@
                     lessor_remarks : lessor_remarks,
                     sam_id : sam_id,
                     sub_activity_id : sub_activity_id,
+                    site_name : site_name,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -552,6 +555,8 @@
                             )
 
                             $("#lessor_remarks").val("");
+                            $(".save_engagement").removeAttr('disabled');
+                            $(".save_engagement").text('Save Engagement');
                         });
                         
                     } else {
@@ -566,6 +571,8 @@
                                 'error'
                             )
                         }
+                            $(".save_engagement").removeAttr('disabled');
+                            $(".save_engagement").text('Save Engagement');
                     }
                 },
                 error: function (resp){
@@ -574,6 +581,8 @@
                         resp.message,
                         'error'
                     )
+                            $(".save_engagement").removeAttr('disabled');
+                            $(".save_engagement").text('Save Engagement');
                 }
             });
         });

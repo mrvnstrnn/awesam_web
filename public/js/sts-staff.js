@@ -43,11 +43,12 @@ $(document).ready(() => {
 
     $(".nav-link.new-endoresement").on("click", function(){
         if ( ! $.fn.DataTable.isDataTable('#new-endoresement-'+$(this).attr("data-program")+'-table') ) {
-            $('#new-endoresement-'+$(this).attr("data-program")+'-table').DataTable({
+            var data_program = $(this).attr("data-program");
+            $('#new-endoresement-'+data_program+'-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: $('#new-endoresement-'+$(this).attr("data-program")+'-table').attr('data-href'),
+                    url: $('#new-endoresement-'+data_program+'-table').attr('data-href'),
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -58,7 +59,7 @@ $(document).ready(() => {
                 },
                 'createdRow': function( row, data, dataIndex ) {
                     $(row).attr('data-site', JSON.stringify(data));
-                    $(row).attr('data-program', $(this).attr("data-program"));
+                    $(row).attr('data-program', data_program);
                     $(row).addClass('modalDataEndorsement');
                 },
                 columnDefs: [{
@@ -117,6 +118,7 @@ $(document).ready(() => {
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
+        var activity_name = $(this).attr('data-activity_name');
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -125,7 +127,8 @@ $(document).ready(() => {
             url: $(this).attr('data-href'),
             data: {
                 sam_id : sam_id,
-                data_complete : data_complete
+                data_complete : data_complete,
+                activity_name : activity_name
             },
             type: 'POST',
             headers: {
@@ -133,6 +136,11 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
+                    if (data_program.indexOf(' ') > -1) {
+
+                    } else {
+
+                    }
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
                         toastr.success(resp.message, 'Success');
@@ -166,6 +174,7 @@ $(document).ready(() => {
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
+        var activity_name = $(this).attr('data-activity_name');
 
         var data_id = $(this).attr('data-id');
         var inputElements = document.getElementsByName('program'+data_id);
@@ -188,7 +197,8 @@ $(document).ready(() => {
             url: $(this).attr('data-href'),
             data: {
                 sam_id : sam_id,
-                data_complete : data_complete
+                data_complete : data_complete,
+                activity_name : activity_name
             },
             type: 'POST',
             headers: {

@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button> --}}
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Site</button>
+                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Endorse New Site</button>
                 </div>
             </div>
         </div>
