@@ -85,19 +85,28 @@
                                 <div></div>
                             </div>
                         </div>
-                    </div>                                    
-    
+                    </div>                                        
                 </ul>                            
             </div>
         </div>
         <div class="col-md-6">
-            {{-- <div class="main-card mb-3 card">
+            <div class="main-card mb-3 card">
                 <div class="card-header">
                     <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
                     Site Progress
                 </div>
-                <x-site-progress /> 
-            </div> --}}
+                <div id="agent_site_progress">
+                    <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                        <div class="loader">
+                            <div class="ball-scale-multiple">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -141,6 +150,22 @@ $(document).ready(() => {
         }
     });
 
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/agent-progress",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#agent_site_progress').html("");   
+            $('#agent_site_progress').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+    
+
 });
 
 $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
@@ -181,10 +206,7 @@ $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
     var mode = "today";
 
 
-
-
-
-    $('.circle-progress').each(function(index, element){
+$(document).find('.circle-progress').each(function(index, element){
         var progress = $(element).find('.site_progress').text();
 
         // console.log(progress);
@@ -202,7 +224,9 @@ $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
                 .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
             });
 
-    });
+    }
+)
+
 
 
     // Dropzone.autoDiscover = false;

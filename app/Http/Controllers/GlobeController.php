@@ -827,6 +827,13 @@ class GlobeController extends Controller
                         ->render();
           
             } 
+            elseif($component == 'agent-progress'){
+
+                $what_modal = "components.site-progress";      
+                return \View::make($what_modal)
+                        ->render();
+          
+            } 
             elseif($component == 'tab-content-activities'){
 
                 $what_modal = "components.site-activities";      

@@ -67,7 +67,15 @@
             var site = $(this).attr("data-site");
             var main_activity = $(this).attr('data-main_activity')
 
-            loader = '<div class="p-2">Loading...</div>';
+            var loader =  '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
+            '<div class="loader">' +
+             '<div class="ball-scale-multiple">' +
+               '<div></div>' +
+               '<div></div>' +
+               '<div></div>' +
+             '</div>' +
+            '</div>' +
+            '</div>';
             $.blockUI({ message: loader });
 
             $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
@@ -123,7 +131,18 @@
                 var main_activity = $(this).attr('data-main_activity');
                 var site = $(this).attr("data-site");
 
-                loader = '<div class="p-2">Loading...</div>';
+
+                var loader =  '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
+                '<div class="loader">' +
+                 '<div class="ball-scale-multiple">' +
+                   '<div></div>' +
+                   '<div></div>' +
+                   '<div></div>' +
+                 '</div>' +
+                '</div>' +
+                '</div>';
+
+
                 $.blockUI({ message: loader });
 
                 $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);

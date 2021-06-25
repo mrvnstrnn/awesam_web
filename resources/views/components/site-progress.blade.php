@@ -25,4 +25,26 @@
 
 <script>
     var table_to_load = "";
+
+    $('.circle-progress').each(function(index, element){
+        var progress = $(element).find('.site_progress').text();
+
+        // console.log(progress);
+
+        $(element)
+            .circleProgress({
+            value: progress,
+            size: 50,
+            lineCap: "round",
+            fill: { gradient: ["#ff1e41"] },
+            })
+            .on("circle-animation-progress", function (event, progress, stepValue) {
+            $(this)
+                .find("small")
+                .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+            });
+
+    });
+
+
 </script>
