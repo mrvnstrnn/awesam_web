@@ -1459,8 +1459,27 @@ class GlobeController extends Controller
                 }
 
             } else {
-                return response()->json(['error' => false, 'message' => $validate->errors() ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_agent_based_program($program_id)
+    {
+        try {
+            $agents = \DB::connection('mysql2')
+                                        ->table('users')
+                                        ->select('users.*')
+                                        ->join('user_details', 'user_details.user_id', 'users.id')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                        ->where('user_details.IS_id', \Auth::user()->id)
+                                        ->where('user_programs.program_id', $program_id)
+                                        ->get();
+            
+
+            return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

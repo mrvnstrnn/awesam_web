@@ -304,6 +304,7 @@ $(document).ready(() => {
                 $(row).addClass('modalDataUnassigned'+data.sam_id);
                 $(row).addClass('modalDataEndorsement');
                 $(row).attr('data-site_name', data.sitename);
+                $(row).attr('data-program_id', data.program_id);
                 $(row).attr('data-site_vendor_id', data.site_vendor_id);
             },
             columnDefs: [{
@@ -342,6 +343,10 @@ $(document).ready(() => {
                     $(row).attr('data-program', data_program);
                     $(row).addClass('modalDataEndorsement');
                     $(row).attr('data-id', data.sam_id);
+                    $(row).attr('data-program_id', data.program_id);
+                    $(row).attr('data-site_name', data.sitename);
+                    $(row).attr('data-program_id', data.program_id);
+                    $(row).attr('data-site_vendor_id', data.site_vendor_id);
                 },
                 columnDefs: [{
                     "targets": 0,
@@ -367,9 +372,30 @@ $(document).ready(() => {
             $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
             $("#sam_id").val($(this).parent().attr('data-id'));
             $("#btn-assign-sites").attr("data-site_name", $(this).parent().attr('data-site_name'));
+            $("#btn-assign-sites").attr("data-program_id", $(this).parent().attr('data-program_id'));
 
-            
-            $("#modal-assign-sites").modal("show");
+            $("#modal-assign-sites select#agent_id option").remove();
+            $.ajax({
+                url: "/get-agent-based-program/"+ $(this).parent().attr('data-program_id'),
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        console.log(resp.message);
+                        resp.message.forEach(element => {
+                            $("#modal-assign-sites select#agent_id").append(
+                                '<option value="'+element.id+'">'+element.name+'</option>'
+                            );
+                        });
+
+                        $("#modal-assign-sites").modal("show");
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp.message, 'Error');
+                }
+            });
         }
     });
 
