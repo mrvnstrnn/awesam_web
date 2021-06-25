@@ -15,7 +15,7 @@
 
         @php
             // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
-            $programs = \Auth::user()->getUserProgram();
+            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
         @endphp
 
 <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
@@ -43,10 +43,10 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @php
-                                        $activity_id = \Auth::user()->getUserProgramAct(6, $program->program_id);
+                                        $activity_id = \Auth::user()->getUserProgramAct($program->activity_id, $program->program_id);
                                     @endphp
                                     <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" 
-                                            data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, 6, $activity_id->what_to_load]) }}">
+                                            data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, $program->activity_id, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th class="d-none d-md-table-cell">Agent</th>
