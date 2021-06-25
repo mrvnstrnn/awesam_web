@@ -91,17 +91,17 @@
                     <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                         <div class="form-row">
                         <input type="hidden" id="sam_id" name="sam_id">
-                            @php
+                            {{-- @php
                                 $agents = \DB::connection('mysql2')
                                         ->table('users')
                                         ->join('user_details', 'user_details.user_id', 'users.id')
                                         ->where('user_details.IS_id', \Auth::user()->id)
                                         ->get();
-                            @endphp
+                            @endphp --}}
                             <select name="agent_id" id="agent_id" class="form-control">
-                            @foreach ($agents as $agent)
+                            {{-- @foreach ($agents as $agent)
                                 <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                            @endforeach
+                            @endforeach --}}
                             </select>
                         </div>
                     </div>
