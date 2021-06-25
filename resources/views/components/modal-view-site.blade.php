@@ -81,7 +81,9 @@
                                                         "PAC VP Approval",
                                                         "FAC Approval",
                                                         "FAC Director Approval",
-                                                        "FAC VP Approval"
+                                                        "FAC VP Approval",
+                                                        "STS Assessment",
+                                                        "STS Head Endorsement to RAM "
                                                     );  
                                     
                                     $forced_actions = array(
@@ -124,14 +126,19 @@
                                             <x-site-rtb-declaration />
 
                                         @elseif(
-                                        $site[0]->activity_name == "PAC Approval" && $main_activity == "" || 
-                                        $site[0]->activity_name == "PAC Director Approval" && $main_activity == "" || 
-                                        $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
-                                        $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
-                                        $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
-                                        $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""
-                                        )
+                                            $site[0]->activity_name == "PAC Approval" && $main_activity == "" || 
+                                            $site[0]->activity_name == "PAC Director Approval" && $main_activity == "" || 
+                                            $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
+                                            $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
+                                            $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
+                                            $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""  ||
+                                            
+                                            $site[0]->activity_name == "STS Assessment" && $main_activity == "" ||
+                                            $site[0]->activity_name == "STS Head Endorsement to RAM" && $main_activity == ""
 
+                                             
+                                        )
+                                            
                                             <x-site-p-a-c-approvals :site="$site" />
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
@@ -145,7 +152,7 @@
                                         @else
 
                                             @if($main_activity == "Document Validation")
-    
+
                                                 <x-site-rtb-docs-validation  :site="$site" />
 
                                             @endif
