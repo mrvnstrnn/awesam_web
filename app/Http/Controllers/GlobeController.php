@@ -129,12 +129,12 @@ class GlobeController extends Controller
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
-                // $when = Carbon::now()->addMinutes(3);
 
-                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i]));
+                // \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
+                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i]) );
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
             }
 
             return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);
@@ -201,8 +201,12 @@ class GlobeController extends Controller
             $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
             if(is_null($checkAgent)) {
+
                 $profile_id = \Auth::user()->profile_id;
                 $id = \Auth::user()->id;
+
+                return response()->json(['error' => true, 'message' => $request->all()]);
+                
                 SiteAgent::create($request->all());
                 \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
@@ -387,8 +391,8 @@ class GlobeController extends Controller
                                                 ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
                                                 ->where('user_details.user_id', \Auth::user()->id)
                                                 ->first();
-                                                
-            if(is_null($is_location)){
+                                        
+            if(!is_null($is_location)){
                 $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
             } else {
                 $region = \DB::connection('mysql2')->table('location_regions')->get();

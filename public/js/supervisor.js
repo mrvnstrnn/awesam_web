@@ -36,6 +36,7 @@ $(document).ready(() => {
                 if($('#agent-'+program_lists[0]+'-table').attr('data-page') == "new-agent"){
                     $(row).addClass('modalAssigAgentnSite');
                     $(row).attr('data-program', program_lists[0]);
+                    $(row).attr('style', "cursor: pointer");
                 }
             },
             columnDefs: [{
@@ -74,6 +75,7 @@ $(document).ready(() => {
                         $(row).addClass('modalAssigAgentnSite');
                         $(row).attr('data-program', $(this).attr("data-program"));
                     }
+                    $(row).attr('style', "cursor: pointer");
                 },
                 columnDefs: [{
                     "targets": 0,
@@ -335,6 +337,8 @@ $(document).ready(() => {
                     $(row).attr('data-site', JSON.stringify(data));
                     $(row).attr('data-program', $(this).attr("data-program"));
                     $(row).addClass('modalDataEndorsement');
+                    $(row).attr('data-id', data.sam_id);
+                    $(row).addClass('modalDataEndorsement');
                 },
                 columnDefs: [{
                     "targets": 0,
@@ -358,6 +362,8 @@ $(document).ready(() => {
             $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
             $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
             $("#sam_id").val($(this).parent().attr('data-id'));
+
+            
             $("#modal-assign-sites").modal("show");
         }
     });
