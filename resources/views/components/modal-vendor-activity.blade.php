@@ -34,7 +34,8 @@
     
 </style>    
     
-
+    <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
+    <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
@@ -523,6 +524,8 @@
             var lessor_method = $("#lessor_method").val();
             var lessor_approval = $("#lessor_approval").val();
             var lessor_remarks = $("#lessor_remarks").val();
+            var site_vendor_id = $("#modal_site_vendor_id").val();
+            var program_id = $("#modal_program_id").val();
             var sam_id = $(".ajax_content_box").attr("data-sam_id");
             var sub_activity_id = $(this).attr("data-sub_activity_id");
             var site_name = $("#viewInfoModal .menu-header-title").text();
@@ -540,6 +543,8 @@
                     sam_id : sam_id,
                     sub_activity_id : sub_activity_id,
                     site_name : site_name,
+                    site_vendor_id : site_vendor_id,
+                    program_id : program_id
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

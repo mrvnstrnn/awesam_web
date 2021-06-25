@@ -7,8 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-// class SiteEndorsementNotification extends Notification implements ShouldQueue
-class SiteEndorsementNotification extends Notification 
+class SiteEndorsementNotification extends Notification implements ShouldQueue
+// class SiteEndorsementNotification extends Notification 
 {
     use Queueable;
 
@@ -32,13 +32,13 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id. " has been endorsed.";
             }
             
-            $this->subject = "Site Endorsement";
+            $this->subject = $this->sam_id ." Site Endorsement";
             $this->action = "View Endorsement";
             $this->url = url('/endorsements');
 
         } else if ($activity_name == "site_assign") {
             
-            $this->subject = "Site Assigned";
+            $this->subject = $this->sam_id ." Site Assigned";
             $this->line = $site_name . " has been assigned to you.";
             $this->action = "View Site";
             $this->url = url('/assigned-sites');
@@ -53,7 +53,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $site_name. " has been rejected.";
             }
 
-            $this->subject = "Lessor Approval";
+            $this->subject = $this->sam_id ." Lessor Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -72,14 +72,14 @@ class SiteEndorsementNotification extends Notification
         } else if ($activity_name == "rtb_docs_approval") {
 
             $this->line = $this->sam_id. " RTB documents has been approved";
-            $this->subject = "RTB Document Approved";
+            $this->subject = $this->sam_id ." RTB Document Approved";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
         } else if ($activity_name == "rtb_declation") {
 
             $this->line = $this->sam_id. " RTB has been declared";
-            $this->subject = "RTB Declaration";
+            $this->subject = $this->sam_id ." RTB Declaration";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -91,7 +91,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " RTB Declaration has been approved.";
             }
             
-            $this->subject = "RTB Declaration Approval";
+            $this->subject = $this->sam_id. " RTB Declaration Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -103,7 +103,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "PAC Approval";
+            $this->subject = $this->sam_id. " PAC Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -115,7 +115,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "PAC Director Approval";
+            $this->subject = $this->sam_id. " PAC Director Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -127,7 +127,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "PAC VP Approval";
+            $this->subject = $this->sam_id. " PAC VP Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -139,7 +139,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "FAC Approval";
+            $this->subject = $this->sam_id. " FAC Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -151,7 +151,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "FAC Director Approval";
+            $this->subject = $this->sam_id. " FAC Director Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 
@@ -163,7 +163,7 @@ class SiteEndorsementNotification extends Notification
                 $this->line = $this->sam_id . " has been approved.";
             }
             
-            $this->subject = "FAC VP Approval";
+            $this->subject = $this->sam_id. " FAC VP Approval";
             $this->action = "View Activities";
             $this->url = url('/activities');
 

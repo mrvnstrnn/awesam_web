@@ -60,6 +60,8 @@
             var sam_id = $("#details_sam_id").val();
             var rtb_declaration_date = $("#rtb_declaration_date").val();
             var rtb_declaration = $("#rtb_declaration").val();
+            var site_vendor_id = $("#modal_site_vendor_id").val();
+            var program_id = $("#modal_program_id").val();
             var activity_name = "rtb_declation";
             // var remarks = $("#remarks").val();
 
@@ -76,6 +78,8 @@
                     rtb_declaration_date : rtb_declaration_date,
                     rtb_declaration : rtb_declaration,
                     activity_name : activity_name,
+                    site_vendor_id : site_vendor_id,
+                    program_id : program_id,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

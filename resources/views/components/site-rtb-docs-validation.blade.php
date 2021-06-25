@@ -286,6 +286,9 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
+        var site_vendor_id = $("#modal_site_vendor_id").val();
+        var program_id = $("#modal_program_id").val();
+
         var sam_id = $("#details_sam_id").val();
         var filename = $("#hidden_filename").val();
 
@@ -301,6 +304,8 @@
                 reason : text_area_reason,
                 sam_id : sam_id,
                 filename : filename,
+                site_vendor_id : site_vendor_id,
+                program_id : program_id,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

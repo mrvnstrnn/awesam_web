@@ -59,6 +59,8 @@
             e.preventDefault();
             var sam_id = $(this).attr("data-sam_id");
             var action = $(this).attr("data-action");
+            var site_vendor_id = $("#modal_site_vendor_id").val();
+            var program_id = $("#modal_program_id").val();
             var remarks = $("#remarks").val();
             var activity_name = "rtb_declation_approval";
 
@@ -78,7 +80,9 @@
                     sam_id : sam_id,
                     action : action,
                     remarks : remarks,
-                    activity_name : activity_name
+                    activity_name : activity_name,
+                    site_vendor_id : site_vendor_id,
+                    program_id : program_id,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

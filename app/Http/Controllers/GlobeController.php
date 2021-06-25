@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
 use Carbon;
+use Illuminate\Support\Facades\Notification;
+
 
 use App\Events\SiteEndorsementEvent;
 use App\Listeners\SiteEndorsementListener;
@@ -38,7 +40,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($stored_procs)
                         ->addColumn('checkbox', function($row) use($program_id) {
                             $checkbox = "<div class='custom-checkbox custom-control'>";
-                            $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement'>";
+                            $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement' data-site_vendor_id='".$row->site_vendor_id."'>";
                             $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
                             $checkbox .= "</div>";
     
@@ -110,9 +112,6 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-            // (new SiteEndorsementListener())->handle(
-            //     new SiteEndorsementEvent($request->input('sam_id')[0])
-            // );
 
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
@@ -120,21 +119,35 @@ class GlobeController extends Controller
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
-            
+
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
             if ($request->input('activity_name') == "endorse_site") {
                 $notification = "Successfully " .$message. " endorsement.";
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
                 $notification = "Site successfully " .$message;
+            } else if ($request->input('activity_name') == "rtb_docs_approval") {
+                $notification = "RTB Docs successfully approved";
             } else {
                 $notification = "Success";
             }
-
+            
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
+                for ($k=0; $k < count($request->input('site_vendor_id')); $k++) {
+                    $email_receiver = User::select('users.*')
+                                    ->join('user_details', 'users.id', 'user_details.user_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->join('program', 'program.program_id', 'user_programs.program_id')
+                                    ->where('user_details.vendor_id', $request->input('site_vendor_id')[$k])
+                                    ->where('program.program', $request->input('data_program'))
+                                    ->get();
+                    
+                    for ($j=0; $j < count($email_receiver); $j++) { 
+                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
+                    }
+                }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
@@ -216,9 +229,19 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                                ->where('program.program', $request->input('data_program'))
+                                ->get();
+
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                $user->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "", $request->input('site_name')) );
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_complete')) );
+                }
 
                 \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
@@ -710,10 +733,19 @@ class GlobeController extends Controller
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
                 $user = User::find($sub_activity_files->user_id);
 
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                                ->where('user_programs.program_id', $request->input('program_id'))
+                                ->get();
+                            
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                $user->notify( new SiteEndorsementNotification($request->input('sam_id'), "document_approval", $request->input('action'), "", $request->input('filename'), $request->input('reason')) );
-                
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "document_approval", $request->input('action'), "", $request->input('filename'), $request->input('reason')) );
+                }
+
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()->all() ]);
@@ -1272,9 +1304,18 @@ class GlobeController extends Controller
 
                 if (is_null($rtb)){
 
+                    $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                                ->where('user_programs.program_id', $request->input('program_id'))
+                                ->get();
+                            
                     SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                    \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+                    for ($j=0; $j < count($email_receiver); $j++) { 
+                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+                    }
 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
@@ -1322,9 +1363,18 @@ class GlobeController extends Controller
                                             'approver_id'=> \Auth::id(),
                                         ]);
 
+                $email_receiver = User::select('users.*')
+                        ->join('user_details', 'users.id', 'user_details.user_id')
+                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                        ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                        ->where('user_programs.program_id', $request->input('program_id'))
+                        ->get();
+                        
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
+                }
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
 
@@ -1395,9 +1445,18 @@ class GlobeController extends Controller
                     'status' => $request->input('lessor_approval'),
                 ]); 
 
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                                ->where('user_programs.program_id', $request->input('program_id'))
+                                ->get();
+                            
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), "lessor_approval", "", $request->input('site_name')) );
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "lessor_approval", "", $request->input('site_name')) );
+                }
 
             } else {
                 return response()->json(['error' => false, 'message' => $validate->errors() ]);
