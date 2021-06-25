@@ -68,8 +68,8 @@
                                 </div>
                             </div>
                             <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="reject{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Endorse New Sites</button>
+                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="reject{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Reject</button>
+                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Endorse New Sites</button>
                             </div>
                         </div>
                     </div>
@@ -102,8 +102,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
+                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Reject</button>
+                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Accept Endorsement</button>
                 </div>
             </div>
         </div>

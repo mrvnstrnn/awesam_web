@@ -143,6 +143,15 @@
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
+        var activity_name = $("#modal_activity_name").val();
+
+        // if ("{{ \Auth::user()->profile_id }}" == 10) {
+        //     activity_name = "pac_approval";
+        // } else if ("{{ \Auth::user()->profile_id }}" == 14) {
+        //     activity_name = "pac_director_approval";
+        // } else if ("{{ \Auth::user()->profile_id }}" == 13) {
+        //     activity_name = "pac_vp_approval";
+        // } 
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -151,7 +160,8 @@
             url: '/accept-reject-endorsement',
             data: {
                 sam_id : sam_id,
-                data_complete : data_complete
+                data_complete : data_complete,
+                activity_name : activity_name
             },
             type: 'POST',
             headers: {

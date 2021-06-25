@@ -60,6 +60,7 @@
             var sam_id = $(this).attr("data-sam_id");
             var action = $(this).attr("data-action");
             var remarks = $("#remarks").val();
+            var activity_name = "rtb_declation_approval";
 
 
             $(this).attr("disabled", "disabled");
@@ -77,6 +78,7 @@
                     sam_id : sam_id,
                     action : action,
                     remarks : remarks,
+                    activity_name : activity_name
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

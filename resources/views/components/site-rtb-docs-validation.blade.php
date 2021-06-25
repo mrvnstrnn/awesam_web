@@ -82,7 +82,7 @@
         </div>
     @endforelse
 
-    <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
+    <input type="hidden" name="hidden_filename" id="hidden_filename">
 </div>
 
 <div class="row confirmation_message pt-2 pb-5 d-none">
@@ -208,6 +208,8 @@
         } else {
           htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
+
+        $("#hidden_filename").val(values[0].value);
                 
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
@@ -284,6 +286,9 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
+        var sam_id = $("#details_sam_id").val();
+        var filename = $("#hidden_filename").val();
+
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
@@ -294,6 +299,8 @@
                 action : data_action,
                 id : data_id,
                 reason : text_area_reason,
+                sam_id : sam_id,
+                filename : filename,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
