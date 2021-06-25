@@ -24,6 +24,7 @@
 </style>    
     
     <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
+    <input id="modal_activity_name" type="hidden" value="{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
@@ -82,6 +83,9 @@
                                                         "FAC Approval",
                                                         "FAC Director Approval",
                                                         "FAC VP Approval",
+
+                                                        "STS Assessment",
+                                                        "STS Head Endorsement to RAM",
 
                                                         "Create PR",
                                                         "RAM Head PR Approval",

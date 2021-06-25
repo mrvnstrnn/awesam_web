@@ -60,6 +60,7 @@
             var sam_id = $("#details_sam_id").val();
             var rtb_declaration_date = $("#rtb_declaration_date").val();
             var rtb_declaration = $("#rtb_declaration").val();
+            var activity_name = "rtb_declation";
             // var remarks = $("#remarks").val();
 
             $(this).attr("disabled", "disabled");
@@ -74,6 +75,7 @@
                     sam_id : sam_id,
                     rtb_declaration_date : rtb_declaration_date,
                     rtb_declaration : rtb_declaration,
+                    activity_name : activity_name,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

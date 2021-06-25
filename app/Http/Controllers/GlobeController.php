@@ -12,6 +12,7 @@ use App\Models\SubActivityValue;
 use App\Models\IssueType;
 use App\Models\Issue;
 use App\Models\Chat;
+use App\Models\User;
 use App\Models\RTBDeclaration;
 use Illuminate\Support\Facades\Schema;
 use Validator;
@@ -121,23 +122,25 @@ class GlobeController extends Controller
             $id = \Auth::user()->id;
             
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
-
-            // $user = \DB::connection('mysql2')->table('stage_activities')->where('profile_id', $profile_id)->get();
-
-            // return response()->json(['error' => false, 'message' => $user]);
+            if ($request->input('activity_name') == "endorse_site") {
+                $notification = "Successfully " .$message. " endorsement.";
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval") {
+                $notification = "Site successfully " .$message;
+            } else {
+                $notification = "Success";
+            }
 
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                // \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
-                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i]) );
+                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
             }
 
-            return response()->json(['error' => false, 'message' => "Successfully " .$message. " endorsement."]);
+            return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -200,14 +203,23 @@ class GlobeController extends Controller
         try {
             $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
+            $user = User::find($request->input('agent_id'));
+
             if(is_null($checkAgent)) {
 
                 $profile_id = \Auth::user()->profile_id;
                 $id = \Auth::user()->id;
-
-                return response()->json(['error' => true, 'message' => $request->all()]);
                 
-                SiteAgent::create($request->all());
+                
+                SiteAgent::create([
+                    'agent_id' => $request->input('agent_id'),
+                    'sam_id' => $request->input('sam_id'),
+                ]);
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                $user->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "", $request->input('site_name')) );
+
                 \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
@@ -694,6 +706,13 @@ class GlobeController extends Controller
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                     'approver_id' => \Auth::id(),
                 ]);
+
+                $sub_activity_files = SubActivityValue::find($request->input('id'));
+                $user = User::find($sub_activity_files->user_id);
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                $user->notify( new SiteEndorsementNotification($request->input('sam_id'), "document_approval", $request->input('action'), "", $request->input('filename'), $request->input('reason')) );
                 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
             } else {
@@ -805,9 +824,6 @@ class GlobeController extends Controller
         return $dt->make(true);
             
     }
-
-
-
 
     public function modal_view_site_components($sam_id, $component)
     {
@@ -1256,12 +1272,9 @@ class GlobeController extends Controller
 
                 if (is_null($rtb)){
 
-                    SiteEndorsementEvent::dispatch( $request->input('sam_id') );
-                    \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
+                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-
+                    \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
@@ -1271,15 +1284,9 @@ class GlobeController extends Controller
                         'status' => "pending",
                         'type' => "rtb_declaration",
                     ]); 
-                    
-                    // RTBDeclaration::create([
-                    //     'sam_id' => $request->input('sam_id'),
-                    //     'rtb_declaration_date' => date('Y-m-d', strtotime($request->input('rtb_declaration_date'))),
-                    //     'rtb_declaration' => $request->input('rtb_declaration'),
-                    //     'status' => 'pending',
-                    //     'user_id' => \Auth::id(),
-                    //     'remarks' => $request->input('remarks'),
-                    // ]);
+
+                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
                     
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 } else {
@@ -1305,14 +1312,7 @@ class GlobeController extends Controller
                 'remarks' => $required,
             ));
 
-            if ($validate->passes()){
-
-                SiteEndorsementEvent::dispatch( $request->input('sam_id') );
-                \Auth::user()->notify(new SiteEndorsementNotification( $request->input('sam_id') ));
-
-                // return response()->json(['error' => true, 'message' => $request->all() ]);
-                // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('action').'")');
+            if ($validate->passes()) {
 
                 $rtb = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', "rtb_declaration")
@@ -1322,12 +1322,9 @@ class GlobeController extends Controller
                                             'approver_id'=> \Auth::id(),
                                         ]);
 
-                // RTBDeclaration::where('sam_id', $request->input('sam_id'))
-                // ->update([
-                //     'status'=> $request->input('action') == "false" ? "denied" : "approved",
-                //     'remarks'=> $request->input('remarks'),
-                //     'approver_id'=> \Auth::id(),
-                // ]);
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
 
@@ -1397,6 +1394,10 @@ class GlobeController extends Controller
                     'user_id' => \Auth::id(),
                     'status' => $request->input('lessor_approval'),
                 ]); 
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                \Auth::user()->notify( new SiteEndorsementNotification($request->input('sam_id'), "lessor_approval", "", $request->input('site_name')) );
 
             } else {
                 return response()->json(['error' => false, 'message' => $validate->errors() ]);

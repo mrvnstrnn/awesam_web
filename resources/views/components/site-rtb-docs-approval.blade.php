@@ -224,6 +224,7 @@
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
+        var activity_name = "rtb_docs_approval";
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -232,7 +233,8 @@
             url: '/accept-reject-endorsement',
             data: {
                 sam_id : sam_id,
-                data_complete : data_complete
+                data_complete : data_complete,
+                activity_name : activity_name
             },
             type: 'POST',
             headers: {
@@ -244,21 +246,21 @@
                         $("#viewInfoModal").modal("hide");
                         toastr.success(resp.message, 'Success');
 
-                        $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
-                        $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                        $("#btn-accept-endorsement").removeAttr("disabled");
+                        $("#btn-accept-endorsement").text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
                         // $("#loaderModal").modal("hide");
                     });
                 } else {
                     toastr.error(resp.message, 'Error');
-                    $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
-                    $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                    $("#btn-accept-endorsement").removeAttr("disabled");
+                    $("#btn-accept-endorsement").text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
                 }
             },
             error: function(resp){
                 // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
-                $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
-                $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
+                $("#btn-accept-endorsement").removeAttr("disabled");
+                $("#btn-accept-endorsement").text(data_complete == "false" ? "Reject" : "Approve RTB Documents");
             }
         });
 
