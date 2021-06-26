@@ -162,7 +162,6 @@
 
                                         )   
 
-                                            <x-site-p-a-c-approvals :site="$site" />
     
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
