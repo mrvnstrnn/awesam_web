@@ -118,6 +118,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
     Route::get('/resolve-issue/{issue_id}', [GlobeController::class, 'resolve_issues']);
 
+    // Create PR
+    Route::post('/add-create-pr', [GlobeController::class, 'add_create_pr']);
+
 
     // Milestone Datatable Source - Document Validation
     Route::get('/site-doc-validation/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_doc_validation'])->name('get_site_doc_validation.list');

@@ -167,6 +167,13 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
             $this->action = "View Activities";
             $this->url = url('/activities');
 
+        } else if ($activity_name == "Create PR") {
+
+            $this->line = $this->sam_id . " PR created.";
+            $this->subject = $this->sam_id. " Create PR";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
         }
         
     }
