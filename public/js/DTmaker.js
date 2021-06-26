@@ -5,7 +5,6 @@ function makeDT(whatTable, whatCols, table_to_load) {
             main_activity = "";
         }
         
-        // Load Datatable
         $(whatTable).DataTable({
             processing: true,
             serverSide: false,
@@ -36,6 +35,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     $(row).attr('data-main_activity', main_activity);
                     $(row).attr('data-profile', data.profile_id);
                     $(row).attr('data-what_table', $(whatTable).attr('id'));
+                    $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
             },
             
             columns: whatCols,
