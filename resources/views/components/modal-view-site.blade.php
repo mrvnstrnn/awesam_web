@@ -22,16 +22,12 @@
     }
     
 </style>    
-
-    @php
-        // dd($site);
-    @endphp
     
     <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
     <input id="modal_activity_name" type="hidden" value="{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}">
     <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
     <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
-
+    
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
@@ -90,11 +86,13 @@
                                                         "FAC Director Approval",
                                                         "FAC VP Approval",
 
+                                                        "STS Assessment",
+                                                        "STS Head Endorsement to RAM",
+
                                                         "Create PR",
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
-                                                        "Vendor Awarding",
-                                                        "Schedule JTSS"
+                                                        "Vendor Awarding"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -154,14 +152,27 @@
                                         @elseif(
 
                                             // NEW SITES APPROVALS                                             
-                                            $site[0]->activity_name == "Create PR" && $main_activity == "" ||
-                                            $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
-                                            $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
-                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == "" ||
-                                            $site[0]->activity_name == "Schedule JTSS" && $main_activity == ""
+                                            $site[0]->activity_name == "Create PR" && $main_activity == ""
+                                            // $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
+                                            // $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
+                                            // $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
 
                                         )   
+                                        
+                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
 
+                                        
+                                        @elseif(
+
+                                            // NEW SITES APPROVALS                                             
+                                            // $site[0]->activity_name == "Create PR" && $main_activity == "" ||
+                                            $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
+                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
+
+                                        )   
+                                        
+                                            <x-site-p-r-approval :site="$site" :pr="$pr" :activity="$site[0]->activity_name" />
     
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
@@ -196,7 +207,7 @@
                                     </div>
                                 </div>
                                 <div id="site_details_view"  class="{{ $site_details_view }}">
-                                    <div class="row">                    
+                                    <div class="row">      
                                         <div class="col-12 text-center">
                                             <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
                                                 <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
@@ -250,6 +261,7 @@
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
+                                            {{-- <x-site-activities :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">
@@ -264,6 +276,7 @@
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
+                                            {{-- <x-site-files :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">
@@ -309,9 +322,11 @@
                                     </div>                                    
                                 </div>
                             </div>
-                        </div>                         
-                    </div>                
+                        </div> 
 
+                        
+                        {{-- <x-site-status :completed="35" :samid="$site[0]->sam_id"/> --}}
+                    </div>                
                 </div>
             </div>
         </div>

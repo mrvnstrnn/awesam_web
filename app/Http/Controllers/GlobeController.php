@@ -603,49 +603,49 @@ class GlobeController extends Controller
                 'file_name' => 'required',
             ));
 
-            $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
 
-            $file_name = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
+            // $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
 
-            if (file_exists( public_path()."/files/".$file_name )) {
+            // $file_name = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
 
-                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+            // if (file_exists( public_path()."/files/".$file_name )) {
 
-                $exploaded_name = explode("-", $withoutExt);
+            //     $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
 
-                if ( is_numeric( end( $exploaded_name) ) ) {
-                    $counter =  end( $exploaded_name) + "01";
-                } else {
-                    $counter =  strtolower(str_replace(" ", "-", $request->input("sub_activity_name")))."-01";
-                }
+            //     $exploaded_name = explode("-", $withoutExt);
 
-                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+            //     if ( is_numeric( end( $exploaded_name) ) ) {
+            //         $counter =  end( $exploaded_name) + "01";
+            //     } else {
+            //         $counter =  strtolower(str_replace(" ", "-", $request->input("sub_activity_name")))."-01";
+            //     }
 
-                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            //     $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
 
-                while (file_exists( public_path()."/files/". $new_file)) {
-                    $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+            //     $new_file = $imploded_name . "-" . $counter . "." .$ext;
 
-                    $exploaded_name = explode("-", $withoutExt);
+            //     while (file_exists( public_path()."/files/". $new_file)) {
+            //         $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
 
-                    if ( is_numeric( end( $exploaded_name) ) ) {
-                        $counter =  end( $exploaded_name) + "01";
-                    } else {
-                        $counter =  "01";
-                    }
+            //         $exploaded_name = explode("-", $withoutExt);
 
-                    $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+            //         if ( is_numeric( end( $exploaded_name) ) ) {
+            //             $counter =  end( $exploaded_name) + "01";
+            //         } else {
+            //             $counter =  "01";
+            //         }
 
-                    $new_file = $imploded_name . "-" . $counter . "." .$ext;
-                }
+            //         $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
 
-                // $new_file = $new_file;
+            //         $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            //     }
 
-            } else {
+            //     // $new_file = $new_file;
 
-                $new_file = $file_name;
-
-            }
+            // } else {
+            //     $new_file = $file_name;
+            // }
 
             // return response()->json(['error' => true, 'message' => $new_file ]);
 
@@ -666,6 +666,156 @@ class GlobeController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function rename_file($filename_data, $sub_activity_name, $sam_id)
+    {
+        $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
+
+        $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
+
+        if (file_exists( public_path()."/files/".$file_name )) {
+
+            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+
+            $exploaded_name = explode("-", $withoutExt);
+
+            if ( is_numeric( end( $exploaded_name) ) ) {
+                $counter =  end( $exploaded_name) + "01";
+            } else {
+                $counter =  strtolower(str_replace(" ", "-", $sub_activity_name))."-01";
+            }
+
+            $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+            $new_file = $imploded_name . "-" . $counter . "." .$ext;
+
+            while (file_exists( public_path()."/files/". $new_file)) {
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  "01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            }
+
+            return $new_file = $new_file;
+
+        } else {
+            return $new_file = $file_name;
+        }
+    }
+
+    public function add_create_pr(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'pr_file' => 'required',
+                'reference_number' => 'required',
+            ));
+
+            if($validate->passes()){
+
+                $sub_activity = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                                                    ->where('sub_activity_id', $request->input("activity_id"))
+                                                    ->first();
+                if (is_null($sub_activity)) {
+                    $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
+    
+                    \Storage::move( $request->input("pr_file"), $new_file );
+
+                    $json = array(
+                        "pr_file" => $new_file,
+                        "reference_number" => $request->input('reference_number'),
+                        "prepared_by" => $request->input('prepared_by'),
+                        "vendor" => $request->input('vendor'),
+                    );
+    
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("activity_id"),
+                        'type' => "create_pr",
+                        'value' => json_encode($json),
+                        'user_id' => \Auth::id(),
+                        'status' => "pending",
+                    ]); 
+
+                    \DB::connection('mysql2')->table("site")
+                                                ->where("sam_id", $request->input("sam_id"))
+                                                ->update([
+                                                    'site_vendor_id' => $request->input('vendor')
+                                                ]);
+
+                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
+    
+                    $email_receiver = User::select('users.*')
+                                    ->join('user_details', 'users.id', 'user_details.user_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->join('program', 'program.program_id', 'user_programs.program_id')
+                                    ->where('user_details.vendor_id', $request->input('vendor'))
+                                    ->where('program.program', $request->input('data_program'))
+                                    ->get();
+                    
+                    for ($j=0; $j < count($email_receiver); $j++) { 
+                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+                    }
+    
+                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
+    
+                    return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
+                } else {
+                    return response()->json(['error' => true, 'message' => "Already created PR." ]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_pr (Request $request)
+    {
+        try {
+            $data_action = $request->input('data_action') == false ? "denied" : "approved";
+
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+            SubActivityValue::where('id', $request->input('id'))
+                            ->update([
+                                'status' => $data_action,
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => Carbon::now()->toDate(),
+                            ]);
+
+            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+            $email_receiver = User::select('users.*')
+                            ->join('user_details', 'users.id', 'user_details.user_id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->join('program', 'program.program_id', 'user_programs.program_id')
+                            ->where('user_details.vendor_id', $request->input('vendor'))
+                            ->where('program.program', $request->input('data_program'))
+                            ->get();
+            
+            for ($j=0; $j < count($email_receiver); $j++) { 
+                $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_action')) );
+            }
+
+            // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('data_action').'")');
+
+            return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -770,7 +920,6 @@ class GlobeController extends Controller
         return $dt->make(true);
             
     }
-
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
@@ -973,6 +1122,10 @@ class GlobeController extends Controller
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
+            } else if($request['main_activity'] == "Program Sites" && $request['program_id'] == 1){
+                $mainactivity = "";
+            } else {
+                $mainactivity = $request['main_activity'];
             }
 
             // $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
@@ -981,6 +1134,13 @@ class GlobeController extends Controller
                                         ->where('status', "pending")
                                         ->where('type', "rtb_declaration")
                                         ->first();
+
+            $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
+                                    ->join('users', 'users.id', 'sub_activity_value.user_id')
+                                    ->where('sub_activity_value.sam_id', $request->input('sam_id'))
+                                    ->where('sub_activity_value.status', "pending")
+                                    ->where('sub_activity_value.type', "create_pr")
+                                    ->first();
 
             if($request['vendor_mode']){
                 
@@ -993,7 +1153,8 @@ class GlobeController extends Controller
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
                     'activity_id' => $request['activity_id'],
-                    'main_activity' => $request['main_activity'],
+                    // 'main_activity' => $request['main_activity'],
+                    'main_activity' => $mainactivity,
                 ])
                 ->render();
 
@@ -1004,10 +1165,11 @@ class GlobeController extends Controller
                 return \View::make($what_modal)
                 ->with([
                     'site' => $site,
+                    'pr' => $pr,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
-                    'main_activity' => $request['main_activity'],
+                    'main_activity' => $mainactivity,
                 ])
                 ->render();
     

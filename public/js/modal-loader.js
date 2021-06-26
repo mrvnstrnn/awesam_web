@@ -11,6 +11,8 @@
                 var main_activity = $(this).attr('data-main_activity');
                 var site = $(this).attr("data-site");
 
+                var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
+
                 loader = '<div class="p-2">Loading...</div>';
                 $.blockUI({ message: loader });
 
@@ -25,6 +27,7 @@
                         main_activity : main_activity,
                         mode : table_to_load,
                         sam_id : sam_id,
+                        program_id : program_id,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
