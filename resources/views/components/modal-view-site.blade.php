@@ -152,14 +152,27 @@
                                         @elseif(
 
                                             // NEW SITES APPROVALS                                             
-                                            $site[0]->activity_name == "Create PR" && $main_activity == "" ||
+                                            $site[0]->activity_name == "Create PR" && $main_activity == ""
+                                            // $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
+                                            // $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
+                                            // $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
+
+                                        )   
+                                        
+                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
+
+                                        
+                                        @elseif(
+
+                                            // NEW SITES APPROVALS                                             
+                                            // $site[0]->activity_name == "Create PR" && $main_activity == "" ||
                                             $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
 
                                         )   
                                         
-                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
+                                            <x-site-p-r-approval :site="$site" :pr="$pr" :activity="$site[0]->activity_name" />
     
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")

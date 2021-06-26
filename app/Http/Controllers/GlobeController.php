@@ -732,8 +732,8 @@ class GlobeController extends Controller
                 if (is_null($sub_activity)) {
                     $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
     
-                    \Storage::move( $request->input("file_name"), $new_file );
-                    
+                    \Storage::move( $request->input("pr_file"), $new_file );
+
                     $json = array(
                         "pr_file" => $new_file,
                         "reference_number" => $request->input('reference_number'),
@@ -744,11 +744,18 @@ class GlobeController extends Controller
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("activity_id"),
+                        'type' => "create_pr",
                         'value' => json_encode($json),
                         'user_id' => \Auth::id(),
                         'status' => "pending",
                     ]); 
-    
+
+                    \DB::connection('mysql2')->table("site")
+                                                ->where("sam_id", $request->input("sam_id"))
+                                                ->update([
+                                                    'site_vendor_id' => $request->input('vendor')
+                                                ]);
+
                     SiteEndorsementEvent::dispatch($request->input('sam_id'));
     
                     $email_receiver = User::select('users.*')
@@ -773,6 +780,42 @@ class GlobeController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_pr (Request $request)
+    {
+        try {
+            $data_action = $request->input('data_action') == false ? "denied" : "approved";
+
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+            SubActivityValue::where('id', $request->input('id'))
+                            ->update([
+                                'status' => $data_action,
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => Carbon::now()->toDate(),
+                            ]);
+
+            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+            $email_receiver = User::select('users.*')
+                            ->join('user_details', 'users.id', 'user_details.user_id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->join('program', 'program.program_id', 'user_programs.program_id')
+                            ->where('user_details.vendor_id', $request->input('vendor'))
+                            ->where('program.program', $request->input('data_program'))
+                            ->get();
+            
+            for ($j=0; $j < count($email_receiver); $j++) { 
+                $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_action')) );
+            }
+
+            // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('data_action').'")');
+
+            return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -1092,6 +1135,13 @@ class GlobeController extends Controller
                                         ->where('type', "rtb_declaration")
                                         ->first();
 
+            $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
+                                    ->join('users', 'users.id', 'sub_activity_value.user_id')
+                                    ->where('sub_activity_value.sam_id', $request->input('sam_id'))
+                                    ->where('sub_activity_value.status', "pending")
+                                    ->where('sub_activity_value.type', "create_pr")
+                                    ->first();
+
             if($request['vendor_mode']){
                 
                 $what_modal = "components.modal-vendor-activity";
@@ -1115,6 +1165,7 @@ class GlobeController extends Controller
                 return \View::make($what_modal)
                 ->with([
                     'site' => $site,
+                    'pr' => $pr,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,

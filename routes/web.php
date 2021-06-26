@@ -120,6 +120,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Create PR
     Route::post('/add-create-pr', [GlobeController::class, 'add_create_pr']);
+    Route::post('/approve-reject-pr', [GlobeController::class, 'approve_reject_pr']);
 
 
     // Milestone Datatable Source - Document Validation

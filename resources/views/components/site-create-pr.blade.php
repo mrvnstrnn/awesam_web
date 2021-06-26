@@ -26,7 +26,7 @@
             </div>
 
             <div class="form-group">
-                <label for="vendor">Reference #</label>
+                <label for="vendor">Vendor</label>
                 <select name="vendor" id="vendor" class="form-control">
                     @php
                         $vendors = \App\Models\Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
@@ -38,7 +38,7 @@
                         <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
                     @endforeach
                 </select>
-                <small class="text-danger reference_no-error"></small>
+                <small class="text-danger vendor-error"></small>
             </div>
         </form>         
 

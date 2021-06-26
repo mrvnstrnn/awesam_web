@@ -174,6 +174,30 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
             $this->action = "View Activities";
             $this->url = url('/activities');
 
+        } else if ($activity_name == "RAM Head PR Approval") {
+
+            if ($data_complete == "false") {
+                $this->line = $this->sam_id . " PR has been rejected";
+            } else {
+                $this->line = $this->sam_id . " PR has been approved.";
+            }
+
+            $this->subject = $this->sam_id. " RAM Head PR Approval";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
+        } else if ($activity_name == "NAM PR Approval") {
+
+            if ($data_complete == "false") {
+                $this->line = $this->sam_id . " PR has been rejected";
+            } else {
+                $this->line = $this->sam_id . " PR has been approved.";
+            }
+
+            $this->subject = $this->sam_id. " NAM PR Approval";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
         }
         
     }
