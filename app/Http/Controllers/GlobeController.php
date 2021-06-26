@@ -822,18 +822,31 @@ class GlobeController extends Controller
                     ->where('counter', '>', 0)
                     ->get();
 
+        } else if ($activity_type == 'all-site-issues') {
+            // $sites = \DB::connection('mysql2')
+            //     ->table("site")
+            //     ->leftjoin('site_issue', 'site.sam_id', 'issue.sam_id')
+            //     ->where('site.program_id', $program_id)
+            //     ->get();
+
+            $sites = \DB::connection('mysql2')
+                ->table("site_issue")
+                ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
+                ->where('site.program_id', $program_id)
+                ->where('site_issue.issue_status', 'active')
+                ->get();
         }
 
         else {
 
             $sites = \DB::connection('mysql2')
-            ->table("site_milestone")
-            ->distinct()
-            ->where('program_id', $program_id)
-            ->where('activity_complete', 'false')
-            ->where('profile_id', $profile_id)
-            ->where('activity_type', $activity_type)
-            ->get();
+                    ->table("site_milestone")
+                    ->distinct()
+                    ->where('program_id', $program_id)
+                    ->where('activity_complete', 'false')
+                    ->where('profile_id', $profile_id)
+                    ->where('activity_type', $activity_type)
+                    ->get();
 
         }
 
@@ -1161,6 +1174,47 @@ class GlobeController extends Controller
         // }
 
 
+    }
+
+    public function get_site_issues ($issue_id, $what_table) 
+    {
+        try {
+
+            $site = \DB::connection('mysql2')
+                            ->table('site_issue')
+                            ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+                            ->where('site_issue.issue_id', $issue_id)
+                            ->first();
+
+            $what_modal = "components.site-issue-validation";
+
+            return \View::make($what_modal)
+            ->with([
+                'site' => $site,
+                'main_activity' => "Issue Validation",
+                'what_table' => $what_table,
+            ])
+            ->render();
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function resolve_issues($issue_id)
+    {
+        try {
+            $site = \DB::connection('mysql2')
+                            ->table('site_issue')
+                            ->where('issue_id', $issue_id)
+                            ->update([
+                                'issue_status' => 'resolved'
+                            ]);
+
+            
+            return response()->json(['error' => false, 'message' => "Successfully resolve an issue." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
     }
 
     public function approve_reject_docs($data_id, $data_action)

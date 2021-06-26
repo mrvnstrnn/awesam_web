@@ -5,29 +5,31 @@
     });
 
 
-    $('.my_table_issue').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: $('.my_table_issue').attr('data-href'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    if ( ! $.fn.DataTable.isDataTable('.my_table_issue') ) {
+        $('.my_table_issue').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: $('.my_table_issue').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
-        },
-        dataSrc: function(json){
-            return json.data;
-        },
-        'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-id', data.issue_id);
-        },
-        columns: [
-            { data: "start_date" },
-            { data: "issue" },
-            { data: "issue_details" },
-            { data: "issue_status" },
-        ],
-    });
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-id', data.issue_id);
+            },
+            columns: [
+                { data: "start_date" },
+                { data: "issue" },
+                { data: "issue_details" },
+                { data: "issue_status" },
+            ],
+        });
+    }
 
     $('#btn_add_issue_cancel').on( 'click', function (e) {
         $('.add_issue_form').addClass('d-none');
