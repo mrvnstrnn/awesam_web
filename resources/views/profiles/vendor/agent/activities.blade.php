@@ -70,7 +70,7 @@
     @endphp
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div class="main-card mb-3 card">
                 <div class="card-header">
                     <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
@@ -89,7 +89,7 @@
                 </ul>                            
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div class="main-card mb-3 card">
                 <div class="card-header">
                     <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>

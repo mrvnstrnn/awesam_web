@@ -95,7 +95,7 @@
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
-                                                        "Advance Site Hunting"
+                                                        "Schedule JTSS"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -158,11 +158,11 @@
                                             $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
                                             $site[0]->activity_name == "Vendor Awarding" && $main_activity == "" ||
-                                            $site[0]->activity_name == "Advance Site Hunting" && $main_activity == ""
+                                            $site[0]->activity_name == "Schedule JTSS" && $main_activity == ""
 
                                         )   
 
-                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
+                                            <x-site-p-a-c-approvals :site="$site" />
     
 
                                         @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")

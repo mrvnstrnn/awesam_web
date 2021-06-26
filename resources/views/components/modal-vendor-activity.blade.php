@@ -285,6 +285,8 @@
             $("#actions_box").removeClass('d-none');
             $("#actions_list").addClass('d-none');
             $('#active_action').text($(this).attr('data-sub_activity'));
+            // $("#action_doc_maker").removeClass('d-none');
+
 
             $(".table_uploaded").removeAttr("id");
 
