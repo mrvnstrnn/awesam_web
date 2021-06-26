@@ -35,8 +35,12 @@
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
+<<<<<<< HEAD
                 <div class="row">
                     
+=======
+                <div class="row justify-content-center">
+>>>>>>> f730c0f73d115a741f64024bfccf856d77235f49
                     <div class="col-lg-8 col-md-12 col-sm-12">
                         <div class="main-card mb-3 card ">
 
@@ -100,6 +104,7 @@
                                     
                                     $forced_actions = array(
                                                         "Document Validation",
+                                                        "Issue Validation",
                                                     );
 
                                     if(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
@@ -172,6 +177,10 @@
                                         @elseif($site[0]->activity_name == "RTB Docs Validation" && $main_activity == "")
 
                                             <x-site-rtb-docs-validation  :site="$site"/>
+
+                                        @elseif($main_activity == "Issue Validation")
+
+                                            <x-site-issue-validation  :site="$site"/>
 
                                         @else
 
