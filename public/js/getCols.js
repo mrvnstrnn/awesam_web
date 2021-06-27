@@ -11,6 +11,24 @@ function getCols(active_program, active_table, active_profile){
         success: function (resp) {
 
             if(resp.length > 0){
+
+
+                if(active_table=='new_endorsements_globe'){
+                   
+                    cols.push(
+                        {
+                            data: null,
+                            name: "<input type='checkbox' class='checkAll form-control' style='margin-left:-8px;width:20px;' />",
+                            width: '20px',
+                            orderable: false,
+                            render: function(data){
+                                return "<input type='checkbox' class='form-control' style='width:20px;' />";
+                            }
+                        }
+                    );
+
+                }
+
                 resp.forEach(function(field){
                     switch(field['source_field']){
                         case "site_fields":

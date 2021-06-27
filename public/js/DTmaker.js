@@ -29,6 +29,8 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
 
             createdRow: function (row, data, dataIndex) {
+
+                    
                     $(row).attr('data-activity', data.activity_name);
                     $(row).attr('data-site', data.site_name);
                     $(row).attr('data-sam_id', data.sam_id);
@@ -43,7 +45,6 @@ function makeDT(whatTable, whatCols, table_to_load) {
             columnDefs: [ 
                 {
                     "targets": [ "site_name" ],
-                    "width": "25%",
                     "visible": true,
                     "searchable": true,
                     "render": function ( data, type, row ) {
