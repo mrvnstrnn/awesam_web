@@ -1,4 +1,4 @@
-<div id="site_details_view">                                    
+<div id="site_details_view"  class="{{ $site_details_view }}">                                    
     <div class="row">      
         <div class="col-12 text-center">
             <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
