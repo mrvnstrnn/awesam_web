@@ -93,7 +93,7 @@
         if ("{{ \Auth::user()->profile_id != 2 }}") {
             $("#viewInfoModal .main-card.mb-3.card").append(
                 '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+                    '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
                     '<button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
                 '</div>'
             );
