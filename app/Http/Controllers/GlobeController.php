@@ -33,7 +33,7 @@ class GlobeController extends Controller
         try {
             // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
-            $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
+            $vendor = !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->vendor_id : 1 ;
 
             $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
@@ -196,7 +196,7 @@ class GlobeController extends Controller
             $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
 
             $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
-            
+
             $dt = DataTables::of($stored_procs)
                             ->addColumn('photo', function($row){
                                 $photo = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>";
