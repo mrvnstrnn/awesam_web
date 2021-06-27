@@ -39,36 +39,18 @@
                                 <div class="dropdown-menu-header-inner bg-dark">
                                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                     <div class="menu-header-content btn-pane-right">
-                                        <div>
                                             <h5 class="menu-header-title">
                                                 {{ $site[0]->site_name }}
                                                 @if($site[0]->site_category != null)
                                                     <span class="mr-3 badge badge-secondary"><small>{{ $site[0]->site_category }}</small></span>
                                                 @endif
                                             </h5>
-                                        </div>
-                                        <div class="btn-actions-pane-right">
-                                            @php
-                                                if($site[0]->end_date > now()){
-                                                    $badge_color = "success";
-                                                } else {
-                                                    $badge_color = "danger";
-                                                }
-
-                                            @endphp
-
-                                            @if($main_activity == "")
-                                                <span class="ml-1 badge badge-light text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
-                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
-                                            @else
-                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
-                                            @endif
-                                        </div>                                            
                                     </div>
                                 </div>
                             </div> 
 
                             <div class="card-body">
+
                                 @php
                                     $site_details_view ="";
                                     $site_action_view = "";
@@ -206,7 +188,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="site_details_view"  class="{{ $site_details_view }}">
+                                <div id="site_details_view"  class="{{ $site_details_view }}">                                    
                                     <div class="row">      
                                         <div class="col-12 text-center">
                                             <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
@@ -250,7 +232,26 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    <div class='mb-3'>
+                                        @php
+                                        if($site[0]->end_date > now()){
+                                            $badge_color = "success";
+                                        } else {
+                                            $badge_color = "danger";
+                                        }
+    
+                                        @endphp
+    
+                                        @if($main_activity == "")
+                                            <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                        @else
+                                            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
+                                        @endif
+    
+                                    </div>  
                                     <div class="tab-content">
+        
                                         <div class="tab-pane tabs-animation fade show active" id="tab-content-details" role="tabpanel">
                                             <div id="">
 

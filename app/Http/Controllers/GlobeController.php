@@ -955,6 +955,19 @@ class GlobeController extends Controller
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
             ->where("site_IS_id", \Auth::id())
+            ->where("profile_id", "2")
+            ->get();
+
+        }
+
+        elseif($activity_type == 'vendor'){
+
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'false')
+            ->where("profile_id", "2")
             ->get();
 
         }
@@ -970,6 +983,17 @@ class GlobeController extends Controller
                     ->where('activity_complete', 'false')
                     ->where('counter', '>', 0)
                     ->get();
+
+        }
+        elseif($activity_type == 'new endorsements vendor'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("site")
+                    // ->select('sam_id', 'site_name', 'site_endorsement_date', 'site_po')
+                    ->where('program_id', $program_id)
+                    ->where('site_agent', '=', NULL)
+                    ->get();
+        
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')
@@ -1138,7 +1162,7 @@ class GlobeController extends Controller
             $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
                                     ->join('users', 'users.id', 'sub_activity_value.user_id')
                                     ->where('sub_activity_value.sam_id', $request->input('sam_id'))
-                                    ->where('sub_activity_value.status', "pending")
+                                    // ->where('sub_activity_value.status', "pending")
                                     ->where('sub_activity_value.type', "create_pr")
                                     ->first();
 

@@ -11,6 +11,24 @@ function getCols(active_program, active_table, active_profile){
         success: function (resp) {
 
             if(resp.length > 0){
+
+
+                if(active_table=='new_endorsements_vendor'){
+                   
+                    cols.push(
+                        {
+                            data: null,
+                            name: "<input type='checkbox' />",
+                            width: '20px',
+                            orderable: false,
+                            render: function(data){
+                                return "<input type='checkbox' />";
+                            }
+                        }
+                    );
+
+                }
+
                 resp.forEach(function(field){
                     switch(field['source_field']){
                         case "site_fields":

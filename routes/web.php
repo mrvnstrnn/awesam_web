@@ -114,6 +114,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Milestone Datatable Source
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
+
+
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
     Route::get('/resolve-issue/{issue_id}', [GlobeController::class, 'resolve_issues']);
