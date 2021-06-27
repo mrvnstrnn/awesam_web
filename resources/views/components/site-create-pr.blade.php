@@ -40,6 +40,11 @@
                 </select>
                 <small class="text-danger vendor-error"></small>
             </div>
+
+            <div class="form-group">
+                <label for="pr_date">PR Date</label>
+                <input type="text" name="pr_date" id="pr_date" class="form-control date_picker">
+            </div>
         </form>         
 
         <button class="float-right btn btn-shadow btn-success ml-1" id="create_pr_btn" data-activity_id="{{ $site[0]->activity_id }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_name="{{ $site[0]->activity_name }}">Create PR</button>
@@ -48,6 +53,12 @@
 
 <script src="/js/dropzone/dropzone.js"></script>
 <script>
+
+    $("#pr_date").flatpickr(
+      { 
+        maxDate: new Date()
+      }
+    );
 
     Dropzone.autoDiscover = false;
     $(".dropzone_files").dropzone({
@@ -77,11 +88,12 @@
         e.preventDefault();
 
         var sam_id = $(this).attr('data-sam_id');
-        var activity_id = $(this).attr('data-activity_id');
+        // var activity_id = $(this).attr('data-activity_id');
         var activity_name = $(this).attr('data-activity_name');
         var reference_number = $("#reference_number").val();
         var prepared_by = $("#prepared_by").val();
         var pr_file = $("#pr_file").val();
+        var pr_date = $("#pr_date").val();
         var vendor = $("#vendor").val();
 
         $(this).attr("disabled", "disabled");
@@ -97,7 +109,8 @@
                 pr_file : pr_file,
                 vendor : vendor,
                 activity_name : activity_name,
-                activity_id : activity_id,
+                // activity_id : activity_id,
+                pr_date : pr_date,
             },
             type: 'POST',
             headers: {

@@ -198,6 +198,12 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
             $this->action = "View Activities";
             $this->url = url('/activities');
 
+        } else if ($activity_name == "Vendor Awarding") {
+            $this->line = $this->sam_id . " awarded site.";
+            $this->subject = $this->sam_id. " Vendor Awarding";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
         }
         
     }

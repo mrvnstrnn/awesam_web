@@ -46,7 +46,7 @@
                                         $activity_id = \Auth::user()->getUserProgramAct($program->activity_id, $program->program_id);
                                     @endphp
                                     <table id="unasigned-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" 
-                                            data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, $program->activity_id, $activity_id->what_to_load]) }}">
+                                            data-href="{{ route('all.unassignedSites', [\Auth::user()->profile_id, $program->program_id, $program->stage_id, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th class="d-none d-md-table-cell">Agent</th>
