@@ -1005,13 +1005,12 @@ class GlobeController extends Controller
                     ->get();
 
         }
-        elseif($activity_type == 'new endorsements vendor'){
+        elseif($activity_type == 'new endorsements globe'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("site")
-                    // ->select('sam_id', 'site_name', 'site_endorsement_date', 'site_po')
+                    ->table("milestone_tracking")
                     ->where('program_id', $program_id)
-                    ->where('site_agent', '=', NULL)
+                    ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
         
 
