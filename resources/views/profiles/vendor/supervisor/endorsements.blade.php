@@ -16,6 +16,7 @@
         @php
             // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
             $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+            // dd($vendor = \Auth::user()->getUserDetail()->first()->vendor_id);
         @endphp
 
 <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
@@ -47,7 +48,7 @@
                                         // dd($activity_id);
                                     @endphp
                                     <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" 
-                                        data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, $program->program_id, $activity_id->what_to_load]) }}">
+                                        data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, $program->stage_id, $activity_id->what_to_load]) }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 15px;">

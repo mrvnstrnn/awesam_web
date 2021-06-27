@@ -33,7 +33,9 @@ class GlobeController extends Controller
         try {
             // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
-            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
+            $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
+
+            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
             // $program = Program::where('program_id', $program_id)->first();
             
@@ -120,6 +122,7 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
             if ($request->input('activity_name') == "endorse_site") {
                 $notification = "Successfully " .$message. " endorsement.";
@@ -127,30 +130,39 @@ class GlobeController extends Controller
                 $notification = "Site successfully " .$message;
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
                 $notification = "RTB Docs successfully approved";
+            } else if ($request->input('activity_name') == "Vendor Awarding") {
+                $notification = "Successfully awarded.";
             } else {
                 $notification = "Success";
             }
             
+            if ($request->input('activity_name') == "Vendor Awarding") {
+                $vendor = $request->input('vendor');
+                $action = $request->input('data_action');
+            } else {
+                $vendor = $request->input('site_vendor_id');
+                $action = $request->input('data_complete');
+            }
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                for ($k=0; $k < count($request->input('site_vendor_id')); $k++) {
+                for ($k=0; $k < count($vendor); $k++) {
                     $email_receiver = User::select('users.*')
                                     ->join('user_details', 'users.id', 'user_details.user_id')
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
                                     ->join('program', 'program.program_id', 'user_programs.program_id')
-                                    ->where('user_details.vendor_id', $request->input('site_vendor_id')[$k])
+                                    ->where('user_details.vendor_id', $vendor[$k])
                                     ->where('program.program', $request->input('data_program'))
                                     ->get();
                     
                     for ($j=0; $j < count($email_receiver); $j++) { 
-                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $request->input('data_complete')) );
+                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
                     }
                 }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$request->input('data_complete').'")');
+                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
             }
 
             return response()->json(['error' => false, 'message' => $notification ]);
@@ -181,8 +193,10 @@ class GlobeController extends Controller
         try {
             // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
-            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
+            $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
 
+            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
+            
             $dt = DataTables::of($stored_procs)
                             ->addColumn('photo', function($row){
                                 $photo = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>";
@@ -739,11 +753,12 @@ class GlobeController extends Controller
                         "reference_number" => $request->input('reference_number'),
                         "prepared_by" => $request->input('prepared_by'),
                         "vendor" => $request->input('vendor'),
+                        "pr_date" => $request->input('pr_date'),
                     );
     
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
-                        'sub_activity_id' => $request->input("activity_id"),
+                        // 'sub_activity_id' => $request->input("activity_id"),
                         'type' => "create_pr",
                         'value' => json_encode($json),
                         'user_id' => \Auth::id(),
@@ -790,7 +805,7 @@ class GlobeController extends Controller
         try {
             $data_action = $request->input('data_action') == false ? "denied" : "approved";
 
-            // return response()->json(['error' => true, 'message' => $request->all()]);
+            // return response()->json(['error' => true, 'message' => $request->all()]); 
             SubActivityValue::where('id', $request->input('id'))
                             ->update([
                                 'status' => $data_action,
@@ -815,7 +830,12 @@ class GlobeController extends Controller
             // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
             // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('data_action').'")');
 
-            return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
+            if ($site[0]->activity_name != 'Vendor Awarding') {
+                return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
+            } else {
+                return response()->json(['error' => false, 'message' => "Successfully awarded."]);
+            }
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
