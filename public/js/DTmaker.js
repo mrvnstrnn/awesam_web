@@ -29,15 +29,14 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
 
             createdRow: function (row, data, dataIndex) {
-
-                    
-                    $(row).attr('data-activity', data.activity_name);
-                    $(row).attr('data-site', data.site_name);
-                    $(row).attr('data-sam_id', data.sam_id);
-                    $(row).attr('data-main_activity', main_activity);
-                    $(row).attr('data-profile', data.profile_id);
-                    $(row).attr('data-what_table', $(whatTable).attr('id'));
-                    $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
+                $(row).attr('data-site_all', JSON.stringify(data));
+                $(row).attr('data-activity', data.activity_name);
+                $(row).attr('data-site', data.site_name);
+                $(row).attr('data-sam_id', data.sam_id);
+                $(row).attr('data-main_activity', main_activity);
+                $(row).attr('data-profile', data.profile_id);
+                $(row).attr('data-what_table', $(whatTable).attr('id'));
+                $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
             },
             
             columns: whatCols,
