@@ -21,12 +21,23 @@
 
             <div class="form-group">
                 <label for="vendor">Vendor</label>
-                <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $json['reference_number'] }}" readonly>
+                @php
+                $vendor = \App\Models\Vendor::where('vendor_id', $json['vendor'])->first();
+                @endphp
+                <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $vendor->vendor_sec_reg_name. ' ('.$vendor->vendor_acronym.')' }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="pr_date">PR Date</label>
+                <input type="text" name="pr_date" id="pr_date" class="form-control" value="{{ $json['pr_date'] }}" readonly>
             </div>
         </form>         
 
-        <button class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr->id }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_name="{{ $site[0]->activity_name }}">Approve PR</button>
-        <button class="float-right btn btn-shadow btn-danger ml-1 approve_reject_pr" id="reject_pr" data-data_action="false" data-id="{{ $pr->id }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_name="{{ $site[0]->activity_name }}">Reject PR</button>
+        <button class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr->id }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_name="{{ $site[0]->activity_name }}">{{ $site[0]->activity_name == 'Vendor Awarding' ? "Award Site" : "Approve PR"  }}</button>
+
+        @if ($site[0]->activity_name != 'Vendor Awarding')
+            <button class="float-right btn btn-shadow btn-danger ml-1 approve_reject_pr" id="reject_pr" data-data_action="false" data-id="{{ $pr->id }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_name="{{ $site[0]->activity_name }}">Reject PR</button>    
+        @endif
     </div>
 </div>
 
@@ -36,11 +47,9 @@
     $(document).on("click", ".approve_reject_pr", function(e){
         e.preventDefault();
 
-        var sam_id = $(this).attr('data-sam_id');
         var activity_name = $(this).attr('data-activity_name');
         var data_action = $(this).attr('data-data_action');
         var id = $(this).attr('data-id');
-        var vendor = $("#vendor").val();
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -48,9 +57,22 @@
         var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
         var button_id = data_action == "false" ? "reject_pr" : "approve_pr";
 
+        
+        if ("{{ $site[0]->activity_name != 'Vendor Awarding' }}") {
+            var url = "/add-create-pr";
+            
+            var sam_id = $(this).attr('data-sam_id');
+            var vendor = $("#vendor").val();
+        } else {
+            var url = "/accept-reject-endorsement";
+            
+            var sam_id = [$(this).attr('data-sam_id')];
+            var vendor = [$("#vendor").val()];
+        }
+
         $("small").text("");
         $.ajax({
-        url: '/approve-reject-pr',
+        url: url,
             data: {
                 sam_id : sam_id,
                 vendor : vendor,
