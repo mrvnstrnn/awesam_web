@@ -82,217 +82,143 @@
                                                         "Issue Validation",
                                                     );
 
-                                    if(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
-                                        $show_view = "site_action_view";
-                                        $site_details_view = 'd-none';
-                                    }
-                                    else {
+                                    // if(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
+                                    //     $show_view = "site_action_view";
+                                    //     $site_details_view = 'd-none';
+                                    // }
+                                    // else {
 
-                                        if(in_array($main_activity, $forced_actions)){
+                                    //     if(in_array($main_activity, $forced_actions)){
 
-                                            $show_view = "site_action_view";
-                                            $site_details_view = 'd-none';
+                                    //         $show_view = "site_action_view";
+                                    //         $site_details_view = 'd-none';
 
-                                        } 
-                                        else {
+                                    //     } 
+                                    //     else {
 
-                                            $show_view = "site_details_view";
-                                            $site_action_view = 'd-none';
+                                    //         $show_view = "site_details_view";
+                                    //         $site_action_view = 'd-none';
 
-                                        }
+                                    //     }
 
-                                    }
+                                    // }
 
 
                                 @endphp
 
-                                <div id="site_action_view" class="{{ $site_action_view }}">
-                                    <div id="site_action_box">
+                                @if (in_array($site[0]->activity_name, $globe_actions) && $main_activity == "")
+                                        <x-site-action-view :site="$site" :main_activity="$main_activity" />
 
-                                        @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "")
-
-                                            <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" />
-
-                                        @elseif($site[0]->activity_name == "RTB Declaration" && $main_activity == "")
-
-                                            <x-site-rtb-declaration />
-
-                                        @elseif(
-
-                                            // COLOC APPROVALS 
-                                            $site[0]->activity_name == "PAC Approval" && $main_activity == "" || 
-                                            $site[0]->activity_name == "PAC Director Approval" && $main_activity == "" || 
-                                            $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
-                                            $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
-                                            $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
-                                            $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""
-                                            
-                                        )
-                                            
-                                            <x-site-p-a-c-approvals :site="$site" />
-
-                                        @elseif(
-
-                                            // NEW SITES APPROVALS                                             
-                                            $site[0]->activity_name == "Create PR" && $main_activity == "" && \Auth::user()->profile_id == 8
-                                            // $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
-                                            // $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
-                                            // $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
-
-                                        )   
-                                        
-                                            <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
-
-                                        
-                                        @elseif(
-
-                                            // NEW SITES APPROVALS                                             
-                                            // $site[0]->activity_name == "Create PR" && $main_activity == "" ||
-                                            $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == "" && \Auth::user()->profile_id == 9 ||
-                                            $site[0]->activity_name == "NAM PR Approval" && $main_activity == "" && \Auth::user()->profile_id == 10 ||
-                                            $site[0]->activity_name == "Vendor Awarding" && $main_activity == "" && \Auth::user()->profile_id == 8
-
-                                        )   
-                                        
-                                            <x-site-p-r-approval :site="$site" :pr="$pr" :activity="$site[0]->activity_name" />
-    
-
-                                        @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
-
-                                            <x-site-rtb-docs-approval :site="$site" />
-
-                                        @elseif($site[0]->activity_name == "RTB Docs Validation" && $main_activity == "")
-
-                                            <x-site-rtb-docs-validation  :site="$site"/>
-
-                                        @elseif($main_activity == "Issue Validation")
-
-                                            <x-site-issue-validation  :site="$site"/>
-
-                                        @else
-
-                                            @if($main_activity == "Document Validation")
-
-                                                <x-site-rtb-docs-validation  :site="$site" />
-
-                                            @endif
-
-                                        @endif
-
-                                    </div>
-                                    <div class="row pt-3 border-top"> 
-                                        <div class="col-12 text-center">
-                                            <button class="btn-icon btn-pill btn btn-focus" id="site_action_view_switch">
-                                                <i class="pe-7s-angle-down-circle pe-2x btn-icon-wrapper"></i>Show Site Details
-                                            </button>
+                                @else
+                                    @if(in_array($main_activity, $forced_actions))
+                                        <x-site-action-view :site="$site" :main_activity="$main_activity" />
+                                    @else 
+                                    {{-- <div id="site_details_view"  class="{{ $site_details_view }}">                                    
+                                        <div class="row">      
+                                            <div class="col-12 text-center">
+                                                <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
+                                                    <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
+                                                    @if($main_activity == "")
+                                                        {{ $site[0]->activity_name }}
+                                                    @else
+                                                        {{ $main_activity }}
+                                                    @endif
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div id="site_details_view"  class="{{ $site_details_view }}">                                    
-                                    <div class="row">      
-                                        <div class="col-12 text-center">
-                                            <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
-                                                <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
-                                                @if($main_activity == "")
-                                                    {{ $site[0]->activity_name }}
-                                                @else
-                                                    {{ $main_activity }}
-                                                @endif
-                                            </button>
+                                        <div class="row  border-bottom mb-3">
+                                            <div class="col-12">
+                                                <ul class="tabs-animated body-tabs-animated nav">
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link active" id="tab-details" data-toggle="tab" href="#tab-content-details">
+                                                            <span>Details</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-activities">
+                                                            <span>Forecast</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-files">
+                                                            <span>Files</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-issues" data-toggle="tab" href="#tab-content-issues">
+                                                            <span>Issues</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-site_chat" data-toggle="tab" href="#tab-content-site_chat">
+                                                            <span>Site Chat</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row  border-bottom mb-3">
-                                        <div class="col-12">
-                                            <ul class="tabs-animated body-tabs-animated nav">
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link active" id="tab-details" data-toggle="tab" href="#tab-content-details">
-                                                        <span>Details</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-activities">
-                                                        <span>Forecast</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-files">
-                                                        <span>Files</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-issues" data-toggle="tab" href="#tab-content-issues">
-                                                        <span>Issues</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-site_chat" data-toggle="tab" href="#tab-content-site_chat">
-                                                        <span>Site Chat</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class='mb-3'>
-                                        @php
-                                        if($site[0]->end_date > now()){
-                                            $badge_color = "success";
-                                        } else {
-                                            $badge_color = "danger";
-                                        }
-    
-                                        @endphp
-    
-                                        @if($main_activity == "")
-                                            <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
-                                            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
-                                        @else
-                                            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
-                                        @endif
-    
-                                    </div>  
-                                    <div class="tab-content">
+                                        <div class='mb-3'>
+                                            @php
+                                            if($site[0]->end_date > now()){
+                                                $badge_color = "success";
+                                            } else {
+                                                $badge_color = "danger";
+                                            }
         
-                                        <div class="tab-pane tabs-animation fade show active" id="tab-content-details" role="tabpanel">
-                                            <div id="">
+                                            @endphp
+        
+                                            @if($main_activity == "")
+                                                <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                            @else
+                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
+                                            @endif
+        
+                                        </div>  
+                                        <div class="tab-content">
+            
+                                            <div class="tab-pane tabs-animation fade show active" id="tab-content-details" role="tabpanel">
+                                                <div id="">
 
-                                            </div>
-                                            <div id="">
+                                                </div>
+                                                <div id="">
 
+                                                </div>
+                                                <x-site-details :site="$site" :sitefields="$site_fields" />
                                             </div>
-                                            <x-site-details :site="$site" :sitefields="$site_fields" />
-                                        </div>
-                                        <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
-                                            {{-- <x-site-activities :site="$site" /> --}}
-                                            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
-                                                <div class="loader">
-                                                    <div class="ball-scale-multiple">
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
+                                                <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                                    <div class="loader">
+                                                        <div class="ball-scale-multiple">
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>        
-                                        </div>
-                                        <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
-                                            <x-site-issues :site="$site" />
-                                        </div>
-                                        <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
-                                            {{-- <x-site-files :site="$site" /> --}}
-                                            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
-                                                <div class="loader">
-                                                    <div class="ball-scale-multiple">
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
+                                                </div>        
+                                            </div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
+                                                <x-site-issues :site="$site" />
+                                            </div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
+                                                <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+                                                    <div class="loader">
+                                                        <div class="ball-scale-multiple">
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>        
+                                                </div>        
+                                            </div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
+                                                <x-site-chat  :site="$site" />
+                                            </div>
                                         </div>
-                                        <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
-                                            <x-site-chat  :site="$site" />
-                                        </div>
-                                    </div>
-                                </div>
+                                    </div> --}}
+                                        <x-site-detail-view :site="$site" :main_activity="$main_activity" />
+                                    @endif
+                                @endif
                             </div>
                         </div> 
                     </div>

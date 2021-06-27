@@ -10,7 +10,11 @@
 <ul class="tabs-animated body-tabs-animated nav">
 
     @php
-        $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+        if (\Request::path() == 'endorsements') {
+            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+        } else {
+            $programs = \Auth::user()->getUserProgram();
+        }
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
