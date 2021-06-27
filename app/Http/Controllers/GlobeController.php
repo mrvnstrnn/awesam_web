@@ -975,6 +975,19 @@ class GlobeController extends Controller
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
             ->where("site_IS_id", \Auth::id())
+            ->where("profile_id", "2")
+            ->get();
+
+        }
+
+        elseif($activity_type == 'vendor'){
+
+            $sites = \DB::connection('mysql2')
+            ->table("site_milestone")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'false')
+            ->where("profile_id", "2")
             ->get();
 
         }
@@ -990,6 +1003,16 @@ class GlobeController extends Controller
                     ->where('activity_complete', 'false')
                     ->where('counter', '>', 0)
                     ->get();
+
+        }
+        elseif($activity_type == 'new endorsements globe'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("milestone_tracking")
+                    ->where('program_id', $program_id)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+        
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')

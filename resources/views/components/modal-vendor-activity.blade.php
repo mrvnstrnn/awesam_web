@@ -81,7 +81,6 @@
 
                             <div class="card-body">
                                 @php
-
                                     $sub_activities = \DB::connection('mysql2')
                                                 ->table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
@@ -138,16 +137,16 @@
                                                     <i class="fa fa-plus fa-3x"></i>
                                                     <p><small class="sub_activity_name">Drag and Drop files here</small></p>
                                                 </div>
-                                            </div>
-                                            {{-- <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Upload Document</button>  --}}
-                                            
+                                            </div>                                            
                                             <div class="file_viewer d-none"></div>
                                             <div class="table-responsive table_uploaded_parent"></div>
                                         </div>
                                         <div id="action_doc_maker" class='d-none'>
                                             <textarea id="summernote" name="editordata" style="height:300px;"></textarea>
                                             <button class="btn btn-shadow float-right btn-success btn-sm mt-3">Print to PDF</button> 
-                                        </div>                                        
+                                        </div>     
+                                        
+                                        {{-- LESSOR ENGAGEMENT --}}
                                         <div id="action_lessor_engagement" class='d-none'>
                                             <div class="row py-5 px-4" id="control_box">
                                                 <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Call">
@@ -224,8 +223,10 @@
                                                     </table> --}}
                                                 </div>
                                             </div>
-                                        </div>                                                                                
+                                        </div>       
+                                                                                                                 
                                     </div>
+
                                 </div>
                             </div>
                         </div>

@@ -64,6 +64,11 @@
                                     <tbody>
                                     </tbody>
                                 </table>                        
+                                @if($activitytype=='new endorsements globe')
+                                <div class="text-right mt-2 pt-2">
+                                    <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">Endorse New Sites</button>
+                                </div>
+                                @endif
                            </div>
                     @endforeach
                 </div>                
