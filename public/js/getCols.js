@@ -14,15 +14,15 @@ function getCols(active_program, active_table, active_profile){
 
 
                 if(active_table=='new_endorsements_globe'){
-                   
+                    
                     cols.push(
                         {
                             data: null,
-                            name: "<input type='checkbox' class='checkAll form-control' style='margin-left:-8px;width:20px;' />",
+                            name: "<input type='checkbox' data-checkbox='"+resp[0].program_id+"' id='checkAll"+resp[0].program_id+"' class='checkAll form-control' value='program"+resp[0].program_id+"' style='margin-left:-8px;width:20px;' />",
                             width: '20px',
                             orderable: false,
                             render: function(data){
-                                return "<input type='checkbox' class='form-control' style='width:20px;' />";
+                                return "<input type='checkbox' name='program"+data.program_id+"' id='checkbox_"+data.sam_id+"' value='"+data.sam_id+"' class='form-control checkbox-new-endorsement' data-site_vendor_id='"+data.vendor_id+"' style='width:20px;' />";
                             }
                         }
                     );

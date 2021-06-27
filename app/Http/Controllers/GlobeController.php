@@ -122,7 +122,6 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
-            // return response()->json(['error' => true, 'message' => $request->all() ]);
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
             if ($request->input('activity_name') == "endorse_site") {
                 $notification = "Successfully " .$message. " endorsement.";
@@ -147,17 +146,19 @@ class GlobeController extends Controller
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                for ($k=0; $k < count($vendor); $k++) {
-                    $email_receiver = User::select('users.*')
-                                    ->join('user_details', 'users.id', 'user_details.user_id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->join('program', 'program.program_id', 'user_programs.program_id')
-                                    ->where('user_details.vendor_id', $vendor[$k])
-                                    ->where('program.program', $request->input('data_program'))
-                                    ->get();
-                    
-                    for ($j=0; $j < count($email_receiver); $j++) { 
-                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
+                if (!is_null($vendor)) {
+                    for ($k=0; $k < count($vendor); $k++) {
+                        $email_receiver = User::select('users.*')
+                                        ->join('user_details', 'users.id', 'user_details.user_id')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                        ->join('program', 'program.program_id', 'user_programs.program_id')
+                                        ->where('user_details.vendor_id', $vendor[$k])
+                                        ->where('program.program', $request->input('data_program'))
+                                        ->get();
+                        
+                        for ($j=0; $j < count($email_receiver); $j++) { 
+                            $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
+                        }
                     }
                 }
 

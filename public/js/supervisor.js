@@ -564,10 +564,16 @@ $(document).ready(() => {
         $("#modal-endorsement").modal("show");
     } );
 
-    $(".checkAll").click(function(e){
+    $(document).on("click", ".checkAll", function(e){
         e.preventDefault();
         var val = $(this).val();
-        $('input[name='+val+']').not(this).prop('checked', this.checked);
+        var atLeastOneIsChecked = $('input[name='+val+']:checkbox:checked').length > 0;
+        
+        if (!atLeastOneIsChecked) {
+            $('input[name='+val+']').not(this).prop('checked', this.checked);
+        } else {
+            $('input[name='+val+']').not(this).prop('checked', false);
+        }
     });
 
     $(".btn-accept-endorsement").click(function(e){

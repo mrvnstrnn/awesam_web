@@ -136,7 +136,7 @@ $(document).ready(() => {
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
         var activity_name = $(this).attr('data-activity_name');
-        var site_vendor_id = [$(this).attr('data-site_vendor_id')];
+        var site_vendor_id = [$(this).attr('data-site_vendor_id') ? $(this).attr('data-site_vendor_id') : "" ];
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -183,7 +183,6 @@ $(document).ready(() => {
 
     $(".btn-bulk-acceptreject-endorsement").click(function(e){
         e.preventDefault();
-        // $("#loaderModal").modal("show");
 
         var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
@@ -191,7 +190,6 @@ $(document).ready(() => {
         var data_id = $(this).attr('data-id');
         var activity_name = $(this).attr('data-activity_name');
 
-        // var inputElements = document.getElementsByClassName('checkbox-new-endorsement');
         var inputElements = document.getElementsByName('program'+data_id);
 
         var id = $(this).attr('id');
@@ -228,20 +226,17 @@ $(document).ready(() => {
                 if(!resp.error){
                     $("#new-endoresement-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        // $("#loaderModal").modal("hide");
                         toastr.success(resp.message, 'Success');
                         $("#"+id).removeAttr("disabled");
                         $("#"+id).text(text);
                     });
                 } else {
-                    // $("#loaderModal").modal("hide");
                     toastr.error(resp.message, 'Error');
                     $("#"+id).removeAttr("disabled");
                     $("#"+id).text(text);
                 }
             },
             error: function(resp){
-                // $("#loaderModal").modal("hide");
                 toastr.error(resp.message, 'Error');
                 $("#"+id).removeAttr("disabled");
                 $("#"+id).text(text);
