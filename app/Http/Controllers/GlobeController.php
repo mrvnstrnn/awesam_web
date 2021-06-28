@@ -1063,6 +1063,34 @@ class GlobeController extends Controller
             
     }
 
+    public function sub_activity_view($sam_id, $sub_activity)
+    {
+
+        if($sub_activity == 'Add SSDS'){
+
+            $what_component = "components.subactivity-ssds";
+            return \View::make($what_component)
+            ->render();
+
+        }
+        elseif($sub_activity == 'Lessor Negotiation'){
+
+            $what_component = "";
+            return \View::make($what_component)
+            ->render();
+            
+        }
+        else {
+
+            $what_component = "components.subactivity-doc-upload";
+            return \View::make($what_component)
+            ->render();
+
+
+        }
+
+    }
+
     public function modal_view_site_components($sam_id, $component)
     {
         try{

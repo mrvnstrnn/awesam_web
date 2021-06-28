@@ -133,6 +133,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/modal-view-site-component/{sam_id}/{component}', [GlobeController::class, 'modal_view_site_components'])->name('modal_view_site_components');
 
 
+    // Get Sub Activity Action
+    Route::get('/subactivity-view/{sam_id}/{sub_activity}', [GlobeController::class, 'sub_activity_view'])->name('sub_activity_view');
+
+
     ////////////////////////////////////////////////
 
     // File management
