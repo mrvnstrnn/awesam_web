@@ -1,12 +1,12 @@
-<div id="site_details_view">                                    
+<div id="site_details_view" class="d-none">                                    
     <div class="row">      
         <div class="col-12 text-center">
-            <button class="btn-icon btn-pill btn btn-focus d-none" id="site_details_view_switch">
+            <button class="btn-icon btn-pill btn btn-lg btn-focus d-none" id="site_details_view_switch">
                 <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
-                @if($main_activity == "")
+                @if($mainactivity == "")
                     {{ $site[0]->activity_name }}
                 @else
-                    {{ $main_activity }}
+                    {{ $mainactivity }}
                 @endif
             </button>
         </div>
@@ -52,11 +52,11 @@
 
         @endphp
 
-        @if($main_activity == "")
+        @if($mainactivity == "")
             <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
             <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
         @else
-            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
+            <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $mainactivity }}</span>
         @endif
 
     </div>  
@@ -69,7 +69,7 @@
             <div id="">
 
             </div>
-            <x-site-details :site="$site" :sitefields="$site_fields" />
+            <x-site-details :site="$site" :sitefields="$sitefields" />
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
             {{-- <x-site-activities :site="$site" /> --}}

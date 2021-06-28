@@ -4,20 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class SiteDetailView extends Component
+class SubactivitySetApprovedSite extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public $site, $mainactivity, $sitefields;
-
-    public function __construct($site, $mainactivity, $sitefields)
+    public function __construct()
     {
-        $this->site = $site;
-        $this->mainactivity = $mainactivity;
-        $this->sitefields = $sitefields;
+        //
     }
 
     /**
@@ -27,6 +23,6 @@ class SiteDetailView extends Component
      */
     public function render()
     {
-        return view('components.site-detail-view');
+        return view('components.subactivity-set-approved-site');
     }
 }
