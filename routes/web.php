@@ -180,6 +180,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
+
+    // SSDS
+    Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
+    Route::get('/get-my-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_site']);
     
 });
 

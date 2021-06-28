@@ -137,7 +137,7 @@
             var active_subactivity = $(this).attr('data-sub_activity');
             var active_sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
-            var program_id = $('modal_program_id').val();
+            var program_id = $('#modal_program_id').val();
 
             var loader =    '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
                                 '<div class="loader">' +

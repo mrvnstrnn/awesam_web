@@ -691,6 +691,54 @@ class GlobeController extends Controller
         }
     }
 
+    public function add_ssds (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'site_name' => 'required',
+                'lessor' => 'required',
+                'address' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
+            ));
+
+            if ($validate->passes()) {
+
+                $file = collect();
+                for ($i=0; $i < count($request->input("file")); $i++) { 
+                    $new_file = $this->rename_file($request->input("file")[$i], $request->input("sub_activity_name"), $request->input("sam_id"));
+    
+                    \Storage::move( $request->input("file")[$i], $new_file );
+
+                    $file->push($new_file);
+                }
+
+                $json = array(
+                    "site_name" => $request->input('site_name'),
+                    "lessor" => $request->input('lessor'),
+                    "address" => $request->input('address'),
+                    "latitude" => $request->input('latitude'),
+                    "longitude" => $request->input('longitude'),
+                    "file" => $file,
+                );
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($json),
+                    'user_id' => \Auth::id(),
+                    'status' => "pending",
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully added sites." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function add_create_pr(Request $request)
     {
         try {
@@ -814,6 +862,33 @@ class GlobeController extends Controller
             return response()->json(['error' => false, 'message' => $sub_activity_files]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+    
+    public function get_my_site($sub_activity_id, $sam_id)
+    {
+        try {
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('user_id', \Auth::id())
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                                ->addColumn('value', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor_remarks'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                });
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
