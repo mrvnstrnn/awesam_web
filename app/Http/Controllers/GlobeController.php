@@ -831,7 +831,7 @@ class GlobeController extends Controller
             // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
             // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('data_action').'")');
 
-            if ($site[0]->activity_name != 'Vendor Awarding') {
+            if ($request->input('activity_name') != 'Vendor Awarding') {
                 return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
             } else {
                 return response()->json(['error' => false, 'message' => "Successfully awarded."]);
