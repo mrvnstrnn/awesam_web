@@ -1,8 +1,8 @@
 @php
-    $site_status = \DB::connection('mysql2')
-        ->table('site_milestone_status')
-        ->where('sam_id', "=", $sam_id)
-        ->get();    
+    // $site_status = \DB::connection('mysql2')
+    //     ->table('site_milestone_status')
+    //     ->where('sam_id', "=", $sam_id)
+    //     ->get();    
 
     // dd($site_status[0]->progress);
 
@@ -11,10 +11,10 @@
 @endphp
 
 
-
+{{-- 
         <div class="circle-progress circle-progress-modal d-inline-block">
             <small><span class="site_progress_modal">{{ $site_status[0]->progress }}</span></small>
-        </div>
+        </div> --}}
 
 {{-- <div class="card-shadow-primary profile-responsive card-border mb-3 card">
     <div class="dropdown-menu-header">
@@ -44,25 +44,25 @@
 
         // console.log(progress);
 
-        $('.circle-progress-modal').each(function(index, element){
-        var progress = $(element).find('.site_progress_modal').text();
+        // $('.circle-progress-modal').each(function(index, element){
+        // var progress = $(element).find('.site_progress_modal').text();
 
         // console.log(progress);
 
-        $(element)
-            .circleProgress({
-            value: progress,
-            size: 250,
-            lineCap: "round",
-            fill: { gradient: ["#ff1e41", "#f81e41", "#fa1e41"] },
-            })
-            .on("circle-animation-progress", function (event, progress, stepValue) {
-            $(this)
-                .find("small")
-                .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
-            });
+    //     $(element)
+    //         .circleProgress({
+    //         value: progress,
+    //         size: 250,
+    //         lineCap: "round",
+    //         fill: { gradient: ["#ff1e41", "#f81e41", "#fa1e41"] },
+    //         })
+    //         .on("circle-animation-progress", function (event, progress, stepValue) {
+    //         $(this)
+    //             .find("small")
+    //             .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+    //         });
 
-    });
+    // });
 
 
 

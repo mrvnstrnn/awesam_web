@@ -961,7 +961,6 @@ class GlobeController extends Controller
             ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
-            ->where('profile_id', $profile_id)
             ->where("site_agent_id", \Auth::id())
             ->get();
 
@@ -1011,6 +1010,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("milestone_tracking")
                     ->where('program_id', $program_id)
+                    ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
         
