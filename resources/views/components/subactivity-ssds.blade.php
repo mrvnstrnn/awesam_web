@@ -122,14 +122,14 @@
             Dropzone.autoDiscover = false;
             $(".dropzone_files_activities").dropzone({
                 addRemoveLinks: true,
-                maxFiles: 1,
+                // maxFiles: 1,    
                 paramName: "file",
                 url: "/upload-file",
-                init: function() {
-                    this.on("maxfilesexceeded", function(file){
-                        this.removeFile(file);
-                    });
-                },
+                // init: function() {
+                //     this.on("maxfilesexceeded", function(file){
+                //         this.removeFile(file);
+                //     });
+                // },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
