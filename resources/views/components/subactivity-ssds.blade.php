@@ -190,7 +190,7 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        $("small").text("");
+        $("small.text-danger").text("");
         $.ajax({
             url: "/add-ssds",
             method: "POST",
