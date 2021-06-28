@@ -119,9 +119,9 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
 
-            SiteEndorsementEvent::dispatch($request->input('sam_id')[0]);
+            // SiteEndorsementEvent::dispatch($request->input('sam_id')[0]);
             
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+            // return response()->json(['error' => true, 'message' => $th->getMessage()]);
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
