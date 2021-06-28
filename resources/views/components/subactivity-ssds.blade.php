@@ -139,10 +139,11 @@
                     $(row).attr('style', 'cursor: pointer');
                 },
                 columns: [
-                    { data: "id" },
-                    { data: "value" },
-                    { data: "status" },
-                    { data: "date_created" },
+                    { data: "sitename" },
+                    { data: "lessor" },
+                    { data: "address" },
+                    { data: "latitude" },
+                    { data: "longitude" },
                 ],
             });
         } else {

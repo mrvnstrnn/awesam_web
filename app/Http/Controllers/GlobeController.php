@@ -875,16 +875,57 @@ class GlobeController extends Controller
                                                         ->get();
 
             $dt = DataTables::of($sub_activity_files)
-                                ->addColumn('value', function($row){
+                                ->addColumn('sitename', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
                                         
-                                        return $json['lessor_remarks'];
+                                        return $json['site_name'];
                                     } else {
                                         return $row->value;  
                                     }                      
-                                });
+                                })
+                                ->addColumn('lessor', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('address', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['address'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('latitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['latitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('longitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['longitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ;
             return $dt->make(true);
 
         } catch (\Throwable $th) {
