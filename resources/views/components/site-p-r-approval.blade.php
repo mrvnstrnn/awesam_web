@@ -25,6 +25,7 @@
                 $vendor = \App\Models\Vendor::where('vendor_id', $json['vendor'])->first();
                 @endphp
                 <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $vendor->vendor_sec_reg_name. ' ('.$vendor->vendor_acronym.')' }}" readonly>
+                <input type="hidden" name="vendor_id" id="vendor_id" class="form-control" value="{{ $vendor->vendor_id }}" readonly>
             </div>
 
             <div class="form-group">
@@ -57,17 +58,19 @@
         var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
         var button_id = data_action == "false" ? "reject_pr" : "approve_pr";
 
-        
+        // RAM Head PR Approval
+        // console.log("{{ $site[0]->activity_name }}");
+        // return;
         if ("{{ $site[0]->activity_name != 'Vendor Awarding' }}") {
-            var url = "/add-create-pr";
+            var url = "/approve-reject-pr";
             
             var sam_id = $(this).attr('data-sam_id');
-            var vendor = $("#vendor").val();
+            var vendor = $("#vendor_id").val();
         } else {
             var url = "/accept-reject-endorsement";
             
             var sam_id = [$(this).attr('data-sam_id')];
-            var vendor = [$("#vendor").val()];
+            var vendor = [$("#vendor_id").val()];
         }
 
         $("small").text("");
