@@ -11,12 +11,13 @@ class SiteDetailView extends Component
      *
      * @return void
      */
-    public $site, $main_activity;
+    public $site, $main_activity, $site_fields;
 
-    public function __construct($site, $main_activity)
+    public function __construct($site, $main_activity = null, $site_fields = null)
     {
         $this->site = $site;
         $this->main_activity = $main_activity;
+        $this->site_fields = $site_fields;
     }
 
     /**
