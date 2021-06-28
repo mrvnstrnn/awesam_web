@@ -1089,8 +1089,6 @@ class GlobeController extends Controller
             $what_component = "components.subactivity-doc-upload";
             return \View::make($what_component)
             ->render();
-
-
         }
 
     }
@@ -1185,7 +1183,7 @@ class GlobeController extends Controller
         $rtb = array("RTB Declaration", "RTB Declaration Approval");
         $vendor_profiles = array(2, 3);
 
-
+        // dd( $request->all() );
         try {
             $site = \DB::connection('mysql2')
                     ->table('site_milestone')
