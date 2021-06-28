@@ -98,8 +98,8 @@ $(document).ready(() => {
         $(".lgu_check div").remove();
         $(".province_check div").remove();
         $(".assign-agent-div select#region option").remove();
-        $("#user_id").val($(this).attr('data-id'));
-        $("#assign-agent-site-btn").attr("data-program", $(this).attr('data-program'));
+        $("#user_id").val($(this).parent().attr('data-id'));
+        $("#assign-agent-site-btn").attr("data-program", $(this).parent().attr('data-program'));
         $.ajax({
             url: "/get-region",
             method: "GET",
@@ -232,8 +232,9 @@ $(document).ready(() => {
 
     $("#assign-agent-site-btn").on('click', function(e){
         $("#assign-agent-site-btn").text("Assigning...");
-        $("#assign-agent-site-btn").attr("disabled");
+        $("#assign-agent-site-btn").attr("disabled", "disabled");
         var data_program = $(this).attr('data-program');
+
         $.ajax({
             url: $(this).attr('data-href'),
             method: "POST",
