@@ -134,7 +134,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     // Get Sub Activity Action
-    Route::get('/subactivity-view/{sam_id}/{sub_activity}', [GlobeController::class, 'sub_activity_view'])->name('sub_activity_view');
+    Route::get('/subactivity-view/{sam_id}/{sub_activity}/{sub_activity_id}/{program_id}', [GlobeController::class, 'sub_activity_view'])->name('sub_activity_view');
 
 
     ////////////////////////////////////////////////

@@ -99,7 +99,7 @@
                                             <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
                                         </div>
                                     </div>
-                                    <div class="row p-2 pt-3    ">
+                                    <div class="row p-2 pt-3">
                                         @foreach ($sub_activities as $sub_activity)
                                             @if($sub_activity->activity_id == $activity_id)
                                                 <div class="col-md-6 btn_switch_show_action pt-3" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
@@ -112,6 +112,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="loading_div"></div>
                                 <div id="actions_box" class="d-none">
 
                                 </div>
@@ -135,10 +136,23 @@
 
             var active_subactivity = $(this).attr('data-sub_activity');
             var active_sam_id = $(this).attr('data-sam_id');
+            var sub_activity_id = $(this).attr('data-sub_activity_id');
+            var program_id = $('modal_program_id').val();
 
+            var loader =    '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
+                                '<div class="loader">' +
+                                    '<div class="ball-scale-multiple">' +
+                                    '<div></div>' +
+                                    '<div></div>' +
+                                    '<div></div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+
+            $(".loading_div").html(loader);
 
             $.ajax({
-                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity,
+                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
                 method: "GET",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -147,19 +161,29 @@
                     if (!resp.error) {
 
                         $('#actions_box').html(resp);
+
+                        $(".loading_div").html("");
                         
                     } else {
 
-                        console.log(resp);
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+
+                        $(".loading_div").html("");
 
                     }
                 },
                 error: function (resp){
                     Swal.fire(
                         'Error',
-                        resp.message,
+                        resp,
                         'error'
                     )
+
+                    loading_div.html("");
                 }
             });
 

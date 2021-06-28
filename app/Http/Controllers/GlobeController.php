@@ -624,50 +624,6 @@ class GlobeController extends Controller
 
             $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
 
-            // $ext = pathinfo($request->input("file_name"), PATHINFO_EXTENSION);
-
-            // $file_name = strtolower($request->input("sam_id")."-".str_replace(" ", "-", $request->input("sub_activity_name"))).".".$ext;
-
-            // if (file_exists( public_path()."/files/".$file_name )) {
-
-            //     $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
-
-            //     $exploaded_name = explode("-", $withoutExt);
-
-            //     if ( is_numeric( end( $exploaded_name) ) ) {
-            //         $counter =  end( $exploaded_name) + "01";
-            //     } else {
-            //         $counter =  strtolower(str_replace(" ", "-", $request->input("sub_activity_name")))."-01";
-            //     }
-
-            //     $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
-
-            //     $new_file = $imploded_name . "-" . $counter . "." .$ext;
-
-            //     while (file_exists( public_path()."/files/". $new_file)) {
-            //         $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
-
-            //         $exploaded_name = explode("-", $withoutExt);
-
-            //         if ( is_numeric( end( $exploaded_name) ) ) {
-            //             $counter =  end( $exploaded_name) + "01";
-            //         } else {
-            //             $counter =  "01";
-            //         }
-
-            //         $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
-
-            //         $new_file = $imploded_name . "-" . $counter . "." .$ext;
-            //     }
-
-            //     // $new_file = $new_file;
-
-            // } else {
-            //     $new_file = $file_name;
-            // }
-
-            // return response()->json(['error' => true, 'message' => $new_file ]);
-
             \Storage::move( $request->input("file_name"), $new_file );
 
             // sub_activity_name
@@ -1067,13 +1023,19 @@ class GlobeController extends Controller
             
     }
 
-    public function sub_activity_view($sam_id, $sub_activity)
+    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
     {
 
         if($sub_activity == 'Add SSDS'){
 
             $what_component = "components.subactivity-ssds";
             return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
             ->render();
 
         }
@@ -1081,6 +1043,12 @@ class GlobeController extends Controller
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
             ->render();
             
         }
@@ -1088,6 +1056,12 @@ class GlobeController extends Controller
 
             $what_component = "components.subactivity-set-approved-site";
             return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
             ->render();
             
         }
@@ -1095,6 +1069,12 @@ class GlobeController extends Controller
 
             $what_component = "components.subactivity-doc-upload";
             return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
             ->render();
         }
 

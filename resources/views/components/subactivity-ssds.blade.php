@@ -39,38 +39,40 @@
     <div class="col-md-12">
         <form class="">
             <div class="position-relative row form-group">
-                <label for="lessor_date" class="col-sm-4 col-form-label">Site Name</label>
+                <label for="site_name" class="col-sm-4 col-form-label">Site Name</label>
                 <div class="col-sm-8">
                     <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Site Name">
+                    <small class="text-danger site_name-errors"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="lessor_method" class="col-sm-4 col-form-label">Lessor</label>
+                <label for="lessor" class="col-sm-4 col-form-label">Lessor</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Lessor">
+                    <small class="text-danger lessor-errors"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="lessor_remarks" class="col-sm-4 col-form-label">Address</label>
+                <label for="address" class="col-sm-4 col-form-label">Address</label>
                 <div class="col-sm-8">
                     <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
-                    <small class="text-danger lessor_remarks-errors"></small>
+                    <small class="text-danger address-errors"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="location" class="col-sm-4 col-form-label">Location</label>
+                <label for="latitude" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
-                    <small class="text-danger lessor_remarks-errors"></small>
+                    <small class="text-danger latitude-errors"></small>
                 </div>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
-                    <small class="text-danger lessor_remarks-errors"></small>
+                    <small class="text-danger longitude-errors"></small>
                 </div>
             </div>
             <div class="divider"></div>
             <div class="position-relative row form-group">
-                <label for="lessor_remarks" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
+                <label for="file_documents" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
                 <div class="dropzone dropzone_files_activities mx-3 mt-0 w-100">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-3x"></i>

@@ -84,7 +84,7 @@
         $(".dropzone_files").dropzone({
             addRemoveLinks: true,
             maxFiles: 1,
-            maxFilesize: 1,
+            // maxFilesize: 1,
             paramName: "file",
             url: "/upload-file",
             headers: {

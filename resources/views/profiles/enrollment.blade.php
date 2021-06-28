@@ -417,7 +417,7 @@
         $(".dropzone").dropzone({
             addRemoveLinks: true,
             maxFiles: 1,
-            maxFilesize: 1,
+            // maxFilesize: 1,
             acceptedFiles: '.jpg, .jpeg, png',
             paramName: "file",
             url: "/upload-image-file",
