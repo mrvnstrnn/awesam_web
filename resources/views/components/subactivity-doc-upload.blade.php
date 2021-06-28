@@ -40,7 +40,6 @@
 
     <script src="/js/dropzone/dropzone.js"></script>
 
-
     <script>
     
         $(".btn_switch_back_to_actions").on("click", function(){
@@ -145,6 +144,11 @@
                 // maxFilesize: 1,
                 paramName: "file",
                 url: "/upload-file",
+                init: function() {
+                    this.on("maxfilesexceeded", function(file){
+                        this.removeFile(file);
+                    });
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

@@ -91,7 +91,7 @@
     </div>
 </div>
 
-
+<script src="/js/dropzone/dropzone.js"></script>
 
 <script>
     
@@ -118,6 +118,84 @@
         $('#ssds_form').addClass('d-none');
     });
 
-    
+    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
+            Dropzone.autoDiscover = false;
+            $(".dropzone_files_activities").dropzone({
+                addRemoveLinks: true,
+                maxFiles: 1,
+                paramName: "file",
+                url: "/upload-file",
+                init: function() {
+                    this.on("maxfilesexceeded", function(file){
+                        this.removeFile(file);
+                    });
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (file, resp) {
+                    if (!resp.error){
+                        var sam_id = "{{ $sam_id }}";
+                        var sub_activity_id = "{{ $sub_activity_id }}";
+                        var sub_activity_name = "{{ $sub_activity }}";
+                        var file_name = resp.file;
+
+                        // $.ajax({
+                        //     url: "/upload-my-file",
+                        //     method: "POST",
+                        //     data: {
+                        //         sam_id : sam_id,
+                        //         sub_activity_id : sub_activity_id,
+                        //         file_name : file_name,
+                        //         sub_activity_name : sub_activity_name
+                        //     },
+                        //     headers: {
+                        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        //     },
+                        //     success: function (resp) {
+                        //         if (!resp.error){
+
+                        //             $('#table_uploaded_files_'+"{{ $sub_activity_id }}").DataTable().ajax.reload(function(){
+                        //                 $(".action_doc_upload").remove();
+                        //                 Swal.fire(
+                        //                     'Success',
+                        //                     resp.message,
+                        //                     'success'
+                        //                 )
+                        //             });
+                                    
+                        //         } else {
+                        //             Swal.fire(
+                        //                 'Error',
+                        //                 resp.message,
+                        //                 'error'
+                        //             )
+                        //         }
+                        //     },
+                        //     error: function (file, response) {
+                        //         Swal.fire(
+                        //             'Error',
+                        //             resp,
+                        //             'error'
+                        //         )
+                        //     }
+                        // });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (file, resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        }
 
 </script>

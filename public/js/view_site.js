@@ -2,9 +2,14 @@ Dropzone.autoDiscover = false;
 $(".dropzone_activity").dropzone({
     addRemoveLinks: true,
     maxFiles: 1,
-    maxFilesize: 5,
+    // maxFilesize: 5,
     paramName: "file",
     url: "/upload-file",
+    init: function() {
+        this.on("maxfilesexceeded", function(file){
+            this.removeFile(file);
+        });
+    },
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
