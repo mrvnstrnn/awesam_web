@@ -11,12 +11,12 @@ class SiteActionView extends Component
      *
      * @return void
      */
-    public $site, $main_activity;
+    public $site, $mainactivity;
 
-    public function __construct($site, $main_activity)
+    public function __construct($site, $mainactivity)
     {
         $this->site = $site;
-        $this->main_activity = $main_activity;
+        $this->mainactivity = $mainactivity;
     }
 
     /**
