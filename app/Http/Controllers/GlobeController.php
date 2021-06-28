@@ -1079,7 +1079,14 @@ class GlobeController extends Controller
         }
         elseif($sub_activity == 'Lessor Negotiation'){
 
-            $what_component = "";
+            $what_component = "components.subactivity-lessor-engagement";
+            return \View::make($what_component)
+            ->render();
+            
+        }
+        elseif($sub_activity == 'Set Approved Site'){
+
+            $what_component = "components.subactivity-set-approved-site";
             return \View::make($what_component)
             ->render();
             
