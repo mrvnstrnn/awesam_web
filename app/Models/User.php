@@ -10,6 +10,7 @@ use App\Models\Permission;
 use App\Models\ProfilePermission;
 use App\Models\UserDetail;
 use App\Models\Profile;
+use App\Models\VendorProgram;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -106,14 +107,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return Profile::get();
     }
 
-    public function getUserProgram()
+    public function getUserProgram($vendor_id = null)
     {
-        return \DB::connection('mysql2')->table('program')
-                        ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                        // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
-                        ->where('user_programs.user_id', \Auth::user()->id)
-                        // ->where('page_route.profile_id', \Auth::user()->profile_id)
-                        ->orderBy('program')->get();
+        if (is_null($vendor_id)) {
+            return \DB::connection('mysql2')->table('program')
+                    ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                    // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
+                    ->where('user_programs.user_id', \Auth::user()->id)
+                    // ->where('page_route.profile_id', \Auth::user()->profile_id)
+                    ->orderBy('program')->get();
+        } else {
+            return VendorProgram::select('program.program_id', 'program.program')
+                                                            ->join('program', 'program.program_id', 'vendor_programs.programs')
+                                                            ->where('vendor_programs.vendors_id', $vendor_id)
+                                                            ->get();
+        }
     }
 
     public function getUserProgramEndorsement($route)
