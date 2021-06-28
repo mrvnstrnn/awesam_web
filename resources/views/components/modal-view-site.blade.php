@@ -262,6 +262,7 @@
                                             <x-site-details :site="$site" :sitefields="$site_fields" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
+                                            {{-- <x-site-activities :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">
@@ -276,6 +277,7 @@
                                             <x-site-issues :site="$site" />
                                         </div>
                                         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
+                                            {{-- <x-site-files :site="$site" /> --}}
                                             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                                                 <div class="loader">
                                                     <div class="ball-scale-multiple">

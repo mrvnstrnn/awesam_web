@@ -1,4 +1,4 @@
-<div id="site_action_view" class="{{ $site_action_view }}">
+<div id="site_action_view">
     <div id="site_action_box">
 
         @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "")
