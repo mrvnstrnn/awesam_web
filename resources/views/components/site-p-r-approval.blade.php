@@ -45,7 +45,7 @@
 <script src="/js/dropzone/dropzone.js"></script>
 <script>
     
-    $(document).on("click", ".approve_reject_pr", function(e){
+    $(".approve_reject_pr").on("click", function(e){
         e.preventDefault();
 
         var activity_name = $(this).attr('data-activity_name');

@@ -84,8 +84,11 @@
         }
     });
     
-    $(document).on("click", "#create_pr_btn", function(e){
+    $("#create_pr_btn").on("click", function(e){
         e.preventDefault();
+
+        // console.log("test");
+        // return;
 
         var sam_id = $(this).attr('data-sam_id');
         // var activity_id = $(this).attr('data-activity_id');
