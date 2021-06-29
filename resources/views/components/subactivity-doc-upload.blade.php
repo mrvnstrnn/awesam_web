@@ -104,7 +104,6 @@
         );
 
         $(".table_uploaded").attr("id", "table_uploaded_files_"+"{{ $sub_activity_id }}");
-        console.log( ! $.fn.DataTable.isDataTable( '#table_uploaded_files_'+"{{ $sub_activity_id }}" ) );
 
                 
         if (! $.fn.DataTable.isDataTable('#table_uploaded_files_'+"{{ $sub_activity_id }}") ){   
@@ -154,6 +153,8 @@
                 },
                 success: function (file, resp) {
                     if (!resp.error){
+                        $("#action_doc_upload").addClass("d-none");
+                        this.removeFile(file);
                         var sam_id = "{{ $sam_id }}";
                         var sub_activity_id = "{{ $sub_activity_id }}";
                         var sub_activity_name = "{{ $sub_activity }}";
@@ -183,6 +184,7 @@
                                             resp.message,
                                             'success'
                                         )
+                                        $(".btn_switch_back_to_actions").trigger("click");
                                     });
                                     
                                 } else {

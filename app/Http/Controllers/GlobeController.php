@@ -724,6 +724,7 @@ class GlobeController extends Controller
 
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
+                    'type' => $request->input("type"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => json_encode($json),
                     'user_id' => \Auth::id(),
@@ -852,7 +853,7 @@ class GlobeController extends Controller
                     
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-                    
+
                     return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
                 } else {
                     return response()->json(['error' => true, 'message' => "Already been scheduled." ]);

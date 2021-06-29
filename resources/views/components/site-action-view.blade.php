@@ -79,13 +79,13 @@
 
             <x-site-schedule-jtss />
 
-        @elseif($main_activity == "Issue Validation")
+        @elseif($mainactivity == "Issue Validation")
 
             <x-site-issue-validation  :site="$site"/>
 
         @else
 
-            @if($main_activity == "Document Validation")
+            @if($mainactivity == "Document Validation")
 
                 <x-site-rtb-docs-validation  :site="$site" />
 

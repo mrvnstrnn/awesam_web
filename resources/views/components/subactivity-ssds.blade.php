@@ -83,6 +83,7 @@
             <input type="hidden" name="sam_id" value="{{ $sam_id }}">
             <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
             <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
+            <input type="hidden" name="type" value="advanced_site_hunting">
             <div class="position-relative row form-group ">
                 <div class="col-sm-12">
                     <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>
@@ -166,7 +167,7 @@
                     var file_name = resp.file;
 
                     $(".ssds_form").append(
-                        '<input value="'+file_name+'" name="file[]" type="hidden">'
+                        '<input value="'+file_name+'" name="file[]" id="'+file.upload.uuid+'" type="hidden">'
                     );
                 } else {
                     Swal.fire(
@@ -200,7 +201,6 @@
             },
             success: function (resp) {
                 if (!resp.error){
-                    // $(".btn_switch_back_to_actions").trigger("click");
 
                     $("#dtTable").DataTable().ajax.reload(function(){
                         Swal.fire(
@@ -209,11 +209,12 @@
                             'success'
                         )
                         $(".ssds_form")[0].reset();
+                        $("#btn_save_ssds").removeAttr("disabled");
+                        $("#btn_save_ssds").text("Save Site");
+                        
+                        $(".btn_switch_back_to_actions").trigger("click");
                     });
 
-                    $("#btn_save_ssds").removeAttr("disabled");
-                    $("#btn_save_ssds").text("Save Site");
-                    
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
