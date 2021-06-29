@@ -742,6 +742,7 @@ class GlobeController extends Controller
     public function add_create_pr(Request $request)
     {
         try {
+            
             $validate = Validator::make($request->all(), array(
                 'pr_file' => 'required',
                 'reference_number' => 'required',
@@ -804,6 +805,63 @@ class GlobeController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function schedule_jtss(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'jtss_schedule' => 'required',
+                'remarks' => 'required',
+            ));
+
+            // return response()->json(['error' => true, 'message' => json_encode($request->all()) ]);
+            if ($validate->passes()) {
+                $jtss_schedule_data = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                                            ->where('type', 'jtss_schedule')
+                                                            ->first();
+
+
+                if (is_null($jtss_schedule_data)) {
+    
+                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
+    
+                    $email_receiver = User::select('users.*')
+                                    ->join('user_details', 'users.id', 'user_details.user_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->join('program', 'program.program_id', 'user_programs.program_id')
+                                    ->where('user_details.vendor_id', $request->input('vendor'))
+                                    ->where('program.program', $request->input('program_id'))
+                                    ->get();
+                    
+                    for ($j=0; $j < count($email_receiver); $j++) { 
+                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('site_vendor_id'), $request->input('activity_name'), "") );
+                    }
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'type' => "jtss_schedule",
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'status' => "pending",
+                    ]); 
+
+                    
+                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
+                } else {
+                    return response()->json(['error' => true, 'message' => "Already been scheduled." ]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

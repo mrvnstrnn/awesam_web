@@ -183,6 +183,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // SSDS
     Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
+    Route::post('/schedule-jtss', [GlobeController::class, 'schedule_jtss']);
     Route::get('/get-my-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_site']);
     
 });

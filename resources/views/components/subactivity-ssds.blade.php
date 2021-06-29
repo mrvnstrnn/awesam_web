@@ -200,7 +200,7 @@
             },
             success: function (resp) {
                 if (!resp.error){
-                    $(".btn_switch_back_to_actions").trigger("click");
+                    // $(".btn_switch_back_to_actions").trigger("click");
 
                     $("#dtTable").DataTable().ajax.reload(function(){
                         Swal.fire(
