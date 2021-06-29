@@ -19,11 +19,11 @@
     <div id="site_action_box">
                 
 
-        @if($site[0]->activity_name == "RTB Declaration Approval" && $mainactivity == "")
+        @if($site[0]->activity_name == "RTB Declaration Approval" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $mainactivity == "")
 
             <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" />
 
-        @elseif($site[0]->activity_name == "RTB Declaration" && $mainactivity == "")
+        @elseif($site[0]->activity_name == "RTB Declaration" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration" && $mainactivity == "")
 
             <x-site-rtb-declaration />
 
@@ -85,7 +85,7 @@
 
         @else
 
-            @if($mainactivity == "Document Validation")
+            @if($mainactivity == "Document Validation" || $site[0]->activity_name == "RAM Documents Validation" || $site[0]->activity_name == "Draft Contract Approval" || $site[0]->activity_name == "Lease Package" || $site[0]->activity_name == "RAM Validation of  Advanced Site Hunting  Documents")
 
                 <x-site-rtb-docs-validation  :site="$site" />
 

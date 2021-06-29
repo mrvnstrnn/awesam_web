@@ -185,6 +185,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
     Route::post('/schedule-jtss', [GlobeController::class, 'schedule_jtss']);
     Route::get('/get-my-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_site']);
+
+    Route::get('/get-my-uploaded-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploaded_site']);
+    Route::post('/set-approve-site', [GlobeController::class, 'set_approve_site']);
     
 });
 

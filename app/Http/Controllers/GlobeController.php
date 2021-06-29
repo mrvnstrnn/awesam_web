@@ -753,6 +753,8 @@ class GlobeController extends Controller
 
                 $sub_activity = SubActivityValue::where('sam_id', $request->input("sam_id"))
                                                     ->where('sub_activity_id', $request->input("activity_id"))
+                                                    ->where('type', "create_pr")
+                                                    ->where('status', "pending")
                                                     ->first();
                 if (is_null($sub_activity)) {
                     $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
@@ -765,6 +767,7 @@ class GlobeController extends Controller
                         "prepared_by" => $request->input('prepared_by'),
                         "vendor" => $request->input('vendor'),
                         "pr_date" => $request->input('pr_date'),
+                        "po_number" => $request->input('po_number'),
                     );
     
                     SubActivityValue::create([
@@ -923,7 +926,116 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function get_my_uploaded_site ($sub_activity_id, $sam_id)
+    {
+        try {
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('user_id', \Auth::id())
+                                                        ->where('type', "advanced_site_hunting")
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                                ->addColumn('sitename', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['site_name'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('lessor', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('address', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['address'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('latitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['latitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('longitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['longitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ;
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
     
+    public function set_approve_site (Request $request)
+    {
+
+        try {
+
+            SubActivityValue::where('id', $request->input('id'))
+                            ->update([
+                                'status' => "approved",
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => Carbon::now()->toDate(),
+                            ]);
+
+            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+            $email_receiver = User::select('users.*')
+                            ->join('user_details', 'users.id', 'user_details.user_id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->join('program', 'program.program_id', 'user_programs.program_id')
+                            ->where('user_details.vendor_id', $request->input('vendor_id'))
+                            ->where('program.program', $request->input('program_id'))
+                            ->get();
+            
+            for ($j=0; $j < count($email_receiver); $j++) { 
+                $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+            }
+
+            // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
+            $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+            if ($request->input('activity_name') != 'Vendor Awarding') {
+                return response()->json(['error' => false, 'message' => "Successfully approved a SSDS."]);
+            } else {
+                return response()->json(['error' => false, 'message' => "Successfully awarded."]);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function get_my_site($sub_activity_id, $sam_id)
     {
         try {
@@ -1200,7 +1312,7 @@ class GlobeController extends Controller
 
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
     {
-
+        
         if($sub_activity == 'Add SSDS'){
 
             $what_component = "components.subactivity-ssds";

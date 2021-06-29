@@ -210,6 +210,12 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
             $this->action = "View Activities";
             $this->url = url('/activities');
 
+        } else if ($activity_name == "Approved SSDS") {
+            $this->line = $this->sam_id . " successfully approved SSDS.";
+            $this->subject = $this->sam_id. " Approved SSDS";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
         }
         
     }

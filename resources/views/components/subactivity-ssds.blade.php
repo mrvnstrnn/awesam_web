@@ -62,11 +62,11 @@
             <div class="position-relative row form-group">
                 <label for="latitude" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+                    <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
                     <small class="text-danger latitude-errors"></small>
                 </div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+                    <input type="number" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
                     <small class="text-danger longitude-errors"></small>
                 </div>
             </div>

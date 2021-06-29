@@ -78,7 +78,12 @@
                                                         "Advanced Site Hunting",
                                                         "Schedule JTSS",
                                                         "Schedule JTSS",
-                                                        "RAM Validation of  Advanced Site Hunting  Documents"
+                                                        "RAM Validation of  Advanced Site Hunting  Documents",
+                                                        "RAM Documents Validation",
+                                                        "STS RTB Declaration",
+                                                        "STS RTB Declaration Approval",
+                                                        "Draft Contract Approval",
+                                                        "Lease Package",
                                                     );  
                                     
                                     $forced_actions = array(
@@ -90,10 +95,10 @@
                                 @endphp
 
                                 @if (in_array($site[0]->activity_name, $globe_actions) && $main_activity == "")
-                                    <x-site-action-view :site="$site" :mainactivity="$main_activity" />
+                                    <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                 @else
                                     @if(in_array($main_activity, $forced_actions))
-                                        <x-site-action-view :site="$site" :mainactivity="$main_activity" />
+                                        <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                     @else 
                                         <x-site-detail-view :site="$site" :mainactivity="$main_activity" :sitefields="$site_fields" />
                                     @endif

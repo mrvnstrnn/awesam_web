@@ -81,7 +81,7 @@
 
         for (let i = 0; i < new_json.length; i++) {
             if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-                $(".card-body").append(
+                $("#viewInfoModal  .card-body").append(
                     '<div class="position-relative form-group col-md-6">' +
                         '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
                         '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
@@ -90,7 +90,7 @@
             }
         }
 
-        $("#viewInfoModal  .main-card.mb-3.card").append(
+        $("#viewInfoModal .main-card.mb-3.card").append(
             '<div class="modal-footer">' +
                 '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
             '</div>'

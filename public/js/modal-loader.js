@@ -82,6 +82,7 @@
             $.blockUI({ message: loader });
 
             $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
+            $(".ajax_content_box").attr("data-activity", $(this).attr('data-activity'));
 
             $.ajax({
                 url: "/get-all-docs",

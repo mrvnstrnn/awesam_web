@@ -133,8 +133,7 @@
             $("#actions_box").removeClass('d-none');
             $("#actions_list").addClass('d-none');
 
-
-            var active_subactivity = $(this).attr('data-sub_activity');
+            var active_subactivity = $(this).attr('data-sub_activity').replace("/", " ");
             var active_sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
             var program_id = $('#modal_program_id').val();
@@ -150,6 +149,7 @@
                             '</div>';
 
             $(".loading_div").html(loader);
+            $('#actions_box').html("");
 
             $.ajax({
                 url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
@@ -160,30 +160,31 @@
                 success: function (resp){
                     if (!resp.error) {
 
+                        $(".loading_div").html("");
+
                         $('#actions_box').html(resp);
 
-                        $(".loading_div").html("");
                         
                     } else {
 
+                        $(".loading_div").html("");
                         Swal.fire(
                             'Error',
                             resp.message,
                             'error'
                         )
 
-                        $(".loading_div").html("");
 
                     }
                 },
                 error: function (resp){
+                    $(".loading_div").html("");
                     Swal.fire(
                         'Error',
                         resp,
                         'error'
                     )
 
-                    loading_div.html("");
                 }
             });
 

@@ -8,6 +8,11 @@
               <label for="reference_number">Reference #</label>
               <input type="text" name="reference_number" id="reference_number" class="form-control" value="{{ $json['reference_number'] }}" readonly>
             </div>
+
+            <div class="form-group">
+              <label for="po_number">PO #</label>
+              <input type="text" name="po_number" id="po_number" class="form-control" value="{{ $json['po_number'] }}" readonly>
+            </div>
             
             <div class="form-group">
                 <label for="prepared_by_name">Prepared By</label>
