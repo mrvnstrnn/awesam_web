@@ -417,10 +417,15 @@
         $(".dropzone").dropzone({
             addRemoveLinks: true,
             maxFiles: 1,
-            maxFilesize: 1,
+            // maxFilesize: 1,
             acceptedFiles: '.jpg, .jpeg, png',
             paramName: "file",
             url: "/upload-image-file",
+            init: function() {
+                this.on("maxfilesexceeded", function(file){
+                    this.removeFile(file);
+                });
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

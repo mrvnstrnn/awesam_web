@@ -47,7 +47,9 @@
 
 <script>
     $(function() {
-        $("#datepicker").datepicker();
+        $("#datepicker").datepicker({
+            minDate : 0
+        });
         $("#datepicker").on("change",function(){
             var selected = $(this).val();
             $("#rtb_declaration_date").val(selected);

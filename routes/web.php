@@ -138,7 +138,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     // Get Sub Activity Action
-    Route::get('/subactivity-view/{sam_id}/{sub_activity}', [GlobeController::class, 'sub_activity_view'])->name('sub_activity_view');
+    Route::get('/subactivity-view/{sam_id}/{sub_activity}/{sub_activity_id}/{program_id}', [GlobeController::class, 'sub_activity_view'])->name('sub_activity_view');
 
 
     ////////////////////////////////////////////////
@@ -184,6 +184,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
+
+    // SSDS
+    Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
+    Route::post('/schedule-jtss', [GlobeController::class, 'schedule_jtss']);
+    Route::get('/get-my-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_site']);
+
+    Route::get('/get-my-uploaded-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploaded_site']);
+    Route::post('/set-approve-site', [GlobeController::class, 'set_approve_site']);
     
 });
 

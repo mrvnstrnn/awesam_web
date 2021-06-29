@@ -27,7 +27,7 @@
     <input id="modal_activity_name" type="hidden" value="{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}">
     <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
     <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
-    
+
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
@@ -75,8 +75,17 @@
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
+                                                        "Advanced Site Hunting",
+                                                        "Schedule JTSS",
+                                                        "Schedule JTSS",
+                                                        "RAM Validation of  Advanced Site Hunting  Documents",
+                                                        "RAM Documents Validation",
+                                                        "STS RTB Declaration",
+                                                        "STS RTB Declaration Approval",
+                                                        "Draft Contract Approval",
+                                                        "Lease Package",
 
-                                                        "Schedule JTSS"
+                                                        "LOI Creation to Renew"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -84,13 +93,14 @@
                                                         "Issue Validation",
                                                     );
 
+
                                 @endphp
 
                                 @if (in_array($site[0]->activity_name, $globe_actions) && $main_activity == "")
-                                    <x-site-action-view :site="$site" :mainactivity="$main_activity" />
+                                    <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                 @else
                                     @if(in_array($main_activity, $forced_actions))
-                                        <x-site-action-view :site="$site" :mainactivity="$main_activity" />
+                                        <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                     @else 
                                         <x-site-detail-view :site="$site" :mainactivity="$main_activity" :sitefields="$site_fields" />
                                     @endif

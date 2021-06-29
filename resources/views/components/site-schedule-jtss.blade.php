@@ -7,8 +7,9 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="rtb_declaration_date">JTSS Schedule</label>
-                        <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" value="" class="form-control" readonly />
+                        <label for="jtss_schedule">JTSS Schedule</label>
+                        <input type="text" id="jtss_schedule" name="jtss_schedule" value="" class="form-control" readonly />
+                        <small class="jtss_schedule-error text-danger"></small>
                     </div>        
                 </div>
             </div>
@@ -26,7 +27,7 @@
 </div>
 <div class="row mb-3 border-top pt-3 mt-2">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success declaration_approve_reject" id="declaration_approve" data-action="true" data-sam_id="">Set Schedule</button>                                            
+        <button class="float-right btn btn-shadow btn-success set_schedule" id="set_schedule" data-action="true" data-sam_id="">Set Schedule</button>                                            
     </div>
 </div>
 
@@ -35,35 +36,40 @@
 
     $(document).ready(function(){
 
+        $('#datepicker').datepicker({
+            minDate : 0
+        });
+
+        $("#datepicker").on("change",function(){
+            var selected = $(this).val();
+            $("#jtss_schedule").val(selected);
+        });
     
-        $(".declaration_approve_reject").on("click", function(e) {
+        $(".set_schedule").on("click", function(e) {
             e.preventDefault();
-            var sam_id = $(this).attr("data-sam_id");
-            var action = $(this).attr("data-action");
+            var sam_id = $("#modal_sam_id").val();
             var site_vendor_id = $("#modal_site_vendor_id").val();
             var program_id = $("#modal_program_id").val();
             var remarks = $("#remarks").val();
-            var activity_name = "rtb_declation_approval";
+            var jtss_schedule = $("#jtss_schedule").val();
+            var activity_name = "jtss_schedule";
 
 
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
-
-            var message = action == "false" ? "Reject" : "Approve RTB Declaration";
-            var button_id = action == "false" ? "declaration_reject" : "declaration_approve";
             
-            $("small").text("");
+            $("small.text-danger").text("");
 
             $.ajax({
-                url: "/approve-reject-rtb",
+                url: "/schedule-jtss",
                 method: "POST",
                 data: {
                     sam_id : sam_id,
-                    action : action,
                     remarks : remarks,
                     activity_name : activity_name,
                     site_vendor_id : site_vendor_id,
                     program_id : program_id,
+                    jtss_schedule : jtss_schedule,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -73,8 +79,8 @@
                         $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                             $("#viewInfoModal").modal("hide");
 
-                            $("#"+button_id).removeAttr("disabled");
-                            $("#"+button_id).text(message);
+                            $(".set_schedule").removeAttr("disabled");
+                            $(".set_schedule").text("Set Schedule");
 
                             Swal.fire(
                                 'Success',
@@ -95,8 +101,8 @@
                             )
                         }
 
-                        $("#"+button_id).removeAttr("disabled");
-                        $("#"+button_id).text(message);
+                        $(".set_schedule").removeAttr("disabled");
+                        $(".set_schedule").text("Set Schedule");
                     }
                 },
                 error: function(resp){
@@ -105,8 +111,8 @@
                         resp.message,
                         'error'
                     )
-                    $("#"+button_id).removeAttr("disabled");
-                    $("#"+button_id).text(message);
+                    $(".set_schedule").removeAttr("disabled");
+                    $(".set_schedule").text("Set Schedule");
                 }
             });
         });

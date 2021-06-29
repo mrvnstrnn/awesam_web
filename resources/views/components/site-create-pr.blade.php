@@ -6,6 +6,12 @@
               <input type="text" name="reference_number" id="reference_number" class="form-control">
               <small class="text-danger reference_number-error"></small>
             </div>
+
+            <div class="form-group">
+              <label for="po_number">PO #</label>
+              <input type="text" name="po_number" id="po_number" class="form-control">
+              <small class="text-danger po_number-error"></small>
+            </div>
             
             <div class="form-group">
                 <label for="prepared_by_name">Prepared By</label>
@@ -64,9 +70,14 @@
     $(".dropzone_files").dropzone({
         addRemoveLinks: true,
         maxFiles: 1,
-        maxFilesize: 1,
+        // maxFilesize: 1,
         paramName: "file",
         url: "/upload-file",
+        init: function() {
+            this.on("maxfilesexceeded", function(file){
+                this.removeFile(file);
+            });
+        },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
@@ -84,8 +95,11 @@
         }
     });
     
-    $(document).on("click", "#create_pr_btn", function(e){
+    $("#create_pr_btn").on("click", function(e){
         e.preventDefault();
+
+        // console.log("test");
+        // return;
 
         var sam_id = $(this).attr('data-sam_id');
         // var activity_id = $(this).attr('data-activity_id');
@@ -94,6 +108,7 @@
         var prepared_by = $("#prepared_by").val();
         var pr_file = $("#pr_file").val();
         var pr_date = $("#pr_date").val();
+        var po_number = $("#po_number").val();
         var vendor = $("#vendor").val();
 
         $(this).attr("disabled", "disabled");
@@ -111,6 +126,7 @@
                 activity_name : activity_name,
                 // activity_id : activity_id,
                 pr_date : pr_date,
+                po_number : po_number,
             },
             type: 'POST',
             headers: {
