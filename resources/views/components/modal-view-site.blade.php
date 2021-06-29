@@ -84,6 +84,8 @@
                                                         "STS RTB Declaration Approval",
                                                         "Draft Contract Approval",
                                                         "Lease Package",
+
+                                                        "LOI Creation to Renew"
                                                     );  
                                     
                                     $forced_actions = array(
