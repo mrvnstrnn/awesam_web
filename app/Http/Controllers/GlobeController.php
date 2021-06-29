@@ -946,6 +946,43 @@ class GlobeController extends Controller
             
     }
 
+    public function get_localcoop($program_id, $profile_id, $activity_type)
+    {
+        if($activity_type == 'all'){
+            $sites = \DB::connection('mysql2')
+            ->table("local_coop")
+            ->get();
+        }
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+
+    }
+
+    public function get_localcoop_details($coop)
+    {
+            $coop_details = \DB::connection('mysql2')
+            ->table("local_coop")
+            ->where('coop_name', $coop)
+            ->get();
+
+        return $coop_details;
+    }
+
+    public function get_localcoop_values($coop, $type)
+    {
+            $coop_values = \DB::connection('mysql2')
+            ->table("local_coop_values")
+            ->join('users', 'local_coop_values.user_id', 'users.id')
+            ->where('coop', $coop)
+            ->where('type', $type)
+            ->get();
+
+        return $coop_values;
+    }
+
+
+
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
 

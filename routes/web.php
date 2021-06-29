@@ -114,7 +114,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Milestone Datatable Source
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
+    Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_localcoop'])->name('get_localcoop');
+    
+    Route::get('/localcoop-details/{coop}', [GlobeController::class, 'get_localcoop_details'])->name('get_localcoop_details');
 
+    Route::get('/localcoop-values/{coop}/{type}', [GlobeController::class, 'get_localcoop_values'])->name('get_localcoop_values');
 
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
