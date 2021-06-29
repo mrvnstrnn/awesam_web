@@ -14,6 +14,7 @@ use App\Models\Issue;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\RTBDeclaration;
+use App\Models\LocalCoopValue;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -2081,6 +2082,63 @@ class GlobeController extends Controller
             
 
             return response()->json(['error' => false, 'message' => $agents ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_coop_value (Request $request)
+    {
+        try {
+            if ($request->input('action') == 'engagements') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'engagement_type' => 'required',
+                    'result_of_engagement' => 'required',
+                    'remarks' => 'required',
+                ));
+
+                $message = "Successfuly added engagements.";
+            } else if ($request->input('action') == 'contacts') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'cellphone' => 'required',
+                    'contact_type' => 'required',
+                    'email' => 'required | email',
+                    'firstname' => 'required',
+                    'lastname' => 'required',
+                ));
+
+                $message = "Successfuly added contacts.";
+            } else if ($request->input('action') == 'issues') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'date_of_issue' => 'required',
+                    'dependency' => 'required',
+                    'description' => 'required',
+                    'issue_assigned_to' => 'required',
+                    'issue_raised_by' => 'required',
+                    'issue_raised_by_name' => 'required',
+                    'nature_of_issue' => 'required',
+                    'status_of_issue' => 'required',
+                ));
+
+                $message = "Successfuly added issue.";
+            }
+
+
+            if ($validate->passes()) {
+                LocalCoopValue::create([
+                    'coop' => $request->input('coop'),
+                    'type' => $request->input('action'),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                return response()->json(['error' => false, 'message' => $message ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

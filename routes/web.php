@@ -192,6 +192,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/get-my-uploaded-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploaded_site']);
     Route::post('/set-approve-site', [GlobeController::class, 'set_approve_site']);
+
+    //COOP
+    Route::post('/add-coop-value', [GlobeController::class, 'add_coop_value']);
     
 });
 
