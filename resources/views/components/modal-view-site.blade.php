@@ -76,7 +76,9 @@
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
                                                         "Advanced Site Hunting",
-                                                        "Schedule JTSS"
+                                                        "Schedule JTSS",
+                                                        "Schedule JTSS",
+                                                        "RAM Validation of  Advanced Site Hunting  Documents"
                                                     );  
                                     
                                     $forced_actions = array(
