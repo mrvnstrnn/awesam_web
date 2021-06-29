@@ -621,7 +621,7 @@
         $(document).on('click', '#btn_cancel_add_issues', function(e){
 
             $('#issue_history_box').removeClass('d-none');
-            $('#issue_add_box').addClass('d-none');
+            $('#issue_add_box').removeClass('d-none');
 
         });
         
