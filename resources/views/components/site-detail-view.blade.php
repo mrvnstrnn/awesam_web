@@ -1,10 +1,10 @@
 
 @php
     if($mainactivity == ""){
-        $details_show = "d-none";
+        $details_show = "";
     }
     else {
-        $details_show = "";
+        $details_show = "d-none";
     }
 @endphp
 
