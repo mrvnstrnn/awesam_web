@@ -844,6 +844,7 @@
                                 '<th>Date</th>' +
                                 '<th>Staff</th>' +
                                 '<th>Remarks</th>' +
+                                '<th>Status</th>' +
                             '</tr>' +
                         '</thead>' +
                     '</table>'
@@ -869,6 +870,7 @@
                             { data: "date" },
                             { data: "staff" },
                             { data: "remarks" },
+                            { data: "status" },
                         ],
                     });
                 } else {

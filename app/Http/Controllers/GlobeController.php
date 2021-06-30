@@ -1251,49 +1251,19 @@ class GlobeController extends Controller
         if ($type == "contacts") {
             $dt = DataTables::of($coop_values)
                 ->addColumn('type', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[0];
+                    return json_decode($row->value)->contact_type;
                 })
                 ->addColumn('firstname', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[1];
+                    return json_decode($row->value)->firstname;
                 })
                 ->addColumn('lastname', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[2];
+                    return json_decode($row->value)->lastname;
                 })
                 ->addColumn('cellphone', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[3];
+                    return json_decode($row->value)->contact_number;
                 })
                 ->addColumn('email', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[4];
+                    return json_decode($row->value)->email;
                 });
 
         } else if ($type == "engagements") {
@@ -2357,6 +2327,9 @@ class GlobeController extends Controller
                         })
                         ->addColumn('remarks', function($row){
                             return json_decode($row->value)->remarks;
+                        })
+                        ->addColumn('status', function($row){
+                            return json_decode($row->value)->status_of_issue;
                         });
             
             // $dt->rawColumns(['checkbox', 'technology']);
