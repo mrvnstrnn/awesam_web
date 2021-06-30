@@ -1299,77 +1299,38 @@ class GlobeController extends Controller
         } else if ($type == "engagements") {
             $dt = DataTables::of($coop_values)
                 ->addColumn('engagement_type', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[0];
+                    return json_decode($row->value)->engagement_type;
                 })
                 ->addColumn('result_of_engagement', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[1];
+                    return json_decode($row->value)->result_of_engagement;
                 })
                 ->addColumn('remarks', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[2];
+                    return json_decode($row->value)->remarks;
                 });
         } else if ($type == "issues") {
             $dt = DataTables::of($coop_values)
-                ->addColumn('staff', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[0];
-                })
                 ->addColumn('dependency', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[1];
-                })->addColumn('nature_of_issue', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[2];
+                    return json_decode($row->value)->dependency;
                 })
-                ->addColumn('description', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-                    
-                    return $array[3];
+                ->addColumn('nature_of_issue', function($row){
+                    return json_decode($row->value)->nature_of_issue;
+                })->addColumn('description', function($row){
+                    return json_decode($row->value)->description;
+                })
+                ->addColumn('issue_raised_by', function($row){
+                    return json_decode($row->value)->issue_raised_by;
+                })
+                ->addColumn('issue_raised_by_name', function($row){
+                    return json_decode($row->value)->issue_raised_by_name;
+                })
+                ->addColumn('date_of_issue', function($row){
+                    return json_decode($row->value)->date_of_issue;
+                })
+                ->addColumn('issue_assigned_to', function($row){
+                    return json_decode($row->value)->issue_assigned_to;
                 })
                 ->addColumn('status_of_issue', function($row){
-                    $json = json_decode($row->value, true);
-                    $array = collect();
-                    foreach ($json as $key => $value) {
-                        $array->push($value);
-                    }
-
-                    return $array[4];
+                    return json_decode($row->value)->status_of_issue;
                 });
         }
 
@@ -2325,15 +2286,33 @@ class GlobeController extends Controller
                 $validate = Validator::make($request->all(), array(
                     'date_history' => 'required',
                     'remarks' => 'required',
+                    'status_of_issue' => 'required',
                 ));
 
-                $coop_data = LocalCoopValue::where('ID', $request->input('issue_id'))->first();
+                $coop_data = LocalCoopValue::where('ID', $request->input('issue_id') )->first();
+
+                $array_update = array(
+                    'dependency' => json_decode($coop_data->value)->date_of_issue,
+                    'nature_of_issue' => json_decode($coop_data->value)->nature_of_issue,
+                    'description' => json_decode($coop_data->value)->description,
+                    'issue_raised_by' => json_decode($coop_data->value)->issue_raised_by,
+                    'issue_raised_by_name' => json_decode($coop_data->value)->issue_raised_by_name,
+                    'date_of_issue' => json_decode($coop_data->value)->date_of_issue,
+                    'issue_assigned_to' => json_decode($coop_data->value)->issue_assigned_to,
+                    'status_of_issue' => $request->input('status_of_issue'),
+                );
+
+                LocalCoopValue::where('ID', $request->input('issue_id') )
+                                ->update([
+                                    'value' => json_encode($array_update),
+                                ]);
 
                 $array = array(
                     'id' => $request->input('issue_id'),
                     'date_history' => $request->input('date_history'),
                     'user_id' => $request->input('user_id'),
                     'remarks' => $request->input('remarks'),
+                    'status_of_issue' => $request->input('status_of_issue'),
                 );
 
                 $coop = $coop_data->coop;
@@ -2370,32 +2349,14 @@ class GlobeController extends Controller
 
             $dt = DataTables::of($history)
                         ->addColumn('date', function($row){
-                            $json = json_decode($row->value, true);
-                            $array = collect();
-                            foreach ($json as $key => $value) {
-                                $array->push($value);
-                            }
-                            
-                            return $array[1];
-                            
+                            return json_decode($row->value)->date_history;
                         })
                         ->addColumn('staff', function($row){
-                            $json = json_decode($row->value, true);
-                            $array = collect();
-                            foreach ($json as $key => $value) {
-                                $array->push($value);
-                            }
-                            
-                            return User::find($array[2])->name;
+                            $user = User::find(json_decode($row->value)->user_id);
+                            return $user->name;
                         })
                         ->addColumn('remarks', function($row){
-                            $json = json_decode($row->value, true);
-                            $array = collect();
-                            foreach ($json as $key => $value) {
-                                $array->push($value);
-                            }
-
-                            return $array[3];
+                            return json_decode($row->value)->remarks;
                         });
             
             // $dt->rawColumns(['checkbox', 'technology']);

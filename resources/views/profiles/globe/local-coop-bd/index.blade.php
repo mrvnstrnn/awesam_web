@@ -15,12 +15,12 @@
     }
 </style>
 
-<div id="coop_details" class="modal" tabindex="-1" role="dialog">
+<div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">COOP Details</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close modal_close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -152,6 +152,18 @@
                                                 <select class="form-control" name="user_id" id="user_id"></select>
                                                 <small class="user_id-error text-danger"></small>
                                             </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="status_of_issue">Status of Issue</label>
+                                                <select name="status_of_issue" id="status_of_issue" class="form-control">
+                                                    <option value="">Status of Issue</option>
+                                                    <option value="Not Started">Not Started</option>
+                                                    <option value="Ongoing">Ongoing</option>
+                                                    <option value="On Hold">On Hold</option>
+                                                    <option value="Resolved">Resolved</option>
+                                                </select>
+                                                <small class="text-danger status_of_issue-error"></small>
+                                            </div>
 
                                             <div class="form-group">
                                                 <label for="remarks">Remarks</label>
@@ -170,12 +182,11 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary modal_close">Close</button>
         </div>
         </div>
     </div>
 </div>
-      
 
 <div id="add_issue" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -505,10 +516,11 @@
             $("#contacts_table").addClass("contacts_table"+id);
             $("#engagement_table").addClass("engagement_table"+id);
             $("#issues_table").addClass("issues_table"+id);
+            $("#save_history").attr('data-issue_id', id);
 
             $("#hidden_program_id").val( $(this).parent().parent().attr('data-program_id') );
             
-            $(".add_history_form select option").remove();
+            $(".add_history_form select#user_id option").remove();
 
             $(".table_contact_parent").html(
                 '<table class="table_contact_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
@@ -543,10 +555,13 @@
                     '<thead>' +
                         '<tr>' +
                             '<th>Date</th>' +
-                            '<th>Staff</th>' +
                             '<th>Dependency</th>' +
                             '<th>Nature of Issue</th>' +
                             '<th>Description</th>' +
+                            '<th>Issue Raised By</th>' +
+                            '<th>Issue Raised By Name</th>' +
+                            '<th>Date Of Issue</th>' +
+                            '<th>Issue Assigned To</th>' +
                             '<th>Status of Issue</th>' +
                         '</tr>' +
                     '</thead>' +
@@ -646,10 +661,13 @@
                     },
                     columns: [
                         { data: "add_timestamp" },
-                        { data: "staff" },
                         { data: "dependency" },
                         { data: "nature_of_issue" },
                         { data: "description" },
+                        { data: "issue_raised_by" },
+                        { data: "issue_raised_by_name" },
+                        { data: "date_of_issue" },
+                        { data: "issue_assigned_to" },
                         { data: "status_of_issue" },
                     ],
                 });
@@ -792,7 +810,7 @@
                     success: function (resp){
                         if (!resp.error) {
                             resp.message.forEach(element => {
-                                $(".add_history_form select").append(
+                                $(".add_history_form select#user_id").append(
                                     '<option value="'+element.id+'">'+element.name+'</option>'
                                 );
                             });
@@ -810,49 +828,52 @@
         $(document).on('click', '.table_issues_parent tbody tr', function(e){
             e.preventDefault();
 
-            $('#issue_table_box').addClass('d-none');
-            $('#issue_history_box').removeClass('d-none');
+            if ($('.table_issues_parent tbody tr td').attr("colspan") != 9) {
 
-            $("#issue_id").val( $(this).attr("data-id") );
+                $('#issue_table_box').addClass('d-none');
+                $('#issue_history_box').removeClass('d-none');
 
-            var id = $(this).attr("data-id");
+                $("#issue_id").val( $(this).attr("data-id") );
 
-            $(".table_history_parent").html(
-                '<table class="table_history_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
-                    '<thead>' +
-                        '<tr>' +
-                            '<th>Date</th>' +
-                            '<th>Staff</th>' +
-                            '<th>Remarks</th>' +
-                        '</tr>' +
-                    '</thead>' +
-                '</table>'
-            );
-            
-            $(".table_history_parent table").attr("id", "table_history_child_" + id);
+                var id = $(this).attr("data-id");
 
-            if (! $.fn.DataTable.isDataTable("#table_history_child_" + id) ){
-                $("#table_history_child_" + id).DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: '/issue-history-data/'+ id,
-                        type: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                $(".table_history_parent").html(
+                    '<table class="table_history_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th>Date</th>' +
+                                '<th>Staff</th>' +
+                                '<th>Remarks</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>'
+                );
+                
+                $(".table_history_parent table").attr("id", "table_history_child_" + id);
+
+                if (! $.fn.DataTable.isDataTable("#table_history_child_" + id) ){
+                    $("#table_history_child_" + id).DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: '/issue-history-data/'+ id,
+                            type: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
                         },
-                    },
-                    dataSrc: function(json){
-                        return json.data;
-                    },
-                    columns: [
-                        { data: "date" },
-                        { data: "staff" },
-                        { data: "remarks" },
-                    ],
-                });
-            } else {
-                $("#table_history_child_" + id).DataTable().ajax.reload();
+                        dataSrc: function(json){
+                            return json.data;
+                        },
+                        columns: [
+                            { data: "date" },
+                            { data: "staff" },
+                            { data: "remarks" },
+                        ],
+                    });
+                } else {
+                    $("#table_history_child_" + id).DataTable().ajax.reload();
+                }
             }
 
         });
@@ -878,9 +899,9 @@
 
         });
         
-        
         $(document).on("click", ".add_engagement", function () {
             var type = $(this).attr("data-type");
+            var table_id = $(this).attr("data-issue_id");
             
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
@@ -938,6 +959,7 @@
                         if ($(".add_engagement").attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
                             $("#table_history_child_" + id).DataTable().ajax.reload();
+                            $("#table_issues_child_" + table_id).DataTable().ajax.reload();
                         }
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
@@ -965,6 +987,15 @@
                     $(button_id).text(button_text);
                 }
             });
+        });
+
+        $(document).on("click", ".modal_close", function (e) {
+            e.preventDefault();
+
+            $("#coop_details").modal("hide");
+            $("#btn_cancel_add_issues").trigger("click");
+            $("#btn_back_to_issues").trigger("click");
+            $("a[href='#tab-coop-details']").trigger("click");
         });
 
 </script>
