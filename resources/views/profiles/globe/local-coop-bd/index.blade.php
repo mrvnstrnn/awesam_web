@@ -866,6 +866,7 @@
                         dataSrc: function(json){
                             return json.data;
                         },
+                        "order": [[ 0, 'desc' ]],
                         columns: [
                             { data: "add_timestamp" },
                             { data: "staff" },
