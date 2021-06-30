@@ -1,4 +1,16 @@
-<div id="site_details_view" class="d-none">                                    
+
+@php
+    if($mainactivity == ""){
+        $details_show = "d-none";
+    }
+    else {
+        $details_show = "";
+    }
+@endphp
+
+<div id="site_details_view" class="{{ $details_show }}">                                    
+
+
     <div class="row">      
         <div class="col-12 text-center">
             <button class="btn-icon btn-pill btn btn-lg btn-focus d-none" id="site_details_view_switch">
