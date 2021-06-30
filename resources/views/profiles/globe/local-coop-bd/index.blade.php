@@ -47,7 +47,7 @@
                         <div class="tab-pane active" id="tab-coop-details" role="tabpanel">
                         </div>
                         <div class="tab-pane" id="tab-coop-contacts" role="tabpanel">
-                            <table class="table" id="contacts_table">
+                            {{-- <table class="table" id="contacts_table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -61,10 +61,12 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
-                            </table>
+                            </table> --}}
+
+                            <div class="table-responsive table_contact_parent"></div>
                         </div>
                         <div class="tab-pane" id="tab-coop-engagements" role="tabpanel">
-                            <table class="table" id="engagement_table">
+                            {{-- <table class="table" id="engagement_table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -76,11 +78,13 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
-                            </table>
+                            </table> --}}
+
+                            <div class="table-responsive table_engagements_parent"></div>
                         </div>
                         <div class="tab-pane" id="tab-coop-issues" role="tabpanel">
                             <div id="issue_table_box">
-                                <table class="table" id="issues_table">
+                                {{-- <table class="table" id="issues_table">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -93,7 +97,9 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
-                                </table>
+                                </table> --}}
+                                
+                                <div class="table-responsive table_issues_parent"></div>
                             </div>
                             <div id="issue_history_box" class="d-none">
                                 <div class="row border-bottom mb-3">
@@ -106,7 +112,8 @@
                                     </div>
                                 </div>
                                 <div class="table_history"></div>
-                                <table class="table" id="issues_history">
+                                <div class="table-responsive table_history_parent"></div>
+                                {{-- <table class="table" id="issues_history">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -116,7 +123,7 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
-                                </table>
+                                </table> --}}
                             </div>
                             <div id="issue_add_box" class="d-none">
                                 <div class="row border-bottom mb-3">
@@ -502,6 +509,54 @@
             $("#hidden_program_id").val( $(this).parent().parent().attr('data-program_id') );
             
             $(".add_history_form select option").remove();
+
+            $(".table_contact_parent").html(
+                '<table class="table_contact_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>Date</th>' +
+                            '<th>Type</th>' +
+                            '<th>Firstname</th>' +
+                            '<th>Lastname</th>' +
+                            '<th>Cellphone</th>' +
+                            '<th>Email</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>'
+            );
+
+            $(".table_engagements_parent").html(
+                '<table class="table_engagements_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>Date</th>' +
+                            '<th>Type</th>' +
+                            '<th>Result</th>' +
+                            '<th>Remarks</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>'
+            );
+
+            $(".table_issues_parent").html(
+                '<table class="table_issues_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>Date</th>' +
+                            '<th>Staff</th>' +
+                            '<th>Dependency</th>' +
+                            '<th>Nature of Issue</th>' +
+                            '<th>Description</th>' +
+                            '<th>Status of Issue</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>'
+            );
+
+            $(".table_contact_parent table").attr("id", "table_contact_child_" + id);
+            $(".table_engagements_parent table").attr("id", "table_engagements_child_" + id);
+            $(".table_issues_parent table").attr("id", "table_issues_child_" + id);
+            
             $.ajax({
                     url: "/localcoop-details/" + $(this).find('td:first').text(),
                     method: "GET",
@@ -527,129 +582,206 @@
                     }
             });
 
-            $.ajax({
-                    url: "/localcoop-values/" + $(this).find('td:first').text() + "/contacts",
-                    method: "GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            if ( ! $.fn.DataTable.isDataTable("#table_contact_child_" + id) || ! $.fn.DataTable.isDataTable("#table_engagements_child_" + id) || ! $.fn.DataTable.isDataTable("#table_issues_child_" + id) ){
+                $("#table_contact_child_" + id).DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/localcoop-values-data/" + $(this).find('td:first').text() + "/contacts",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                     },
-                    success: function (resp){
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "add_timestamp" },
+                        { data: "type" },
+                        { data: "firstname" },
+                        { data: "lastname" },
+                        { data: "cellphone" },
+                        { data: "email" },
+                    ],
+                });
 
-                        var html = "";
-                        resp.forEach(function(data){
+                $("#table_engagements_child_" + id).DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/localcoop-values-data/" + $(this).find('td:first').text() + "/engagements",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "add_timestamp" },
+                        { data: "engagement_type" },
+                        { data: "result_of_engagement" },
+                        { data: "remarks" },
+                    ],
+                });
 
-                            var dateParts = data['add_timestamp'].split("-");
-                            var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-                            var dateString = moment(jsDate).format('YYYY-MM-DD');
+                $("#table_issues_child_" + id).DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/localcoop-values-data/" + $(this).find('td:first').text() + "/issues",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    'createdRow': function( row, data, dataIndex ) {
+                        $(row).attr('data-id', data.ID);
+                        $(row).attr('style', 'cursor: pointer');
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "add_timestamp" },
+                        { data: "staff" },
+                        { data: "dependency" },
+                        { data: "nature_of_issue" },
+                        { data: "description" },
+                        { data: "status_of_issue" },
+                    ],
+                });
+            } else {
+                $("#table_contact_child_" + id).DataTable().ajax.reload();
+                $("#table_engagements_child_" + id).DataTable().ajax.reload();
+                $("#table_issues_child_" + id).DataTable().ajax.reload();
+            }
 
-                            var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
-                            html = html + "<tr>";
+            // $.ajax({
+            //         url: "/localcoop-values/" + $(this).find('td:first').text() + "/contacts",
+            //         method: "GET",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         success: function (resp){
+
+            //             var html = "";
+            //             resp.forEach(function(data){
+
+            //                 var dateParts = data['add_timestamp'].split("-");
+            //                 var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+            //                 var dateString = moment(jsDate).format('YYYY-MM-DD');
+
+            //                 var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
+            //                 html = html + "<tr>";
                             
-                                html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
+            //                     html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
 
-                            Object.keys(engagement).forEach(function (key, index){
+            //                 Object.keys(engagement).forEach(function (key, index){
 
-                                    html = html + "<td>" + engagement[key] + "</td>";
+            //                         html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                // console.log(key + " : " + engagement[key]);
+            //                     // console.log(key + " : " + engagement[key]);
 
-                            });
-                            html = html + "</tr>";
-                        });
+            //                 });
+            //                 html = html + "</tr>";
+            //             });
 
-                        $('#contacts_table tbody').empty();
-                        $('#contacts_table tbody').append(html);
-                        $('#contacts_table').DataTable();
+            //             $('#contacts_table tbody').empty();
+            //             $('#contacts_table tbody').append(html);
+            //             $('#contacts_table').DataTable();
 
 
-                    },
-                    error: function (resp){
-                        toastr.error(resp.message, "Error");
-                    }
-            });
+            //         },
+            //         error: function (resp){
+            //             toastr.error(resp.message, "Error");
+            //         }
+            // });
 
-            $.ajax({
-                    url: "/localcoop-values/" + $(this).find('td:first').text() + "/engagements",
-                    method: "GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp){
+            // $.ajax({
+            //         url: "/localcoop-values/" + $(this).find('td:first').text() + "/engagements",
+            //         method: "GET",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         success: function (resp){
 
-                        var html = "";
-                        resp.forEach(function(data){
+            //             var html = "";
+            //             resp.forEach(function(data){
 
-                            var dateParts = data['add_timestamp'].split("-");
-                            var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-                            var dateString = moment(jsDate).format('YYYY-MM-DD');
+            //                 var dateParts = data['add_timestamp'].split("-");
+            //                 var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+            //                 var dateString = moment(jsDate).format('YYYY-MM-DD');
 
-                            var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
-                            html = html + "<tr>";
+            //                 var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
+            //                 html = html + "<tr>";
                             
-                                html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
+            //                     html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
 
-                            Object.keys(engagement).forEach(function (key, index){
+            //                 Object.keys(engagement).forEach(function (key, index){
 
-                                    html = html + "<td>" + engagement[key] + "</td>";
+            //                         html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                // console.log(key + " : " + engagement[key]);
+            //                     // console.log(key + " : " + engagement[key]);
 
-                            });
-                            html = html + "</tr>";
-                        });
+            //                 });
+            //                 html = html + "</tr>";
+            //             });
 
-                        $('#engagement_table tbody').empty();
-                        $('#engagement_table tbody').append(html);
-                        $('#engagement_table').DataTable();
+            //             $('#engagement_table tbody').empty();
+            //             $('#engagement_table tbody').append(html);
+            //             $('#engagement_table').DataTable();
 
 
-                    },
-                    error: function (resp){
-                        toastr.error(resp.message, "Error");
-                    }
-            });
+            //         },
+            //         error: function (resp){
+            //             toastr.error(resp.message, "Error");
+            //         }
+            // });
 
-            $.ajax({
-                    url: "/localcoop-values/" + $(this).find('td:first').text() + "/issues",
-                    method: "GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp){
+            // $.ajax({
+            //         url: "/localcoop-values/" + $(this).find('td:first').text() + "/issues",
+            //         method: "GET",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         success: function (resp){
 
-                        var html = "";
-                        resp.forEach(function(data){
+            //             var html = "";
+            //             resp.forEach(function(data){
 
-                            var dateParts = data['add_timestamp'].split("-");
-                            var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-                            var dateString = moment(jsDate).format('YYYY-MM-DD');
-                            var allowed_issues_column = ["dependency", "nature_of_issue", "description", "status_of_issue"];
+            //                 var dateParts = data['add_timestamp'].split("-");
+            //                 var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+            //                 var dateString = moment(jsDate).format('YYYY-MM-DD');
+            //                 var allowed_issues_column = ["dependency", "nature_of_issue", "description", "status_of_issue"];
                             
-                            var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
-                            html = html + "<tr data-id='"+data.ID+"'>";
+            //                 var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
+            //                 html = html + "<tr data-id='"+data.ID+"'>";
                             
-                                html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
+            //                     html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
 
-                            Object.keys(engagement).forEach(function (key, index){
+            //                 Object.keys(engagement).forEach(function (key, index){
 
-                                // console.log(key + " : " + engagement[key]);
-                                if(allowed_issues_column.includes(key) == true){
-                                html = html + "<td>" + engagement[key] + "</td>";
-                                }
+            //                     // console.log(key + " : " + engagement[key]);
+            //                     if(allowed_issues_column.includes(key) == true){
+            //                     html = html + "<td>" + engagement[key] + "</td>";
+            //                     }
 
-                            });
-                            html = html + "</tr>";
-                        });
+            //                 });
+            //                 html = html + "</tr>";
+            //             });
 
-                        $('#issues_table tbody').empty();
-                        $('#issues_table tbody').append(html);
-                        $('#issues_table').DataTable();
+            //             $('#issues_table tbody').empty();
+            //             $('#issues_table tbody').append(html);
+            //             $('#issues_table').DataTable();
 
-                    },
-                    error: function (resp){
-                        toastr.error(resp.message, "Error");
-                    }
-            });
+            //         },
+            //         error: function (resp){
+            //             toastr.error(resp.message, "Error");
+            //         }
+            // });
 
             $.ajax({
                     url: "/agent-based-program/"+$(this).parent().parent().attr('data-program_id'),
@@ -675,7 +807,7 @@
 
         });
 
-        $(document).on('click', '#issues_table tbody tr', function(e){
+        $(document).on('click', '.table_issues_parent tbody tr', function(e){
             e.preventDefault();
 
             $('#issue_table_box').addClass('d-none');
@@ -683,12 +815,28 @@
 
             $("#issue_id").val( $(this).attr("data-id") );
 
-            if (! $.fn.DataTable.isDataTable("#issues_history") ){
-                $('#issues_history').DataTable({
+            var id = $(this).attr("data-id");
+
+            $(".table_history_parent").html(
+                '<table class="table_history_child align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>Date</th>' +
+                            '<th>Staff</th>' +
+                            '<th>Remarks</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>'
+            );
+            
+            $(".table_history_parent table").attr("id", "table_history_child_" + id);
+
+            if (! $.fn.DataTable.isDataTable("#table_history_child_" + id) ){
+                $("#table_history_child_" + id).DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '/issue-history-data/'+ $(this).attr('data-id'),
+                        url: '/issue-history-data/'+ id,
                         type: 'GET',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -704,7 +852,7 @@
                     ],
                 });
             } else {
-                $('#issues_history').DataTable().ajax.reload();
+                $("#table_history_child_" + id).DataTable().ajax.reload();
             }
 
         });
@@ -726,7 +874,7 @@
         $(document).on('click', '#btn_cancel_add_issues', function(e){
 
             $('#issue_history_box').removeClass('d-none');
-            $('#issue_add_box').removeClass('d-none');
+            $('#issue_add_box').addClass('d-none');
 
         });
         
@@ -759,6 +907,7 @@
                 var button_id = "#add_issue_btn";
                 var button_text = "Add Issue";
             } else if (type == "issue_history") {
+                var id = $("#hidden_program_id").val();
                 $(".add_history_form small").text("");
                 var form_id = ".add_history_form";
                 var data_serialize = $(form_id).serialize();
@@ -788,7 +937,7 @@
 
                         if ($(".add_engagement").attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
-                            $("#issues_history").DataTable().ajax.reload();
+                            $("#table_history_child_" + id).DataTable().ajax.reload();
                         }
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
@@ -821,4 +970,3 @@
 </script>
 
 @endsection
-

@@ -889,7 +889,7 @@ class GlobeController extends Controller
     {
         try {
 
-            $data_action = $request->input('data_action') == false ? "denied" : "approved";
+            $data_action = $request->input('data_action') == "false" ? "denied" : "approved";
 
             SubActivityValue::where('id', $request->input('id'))
                             ->update([
@@ -1228,17 +1228,153 @@ class GlobeController extends Controller
 
     public function get_localcoop_values($coop, $type)
     {
-            $coop_values = \DB::connection('mysql2')
-            ->table("local_coop_values")
-            ->join('users', 'local_coop_values.user_id', 'users.id')
-            ->where('coop', $coop)
-            ->where('type', $type)
-            ->get();
+        $coop_values = \DB::connection('mysql2')
+                            ->table("local_coop_values")
+                            ->join('users', 'local_coop_values.user_id', 'users.id')
+                            ->where('coop', $coop)
+                            ->where('type', $type)
+                            ->get();
 
         return $coop_values;
     }
 
+    public function get_localcoop_values_data($coop, $type)
+    {
+        $coop_values = \DB::connection('mysql2')
+                            ->table("local_coop_values")
+                            ->join('users', 'local_coop_values.user_id', 'users.id')
+                            ->where('coop', $coop)
+                            ->where('type', $type)
+                            ->orderBy('add_timestamp', 'desc')
+                            ->get();
 
+        if ($type == "contacts") {
+            $dt = DataTables::of($coop_values)
+                ->addColumn('type', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[0];
+                })
+                ->addColumn('firstname', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[1];
+                })
+                ->addColumn('lastname', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[2];
+                })
+                ->addColumn('cellphone', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[3];
+                })
+                ->addColumn('email', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[4];
+                });
+
+        } else if ($type == "engagements") {
+            $dt = DataTables::of($coop_values)
+                ->addColumn('engagement_type', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[0];
+                })
+                ->addColumn('result_of_engagement', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[1];
+                })
+                ->addColumn('remarks', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[2];
+                });
+        } else if ($type == "issues") {
+            $dt = DataTables::of($coop_values)
+                ->addColumn('staff', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[0];
+                })
+                ->addColumn('dependency', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[1];
+                })->addColumn('nature_of_issue', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[2];
+                })
+                ->addColumn('description', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+                    
+                    return $array[3];
+                })
+                ->addColumn('status_of_issue', function($row){
+                    $json = json_decode($row->value, true);
+                    $array = collect();
+                    foreach ($json as $key => $value) {
+                        $array->push($value);
+                    }
+
+                    return $array[4];
+                });
+        }
+
+        return $dt->make(true);
+    }
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
@@ -1521,8 +1657,8 @@ class GlobeController extends Controller
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
-            } else if($request['main_activity'] == "Program Sites" && $request['program_id'] == 1){
-                $mainactivity = "";
+            // } else if($request['main_activity'] == "Program Sites" && $request['program_id'] == 1){
+            //     $mainactivity = "";
             } else {
                 $mainactivity = $request['main_activity'];
             }
@@ -2229,6 +2365,7 @@ class GlobeController extends Controller
 
             $history = LocalCoopValue::where('type', 'issue_history')
                                         ->whereJsonContains('value', ['id' => $id ])
+                                        ->orderBy('add_timestamp', 'desc')
                                         ->get();
 
             $dt = DataTables::of($history)
@@ -2261,7 +2398,7 @@ class GlobeController extends Controller
                             return $array[3];
                         });
             
-            $dt->rawColumns(['checkbox', 'technology']);
+            // $dt->rawColumns(['checkbox', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;

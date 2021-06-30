@@ -8,7 +8,8 @@
     }
 @endphp
 
-<div id="site_details_view" class="{{ $details_show }}">                                    
+<div id="site_details_view">
+    {{-- <div id="site_details_view" class="{{ $details_show }}"> --}}
 
 
     <div class="row">      

@@ -1,12 +1,3 @@
-@php
-    if($mainactivity == ""){
-        $details_show = "";
-    }
-    else {
-        $details_show = "d-none";
-    }
-@endphp
-
 <div id="site_action_view">
     <div class="mb-3">
         @php
