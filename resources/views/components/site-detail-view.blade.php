@@ -1,14 +1,13 @@
 
 @php
-    if($mainactivity == ""){
-        $details_show = "";
-    }
-    else {
-        $details_show = "d-none";
-    }
-@endphp
+if($mainactivity == ""){
+    $details_show = "";
+}
+else {
+    $details_show = "d-none";
+}
 
-<div id="site_details_view" class="{{ $details_show }}">                                    
+@endphp<div id="site_details_view">                                    
 
 
     <div class="row">      

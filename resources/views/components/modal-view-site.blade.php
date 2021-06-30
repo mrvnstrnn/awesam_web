@@ -32,7 +32,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row justify-content-center">
-                    <div class="col-lg-8 col-md-12 col-sm-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="main-card mb-3 card ">
 
                             <div class="dropdown-menu-header">
@@ -109,7 +109,7 @@
                         </div> 
                     </div>
                 
-                    <div class="col-lg-4 col-md-12 col-sm-12">
+                    {{-- <div class="col-lg-4 col-md-12 col-sm-12">
 
                         <div class="mb-3 profile-responsive card">
                             <div class="dropdown-menu-header">
@@ -135,11 +135,8 @@
                                     </div>                                    
                                 </div>
                             </div>
-                        </div> 
-
-                        
-                        {{-- <x-site-status :completed="35" :samid="$site[0]->sam_id"/> --}}
-                    </div>                
+                        </div>                         
+                    </div>                 --}}
                 </div>
             </div>
         </div>
