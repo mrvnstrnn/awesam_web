@@ -102,4 +102,15 @@
         </div>
     </div>
 </div>
+@php
+if($mainactivity == ""){
+    $details_show = "";
+}
+else {
+    $details_show = "d-none";
+}
+@endphp
+
+<div class="{{$details_show}}">
 <x-site-detail-view :site="$site" :mainactivity="$mainactivity" :sitefields="$site[0]->site_fields" />
+</div>
