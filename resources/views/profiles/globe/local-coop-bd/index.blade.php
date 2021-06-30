@@ -105,6 +105,7 @@
                                         <button type="button" class="btn btn-primary mb-1" id="btn_add_issue" >Add History</button>
                                     </div>
                                 </div>
+                                <div class="table_history"></div>
                                 <table class="table" id="issues_history">
                                     <thead>
                                         <tr>
@@ -124,6 +125,35 @@
                                     </div>
                                     <div class="col-sm-6 text-right">
                                         <button type="button" class="btn btn-secondary mb-1" id="btn_cancel_add_issues" >Cancel Add Issue</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form class="add_history_form">
+                                            <input type="hidden" name="hidden_program_id" id="hidden_program_id">
+                                            <input type="hidden" name="issue_id" id="issue_id">
+                                            <input type="hidden" name="action" id="action" value="issue_history">
+                                            <div class="form-group">
+                                                <label for="date_history">Date History</label>
+                                                <input type="date" name="date_history" id="date_history" class="form-control">
+                                                <small class="date_history-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="user_id">Staff</label>
+                                                <select class="form-control" name="user_id" id="user_id"></select>
+                                                <small class="user_id-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="remarks">Remarks</label>
+                                                <textarea class="form-control" name="remarks" id="remarks" cols="30" rows="5"></textarea>
+                                                <small class="remarks-error text-danger"></small>
+                                            </div>
+
+                                            <button class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -150,109 +180,118 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="">
+        <form class="issue_form">
+            <input type="hidden" name="action" id="action" value="issues">
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">COOP</label>
+                <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
+                    <select name="coop" id="coop" class="form-control">
                         @php
                             $coops = \DB::connection('mysql2')
                                 ->table("local_coop")
                                 ->get();
                         @endphp
-                        <option>COOP</option>
+                        <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
-                            <option>{{$coop->coop_name}}</option>
+                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
                         @endforeach
                     </select>
+                    <small class="text-danger coop-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Dependency</label>
+                <label for="dependency" class="col-sm-3 col-form-label">Dependency</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
-                        <option>Dependency</option>
-                        <option>COOP</option>
-                        <option>Globe</option>
-                        <option>LGU</option>
-                        <option>Others</option>
+                    <select name="dependency" id="dependency" class="form-control">
+                        <option value="Dependency">Dependency</option>
+                        <option value="COOP">COOP</option>
+                        <option value="Globe">Globe</option>
+                        <option value="LGU">LGU</option>
+                        <option value="Others">Others</option>
                     </select>
+                    <small class="text-danger dependency-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Nature of Issue </label>
+                <label for="nature_of_issue" class="col-sm-3 col-form-label">Nature of Issue </label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
-                        <option>Nature of Issue</option>
-                        <option>Bills Payment</option>
-                        <option>Power Upgrade</option>
-                        <option>Power Application</option>
-                        <option>Cable Regrooming</option>
-                        <option>Pole Related Concern</option>
-                        <option>JPA</option>
-                        <option>RTA</option>
-                        <option>Business Related Concerns</option>
-                        <option>Others</option>
+                    <select name="nature_of_issue" id="nature_of_issue" class="form-control">
+                        <option value="Nature of Issue">Nature of Issue</option>
+                        <option value="Bills Payment">Bills Payment</option>
+                        <option value="Power Upgrade">Power Upgrade</option>
+                        <option value="Power Application">Power Application</option>
+                        <option value="Cable Regrooming">Cable Regrooming</option>
+                        <option value="Pole Related Concern">Pole Related Concern</option>
+                        <option value="JPA">JPA</option>
+                        <option value="RTA">RTA</option>
+                        <option value="Business Related Concerns">Business Related Concerns</option>
+                        <option value="Others">Others</option>
                     </select>
+                    <small class="text-danger nature_of_issue-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleText" class="col-sm-3 col-form-label">Description</label>
+                <label for="description" class="col-sm-3 col-form-label">Description</label>
                 <div class="col-sm-9">
-                    <textarea name="text" id="exampleText" class="form-control"></textarea>
+                    <textarea name="description" id="description" class="form-control"></textarea>
+                    <small class="text-danger description-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Issue Raised By</label>
+                <label for="issue_raised_by" class="col-sm-3 col-form-label">Issue Raised By</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
+                    <select name="issue_raised_by" id="issue_raised_by" class="form-control">
                         <option>Issue Raised By</option>
                         <option>COOP</option>
                         <option>Globe</option>
                     </select>
+                    <small class="text-danger issue_raised_by-error"></small>
                 </div>
             </div>
 
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Issue Raised By (Name)</label>
+                <label for="issue_raised_by_name" class="col-sm-3 col-form-label">Issue Raised By (Name)</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Issue Raised By (Name)">
+                    <input type="text" class="form-control" id="issue_raised_by_name" name="issue_raised_by_name" placeholder="Issue Raised By (Name)">
+                    <small class="text-danger issue_raised_by_name-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Date of Issue</label>
+                <label for="date_of_issue" class="col-sm-3 col-form-label">Date of Issue</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Date of Issue">
+                    <input type="date" class="form-control flatpicker" name="date_of_issue" id="date_of_issue" placeholder="Date of Issue">
+                    <small class="text-danger date_of_issue-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Issue Assigned To</label>
+                <label for="issue_assigned_to" class="col-sm-3 col-form-label">Issue Assigned To</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Issue Assigned To">
+                    <input type="text" class="form-control" id="issue_assigned_to" name="issue_assigned_to" placeholder="Issue Assigned To">
+                    <small class="text-danger issue_assigned_to-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Status of Issue</label>
+                <label for="status_of_issue" class="col-sm-3 col-form-label">Status of Issue</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
-                        <option>Status of Issue</option>
-                        <option>Not Started</option>
-                        <option>Ongoing</option>
-                        <option>On Hold</option>
-                        <option>Resolved</option>
+                    <select name="status_of_issue" id="status_of_issue" class="form-control">
+                        <option value="">Status of Issue</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Resolved">Resolved</option>
                     </select>
+                    <small class="text-danger status_of_issue-error"></small>
                 </div>
             </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Add Issue</button>
+        <button type="button" class="btn btn-primary add_engagement" id="add_issue_btn" data-type="issues">Add Issue</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-
 
 <div id="add_engagement" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -264,59 +303,64 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="">
+        <form class="engagement_form">
+            <input type="hidden" name="action" id="action" value="engagements">
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">COOP</label>
+                <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
+                    <select name="coop" id="coop" class="form-control">
                         @php
                             $coops = \DB::connection('mysql2')
                                 ->table("local_coop")
                                 ->get();
                         @endphp
-                        <option>Select COOP</option>
+                        <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
-                            <option>{{$coop->coop_name}}</option>
+                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
                         @endforeach
                     </select>
+                    <small class="text-danger coop-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Engagement Type</label>
+                <label for="engagement_type" class="col-sm-3 col-form-label">Engagement Type</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
-                        <option>Select Engagement Type</option>
-                        <option>Power Upgrade</option>
-                        <option>New Sites</option>
-                        <option>Sites for Permanent Power</option>
-                        <option>RTA</option>
-                        <option>JPA</option>
-                        <option>Bills Payment</option>
+                    <select name="engagement_type" id="engagement_type" class="form-control">
+                        <option value="">Select Engagement Type</option>
+                        <option value="Power Upgrade">Power Upgrade</option>
+                        <option value="New Sites">New Sites</option>
+                        <option value="Sites for Permanent Power">Sites for Permanent Power</option>
+                        <option value="RTA">RTA</option>
+                        <option value="JPA">JPA</option>
+                        <option value="Bills Payment">Bills Payment</option>
                     </select>
+                    <small class="text-danger engagement_type-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleSelect" class="col-sm-3 col-form-label">Result of Engagement</label>
+                <label for="result_of_engagement" class="col-sm-3 col-form-label">Result of Engagement</label>
                 <div class="col-sm-9">
-                    <select name="select" id="exampleSelect" class="form-control">
-                        <option>Select Engagement Result</option>
-                        <option>Positive</option>
-                        <option>Negative</option>
-                        <option>Engaged</option>
+                    <select name="result_of_engagement" id="result_of_engagement" class="form-control">
+                        <option value="">Select Engagement Result</option>
+                        <option value="Positive">Positive</option>
+                        <option value="Negative">Negative</option>
+                        <option value="Engaged">Engaged</option>
                     </select>
+                    <small class="text-danger result_of_engagement-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="exampleText" class="col-sm-3 col-form-label">Remarks</label>
+                <label for="remarks" class="col-sm-3 col-form-label">Remarks</label>
                 <div class="col-sm-9">
-                    <textarea name="text" id="exampleText" class="form-control"></textarea>
+                    <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                    <small class="text-danger remarks-error"></small>
                 </div>
             </div>
         </form>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Add Engagement</button>
+        <button type="button" class="btn btn-primary add_engagement" id="add_engagement_btn" data-type="engagements">Add Engagement</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -333,62 +377,69 @@
           </button>
         </div>
         <div class="modal-body">
-          <form class="">
+          <form class="contact_form">
+                <input type="hidden" name="action" id="action" value="contacts">
               <div class="position-relative row form-group">
-                  <label for="exampleSelect" class="col-sm-3 col-form-label">COOP</label>
+                  <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                   <div class="col-sm-9">
-                      <select name="select" id="exampleSelect" class="form-control">
+                      <select name="coop" id="coop" class="form-control">
                           @php
                               $coops = \DB::connection('mysql2')
                                   ->table("local_coop")
                                   ->get();
                           @endphp
-                          <option>Select COOP</option>
+                          <option value="">Select COOP</option>
                           @foreach ($coops as $coop)
-                              <option>{{$coop->coop_name}}</option>
+                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
                           @endforeach
                       </select>
+                      <small class="text-danger coop-error"></small>
                   </div>
               </div>
               <div class="position-relative row form-group">
                   <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
                   <div class="col-sm-9">
-                      <select name="select" id="contact_type" name="contact_type" class="form-control">
-                          <option>Select Contact Type</option>
-                          <option>Engineering</option>
-                          <option>COOP Contact</option>
+                      <select id="contact_type" name="contact_type" class="form-control">
+                          <option value="">Select Contact Type</option>
+                          <option value="Engineering">Engineering</option>
+                          <option value="COOP Contact">COOP Contact</option>
                       </select>
+                      <small class="text-danger contact_type-error"></small>
                   </div>
               </div>
               <div class="position-relative row form-group">
                   <label for="firstname" class="col-sm-3 col-form-label">Firstname</label>
                   <div class="col-sm-9">
-                      <input type="text" value="" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
+                      <input type="text" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
+                      <small class="text-danger firstname-error"></small>
                   </div>
               </div>
               <div class="position-relative row form-group">
                 <label for="lastname" class="col-sm-3 col-form-label">Lastname</label>
                 <div class="col-sm-9">
-                    <input type="text" value="" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
+                    <input type="text" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
+                    <small class="text-danger lastname-error"></small>
                 </div>
               </div>
               <div class="position-relative row form-group">
-                <label for="cellphone" class="col-sm-3 col-form-label">Cellphone</label>
+                <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
                 <div class="col-sm-9">
-                    <input type="number" value="" placeholder="Cellphone" name="cellphone" id="cellphone" class="form-control"/>
+                    <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
+                    <small class="text-danger contact_number-error"></small>
                 </div>
               </div>
               <div class="position-relative row form-group">
                 <label for="email" class="col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
-                    <input type="email" value="" placeholder="Email" name="email" id="email" class="form-control"/>
+                    <input type="email" placeholder="Email" name="email" id="email" class="form-control"/>
+                    <small class="text-danger email-error"></small>
                 </div>
               </div>
             </form>
   
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Add Contact</button>
+          <button type="button" class="btn btn-primary add_engagement" id="add_contact_btn" data-type="contacts">Add Contact</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -412,7 +463,7 @@
 {{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
 
 <script>
-
+    
     // $('.show_activity_modal').on( 'click', function (e) {
     // });
         $('li').on('click','a', function(e){
@@ -441,8 +492,16 @@
             $('#contacts_table tbody').empty();
             $('#engagement_table tbody').empty();
             $('#issues_table tbody').empty();
-            
 
+            var id = JSON.parse($(this).attr('data-site_all')).id;
+
+            $("#contacts_table").addClass("contacts_table"+id);
+            $("#engagement_table").addClass("engagement_table"+id);
+            $("#issues_table").addClass("issues_table"+id);
+
+            $("#hidden_program_id").val( $(this).parent().parent().attr('data-program_id') );
+            
+            $(".add_history_form select option").remove();
             $.ajax({
                     url: "/localcoop-details/" + $(this).find('td:first').text(),
                     method: "GET",
@@ -451,7 +510,7 @@
                     },
                     success: function (resp){
 
-                        console.log(resp[0]);
+                        // console.log(resp[0]);
                         var columns = resp[0];
                         
                         var html = "";
@@ -492,7 +551,7 @@
 
                                     html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
 
                             });
                             html = html + "</tr>";
@@ -533,7 +592,7 @@
 
                                     html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
 
                             });
                             html = html + "</tr>";
@@ -565,15 +624,15 @@
                             var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
                             var dateString = moment(jsDate).format('YYYY-MM-DD');
                             var allowed_issues_column = ["dependency", "nature_of_issue", "description", "status_of_issue"];
-
+                            
                             var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
-                            html = html + "<tr>";
+                            html = html + "<tr data-id='"+data.ID+"'>";
                             
                                 html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
 
                             Object.keys(engagement).forEach(function (key, index){
 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
                                 if(allowed_issues_column.includes(key) == true){
                                 html = html + "<td>" + engagement[key] + "</td>";
                                 }
@@ -592,6 +651,28 @@
                     }
             });
 
+            $.ajax({
+                    url: "/agent-based-program/"+$(this).parent().parent().attr('data-program_id'),
+                    method: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+                        if (!resp.error) {
+                            resp.message.forEach(element => {
+                                $(".add_history_form select").append(
+                                    '<option value="'+element.id+'">'+element.name+'</option>'
+                                );
+                            });
+                        } else {
+                            toastr.error(resp.message, "Error");
+                        }
+                    },
+                    error: function (resp){
+                        toastr.error(resp, "Error");
+                    }
+            });
+
         });
 
         $(document).on('click', '#issues_table tbody tr', function(e){
@@ -600,7 +681,31 @@
             $('#issue_table_box').addClass('d-none');
             $('#issue_history_box').removeClass('d-none');
 
-            $('#issues_history').DataTable();
+            $("#issue_id").val( $(this).attr("data-id") );
+
+            if (! $.fn.DataTable.isDataTable("#issues_history") ){
+                $('#issues_history').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '/issue-history-data/'+ $(this).attr('data-id'),
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "date" },
+                        { data: "staff" },
+                        { data: "remarks" },
+                    ],
+                });
+            } else {
+                $('#issues_history').DataTable().ajax.reload();
+            }
 
         });
 
@@ -626,7 +731,92 @@
         });
         
         
+        $(document).on("click", ".add_engagement", function () {
+            var type = $(this).attr("data-type");
+            
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
 
+            if (type == "engagements") {
+                $(".engagement_form small").text("");
+                var form_id = ".engagement_form";
+                var data_serialize = $(form_id).serialize();
+                var modal_id = "#add_engagement";
+                var button_id = "#add_engagement_btn";
+                var button_text = "Add Engagement";
+            } else if (type == "contacts") {
+                $(".contact_form small").text("");
+                var form_id = ".contact_form";
+                var data_serialize = $(form_id).serialize();
+                var modal_id = "#add_contact";
+                var button_id = "#add_contact_btn";
+                var button_text = "Add Contact";
+            } else if (type == "issues") {
+                $(".issue_form small").text("");
+                var form_id = ".issue_form";
+                var data_serialize = $(form_id).serialize();
+                var modal_id = "#add_issue";
+                var button_id = "#add_issue_btn";
+                var button_text = "Add Issue";
+            } else if (type == "issue_history") {
+                $(".add_history_form small").text("");
+                var form_id = ".add_history_form";
+                var data_serialize = $(form_id).serialize();
+                var modal_id = "#add_issue";
+                var button_id = "#save_history";
+                var button_text = "Save History";
+            }
+            
+            $.ajax({
+                url: "/add-coop-value",
+                method: "POST",
+                data: data_serialize,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+                        $(modal_id).modal("hide");
+                        $(form_id)[0].reset();
+                        $(button_id).removeAttr("disabled");
+                        $(button_id).text(button_text);
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        if ($(".add_engagement").attr("data-type") == "issue_history") {
+                            $("#btn_cancel_add_issues").trigger("click");
+                            $("#issues_history").DataTable().ajax.reload();
+                        }
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(form_id + " ." + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                        $(button_id).removeAttr("disabled");
+                        $(button_id).text(button_text);
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                    $(button_id).removeAttr("disabled");
+                    $(button_id).text(button_text);
+                }
+            });
+        });
 
 </script>
 

@@ -1,4 +1,4 @@
-<div id="site_details_view" class="d-none">                                    
+<div id="site_details_view">                                    
     <div class="row">      
         <div class="col-12 text-center">
             <button class="btn-icon btn-pill btn btn-lg btn-focus d-none" id="site_details_view_switch">

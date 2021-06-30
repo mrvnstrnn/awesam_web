@@ -1,17 +1,23 @@
 <div class="row mb-3">
     <div class="col-12 align-right">
         <form id="create_pr_form">
+
             <div class="form-group">
-              <label for="reference_number">Reference #</label>
+                <label for="pr_date">PR Date</label>
+                <input type="text" name="pr_date" id="pr_date" class="form-control date_picker">
+            </div>
+
+            <div class="form-group">
+              <label for="reference_number">PR #</label>
               <input type="text" name="reference_number" id="reference_number" class="form-control">
               <small class="text-danger reference_number-error"></small>
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="po_number">PO #</label>
               <input type="text" name="po_number" id="po_number" class="form-control">
               <small class="text-danger po_number-error"></small>
-            </div>
+            </div> --}}
             
             <div class="form-group">
                 <label for="prepared_by_name">Prepared By</label>
@@ -45,11 +51,6 @@
                     @endforeach
                 </select>
                 <small class="text-danger vendor-error"></small>
-            </div>
-
-            <div class="form-group">
-                <label for="pr_date">PR Date</label>
-                <input type="text" name="pr_date" id="pr_date" class="form-control date_picker">
             </div>
         </form>         
 
@@ -108,7 +109,7 @@
         var prepared_by = $("#prepared_by").val();
         var pr_file = $("#pr_file").val();
         var pr_date = $("#pr_date").val();
-        var po_number = $("#po_number").val();
+        // var po_number = $("#po_number").val();
         var vendor = $("#vendor").val();
 
         $(this).attr("disabled", "disabled");
@@ -126,7 +127,7 @@
                 activity_name : activity_name,
                 // activity_id : activity_id,
                 pr_date : pr_date,
-                po_number : po_number,
+                // po_number : po_number,
             },
             type: 'POST',
             headers: {
