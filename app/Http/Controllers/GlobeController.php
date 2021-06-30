@@ -2318,9 +2318,6 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($history)
-                        ->addColumn('date', function($row){
-                            return json_decode($row->value)->date_history;
-                        })
                         ->addColumn('staff', function($row){
                             $user = User::find(json_decode($row->value)->user_id);
                             return $user->name;
