@@ -6,8 +6,8 @@ if($mainactivity == ""){
 else {
     $details_show = "d-none";
 }
-
-@endphp<div id="site_details_view">                                    
+@endphp
+<div id="site_details_view" class="{{ $details_show }}">
 
 
     <div class="row">      

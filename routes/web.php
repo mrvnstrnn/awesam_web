@@ -120,6 +120,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/localcoop-values/{coop}/{type}', [GlobeController::class, 'get_localcoop_values'])->name('get_localcoop_values');
 
+    Route::get('/localcoop-values-data/{coop}/{type}', [GlobeController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
+
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
     Route::get('/resolve-issue/{issue_id}', [GlobeController::class, 'resolve_issues']);

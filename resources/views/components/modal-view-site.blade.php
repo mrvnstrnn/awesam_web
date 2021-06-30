@@ -93,13 +93,12 @@
                                                         "Issue Validation",
                                                     );
 
-
                                 @endphp
 
                                 @if (in_array($site[0]->activity_name, $globe_actions) && $main_activity == "")
                                     <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                 @else
-                                    @if(in_array($main_activity, $forced_actions))
+                                    @if(!in_array($main_activity, $forced_actions))
                                         <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                     @else 
                                         <x-site-detail-view :site="$site" :mainactivity="$main_activity" :sitefields="$site_fields" />
