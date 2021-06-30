@@ -8,6 +8,7 @@ if($profile_id === "2"){
     $dar = \DB::connection('mysql2')
                 ->table('agent_dar')
                 ->where('agent_dar.agent_user_id', "=", $user_id)
+                ->where('program_id', 1)
                 ->get();                            
 
 } 
@@ -15,12 +16,14 @@ elseif($profile_id === "3"){
     $dar = \DB::connection('mysql2')
                 ->table('agent_dar')
                 ->where('agent_dar.IS_id', "=", $user_id)
+                ->where('program_id', 1)
                 ->get();                            
 
 } 
 else {
     $dar = \DB::connection('mysql2')
                 ->table('agent_dar')
+                ->where('program_id', 1)
                 ->get();                            
 }
 
