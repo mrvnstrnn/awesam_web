@@ -1,4 +1,13 @@
-<div id="site_action_view">
+@php
+    if($mainactivity == ""){
+        $details_show = "";
+    }
+    else {
+        $details_show = "d-none";
+    }
+@endphp
+
+<div id="site_action_view" class="{{ $details_show }}">
     <div class="mb-3">
         @php
         if($site[0]->end_date > now()){
