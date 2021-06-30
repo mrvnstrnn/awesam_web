@@ -7,7 +7,7 @@
     }
 @endphp
 
-<div id="site_action_view" class="{{ $details_show }}">
+<div id="site_action_view">
     <div class="mb-3">
         @php
         if($site[0]->end_date > now()){

@@ -81,14 +81,14 @@
             var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
 
             for (let i = 0; i < new_json.length; i++) {
-                if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
                     $("#viewInfoModal  .card-body").append(
                         '<div class="position-relative form-group col-md-6">' +
                             '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
                             '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
                         '</div>'
                     );
-                }
+                // }
             }
         } else {
             $("#viewInfoModal  .card-body").append(
