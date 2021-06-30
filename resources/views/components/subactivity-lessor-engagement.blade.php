@@ -26,7 +26,7 @@
     </div>
     <div class="row py-3 px-5 d-none" id="control_form">
         <div class="col-12 py-3">
-        <form class="">
+        <form class=".engagement_form">
             <div class="position-relative row form-group">
                 <label for="lessor_date" class="col-sm-3 col-form-label">Date</label>
                 <div class="col-sm-9">
@@ -89,5 +89,55 @@
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
     });
+
+    $(".contact-lessor").on("click", function(){
+
+        $('#control_box').addClass('d-none');
+        $('#control_form').removeClass('d-none');
+        $('#lessor_method').val($(this).attr('data-value'));
+        $('#lessor_date').val(moment().format('YYYY-MM-DD'));
+
+    });
+
+
+    $('.save_engagement').on("click", function(){
+
+        // $(this).addAttr("disabled");
+        $.ajax({
+            url: "/add-engagement",
+            method: "POST",
+            data: {
+                lessor_date: $("#lessor_date").val(),
+                lessor_method:  $("#lessor_method").val(),
+                lessor_remarks:  $("#lessor_remarks").val(),
+                lessor_approval:  $("#lessor_dlessor_approvalate").val()
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+
+                    Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                    )
+
+                } else {
+
+                }
+            },
+            error: function (file, resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+
+    });
+
 
 </script>

@@ -1457,6 +1457,19 @@ class GlobeController extends Controller
             ->render();
             
         }
+        elseif($sub_activity == 'LESSOR ENGAGEMENT'){
+
+            $what_component = "components.subactivity-lessor-engagement";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
+            ->render();
+            
+        }
         elseif($sub_activity == 'Set Approved Site'){
 
             $what_component = "components.subactivity-set-approved-site";
