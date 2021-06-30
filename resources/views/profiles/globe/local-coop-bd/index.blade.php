@@ -503,6 +503,8 @@
     
         $('.assigned-sites-table').on('click', 'tbody tr', function(e){
             e.preventDefault();
+
+            $("#btn_back_to_issues").trigger("click");
             $('#coop_details').modal('show');
             $('#coop_details').find('.modal-title').html($(this).find('td:first').text());
 
@@ -611,6 +613,7 @@
                     dataSrc: function(json){
                         return json.data;
                     },
+                    "order": [[ 0, 'desc' ]],
                     columns: [
                         { data: "add_timestamp" },
                         { data: "type" },
@@ -634,6 +637,7 @@
                     dataSrc: function(json){
                         return json.data;
                     },
+                    "order": [[ 0, 'desc' ]],
                     columns: [
                         { data: "add_timestamp" },
                         { data: "engagement_type" },
@@ -659,6 +663,7 @@
                     dataSrc: function(json){
                         return json.data;
                     },
+                    "order": [[ 0, 'desc' ]],
                     columns: [
                         { data: "add_timestamp" },
                         { data: "dependency" },
@@ -932,6 +937,7 @@
                 var button_text = "Add Issue";
             } else if (type == "issue_history") {
                 var id = $("#hidden_program_id").val();
+                var issue_id = $("#issue_id").val();
                 $(".add_history_form small").text("");
                 var form_id = ".add_history_form";
                 var data_serialize = $(form_id).serialize();
@@ -961,7 +967,7 @@
 
                         if ($(".add_engagement").attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
-                            $("#table_history_child_" + id).DataTable().ajax.reload();
+                            $("#table_history_child_" + issue_id).DataTable().ajax.reload();
                             $("#table_issues_child_" + table_id).DataTable().ajax.reload();
                         }
                     } else {

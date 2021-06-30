@@ -2254,7 +2254,7 @@ class GlobeController extends Controller
                 $message = "Successfuly added issue.";
             } else if ($request->input('action') == 'issue_history') {
                 $validate = Validator::make($request->all(), array(
-                    'date_history' => 'required',
+                    // 'date_history' => 'required',
                     'remarks' => 'required',
                     'status_of_issue' => 'required',
                 ));
@@ -2262,7 +2262,7 @@ class GlobeController extends Controller
                 $coop_data = LocalCoopValue::where('ID', $request->input('issue_id') )->first();
 
                 $array_update = array(
-                    'dependency' => json_decode($coop_data->value)->date_of_issue,
+                    'dependency' => json_decode($coop_data->value)->dependency,
                     'nature_of_issue' => json_decode($coop_data->value)->nature_of_issue,
                     'description' => json_decode($coop_data->value)->description,
                     'issue_raised_by' => json_decode($coop_data->value)->issue_raised_by,
@@ -2279,7 +2279,7 @@ class GlobeController extends Controller
 
                 $array = array(
                     'id' => $request->input('issue_id'),
-                    'date_history' => $request->input('date_history'),
+                    // 'date_history' => $request->input('date_history'),
                     'user_id' => $request->input('user_id'),
                     'remarks' => $request->input('remarks'),
                     'status_of_issue' => $request->input('status_of_issue'),
