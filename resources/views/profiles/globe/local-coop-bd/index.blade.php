@@ -141,11 +141,11 @@
                                             <input type="hidden" name="hidden_program_id" id="hidden_program_id">
                                             <input type="hidden" name="issue_id" id="issue_id">
                                             <input type="hidden" name="action" id="action" value="issue_history">
-                                            <div class="form-group">
+                                            {{-- <div class="form-group">
                                                 <label for="date_history">Date History</label>
                                                 <input type="date" name="date_history" id="date_history" class="form-control">
                                                 <small class="date_history-error text-danger"></small>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="form-group">
                                                 <label for="user_id">Staff</label>
@@ -844,6 +844,7 @@
                                 '<th>Date</th>' +
                                 '<th>Staff</th>' +
                                 '<th>Remarks</th>' +
+                                '<th>Status</th>' +
                             '</tr>' +
                         '</thead>' +
                     '</table>'
@@ -865,10 +866,12 @@
                         dataSrc: function(json){
                             return json.data;
                         },
+                        "order": [[ 0, 'desc' ]],
                         columns: [
-                            { data: "date" },
+                            { data: "add_timestamp" },
                             { data: "staff" },
                             { data: "remarks" },
+                            { data: "status" },
                         ],
                     });
                 } else {
