@@ -119,10 +119,22 @@ class GlobeController extends Controller
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
-
-            // SiteEndorsementEvent::dispatch($request->input('sam_id')[0]);
             
-            // return response()->json(['error' => true, 'message' => "error"]);
+            if ($request->input('activity_name') == "Vendor Awarding") {
+                $validate = Validator::make($request->all(), array(
+                    'po_number' => 'required',
+                ));
+
+                if (!$validate->passes()) {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                } else {
+                    \DB::connection('mysql2')->table("site")
+                                                ->where("sam_id", $request->input("sam_id"))
+                                                ->update([
+                                                    'site_po' => $request->input('po_number'),
+                                                ]);
+                }
+            }
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -768,7 +780,7 @@ class GlobeController extends Controller
                         "prepared_by" => $request->input('prepared_by'),
                         "vendor" => $request->input('vendor'),
                         "pr_date" => $request->input('pr_date'),
-                        "po_number" => $request->input('po_number'),
+                        // "po_number" => $request->input('po_number'),
                     );
     
                     SubActivityValue::create([
@@ -783,7 +795,8 @@ class GlobeController extends Controller
                     \DB::connection('mysql2')->table("site")
                                                 ->where("sam_id", $request->input("sam_id"))
                                                 ->update([
-                                                    'site_vendor_id' => $request->input('vendor')
+                                                    'site_vendor_id' => $request->input('vendor'),
+                                                    'site_pr' => $request->input('reference_number'),
                                                 ]);
 
                     SiteEndorsementEvent::dispatch($request->input('sam_id'));
@@ -875,9 +888,9 @@ class GlobeController extends Controller
     public function approve_reject_pr (Request $request)
     {
         try {
+
             $data_action = $request->input('data_action') == false ? "denied" : "approved";
 
-            // return response()->json(['error' => true, 'message' => $request->all()]); 
             SubActivityValue::where('id', $request->input('id'))
                             ->update([
                                 'status' => $data_action,
@@ -1205,7 +1218,7 @@ class GlobeController extends Controller
 
     public function get_localcoop_details($coop)
     {
-            $coop_details = \DB::connection('mysql2')
+        $coop_details = \DB::connection('mysql2')
             ->table("local_coop")
             ->where('coop_name', $coop)
             ->get();
@@ -2087,9 +2100,26 @@ class GlobeController extends Controller
         }
     }
 
-    public function add_coop_value (Request $request)
+    public function agent_based_program($program_id)
     {
         try {
+            $agents = \DB::connection('mysql2')
+                                        ->table('users')
+                                        ->select('users.*')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                        ->where('user_programs.program_id', $program_id)
+                                        ->get();
+            
+
+            return response()->json(['error' => false, 'message' => $agents ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_coop_value (Request $request)
+    {
+        try { 
             if ($request->input('action') == 'engagements') {
                 $validate = Validator::make($request->all(), array(
                     'coop' => 'required',
@@ -2098,16 +2128,34 @@ class GlobeController extends Controller
                     'remarks' => 'required',
                 ));
 
+                $array = array(
+                    'engagement_type' => $request->input('engagement_type'),
+                    'result_of_engagement' => $request->input('result_of_engagement'),
+                    'remarks' => $request->input('remarks'),
+                );
+
+                $coop = $request->input('coop');
+
                 $message = "Successfuly added engagements.";
             } else if ($request->input('action') == 'contacts') {
                 $validate = Validator::make($request->all(), array(
                     'coop' => 'required',
-                    'cellphone' => 'required',
+                    'contact_number' => 'required',
                     'contact_type' => 'required',
                     'email' => 'required | email',
                     'firstname' => 'required',
                     'lastname' => 'required',
                 ));
+
+                $array = array(
+                    'contact_type' => $request->input('contact_type'),
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'contact_number' => $request->input('contact_number'),
+                    'email' => $request->input('email'),
+                );
+
+                $coop = $request->input('coop');
 
                 $message = "Successfuly added contacts.";
             } else if ($request->input('action') == 'issues') {
@@ -2123,15 +2171,46 @@ class GlobeController extends Controller
                     'status_of_issue' => 'required',
                 ));
 
+                $array = array(
+                    'dependency' => $request->input('dependency'),
+                    'nature_of_issue' => $request->input('nature_of_issue'),
+                    'description' => $request->input('description'),
+                    'issue_raised_by' => $request->input('issue_raised_by'),
+                    'issue_raised_by_name' => $request->input('issue_raised_by_name'),
+                    'date_of_issue' => $request->input('date_of_issue'),
+                    'issue_assigned_to' => $request->input('issue_assigned_to'),
+                    'status_of_issue' => $request->input('status_of_issue'),
+                );
+
+                $coop = $request->input('coop');
+
                 $message = "Successfuly added issue.";
+            } else if ($request->input('action') == 'issue_history') {
+                $validate = Validator::make($request->all(), array(
+                    'date_history' => 'required',
+                    'remarks' => 'required',
+                ));
+
+                $coop_data = LocalCoopValue::where('ID', $request->input('issue_id'))->first();
+
+                $array = array(
+                    'id' => $request->input('issue_id'),
+                    'date_history' => $request->input('date_history'),
+                    'user_id' => $request->input('user_id'),
+                    'remarks' => $request->input('remarks'),
+                );
+
+                $coop = $coop_data->coop;
+
+                $message = "Successfuly added history.";
             }
 
 
             if ($validate->passes()) {
                 LocalCoopValue::create([
-                    'coop' => $request->input('coop'),
+                    'coop' => $coop,
                     'type' => $request->input('action'),
-                    'value' => json_encode($request->all()),
+                    'value' => json_encode($array),
                     'user_id' => \Auth::id(),
                 ]);
     
@@ -2141,6 +2220,51 @@ class GlobeController extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function issue_history_data($id)
+    {
+        try {
+
+            $history = LocalCoopValue::where('type', 'issue_history')
+                                        ->whereJsonContains('value', ['id' => $id ])
+                                        ->get();
+
+            $dt = DataTables::of($history)
+                        ->addColumn('date', function($row){
+                            $json = json_decode($row->value, true);
+                            $array = collect();
+                            foreach ($json as $key => $value) {
+                                $array->push($value);
+                            }
+                            
+                            return $array[1];
+                            
+                        })
+                        ->addColumn('staff', function($row){
+                            $json = json_decode($row->value, true);
+                            $array = collect();
+                            foreach ($json as $key => $value) {
+                                $array->push($value);
+                            }
+                            
+                            return User::find($array[2])->name;
+                        })
+                        ->addColumn('remarks', function($row){
+                            $json = json_decode($row->value, true);
+                            $array = collect();
+                            foreach ($json as $key => $value) {
+                                $array->push($value);
+                            }
+
+                            return $array[3];
+                        });
+            
+            $dt->rawColumns(['checkbox', 'technology']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 

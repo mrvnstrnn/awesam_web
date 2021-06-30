@@ -184,6 +184,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
+    Route::get('/agent-based-program/{program_id}', [GlobeController::class, 'agent_based_program']);
 
     // SSDS
     Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
@@ -195,6 +196,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //COOP
     Route::post('/add-coop-value', [GlobeController::class, 'add_coop_value']);
+    Route::get('/issue-history-data/{id}', [GlobeController::class, 'issue_history_data']);
     
 });
 

@@ -105,6 +105,7 @@
                                         <button type="button" class="btn btn-primary mb-1" id="btn_add_issue" >Add History</button>
                                     </div>
                                 </div>
+                                <div class="table_history"></div>
                                 <table class="table" id="issues_history">
                                     <thead>
                                         <tr>
@@ -124,6 +125,35 @@
                                     </div>
                                     <div class="col-sm-6 text-right">
                                         <button type="button" class="btn btn-secondary mb-1" id="btn_cancel_add_issues" >Cancel Add Issue</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form class="add_history_form">
+                                            <input type="hidden" name="hidden_program_id" id="hidden_program_id">
+                                            <input type="hidden" name="issue_id" id="issue_id">
+                                            <input type="hidden" name="action" id="action" value="issue_history">
+                                            <div class="form-group">
+                                                <label for="date_history">Date History</label>
+                                                <input type="date" name="date_history" id="date_history" class="form-control">
+                                                <small class="date_history-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="user_id">Staff</label>
+                                                <select class="form-control" name="user_id" id="user_id"></select>
+                                                <small class="user_id-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="remarks">Remarks</label>
+                                                <textarea class="form-control" name="remarks" id="remarks" cols="30" rows="5"></textarea>
+                                                <small class="remarks-error text-danger"></small>
+                                            </div>
+
+                                            <button class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -392,10 +422,10 @@
                 </div>
               </div>
               <div class="position-relative row form-group">
-                <label for="cellphone" class="col-sm-3 col-form-label">Cellphone</label>
+                <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
                 <div class="col-sm-9">
-                    <input type="number" placeholder="Cellphone" name="cellphone" id="cellphone" class="form-control"/>
-                    <small class="text-danger cellphone-error"></small>
+                    <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
+                    <small class="text-danger contact_number-error"></small>
                 </div>
               </div>
               <div class="position-relative row form-group">
@@ -462,8 +492,16 @@
             $('#contacts_table tbody').empty();
             $('#engagement_table tbody').empty();
             $('#issues_table tbody').empty();
-            
 
+            var id = JSON.parse($(this).attr('data-site_all')).id;
+
+            $("#contacts_table").addClass("contacts_table"+id);
+            $("#engagement_table").addClass("engagement_table"+id);
+            $("#issues_table").addClass("issues_table"+id);
+
+            $("#hidden_program_id").val( $(this).parent().parent().attr('data-program_id') );
+            
+            $(".add_history_form select option").remove();
             $.ajax({
                     url: "/localcoop-details/" + $(this).find('td:first').text(),
                     method: "GET",
@@ -472,7 +510,7 @@
                     },
                     success: function (resp){
 
-                        console.log(resp[0]);
+                        // console.log(resp[0]);
                         var columns = resp[0];
                         
                         var html = "";
@@ -513,7 +551,7 @@
 
                                     html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
 
                             });
                             html = html + "</tr>";
@@ -554,7 +592,7 @@
 
                                     html = html + "<td>" + engagement[key] + "</td>";
                                 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
 
                             });
                             html = html + "</tr>";
@@ -586,15 +624,15 @@
                             var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
                             var dateString = moment(jsDate).format('YYYY-MM-DD');
                             var allowed_issues_column = ["dependency", "nature_of_issue", "description", "status_of_issue"];
-
+                            
                             var engagement = JSON.parse(data['value'].replace(/&quot;/g,'"'));
-                            html = html + "<tr>";
+                            html = html + "<tr data-id='"+data.ID+"'>";
                             
                                 html = html + "<td>" + dateString + "</td><td>" + data['firstname'] + " " +  data['lastname'] + "</td>"
 
                             Object.keys(engagement).forEach(function (key, index){
 
-                                console.log(key + " : " + engagement[key]);
+                                // console.log(key + " : " + engagement[key]);
                                 if(allowed_issues_column.includes(key) == true){
                                 html = html + "<td>" + engagement[key] + "</td>";
                                 }
@@ -613,6 +651,28 @@
                     }
             });
 
+            $.ajax({
+                    url: "/agent-based-program/"+$(this).parent().parent().attr('data-program_id'),
+                    method: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+                        if (!resp.error) {
+                            resp.message.forEach(element => {
+                                $(".add_history_form select").append(
+                                    '<option value="'+element.id+'">'+element.name+'</option>'
+                                );
+                            });
+                        } else {
+                            toastr.error(resp.message, "Error");
+                        }
+                    },
+                    error: function (resp){
+                        toastr.error(resp, "Error");
+                    }
+            });
+
         });
 
         $(document).on('click', '#issues_table tbody tr', function(e){
@@ -621,7 +681,31 @@
             $('#issue_table_box').addClass('d-none');
             $('#issue_history_box').removeClass('d-none');
 
-            $('#issues_history').DataTable();
+            $("#issue_id").val( $(this).attr("data-id") );
+
+            if (! $.fn.DataTable.isDataTable("#issues_history") ){
+                $('#issues_history').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '/issue-history-data/'+ $(this).attr('data-id'),
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "date" },
+                        { data: "staff" },
+                        { data: "remarks" },
+                    ],
+                });
+            } else {
+                $('#issues_history').DataTable().ajax.reload();
+            }
 
         });
 
@@ -674,6 +758,13 @@
                 var modal_id = "#add_issue";
                 var button_id = "#add_issue_btn";
                 var button_text = "Add Issue";
+            } else if (type == "issue_history") {
+                $(".add_history_form small").text("");
+                var form_id = ".add_history_form";
+                var data_serialize = $(form_id).serialize();
+                var modal_id = "#add_issue";
+                var button_id = "#save_history";
+                var button_text = "Save History";
             }
             
             $.ajax({
@@ -694,6 +785,11 @@
                             resp.message,
                             'success'
                         )
+
+                        if ($(".add_engagement").attr("data-type") == "issue_history") {
+                            $("#btn_cancel_add_issues").trigger("click");
+                            $("#issues_history").DataTable().ajax.reload();
+                        }
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
