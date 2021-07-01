@@ -72,10 +72,17 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="main-card mb-3 card">
-                <div class="card-header">
-                    <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
-                    My Activities
-                </div>
+                <div class="dropdown-menu-header">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <h5 class="menu-header-title">
+                                <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
+                                My Activities
+                            </h5>
+                        </div>
+                    </div>
+                </div> 
                 <ul class="todo-list-wrapper list-group list-group-flush" id="agent_activity_list">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">
@@ -91,10 +98,17 @@
         </div>
         <div class="col-lg-6">
             <div class="main-card mb-3 card">
-                <div class="card-header">
-                    <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
-                    Site Progress
-                </div>
+                <div class="dropdown-menu-header">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <h5 class="menu-header-title">
+                                <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                                Site Progress
+                            </h5>
+                        </div>
+                    </div>
+                </div> 
                 <div id="agent_site_progress">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">

@@ -56,12 +56,15 @@ else {
                 @endif --}}
             </div>
             <div class="widget-subheading">
+                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
+            </div>
+            <div class="widget-subheading">
                 <h6 class="m-0 p-0">{{ $activity->site_name }}</h6>
             </div>
             <div class="widget-subheading">
-                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
-
+                <i class="m-0 p-0">{{ $activity->sam_id }}</i>
             </div>
+
         </div>
         @if(in_array($activity->profile_id, array("2", "3")))
         <div class="widget-content-right">

@@ -220,7 +220,7 @@
                                         </div>
                                     </div>
                                     {{-- @php
-                                    if($mainactivity == ""){
+                                    if($main_activity == ""){
                                         $details_show = "";
                                     }
                                     else {
@@ -229,7 +229,7 @@
                                     @endphp --}}
 
                                     {{-- <div class="{{$site_action_view}}">
-                                        <x-site-detail-view :site="$site" :mainactivity="$mainactivity" :sitefields="$site[0]->site_fields" />
+                                        <x-site-detail-view :site="$site" :main_activity="$main_activity" :sitefields="$site[0]->site_fields" />
                                     </div> --}}
 
                                     <div id="site_details_view" class="{{ $site_details_view }}">
@@ -341,12 +341,12 @@
                                     </div>
 
                                 {{-- @if (in_array($site[0]->activity_name, $globe_actions) && $main_activity == "")
-                                    <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
+                                    <x-site-action-view :site="$site" :main_activity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                 @else
                                     @if(!in_array($main_activity, $forced_actions))
-                                        <x-site-action-view :site="$site" :mainactivity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
+                                        <x-site-action-view :site="$site" :main_activity="$main_activity" :rtbdeclaration="$rtbdeclaration" :pr="$pr" />
                                     @else 
-                                        <x-site-detail-view :site="$site" :mainactivity="$main_activity" :sitefields="$site_fields" />
+                                        <x-site-detail-view :site="$site" :main_activity="$main_activity" :sitefields="$site_fields" />
                                     @endif
                                 @endif --}}
                             </div>

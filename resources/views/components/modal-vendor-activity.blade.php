@@ -82,11 +82,21 @@
 
                             <div class="card-body">
                                 @php
-                                    $sub_activities = \DB::connection('mysql2')
+
+                                    if($site[0]->site_category != null){
+                                        $sub_activities = \DB::connection('mysql2')
+                                                ->table('sub_activity')
+                                                ->where('program_id', $site[0]->program_id)
+                                                ->where('activity_id', $site[0]->activity_id)
+                                                ->where('category', $site[0]->site_category)
+                                                ->get();
+                                    } else {
+                                        $sub_activities = \DB::connection('mysql2')
                                                 ->table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->get();
+                                    }
 
                                     // dd($site[0]->activity_id) ;
                                     // $sub_activities = json_decode($site[0]->sub_activity);

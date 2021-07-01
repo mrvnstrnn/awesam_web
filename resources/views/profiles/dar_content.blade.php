@@ -10,13 +10,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header-tab card-header">
-                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                        <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                        Daily Activity Report
-                        </div>      
-                    </div>
-                    <div class="card-body" style="overflow-x: scroll">
+                    <div class="dropdown-menu-header">
+                        <div class="dropdown-menu-header-inner bg-dark">
+                            <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                            <div class="menu-header-content btn-pane-right">
+                                <h5 class="menu-header-title">
+                                    <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                                    Daily Activity Report
+                                </h5>
+                            </div>
+                        </div>
+                    </div> 
+]                    <div class="card-body" style="overflow-x: scroll">
 
                         <div class="table-responsive">
                             <x-dar-table />
