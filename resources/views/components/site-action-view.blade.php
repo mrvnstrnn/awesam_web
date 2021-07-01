@@ -71,6 +71,10 @@
 
             <x-site-rtb-docs-approval :site="$site" />
 
+        {{-- @elseif($site[0]->activity_name == "Lessor Approval" && $mainactivity == "")
+
+            <x-site-subactivity-lessor-engagement :site="$site" /> --}}
+
         @elseif($site[0]->activity_name == "RTB Docs Validation" && $mainactivity == "")
 
             <x-site-rtb-docs-validation  :site="$site"/>
