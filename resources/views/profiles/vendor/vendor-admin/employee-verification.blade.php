@@ -200,7 +200,7 @@
                                     <div class="col-md-12">
                                         <div class="position-relative form-group">
                                             <label for="designation">Designation</label>
-                                            <select name="designation" id="designation" disabled class="form-control" required>
+                                            <select name="designation" id="designation" class="form-control" required>
                                                 <option value="2">Agent</option>
                                                 <option value="3">Supervisor</option>
                                             </select>
@@ -254,7 +254,7 @@
                         </div>
 
                         <div class="divider agent_area d-none"></div>
-                        <div class="form-row mt-3 px-3 agent_area d-none">
+                        <div class="form-row mt-3 px-3 agent_area">
                             <div class="col-md-5">
                                 <H5>Program</H5>
                             </div>

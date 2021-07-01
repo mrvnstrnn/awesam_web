@@ -102,6 +102,14 @@ $(document).ready(() => {
 
             $("#fullname").val(data.firstname+" "+data.lastname);
             $('#designation').val(data.designation).trigger('change');
+
+            // if (data.designation == 3) {
+            //     $('#mysupervisor').val("").trigger('change');
+            //     $(".supervisor_area").addClass("d-none");
+            // } else {
+            //     $(".supervisor_area").removeClass("d-none");
+            // }
+
             $('#employment_classification').val(data.employment_classification).trigger('change');
             $('#employment_status').val(data.employment_status).trigger('change');
             $('#hiring_date').val(data.hiring_date);
@@ -120,7 +128,7 @@ $(document).ready(() => {
             if(data.designation != null){
                 if($( this ).parent().attr("data-profile_id") == 2){
                     $(".supervisor_area").removeClass('d-none');
-                    $(".agent_area").removeClass('d-none');
+                    // $(".agent_area").removeClass('d-none');
     
                     $('.supervisor-data select option').remove();
                     $.ajax({
@@ -129,6 +137,7 @@ $(document).ready(() => {
                         success: function (resp) {
                             if(!resp.error){
                                 $('.supervisor-data').removeClass("d-none");
+                                $('.supervisor_select select').append("<option value=''>Select supervisor</option>");
                                 resp.message.forEach(element => {
                                     $('.supervisor_select select').append("<option value="+element.id+">"+element.email+"</option>");
                                 });
@@ -142,7 +151,7 @@ $(document).ready(() => {
                     });
                 } else {
                     $(".supervisor_area").addClass('d-none');
-                    $(".agent_area").addClass('d-none');
+                    // $(".agent_area").addClass('d-none');
                 }
             } else {
                 $(".modal-footer.button-assign").addClass("d-none");
@@ -152,11 +161,21 @@ $(document).ready(() => {
         // window.location.href = "/chapters/"+data;
     } );
 
+    $("#designation").on("change", function () {
+        if ($(this).val() == 3) {
+            $('#mysupervisor').val("").trigger('change');
+            $(".supervisor_area").addClass("d-none");
+        } else {
+            $(".supervisor_area").removeClass("d-none");
+        }
+    });
+
     $(document).on( 'click', '.btn-assign-profile', function (e) {
          e.preventDefault();
 
         var user_id = $(this).attr('data-user_id');
-        var profile_id = $(this).attr('data-profile_id');
+        // var profile_id = $(this).attr('data-profile_id');
+        var profile_id = $("#designation").val();
 
         var mysupervisor = $("#mysupervisor").val();
         

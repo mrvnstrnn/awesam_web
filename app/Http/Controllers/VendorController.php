@@ -50,9 +50,6 @@ class VendorController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
-
-
-
     
     public function add_vendor(Request $request)
     {

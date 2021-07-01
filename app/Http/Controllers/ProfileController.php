@@ -181,26 +181,35 @@ class ProfileController extends Controller
                 $required = '';
             }
             $validate = \Validator::make($request->all(), array(
-                'checkbox_id' => $required
+                'checkbox_id' => $required,
             ));
             // return response()->json(['error' => true, 'message' => $request->all()]);
 
             if($validate->passes()){
-                User::where('id', $request->input('user_id'))->update(['profile_id' => $request->input('profile_id') ]);
+                User::where('id', $request->input('user_id'))
+                        ->update([
+                            'profile_id' => $request->input('profile_id')
+                        ]);
+
                 if(!is_null($request->input('mysupervisor'))){
                     UserDetail::where('user_id', $request->input('user_id'))->update([
                         'IS_id' => $request->input('mysupervisor'),
+                        'designation' => $request->input('profile_id'),
+                    ]);
+                } else {
+                    UserDetail::where('user_id', $request->input('user_id'))->update([
+                        'designation' => $request->input('profile_id'),
                     ]);
                 }
     
-                if($request->input('profile_id') == 2){
+                // if($request->input('profile_id') == 2){
                     for ($i=0; $i < count($request->input('checkbox_id')); $i++) { 
                         UserProgram::create([
                             "user_id" => $request->input('user_id'),
                             "program_id" => $request->input('checkbox_id')[$i],
                         ]);
                     }
-                }
+                // }
                 return response()->json(['error' => false, 'message' => "Successfully assigned profile." ]);
             } else {
                 return response()->json(['error' => true, 'message' => "Program required."]);
