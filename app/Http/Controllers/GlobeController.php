@@ -1430,7 +1430,6 @@ class GlobeController extends Controller
 
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
     {
-        
         if($sub_activity == 'Add SSDS'){
 
             $what_component = "components.subactivity-ssds";
@@ -1444,7 +1443,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'Lessor Negotiation'){
+        elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT'){
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
