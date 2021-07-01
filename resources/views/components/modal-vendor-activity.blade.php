@@ -138,6 +138,7 @@
             var active_sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
             $("#sub_activity_id").val(sub_activity_id);
+
             var program_id = $('#modal_program_id').val();
 
             var loader =    '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
@@ -166,6 +167,49 @@
 
                         $('#actions_box').html(resp);
 
+                        if (active_subactivity == "LESSOR ENGAGEMENT") {
+                            $(".table_lessor_parent").html(
+                                '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                                    '<thead>' +
+                                        '<tr>' +
+                                            '<th>Date</th>' +
+                                            '<th>Method</th>' +
+                                            '<th>Remarks</th>' +
+                                            '<th>Approved</th>' +
+                                        '</tr>' +
+                                    '</thead>' +
+                                '</table>'
+                            );
+
+                            $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
+
+                            if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
+                                $('#table_lessor_'+sub_activity_id).DataTable({
+                                    processing: true,
+                                    serverSide: true,
+                                    ajax: {
+                                        url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                                        type: 'GET',
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                    },
+                                    dataSrc: function(json){
+                                        return json.data;
+                                    },
+                                    // 'createdRow': function( row, data, dataIndex ) {
+                                    //     $(row).attr('data-value', data.value);
+                                    //     $(row).attr('style', 'cursor: pointer');
+                                    // },
+                                    columns: [
+                                        { data: "date_created" },
+                                        { data: "value" },
+                                        { data: "status" },
+                                        { data: "date_created" },
+                                    ],
+                                });
+                            } 
+                        }
                         
                     } else {
 
@@ -190,6 +234,8 @@
                 }
             });
 
+            
+
         });
 
         var today = new Date();
@@ -205,6 +251,21 @@
             $("#lessor_method").val($(this).attr("data-value"));
             $("#lessor_date").val(today);
         });
+
+        // <div class="row">
+        //     <div class="col-12 table-responsive table_lessor_parent">
+        //         {{-- <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
+        //             <thead>
+        //                 <tr>
+        //                     <th>Date</th>
+        //                     <th>Method</th>
+        //                     <th>Remarks</th>
+        //                     <th>Approved</th>
+        //                 </tr>
+        //             </thead>
+        //         </table> --}}
+        //     </div>
+        // </div>
 
         $(document).on("click", ".save_engagement", function (e){
             // e.preventDefault();
@@ -241,18 +302,18 @@
                 success: function (resp){
                     if (!resp.error) {
 
-                        // $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
+                        $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
                             Swal.fire(
                                 'Success',
                                 resp.message,
                                 'success'
                             )
 
-                            $("#viewInfoModal").modal("hide");
+                            // $("#viewInfoModal").modal("hide");
                             $("#lessor_remarks").val("");
                             $(".save_engagement").removeAttr('disabled');
                             $(".save_engagement").text('Save Engagement');
-                        // });
+                        });
                         
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
