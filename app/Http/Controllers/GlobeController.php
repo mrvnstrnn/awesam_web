@@ -1357,6 +1357,18 @@ class GlobeController extends Controller
 
         }
 
+        elseif($activity_type == 'set site value'){
+
+            $sites = \DB::connection('mysql2') 
+                    ->table("milestone_tracking")
+                    ->distinct()
+                    ->where('program_id', $program_id)
+                    ->where('activity_type', 'set site value')
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+
+        }
+
 
         elseif($activity_type == 'doc validation'){
 
@@ -1372,14 +1384,23 @@ class GlobeController extends Controller
         }
         elseif($activity_type == 'new endorsements globe'){
 
-            $sites = \DB::connection('mysql2')
+            $sites = \DB::connection('mysql2') 
                     ->table("milestone_tracking")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
-        
+        }
+        elseif($activity_type == 'new endorsements vendor'){
+
+            $sites = \DB::connection('mysql2') 
+                    ->table("milestone_tracking")
+                    ->distinct()
+                    ->where('program_id', $program_id)
+                    ->where('activity_type', 'endorsement')
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')

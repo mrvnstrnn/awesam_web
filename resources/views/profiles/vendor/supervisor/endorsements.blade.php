@@ -1,114 +1,242 @@
 @extends('layouts.main')
 
 @section('content')
-    <style>
-        .modalDataEndorsement {
-            cursor: pointer;
-        }
 
-        table {
-            width: 100% !important;
-        }
-    </style> 
+    {{-- <x-assigned-sites mode="vendor"/> --}}
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements vendor"/>
 
-    <ul class="tabs-animated body-tabs-animated nav">
-
-        @php
-            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
-            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
-            // dd($vendor = \Auth::user()->getUserDetail()->first()->vendor_id);
-        @endphp
-
-<input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
-
-        @foreach ($programs as $program)
-            <li class="nav-item">
-                <a role="tab" class="nav-link new-endoresement {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
-                    <span>{{ $program->program }}</span>
-                </a>
-            </li>
-        @endforeach
-    </ul>
-    <div class="tab-content">
-        @foreach ($programs as $program)
-            <div class="tab-pane tabs-animation fade {{ $loop->first ? 'active show' : '' }}" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="main-card mb-3 card">
-                            <div class="card-header-tab card-header">
-                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ strtoupper($program->program)  }} Endorsements
-                                </div>      
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    @php
-                                        $activity_id = \Auth::user()->getUserProgramAct($program->activity_id, $program->program_id);
-                                        // dd($activity_id);
-                                    @endphp
-                                    <table id="new-endoresement-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" 
-                                        data-href="{{ route('all.getDataNewEndorsement', [\Auth::user()->profile_id, $program->program_id, $program->stage_id, $activity_id->what_to_load]) }}">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 15px;">
-                                                    <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" data-checkbox="{{ $program->program_id }}" id="checkAll{{ $program->program_id }}" value="program{{ $program->program_id }}" class="custom-control-input checkAll">
-                                                        <label class="custom-control-label" for="checkAll{{ $program->program_id }}">&nbsp;</label>
-                                                    </div>
-                                                </th>
-                                                <th class="d-none d-md-table-cell">Date Endorsed</th>
-                                                <th class="d-none d-md-table-cell">SAM ID</th>
-                                                <th>Site</th>
-                                                <th class="text-center">Technology</th>
-                                                {{-- <th class="text-center  d-none d-sm-table-cell">PLA ID</th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="d-block text-right card-footer">
-                                <button type="button" class="btn btn btn-outline-danger btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="reject{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Reject</button>
-                                <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-program="{{ strtolower($program->program) }}" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-id="{{ $program->program_id }}" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Endorse New Sites</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
 @endsection
 
-@section('js_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('js/supervisor.js') }}"></script>
-@endsection
 
 @section('modals')
 
-    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="{{ route('accept-reject.endorsement') }}" data-activity_name="endorse_site">Accept Endorsement</button>
+<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="background-color: transparent; border: 0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="main-card mb-3 card ">
+
+                        <div class="dropdown-menu-header">
+                            <div class="dropdown-menu-header-inner bg-dark">
+                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                <div class="menu-header-content btn-pane-right">
+                                        <h5 class="menu-header-title">
+                                            Endorsement
+                                        </h5>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+@endsection
+
+
+@section('js_script')
+
+<script>
+    //////////////////////////////////////
+    var profile_id = 8;
+    var table_to_load = 'new_endorsements_globe';
+    var main_activity = 'New Endorsements Vendor';
+
+    //////////////////////////////////////
+</script>
+
+<script type="text/javascript" src="/js/getCols.js"></script>  
+<script type="text/javascript" src="/js/DTmaker.js"></script>  
+{{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
+
+
+<script>
+    $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
+        e.preventDefault();
+        $(document).find('#viewInfoModal').modal('show');
+
+        var json_parse = JSON.parse($(this).parent().attr('data-site_all'));
+
+        $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
+
+        allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
+
+        // $("..content-data .position-relative.form-group").remove();
+        $(".card-body .position-relative.form-group").remove();
+        $(".main-card.mb-3.card .modal-footer").remove();
+
+        var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+
+        for (let i = 0; i < new_json.length; i++) {
+            // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                $("#viewInfoModal .card-body").append(
+                    '<div class="position-relative form-group col-md-6">' +
+                        '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
+                        '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                    '</div>'
+                );
+            // }
+        }
+
+        if ("{{ \Auth::user()->profile_id != 2 }}") {
+            $("#viewInfoModal .main-card.mb-3.card").append(
+                '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
+                    '<button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
+                '</div>'
+            );
+        } else {
+            $("#viewInfoModal .main-card.mb-3.card").append(
+                '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+                '</div>'
+            );
+        }
+
+        $(".modal-title").text(json_parse.site_name);
+        $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+        $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
+        $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
+        $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+    } );
+
+    $(document).on("click", ".checkAll", function(e){
+        e.preventDefault();
+        var val = $(this).val();
+        var atLeastOneIsChecked = $('input[name='+val+']:checkbox:checked').length > 0;
+        
+        if (!atLeastOneIsChecked) {
+            $('input[name='+val+']').not(this).prop('checked', this.checked);
+        } else {
+            $('input[name='+val+']').not(this).prop('checked', false);
+        }
+    });
+
+    $(document).on("click", ".btn-accept-endorsement", function(e){
+        e.preventDefault();
+
+        var sam_id = [$(this).attr('data-sam_id')];
+        var data_complete = $(this).attr('data-complete');
+        var what_table = $(this).attr('data-what_table');
+        var data_program = $("#"+what_table).attr('data-program_id');
+        var activity_name = $(this).attr('data-activity_name');
+        var site_vendor_id = [$(this).attr('data-site_vendor_id')];
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete,
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                data_program : data_program,
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#"+what_table).DataTable().ajax.reload(function(){
+                        $("#viewInfoModal").modal("hide");
+                        toastr.success(resp.message, 'Success');
+
+                        $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                        $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
+                        // $("#loaderModal").modal("hide");
+                    });
+                } else {
+                    // $("#loaderModal").modal("hide");
+                    toastr.error(resp.message, 'Error');
+                    $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                    $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
+                }
+            },
+            error: function(resp){
+                // $("#loaderModal").modal("hide");
+                toastr.error(resp.message, 'Error');
+                $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
+                $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
+            }
+        });
+
+    });
+
+    $(".btn-bulk-acceptreject-endorsement").click(function(e){
+        e.preventDefault();
+
+        // var sam_id = $(this).attr('data-sam_id');
+        var data_complete = $(this).attr('data-complete');
+        var data_program = $(this).attr('data-program');
+        var data_id = $(this).attr('data-id');
+        var activity_name = $(this).attr('data-activity_name');
+
+        var inputElements = document.getElementsByName('program'+data_id);
+
+        var id = $(this).attr('id');
+
+        var text = id == "reject"+data_program.replace(" ", "-") ? "Reject" : "Endorse New Sites";
+
+        $("#"+id).attr("disabled", "disabled");
+        $("#"+id).text("Processing...");
+
+
+        sam_id = [];
+        site_vendor_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                sam_id.push(inputElements[i].value);
+                site_vendor_id.push(inputElements[i].attributes[5].value);
+            }
+        }
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete,
+                activity_name : activity_name,
+                data_program : data_program,
+                site_vendor_id : site_vendor_id,
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#assigned-sites-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
+                        $("#modal-endorsement").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                        $("#"+id).removeAttr("disabled");
+                        $("#"+id).text(text);
+                    });
+                } else {
+                    toastr.error(resp.message, 'Error');
+                    $("#"+id).removeAttr("disabled");
+                    $("#"+id).text(text);
+                }
+            },
+            error: function(resp){
+                toastr.error(resp.message, 'Error');
+                $("#"+id).removeAttr("disabled");
+                $("#"+id).text(text);
+            }
+        });
+
+    });
+
+</script>
+
 
 @endsection
