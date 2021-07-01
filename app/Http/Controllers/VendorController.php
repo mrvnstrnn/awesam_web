@@ -167,6 +167,7 @@ class VendorController extends Controller
     {
         try {
             $vendors = Vendor::join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendors.vendor_program_id')
+                                    ->whereNot('vendors', 'HT')
                                     ->get();
             return response()->json([ 'error' => false, 'message' => $vendors ]);
         } catch (\Throwable $th) {
@@ -178,7 +179,7 @@ class VendorController extends Controller
     {
         try {
             $vendors = Vendor::join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendors.vendor_program_id')
-                                    ->where('vendors.vendor_id', $vendor_id)
+                                    // ->where('vendors.vendor_id', $vendor_id)
                                     ->first();
 
             return response()->json([ 'error' => false, 'message' => $vendors ]);
@@ -201,6 +202,7 @@ class VendorController extends Controller
             $vendors = \DB::connection('mysql2')->table('vendor')
                                     // ->join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendor.vendor_program_id')
                                     ->whereIn('vendor_status', $arrayProgram)
+                                    // ->where('vendor.vendor_acronym', "!=" ,'HT')
                                     ->get();
 
             $dt = DataTables::of($vendors)

@@ -26,7 +26,7 @@
     </div>
     <div class="row py-3 px-5 d-none" id="control_form">
         <div class="col-12 py-3">
-        <form class=".engagement_form">
+        <form class="engagement_form">
             <div class="position-relative row form-group">
                 <label for="lessor_date" class="col-sm-3 col-form-label">Date</label>
                 <div class="col-sm-9">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="lesor_approval" class="col-sm-3 col-form-label">Approval</label>
+                <label for="lessor_approval" class="col-sm-3 col-form-label">Approval</label>
                 <div class="col-sm-9">
                     <select name="lessor_approval" id="lessor_approval" class="form-control">
                         <option value="active">Approval not yet secured</option>
@@ -90,53 +90,96 @@
         $("#actions_list").removeClass('d-none');
     });
 
-    $(".contact-lessor").on("click", function(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
 
+    $(document).on("click", ".contact-lessor", function(){
         $('#control_box').addClass('d-none');
         $('#control_form').removeClass('d-none');
-        $('#lessor_method').val($(this).attr('data-value'));
-        $('#lessor_date').val(moment().format('YYYY-MM-DD'));
 
+        $("#lessor_method").val($(this).attr("data-value"));
+        $("#lessor_date").val(today);
     });
 
 
-    $('.save_engagement').on("click", function(){
+    $(".save_engagement").on("click",  function (e){
+        // e.preventDefault();
+        var lessor_method = $("#lessor_method").val();
+        var lessor_approval = $("#lessor_approval").val();
+        var lessor_remarks = $("#lessor_remarks").val();
+        var site_vendor_id = $("#modal_site_vendor_id").val();
+        var program_id = $("#modal_program_id").val();
+        var sam_id = $(".ajax_content_box").attr("data-sam_id");
+        // var sub_activity_id = $(this).attr("data-sub_activity_id");
+        var sub_activity_id = $("#sub_activity_id").val();
+        var site_name = $("#viewInfoModal .menu-header-title").text();
 
-        // $(this).addAttr("disabled");
+        $(this).attr('disabled', 'disabled');
+        $(this).text('Processing...');
+
+        $("form.engagement_form small").text("");
+
         $.ajax({
             url: "/add-engagement",
             method: "POST",
             data: {
-                lessor_date: $("#lessor_date").val(),
-                lessor_method:  $("#lessor_method").val(),
-                lessor_remarks:  $("#lessor_remarks").val(),
-                lessor_approval:  $("#lessor_dlessor_approvalate").val()
+                lessor_method : lessor_method,
+                lessor_approval : lessor_approval,
+                lessor_remarks : lessor_remarks,
+                sam_id : sam_id,
+                sub_activity_id : sub_activity_id,
+                site_name : site_name,
+                site_vendor_id : site_vendor_id,
+                program_id : program_id
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            success: function (resp) {
-                if (!resp.error){
+            success: function (resp){
+                if (!resp.error) {
 
-                    Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                    )
+                    $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
 
+                        // $("#viewInfoModal").modal("hide");
+                        $("#lessor_remarks").val("");
+                        $(".save_engagement").removeAttr('disabled');
+                        $(".save_engagement").text('Save Engagement');
+                    });
+                    
                 } else {
-
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("." + index + "-errors").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                    $(".save_engagement").removeAttr('disabled');
+                    $(".save_engagement").text('Save Engagement');
                 }
             },
-            error: function (file, resp) {
+            error: function (resp){
                 Swal.fire(
                     'Error',
-                    resp,
+                    resp.message,
                     'error'
                 )
+                $(".save_engagement").removeAttr('disabled');
+                $(".save_engagement").text('Save Engagement');
             }
         });
-
     });
 
 
