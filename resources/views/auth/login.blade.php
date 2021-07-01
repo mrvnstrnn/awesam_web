@@ -8,7 +8,7 @@
                 <div class="modal-body">
                     <div class="h5 modal-title text-center">
                         <h4 class="mt-2">
-                            <div>Welcome to SAM,</div>
+                            <div class="app-logo-inverse mx-auto mb-3"></div>
                             <span>Please sign in to your account below.</span>
                         </h4>
                     </div>
