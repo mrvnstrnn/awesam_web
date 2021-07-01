@@ -184,9 +184,9 @@
 
                                                 <x-site-rtb-docs-approval :site="$site" />
 
-                                            @elseif($site[0]->activity_name == "Lessor Approval" && $main_activity == "")
+                                            {{-- @elseif($site[0]->activity_name == "Lessor Approval" && $main_activity == "")
 
-                                                <x-subactivity-lessor-engagement :site="$site" />
+                                                <x-site-subactivity-lessor-engagement :site="$site" /> --}}
 
                                             @elseif($site[0]->activity_name == "RTB Docs Validation" && $main_activity == "")
 
@@ -305,7 +305,7 @@
                                                 <div id="">
                                     
                                                 </div>
-                                                <x-site-details :site="$site" :sitefields="$site_fields" />
+                                                <x-site-details :site="$site" :sitefields="$site[0]->site_fields" />
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-activities" role="tabpanel">
                                                 {{-- <x-site-activities :site="$site" /> --}}

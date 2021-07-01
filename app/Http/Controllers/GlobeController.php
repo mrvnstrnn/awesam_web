@@ -1581,7 +1581,7 @@ class GlobeController extends Controller
 
     public function get_all_docs(Request $request)
     {
-
+        // return "test";
         $documents = array("RTB Docs Validation", "RTB Docs Approval", "PAC Approval");
         $doc_preview_main_activities = array("Document Validation");
         $site_view_main_actiivities = array("Program Sites", "Assigned Sites");
@@ -2152,6 +2152,8 @@ class GlobeController extends Controller
                 for ($j=0; $j < count($email_receiver); $j++) { 
                     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "lessor_approval", "", $request->input('site_name')) );
                 }
+
+                return response()->json(['error' => false, 'message' => "Successfully saved engagement."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);

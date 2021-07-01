@@ -241,19 +241,19 @@
 
         });
 
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-        today = mm + '/' + dd + '/' + yyyy;
+        // var today = new Date();
+        // var dd = String(today.getDate()).padStart(2, '0');
+        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        // var yyyy = today.getFullYear();
+        // today = mm + '/' + dd + '/' + yyyy;
 
-        $(document).on("click", ".contact-lessor", function(){
-            $('#control_box').addClass('d-none');
-            $('#control_form').removeClass('d-none');
+        // $(document).on("click", ".contact-lessor", function(){
+        //     $('#control_box').addClass('d-none');
+        //     $('#control_form').removeClass('d-none');
 
-            $("#lessor_method").val($(this).attr("data-value"));
-            $("#lessor_date").val(today);
-        });
+        //     $("#lessor_method").val($(this).attr("data-value"));
+        //     $("#lessor_date").val(today);
+        // });
 
         // <div class="row">
         //     <div class="col-12 table-responsive table_lessor_parent">
@@ -270,81 +270,82 @@
         //     </div>
         // </div>
 
-        $(document).on("click", ".save_engagement", function (e){
-            // e.preventDefault();
+        // $(".save_engagement").on("click",  function (e){
+        //     // e.preventDefault();
 
-            var lessor_method = $("#lessor_method").val();
-            var lessor_approval = $("#lessor_approval").val();
-            var lessor_remarks = $("#lessor_remarks").val();
-            var site_vendor_id = $("#modal_site_vendor_id").val();
-            var program_id = $("#modal_program_id").val();
-            var sam_id = $(".ajax_content_box").attr("data-sam_id");
-            // var sub_activity_id = $(this).attr("data-sub_activity_id");
-            var sub_activity_id = $("#sub_activity_id").val();
-            var site_name = $("#viewInfoModal .menu-header-title").text();
+        //     console.log("test");
+        //     var lessor_method = $("#lessor_method").val();
+        //     var lessor_approval = $("#lessor_approval").val();
+        //     var lessor_remarks = $("#lessor_remarks").val();
+        //     var site_vendor_id = $("#modal_site_vendor_id").val();
+        //     var program_id = $("#modal_program_id").val();
+        //     var sam_id = $(".ajax_content_box").attr("data-sam_id");
+        //     // var sub_activity_id = $(this).attr("data-sub_activity_id");
+        //     var sub_activity_id = $("#sub_activity_id").val();
+        //     var site_name = $("#viewInfoModal .menu-header-title").text();
 
-            $(this).attr('disabled', 'disabled');
-            $(this).text('Processing...');
+        //     $(this).attr('disabled', 'disabled');
+        //     $(this).text('Processing...');
 
-            $.ajax({
-                url: "/add-engagement",
-                method: "POST",
-                data: {
-                    lessor_method : lessor_method,
-                    lessor_approval : lessor_approval,
-                    lessor_remarks : lessor_remarks,
-                    sam_id : sam_id,
-                    sub_activity_id : sub_activity_id,
-                    site_name : site_name,
-                    site_vendor_id : site_vendor_id,
-                    program_id : program_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp){
-                    if (!resp.error) {
+        //     $.ajax({
+        //         url: "/add-engagement",
+        //         method: "POST",
+        //         data: {
+        //             lessor_method : lessor_method,
+        //             lessor_approval : lessor_approval,
+        //             lessor_remarks : lessor_remarks,
+        //             sam_id : sam_id,
+        //             sub_activity_id : sub_activity_id,
+        //             site_name : site_name,
+        //             site_vendor_id : site_vendor_id,
+        //             program_id : program_id
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success: function (resp){
+        //             if (!resp.error) {
 
-                        $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
-                            Swal.fire(
-                                'Success',
-                                resp.message,
-                                'success'
-                            )
+        //                 $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
+        //                     Swal.fire(
+        //                         'Success',
+        //                         resp.message,
+        //                         'success'
+        //                     )
 
-                            // $("#viewInfoModal").modal("hide");
-                            $("#lessor_remarks").val("");
-                            $(".save_engagement").removeAttr('disabled');
-                            $(".save_engagement").text('Save Engagement');
-                        });
+        //                     // $("#viewInfoModal").modal("hide");
+        //                     $("#lessor_remarks").val("");
+        //                     $(".save_engagement").removeAttr('disabled');
+        //                     $(".save_engagement").text('Save Engagement');
+        //                 });
                         
-                    } else {
-                        if (typeof resp.message === 'object' && resp.message !== null) {
-                            $.each(resp.message, function(index, data) {
-                                $("." + index + "-error").text(data);
-                            });
-                        } else {
-                            Swal.fire(
-                                'Error',
-                                resp.message,
-                                'error'
-                            )
-                        }
-                        $(".save_engagement").removeAttr('disabled');
-                        $(".save_engagement").text('Save Engagement');
-                    }
-                },
-                error: function (resp){
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-                    $(".save_engagement").removeAttr('disabled');
-                    $(".save_engagement").text('Save Engagement');
-                }
-            });
-        });
+        //             } else {
+        //                 if (typeof resp.message === 'object' && resp.message !== null) {
+        //                     $.each(resp.message, function(index, data) {
+        //                         $("." + index + "-error").text(data);
+        //                     });
+        //                 } else {
+        //                     Swal.fire(
+        //                         'Error',
+        //                         resp.message,
+        //                         'error'
+        //                     )
+        //                 }
+        //                 $(".save_engagement").removeAttr('disabled');
+        //                 $(".save_engagement").text('Save Engagement');
+        //             }
+        //         },
+        //         error: function (resp){
+        //             Swal.fire(
+        //                 'Error',
+        //                 resp.message,
+        //                 'error'
+        //             )
+        //             $(".save_engagement").removeAttr('disabled');
+        //             $(".save_engagement").text('Save Engagement');
+        //         }
+        //     });
+        // });
 
     });
 
