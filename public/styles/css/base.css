@@ -14341,12 +14341,12 @@ legend {
 .app-logo {
   height: 33px;
   width: 100px;
-  background: url("../../images/awesam_small.png"); }
+  background: url("/images/awesam_small.png"); }
 
 .app-logo-inverse {
   height: 84px;
   width: 200px;
-  background: url("../../images/awesam_med.png"); }
+  background: url("/images/awesam_med.png"); }
 
 .app-login-box .app-logo {
   margin-bottom: 3rem; }
