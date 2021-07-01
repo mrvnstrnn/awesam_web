@@ -82,10 +82,13 @@
 
                             <div class="card-body">
                                 @php
+                                    // dd($site[0]);
+
                                     $sub_activities = \DB::connection('mysql2')
                                                 ->table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
+                                                ->where('category', $site[0]->site_category)
                                                 ->get();
 
                                     // dd($site[0]->activity_id) ;

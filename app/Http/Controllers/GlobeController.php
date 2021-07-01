@@ -1374,6 +1374,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("milestone_tracking")
+                    ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
