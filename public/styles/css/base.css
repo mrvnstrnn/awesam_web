@@ -7389,7 +7389,7 @@ button,
   .app-header__logo .logo-src {
     height: 23px;
     width: 97px;
-    background: url("../../images/logo-inverse.png"); }
+    background: url("../../images/awesam_small.png"); }
 
 .app-header__menu,
 .app-header__mobile-menu {
@@ -14339,14 +14339,14 @@ legend {
         background: rgba(255, 255, 255, 0.2); }
 
 .app-logo {
-  height: 23px;
-  width: 97px;
-  background: url("../../images/logo-inverse.png"); }
+  height: 33px;
+  width: 100px;
+  background: url("/images/awesam_small.png"); }
 
 .app-logo-inverse {
-  height: 23px;
-  width: 97px;
-  background: url("../../images/logo.png"); }
+  height: 84px;
+  width: 200px;
+  background: url("/images/awesam_med.png"); }
 
 .app-login-box .app-logo {
   margin-bottom: 3rem; }
@@ -14355,7 +14355,7 @@ legend {
   margin-bottom: 1.5rem;
   font-weight: normal; }
   .app-login-box h4 div {
-    opacity: .6; }
+    opacity: 1; }
   .app-login-box h4 span {
     font-size: 1.1rem; }
 

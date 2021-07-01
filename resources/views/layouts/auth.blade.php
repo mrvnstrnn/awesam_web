@@ -24,22 +24,22 @@
      </head>
      <body>
          <style>
-             .app-logo-inverse:before {
+             /* .app-logo-inverse:before {
                 content: "SAM" !important;
                 font-size: 30px !important;
                 color: white;
-                /* vertical-align: middle; */
             }
 
             .app-logo-inverse {
+                    box-shadow: 0px 0px 5px #fff;
+
                 background: none !important;
-            }
+            } */
          </style>
          <div class="app-container app-theme-white body-tabs-shadow">
              <div class="h-100 bg-plum-plate bg-animation">
                  <div class="d-flex h-100 justify-content-center align-items-center">
                      <div class="mx-auto app-login-box col-md-8">
-                         <div class="app-logo-inverse mx-auto mb-3"></div>
                              @yield('content')
                          <div class="text-center text-white opacity-8 mt-3">Copyright © Globe Telecoms - Site Acquisition & Management 2021</div>
                      </div>
