@@ -37,10 +37,10 @@
                                         @if (\Auth::user()->getUserDetail()->first()->image != "")
                                             <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                         @else
-                                            <img width="42" height="42" class="rounded-circle" src="images/avatars/4.jpg" alt="">
+                                            <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                                         @endif
                                     @else
-                                        <img width="42" height="42" class="rounded-circle" src="images/avatars/4.jpg" alt="">
+                                        <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                                     @endif
 
                                     {{-- @if (\Auth::user()->getUserDetail()->first()->image == "")
