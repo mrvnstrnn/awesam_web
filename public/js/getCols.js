@@ -11,8 +11,6 @@ function getCols(active_program, active_table, active_profile){
         success: function (resp) {
 
             if(resp.length > 0){
-
-
                 if(active_table=='new_endorsements_globe'){
                     
                     cols.push(
@@ -30,6 +28,8 @@ function getCols(active_program, active_table, active_profile){
                 }
 
                 resp.forEach(function(field){
+                    
+                // console.log(field);
                     switch(field['source_field']){
                         case "site_fields":
 
@@ -41,12 +41,11 @@ function getCols(active_program, active_table, active_profile){
                                     regex: true,
                                     render : function(data){
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                        
                                         var results = $.map( col, function(e,i){
                                             if( e.field_name === field['search_field'] ) 
                                             return e; 
                                         });
-                                        return results[0]['value'];
+                                        return results.length < 1 ? "" : results[0]['value'];
                                     
                                     }
                                 }

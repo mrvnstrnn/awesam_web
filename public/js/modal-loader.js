@@ -135,6 +135,8 @@
                 var main_activity = $(this).attr('data-main_activity');
                 var site = $(this).attr("data-site");
 
+                $(".ajax_content_box").attr("data-what_table", table_to_load);
+
 
                 var loader =  '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
                 '<div class="loader">' +

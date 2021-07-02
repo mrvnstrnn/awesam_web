@@ -52,15 +52,11 @@
                                 @if (\Auth::user()->getUserDetail()->first()->image != "")
                                     <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                 @else
-                                    <img width="42" height="42" class="rounded-circle" src="images/avatars/4.jpg" alt="">
+                                    <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                                 @endif
                             @else
-                                <img width="42" height="42" class="rounded-circle" src="images/avatars/4.jpg" alt="">
+                                <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                             @endif
-                            
-                            {{-- <img width="42" height="42" class="rounded-circle" src="{{ 
-                                !is_null(\Auth::user()->getUserDetail()->first()) || \Auth::user()->getUserDetail()->first()->image != '' ? asset('files/' .  \Auth::user()->getUserDetail()->first()->image) : 'images/avatars/4.jpg'
-                            }}" alt=""> --}}
                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                         </a>
 
@@ -88,3 +84,48 @@
     </div>
 
 </div>
+
+
+{{-- <style>
+    .sapMBtnInner {
+        background-color: unset !important;
+        background: unset;
+        border: 0px;
+    }
+</style>
+
+<script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap" data-sap-ui-xx-bindingSyntax="complex" data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_bluecrystal">
+</script>
+
+<script>
+    var model = new sap.ui.model.json.JSONModel({
+        name: "{{ ucwords(Auth::user()->name) }}"
+    });
+
+    new sap.m.Button({
+        icon: { path: "/name", formatter: generateAvatar },
+        // text: "Hello"
+    }).setModel(model).placeAt("avatar");
+
+
+    function generateAvatar(name){
+        var initials = name.split(' ').map(function(str) { return str ? str[0].toUpperCase() : "";}).join('');
+        var canvas = document.createElement('canvas');
+        var radius = 30;
+        var margin = 5;
+        canvas.width = radius*2+margin*2;
+        canvas.height = radius*2+margin*2;
+
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(radius+margin,radius+margin,radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fillStyle = 'pink';
+        ctx.fill();
+        ctx.fillStyle = "white";
+        ctx.font = "bold 30px Arial";
+        ctx.textAlign = 'center';
+        ctx.fillText(initials, radius+5,radius*4/3+margin);
+        return canvas.toDataURL();
+    }
+</script> --}}
