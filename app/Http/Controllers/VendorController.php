@@ -365,7 +365,7 @@ class VendorController extends Controller
                     'comment' => $request->input('reason'),
                 ]);
 
-                return response()->json(['error' => false, 'message' => "Successfully rejected request."]);
+                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('data_action')." request."]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }
