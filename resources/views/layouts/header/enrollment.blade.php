@@ -32,8 +32,8 @@
         
                         <div class="widget-content-left">
                             <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                    @if (!is_null(\Auth::user()->getUserDetail()->first()))
+                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" id="avatar3">
+                                    {{-- @if (!is_null(\Auth::user()->getUserDetail()->first()))
                                         @if (\Auth::user()->getUserDetail()->first()->image != "")
                                             <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                         @else
@@ -41,7 +41,7 @@
                                         @endif
                                     @else
                                         <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
-                                    @endif
+                                    @endif --}}
 
                                     {{-- @if (\Auth::user()->getUserDetail()->first()->image == "")
                                         <img width="42" class="rounded-circle" src="/images/avatars/4.jpg" alt="">

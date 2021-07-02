@@ -7,7 +7,7 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left mr-3" id="avatar">
-                            @if (!is_null(\Auth::user()->getUserDetail()->first()))
+                            {{-- @if (!is_null(\Auth::user()->getUserDetail()->first()))
                                 @if (\Auth::user()->getUserDetail()->first()->image != "")
                                     <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                 @else
@@ -15,7 +15,7 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                                 @endif
                             @else
                                 <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
-                            @endif
+                            @endif --}}
                         </div>
                         <div class="widget-content-left">
                             <div class="widget-heading">{{ ucwords(Auth::user()->name) }}</div>

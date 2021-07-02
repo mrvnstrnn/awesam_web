@@ -47,8 +47,8 @@
 
                 <div class="widget-content-left">
                     <div class="btn-group">
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                            @if (!is_null(\Auth::user()->getUserDetail()->first()))
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" id="avatar2">
+                            {{-- @if (!is_null(\Auth::user()->getUserDetail()->first()))
                                 @if (\Auth::user()->getUserDetail()->first()->image != "")
                                     <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                 @else
@@ -56,7 +56,7 @@
                                 @endif
                             @else
                                 <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
-                            @endif
+                            @endif --}}
                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                         </a>
 
@@ -86,11 +86,15 @@
 </div>
 
 
-{{-- <style>
+<style>
     .sapMBtnInner {
         background-color: unset !important;
         background: unset;
         border: 0px;
+    }
+
+    .sapMBtnInner img {
+        width: 100px !important;
     }
 </style>
 
@@ -98,21 +102,18 @@
 </script>
 
 <script>
-    var model = new sap.ui.model.json.JSONModel({
-        name: "{{ ucwords(Auth::user()->name) }}"
-    });
-
-    new sap.m.Button({
-        icon: { path: "/name", formatter: generateAvatar },
-        // text: "Hello"
-    }).setModel(model).placeAt("avatar");
-
 
     function generateAvatar(name){
-        var initials = name.split(' ').map(function(str) { return str ? str[0].toUpperCase() : "";}).join('');
+        // var initials = name.split(' ').map(function(str) { 
+        //     return str ? str[0].toUpperCase() : ""; 
+        // }).join('');
+
+        const fullName = name.split(' ');
+        const initials = fullName.shift().charAt(0) + fullName.pop().charAt(0);
+
         var canvas = document.createElement('canvas');
         var radius = 30;
-        var margin = 5;
+        var margin = 3;
         canvas.width = radius*2+margin*2;
         canvas.height = radius*2+margin*2;
 
@@ -128,4 +129,25 @@
         ctx.fillText(initials, radius+5,radius*4/3+margin);
         return canvas.toDataURL();
     }
-</script> --}}
+
+    
+    var model = new sap.ui.model.json.JSONModel({
+        name: "{{ ucwords(Auth::user()->name) }}"
+    });
+
+    new sap.m.Button({
+        icon: { path: "/name", formatter: generateAvatar },
+        // text: "Hello"
+    }).setModel(model).placeAt("avatar");
+
+    new sap.m.Button({
+        icon: { path: "/name", formatter: generateAvatar },
+        // text: "Hello"
+    }).setModel(model).placeAt("avatar2");
+
+    new sap.m.Button({
+        icon: { path: "/name", formatter: generateAvatar },
+        // text: "Hello"
+    }).setModel(model).placeAt("avatar3");
+
+</script>
