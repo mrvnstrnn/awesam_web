@@ -145,9 +145,9 @@
         // text: "Hello"
     }).setModel(model).placeAt("avatar2");
 
-    new sap.m.Button({
-        icon: { path: "/name", formatter: generateAvatar },
-        // text: "Hello"
-    }).setModel(model).placeAt("avatar3");
+    // new sap.m.Button({
+    //     icon: { path: "/name", formatter: generateAvatar },
+    //     // text: "Hello"
+    // }).setModel(model).placeAt("avatar3");
 
 </script>
