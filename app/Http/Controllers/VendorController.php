@@ -345,9 +345,14 @@ class VendorController extends Controller
     {
         try {
 
-            if($request->input('data_action') == 'denied'){
-                $valid = 'required';
-            }
+            // if($request->input('data_action') == 'denied'){
+            //     $valid = 'required';
+            // }
+
+            
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
+
+            $valid = $request->input('data_action') == 'denied' ? "required" : "";
 
             $validate = Validator::make($request->all(), array(
                 'reason' => $valid

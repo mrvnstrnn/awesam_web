@@ -103,11 +103,15 @@ $(document).ready(() => {
             method: "POST",
             success: function (resp) {
 
-                if(data_action == "approve"){
+                if(!resp.error){
                     $('#active-request-table').DataTable().ajax.reload();
                     $('#approved-request-table').DataTable().ajax.reload(function (){
                         toastr.success(resp.message, "Success");
-                        $("#deniedModal").modal("hide");
+                        if (data_action == "denied") {
+                            $("#deniedModal").modal("hide");
+                        } else {
+                            $("#modalRequest").modal("hide");
+                        }
                         $("textarea").val("");
                     });
                 } else {
