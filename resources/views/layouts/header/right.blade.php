@@ -121,7 +121,7 @@
         ctx.beginPath();
         ctx.arc(radius+margin,radius+margin,radius, 0, 2 * Math.PI, false);
         ctx.closePath();
-        ctx.fillStyle = 'pink';
+        ctx.fillStyle = '#d92550';
         ctx.fill();
         ctx.fillStyle = "white";
         ctx.font = "bold 30px Arial";
