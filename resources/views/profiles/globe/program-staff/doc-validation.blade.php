@@ -21,6 +21,10 @@
     var main_activity = 'Document Validation';
  
     //////////////////////////////////////
+
+    $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
+      $( "#"+$(".ajax_content_box").attr("data-what_table") ).DataTable().ajax.reload();
+    });
 </script>
 
 <script type="text/javascript" src="/js/getCols.js"></script>  
