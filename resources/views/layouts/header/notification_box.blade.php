@@ -24,7 +24,7 @@ class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
 <ul class="nav flex-column">
     <li class="nav-item-divider nav-item"></li>
     <li class="nav-item-btn text-center nav-item">
-        <button onclick="window.location.href='/notifications'" class="btn-shadow btn-wide btn-pill btn btn-focus btn-sm">View All</button>
+        <a href="{{ route('notifications') }}" class="btn-shadow btn-wide btn-pill btn btn-focus btn-sm">View All</a>
     </li>
 </ul>
 </div>

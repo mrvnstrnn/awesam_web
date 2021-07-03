@@ -821,4 +821,62 @@ class UserController extends Controller
     }
 
 
+    public function notifications()
+    {
+        try {
+            if(is_null(\Auth::user()->profile_id)){
+                return redirect('/onboarding');
+            } else {
+                
+                $role = \Auth::user()->getUserProfile();
+    
+                $mode = $role->mode;
+                $profile = $role->profile;
+    
+                
+                $title = ucwords(Auth::user()->name);
+                $title_subheading  = ucwords($mode . " : " . $profile);
+                $title_icon = 'monitor';
+        
+                $active_slug = "notifications";
+        
+                $profile_menu = self::getProfileMenuLinks();
+    
+                $profile_direct_links = self::getProfileMenuDirectLinks();
+                    
+                $program_direct_links = self::getProgramMenuDirectLinks();
+                
+                return view('profiles.notifications', 
+                    compact(
+                        'mode',
+                        'profile',
+                        'active_slug',
+                        'profile_menu',
+                        'profile_direct_links',
+                        'program_direct_links',
+                        'title', 
+                        'title_subheading', 
+                        'title_icon',
+                    )
+                );
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function read_notifications ($id, $action)
+    {
+        try {
+            \DB::connection('mysql2')->table("notifications")
+                                    ->where("id", $id)
+                                    ->update([
+                                        'read_at' => $action == "unread" ? null : Carbon::now(),
+                                    ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully ".$action." notification." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }

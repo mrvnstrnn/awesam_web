@@ -7,8 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SiteEndorsementNotification extends Notification implements ShouldQueue
-// class SiteEndorsementNotification extends Notification 
+// class SiteEndorsementNotification extends Notification implements ShouldQueue
+class SiteEndorsementNotification extends Notification 
 {
     use Queueable;
 
@@ -258,6 +258,12 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
         //     //
         // ];
 
-        return $this->sam_id;
+        return [
+            "sam_id" => $this->sam_id,
+            "title" => $this->subject,
+            "message" => $this->line,
+        ];
+
+        // return $this->sam_id;
     }
 }

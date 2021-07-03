@@ -115,7 +115,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-
+            
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -161,26 +161,34 @@ class GlobeController extends Controller
             }
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+                // SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                if (!is_null($vendor)) {
+                if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first()->vendor_id )) {
+                    if ( !is_null(\Auth::user()->getUserDetail()->first()->vendor_id) ) {
+                        $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
+                    } else {
+                        $vendor = $vendor; 
+                    }
                     for ($k=0; $k < count($vendor); $k++) {
                         $email_receiver = User::select('users.*')
                                         ->join('user_details', 'users.id', 'user_details.user_id')
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->join('program', 'program.program_id', 'user_programs.program_id')
                                         ->where('user_details.vendor_id', $vendor[$k])
-                                        ->where('program.program', $request->input('data_program'))
+                                        ->where('user_programs.program_id', $request->input('data_program'))
                                         ->get();
                         
                         for ($j=0; $j < count($email_receiver); $j++) { 
                             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
                         }
                     }
+
+                    
+                    // return response()->json(['error' => true, 'message' => $email_receiver ]);
                 }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
             }
 
             return response()->json(['error' => false, 'message' => $notification ]);
