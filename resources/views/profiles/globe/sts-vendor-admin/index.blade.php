@@ -8,9 +8,6 @@
             <i class="header-icon lnr-charts icon-gradient bg-happy-green"></i>
             Vendor Summary
         </div>
-        {{-- <div class="btn-actions-pane-right text-capitalize">
-            Since Last Month
-        </div> --}}
     </div>
     <div class="no-gutters row">
         <div class="col-sm-12 col-md-4 col-xl-4">
@@ -22,7 +19,7 @@
                 <div class="widget-chart-content">
                     <div class="widget-subheading">Active Vendors</div>
                     <div class="widget-numbers">
-                        <span>100</span>
+                        <span>{{ count( \Auth::user()->vendor_list('listVendor') ) }}</span>
                     </div>
                     {{-- <div class="widget-description text-focus">
                         Increased by
@@ -42,7 +39,7 @@
                 </div>
                 <div class="widget-chart-content">
                     <div class="widget-subheading">Offboarding</div>
-                    <div class="widget-numbers">10</div>
+                    <div class="widget-numbers">{{ count( \Auth::user()->vendor_list('OngoingOff') ) }}</div>
                     {{-- <div class="widget-description text-focus">
                         Decreased by
                         <span class="text-warning pl-1">
@@ -63,7 +60,7 @@
                 <div class="widget-chart-content">
                     <div class="widget-subheading">Terminated</div>
                     <div class="widget-numbers">
-                        <span>2</span>
+                        <span>{{ count( \Auth::user()->vendor_list('Complete') ) }}</span>
                     </div>
                     {{-- <div class="widget-description opacity-8 text-focus">
                         Increased by
