@@ -1409,6 +1409,17 @@ class GlobeController extends Controller
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
+        }
+
+        elseif($activity_type == 'unassigned sites'){
+
+            $sites = \DB::connection('mysql2') 
+                    ->table("milestone_tracking")
+                    ->distinct()
+                    ->where('program_id', $program_id)
+                    ->where('activity_type', 'unassigned site')
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')

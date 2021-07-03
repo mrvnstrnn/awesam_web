@@ -11,6 +11,7 @@ function getCols(active_program, active_table, active_profile){
         success: function (resp) {
 
             if(resp.length > 0){
+                
                 if(active_table=='new_endorsements_globe'){
                     
                     cols.push(
@@ -27,6 +28,27 @@ function getCols(active_program, active_table, active_profile){
 
                 }
 
+                else if(active_table=='unassigned_site'){
+                    
+                    cols.push(
+                        {
+                            data: null,
+                            name: "Agent",
+                            width: '20px',
+                            orderable: false,
+                            render: function(data){
+
+                                photo = "<div class='avatar-icon-wrapper avatar-icon-sm avatar-icon-add'>" +
+                                         "<div class='avatar-icon' style='padding-top:3px; font-weight: bold;'>" +
+                                        "<i>+</i>";
+
+
+                                return photo;
+                            }
+                        }
+                    );
+
+                }
                 resp.forEach(function(field){
                     
                 // console.log(field);

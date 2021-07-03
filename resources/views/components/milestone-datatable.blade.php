@@ -10,11 +10,11 @@
 <ul class="tabs-animated body-tabs-animated nav">
 
     @php
-        if (\Request::path() == 'endorsements') {
-            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
-        } else {
-            $programs = \Auth::user()->getUserProgram();
-        }
+        // if (\Request::path() == 'endorsements') {
+        //     $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+        // } else {
+        // }
+        $programs = \Auth::user()->getUserProgram();
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="dropdown-menu-header">
+            <div class="dropdown-menu-header"> 
                 <div class="dropdown-menu-header-inner bg-dark">
                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                     <div class="menu-header-content btn-pane-right">
