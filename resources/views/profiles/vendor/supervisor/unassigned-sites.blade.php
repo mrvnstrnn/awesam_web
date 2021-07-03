@@ -50,7 +50,7 @@
 
 <script type="text/javascript" src="/js/getCols.js"></script>  
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
-<script src="{{ asset('js/supervisor.js') }}"></script>
+{{-- <script src="{{ asset('js/supervisor.js') }}"></script> --}}
 
 <script>
     $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
@@ -100,7 +100,8 @@
         var sam_id = $("#sam_id").val();
         var agent_id = $("#agent_id").val();
 
-        var data_program = $(this).attr('data-program');
+        var table = $(this).attr('data-program');
+        var data_program = $(this).attr('data-program_id');
         var site_name = $(this).attr('data-site_name');
         var activity_name = $(this).attr('data-activity_name');
         var site_vendor_id = $(this).attr('data-site_vendor_id');
@@ -123,7 +124,7 @@
                 if(!resp.error){
                     $("#btn-assign-sites").removeAttr('disabled');
                     $("#btn-assign-sites").text('Assign');
-                    $("#"+data_program).DataTable().ajax.reload(function(){
+                    $("#"+table).DataTable().ajax.reload(function(){
                         $("#modal-assign-sites").modal("hide");
                         toastr.success(resp.message, 'Success');
                     });
