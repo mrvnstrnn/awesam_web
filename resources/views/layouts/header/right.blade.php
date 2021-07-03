@@ -26,7 +26,11 @@
                 <span class="icon-wrapper-bg bg-danger"></span>
                 {{-- <i class="icon text-danger icon-anim-pulse ion-android-notifications"></i> --}}
                 <i class="icon text-danger ion-android-notifications"></i>
-                {{-- <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span> --}}
+
+                @if (count(\Auth::user()->unreadNotifications) > 0)
+                    <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span>
+                @endif
+
                 {{-- <span class="badge badge-dot badge-dot-sm badge-danger">Notifications</span> --}}
 
             </span>

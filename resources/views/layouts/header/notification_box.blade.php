@@ -1,12 +1,11 @@
-<div tabindex="-1" role="menu" aria-hidden="true"
-class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
+<div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
 <div class="dropdown-menu-header mb-0">
     <div class="dropdown-menu-header-inner bg-deep-blue">
         <div class="menu-header-image opacity-1" style="background-image: url('images/dropdown-header/city3.jpg');"></div>
         <div class="menu-header-content text-dark">
             <h5 class="menu-header-title">Notifications</h5>
             <h6 class="menu-header-subtitle">You have
-                <b>0</b> unread messages
+                <b>{{ count(\Auth::user()->unreadNotifications) }}</b> unread notifications
             </h6>
         </div>
     </div>
