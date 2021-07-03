@@ -283,9 +283,24 @@ class GlobeController extends Controller
                     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_complete')) );
                 }
 
-                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
+                $email_receiver = User::select('users.*')
+                        ->join('user_details', 'users.id', 'user_details.user_id')
+                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                        ->join('program', 'program.program_id', 'user_programs.program_id')
+                        ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                        ->where('program.program', $request->input('data_program'))
+                        ->get();
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_complete')) );
+                }
+
+                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 return response()->json(['error' => true, 'message' => "Agent already assigned."]);
             }
         } catch (\Throwable $th) {

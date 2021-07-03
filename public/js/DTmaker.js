@@ -29,6 +29,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
 
             createdRow: function (row, data, dataIndex) {
+                console.log(data);
                 $(row).attr('data-site_all', JSON.stringify(data));
                 $(row).attr('data-activity', data.activity_name);
                 $(row).attr('data-site', data.site_name);
@@ -37,6 +38,9 @@ function makeDT(whatTable, whatCols, table_to_load) {
                 $(row).attr('data-profile', data.profile_id);
                 $(row).attr('data-what_table', $(whatTable).attr('id'));
                 $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
+
+                $(row).attr('data-program_id', data.program_id ? data.program_id : "");
+                $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
             },
             
             columns: whatCols,

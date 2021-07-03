@@ -23,18 +23,7 @@
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                     <div class="form-row">
                     <input type="hidden" id="sam_id" name="sam_id">
-                        {{-- @php
-                            $agents = \DB::connection('mysql2')
-                                    ->table('users')
-                                    ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->get();
-                        @endphp --}}
-                        <select name="agent_id" id="agent_id" class="form-control">
-                        {{-- @foreach ($agents as $agent)
-                            <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                        @endforeach --}}
-                        </select>
+                        <select name="agent_id" id="agent_id" class="form-control"></select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -63,7 +52,95 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 <script src="{{ asset('js/supervisor.js') }}"></script>
 
-{{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
+<script>
+    $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
+        e.preventDefault();
+        if ($(this).attr("colspan") != 5) {
+            $(document).find('#modal-assign-sites').modal('show');
+
+            $("#sam_id").val($(this).parent().attr('data-sam_id'));
+            $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
+            $("#btn-assign-sites").attr('data-site_vendor_id', $(this).parent().attr('data-vendor_id'));
+            $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-what_table'));
+            
+            $("#btn-assign-sites").attr("data-site_name", $(this).parent().attr('data-site'));
+            $("#btn-assign-sites").attr("data-program_id", $(this).parent().attr('data-program_id'));
+
+            $("#modal-assign-sites select#agent_id option").remove();
+
+            $.ajax({
+                url: "/get-agent-based-program/"+ $(this).parent().attr('data-program_id'),
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        console.log(resp.message);
+                        resp.message.forEach(element => {
+                            $("#modal-assign-sites select#agent_id").append(
+                                '<option value="'+element.id+'">'+element.name+'</option>'
+                            );
+                        });
+
+                        $("#modal-assign-sites").modal("show");
+                    } else {
+                        toastr.error(resp.message, 'Error');
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp.message, 'Error');
+                }
+            });
+        }
+    } );
+
+    $(document).on('click',"#btn-assign-sites", function(e){
+        e.preventDefault();
+
+        $(this).attr('disabled', 'disabled');
+        $(this).text('Processing...');
+        var sam_id = $("#sam_id").val();
+        var agent_id = $("#agent_id").val();
+
+        var data_program = $(this).attr('data-program');
+        var site_name = $(this).attr('data-site_name');
+        var activity_name = $(this).attr('data-activity_name');
+        var site_vendor_id = $(this).attr('data-site_vendor_id');
+
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: {
+                sam_id : sam_id,
+                agent_id : agent_id,
+                site_name : site_name,
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                data_program : data_program
+            },
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if(!resp.error){
+                    $("#btn-assign-sites").removeAttr('disabled');
+                    $("#btn-assign-sites").text('Assign');
+                    $("#"+data_program).DataTable().ajax.reload(function(){
+                        $("#modal-assign-sites").modal("hide");
+                        toastr.success(resp.message, 'Success');
+                    });
+                } else {
+                    $("#btn-assign-sites").removeAttr('disabled');
+                    $("#btn-assign-sites").text('Assign');
+                    toastr.error(resp.message, 'Error');
+                }
+            },
+            error: function(resp){
+                $("#btn-assign-sites").removeAttr('disabled');
+                $("#btn-assign-sites").text('Assign');
+                toastr.error(resp.message, 'Error');
+            }
+        });
+    });
+</script>
 
 
 
