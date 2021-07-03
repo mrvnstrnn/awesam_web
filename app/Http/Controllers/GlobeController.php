@@ -1409,7 +1409,7 @@ class GlobeController extends Controller
                     ->table("milestone_tracking")
                     ->distinct()
                     ->where('program_id', $program_id)
-                    ->where('activity_type', 'site config')
+                    ->where('activity_type', 'unassigned site')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 
