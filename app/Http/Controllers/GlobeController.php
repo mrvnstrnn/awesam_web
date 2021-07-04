@@ -1623,6 +1623,7 @@ class GlobeController extends Controller
         }
     }
 
+    
     public function get_all_docs(Request $request)
     {
         // return "test";
