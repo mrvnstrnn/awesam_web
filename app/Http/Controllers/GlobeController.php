@@ -1389,6 +1389,7 @@ class GlobeController extends Controller
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'rtb declaration')
+                    ->where('activity_complete', 'false')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 

@@ -2,6 +2,7 @@
     $site_status = \DB::connection('mysql2')
         ->table('milestone_tracking')
         ->where('site_agent_id', "=", \Auth::id())
+        ->where('activity_complete', "=", 'false')
         ->get();    
 @endphp
 
