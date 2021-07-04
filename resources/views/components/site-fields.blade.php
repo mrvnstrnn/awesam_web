@@ -6,7 +6,6 @@
 
     @php
 
-
         $what = str_replace(' ', '_', $site_field->field_name);
 
     @endphp
