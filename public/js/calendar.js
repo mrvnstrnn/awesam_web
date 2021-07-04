@@ -231,7 +231,6 @@ $(document).ready(() => {
         var color = "";
 
         for (let j = 0; j < events.length; j++) {
-          
           if (j == 0 || j == 5) {
             color = "success";
           } else if (j == 1 || j == 6) {
@@ -247,17 +246,24 @@ $(document).ready(() => {
           // var random_color = colors[Math.floor(Math.random() * colors.length)];
           for (let k = 0; k < events[j].length; k++) {
 
-            start_date = events[j][k].start_date +"T00:00:00";
-            end_date = events[j][k].end_date +"T23:59:00";
+            
+          console.log(events[j][k]);
+          // console.log(events[j][k]);
 
-            event_to_display.push({
-              start: start_date,
-              end: end_date,
-              // overlap: true,
-              color: "var(--"+color+")",
-              title: events[j][k].site_name + " : " + events[j][k].activity_name,
-            });
-          }
+            // if (events[j][events[j].length - 1].activity_name != "Completed") {
+
+              start_date = events[j][k].start_date +"T00:00:00";
+              end_date = events[j][k].end_date +"T23:59:00";
+
+              event_to_display.push({
+                start: start_date,
+                end: end_date,
+                // overlap: true,
+                color: "var(--"+color+")",
+                title: events[j][k].site_name + " : " + events[j][k].activity_name,
+              });
+            }
+          // }
         }
 
         $("#calendar-bg-events").fullCalendar({

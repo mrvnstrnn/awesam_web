@@ -782,6 +782,8 @@ class UserController extends Controller
                 $arrayTimeline->push($timeline);
             }
 
+            // dd($timelines[0]->timeline);
+
             return response()->json([ "error" => false, "message" => $timelines ]);
         } catch (\Throwable $th) {
             throw $th->getMessage();

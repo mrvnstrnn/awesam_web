@@ -39,9 +39,9 @@
     <div class="col-md-12">
         <form class="ssds_form">
             <div class="position-relative row form-group">
-                <label for="site_name" class="col-sm-4 col-form-label">Site Name</label>
+                <label for="site_name" class="col-sm-4 col-form-label">Location</label>
                 <div class="col-sm-8">
-                    <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Site Name">
+                    <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Location">
                     <small class="text-danger site_name-errors"></small>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="latitude" class="col-sm-4 col-form-label">Location</label>
+                <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
                 <div class="col-sm-4">
                     <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
                     <small class="text-danger latitude-errors"></small>

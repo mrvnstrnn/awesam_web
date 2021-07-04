@@ -266,6 +266,7 @@
             });
         });
     </script>
+    
     @yield('js_script')
 
 

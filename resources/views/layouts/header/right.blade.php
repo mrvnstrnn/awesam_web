@@ -108,9 +108,6 @@
 <script>
 
     function generateAvatar(name){
-        // var initials = name.split(' ').map(function(str) { 
-        //     return str ? str[0].toUpperCase() : ""; 
-        // }).join('');
 
         const fullName = name.split(' ');
         const initials = fullName.shift().charAt(0) + fullName.pop().charAt(0);
