@@ -161,7 +161,7 @@ class GlobeController extends Controller
             }
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                // SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
                 if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
                     
