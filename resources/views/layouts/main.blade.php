@@ -237,6 +237,35 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script type="module" src="/js/echo.js"></script>
+
+    <script>
+        $(document).on("click", ".mark_as_unread", function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("data-id");
+            var action = $(this).attr("data-action");
+
+            console.log("clicked");
+
+            $.ajax({
+                url: "/read-notification/"+id+"/"+action,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        $( ".notification_area" ).load(window.location.href + " .vertical-timeline-item.vertical-timeline-element" );
+                        $( ".counter_notif" ).load(window.location.href + " .counter_notif span" );
+
+                        toastr.success(resp.message, "Success");
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp, "Error");
+                }
+            });
+        });
+    </script>
     @yield('js_script')
 
 
