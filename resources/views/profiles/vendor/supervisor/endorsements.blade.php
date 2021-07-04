@@ -1,9 +1,16 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+    .modal-dialog{
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        box-shadow: 0 5px 15px rgba(0,0,0,0);
+    }   
+</style>    
 
-    {{-- <x-assigned-sites mode="vendor"/> --}}
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements vendor"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements globe"/>
 
 @endsection
 
@@ -40,14 +47,13 @@
 
 @endsection
 
-
 @section('js_script')
 
 <script>
     //////////////////////////////////////
-    var profile_id = 8;
+    var profile_id = 3;
     var table_to_load = 'new_endorsements_globe';
-    var main_activity = 'New Endorsements Vendor';
+    var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////
 </script>
@@ -55,7 +61,6 @@
 <script type="text/javascript" src="/js/getCols.js"></script>  
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 {{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
-
 
 <script>
     $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
@@ -72,19 +77,25 @@
         $(".card-body .position-relative.form-group").remove();
         $(".main-card.mb-3.card .modal-footer").remove();
 
-        var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+        if (json_parse.site_fields != null) {
+            var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
 
-        for (let i = 0; i < new_json.length; i++) {
-            // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-                $("#viewInfoModal .card-body").append(
-                    '<div class="position-relative form-group col-md-6">' +
-                        '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
-                        '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
-                    '</div>'
-                );
-            // }
+            for (let i = 0; i < new_json.length; i++) {
+                // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                    $("#viewInfoModal .card-body").append(
+                        '<div class="position-relative form-group col-md-6">' +
+                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
+                            '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                        '</div>'
+                    );
+                // }
+            }
+        } else {
+            $("#viewInfoModal  .card-body").append(
+                '<div><h1>No fields available.</h1></div>'
+            );
         }
-
+        
         if ("{{ \Auth::user()->profile_id != 2 }}") {
             $("#viewInfoModal .main-card.mb-3.card").append(
                 '<div class="modal-footer">' +
@@ -237,6 +248,8 @@
     });
 
 </script>
+
+
 
 
 @endsection

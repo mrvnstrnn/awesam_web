@@ -88,7 +88,11 @@
 
                                                         "LOI Creation to Renew",
 
-                                                        "Lessor Docs Approval"
+                                                        "Lessor Docs Approval",
+                                                        "Permits Approval",
+                                                        "Contract Approval",
+                                                        "Lease Package Checklist Approval"
+
                                                     );  
                                     
                                     $forced_actions = array(
@@ -153,7 +157,10 @@
                                                 $site[0]->activity_name == "FAC VP Approval" && $main_activity == "" ||
 
                                                 // MWAN APPROVALS 
-                                                $site[0]->activity_name == "Lessor Docs Approval" && $main_activity == ""
+                                                $site[0]->activity_name == "Lessor Docs Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Permits Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Contract Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Lease Package Checklist Approval" && $main_activity == ""
                                                 
 
                                             )
