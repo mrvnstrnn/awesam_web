@@ -134,7 +134,7 @@
                                         <div id="site_action_box">
                                                     
 
-                                            @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $main_activity == "")
+                                            @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $main_activity == "" )
 
                                                 <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" />
 
