@@ -161,10 +161,11 @@ class GlobeController extends Controller
             }
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+                // SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first()->vendor_id )) {
-                    if ( !is_null(\Auth::user()->getUserDetail()->first()->vendor_id) ) {
+                if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
+                    
+                    if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
                         $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
                     } else {
                         $vendor = $vendor; 
@@ -182,9 +183,6 @@ class GlobeController extends Controller
                             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
                         }
                     }
-
-                    
-                    return response()->json(['error' => true, 'message' => $notification ]);
                 }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
