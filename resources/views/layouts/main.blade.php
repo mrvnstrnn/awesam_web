@@ -36,6 +36,24 @@
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+        <script
+            id="sap-ui-bootstrap"
+            src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_belize"
+            data-sap-ui-libs="sap.m, sap.ui.layout, sap.tnt"
+            data-sap-ui-resourceroots='{"Quickstart": "./"}'
+            data-sap-ui-async="true"
+        ></script>
+        <script>
+            sap.ui.getCore().attachInit(function () {
+                sap.ui.require(["sap/ui/core/mvc/XMLView"], function (XMLView) {
+                XMLView.create({ viewName: "Quickstart.App" }).then(function (oView) {
+                    oView.placeAt("content");
+                });
+                });
+            });
+        </script>
         
 
         <style>

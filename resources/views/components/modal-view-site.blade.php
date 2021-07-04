@@ -91,7 +91,10 @@
                                                         "Lessor Docs Approval",
                                                         "Permits Approval",
                                                         "Contract Approval",
-                                                        "Lease Package Checklist Approval"
+                                                        "Lease Package Checklist Approval",
+
+                                                        "Precon Docs Approval",
+                                                        "Postcon Docs Approval",
 
                                                     );  
                                     
@@ -160,9 +163,14 @@
                                                 $site[0]->activity_name == "Lessor Docs Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "Permits Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "Contract Approval" && $main_activity == "" ||
-                                                $site[0]->activity_name == "Lease Package Checklist Approval" && $main_activity == ""
-                                                
+                                                $site[0]->activity_name == "Lease Package Checklist Approval" && $main_activity == "" ||
 
+                                                
+                                                $site[0]->activity_name == "Precon Docs Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Postcon Docs Approval" && $main_activity == ""
+
+                                                
+                                                
                                             )
                                                 
                                                 <x-site-p-a-c-approvals :site="$site" />
@@ -191,7 +199,6 @@
                                             )   
                                             
                                                 <x-site-p-r-approval :site="$site" :pr="$pr" :activity="$site[0]->activity_name" />
-
 
                                             @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
 

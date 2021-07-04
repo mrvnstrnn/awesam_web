@@ -216,6 +216,12 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
             $this->action = "View Activities";
             $this->url = url('/activities');
 
+        } else if ($activity_name == "Set Site Category") {
+            $this->line = $this->sam_id . " successfully set site category.";
+            $this->subject = $this->sam_id. " Set Site Category";
+            $this->action = "View Activities";
+            $this->url = url('/activities');
+
         }
         
     }
