@@ -17,7 +17,7 @@
     @forelse ($datas as $data)
         @if (is_null($data->files))
             <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
+                <div class="dropzone dropzone_files" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-3x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
@@ -58,7 +58,7 @@
                     </div>
                 @else
                     @if($loop->first)
-                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
                             <div class="child_div_{{ $data->sub_activity_id }}">
                                 <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                                     <div>
@@ -213,6 +213,8 @@
         }
 
         $("#hidden_filename").val(values[0].value);
+
+        var sam_id = $(this).attr('data-sam_id');
                 
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
@@ -252,7 +254,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/get-my-sub_act_value/"+sub_activity_id,
+                    url: "/get-my-sub_act_value/"+sub_activity_id+"/"+sam_id,
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
