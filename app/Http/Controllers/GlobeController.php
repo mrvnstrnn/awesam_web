@@ -1445,7 +1445,7 @@ class GlobeController extends Controller
         else {
 
             $sites = \DB::connection('mysql2')
-                    ->table("site_milestone")
+                    ->table("milestone_tracking")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')

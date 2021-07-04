@@ -86,7 +86,9 @@
                                                         "Draft Contract Approval",
                                                         "Lease Package",
 
-                                                        "LOI Creation to Renew"
+                                                        "LOI Creation to Renew",
+
+                                                        "Lessor Docs Approval"
                                                     );  
                                     
                                     $forced_actions = array(
@@ -148,8 +150,12 @@
                                                 $site[0]->activity_name == "PAC VP Approval" && $main_activity == "" || 
                                                 $site[0]->activity_name == "FAC Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "FAC Director Approval" && $main_activity == "" ||
-                                                $site[0]->activity_name == "FAC VP Approval" && $main_activity == ""
+                                                $site[0]->activity_name == "FAC VP Approval" && $main_activity == "" ||
+
+                                                // MWAN APPROVALS 
+                                                $site[0]->activity_name == "Lessor Docs Approval" && $main_activity == ""
                                                 
+
                                             )
                                                 
                                                 <x-site-p-a-c-approvals :site="$site" />
