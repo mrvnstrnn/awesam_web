@@ -44,7 +44,7 @@
                 }
 
             @endphp
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-sub_activity_id="{{ $data->sub_activity_id }}" data-value="{{ json_encode($uploaded_files) }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sam_id="{{ $sam_id }}" data-value="{{ json_encode($uploaded_files) }}">
                 <div class="child_div_{{ $data->sub_activity_id }}">
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -165,6 +165,10 @@
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
 
+        var sam_id = $(this).attr('data-sam_id');
+
+        console.log(sam_id);
+
         $('.file_viewer_list').html('');
 
         var sub_activity_id = $(this).attr("data-sub_activity_id");
@@ -190,7 +194,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/get-my-sub_act_value/"+sub_activity_id,
+                    url: "/get-my-sub_act_value/"+sub_activity_id+"/"+sam_id,
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
