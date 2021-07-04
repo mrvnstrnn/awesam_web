@@ -1,10 +1,7 @@
 @php
 $activities = \DB::connection('mysql2')
-    ->table('site_milestone')
-    ->join('site', 'site_milestone.sam_id','site.sam_id' )
-    ->distinct()
+    ->table('milestone_tracking')
     ->where('site_agent_id', "=", \Auth::id())
-    ->where('activity_complete', "=", 'false')
     ->get();
 @endphp
 

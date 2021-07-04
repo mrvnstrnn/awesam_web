@@ -1,8 +1,7 @@
 @php
     $site_status = \DB::connection('mysql2')
-        ->table('site_milestone_status')
+        ->table('milestone_tracking')
         ->where('site_agent_id', "=", \Auth::id())
-        ->orderBy('sam_id') 
         ->get();    
 @endphp
 
