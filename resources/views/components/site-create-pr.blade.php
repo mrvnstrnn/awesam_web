@@ -88,11 +88,19 @@
                 // $(".dropzone_files").addClass("d-none");
                 // this.removeFile(file);
             } else {
-                toastr.error(resp.message, "Error");
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
             }
         },
         error: function (file, resp) {
-            toastr.error(resp.message, "Error");
+            Swal.fire(
+                'Error',
+                resp,
+                'error'
+            )
         }
     });
     

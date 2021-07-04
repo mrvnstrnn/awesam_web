@@ -2398,5 +2398,19 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_my_sub_act_value($sub_activity_id)
+    {
+        try {
+
+            $sub_activity_id = SubActivityValue::where('sub_activity_id', $sub_activity_id)
+                                        ->get();
+
+            $dt = DataTables::of($sub_activity_id);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 }
 

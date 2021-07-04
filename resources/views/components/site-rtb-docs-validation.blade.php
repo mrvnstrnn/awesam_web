@@ -1,8 +1,8 @@
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
         <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-        <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success approve_reject_doc_btn" data-action="approve" type="button">Approve Document</button>
-        <button id="btn_back_to_file_list" class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btn" data-action="reject" type="button">Reject Document</button>
+        <button class="float-right mt-0 btn btn-success approve_reject_doc_btn" data-action="approve" type="button">Approve Document</button>
+        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btn" data-action="reject" type="button">Reject Document</button>
     </div>
     <div class="col-12 file_viewer">
     </div>
@@ -46,7 +46,6 @@
                 }
             @endphp
 
-{{-- {{ print_r($uploaded_files) }} --}}
             @foreach ($uploaded_files as $item)
                 @if ($item->status == "denied")
                     <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
@@ -125,8 +124,6 @@
                     var sub_activity_name = this.element.attributes[3].value;
                     var file_name = resp.file;
 
-                    // var sub_activity_name = $(this).attr("data-sub_activity_name");
-
                     $.ajax({
                         url: "/upload-my-file",
                         method: "POST",
@@ -194,7 +191,8 @@
 
         $(".approve_reject_doc_btn").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
         
-        $(".approve_reject_doc_btn").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
+        var sub_activity_id = $(this).attr("data-sub_activity_id");
+        $(".approve_reject_doc_btn").attr("data-sub_activity_id", sub_activity_id);
 
         if ($(this).attr("data-status") == "pending"){
             $(".approve_reject_doc_btn").removeClass("d-none");
@@ -221,35 +219,113 @@
 
         $('.file_viewer_list').html('');
 
-        values.forEach(function(item, index){
+        // values.forEach(function(item, index){
             
-            htmllist = "<tr>" + 
-                            "<td>"  + item.id + "</td>" +
-                            "<td>"  + item.value + "</td>" +
-                            "<td>"  + item.status + "</td>" +
-                            "<td>"  + item.date_created + "</td>" +
-                        "</tr>";
-        });
+        //     htmllist = "<tr>" + 
+        //                     "<td>"  + item.id + "</td>" +
+        //                     "<td>"  + item.value + "</td>" +
+        //                     "<td>"  + item.status + "</td>" +
+        //                     "<td>"  + item.date_created + "</td>" +
+        //                 "</tr>";
+        // });
 
-        htmllist = "<table class='table-bordered mb-0 table'>" + 
-                        "<thead>" +
-                            "<tr>" +                           
-                                "<th>#</th>"+
-                                "<th>file</th>"+
-                                "<th>status</th>"+
-                                "<th>timestamp</th>"+
-                            "</tr>" +                           
-                        "</thead>" +
-                        "<tbody>" +
-                            htmllist + 
-                        "</tbody>" +
-                    "</table>";
+        // $(".file_viewer_list").html(
+        htmllist = '<div class="table-responsive table_uploaded_parent">' +
+                '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th style="width: 5%">#</th>' +
+                            '<th>Filename</th>' +
+                            '<th style="width: 35%">Status</th>' +
+                            '<th>Date Uploaded</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>' +
+            '</div>';
+        // );
 
         $('.file_viewer_list').html(htmllist);
+        $(".table_uploaded").attr("id", "table_uploaded_files_"+sub_activity_id);
+
+        if (! $.fn.DataTable.isDataTable("#table_uploaded_files_"+sub_activity_id) ){
+            $("#table_uploaded_files_"+sub_activity_id).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/get-my-sub_act_value/"+sub_activity_id,
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-value', data.value);
+                    $(row).attr('data-status', data.status);
+                    $(row).attr('data-id', data.id);
+                    $(row).attr('data-sub_activity_id', data.sub_activity_id);
+                    $(row).attr('style', 'cursor: pointer');
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "value" },
+                    { data: "status" },
+                    { data: "date_created" },
+                ],
+            });
+        } else {
+            $("#table_uploaded_files_"+sub_activity_id).DataTable().ajax.reload();
+        }
+
+        // htmllist = "<table class='table-bordered mb-0 table'>" + 
+        //                 "<thead>" +
+        //                     "<tr>" +                           
+        //                         "<th>#</th>"+
+        //                         "<th>file</th>"+
+        //                         "<th>status</th>"+
+        //                         "<th>timestamp</th>"+
+        //                     "</tr>" +                           
+        //                 "</thead>" +
+        //                 "<tbody>" +
+        //                     htmllist + 
+        //                 "</tbody>" +
+        //             "</table>";
+
 
         $('.file_lists').addClass('d-none');
         $('.file_preview').removeClass('d-none');
 
+    });
+
+    $(document).on("click", ".table_uploaded tr", function (e) {
+        var extensions = ["pdf", "jpg", "png"];
+
+        var value = $(this).attr("data-value");
+        var id = $(this).attr("data-id");
+        var sub_activity_id = $(this).attr("data-sub_activity_id");
+
+        $(".approve_reject_doc_btn").attr("data-sub_activity_id", sub_activity_id);
+        $(".approve_reject_doc_btn").attr("data-id", id);
+
+        if ($(this).attr("data-status") == "pending"){
+            $(".approve_reject_doc_btn").removeClass("d-none");
+        } else {
+            $(".approve_reject_doc_btn").addClass("d-none");
+        }
+
+
+        if( extensions.includes(value.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + value + '" allowfullscreen></iframe>';
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        $("#hidden_filename").val(value);
+                
+        $('.file_viewer').html('');
+        $('.file_viewer').html(htmltoload);
     });
 
     $("#btn_back_to_file_list").on("click", function (){

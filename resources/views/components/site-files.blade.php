@@ -9,7 +9,6 @@
 </div>
 <div class="row file_lists">
     @php
-        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '", ' .  $program_id . ', "")');
         $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '")');
     @endphp
 
@@ -45,12 +44,11 @@
                 }
 
             @endphp
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-sub_activity_id="{{ $data->sub_activity_id }}" data-value="{{ json_encode($uploaded_files) }}">
                 <div class="child_div_{{ $data->sub_activity_id }}">
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
                         <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                        {{-- <small>{{ $item->value }}</small> --}}
                         <p><small>{{ $data->sub_activity_name }}</small></p>
                         </div>
                     </div>
@@ -76,7 +74,6 @@
         $(".dropzone_files").dropzone({
             addRemoveLinks: true,
             maxFiles: 1,
-            // maxFilesize: 1,
             paramName: "file",
             url: "/upload-file",
             init: function() {
@@ -170,31 +167,55 @@
 
         $('.file_viewer_list').html('');
 
-        values.forEach(function(item, index){
-            
-            htmllist = "<tr>" + 
-                            "<td>"  + item.id + "</td>" +
-                            "<td>"  + item.value + "</td>" +
-                            "<td>"  + item.status + "</td>" +
-                            "<td>"  + item.date_created + "</td>" +
-                        "</tr>";
-        });
+        var sub_activity_id = $(this).attr("data-sub_activity_id");
 
-        htmllist = "<table class='table-bordered mb-0 table'>" + 
-                        "<thead>" +
-                            "<tr>" +                           
-                                "<th>#</th>"+
-                                "<th>file</th>"+
-                                "<th>status</th>"+
-                                "<th>timestamp</th>"+
-                            "</tr>" +                           
-                        "</thead>" +
-                        "<tbody>" +
-                            htmllist + 
-                        "</tbody>" +
-                    "</table>";
+        htmllist = '<div class="table-responsive table_uploaded_parent">' +
+                '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th style="width: 5%">#</th>' +
+                            '<th>Filename</th>' +
+                            '<th style="width: 35%">Status</th>' +
+                            '<th>Date Uploaded</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>' +
+            '</div>';
 
         $('.file_viewer_list').html(htmllist);
+        $(".table_uploaded").attr("id", "table_uploaded_files_"+sub_activity_id);
+
+        if (! $.fn.DataTable.isDataTable("#table_uploaded_files_"+sub_activity_id) ){
+            $("#table_uploaded_files_"+sub_activity_id).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/get-my-sub_act_value/"+sub_activity_id,
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-value', data.value);
+                    $(row).attr('data-status', data.status);
+                    $(row).attr('data-id', data.id);
+                    $(row).attr('data-sub_activity_id', data.sub_activity_id);
+                    $(row).attr('style', 'cursor: pointer');
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "value" },
+                    { data: "status" },
+                    { data: "date_created" },
+                ],
+            });
+        } else {
+            $("#table_uploaded_files_"+sub_activity_id).DataTable().ajax.reload();
+        }
 
         $('.file_lists').addClass('d-none');
         $('.file_preview').removeClass('d-none');
@@ -209,6 +230,23 @@
 
     $(".dropzone_files").on("click", function (){
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
+    });
+
+    $(document).on("click", ".table_uploaded tr", function (e) {
+        var extensions = ["pdf", "jpg", "png"];
+
+        var value = $(this).attr("data-value");
+
+        if( extensions.includes(value.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + value + '" allowfullscreen></iframe>';
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        $("#hidden_filename").val(value);
+                
+        $('.file_viewer').html('');
+        $('.file_viewer').html(htmltoload);
     });
 
 </script>
