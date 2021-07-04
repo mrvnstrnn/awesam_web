@@ -371,7 +371,7 @@ $(document).ready(() => {
             $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
             $("#btn-assign-sites").attr('data-site_vendor_id', $(this).parent().attr('data-site_vendor_id'));
             $("#btn-assign-sites").attr('data-program', $(this).parent().attr('data-program'));
-            $("#sam_id").val($(this).parent().attr('data-id'));
+            $("#sam_id").val($(this).parent().attr('data-sam_id'));
             $("#btn-assign-sites").attr("data-site_name", $(this).parent().attr('data-site_name'));
             $("#btn-assign-sites").attr("data-program_id", $(this).parent().attr('data-program_id'));
 

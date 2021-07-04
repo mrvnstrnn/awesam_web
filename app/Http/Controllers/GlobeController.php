@@ -115,7 +115,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-
+            
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -163,20 +163,28 @@ class GlobeController extends Controller
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
-                if (!is_null($vendor)) {
+                if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first()->vendor_id )) {
+                    if ( !is_null(\Auth::user()->getUserDetail()->first()->vendor_id) ) {
+                        $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
+                    } else {
+                        $vendor = $vendor; 
+                    }
                     for ($k=0; $k < count($vendor); $k++) {
                         $email_receiver = User::select('users.*')
                                         ->join('user_details', 'users.id', 'user_details.user_id')
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->join('program', 'program.program_id', 'user_programs.program_id')
                                         ->where('user_details.vendor_id', $vendor[$k])
-                                        ->where('program.program', $request->input('data_program'))
+                                        ->where('user_programs.program_id', $request->input('data_program'))
                                         ->get();
                         
                         for ($j=0; $j < count($email_receiver); $j++) { 
                             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
                         }
                     }
+
+                    
+                    return response()->json(['error' => true, 'message' => $notification ]);
                 }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
@@ -250,35 +258,32 @@ class GlobeController extends Controller
 
             $user = User::find($request->input('agent_id'));
 
-            if(is_null($checkAgent)) {
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::user()->id;
 
-                $profile_id = \Auth::user()->profile_id;
-                $id = \Auth::user()->id;
-                
+            
+
+            $email_receiver = User::find($request->input('agent_id'));
+
+            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+            $email_receiver->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true", $request->input('site_name')) );
+
+            if(is_null($checkAgent)) {
                 
                 SiteAgent::create([
                     'agent_id' => $request->input('agent_id'),
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                $email_receiver = User::select('users.*')
-                                ->join('user_details', 'users.id', 'user_details.user_id')
-                                ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->join('program', 'program.program_id', 'user_programs.program_id')
-                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
-                                ->where('program.program', $request->input('data_program'))
-                                ->get();
-
-                SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-                for ($j=0; $j < count($email_receiver); $j++) { 
-                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_complete')) );
-                }
-
                 \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
-                return response()->json(['error' => true, 'message' => "Agent already assigned."]);
+
+                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                
+                return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -769,6 +774,21 @@ class GlobeController extends Controller
                                                     ->where('type', "create_pr")
                                                     ->where('status', "pending")
                                                     ->first();
+
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_details.vendor_id', $request->input('vendor'))
+                                ->where('user_programs.program_id', $request->input('data_program'))
+                                ->get();
+                
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+                }
+
                 if (is_null($sub_activity)) {
                     $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
     
@@ -798,27 +818,16 @@ class GlobeController extends Controller
                                                     'site_vendor_id' => $request->input('vendor'),
                                                     'site_pr' => $request->input('reference_number'),
                                                 ]);
-
-                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
-    
-                    $email_receiver = User::select('users.*')
-                                    ->join('user_details', 'users.id', 'user_details.user_id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->join('program', 'program.program_id', 'user_programs.program_id')
-                                    ->where('user_details.vendor_id', $request->input('vendor'))
-                                    ->where('program.program', $request->input('data_program'))
-                                    ->get();
-                    
-                    for ($j=0; $j < count($email_receiver); $j++) { 
-                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
-                    }
     
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
     
                     return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
                 } else {
-                    return response()->json(['error' => true, 'message' => "Already created PR." ]);
+                    
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
+
+                    return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -843,21 +852,23 @@ class GlobeController extends Controller
                                                             ->first();
 
 
+                                                            
+    
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_details.vendor_id', $request->input('vendor'))
+                                ->where('user_programs.program_id', $request->input('program_id'))
+                                ->get();
+                
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('site_vendor_id'), $request->input('activity_name'), "") );
+                }
+
                 if (is_null($jtss_schedule_data)) {
-    
-                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
-    
-                    $email_receiver = User::select('users.*')
-                                    ->join('user_details', 'users.id', 'user_details.user_id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->join('program', 'program.program_id', 'user_programs.program_id')
-                                    ->where('user_details.vendor_id', $request->input('vendor'))
-                                    ->where('program.program', $request->input('program_id'))
-                                    ->get();
-                    
-                    for ($j=0; $j < count($email_receiver); $j++) { 
-                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('site_vendor_id'), $request->input('activity_name'), "") );
-                    }
 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
@@ -873,7 +884,10 @@ class GlobeController extends Controller
 
                     return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
                 } else {
-                    return response()->json(['error' => true, 'message' => "Already been scheduled." ]);
+                    
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -905,7 +919,7 @@ class GlobeController extends Controller
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
                             ->join('program', 'program.program_id', 'user_programs.program_id')
                             ->where('user_details.vendor_id', $request->input('vendor'))
-                            ->where('program.program', $request->input('data_program'))
+                            ->where('user_programs.program_id', $request->input('data_program'))
                             ->get();
             
             for ($j=0; $j < count($email_receiver); $j++) { 
@@ -1029,7 +1043,7 @@ class GlobeController extends Controller
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
                             ->join('program', 'program.program_id', 'user_programs.program_id')
                             ->where('user_details.vendor_id', $request->input('vendor_id'))
-                            ->where('program.program', $request->input('program_id'))
+                            ->where('user_programs.program_id', $request->input('program_id'))
                             ->get();
             
             for ($j=0; $j < count($email_receiver); $j++) { 
@@ -2029,20 +2043,20 @@ class GlobeController extends Controller
                                         ->where('type', "rtb_declaration")
                                         ->first();
 
+                $email_receiver = User::select('users.*')
+                            ->join('user_details', 'users.id', 'user_details.user_id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->where('user_details.vendor_id', $request->input('site_vendor_id'))
+                            ->where('user_programs.program_id', $request->input('program_id'))
+                            ->get();
+                        
+                SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
+                }
+
                 if (is_null($rtb)){
-
-                    $email_receiver = User::select('users.*')
-                                ->join('user_details', 'users.id', 'user_details.user_id')
-                                ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->where('user_details.vendor_id', $request->input('site_vendor_id'))
-                                ->where('user_programs.program_id', $request->input('program_id'))
-                                ->get();
-                            
-                    SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-                    for ($j=0; $j < count($email_receiver); $j++) { 
-                        $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
-                    }
 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
@@ -2058,7 +2072,10 @@ class GlobeController extends Controller
                     
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 } else {
-                    return response()->json(['error' => true, 'message' => "RTB already declared." ]);
+                    
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);

@@ -258,6 +258,12 @@ class SiteEndorsementNotification extends Notification implements ShouldQueue
         //     //
         // ];
 
-        return $this->sam_id;
+        return [
+            "sam_id" => $this->sam_id,
+            "title" => $this->subject,
+            "message" => $this->line,
+        ];
+
+        // return $this->sam_id;
     }
 }

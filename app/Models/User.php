@@ -175,4 +175,20 @@ class User extends Authenticatable implements MustVerifyEmail
                             ->get();
         }
     }
+
+    public function vendor_list($program_status)
+    {
+        
+        if ($program_status == 'listVendor') {
+            $arrayProgram = ['Active', 'Ongoing Accreditation'];
+        } else if($program_status == 'OngoingOff') {
+            $arrayProgram = ['Ongoing Offboarding'];
+        } else if($program_status == 'Complete') {
+            $arrayProgram = ['Complete Offboarding'];
+        }
+
+        return $vendors = \DB::connection('mysql2')->table('vendor')
+                                    ->whereIn('vendor_status', $arrayProgram)
+                                    ->get();
+    }
 }

@@ -197,9 +197,7 @@ class VendorController extends Controller
             }
             
             $vendors = \DB::connection('mysql2')->table('vendor')
-                                    // ->join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendor.vendor_program_id')
                                     ->whereIn('vendor_status', $arrayProgram)
-                                    // ->where('vendor.vendor_acronym', "!=" ,'HT')
                                     ->get();
 
             $dt = DataTables::of($vendors)
@@ -213,12 +211,8 @@ class VendorController extends Controller
                             if ($program_status != "Complete"){
                                 $button .= ' <button class="btn btn-danger view-info btn-sm modalTerminate" data-vendor_sec_reg_name="'.$row->vendor_sec_reg_name.'" data-statusb="'.$program_status.'" data-id="'.$row->vendor_id.'">Terminate</button>';
                             }
-
-                            // if ($program_status == "OngoingOff") {
-                            //     $button .= ' <a href="'.route('site.vendor', $row->vendor_id).'" class="btn btn-primary text-white btn-sm">View Sites</a>';
-                            // }
-
-                             return $button;
+                            
+                            return $button;
                         })
                         ->addColumn('vendor_name', function($row){
                             return $row->vendor_firstname. " " .$row->vendor_lastname;
@@ -365,7 +359,7 @@ class VendorController extends Controller
                     'comment' => $request->input('reason'),
                 ]);
 
-                return response()->json(['error' => false, 'message' => "Successfully rejected request."]);
+                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('data_action')." request."]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }

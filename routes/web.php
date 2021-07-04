@@ -20,6 +20,11 @@ use App\Http\Controllers\GlobeController;
 
 //ROUTE TO USER'S HOME
 Route::group(['middleware' => ['auth', 'verified']], function () {
+    //Notifications
+    Route::get('/notifications', [UserController::class, 'notifications'])->name('notifications');
+    Route::get('/read-notification/{id}/{action}', [UserController::class, 'read_notifications']);
+
+
     Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
     Route::get('/', [UserController::class, 'index']);
     Route::get('/onboarding', [UserController::class, 'onboarding']);
