@@ -1321,7 +1321,7 @@ class GlobeController extends Controller
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
-
+        
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
             ->table("site_milestone")
@@ -1405,7 +1405,7 @@ class GlobeController extends Controller
                     ->get();
         }
         elseif($activity_type == 'new endorsements vendor'){
-
+            
             $sites = \DB::connection('mysql2') 
                     ->table("milestone_tracking")
                     ->distinct()
@@ -1416,7 +1416,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'unassigned sites'){
-
+            
             $sites = \DB::connection('mysql2') 
                     ->table("milestone_tracking")
                     ->distinct()
@@ -1475,6 +1475,7 @@ class GlobeController extends Controller
 
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
     {
+
         if($sub_activity == 'Add SSDS'){
 
             $what_component = "components.subactivity-ssds";
@@ -1527,6 +1528,19 @@ class GlobeController extends Controller
             ->render();
             
         }
+        elseif($sub_activity == 'Set Site Category'){
+
+            $what_component = "components.set-site-category";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
+            ->render();
+            
+        }
         else {
 
             $what_component = "components.subactivity-doc-upload";
@@ -1545,7 +1559,7 @@ class GlobeController extends Controller
     public function modal_view_site_components($sam_id, $component)
     {
         try{
-
+            
             if($component == 'site-status'){
 
                 $what_modal = "components.site-status";           
@@ -2413,5 +2427,43 @@ class GlobeController extends Controller
         }
     }
 
+    public function set_site_category(Request $request)
+    {
+        try {
+
+            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+
+            if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
+                $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
+
+                $email_receiver = User::select('users.*')
+                                ->join('user_details', 'users.id', 'user_details.user_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_details.vendor_id', $vendor)
+                                ->where('user_programs.program_id', $request->input('data_program'))
+                                ->get();
+                
+                for ($j=0; $j < count($email_receiver); $j++) { 
+                    $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true") );
+                }
+            }
+            
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::id();
+            
+            \DB::connection('mysql2')->table("site")
+                                    ->where("sam_id", $request->input("sam_id"))
+                                    ->update([
+                                        'site_category' => $request->input('site_category'),
+                                    ]);
+                                              
+            $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+
+            return response()->json(['error' => false, 'message' => "Successfully set site category."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }
 

@@ -207,6 +207,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //COOP
     Route::post('/add-coop-value', [GlobeController::class, 'add_coop_value']);
     Route::get('/issue-history-data/{id}', [GlobeController::class, 'issue_history_data']);
+
+    //Site Category
+    Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
     
 });
 
