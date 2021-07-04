@@ -29,7 +29,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
 
             createdRow: function (row, data, dataIndex) {
-                console.log(data);
+                // console.log(data);
                 $(row).attr('data-site_all', JSON.stringify(data));
                 $(row).attr('data-activity', data.activity_name);
                 $(row).attr('data-site', data.site_name);
