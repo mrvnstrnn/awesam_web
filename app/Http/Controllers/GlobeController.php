@@ -1378,6 +1378,7 @@ class GlobeController extends Controller
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'set site value')
                     ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('activity_complete', 'false')
                     ->get();
 
         }
@@ -1400,10 +1401,10 @@ class GlobeController extends Controller
             if (\Auth::user()->profile_id == 9) {
                 $sites = \DB::connection('mysql2') 
                                 ->table("milestone_tracking")
-                                ->distinct()
                                 ->where('program_id', $program_id)
                                 ->where('activity_type', 'doc approval')
                                 ->where('profile_id', \Auth::user()->profile_id)
+                                ->where('activity_complete', 'false')
                                 ->get();
             } else {
                 $sites = \DB::connection('mysql2') 
@@ -1412,6 +1413,7 @@ class GlobeController extends Controller
                             ->where('program_id', $program_id)
                             ->where('activity_type', 'site approval')
                             ->where('profile_id', \Auth::user()->profile_id)
+                            ->where('activity_complete', 'false')
                             ->get();
             }
 
@@ -1438,6 +1440,7 @@ class GlobeController extends Controller
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('activity_complete', 'false')
                     ->get();
         }
         elseif($activity_type == 'new endorsements vendor'){
@@ -1448,6 +1451,7 @@ class GlobeController extends Controller
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('activity_complete', 'false')
                     ->get();
         }
 
