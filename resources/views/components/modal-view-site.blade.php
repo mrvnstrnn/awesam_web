@@ -96,6 +96,8 @@
                                                         "Precon Docs Approval",
                                                         "Postcon Docs Approval",
 
+                                                        "Lease Renewal Approval"
+
                                                     );  
                                     
                                     $forced_actions = array(
@@ -167,7 +169,10 @@
 
                                                 
                                                 $site[0]->activity_name == "Precon Docs Approval" && $main_activity == "" ||
-                                                $site[0]->activity_name == "Postcon Docs Approval" && $main_activity == ""
+                                                $site[0]->activity_name == "Postcon Docs Approval" && $main_activity == "" ||
+
+
+                                                $site[0]->activity_name == "Lease Renewal Approval" && $main_activity == ""
 
                                                 
                                                 
