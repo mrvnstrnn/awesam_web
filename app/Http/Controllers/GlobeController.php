@@ -1398,7 +1398,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site approval'){
 
-            if (\Auth::user()->profile_id == 9 || \Auth::user()->profile_id == 10) {
+            // if (\Auth::user()->profile_id == 9 || \Auth::user()->profile_id == 10 || \Auth::user()->profile_id == 6 || \Auth::user()->profile_id == 7 ) {
                 $sites = \DB::connection('mysql2') 
                                 ->table("milestone_tracking")
                                 ->where('program_id', $program_id)
@@ -1406,16 +1406,16 @@ class GlobeController extends Controller
                                 ->where('profile_id', \Auth::user()->profile_id)
                                 ->where('activity_complete', 'false')
                                 ->get();
-            } else {
-                $sites = \DB::connection('mysql2') 
-                            ->table("milestone_tracking")
-                            ->distinct()
-                            ->where('program_id', $program_id)
-                            ->where('activity_type', 'site approval')
-                            ->where('profile_id', \Auth::user()->profile_id)
-                            ->where('activity_complete', 'false')
-                            ->get();
-            }
+            // } else {
+            //     $sites = \DB::connection('mysql2') 
+            //                 ->table("milestone_tracking")
+            //                 ->distinct()
+            //                 ->where('program_id', $program_id)
+            //                 ->where('activity_type', 'site approval')
+            //                 ->where('profile_id', \Auth::user()->profile_id)
+            //                 ->where('activity_complete', 'false')
+            //                 ->get();
+            // }
 
         }
 

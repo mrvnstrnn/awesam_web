@@ -96,7 +96,10 @@
                                                         "Precon Docs Approval",
                                                         "Postcon Docs Approval",
 
-                                                        "Lease Renewal Approval"
+                                                        "Lease Renewal Approval",
+                                                        "STS Draft Contract Legal Review",
+                                                        "STS Head Draft Contract Legal Approval",
+                                                        "Finalize Contract Approval"
 
                                                     );  
                                     
@@ -172,8 +175,10 @@
                                                 $site[0]->activity_name == "Postcon Docs Approval" && $main_activity == "" ||
 
 
-                                                $site[0]->activity_name == "Lease Renewal Approval" && $main_activity == ""
-
+                                                $site[0]->activity_name == "Lease Renewal Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "STS Draft Contract Legal Review" && $main_activity == "" ||
+                                                $site[0]->activity_name == "STS Head Draft Contract Legal Approval" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == ""
                                                 
                                                 
                                             )
