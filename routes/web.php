@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/requests/approve-reject', [VendorController::class, 'approvereject_agent_request'])->name('approvereject_agent_request');
 
 
-    Route::get('/vendor-agents', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
+    Route::get('/vendor-agents/{user_id?}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
     
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
@@ -214,6 +214,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //Agent - Supervisor
     Route::get('/get-user-data/{user_id}/{vendor_id}/{is_id}', [GlobeController::class, 'get_user_data']);
     Route::post('/update-user-data', [GlobeController::class, 'update_user_data']);
+
+    
+    Route::get('/change-supervisor/{user_id}/{is_id}', [GlobeController::class, 'change_supervisor']);
 
     
     

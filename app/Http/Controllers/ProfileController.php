@@ -221,7 +221,7 @@ class ProfileController extends Controller
         }
     }
 
-    public function get_supervisor(Request $request)
+    public function get_supervisor()
     {
         try {
 
