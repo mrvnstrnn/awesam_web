@@ -88,6 +88,7 @@ $(document).ready(() => {
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
+            { data: "action" },
             // { data: "number_agent" },
         ],
     });
@@ -256,5 +257,92 @@ $(document).ready(() => {
     //         }
     //     });
     // });
+
+    $(document).on("click", ".update-data", function () {
+        var user_id = $(this).attr("data-value");
+        var vendor_id = $(this).attr("data-vendor_id");
+        var is_id = $(this).attr("data-is_id");
+
+        $(".change-data").attr("data-user_id", user_id);
+        
+        $("#modal-info #supervisor option").remove();
+        $("#modal-info .vendor_program_div div").remove();
+
+        $.ajax({
+            url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    $("#modal-info").modal("show");
+;
+                    resp.supervisor.forEach(element => {
+                        $("#modal-info #supervisor").append(
+                            '<option value="'+element.id+'">'+element.name+'</option>'
+                        );
+                    });
+                    
+                    resp.vendor_program.forEach(element => {
+                        $(".vendor_program_div").append(
+                            '<div class="col-4">' +
+                            '<input class="form-check-input" type="checkbox" value="'+element.program_id+'" name="program[]" id="checkbox'+element.program_id+'">' +
+                            '<label class="form-check-label" for="checkbox'+element.program_id+'">' +
+                                element.program +
+                            '</label>' +
+                            '</div>'
+                        );
+                    });
+
+                    
+                    $('#supervisor').val(is_id).trigger('change');
+
+                    resp.user_data.forEach(element => {
+                        $("input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                    });
+                    
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function (resp) {
+                toastr.error(resp, "Error");
+            }
+        });
+    });
+
+    $(document).on("click", ".change-data", function(){
+        var user_id = $(this).attr('data-user_id');
+        var is_id = $("#supervisor").val();
+
+        var program = [];
+        $.each($("input[type='checkbox']:checked"), function(){
+            program.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/update-user-data",
+            method: "POST",
+            data: {
+                user_id : user_id,
+                is_id : is_id,
+                program : program,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+                    $("#employee-agents-table").DataTable().ajax.reload(function () {
+                        $("#modal-info").modal("hide");
+                        toastr.success(resp.message, "Success");
+                    });
+                } else {
+                    toastr.error(resp.message, "Error");
+                }
+            },
+            error: function (resp) {
+                toastr.error(resp, "Error");
+            }
+        });
+    });
 
 });

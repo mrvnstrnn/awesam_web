@@ -210,6 +210,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //Site Category
     Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
+
+    //Agent - Supervisor
+    Route::get('/get-user-data/{user_id}/{vendor_id}/{is_id}', [GlobeController::class, 'get_user_data']);
+    Route::post('/update-user-data', [GlobeController::class, 'update_user_data']);
+
+    
     
 });
 

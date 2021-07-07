@@ -17,6 +17,7 @@
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +36,6 @@
 @endsection
 
 @section('modals')
-
     <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
             <div class="modal-content">
@@ -55,6 +55,34 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary btn-assign-profile" data-href="{{ route("assign.profile") }}">Approve Employee</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vendor Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                    <div class="form-row">
+                        <div class="col-12 supervisor_div">
+                            <label for="supervisor">Supervisor</label>
+                            <select name="supervisor" id="supervisor" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="">Program</label>
+                        <div class="col-12 vendor_program_div"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-change-info change-data">Update Data</button>
                 </div>
             </div>
         </div>
