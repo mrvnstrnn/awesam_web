@@ -15,7 +15,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('vendor_supervisors',[1]) }}">
+            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('vendor_supervisors') }}">
                 <thead>
                     <tr>
                         <th>User ID</th>
@@ -57,6 +57,22 @@
                             <option value="2">Agent</option>
                             <option value="3">Supervisor</option>
                         </select> --}}
+                    </div>
+
+                    <div class="supervisor-data d-none">
+                        <div class="form-row">
+                            <div class="col-12">
+                                <label for="supervisor">Supervisor</label>
+                                <select name="supervisor" id="supervisor" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-3">
+                            <div class="col-12">
+                                <button class="btn btn-sm btn-primary change_supervisor mr-1">Change Supervisor</button>
+                                <button class="btn btn-sm btn-secondary cancel_change">Back to table</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

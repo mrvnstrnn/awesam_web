@@ -14,6 +14,8 @@ use App\Models\Issue;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\RTBDeclaration;
+use App\Models\VendorProgram;
+use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
 use Illuminate\Support\Facades\Schema;
 use Validator;
@@ -399,19 +401,41 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_agents()
+    public function vendor_agents($user_id = null)
     {
 
         try {
 
-            $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
+            if (is_null($user_id)) {
+                
+                $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
-            $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.vendor_id', $vendors->vendor_id)
-                                    ->where('users.profile_id', 2)
-                                    ->get();
-                                                        
-            $dt = DataTables::of($checkAgent);
+                $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                        ->where('user_details.vendor_id', $vendors->vendor_id)
+                                        ->where('users.profile_id', 2)
+                                        ->get();
+                                                            
+                $dt = DataTables::of($checkAgent)
+                                    ->addColumn('action', function($row){
+                                        return '<button class="btn btn-sm btn-primary update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button>';
+                                    });
+            } else {
+                $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
+
+                $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                        ->where('user_details.vendor_id', $vendors->vendor_id)
+                                        ->where('users.profile_id', 2)
+                                        ->where('user_details.IS_id', $user_id)
+                                        ->get();
+                                                            
+                $dt = DataTables::of($checkAgent)
+                                    ->addColumn('action', function($row){
+                                        return '<button class="btn btn-sm btn-primary get_supervisor" data-user_id="'.$row->user_id.'" data-profile_id="'.$row->profile_id.'" data-is_id="'.$row->IS_id.'" data-name="'.$row->name.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button>';
+                                    });
+            }
+
+                
+            $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
@@ -2502,6 +2526,83 @@ class GlobeController extends Controller
             $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_user_data ($user_id, $vendor_id, $is)
+    {
+        try {
+            $vendor_program = VendorProgram::join('program', 'program.program_id', 'vendor_programs.programs')
+                                                ->where('vendor_programs.vendors_id', $vendor_id)
+                                                ->get();
+
+            $user_data = UserProgram::select('program_id')->where('user_id', $user_id)->get();
+
+            $supervisor = User::select('users.*')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+                                    ->where('vendor_id', $vendor_id)
+                                    ->where('designation', 3)
+                                    ->get();
+
+            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function update_user_data(Request $request)
+    {
+        try {
+            
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+
+            UserProgram::where('user_id', $request->input('user_id'))
+                                                ->delete();  
+
+            for ($i=0; $i < count($request->input('program')); $i++) { 
+                UserProgram::create([
+                    'user_id' => $request->input('user_id'),
+                    'program_id' => $request->input('program')[$i],
+                ]);
+            }
+
+            $supervisor = UserDetail::where('user_id', $request->input('user_id'))
+                                    ->update([
+                                        'IS_id' => $request->input('is_id')
+                                    ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully updated data." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_supervisor ($user_id, $vendor_id)
+    {
+        try {
+            $supervisor = User::select('users.*')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+                                    ->where('vendor_id', $vendor_id)
+                                    ->where('designation', 3)
+                                    ->get();
+
+            return response()->json(['error' => false, 'supervisor' => $supervisor ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+    
+    public function change_supervisor($user_id, $is_id)
+    {
+        try {
+            $supervisor = UserDetail::where('user_id', $user_id)
+                                    ->update([
+                                        'IS_id' => $is_id
+                                    ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully changed supervisor." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
