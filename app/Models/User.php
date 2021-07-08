@@ -11,6 +11,7 @@ use App\Models\ProfilePermission;
 use App\Models\UserDetail;
 use App\Models\Profile;
 use App\Models\VendorProgram;
+use App\Models\SubActivityValue;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -190,5 +191,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $vendors = \DB::connection('mysql2')->table('vendor')
                                     ->whereIn('vendor_status', $arrayProgram)
                                     ->get();
+    }
+
+    public function checkIfSubActUploaded($sub_activity_id, $sam_id)
+    {
+        $sub_act = SubActivityValue::select('id')
+                                        ->where('sub_activity_id', $sub_activity_id)
+                                        ->where('sam_id', $sam_id)
+                                        ->first();
+
+        return $sub_act;
     }
 }

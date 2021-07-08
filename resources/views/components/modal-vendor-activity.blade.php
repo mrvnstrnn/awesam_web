@@ -27,7 +27,7 @@
         color: blue;
     }
 
-    .contact-lessor:hover {
+    .contact-lessor:hover, .contact-lessor_log:hover {
         color: blue;
         cursor: pointer;
     }
@@ -36,7 +36,7 @@
     
     <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
     <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
-    <input id="sub_activity_id" type="hidden" value="{{ $site[0]->program_id }}">
+    <input id="sub_activity_id" type="hidden" value="{{ $site[0]->activity_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
@@ -94,24 +94,120 @@
                                     // $sub_activities = json_decode($site[0]->sub_activity);
                                 @endphp
                                 <div id="actions_list" class="">
-                                    <div class="row border-bottom">
-                                        <div class="col-8">
-                                            <H5>Actions to Complete</H5>
-                                        </div>
-                                        <div class="col-4">
-                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
-                                        </div>
-                                    </div>
-                                    <div class="row p-2 pt-3">
-                                        @foreach ($sub_activities as $sub_activity)
-                                            @if($sub_activity->activity_id == $activity_id)
-                                                <div class="col-md-6 btn_switch_show_action pt-3" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
-                                                <H6><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</H6>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="tabs-animated body-tabs-animated nav mb-4">
+                                                <li class="nav-item">
+                                                    <a role="tab" class="nav-link active" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
+                                                        <span>Lessor Engagement</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a role="tab" class="nav-link" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
+                                                        <span>Activity</span>
+                                                        <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+        
+                                            <div class="tab-content">
+                                                <div class="tab-pane tabs-animation fade active show" id="tab-content-lessor-engagement" role="tabpanel">
+                                                    <div id="action_lessor_engagement" class=''>
+                                                        <div class="row py-5 px-4" id="control_box_log">
+                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Call">
+                                                                <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
+                                                                <div class="pt-3"><small>Call</small></div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Text">
+                                                                <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
+                                                                <div class="pt-3"><small>Text</small></div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor_log" data-value="Email">
+                                                                <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
+                                                                <div class="pt-3"><small>Email</small></div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Site Visit">
+                                                                <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
+                                                                <div class="pt-3"><small>Site Visit</small></div>
+                                                    
+                                                            </div>
+                                                        </div>
+                                                        <div class="row py-3 px-5 d-none" id="control_form_log">
+                                                            <div class="col-12 py-3">
+                                                            <form class="engagement_form">
+                                                                <div class="position-relative row form-group">
+                                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">Date</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative row form-group">
+                                                                    <label for="lessor_method_log" class="col-sm-3 col-form-label">Method</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="text" class="form-control" id="lessor_method_log" name="lessor_method_log" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative row form-group">
+                                                                    <label for="lessor_remarks_log" class="col-sm-3 col-form-label">Remarks</label>
+                                                                    <div class="col-sm-9">
+                                                                        <textarea name="lessor_remarks_log" id="lessor_remarks_log" class="form-control"></textarea>
+                                                                        <small class="text-danger lessor_remarks-errors"></small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative row form-group">
+                                                                    <label for="lessor_approval_log" class="col-sm-3 col-form-label">Approval</label>
+                                                                    <div class="col-sm-9">
+                                                                        <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
+                                                                            <option value="active">Approval not yet secured</option>
+                                                                            <option value="approved">Approval Secured</option>
+                                                                            <option value="denied">Lessor Rejected</option>
+                                                                        </select>
+                                                                        <small class="text-danger lessor_approval-errors"></small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative row form-group ">
+                                                                    <div class="col-sm-10 offset-sm-3">
+                                                                        <button class="btn btn-primary save_engagement_log" type="button">Save Engagement</button>
+                                                                        <button class="btn btn-secondary cancel_engagement_log" type="button">Back to Engagement</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            </div>
+                                                    
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 table-responsive table_lessor_parent_log">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            @endif                                    
-                                        @endforeach
-                                        <div class="col-12 mt-5">
-                                        <small>* Required actions are in bold letters</small>
+                                                <div class="tab-pane tabs-animation fade" id="tab-content-action-to-complete" role="tabpanel">
+                                                    <div class="row border-bottom">
+                                                        <div class="col-8">
+                                                            <H5>Actions to Complete</H5>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="row p-2 pt-3 action_to_complete_parent">
+                                                        @foreach ($sub_activities as $sub_activity)
+                                                            @if($sub_activity->activity_id == $activity_id)
+                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
+                                                                    <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset;"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</h6>
+                                                                    
+                                                                    @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
+                                                                    <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                    @endif
+                                                                </div>
+                                                            @endif                                    
+                                                        @endforeach
+                                                        <div class="col-12 mt-5">
+                                                        <small>* Required actions are in bold letters</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -346,6 +442,149 @@
         //         }
         //     });
         // });
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+
+
+        var sub_activity_id = $("#sub_activity_id").val();
+        var sam_id = $(".ajax_content_box").attr("data-sam_id");
+        
+        htmllist = '<div class="table-responsive table_uploaded_parent_log">' +
+                '<table class="table_uploaded_log align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th style="width: 5%">#</th>' +
+                            '<th>Method</th>' +
+                            '<th style="width: 35%">Remarks</th>' +
+                            '<th style="width: 35%">status</th>' +
+                            '<th>Date Approved</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>' +
+            '</div>';
+
+        $('.table_lessor_parent_log').html(htmllist);
+        $(".table_uploaded_log").attr("id", "table_uploaded_files_log_"+sub_activity_id);
+
+        if (! $.fn.DataTable.isDataTable("#table_uploaded_files_log_"+sub_activity_id) ){
+            $("#table_uploaded_files_log_"+sub_activity_id).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+sam_id,
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "method" },
+                    { data: "value" },
+                    { data: "status" },
+                    { data: "date_created" },
+                ],
+            });
+        } else {
+            $("#table_uploaded_files_log_"+sub_activity_id).DataTable().ajax.reload();
+        }
+
+        $(document).on("click", ".cancel_engagement_log", function(){
+            $('#control_box_log').removeClass('d-none');
+            $('#control_form_log').addClass('d-none');
+        });
+
+        $(document).on("click", ".contact-lessor_log", function(){
+            $('#control_box_log').addClass('d-none');
+            $('#control_form_log').removeClass('d-none');
+
+            $("#lessor_method_log").val($(this).attr("data-value"));
+            $("#lessor_date_log").val(today);
+        });
+
+        $(".save_engagement_log").on("click",  function (e){
+            // e.preventDefault();
+            var lessor_method = $("#lessor_method_log").val();
+            var lessor_approval = $("#lessor_approval_log").val();
+            var lessor_remarks = $("#lessor_remarks_log").val();
+            var site_vendor_id = $("#modal_site_vendor_id").val();
+            var program_id = $("#modal_program_id").val();
+            var sam_id = $(".ajax_content_box").attr("data-sam_id");
+            // var sub_activity_id = $(this).attr("data-sub_activity_id");
+            var sub_activity_id = $("#sub_activity_id").val();
+            var site_name = $("#viewInfoModal .menu-header-title").text();
+
+            $(this).attr('disabled', 'disabled');
+            $(this).text('Processing...');
+
+            $("form.engagement_form_log small").text("");
+
+            $.ajax({
+                url: "/add-engagement",
+                method: "POST",
+                data: {
+                    lessor_method : lessor_method,
+                    lessor_approval : lessor_approval,
+                    lessor_remarks : lessor_remarks,
+                    sam_id : sam_id,
+                    sub_activity_id : sub_activity_id,
+                    site_name : site_name,
+                    site_vendor_id : site_vendor_id,
+                    program_id : program_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+
+                        $('#table_uploaded_files_log_'+sub_activity_id).DataTable().ajax.reload(function (){
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            // $("#viewInfoModal").modal("hide");
+                            $("#lessor_remarks_log").val("");
+                            $(".save_engagement_log").removeAttr('disabled');
+                            $(".save_engagement_log").text('Save Engagement');
+                        });
+                        
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                        $(".save_engagement_log").removeAttr('disabled');
+                        $(".save_engagement_log").text('Save Engagement');
+                    }
+                },
+                error: function (resp){
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                    $(".save_engagement_log").removeAttr('disabled');
+                    $(".save_engagement_log").text('Save Engagement');
+                }
+            });
+        });
 
     });
 
