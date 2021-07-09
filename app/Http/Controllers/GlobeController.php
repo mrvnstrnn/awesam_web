@@ -2238,6 +2238,16 @@ class GlobeController extends Controller
                                     } else {
                                         return $row->value;  
                                     }                      
+                                })
+                                ->addColumn('method', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor_method'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
                                 });
             return $dt->make(true);
 

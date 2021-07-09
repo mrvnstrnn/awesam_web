@@ -150,7 +150,7 @@
                 },
                 success: function (file, resp) {
                     if (!resp.error){
-                        $("#action_doc_upload").addClass("d-none");
+                        // $("#action_doc_upload").addClass("d-none");
                         this.removeFile(file);
                         var sam_id = "{{ $sam_id }}";
                         var sub_activity_id = "{{ $sub_activity_id }}";
@@ -181,7 +181,12 @@
                                             resp.message,
                                             'success'
                                         )
-                                        $(".btn_switch_back_to_actions").trigger("click");
+                                        // $(".btn_switch_back_to_actions").trigger("click");
+
+                                        $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
+                                            '<i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>'
+                                        );
+
                                     });
                                     
                                 } else {
