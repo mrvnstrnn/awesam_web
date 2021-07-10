@@ -218,8 +218,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/change-supervisor/{user_id}/{is_id}', [GlobeController::class, 'change_supervisor']);
 
-    
-    
+    //Issue Management
+    Route::get('/get-site_issue_remarks/{issue_id}', [GlobeController::class, 'get_site_issue_remarks']);
+    Route::post('/add-remarks', [GlobeController::class, 'add_remarks']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

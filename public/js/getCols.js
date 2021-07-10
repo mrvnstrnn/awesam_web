@@ -9,7 +9,6 @@ function getCols(active_program, active_table, active_profile){
         async: false,
 
         success: function (resp) {
-
             if(resp.length > 0){
                 
                 if(active_table=='new_endorsements_globe'){
@@ -51,8 +50,44 @@ function getCols(active_program, active_table, active_profile){
                 }
                 resp.forEach(function(field){
                     
-                // console.log(field);
                     switch(field['source_field']){
+                        case "issue_type":
+
+                            cols.push(
+                                {
+                                    data : field['source_field'],
+                                    name: field['field_name'],
+                                    searchable: true,
+                                    regex: true,
+                                    render : function(data){
+                                        return data;
+                                        // return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] + '</small>';
+                                    }
+                                }
+                            );
+                            break;
+
+                        case "issue_details":
+
+                            cols.push(
+                                {
+                                    data : field['source_field'],
+                                    name: field['field_name'],
+                                    searchable: true,
+                                    regex: true,
+                                    render : function(data){
+                                        // col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        // var results = $.map( col, function(e,i){
+                                        //     if( e.field_name === field['search_field'] ) 
+                                        //     return e; 
+                                        // });
+                                        return data;
+                                    
+                                    }
+                                }
+                            );
+                            break;
+
                         case "site_fields":
 
                             cols.push(

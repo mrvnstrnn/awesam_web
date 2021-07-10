@@ -17,6 +17,7 @@ use App\Models\RTBDeclaration;
 use App\Models\VendorProgram;
 use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
+use App\Models\IssueRemark;
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -1499,9 +1500,12 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                 ->table("site_issue")
                 ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
+                ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                 ->where('site.program_id', $program_id)
                 ->where('site_issue.issue_status', 'active')
                 ->get();
+
+                // dd($sites);
         }
 
         else {
@@ -1952,13 +1956,16 @@ class GlobeController extends Controller
 
             $what_modal = "components.site-issue-validation";
 
-            return \View::make($what_modal)
-            ->with([
-                'site' => $site,
-                'main_activity' => "Issue Validation",
-                'what_table' => $what_table,
-            ])
-            ->render();
+            return response()->json(['error' => false, 'site' => $site, 'what_modal' => $what_modal  ]);
+
+            // return \View::make($what_modal)
+            // ->with([
+            //     'site' => $site,
+            //     'main_activity' => "Issue Validation",
+            //     'what_table' => $what_table,
+            //     'issue_id' => $issue_id,
+            // ])
+            // ->render();
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -2043,10 +2050,38 @@ class GlobeController extends Controller
     public function get_my_issue($sam_id)
     {
         try {
-            $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
-                            ->where('site_issue.user_id', \Auth::id())
-                            ->where('site_issue.sam_id', $sam_id)
-                            ->get();
+            // if (\Auth::user()->profile_id == 2) {
+            //     $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+            //                         ->join('users', 'users.id', 'site_issue.user_id')
+            //                         ->where('site_issue.user_id', \Auth::id())
+            //                         ->where('site_issue.sam_id', $sam_id)
+            //                         ->get();
+            // } else if (\Auth::user()->profile_id == 3) {
+            //     $agents = \DB::connection('mysql2')
+            //                             ->table('users')
+            //                             ->select('users.id')
+            //                             ->join('user_details', 'user_details.user_id', 'users.id')
+            //                             ->where('user_details.IS_id', \Auth::user()->id)
+            //                             ->get();
+
+            //     $array_id = collect();
+
+            //     foreach ($agents as $agent) {
+            //         $array_id->push($agent->id);
+            //     }
+                
+            //     $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+            //                     ->join('users', 'users.id', 'site_issue.user_id')
+            //                     ->whereIn('site_issue.user_id', $array_id->all())
+            //                     ->where('site_issue.sam_id', $sam_id)
+            //                     ->get();
+            // } else {
+                $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+                                ->join('users', 'users.id', 'site_issue.user_id')
+                                ->where('site_issue.user_id', \Auth::id())
+                                ->where('site_issue.sam_id', $sam_id)
+                                ->get();
+            // }
 
             $dt = DataTables::of($data);
 
@@ -2613,6 +2648,45 @@ class GlobeController extends Controller
                                     ]);
 
             return response()->json(['error' => false, 'message' => "Successfully changed supervisor." ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_site_issue_remarks($issue_id)
+    {
+        try {
+            $issue_remakrs = \DB::connection('mysql2')
+                                        ->table('site_issue_remarks')
+                                        ->where('site_issue_id', $issue_id)
+                                        ->get();
+
+            $dt = DataTables::of($issue_remakrs);
+            
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function add_remarks(Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => 'required',
+                'date_engage' => 'required',
+            ));
+
+            if ($validate->passes()) {
+                IssueRemark::create($request->all());
+                Issue::where('issue_id', $request->input('site_issue_id'))
+                        ->update([
+                            'issue_status' => $request->input('status'),
+                        ]);
+                return response()->json(['error' => false, 'message' => "Successfully added remarks."]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all() ]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

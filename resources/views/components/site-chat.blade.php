@@ -62,9 +62,11 @@
                     @endif
 
                 @empty
-                    <div class="text-center pt-5"> 
-                        <i class="fa fa-envelope fa-4x"></i>
-                        <h3 class="text-center">no message</h3>    
+                    <div class="no_message">
+                        <div class="text-center pt-5"> 
+                            <i class="fa fa-envelope fa-4x"></i>
+                            <h3 class="text-center">no message</h3>    
+                        </div>
                     </div>
                 @endforelse
             </div>
