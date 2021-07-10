@@ -1502,7 +1502,8 @@ class GlobeController extends Controller
                 ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
                 ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                 ->where('site.program_id', $program_id)
-                ->where('site_issue.issue_status', 'active')
+                // ->where('site_issue.issue_status', 'active')
+                ->whereNull('site_issue.date_resolve')
                 ->get();
 
                 // dd($sites);
@@ -1956,7 +1957,7 @@ class GlobeController extends Controller
 
             $what_modal = "components.site-issue-validation";
 
-            return response()->json(['error' => false, 'site' => $site, 'what_modal' => $what_modal  ]);
+            return response()->json(['error' => false, 'site' => $site  ]);
 
             // return \View::make($what_modal)
             // ->with([
@@ -1978,7 +1979,8 @@ class GlobeController extends Controller
                             ->table('site_issue')
                             ->where('issue_id', $issue_id)
                             ->update([
-                                'issue_status' => 'resolved'
+                                'date_resolve' => Carbon::now()->toDate(),
+                                'approver_id' => \Auth::id(),
                             ]);
 
             

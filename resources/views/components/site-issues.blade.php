@@ -103,7 +103,9 @@
                 </div>
             </form>
     
+            @if (\Auth::user()->profile_id == 2)
             <button id="btn_add_remarks" class=" mb-3 btn btn-primary float-right" type="button">Add Remarks</button>
+            @endif
             <button class=" mb-3 btn btn-secondary float-right btn_back_to_list mr-2" type="button">Back to issue list</button>
 
             <br><hr><br>
@@ -145,7 +147,9 @@
                     </div>
                 </div>
 
+                @if (\Auth::user()->profile_id == 2)
                 <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Remarks</button>
+                @endif
                 <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
             </form>
 

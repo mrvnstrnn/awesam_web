@@ -1,5 +1,5 @@
 
-    $("#start_date").flatpickr(
+    $("#start_date, #date_engage").flatpickr(
     { 
         maxDate: new Date()
     });

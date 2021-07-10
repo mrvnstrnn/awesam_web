@@ -51,42 +51,37 @@ function getCols(active_program, active_table, active_profile){
                 resp.forEach(function(field){
                     
                     switch(field['source_field']){
-                        case "issue_type":
 
-                            cols.push(
-                                {
-                                    data : field['source_field'],
-                                    name: field['field_name'],
-                                    searchable: true,
-                                    regex: true,
-                                    render : function(data){
-                                        return data;
-                                        // return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] + '</small>';
-                                    }
-                                }
-                            );
-                            break;
+                        // case "issue_status":
 
-                        case "issue_details":
+                        //     cols.push(
+                        //         {
+                        //             data : field['source_field'],
+                        //             name: field['field_name'],
+                        //             searchable: true,
+                        //             regex: true,
+                        //             render : function(data){
+                        //                 return data;
+                        //             }
+                        //         }
+                        //     );
+                        //     break;
 
-                            cols.push(
-                                {
-                                    data : field['source_field'],
-                                    name: field['field_name'],
-                                    searchable: true,
-                                    regex: true,
-                                    render : function(data){
-                                        // col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                        // var results = $.map( col, function(e,i){
-                                        //     if( e.field_name === field['search_field'] ) 
-                                        //     return e; 
-                                        // });
-                                        return data;
+                        // case "issue_details":
+
+                        //     cols.push(
+                        //         {
+                        //             data : field['source_field'],
+                        //             name: field['field_name'],
+                        //             searchable: true,
+                        //             regex: true,
+                        //             render : function(data){
+                        //                 return data;
                                     
-                                    }
-                                }
-                            );
-                            break;
+                        //             }
+                        //         }
+                        //     );
+                        //     break;
 
                         case "site_fields":
 
@@ -132,10 +127,10 @@ function getCols(active_program, active_table, active_profile){
                                 {
                                     data : field['source_field'], 
                                     name: field['field_name'],
-                                    // render : function(data){
-                                    //     site_name = "</strong>" + data + '</strong>';
-                                    //     return site_name;
-                                    // }
+                                    render : function(data){
+                                        // site_name = "</strong>" + data + '</strong>';
+                                        return data;
+                                    }
                                 }
                             );
                             // cols.push({data : field['source_field'], name: field['field_name']});

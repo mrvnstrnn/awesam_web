@@ -93,7 +93,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 7;
+    var profile_id = 10;
     var table_to_load = 'issue_validation';
     var main_activity = "Issue Validation";
     //////////////////////////////////////
