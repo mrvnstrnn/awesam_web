@@ -103,7 +103,7 @@
                 </div>
             </form>
     
-            <button id="btn_add_remarks" class=" mb-3 btn btn-danger float-right" type="button">Add Remarks</button>
+            <button id="btn_add_remarks" class=" mb-3 btn btn-primary float-right" type="button">Add Remarks</button>
             <button class=" mb-3 btn btn-secondary float-right btn_back_to_list mr-2" type="button">Back to issue list</button>
 
             <br><hr><br>
@@ -131,6 +131,7 @@
                     </div>
                     <div class="col-8">
                         <textarea type="text" class="form-control" name="remarks" id="remarks"></textarea>
+                        <small class="text-danger remarks-errors"></small>
                     </div>
                 </div>
     
@@ -140,6 +141,7 @@
                     </div>
                     <div class="col-8">
                         <input type="date" class="form-control" name="date_engage" id="date_engage">
+                        <small class="text-danger date_engage-errors"></small>
                     </div>
                 </div>
 
@@ -156,7 +158,7 @@
 {{-- <div class="divider"></div> --}}
 <div class="row" id="issue_table">
     <div class="col-12">
-        <table class="mb-0 table table-bordered my_table_issue w-100" data-href="/get-my-issue/{{ $site[0]->sam_id }}">
+        <table class="table-hover mb-0 table table-bordered my_table_issue w-100" data-href="/get-my-issue/{{ $site[0]->sam_id }}">
             <thead>
                 <tr>
                     <th>#</th>

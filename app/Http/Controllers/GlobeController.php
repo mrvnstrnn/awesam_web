@@ -2685,7 +2685,7 @@ class GlobeController extends Controller
                         ]);
                 return response()->json(['error' => false, 'message' => "Successfully added remarks."]);
             } else {
-                return response()->json(['error' => true, 'message' => $validate->errors()->all() ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

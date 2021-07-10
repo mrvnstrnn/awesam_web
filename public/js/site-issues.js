@@ -137,7 +137,7 @@
 
                         $('.table-list-issue').html("");
                         htmllist = '<div class="table-responsive table_issue_parent">' +
-                            '<table class="table_issue_remarks align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                            '<table class="table-hover table_issue_remarks align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
                                 '<thead>' +
                                     '<tr>' +
                                         '<th style="width: 5%">#</th>' +
@@ -215,6 +215,8 @@
 
         var site_issue_id = $("#site_issue_id").val();
 
+        $(".add_remarks_issue_form small").text();
+
         $.ajax({
             url: "/add-remarks",
             method: "POST",
@@ -234,16 +236,26 @@
 
                         $(".add_btn_remarks_submit").removeAttr("disabled");
                         $(".add_btn_remarks_submit").text("Add Remarks");
+
+                        $(".btn_cancel_remarks").trigger("click");
                     });
 
                     $(".my_table_issue").DataTable().ajax.reload();
                     
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            console.log(index);
+                            $(".add_remarks_issue_form ." + index + "-errors").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
 
                     $(".add_btn_remarks_submit").removeAttr("disabled");
                     $(".add_btn_remarks_submit").text("Add Remarks");
