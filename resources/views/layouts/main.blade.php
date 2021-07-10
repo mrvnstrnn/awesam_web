@@ -37,7 +37,7 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-        <script
+        {{-- <script
             id="sap-ui-bootstrap"
             src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
             data-sap-ui-theme="sap_belize"
@@ -53,7 +53,7 @@
                 });
                 });
             });
-        </script>
+        </script> --}}
         
 
         <style>

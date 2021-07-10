@@ -2261,6 +2261,57 @@ class GlobeController extends Controller
             }
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
+                                                        ->whereNull('type')
+                                                        ->whereIn('user_id', $array_id)
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                                ->addColumn('value', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor_remarks'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('method', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor_method'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                });
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function get_engagement($sub_activity_id, $sam_id)
+    {
+        try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('type', 'lessor_engagement')
                                                         ->whereIn('user_id', $array_id)
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
@@ -2307,10 +2358,11 @@ class GlobeController extends Controller
             if ($validate->passes()) {
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'sub_activity_id' => !is_null($request->input("log")) ? "" : $request->input("sub_activity_id"),
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
                     'status' => $request->input('lessor_approval'),
+                    'type' => 'lessor_engagement',
                 ]); 
 
                 // $email_receiver = User::select('users.*')

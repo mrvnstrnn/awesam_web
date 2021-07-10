@@ -167,7 +167,7 @@
                                                                 </div>
                                                                 <div class="position-relative row form-group ">
                                                                     <div class="col-sm-10 offset-sm-3">
-                                                                        <button class="btn btn-primary save_engagement_log" type="button">Save Engagement</button>
+                                                                        <button class="btn btn-primary save_engagement_log" data-log="true" type="button">Save Engagement</button>
                                                                         <button class="btn btn-secondary cancel_engagement_log" type="button">Back to Engagement</button>
                                                                     </div>
                                                                 </div>
@@ -193,7 +193,7 @@
                                                     <div class="row p-2 pt-3 action_to_complete_parent">
                                                         @foreach ($sub_activities as $sub_activity)
                                                             @if($sub_activity->activity_id == $activity_id)
-                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-required="">
+                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="">
                                                                     <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset;"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</h6>
                                                                     
                                                                     @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
@@ -236,6 +236,7 @@
             var active_subactivity = $(this).attr('data-sub_activity').replace("/", " ");
             var active_sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
+            var document_type = $(this).attr('data-document_type');
             $("#sub_activity_id").val(sub_activity_id);
 
             var program_id = $('#modal_program_id').val();
@@ -253,86 +254,90 @@
             $(".loading_div").html(loader);
             $('#actions_box').html("");
 
-            $.ajax({
-                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
-                method: "GET",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp){
-                    if (!resp.error) {
+            // if (document_type == "permit") {
+                
+            // } else {
+                $.ajax({
+                    url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
+                    method: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+                        if (!resp.error) {
 
-                        $(".loading_div").html("");
+                            $(".loading_div").html("");
 
-                        $('#actions_box').html(resp);
+                            $('#actions_box').html(resp);
 
-                        if (active_subactivity == "LESSOR ENGAGEMENT") {
-                            $(".table_lessor_parent").html(
-                                '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
-                                    '<thead>' +
-                                        '<tr>' +
-                                            '<th>Date</th>' +
-                                            '<th>Method</th>' +
-                                            '<th>Remarks</th>' +
-                                            '<th>Approved</th>' +
-                                        '</tr>' +
-                                    '</thead>' +
-                                '</table>'
-                            );
+                            if (active_subactivity == "LESSOR ENGAGEMENT") {
+                                $(".table_lessor_parent").html(
+                                    '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                                        '<thead>' +
+                                            '<tr>' +
+                                                '<th>Date</th>' +
+                                                '<th>Method</th>' +
+                                                '<th>Remarks</th>' +
+                                                '<th>Approved</th>' +
+                                            '</tr>' +
+                                        '</thead>' +
+                                    '</table>'
+                                );
 
-                            $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
+                                $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
 
-                            if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
-                                $('#table_lessor_'+sub_activity_id).DataTable({
-                                    processing: true,
-                                    serverSide: true,
-                                    ajax: {
-                                        url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
-                                        type: 'GET',
-                                        headers: {
-                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
+                                    $('#table_lessor_'+sub_activity_id).DataTable({
+                                        processing: true,
+                                        serverSide: true,
+                                        ajax: {
+                                            url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                                            type: 'GET',
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            },
                                         },
-                                    },
-                                    dataSrc: function(json){
-                                        return json.data;
-                                    },
-                                    // 'createdRow': function( row, data, dataIndex ) {
-                                    //     $(row).attr('data-value', data.value);
-                                    //     $(row).attr('style', 'cursor: pointer');
-                                    // },
-                                    columns: [
-                                        { data: "date_created" },
-                                        { data: "value" },
-                                        { data: "status" },
-                                        { data: "date_created" },
-                                    ],
-                                });
-                            } 
-                        }
-                        
-                    } else {
+                                        dataSrc: function(json){
+                                            return json.data;
+                                        },
+                                        // 'createdRow': function( row, data, dataIndex ) {
+                                        //     $(row).attr('data-value', data.value);
+                                        //     $(row).attr('style', 'cursor: pointer');
+                                        // },
+                                        columns: [
+                                            { data: "date_created" },
+                                            { data: "value" },
+                                            { data: "status" },
+                                            { data: "date_created" },
+                                        ],
+                                    });
+                                } 
+                            }
+                            
+                        } else {
 
+                            $(".loading_div").html("");
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+
+
+                        }
+                    },
+                    error: function (resp){
                         $(".loading_div").html("");
                         Swal.fire(
                             'Error',
-                            resp.message,
+                            resp,
                             'error'
                         )
 
-
                     }
-                },
-                error: function (resp){
-                    $(".loading_div").html("");
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
+                });
 
-                }
-            });
-
+            // }
             
 
         });
@@ -460,7 +465,7 @@
                             '<th style="width: 5%">#</th>' +
                             '<th>Method</th>' +
                             '<th style="width: 35%">Remarks</th>' +
-                            '<th style="width: 35%">status</th>' +
+                            '<th style="width: 35%">Status</th>' +
                             '<th>Date Approved</th>' +
                         '</tr>' +
                     '</thead>' +
@@ -475,7 +480,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+sam_id,
+                    url: "/get-engagement/"+sub_activity_id+"/"+sam_id,
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -517,7 +522,7 @@
             var site_vendor_id = $("#modal_site_vendor_id").val();
             var program_id = $("#modal_program_id").val();
             var sam_id = $(".ajax_content_box").attr("data-sam_id");
-            // var sub_activity_id = $(this).attr("data-sub_activity_id");
+            var log = $(this).attr("data-log");
             var sub_activity_id = $("#sub_activity_id").val();
             var site_name = $("#viewInfoModal .menu-header-title").text();
 
@@ -537,7 +542,8 @@
                     sub_activity_id : sub_activity_id,
                     site_name : site_name,
                     site_vendor_id : site_vendor_id,
-                    program_id : program_id
+                    program_id : program_id,
+                    log : log,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
