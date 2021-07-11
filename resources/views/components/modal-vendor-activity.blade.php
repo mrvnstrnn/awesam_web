@@ -261,85 +261,7 @@
 
             if (document_type == "permit") {
                 if (substep_same == "same") {
-                    $.ajax({
-                        url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
-                        method: "GET",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (resp){
-                            if (!resp.error) {
-
-                                $(".loading_div").html("");
-
-                                $('#actions_box').html(resp);
-
-                                if (active_subactivity == "LESSOR ENGAGEMENT") {
-                                    $(".table_lessor_parent").html(
-                                        '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
-                                            '<thead>' +
-                                                '<tr>' +
-                                                    '<th>Date</th>' +
-                                                    '<th>Method</th>' +
-                                                    '<th>Remarks</th>' +
-                                                    '<th>Approved</th>' +
-                                                '</tr>' +
-                                            '</thead>' +
-                                        '</table>'
-                                    );
-
-                                    $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
-
-                                    if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
-                                        $('#table_lessor_'+sub_activity_id).DataTable({
-                                            processing: true,
-                                            serverSide: true,
-                                            ajax: {
-                                                url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
-                                                type: 'GET',
-                                                headers: {
-                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                },
-                                            },
-                                            dataSrc: function(json){
-                                                return json.data;
-                                            },
-                                            // 'createdRow': function( row, data, dataIndex ) {
-                                            //     $(row).attr('data-value', data.value);
-                                            //     $(row).attr('style', 'cursor: pointer');
-                                            // },
-                                            columns: [
-                                                { data: "date_created" },
-                                                { data: "value" },
-                                                { data: "status" },
-                                                { data: "date_created" },
-                                            ],
-                                        });
-                                    } 
-                                }
-                                
-                            } else {
-
-                                $(".loading_div").html("");
-                                Swal.fire(
-                                    'Error',
-                                    resp.message,
-                                    'error'
-                                )
-
-
-                            }
-                        },
-                        error: function (resp){
-                            $(".loading_div").html("");
-                            Swal.fire(
-                                'Error',
-                                resp,
-                                'error'
-                            )
-
-                        }
-                    });
+                    ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id);
                 } else {
                     $.ajax({
                         url: "/subactivity-step/" + sub_activity_id + "/" + active_sam_id + "/" + active_subactivity ,
@@ -378,89 +300,94 @@
                     });
                 }
             } else {
-                $.ajax({
-                    url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
-                    method: "GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp){
-                        if (!resp.error) {
-
-                            $(".loading_div").html("");
-
-                            $('#actions_box').html(resp);
-
-                            if (active_subactivity == "LESSOR ENGAGEMENT") {
-                                $(".table_lessor_parent").html(
-                                    '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
-                                        '<thead>' +
-                                            '<tr>' +
-                                                '<th>Date</th>' +
-                                                '<th>Method</th>' +
-                                                '<th>Remarks</th>' +
-                                                '<th>Approved</th>' +
-                                            '</tr>' +
-                                        '</thead>' +
-                                    '</table>'
-                                );
-
-                                $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
-
-                                if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
-                                    $('#table_lessor_'+sub_activity_id).DataTable({
-                                        processing: true,
-                                        serverSide: true,
-                                        ajax: {
-                                            url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
-                                            type: 'GET',
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            },
-                                        },
-                                        dataSrc: function(json){
-                                            return json.data;
-                                        },
-                                        // 'createdRow': function( row, data, dataIndex ) {
-                                        //     $(row).attr('data-value', data.value);
-                                        //     $(row).attr('style', 'cursor: pointer');
-                                        // },
-                                        columns: [
-                                            { data: "date_created" },
-                                            { data: "value" },
-                                            { data: "status" },
-                                            { data: "date_created" },
-                                        ],
-                                    });
-                                } 
-                            }
-                            
-                        } else {
-
-                            $(".loading_div").html("");
-                            Swal.fire(
-                                'Error',
-                                resp.message,
-                                'error'
-                            )
-
-
-                        }
-                    },
-                    error: function (resp){
-                        $(".loading_div").html("");
-                        Swal.fire(
-                            'Error',
-                            resp,
-                            'error'
-                        )
-
-                    }
-                });
+                ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id) 
             }
             
 
         });
+
+        function ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id) 
+        {
+            $.ajax({
+                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+
+                        $(".loading_div").html("");
+
+                        $('#actions_box').html(resp);
+
+                        if (active_subactivity == "LESSOR ENGAGEMENT") {
+                            $(".table_lessor_parent").html(
+                                '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                                    '<thead>' +
+                                        '<tr>' +
+                                            '<th>Date</th>' +
+                                            '<th>Method</th>' +
+                                            '<th>Remarks</th>' +
+                                            '<th>Approved</th>' +
+                                        '</tr>' +
+                                    '</thead>' +
+                                '</table>'
+                            );
+
+                            $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
+
+                            if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
+                                $('#table_lessor_'+sub_activity_id).DataTable({
+                                    processing: true,
+                                    serverSide: true,
+                                    ajax: {
+                                        url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                                        type: 'GET',
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                    },
+                                    dataSrc: function(json){
+                                        return json.data;
+                                    },
+                                    // 'createdRow': function( row, data, dataIndex ) {
+                                    //     $(row).attr('data-value', data.value);
+                                    //     $(row).attr('style', 'cursor: pointer');
+                                    // },
+                                    columns: [
+                                        { data: "date_created" },
+                                        { data: "value" },
+                                        { data: "status" },
+                                        { data: "date_created" },
+                                    ],
+                                });
+                            } 
+                        }
+                        
+                    } else {
+
+                        $(".loading_div").html("");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+
+
+                    }
+                },
+                error: function (resp){
+                    $(".loading_div").html("");
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                }
+            });
+        }
 
         // var today = new Date();
         // var dd = String(today.getDate()).padStart(2, '0');
