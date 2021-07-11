@@ -193,14 +193,16 @@
                                                     <div class="row p-2 pt-3 action_to_complete_parent">
                                                         @foreach ($sub_activities as $sub_activity)
                                                             @if($sub_activity->activity_id == $activity_id)
-                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="">
+                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
+                                                                    data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
+                                                                    >
                                                                     <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset;"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</h6>
                                                                     
                                                                     @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
                                                                     <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
                                                                     @endif
                                                                 </div>
-                                                            @endif                                    
+                                                            @endif                               
                                                         @endforeach
                                                         <div class="col-12 mt-5">
                                                         <small>* Required actions are in bold letters</small>
@@ -222,6 +224,7 @@
             </div>
         </div>
     </div>
+
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script>
@@ -237,6 +240,8 @@
             var active_sam_id = $(this).attr('data-sam_id');
             var sub_activity_id = $(this).attr('data-sub_activity_id');
             var document_type = $(this).attr('data-document_type');
+            var substep_same = $(this).attr('data-substep_same');
+
             $("#sub_activity_id").val(sub_activity_id);
 
             var program_id = $('#modal_program_id').val();
@@ -254,9 +259,125 @@
             $(".loading_div").html(loader);
             $('#actions_box').html("");
 
-            // if (document_type == "permit") {
-                
-            // } else {
+            if (document_type == "permit") {
+                if (substep_same == "same") {
+                    $.ajax({
+                        url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
+                        method: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp){
+                            if (!resp.error) {
+
+                                $(".loading_div").html("");
+
+                                $('#actions_box').html(resp);
+
+                                if (active_subactivity == "LESSOR ENGAGEMENT") {
+                                    $(".table_lessor_parent").html(
+                                        '<table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                                            '<thead>' +
+                                                '<tr>' +
+                                                    '<th>Date</th>' +
+                                                    '<th>Method</th>' +
+                                                    '<th>Remarks</th>' +
+                                                    '<th>Approved</th>' +
+                                                '</tr>' +
+                                            '</thead>' +
+                                        '</table>'
+                                    );
+
+                                    $(".table_lessor").attr("id", "table_lessor_"+sub_activity_id);
+
+                                    if (! $.fn.DataTable.isDataTable('#table_lessor_'+sub_activity_id) ){
+                                        $('#table_lessor_'+sub_activity_id).DataTable({
+                                            processing: true,
+                                            serverSide: true,
+                                            ajax: {
+                                                url: "/get-my-uploaded-file-data/"+sub_activity_id+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                                                type: 'GET',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                },
+                                            },
+                                            dataSrc: function(json){
+                                                return json.data;
+                                            },
+                                            // 'createdRow': function( row, data, dataIndex ) {
+                                            //     $(row).attr('data-value', data.value);
+                                            //     $(row).attr('style', 'cursor: pointer');
+                                            // },
+                                            columns: [
+                                                { data: "date_created" },
+                                                { data: "value" },
+                                                { data: "status" },
+                                                { data: "date_created" },
+                                            ],
+                                        });
+                                    } 
+                                }
+                                
+                            } else {
+
+                                $(".loading_div").html("");
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+
+
+                            }
+                        },
+                        error: function (resp){
+                            $(".loading_div").html("");
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "/subactivity-step/" + sub_activity_id + "/" + active_sam_id + "/" + active_subactivity ,
+                        method: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp){
+                            if (!resp.error) {
+
+                                $(".loading_div").html("");
+
+                                $('#actions_box').html(resp);
+                                
+                            } else {
+
+                                $(".loading_div").html("");
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+
+
+                            }
+                        },
+                        error: function (resp){
+                            $(".loading_div").html("");
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+
+                        }
+                    });
+                }
+            } else {
                 $.ajax({
                     url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
                     method: "GET",
@@ -336,8 +457,7 @@
 
                     }
                 });
-
-            // }
+            }
             
 
         });

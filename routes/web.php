@@ -222,6 +222,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-site_issue_remarks/{issue_id}', [GlobeController::class, 'get_site_issue_remarks']);
     Route::post('/add-remarks', [GlobeController::class, 'add_remarks']);
 
+    // Sub activity steo
+    Route::get('/subactivity-step/{sub_activity_id}/{sam_id}/{sub_activity}', [GlobeController::class, 'subactivity_step']);
+    Route::post('/submit-subactivity-step', [GlobeController::class, 'submit_subactivity_step']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

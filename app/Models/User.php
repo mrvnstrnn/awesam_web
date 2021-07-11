@@ -203,4 +203,49 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $sub_act;
     }
+
+    public function substep_complete($sub_activity_step_id, $sam_id, $sub_activity_id)
+    {
+        $substeps = SubActivityValue::select('id')
+                        ->where('type', 'substep')
+                        ->where('sam_id', $sam_id)
+                        ->whereJsonContains("value", [
+                            "sub_activity_step_id" => $sub_activity_step_id,
+                            "sub_activity_id" => $sub_activity_id
+                        ])
+                        ->get();
+        return $substeps;
+    }
+
+    public function substep_all($sam_id, $sub_activity_id)
+    {
+        $subactivity_all = SubActivityValue::select('id')
+                        ->where('type', 'substep')
+                        ->where('sam_id', $sam_id)
+                        ->whereJsonContains("value", [
+                            "sub_activity_id" => $sub_activity_id
+                        ])
+                        ->get();
+        
+        $substeps = $this->subactivity_step($sub_activity_id);
+
+        if ($substeps->count() == $subactivity_all->count()) {
+            $count = "same";
+        } else {
+            $count = "not_same";
+        }
+
+        return $count;
+    }
+
+    public function subactivity_step($sub_activity_id, $select = null)
+    {
+        if (is_null($select)) {
+            $sub_steps = \DB::connection('mysql2')->table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
+            return $sub_steps;
+        } else {
+            $sub_steps = \DB::connection('mysql2')->table('sub_activity_step')->select('sub_activity_step_id')->where('sub_activity_id', $sub_activity_id)->get();
+            return $sub_steps;
+        }
+    }
 }

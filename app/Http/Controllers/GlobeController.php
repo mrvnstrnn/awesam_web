@@ -2745,5 +2745,50 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function subactivity_step($sub_activity_id, $sam_id, $sub_activity)
+    {
+        try {
+            // $substeps = \DB::connection('mysql2')->table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
+            $substeps = \Auth::user()->subactivity_step($sub_activity_id);
+
+            $what_component = "components.site-sub-step";
+            return \View::make($what_component)
+            ->with([
+                'substeps' => $substeps,
+                'sam_id' => $sam_id,
+                'sub_activity' => $sub_activity
+            ])
+            ->render();
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function submit_subactivity_step(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                "date" => "required",
+                "remarks" => "required",
+            ));
+
+            if ($validate->passes()) {
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'type' => "substep",
+                    'status' => "approved",
+                ]); 
+
+                return response()->json([ 'error' => false, 'message' => "Successfully saved." ]);
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }
 
