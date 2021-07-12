@@ -1,8 +1,10 @@
 @php
     $site_status = \DB::connection('mysql2')
         ->table('milestone_tracking')
+        ->select('site_name', 'progress', 'sam_id', 'site_category','activity_name')
         ->where('site_agent_id', "=", \Auth::id())
         ->where('activity_complete', "=", 'false')
+        ->where('profile_id', "=", '2')
         ->get();    
 @endphp
 
