@@ -190,7 +190,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     // Lessor Engagement
     Route::post('/add-engagement', [GlobeController::class, 'save_engagement']);
-    Route::get('/get-engagement', [GlobeController::class, 'get_engagement']);
+    Route::get('/get-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_engagement']);
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
@@ -218,8 +218,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::get('/change-supervisor/{user_id}/{is_id}', [GlobeController::class, 'change_supervisor']);
 
-    
-    
+    //Issue Management
+    Route::get('/get-site_issue_remarks/{issue_id}', [GlobeController::class, 'get_site_issue_remarks']);
+    Route::post('/add-remarks', [GlobeController::class, 'add_remarks']);
+
+    // Sub activity steo
+    Route::get('/subactivity-step/{sub_activity_id}/{sam_id}/{sub_activity}', [GlobeController::class, 'subactivity_step']);
+    Route::post('/submit-subactivity-step', [GlobeController::class, 'submit_subactivity_step']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

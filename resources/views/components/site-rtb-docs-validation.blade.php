@@ -340,7 +340,7 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
-    $(document).on("click", ".approve_reject_doc_btn", function (){
+    $(".approve_reject_doc_btn").on("click", function (){
         $(".confirmation_message").removeClass("d-none");
         $(".file_preview").addClass("d-none");
 
@@ -397,6 +397,8 @@
                 if (!resp.error){
                     $(".approve_reject_doc_btn_final").removeAttr("disabled");
                     $(".approve_reject_doc_btn_final").text("Confirm");
+
+                    $(".dropzone_div_"+sub_activity_id).attr("data-status", data_action);
 
                     Swal.fire(
                         'Success',
