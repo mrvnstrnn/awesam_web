@@ -129,7 +129,7 @@ function getCols(active_program, active_table, active_profile){
                                     name: field['field_name'],
                                     render : function(data){
                                         // site_name = "</strong>" + data + '</strong>';
-                                        return data;
+                                        return data ? data : "";
                                     }
                                 }
                             );
