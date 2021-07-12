@@ -2261,7 +2261,7 @@ class GlobeController extends Controller
             }
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
-                                                        ->whereNull('type')
+                                                        // ->whereNull('type')
                                                         ->whereIn('user_id', $array_id)
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
@@ -2310,9 +2310,12 @@ class GlobeController extends Controller
                 $array_id = collect(\Auth::id());
             }
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
-                                                        ->where('sub_activity_id', $sub_activity_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
                                                         ->where('type', 'lessor_engagement')
                                                         ->whereIn('user_id', $array_id)
+                                                        ->whereJsonContains("value", [
+                                                            "sub_activity_id" => $sub_activity_id
+                                                        ])
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 
@@ -2358,7 +2361,7 @@ class GlobeController extends Controller
             if ($validate->passes()) {
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => !is_null($request->input("log")) ? "" : $request->input("sub_activity_id"),
+                    'sub_activity_id' => !is_null($request->input("log")) ? null : $request->input("sub_activity_id"),
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
                     'status' => $request->input('lessor_approval'),
