@@ -64,7 +64,6 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
         var button_id = data_action == "false" ? "reject_pr" : "approve_pr";
 
         // RAM Head PR Approval
@@ -76,12 +75,15 @@
             var sam_id = $(this).attr('data-sam_id');
             var vendor = $("#vendor_id").val();
             var po_number = null;
+            var button_text = "Award to Vendor";
         } else {
             var url = "/accept-reject-endorsement";
             
             var sam_id = [$(this).attr('data-sam_id')];
             var vendor = [$("#vendor_id").val()];
             var po_number = $("#po_number").val();
+
+            var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
         }
 
         $("#create_pr_form small").text("");
