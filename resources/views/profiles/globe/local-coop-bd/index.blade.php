@@ -13,22 +13,14 @@
         cursor: pointer;
         background-color: rgb(221, 221, 221);
     }
-
-    .table_issues_child tbody tr td:nth-child(4), .table_history_child tbody tr td:nth-child(3), .table_engagements_child tbody tr td:nth-child(4) {
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-    }
 </style>
 
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">COOP Details</h5>
-            <button type="button" class="close modal_close">
+        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+            <h5 class="modal-title text-light">COOP Details</h5>
+            <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -397,7 +389,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Add Contact</h5>
+          <h5 class="modal-title">Add Engagement</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
