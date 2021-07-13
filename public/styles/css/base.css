@@ -8032,7 +8032,8 @@ button,
   background: #ffffe6; }
 
 .app-theme-white .app-page-title {
-  background: rgba(255, 255, 255, 0.45); }
+  background: rgba(255, 255, 255, 1); 
+}
 
 .app-theme-white .app-footer .app-footer__inner,
 .app-theme-white .app-header {
@@ -8148,7 +8149,7 @@ button,
 
 .app-page-title {
   padding: 30px;
-  margin: -30px -30px 30px;
+  margin: -30px -30px 10px;
   position: relative; }
   .app-page-title + .body-tabs-layout {
     margin-top: -30px !important; }

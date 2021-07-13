@@ -18,7 +18,7 @@
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-warning"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark">Coop Details</h5>
             <button type="button" class="close modal_close  text-dark">
             <span aria-hidden="true">&times;</span>
@@ -191,7 +191,7 @@
 <div id="add_issue" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-warning"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-gleam pe-lg mr-2"></i>Add Issue</h5>
             <button type="button" class="close modal_close  text-dark">
             <span aria-hidden="true">&times;</span>
@@ -314,7 +314,7 @@
 <div id="add_engagement" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-warning"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-star pe-lg mr-2"></i>Add Engagement</h5>
             <button type="button" class="close modal_close  text-dark">
             <span aria-hidden="true">&times;</span>
@@ -388,7 +388,7 @@
 <div id="add_contact" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-warning"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-user pe-lg mr-2"></i>Add Contact</h5>
             <button type="button" class="close modal_close  text-dark">
             <span aria-hidden="true">&times;</span>
