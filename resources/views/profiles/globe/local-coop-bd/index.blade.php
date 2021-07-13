@@ -191,12 +191,12 @@
 <div id="add_issue" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Issue</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+            <h5 class="modal-title text-light">Add Issue</h5>
+            <button type="button" class="close modal_close  text-light">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
       <div class="modal-body">
         <form class="issue_form">
             <input type="hidden" name="action" id="action" value="issues">
@@ -314,12 +314,12 @@
 <div id="add_engagement" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Engagement</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+            <h5 class="modal-title text-light">Add Engagement</h5>
+            <button type="button" class="close modal_close  text-light">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
       <div class="modal-body">
         <form class="engagement_form">
             <input type="hidden" name="action" id="action" value="engagements">
@@ -388,11 +388,11 @@
 <div id="add_contact" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Add Engagement</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+            <h5 class="modal-title text-light">Add Contact</h5>
+            <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>
-          </button>
+            </button>
         </div>
         <div class="modal-body">
           <form class="contact_form">
