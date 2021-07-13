@@ -18,7 +18,7 @@
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header menu-header-image  bg-primary"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
             <h5 class="modal-title text-light">COOP Details</h5>
             <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>
@@ -191,7 +191,7 @@
 <div id="add_issue" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header menu-header-image  bg-primary"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
             <h5 class="modal-title text-light">Add Issue</h5>
             <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>
@@ -314,7 +314,7 @@
 <div id="add_engagement" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header menu-header-image  bg-primary"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
             <h5 class="modal-title text-light">Add Engagement</h5>
             <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>
@@ -388,7 +388,7 @@
 <div id="add_contact" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header menu-header-image  bg-dark"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
+        <div class="modal-header menu-header-image  bg-primary"  style="background-image: url('/images/dropdown-header/abstract2.jpg; background-size: 100%;');">
             <h5 class="modal-title text-light">Add Contact</h5>
             <button type="button" class="close modal_close  text-light">
             <span aria-hidden="true">&times;</span>

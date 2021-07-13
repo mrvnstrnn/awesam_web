@@ -41,7 +41,7 @@
     <div class="col-md-12">
         <div class="main-card mb-3 card">
             <div class="dropdown-menu-header"> 
-                <div class="dropdown-menu-header-inner bg-dark">
+                <div class="dropdown-menu-header-inner bg-primary">
                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                     <div class="menu-header-content btn-pane-right">
                             <h5 class="menu-header-title">

@@ -8029,14 +8029,14 @@ button,
   background: #f1f4f6; }
 
 .app-theme-white .app-sidebar {
-  background: #ffffff; }
+  background: #ffffe6; }
 
 .app-theme-white .app-page-title {
   background: rgba(255, 255, 255, 0.45); }
 
 .app-theme-white .app-footer .app-footer__inner,
 .app-theme-white .app-header {
-  background: #fafbfc; }
+  background: #FDFD96; }
 
 .app-theme-white.fixed-header .app-header__logo {
   background: rgba(250, 251, 252, 0.1); }
