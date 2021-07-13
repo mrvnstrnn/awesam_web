@@ -1246,6 +1246,15 @@ class GlobeController extends Controller
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
             ->table("local_coop")
+            ->select(
+                'region', 
+                'id', 
+                'prioritization_tagging', 
+                'endorsement_tagging', 
+                'coop_name',
+                'coop_full_name',
+                'province'
+            )
             ->get();
         }
 
@@ -1258,6 +1267,15 @@ class GlobeController extends Controller
     {
         $coop_details = \DB::connection('mysql2')
             ->table("local_coop")
+            ->select(
+                'region', 
+                'id', 
+                'prioritization_tagging', 
+                'endorsement_tagging', 
+                'coop_name',
+                'coop_full_name',
+                'province'
+            )
             ->where('coop_name', $coop)
             ->get();
 
