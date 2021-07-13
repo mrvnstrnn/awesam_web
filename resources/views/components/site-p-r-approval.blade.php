@@ -75,7 +75,7 @@
             var sam_id = $(this).attr('data-sam_id');
             var vendor = $("#vendor_id").val();
             var po_number = null;
-            var button_text = "Award to Vendor";
+            var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
         } else {
             var url = "/accept-reject-endorsement";
             
@@ -83,7 +83,7 @@
             var vendor = [$("#vendor_id").val()];
             var po_number = $("#po_number").val();
 
-            var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
+            var button_text = "Award to Vendor";
         }
 
         $("#create_pr_form small").text("");
