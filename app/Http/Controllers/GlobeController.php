@@ -2867,15 +2867,15 @@ class GlobeController extends Controller
                     'to' => $request->input("to"),
                 );
 
-                // for ($i=0; $i < count($request->input("sam_id")); $i++) { 
-                //     SubActivityValue::create([
-                //         'sam_id' => $request->input("sam_id")[$i],
-                //         'value' => json_encode($array_data),
-                //         'user_id' => \Auth::id(),
-                //         'type' => "create_pr_po",
-                //         'status' => "approved",
-                //     ]);
-                // }
+                for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id")[$i],
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => "create_pr_po",
+                        'status' => "approved",
+                    ]);
+                }
                 
                 return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO." ]);
             } else {
