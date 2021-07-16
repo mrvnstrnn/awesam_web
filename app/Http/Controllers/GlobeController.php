@@ -1388,6 +1388,19 @@ class GlobeController extends Controller
             // return \Auth::user()->profile_id;
         }
 
+        elseif($activity_type == 'mine_completed'){
+
+            $sites = \DB::connection('mysql2')
+            ->table("milestone_tracking")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'true')
+            ->where("site_agent_id", \Auth::id())
+            ->get();
+
+            // return \Auth::user()->profile_id;
+        }
+
         elseif($activity_type == 'is'){
 
             $sites = \DB::connection('mysql2')
