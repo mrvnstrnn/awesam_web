@@ -26,9 +26,8 @@
 
 
 <script>
-    var table_to_load = "";
 
-    $('.circle-progress').each(function(index, element){
+    $(document).find('.circle-progress').each(function(index, element){
         var progress = $(element).find('.site_progress').text();
 
         // console.log(progress);
@@ -46,7 +45,8 @@
                 .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
             });
 
-    });
+    }
+)
 
 
 </script>
