@@ -43,11 +43,14 @@
             <div class="dropdown-menu-header"> 
                 <div class="dropdown-menu-header-inner bg-primary">
                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                    <div class="menu-header-content btn-pane-right">
-                            <h5 class="menu-header-title">
-                                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ $tableheader }}
-                            </h5>
+                    <div class="menu-header-content btn-pane-right d-flex justify-content-between">
+                        <h5 class="menu-header-title">
+                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                            {{ $tableheader }}
+                        </h5>
+                        @if ($tableheader == "PR / PO")
+                        <button class="btn btn-primary btn-sm btn_create_pr">Create PR / PO</button>
+                        @endif
                     </div>
                 </div>
             </div> 
@@ -79,9 +82,11 @@
                                     </tbody>
                                 </table>                        
                                 @if($activitytype=='new endorsements globe' || $activitytype=='new endorsements vendor')
-                                <div class="text-right mt-2 pt-2">
-                                    <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">Endorse New Sites</button>
-                                </div>
+                                    @if (\Auth::user()->profile_id != 8)
+                                        <div class="text-right mt-2 pt-2">
+                                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">Endorse New Sites</button>
+                                        </div>
+                                    @endif
                                 @endif
                            </div>
                     @endforeach
