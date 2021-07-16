@@ -51,7 +51,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 10;
+    var profile_id = 1;
     var table_to_load = 'new_endorsements_globe';
     var main_activity = 'New Endorsements Globe';
 
