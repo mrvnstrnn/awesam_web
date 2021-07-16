@@ -82,9 +82,10 @@
 
             for (let i = 0; i < new_json.length; i++) {
                 // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                    field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
                     $("#viewInfoModal .card-body").append(
                         '<div class="position-relative form-group col-md-6">' +
-                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
+                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
                             '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
                         '</div>'
                     );
