@@ -22,8 +22,10 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
             
             language: {
-                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+                // "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
             },
+            
             dataSrc: function(json){
                 return json.data;
             },

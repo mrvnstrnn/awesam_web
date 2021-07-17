@@ -226,6 +226,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/subactivity-step/{sub_activity_id}/{sam_id}/{sub_activity}', [GlobeController::class, 'subactivity_step']);
     Route::post('/submit-subactivity-step', [GlobeController::class, 'submit_subactivity_step']);
 
+    // PR / PO
+    Route::get('/get-fiancial-analysis/{sam_id}', [GlobeController::class, 'get_fiancial_analysis']);
+    Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
+    
+    Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

@@ -133,7 +133,7 @@
 
     
     var model = new sap.ui.model.json.JSONModel({
-        name: "{{ ucwords(Auth::user()->name) }}"
+        name: "{{ ucwords(Auth::user()->firstname) }} " + " {{ ucwords(Auth::user()->lastname) }}"
     });
 
     new sap.m.Button({

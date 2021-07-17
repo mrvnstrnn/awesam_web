@@ -1388,6 +1388,19 @@ class GlobeController extends Controller
             // return \Auth::user()->profile_id;
         }
 
+        elseif($activity_type == 'mine_completed'){
+
+            $sites = \DB::connection('mysql2')
+            ->table("milestone_tracking")
+            ->distinct()
+            ->where('program_id', $program_id)
+            ->where('activity_complete', 'true')
+            ->where("site_agent_id", \Auth::id())
+            ->get();
+
+            // return \Auth::user()->profile_id;
+        }
+
         elseif($activity_type == 'is'){
 
             $sites = \DB::connection('mysql2')
@@ -2809,6 +2822,136 @@ class GlobeController extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_fiancial_analysis ($sam_id)
+    {
+        try {
+            $sites = \DB::connection('mysql2')
+                            ->table('new_sites')
+                            ->where('sam_id', $sam_id)
+                            ->first();
+
+            return response()->json([ 'error' => false, 'message' => $sites ]);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_pr_po(Request $request)
+    {
+        try {
+            // $file= public_path() . "/files/1623380277user_details.csv";
+
+            // $headers = array(
+            //         'Content-Type: application/pdf',
+            //     );
+
+            // return \Response::download($file, 'filename.pdf', $headers);
+
+            $validate = \Validator::make($request->all(), array(
+                'budget_source' => 'required',
+                'date_created' => 'required',
+                'department' => 'required',
+                'division' => 'required',
+                'from' => 'required',
+                'group' => 'required',
+                'recommendation' => 'required',
+                'requested_amount' => 'required',
+                'subject' => 'required',
+                'thru' => 'required',
+                'to' => 'required',
+            ));
+            if ($validate->passes()) {
+
+                $array_data = array(
+                    'budget_source' => $request->input("budget_source"),
+                    'date_created' => $request->input("date_created"),
+                    'department' => $request->input("department"),
+                    'division' => $request->input("division"),
+                    'from' => $request->input("from"),
+                    'group' => $request->input("group"),
+                    'recommendation' => $request->input("recommendation"),
+                    'requested_amount' => $request->input("requested_amount"),
+                    'subject' => $request->input("subject"),
+                    'thru' => $request->input("thru"),
+                    'to' => $request->input("to"),
+                );
+
+                for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id")[$i],
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => "create_pr_po",
+                        'status' => "approved",
+                    ]);
+                }
+                
+                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO." ]);
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function print_to_pdf_pr_po (Request $request)
+    {
+        try {
+            // $request->input("budget_source"),
+            // $request->input("date_created"),
+            // $request->input("department"),
+            // $request->input("division"),
+            // $request->input("from"),
+            // $request->input("group"),
+            // $request->input("recommendation"),
+            // $request->input("requested_amount"),
+            // $request->input("subject"),
+            // $request->input("thru"),
+            // $request->input("to")
+
+            $html = '<b>To: </b> '.$request->input("to") ."<br>";
+            $html .= '<b>Thru: </b> '.$request->input("thru") ."<br>";
+            $html .= '<b>From: </b> '.$request->input("from") ."<br>";
+            $html .= '<b>Division: </b> '.$request->input("division") ."<br>";
+            $html .= '<b>Subject: </b> '.$request->input("subject") ."<br>";
+            $html .= '<b>Reqested Amount: </b> '.$request->input("requested_amount") ."<br>";
+            $html .= '<b>Date Created: </b> '.$request->input("date_created") ."<br>";
+            $html .= '<b>Group: </b> '.$request->input("group") ."<br>";
+            $html .= '<b>Department: </b> '.$request->input("department") ."<br>";
+            $html .= '<b>Budget Source: </b> '.$request->input("budget_source") ."<br>";
+            $html .= '<b>Recommendation: </b> '.$request->input("recommendation") ."<br><br><br>";
+
+            $html .= '<table class="table">';
+            $html .= '<thead>';
+            $html .= '<tr>';
+            $html .= '<th style="width: 20%">Sam ID</th>';
+            // $html .= '<th style="width: 40%">Searching Name</th>';
+            // $html .= '<th>Region</th>';
+            // $html .= '<th>Province</th>';
+            // $html .= '<th style="width: 10%">Gross Amount PHP (VAT EXCLUSIVE)</th>';
+
+            $html .= '<tbody>';
+            for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+                $html .= '<tr>';
+                $html .= '<td>'.$request->input("sam_id")[$i].'</td>';
+                $html .= '</tr>';
+            }
+
+            $html .= '</tbody>';
+
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf = PDF::loadHTML($html);
+            $pdf->setPaper('a4');
+            
+            return $pdf->stream();
+
+        } catch (\Throwable $th) {
+            abort(403, $th->getMessage());
         }
     }
 }

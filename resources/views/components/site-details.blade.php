@@ -19,7 +19,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_sam_id" class="mr-sm-2">SAM ID</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_sam_id" id="details_sam_id" type="text" value="{{ $site[0]->sam_id }}" class="form-control">
+                            <input name="details_sam_id" id="details_sam_id" type="text" value="{{ $site[0]->sam_id }}" readonly class="form-control">
                         </div>
                     </div>
                     <div class="form-row mb-2 pb-2 border-bottom">
@@ -27,7 +27,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_site_name" class="mr-sm-2">Site Name</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_site_name" id="details_site_name" type="text" value="{{ $site[0]->site_name }}" class="form-control">
+                            <input name="details_site_name" id="details_site_name" type="text" value="{{ $site[0]->site_name }}" readonly class="form-control">
                         </div>
                     </div>
                     <div class="form-row mb-2 pb-2 border-bottom">
@@ -35,7 +35,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_address" class="mr-sm-2">Address</label>
                         </div>
                         <div class="col-7">
-                            <textarea name="details_address" id="details_address" type="text" class="form-control">{{ $site[0]->site_address }}</textarea>
+                            <textarea name="details_address" id="details_address" type="text" readonly class="form-control">{{ $site[0]->site_address }}</textarea>
                         </div>
                     </div>
                     {{-- <div class="form-row mb-2 pb-2 border-bottom">
@@ -59,7 +59,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_endorsement_date" class="mr-sm-2">Endorsement Date</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_endorsement_date" id="details_endorsement_date" type="text" value="{{ $site[0]->site_endorsement_date }}" class="form-control">
+                            <input name="details_endorsement_date" id="details_endorsement_date" type="text" value="{{ $site[0]->site_endorsement_date }}" readonly class="form-control">
                         </div>
                     </div>
                     <div class="form-row mb-2">
@@ -67,7 +67,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_endorsement_acceptance_date" class="mr-sm-2">Endorsement Acceptance Date</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_endorsement_acceptance_date" id="details_endorsement_acceptance_date" type="text" value="{{ $site[0]->site_endorsement_accepted_date }}" class="form-control">
+                            <input name="details_endorsement_acceptance_date" id="details_endorsement_acceptance_date" type="text" value="{{ $site[0]->site_endorsement_accepted_date }}" readonly class="form-control">
                         </div>
                     </div>
 
