@@ -19,11 +19,19 @@ $(document).ready(() => {
                             );
                         });
                     } else {
-                        toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 },
                 error: function(resp) {
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
                 }
             });
         }

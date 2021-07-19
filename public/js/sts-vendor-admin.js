@@ -66,16 +66,24 @@ $(document).ready(() => {
                 if(!resp.error){
                     resp.message.forEach(element => {
                         $("select#vendor").append(
-                            '<option value="'+element.id+'">'+element.email+'</option>'
+                            '<option value="'+element.vendor_id+'">'+element.vendor_sec_reg_name+ "("+ element.vendor_acronym +") - " +element.email+'</option>'
                         );
                     });
                     $("#transferModal").modal("show");
                 }else {
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, "Error");
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
             }
         });
     });
@@ -96,15 +104,27 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $('#vendor-sites-table').DataTable().ajax.reload(function(){
-                        toastr.success(resp.message, "Success");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                         $("#transferModal").modal("hide");
                     });
                 }else {
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, "Error");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -125,7 +145,11 @@ $(document).ready(() => {
             success: function(resp) {
                 if(!resp.error){
                     $("#addVendorForm")[0].reset();
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                     $(".add_vendor").text("Add vendor");
                     $(".add_vendor").removeAttr("disabled");
                 } else {
@@ -134,14 +158,22 @@ $(document).ready(() => {
                             $("#" + index + "-error").text(data);
                         });
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                     $(".add_vendor").text("Add vendor");
                     $(".add_vendor").removeAttr("disabled");
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 $(".add_vendor").removeAttr("disabled");
                 $(".add_vendor").text("Add vendor");
             }
@@ -170,11 +202,20 @@ $(document).ready(() => {
                     
                     $('#list_vendor_modal').modal('show');
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function (resp) {
-                toastr.error(resp.message, 'Error');
+                
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -205,11 +246,19 @@ $(document).ready(() => {
                     $(".add_vendor").text('Update vendor');
 
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function (resp) {
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -255,11 +304,19 @@ $(document).ready(() => {
                         );
                     });
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
         $("#viewInfoModal").modal("show");
@@ -313,7 +370,11 @@ $(document).ready(() => {
                     if(data_statusb == 'listVendor'){
                         $(var_id).DataTable().ajax.reload(function(){
                             $("#terminationModal").modal("hide");
-                            toastr.success(resp.message, 'Success');
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'succes'
+                            )
                             
                             $(".terminate_button").text(textAfter);
                             $(".terminate_button").removeAttr("disabled");
@@ -330,14 +391,22 @@ $(document).ready(() => {
                         $("#vendor-list-complete-table").DataTable().ajax.reload();
                     }
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                             
                     $(".terminate_button").text(textAfter);
                     $(".terminate_button").removeAttr("disabled");
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                             
                 $(".terminate_button").text(textAfter);
                 $(".terminate_button").removeAttr("disabled");

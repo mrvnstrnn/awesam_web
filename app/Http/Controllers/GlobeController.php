@@ -2915,6 +2915,8 @@ class GlobeController extends Controller
                     'to' => $request->input("to"),
                 );
 
+                $current = \Carbon::now()->format('YmdHs');
+
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id")[$i],
@@ -2925,7 +2927,7 @@ class GlobeController extends Controller
                     ]);
                 }
                 
-                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO." ]);
+                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO.", "file_name" => 'create-pr-memo-'.$current.'.pdf' ]);
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
@@ -2949,40 +2951,62 @@ class GlobeController extends Controller
             // $request->input("thru"),
             // $request->input("to")
 
-            $html = '<b>To: </b> '.$request->input("to") ."<br>";
-            $html .= '<b>Thru: </b> '.$request->input("thru") ."<br>";
-            $html .= '<b>From: </b> '.$request->input("from") ."<br>";
-            $html .= '<b>Division: </b> '.$request->input("division") ."<br>";
-            $html .= '<b>Subject: </b> '.$request->input("subject") ."<br>";
-            $html .= '<b>Reqested Amount: </b> '.$request->input("requested_amount") ."<br>";
-            $html .= '<b>Date Created: </b> '.$request->input("date_created") ."<br>";
-            $html .= '<b>Group: </b> '.$request->input("group") ."<br>";
-            $html .= '<b>Department: </b> '.$request->input("department") ."<br>";
-            $html .= '<b>Budget Source: </b> '.$request->input("budget_source") ."<br>";
-            $html .= '<b>Recommendation: </b> '.$request->input("recommendation") ."<br><br><br>";
+            $sites = \DB::connection('mysql2')
+                            ->table('new_sites')
+                            ->whereIn('sam_id', $request->input("sam_id"))
+                            ->get();
+                            
+            $view = \View::make('components.create-pr-po-pdf')
+                ->with([
+                    'budget_source' => $request->input("budget_source"),
+                    'date_created' => $request->input("date_created"),
+                    'department' => $request->input("department"),
+                    'division' => $request->input("division"),
+                    'from' => $request->input("from"),
+                    'group' => $request->input("group"),
+                    'recommendation' => $request->input("recommendation"),
+                    'requested_amount' => $request->input("requested_amount"),
+                    'subject' => $request->input("subject"),
+                    'thru' => $request->input("thru"),
+                    'to' => $request->input("to"),
+                    'sites' => $sites,
+                ])
+                ->render();
 
-            $html .= '<table class="table">';
-            $html .= '<thead>';
-            $html .= '<tr>';
-            $html .= '<th style="width: 20%">Sam ID</th>';
-            // $html .= '<th style="width: 40%">Searching Name</th>';
-            // $html .= '<th>Region</th>';
-            // $html .= '<th>Province</th>';
-            // $html .= '<th style="width: 10%">Gross Amount PHP (VAT EXCLUSIVE)</th>';
+            // $html = '<b>To: </b> '.$request->input("to") ."<br>";
+            // $html .= '<b>Thru: </b> '.$request->input("thru") ."<br>";
+            // $html .= '<b>From: </b> '.$request->input("from") ."<br>";
+            // $html .= '<b>Division: </b> '.$request->input("division") ."<br>";
+            // $html .= '<b>Subject: </b> '.$request->input("subject") ."<br>";
+            // $html .= '<b>Reqested Amount: </b> '.$request->input("requested_amount") ."<br>";
+            // $html .= '<b>Date Created: </b> '.$request->input("date_created") ."<br>";
+            // $html .= '<b>Group: </b> '.$request->input("group") ."<br>";
+            // $html .= '<b>Department: </b> '.$request->input("department") ."<br>";
+            // $html .= '<b>Budget Source: </b> '.$request->input("budget_source") ."<br>";
+            // $html .= '<b>Recommendation: </b> '.$request->input("recommendation") ."<br><br><br>";
 
-            $html .= '<tbody>';
-            for ($i=0; $i < count($request->input("sam_id")); $i++) { 
-                $html .= '<tr>';
-                $html .= '<td>'.$request->input("sam_id")[$i].'</td>';
-                $html .= '</tr>';
-            }
+            // $html .= '<table class="table">';
+            // $html .= '<thead>';
+            // $html .= '<tr>';
+            // $html .= '<th style="width: 20%">Sam ID</th>';
 
-            $html .= '</tbody>';
+            // $html .= '<tbody>';
+            // for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+            //     $html .= '<tr>';
+            //     $html .= '<td>'.$request->input("sam_id")[$i].'</td>';
+            //     $html .= '</tr>';
+            // }
+
+            // $html .= '</tbody>';
 
             $pdf = \App::make('dompdf.wrapper');
-            $pdf = PDF::loadHTML($html);
-            $pdf->setPaper('a4');
-            
+            $pdf = PDF::loadHTML($view);
+            $pdf->setPaper('a4', 'landscape');
+            // $pdf->setWarnings(false);
+
+            // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
+
+            \Storage::put('pdf/'.$request->input("to"), $pdf->output());
             return $pdf->stream();
 
         } catch (\Throwable $th) {

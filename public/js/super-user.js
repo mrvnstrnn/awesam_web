@@ -129,11 +129,19 @@ $(document).ready(() => {
                     $("#profile_name").val(resp.message[0].profile);
                     $("#profileModal").modal('show');
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             },
         });
     });
@@ -151,19 +159,31 @@ $(document).ready(() => {
                     $("#profile_form")[0].reset();
                     $("#profileModal").modal('hide');
                     $('#profile-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -181,11 +201,19 @@ $(document).ready(() => {
                     }
                     $("#permissionModal").modal('show');
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
             },
         });
     });
@@ -208,20 +236,31 @@ $(document).ready(() => {
                     $("#permission_form")[0].reset();
                     $("#permissionModal").modal('hide');
                     $('#permission-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
-                        toastr.error(resp.message, 'Error');
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
             }
         });
     });
@@ -236,11 +275,19 @@ $(document).ready(() => {
                     $("b.permission_name").text(resp.message.title);
                     $("#deletePermissionModal").modal('show');
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             },
         });
     });
@@ -262,13 +309,25 @@ $(document).ready(() => {
                     $("b.permission_name").text(resp.message.title);
                     $("#deletePermissionModal").modal('hide');
                     $('#permission-table').DataTable().ajax.reload();
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
             },
         });
     });

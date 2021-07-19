@@ -32,8 +32,8 @@
                                     </th>
                                     <th class="d-none d-md-table-cell">SAM ID</th>
                                     <th>Site</th>
-                                    <th class="text-center  d-none d-sm-table-cell">Site Address</th>
-                                    <th class="text-center  d-none d-sm-table-cell">Action</th>
+                                    <th class="text-center d-none d-sm-table-cell">Site Address</th>
+                                    <th class="text-center d-none d-sm-table-cell">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -47,7 +47,7 @@
 
 @section('modals')
     <div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tranfer Site</h5>

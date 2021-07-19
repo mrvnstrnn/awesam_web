@@ -32,11 +32,19 @@ $(document).ready(function() {
                         });
                         $("#modal-sub_activity").modal("show");
                     } else {
-                        toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 },
                 error: function(resp){
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
                 },
             });
             // var content = "Sample";
@@ -118,11 +126,19 @@ $(document).ready(function() {
                             }
                         }
                     } else {
-                        toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 },
                 error: function(resp){
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
                 }
             });
         }
@@ -160,13 +176,25 @@ $(document).ready(function() {
                     file_name = $("#form-upload #file_name").val("");
 
                     $(".cancel_uploader").trigger("click");
-                    toastr.success(resp.message, "Success");
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                 } else {
-                    toastr.error(resp.message, "Error");
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, "Error");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

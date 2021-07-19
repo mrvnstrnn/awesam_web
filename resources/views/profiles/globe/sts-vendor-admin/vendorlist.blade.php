@@ -19,7 +19,7 @@
                     <th>Fullname</th>
                     <th>Email</th>
                     <th>Address</th>
-                    <th>Action</th>
+                    <th style="width: 20%;">Action</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -93,7 +93,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

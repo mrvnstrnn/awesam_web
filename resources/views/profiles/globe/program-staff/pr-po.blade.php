@@ -57,152 +57,162 @@
                                 <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                 <div class="menu-header-content btn-pane-right">
                                     <h5 class="menu-header-title">
-                                        PR / PO
+                                        Create PR Memo
                                     </h5>
                                 </div>
                             </div>
                         </div> 
 
-                        <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                            <form action="/print-to-pdf-pr-po" method="POST" class="pr_po_form" target="_blank">@csrf
-                                <div class="form-row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="to">To</label>
-                                            <input type="text" class="form-control" name="to" id="to">
-                                            <small class="text-danger to-error"></small>
+                        <form action="/print-to-pdf-pr-po" method="POST" class="pr_po_form" target="_blank">@csrf
+                            <input type="hidden" name="file_name" id="file_name">
+                            <div class="form_div">
+                                <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="to">To</label>
+                                                <input type="text" class="form-control" name="to" id="to">
+                                                <small class="text-danger to-error"></small>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="thru">Thru</label>
+                                                <input type="text" class="form-control" name="thru" id="thru">
+                                                <small class="text-danger thru-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="date_created">Date Created</label>
+                                                <input type="text" class="form-control" name="date_created" id="date_created" value="{{ \Carbon\Carbon::now() }}" readonly>
+                                                <small class="text-danger date_created-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="from">From</label>
+                                                <input type="text" class="form-control" name="from" id="from" value="{{ \Auth::user()->name }}" readonly>
+                                                <small class="text-danger from-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="group">Group</label>
+                                                <input type="text" class="form-control" name="group" id="group" value="Network Technical" readonly>
+                                                <small class="text-danger group-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="division">Division</label>
+                                                <input type="text" class="form-control" name="division" id="division" value="Network Technical Group" readonly>
+                                                <small class="text-danger division-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="department">Department</label>
+                                                <input type="text" class="form-control" name="department" id="department" value="Site Aquisition and Management" readonly>
+                                                <small class="text-danger department-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class=" col-12">
+                                            <div class="form-group">
+                                                <label for="subject">Subject</label>
+                                                <input type="text" class="form-control" name="subject" id="subject">
+                                                <small class="text-danger subject-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="requested_amount">Requested Amount</label>
+                                                <input type="number" class="form-control" name="requested_amount" id="requested_amount">
+                                                <small class="text-danger requested_amount-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="budget_source">Budget Source</label>
+                                                <input type="text" class="form-control" name="budget_source" id="budget_source">
+                                                <small class="text-danger budget_source-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <hr>
+    
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="recommendation">Recommendation</label>
+                                                <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation"></textarea>
+                                                <small class="text-danger recommendation-error"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <hr>
+    
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="financial_analysis">Financial Analysis</label>
+                                                @php
+                                                    $sites = \DB::connection('mysql2')->table('new_sites')->get();
+                                                @endphp
+                                                <select name="financial_analysis" id="financial_analysis" class="form-control">
+                                                    <option value="">Select site</option>
+                                                    @foreach ($sites as $site)
+                                                    <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->search_ring }}</option>
+                                                    @endforeach
+                                                </select>
+    
+                                                <button type="button" class="my-3 btn btn-primary btn-sm pull-right add_new_site">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="table_financial_analysis table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style='width: 20%'>Site ID</th>
+                                                    <th style='width: 40%'>Searching Name</th>
+                                                    <th>Region</th>
+                                                    <th>Province</th>
+                                                    <th style='width: 10%'>Gross Amount PHP (VAT EXCLUSIVE)</th>
+                                                    <th style='width: 20px;'>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        <div class="input_hidden"></div>
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="thru">Thru</label>
-                                            <input type="text" class="form-control" name="thru" id="thru">
-                                            <small class="text-danger thru-error"></small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="date_created">Date Created</label>
-                                            <input type="text" class="form-control" name="date_created" id="date_created" value="{{ \Carbon\Carbon::now() }}" readonly>
-                                            <small class="text-danger date_created-error"></small>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="file_view d-none">
+                                <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                                    <div class="file_view_child"></div>
+                                    <button class="btn btn-shadow btn-sm btn-primary edit_form_pdf" type="button">Edit</button>
                                 </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="from">From</label>
-                                            <input type="text" class="form-control" name="from" id="from" value="{{ \Auth::user()->name }}" readonly>
-                                            <small class="text-danger from-error"></small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="group">Group</label>
-                                            <input type="text" class="form-control" name="group" id="group">
-                                            <small class="text-danger group-error"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="division">Division</label>
-                                            <input type="text" class="form-control" name="division" id="division">
-                                            <small class="text-danger division-error"></small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="department">Department</label>
-                                            <input type="text" class="form-control" name="department" id="department">
-                                            <small class="text-danger department-error"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class=" col-12">
-                                        <div class="form-group">
-                                            <label for="subject">Subject</label>
-                                            <input type="text" class="form-control" name="subject" id="subject">
-                                            <small class="text-danger subject-error"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="requested_amount">Requested Amount</label>
-                                            <input type="number" class="form-control" name="requested_amount" id="requested_amount">
-                                            <small class="text-danger requested_amount-error"></small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-12">
-                                        <div class="form-group">
-                                            <label for="budget_source">Budget Source</label>
-                                            <input type="text" class="form-control" name="budget_source" id="budget_source">
-                                            <small class="text-danger budget_source-error"></small>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
 
-                                <hr>
-
-                                <div class="form-row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="recommendation">Recommendation</label>
-                                            <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation"></textarea>
-                                            <small class="text-danger recommendation-error"></small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <hr>
-
-                                <div class="form-row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="financial_analysis">Financial Analysis</label>
-                                            @php
-                                                $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                            @endphp
-                                            <select name="financial_analysis" id="financial_analysis" class="form-control">
-                                                <option value="">Select site</option>
-                                                @foreach ($sites as $site)
-                                                <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->search_ring }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            <button type="button" class="my-3 btn btn-primary btn-sm pull-right add_new_site">Add</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="table_financial_analysis table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th style='width: 20%'>Site ID</th>
-                                                <th style='width: 40%'>Searching Name</th>
-                                                <th>Region</th>
-                                                <th>Province</th>
-                                                <th style='width: 10%'>Gross Amount PHP (VAT EXCLUSIVE)</th>
-                                                <th style='width: 10%'>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                    <div class="input_hidden"></div>
-                                </div>
-
+                            <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR/PO</button>
-
                                 <button type="submit" class="print_to_pdf d-none"></button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div> 
                 </div>
             </div>
@@ -351,26 +361,6 @@
         
         $(".pr_po_form small").text("");
 
-        $(".print_to_pdf").trigger("click");
-
-        // var data = {
-        //     budget_source: $("#budget_source").val(),
-        //     date_created: $("#date_created").val(),
-        //     department: $("#department").val(),
-        //     division: $("#division").val(),
-        //     from: $("#from").val(),
-        //     group: $("#group").val(),
-        //     recommendation: $("#recommendation").val(),
-        //     requested_amount: $("#requested_amount").val(),
-        //     subject: $("#subject").val(),
-        //     thru: $("#thru").val(),
-        //     to: $("#to").val(),
-        //     sam_id: $("input[name='sam_id[]'").map(function(){
-        //           return $(this).val();}
-        //       ).get(),
-        //     html: (".pr_po_form")[0].innerHTML,
-        // }
-
         $.ajax({
             url: "/add-pr-po",
             method: "POST",
@@ -380,15 +370,31 @@
             },
             success: function (resp){
                 if (!resp.error) {
-                    $(".pr_po_form")[0].reset();
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
-
+                    // $(".pr_po_form")[0].reset();
+                    // Swal.fire(
+                    //     'Success',
+                    //     resp.message,
+                    //     'success'
+                    // )
                     
-                    $(".input_hidden input").remove();
+                    $(".pr_po_form #file_name").val(resp.file_name);
+                    $(".print_to_pdf").trigger("click");
+
+                    // $(".file_view").removeClass("d-none");
+                    // $(".form_div").addClass("d-none");
+
+                    // var extensions = ["pdf", "jpg", "png"];
+                    
+                    // if( extensions.includes(resp.file_name.split('.').pop()) == true) {     
+                    //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/' + resp.file_name + '" allowfullscreen></iframe>';
+                    // } else {
+                    //     htmltoload = '<div class="text-center my-5"><a href="/files/pdf/' + resp.file_name + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+                    // }
+                    
+                    // $('.file_view_child').html('');
+                    // $('.file_view_child').html(htmltoload);
+
+                    // $(".input_hidden input").remove();
 
                     $(".add_pr_po").removeAttr("disabled");
                     $(".add_pr_po").text("Create PR/PO");
@@ -423,6 +429,10 @@
         });
     });
     
+    $(document).on("click", ".edit_form_pdf", function (e) {
+        $(".file_view").addClass("d-none");
+        $(".form_div").removeClass("d-none");
+    });
     
 
 </script>
