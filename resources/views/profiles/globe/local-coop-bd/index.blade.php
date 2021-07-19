@@ -27,7 +27,7 @@
         <div class="modal-content">
         <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark">Coop Details</h5>
-            <button type="button" class="close modal_close  text-dark">
+            <button type="button" class="close modal_close text-dark">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -70,6 +70,71 @@
                                 </tbody>
                             </table> --}}
 
+                            <div class="contact_div_edit d-none">
+                                <form class="contact_form_update">
+                                    <input type="hidden" name="action" id="action" value="contacts">
+                                    <input type="hidden" name="ID" id="ID">
+                                    <div class="position-relative row form-group">
+                                        <label for="coop" class="col-sm-3 col-form-label">COOP</label>
+                                        <div class="col-sm-9">
+                                            <select name="coop" id="coop" class="form-control">
+                                                @php
+                                                    $coops = \DB::connection('mysql2')
+                                                        ->table("local_coop")
+                                                        ->get();
+                                                @endphp
+                                                <option value="">Select COOP</option>
+                                                @foreach ($coops as $coop)
+                                                    <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <small class="text-danger coop-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
+                                        <div class="col-sm-9">
+                                            <select id="contact_type" name="contact_type" class="form-control">
+                                                <option value="">Select Contact Type</option>
+                                                <option value="Engineering">Engineering</option>
+                                                <option value="COOP Contact">COOP Contact</option>
+                                            </select>
+                                            <small class="text-danger contact_type-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="firstname" class="col-sm-3 col-form-label">Firstname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
+                                            <small class="text-danger firstname-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="lastname" class="col-sm-3 col-form-label">Lastname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
+                                            <small class="text-danger lastname-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
+                                            <small class="text-danger contact_number-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input type="email" placeholder="Email" name="email" id="email" class="form-control"/>
+                                            <small class="text-danger email-error"></small>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary btn-sm btn-shadow add_engagement" data-type="contacts" id="btn_update_contact">Update</button>
+                                    <button type="button" class="btn btn-secondary btn-sm btn-shadow cancel_update">Cancel</button>
+                                </form>
+                            </div>
                             <div class="table-responsive table_contact_parent"></div>
                         </div>
                         <div class="tab-pane" id="tab-coop-engagements" role="tabpanel">
@@ -287,7 +352,7 @@
     <div class="modal-content">
         <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-gleam pe-lg mr-2"></i>Add Issue</h5>
-            <button type="button" class="close modal_close  text-dark">
+            <button type="button" class="close text-dark" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -354,8 +419,9 @@
                 <div class="col-sm-9">
                     <select name="issue_raised_by" id="issue_raised_by" class="form-control">
                         <option>Issue Raised By</option>
-                        <option>COOP</option>
-                        <option>Globe</option>
+                        <option value="COOP">COOP</option>
+                        <option value="Globe">Globe</option>
+                        <option value="HOA">HOA</option>
                     </select>
                     <small class="text-danger issue_raised_by-error"></small>
                 </div>
@@ -410,7 +476,7 @@
     <div class="modal-content">
         <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-star pe-lg mr-2"></i>Add Engagement</h5>
-            <button type="button" class="close modal_close  text-dark">
+            <button type="button" class="close text-dark" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -484,69 +550,69 @@
       <div class="modal-content">
         <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
             <h5 class="modal-title text-dark"><i class="pe-7s-user pe-lg mr-2"></i>Add Contact</h5>
-            <button type="button" class="close modal_close  text-dark">
+            <button type="button" class="close text-dark" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-          <form class="contact_form">
+            <form class="contact_form">
                 <input type="hidden" name="action" id="action" value="contacts">
-              <div class="position-relative row form-group">
-                  <label for="coop" class="col-sm-3 col-form-label">COOP</label>
-                  <div class="col-sm-9">
-                      <select name="coop" id="coop" class="form-control">
-                          @php
-                              $coops = \DB::connection('mysql2')
-                                  ->table("local_coop")
-                                  ->get();
-                          @endphp
-                          <option value="">Select COOP</option>
-                          @foreach ($coops as $coop)
-                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
-                          @endforeach
-                      </select>
-                      <small class="text-danger coop-error"></small>
-                  </div>
-              </div>
-              <div class="position-relative row form-group">
-                  <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
-                  <div class="col-sm-9">
-                      <select id="contact_type" name="contact_type" class="form-control">
-                          <option value="">Select Contact Type</option>
-                          <option value="Engineering">Engineering</option>
-                          <option value="COOP Contact">COOP Contact</option>
-                      </select>
-                      <small class="text-danger contact_type-error"></small>
-                  </div>
-              </div>
-              <div class="position-relative row form-group">
-                  <label for="firstname" class="col-sm-3 col-form-label">Firstname</label>
-                  <div class="col-sm-9">
-                      <input type="text" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
-                      <small class="text-danger firstname-error"></small>
-                  </div>
-              </div>
-              <div class="position-relative row form-group">
-                <label for="lastname" class="col-sm-3 col-form-label">Lastname</label>
-                <div class="col-sm-9">
-                    <input type="text" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
-                    <small class="text-danger lastname-error"></small>
+                <div class="position-relative row form-group">
+                    <label for="coop" class="col-sm-3 col-form-label">COOP</label>
+                    <div class="col-sm-9">
+                        <select name="coop" id="coop" class="form-control">
+                            @php
+                                $coops = \DB::connection('mysql2')
+                                    ->table("local_coop")
+                                    ->get();
+                            @endphp
+                            <option value="">Select COOP</option>
+                            @foreach ($coops as $coop)
+                                <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-danger coop-error"></small>
+                    </div>
                 </div>
-              </div>
-              <div class="position-relative row form-group">
-                <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
-                <div class="col-sm-9">
-                    <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
-                    <small class="text-danger contact_number-error"></small>
+                <div class="position-relative row form-group">
+                    <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
+                    <div class="col-sm-9">
+                        <select id="contact_type" name="contact_type" class="form-control">
+                            <option value="">Select Contact Type</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="COOP Contact">COOP Contact</option>
+                        </select>
+                        <small class="text-danger contact_type-error"></small>
+                    </div>
                 </div>
-              </div>
-              <div class="position-relative row form-group">
-                <label for="email" class="col-sm-3 col-form-label">Email</label>
-                <div class="col-sm-9">
-                    <input type="email" placeholder="Email" name="email" id="email" class="form-control"/>
-                    <small class="text-danger email-error"></small>
+                <div class="position-relative row form-group">
+                    <label for="firstname" class="col-sm-3 col-form-label">Firstname</label>
+                    <div class="col-sm-9">
+                        <input type="text" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
+                        <small class="text-danger firstname-error"></small>
+                    </div>
                 </div>
-              </div>
+                <div class="position-relative row form-group">
+                    <label for="lastname" class="col-sm-3 col-form-label">Lastname</label>
+                    <div class="col-sm-9">
+                        <input type="text" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
+                        <small class="text-danger lastname-error"></small>
+                    </div>
+                </div>
+                <div class="position-relative row form-group">
+                    <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
+                    <div class="col-sm-9">
+                        <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
+                        <small class="text-danger contact_number-error"></small>
+                    </div>
+                </div>
+                <div class="position-relative row form-group">
+                    <label for="email" class="col-sm-3 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                        <input type="email" placeholder="Email" name="email" id="email" class="form-control"/>
+                        <small class="text-danger email-error"></small>
+                    </div>
+                </div>
             </form>
   
         </div>
@@ -629,6 +695,7 @@
                             '<th>Lastname</th>' +
                             '<th>Cellphone</th>' +
                             '<th>Email</th>' +
+                            '<th></th>' +
                         '</tr>' +
                     '</thead>' +
                 '</table>'
@@ -683,7 +750,8 @@
                         var html = "";
 
                         Object.keys(columns).forEach(function (key, index){
-                            html = html + "<div class='row'><div class='col-5'>" + key + "</div><div class='col-7'><input class='form-control mb-2' type='text' value='" + columns[key] + "' readonly /></div></div>";
+                            field_name = key.charAt(0).toUpperCase() + key.slice(1);
+                            html = html + "<div class='row'><div class='col-5'>" + field_name.split('_').join(' ') + "</div><div class='col-7'><input class='form-control mb-2' type='text' value='" + columns[key] + "' readonly /></div></div>";
                         });
 
                         $('#tab-coop-details').html(html);
@@ -716,6 +784,7 @@
                         { data: "lastname" },
                         { data: "cellphone" },
                         { data: "email" },
+                        { data: "action" },
                     ],
                 });
 
@@ -938,12 +1007,20 @@
                 var button_id = "#add_engagement_btn";
                 var button_text = "Add Engagement";
             } else if (type == "contacts") {
-                $(".contact_form small").text("");
-                var form_id = ".contact_form";
-                var data_serialize = $(form_id).serialize();
-                var modal_id = "#add_contact";
-                var button_id = "#add_contact_btn";
-                var button_text = "Add Contact";
+                if ($('.contact_form_update #ID').val() != "") {
+                    $(".contact_form_update small").text("");
+                    var form_id = ".contact_form_update";
+                    var data_serialize = $(form_id).serialize();
+                    var button_id = "#btn_update_contact";
+                    var button_text = "Update";
+                } else {
+                    $(".contact_form small").text("");
+                    var form_id = ".contact_form";
+                    var data_serialize = $(form_id).serialize();
+                    var modal_id = "#add_contact";
+                    var button_id = "#add_contact_btn";
+                    var button_text = "Add Contact";
+                }
             } else if (type == "issues") {
                 $(".issue_form small").text("");
                 var form_id = ".issue_form";
@@ -971,21 +1048,29 @@
                 },
                 success: function (resp) {
                     if (!resp.error) {
-                        $(modal_id).modal("hide");
+                        if ($('.contact_form_update #ID').val() == "") {
+                            $(modal_id).modal("hide");
+                        }
                         $(form_id)[0].reset();
                         $(button_id).removeAttr("disabled");
                         $(button_id).text(button_text);
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
 
                         if ($(".add_engagement").attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
                             $("#table_history_child_" + issue_id).DataTable().ajax.reload();
                             $("#table_issues_child_" + table_id).DataTable().ajax.reload();
+                        } else if ($('.contact_form_update #ID').val() != "") {
+                            $(".table_contact_child").DataTable().ajax.reload();
+                            $(".cancel_update").trigger("click");
                         }
+
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+                        $(button_id).removeAttr("disabled");
+                        $(button_id).text(button_text);
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
@@ -1014,6 +1099,57 @@
             });
         });
 
+        $(document).on("click", ".edit_contact", function(e){
+            e.preventDefault();
+
+            var id = $(this).attr("data-id");
+            var action = $(this).attr("data-action");
+
+            $.ajax({
+                url: "/edit-contact/"+id+"/"+action,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        var value = JSON.parse(resp.message.value);
+                        
+                        $('.contact_form_update #coop').val(resp.message.coop).trigger('change');
+                        $('.contact_form_update #contact_type').val(value.contact_type).trigger('change');
+
+                        $('.contact_form_update #ID').val(resp.message.ID);
+                        $('.contact_form_update #contact_number').val(value.contact_number);
+                        $('.contact_form_update #email').val(value.email);
+                        $('.contact_form_update #firstname').val(value.firstname);
+                        $('.contact_form_update #lastname').val(value.lastname);
+                        $('.contact_form_update #action').val("contacts");
+
+                        $(".contact_div_edit").removeClass("d-none");
+                        $(".table_contact_parent").addClass("d-none");
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+            
+        });
+
+        $(document).on("click", ".cancel_update", function (e) {
+            e.preventDefault();
+
+            $(".contact_div_edit").addClass("d-none");
+            $(".table_contact_parent").removeClass("d-none");
+        })
+
         $(document).on("click", ".modal_close", function (e) {
             e.preventDefault();
 
@@ -1021,6 +1157,10 @@
             $("#btn_cancel_add_issues").trigger("click");
             $("#btn_back_to_issues").trigger("click");
             $("a[href='#tab-coop-details']").trigger("click");
+        });
+
+        $(document).on("click", ".modal_close", function (e) {
+            
         });
 
 </script>

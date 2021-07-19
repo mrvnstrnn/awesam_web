@@ -1320,7 +1320,15 @@ class GlobeController extends Controller
                 })
                 ->addColumn('email', function($row){
                     return json_decode($row->value)->email;
+                })
+                ->addColumn('action', function($row){
+                    $button = "<button class='btn btn-sm btn-primary btn-shadow edit_contact' data-action='edit' title='Edit' data-id='".$row->ID."'><i class='pe-7s-pen'></i></button>";
+                    $button .= "<button class='btn btn-sm btn-danger btn-shadow delete_contact' data-action='delete' title='Delete' data-id='".$row->ID."'><i class='pe-7s-trash'></i></button>";
+                    
+                    return $button;
                 });
+
+            $dt->rawColumns(['action']);
 
         } else if ($type == "engagements") {
             $dt = DataTables::of($coop_values)
@@ -2499,6 +2507,20 @@ class GlobeController extends Controller
                 $coop = $request->input('coop');
 
                 $message = "Successfuly added contacts.";
+
+                if (!is_null($request->input('ID'))) {
+                    LocalCoopValue::where('ID', $request->input('ID'))
+                    ->update([
+                        'coop' => $coop,
+                        'type' => $request->input('action'),
+                        'value' => json_encode($array),
+                        'user_id' => \Auth::id(),
+                    ]);
+
+                    $message = "Successfuly updated contacts.";
+
+                    return response()->json(['error' => false, 'message' => $message ]);
+                }
             } else if ($request->input('action') == 'issues') {
                 $validate = Validator::make($request->all(), array(
                     'coop' => 'required',
@@ -2607,6 +2629,19 @@ class GlobeController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function get_contact($id, $action)
+    {
+        try {
+            $contact = LocalCoopValue::where('type', 'contacts')
+                                            ->where('ID', $id)
+                                            ->first();
+            
+            return response()->json(['error' => false, 'message' => $contact ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
 
