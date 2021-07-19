@@ -450,13 +450,14 @@
                     </div>       
                     <div role="group" class="btn-group-sm nav btn-group">
                         <a data-toggle="tab" href="#tab-eg3-0" class="btn-shadow btn btn-secondary active">Chart</a>
-                        <a data-toggle="tab" href="#tab-eg3-2" class="btn-shadow btn btn-secondary">List</a>
+                        <a data-toggle="tab" href="#tab-eg3-1" class="btn-shadow btn btn-secondary">Distribution</a>
+                        <a data-toggle="tab" href="#tab-eg3-2" class="btn-shadow btn btn-secondary">Sites</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane show active" id="tab-eg3-0" role="tabpanel">
                             <div id="chart_div" style="width:100%; height: 500px; margin:0; padding:0"></div>
                         </div>
-                        <div class="tab-pane" id="tab-eg3-2" role="tabpanel">
+                        <div class="tab-pane" id="tab-eg3-1" role="tabpanel">
                             <ul id="PR_Created_Distribution" class="list-group list-group-flush d-none">
                                 <li class="list-group-item">
                                     <div class="widget-content p-0">
@@ -1121,6 +1122,9 @@
                                     </div>
                                 </li>
                             </ul>        
+                        </div>
+                        <div class="tab-pane" id="tab-eg3-2" role="tabpanel">
+
                         </div>
                     </div>                    
                 </div>
