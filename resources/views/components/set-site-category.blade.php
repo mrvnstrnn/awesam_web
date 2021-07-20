@@ -22,7 +22,6 @@
         </form>         
 
         <button class="float-right btn btn-shadow btn-success" id="site_category_btn" data-sub_activity_id="{{ $sub_activity_id }}" data-sam_id="{{ $sam_id }}" data-activity_name="{{ $sub_activity }}">Set Category</button>
-        <button class="btn btn-sm btn-shadow btn-secondary" id="btn_cancel_set_site">Cancel</button>
     </div>
 </div>
 
