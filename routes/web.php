@@ -235,6 +235,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
 
+    Route::post('/reject-site', [GlobeController::class, 'reject_site']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

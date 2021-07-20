@@ -3013,5 +3013,30 @@ class GlobeController extends Controller
             abort(403, $th->getMessage());
         }
     }
+
+    public function reject_site (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'type' => $request->input("type"),
+                    'status' => "approved",
+                ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully rejected site." ]);
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }
 

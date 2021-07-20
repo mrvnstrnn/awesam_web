@@ -89,7 +89,13 @@
                                 @if($activitytype=='new endorsements globe' || $activitytype=='new endorsements vendor')
                                     {{-- @if (\Auth::user()->profile_id != 8) --}}
                                         <div class="text-right mt-2 pt-2">
-                                            <button type="button" class="btn btn-primary btn-bulk-acceptreject-endorsement" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">Endorse New Sites</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-bulk-acceptreject-endorsement btn-shadow" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}"  data-activity_name="endorse_site">
+                                                @if (\Auth::user()->profile_id == 12)
+                                                    Endorse New Sites
+                                                @else
+                                                    Accept Endorsement
+                                                @endif
+                                            </button>
                                         </div>
                                     {{-- @endif --}}
                                 @endif
