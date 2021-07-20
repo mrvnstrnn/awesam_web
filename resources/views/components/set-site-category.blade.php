@@ -9,14 +9,14 @@
             <div class="form-group">
                 <label for="site_category">Site Category</label>
                 <select name="site_category" id="site_category" class="form-control">
-                    <option value="CONVENTIONAL - BRGY">CONVENTIONAL - BRGY</option>
+                    {{-- <option value="CONVENTIONAL - BRGY">CONVENTIONAL - BRGY</option>
                     <option value="CONVENTIONAL - HOA">CONVENTIONAL - HOA</option>
                     <option value="MILO - BRGY">MILO - BRGY</option>
                     <option value="MILO - HOA">MILO - HOA</option>
                     <option value="TRANSPORT - BRGY">TRANSPORT - BRGY</option>
                     <option value="TRANSPORT - HOA">TRANSPORT - HOA</option>
                     <option value="OPS CAB - BRGY">OPS CAB - BRGY</option>
-                    <option value="OPS CAB - HOA">OPS CAB - HOA</option>
+                    <option value="OPS CAB - HOA">OPS CAB - HOA</option> --}}
                 </select>
             </div>
         </form>         
@@ -82,6 +82,15 @@
                 )
             },
         });
+    });
+
+    $(document).ready(function(){
+        $("select#site_category option").remove();
+        var site_category = $("small.site_category").text();
+        $("select#site_category").append(
+            '<option value="'+site_category+' - BRGY">'+site_category+' - BRGY</option>' +
+            '<option value="'+site_category+' - HOA">'+site_category+' - HOA</option>'
+        );
     });
 
     $(".btn_switch_back_to_actions").on("click", function(){
