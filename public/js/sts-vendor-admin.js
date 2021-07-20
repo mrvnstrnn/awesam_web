@@ -48,7 +48,6 @@ $(document).ready(() => {
             return json.data;
         },
         columns: [
-            { data: "checkbox" },
             { data: "sam_id" },
             { data: "site_name" },
             { data: "site_address" },

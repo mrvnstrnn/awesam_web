@@ -24,12 +24,6 @@
                         <table style="width: 100%;" id="vendor-sites-table" data-href="{{ route('site.vendortable', $vendor_id) }}" class="table table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 15px;">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox"  id="checkAll" class="custom-control-input">
-                                            <label class="custom-control-label" for="checkAll">&nbsp;</label>
-                                        </div>
-                                    </th>
                                     <th class="d-none d-md-table-cell">SAM ID</th>
                                     <th>Site</th>
                                     <th class="text-center d-none d-sm-table-cell">Site Address</th>
