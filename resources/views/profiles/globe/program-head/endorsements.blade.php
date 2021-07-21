@@ -184,7 +184,11 @@
                 if(!resp.error){
                     $("#"+what_table).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
 
                         $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                         $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
@@ -192,14 +196,22 @@
                     });
                 } else {
                     // $("#loaderModal").modal("hide");
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                     $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                     $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
                 }
             },
             error: function(resp){
                 // $("#loaderModal").modal("hide");
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                 $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
             }
@@ -252,18 +264,30 @@
                 if(!resp.error){
                     $("#assigned-sites-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                         $("#"+id).removeAttr("disabled");
                         $("#"+id).text(text);
                     });
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                     $("#"+id).removeAttr("disabled");
                     $("#"+id).text(text);
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 $("#"+id).removeAttr("disabled");
                 $("#"+id).text(text);
             }
