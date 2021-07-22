@@ -79,9 +79,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAllNavigation()
     {
+        $programs = UserProgram::where('user_id', \Auth::id())->orderBy('program_id', 'asc')->pluck('program_id');
+
         return ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
                                         ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
                                         ->where('profile_permissions.profile_id', \Auth::user()->profile_id);
+                                        // ->whereIn('profile_permissions.program_id', $programs);
+
+                                        // ->whereIn('profile_permissions.program_id', $programs);
                                         // ->get();
     }
 

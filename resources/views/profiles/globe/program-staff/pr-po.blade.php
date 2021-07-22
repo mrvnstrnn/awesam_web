@@ -227,7 +227,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'doc_validation';
+    var table_to_load = 'site_approvals';
     var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////
@@ -370,7 +370,6 @@
             },
             success: function (resp){
                 if (!resp.error) {
-                    // $(".pr_po_form")[0].reset();
                     // Swal.fire(
                     //     'Success',
                     //     resp.message,
@@ -396,8 +395,11 @@
 
                     // $(".input_hidden input").remove();
 
+                    
                     $(".add_pr_po").removeAttr("disabled");
                     $(".add_pr_po").text("Create PR/PO");
+                    $(".remove_td").trigger("click");
+                    $(".pr_po_form")[0].reset();
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {

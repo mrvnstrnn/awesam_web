@@ -52,7 +52,7 @@
                                         <div>
                                             <h5 class="menu-header-title">
                                                 {{ $site[0]->site_name }}
-                                                @if(!is_null($site[0]->site_category))
+                                                @if(!is_null($site[0]->site_category) && $site[0]->site_category != "none")
                                                     <span class="mr-3 badge badge-secondary"><small class="site_category">{{ $site[0]->site_category }}</small></span>
                                                 @endif
                                             </h5>
