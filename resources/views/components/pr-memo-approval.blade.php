@@ -62,7 +62,7 @@
                         <small class="text-danger remarks-error"></small>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Confirm</button>
+                        <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Reject PR</button>
                         
                         <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                     </div>
@@ -123,7 +123,7 @@
             }
         } else {
             $(".reject_form small").text("");
-            var button_text = data_action == "false" ? "Reject PR" : "Confirm";
+            var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
             url = "/approve-reject-pr-memo";
             data = {
                 sam_id : sam_id,
@@ -133,6 +133,7 @@
                 remarks : remarks
             }
         }
+
         $.ajax({
         url: url,
             data: data,
