@@ -340,7 +340,8 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
-    $(".approve_reject_doc_btn").on("click", function (){
+    $(".approve_reject_doc_btn").on("click", function (e){
+        e.preventDefault();
         $(".confirmation_message").removeClass("d-none");
         $(".file_preview").addClass("d-none");
 
@@ -362,7 +363,8 @@
         }
     });
 
-    $(document).on("click", ".approve_reject_doc_btn_final", function (){
+    $(document).on("click", ".approve_reject_doc_btn_final", function (e){
+        e.preventDefault();
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");

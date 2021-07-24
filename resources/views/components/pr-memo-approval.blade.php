@@ -12,25 +12,16 @@
                     <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }}>
                     <small class="pr_number-error text-danger"></small>
                 </div>
-            
-            @elseif ($activity == "Vendor Awarding of Sites")
-            
-                <div class="form-group">
-                    <label for="vendor">Vendor</label>
-                    <select name="vendor" id="vendor" class="form-control">
-                        @php
-                            $vendors = \App\Models\Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
-                                                                ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
-                                                                ->where("vendor_programs.programs", $site[0]->program_id)
-                                                                ->get();
-                        @endphp
-                        @foreach ($vendors as $vendor)
-                            <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
-                        @endforeach
-                    </select>
-                    <small class="text-danger vendor-error"></small>
-                </div>
+
             @endif
+
+            <div class="form-group">
+                <label for="vendor">Vendor</label>
+                @php
+                    $vendor_name = \App\Models\Vendor::where('vendor_id', $json['vendor'])->first();
+                @endphp
+                <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $vendor_name->vendor_sec_reg_name }} ({{ $vendor_name->vendor_acronym }})" readonly>
+            </div>
             
             <div class="form-group">
                 <label for="pr_file">PR File</label>
@@ -48,8 +39,6 @@
                 <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
             @endif
 
-
-            {{-- <button type="button" class="float-right btn btn-shadow btn-danger ml-1 approve_reject_pr d-none" id="reject_pr" data-data_action="false" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Reject PR</button> --}}
         </form>
 
         <div class="row reject_remarks d-none">
@@ -119,7 +108,7 @@
                 sam_id : sam_id,
                 activity_name : activity_name,
                 data_action : data_action,
-                vendor : vendor
+                // vendor : vendor
             }
         } else {
             $(".reject_form small").text("");

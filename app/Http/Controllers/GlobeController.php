@@ -1507,6 +1507,17 @@ class GlobeController extends Controller
         }
 
 
+        elseif($activity_type == 'site prmemo'){
+            $sites = \DB::connection('mysql2') 
+                            ->table("milestone_tracking")
+                            ->where('program_id', $program_id)
+                            ->whereIn('activity_type', ['PR / PO'])
+                            ->where('profile_id', \Auth::user()->profile_id)
+                            ->where('activity_complete', 'false')
+                            ->get();
+
+        }
+            
         elseif($activity_type == 'doc validation'){
 
             $sites = \DB::connection('mysql2')
@@ -2940,29 +2951,38 @@ class GlobeController extends Controller
                 'thru' => 'required',
                 'to' => 'required',
             ));
+
             if ($validate->passes()) {
                 
                 $current = \Carbon::now()->format('YmdHs');
 
                 $file_name = 'create-pr-memo-'.$current.'.pdf';
 
-                $array_data = array(
-                    'budget_source' => $request->input("budget_source"),
-                    'date_created' => $request->input("date_created"),
-                    'department' => $request->input("department"),
-                    'division' => $request->input("division"),
-                    'from' => $request->input("from"),
-                    'group' => $request->input("group"),
-                    'recommendation' => $request->input("recommendation"),
-                    'requested_amount' => $request->input("requested_amount"),
-                    'subject' => $request->input("subject"),
-                    'thru' => $request->input("thru"),
-                    'to' => $request->input("to"),
-                    'file_name' => $file_name,
-                );
-
-
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+
+                    $array_data = array(
+                        'budget_source' => $request->input("budget_source"),
+                        'date_created' => $request->input("date_created"),
+                        'department' => $request->input("department"),
+                        'division' => $request->input("division"),
+                        'from' => $request->input("from"),
+                        'group' => $request->input("group"),
+                        'recommendation' => $request->input("recommendation"),
+                        'requested_amount' => $request->input("requested_amount"),
+                        'subject' => $request->input("subject"),
+                        'thru' => $request->input("thru"),
+                        'to' => $request->input("to"),
+                        'file_name' => $file_name,
+                        'sam_id' => $request->input("sam_id")[$i],
+                        'vendor' => $request->input('vendor'),
+                    );
+
+                    \DB::connection('mysql2')->table("site")
+                                    ->where("sam_id", $request->input("sam_id")[$i])
+                                    ->update([
+                                        'site_vendor_id' => $request->input('vendor'),
+                                    ]);
+
                     $check_sub_act = SubActivityValue::where('sam_id', $request->input("sam_id")[$i])
                                                             ->where('type', 'create_pr')
                                                             ->where('status', 'pending')
@@ -3103,25 +3123,25 @@ class GlobeController extends Controller
     {
         try {
 
-            $validate = \Validator::make($request->all(), array(
-                'vendor' => 'required'
-            ));
+            // $validate = \Validator::make($request->all(), array(
+            //     'vendor' => 'required'
+            // ));
             
-            if ($validate->passes()) {
+            // if ($validate->passes()) {
 
-                \DB::connection('mysql2')->table("site")
-                                ->where("sam_id", $request->input("sam_id"))
-                                ->update([
-                                    'site_vendor_id' => $request->input('vendor'),
-                                ]);
+                // \DB::connection('mysql2')->table("site")
+                //                 ->where("sam_id", $request->input("sam_id"))
+                //                 ->update([
+                //                     'site_vendor_id' => $request->input('vendor'),
+                //                 ]);
 
                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
 
                 return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
 
-            } else {
-                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
-            }
+            // } else {
+            //     return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            // }
 
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

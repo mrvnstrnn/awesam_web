@@ -106,6 +106,7 @@
                                                         "NAM PR Memo Approval",
                                                         "Set Ariba PR Number to Sites",
                                                         "Vendor Awarding of Sites",
+                                                        "Approved SSDS / NTP Validation"
 
                                                     );  
                                     
@@ -184,8 +185,10 @@
                                                 $site[0]->activity_name == "Lease Renewal Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "STS Draft Contract Legal Review" && $main_activity == "" ||
                                                 $site[0]->activity_name == "STS Head Draft Contract Legal Approval" && $main_activity == "" ||
-                                                $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == ""
-                                                
+                                                $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == "" ||
+
+                                                $site[0]->activity_name == "Approved SSDS / NTP Validation" && $main_activity == ""
+                                            
                                                 
                                             )
                                                 

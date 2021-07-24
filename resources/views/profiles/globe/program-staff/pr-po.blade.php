@@ -10,7 +10,7 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR / PO" activitytype="site approval"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR / PO" activitytype="site prmemo"/>
 
 @endsection
 
@@ -67,6 +67,25 @@
                             <input type="hidden" name="file_name" id="file_name">
                             <div class="form_div">
                                 <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                                    
+                                    <div class="form-group">
+                                        <label for="vendor">Vendor</label>
+                                        <select name="vendor" id="vendor" class="form-control">
+                                            @php
+                                                $vendors = \App\Models\Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
+                                                                    ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+                                                                    ->where("vendor_programs.programs", 1)
+                                                                    ->get();
+                                            @endphp
+                                            @foreach ($vendors as $vendor)
+                                                <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-danger vendor-error"></small>
+                                    </div>
+
+                                    <hr>
+
                                     <div class="form-row">
                                         <div class="col-12">
                                             <div class="form-group">
