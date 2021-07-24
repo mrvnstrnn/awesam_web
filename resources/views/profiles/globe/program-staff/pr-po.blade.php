@@ -273,7 +273,7 @@
 
         // $("..content-data .position-relative.form-group").remove();
         $(".card-body .position-relative.form-group").remove();
-        $(".main-card.mb-3.card .modal-footer").remove();
+        $("#viewInfoModal .main-card.mb-3.card .modal-footer").remove();
 
         if (json_parse.site_fields != null) {
             var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
@@ -289,7 +289,7 @@
                 // }
             }
         } else {
-            $("#viewInfoModal  .card-body").append(
+            $("#viewInfoModal .card-body").append(
                 '<div><h1>No fields available.</h1></div>'
             );
         }
@@ -394,6 +394,10 @@
                     //     resp.message,
                     //     'success'
                     // )
+
+                    $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
+
+                    });
                     
                     $(".pr_po_form #file_name").val(resp.file_name);
                     $(".print_to_pdf").trigger("click");
