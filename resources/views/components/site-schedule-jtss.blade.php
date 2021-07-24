@@ -3,6 +3,13 @@
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
 </div>
+
+<div class="row pt-4">
+    <div class="col-md-12">
+        <H5 id="active_action">Schedule JTSS</H5>
+    </div>
+</div>
+
 <div class="row pt-4">
     <div class="col-lg-6">
         <div id="datepicker" class=""></div>

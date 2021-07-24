@@ -4,6 +4,11 @@
     </div>
 </div>
 <div class="row pt-4">
+    <div class="col-md-12">
+        <H5 id="active_action">Schedule Advanced Site Hunting</H5>
+    </div>
+</div>
+<div class="row pt-4">
     <div class="col-lg-6">
         <div id="datepicker" class=""></div>
     </div>
