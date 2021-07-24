@@ -1489,7 +1489,7 @@ class GlobeController extends Controller
                 $sites = \DB::connection('mysql2') 
                                 ->table("milestone_tracking")
                                 ->where('program_id', $program_id)
-                                ->whereIn('activity_type', ['doc approval', 'site approval', 'PR / PO'])
+                                ->whereIn('activity_type', ['doc approval', 'site approval'])
                                 ->where('profile_id', \Auth::user()->profile_id)
                                 ->where('activity_complete', 'false')
                                 ->get();
@@ -1511,7 +1511,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("milestone_tracking")
                             ->where('program_id', $program_id)
-                            ->whereIn('activity_type', ['PR / PO'])
+                            ->where('activity_type', 'PR / PO')
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->where('activity_complete', 'false')
                             ->get();
