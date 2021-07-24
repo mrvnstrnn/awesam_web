@@ -2989,5 +2989,17 @@ class GlobeController extends Controller
             abort(403, $th->getMessage());
         }
     }
+
+    public function get_towerco()
+    {
+        $sites = \DB::connection('mysql2')
+                    ->table("towerco")
+                    ->get();
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+    }
+
+
 }
 
