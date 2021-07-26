@@ -3057,19 +3057,14 @@ class GlobeController extends Controller
 
             $allowed_fields = [
                 ['field' => 'Serial Number', 'field_type' => 'text'],	
-                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
                 ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
-                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
                 ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
                 ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
                 ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
-                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
                 ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
                 ['field' => 'CW START DATE', 'field_type' => 'date'],	
                 ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
             ];  
 
         }
@@ -3093,6 +3088,8 @@ class GlobeController extends Controller
                 ['field' => 'TOWERCO','field_type' => 'text'],
                 ['field' => 'PROVINCE','field_type' => 'text'],
                 ['field' => 'TOWN','field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
+                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
                 ['field' => '[NP] Latitude','field_type' => 'number'],
                 ['field' => '[NP]Longitude','field_type' => 'number'],
                 ['field' => 'SITE TYPE','field_type' => 'select', 'selection' => ['GREENFIELD', 'ROOFTOP']],
@@ -3109,8 +3106,10 @@ class GlobeController extends Controller
             $allowed_fields = [
                 ['field' => 'TSSR STATUS', 'field_type' => 'text'],
                 ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
-                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date']
-
+                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
             ];  
         }
 
@@ -3205,19 +3204,15 @@ class GlobeController extends Controller
         if($who == 'towerco'){
 
             $allowed_fields = [
-                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
+                ['field' => 'Serial Number', 'field_type' => 'text'],	
                 ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
-                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
                 ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
                 ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
                 ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
-                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
                 ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
                 ['field' => 'CW START DATE', 'field_type' => 'date'],	
                 ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
             ];  
 
         }
@@ -3235,11 +3230,14 @@ class GlobeController extends Controller
         elseif($who == 'sts'){
 
             $allowed_fields = [
+                ['field' => 'Serial Number','field_type' => 'text'],
                 ['field' => 'Search Ring','field_type' => 'text'],
                 ['field' => 'REGION','field_type' => 'text'],
                 ['field' => 'TOWERCO','field_type' => 'text'],
                 ['field' => 'PROVINCE','field_type' => 'text'],
                 ['field' => 'TOWN','field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
+                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
                 ['field' => '[NP] Latitude','field_type' => 'number'],
                 ['field' => '[NP]Longitude','field_type' => 'number'],
                 ['field' => 'SITE TYPE','field_type' => 'select', 'selection' => ['GREENFIELD', 'ROOFTOP']],
@@ -3256,8 +3254,10 @@ class GlobeController extends Controller
             $allowed_fields = [
                 ['field' => 'TSSR STATUS', 'field_type' => 'text'],
                 ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
-                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date']
-
+                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
             ];  
         }
 
