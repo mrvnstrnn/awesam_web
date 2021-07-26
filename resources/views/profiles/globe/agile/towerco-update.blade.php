@@ -10,8 +10,9 @@
 @section('modals')
 
     <x-tower-co-modal actor="AGILE" />
-
     <x-tower-co-multi-modal actor="AGILE" />
+    <x-tower-co-export-modal actor="AGILE" />
+
 
 @endsection
 

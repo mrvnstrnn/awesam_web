@@ -31,7 +31,9 @@
                                         <th>Serial No.</th>
                                         <th>REGION</th>
                                         <th>Search Ring</th>
+                                        @if(\Auth::user()->profile_id != 21)
                                         <th>TOWERCO</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>

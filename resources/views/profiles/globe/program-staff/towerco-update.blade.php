@@ -11,6 +11,8 @@
 
     <x-tower-co-modal actor="RAM" />
     <x-tower-co-multi-modal actor="RAM" />
+    <x-tower-co-export-modal actor="RAM" />
+
 
 @endsection
 

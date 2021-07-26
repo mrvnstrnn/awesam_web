@@ -11,6 +11,7 @@
 
     <x-tower-co-modal actor="TowerCo" />
     <x-tower-co-multi-modal actor="TowerCo" />
+    <x-tower-co-export-modal actor="TowerCo" />
 
 @endsection
 

@@ -342,6 +342,11 @@ $(document).ready(() => {
             }
         });
     });
+
+    // EXPORT
+    $(document).on('click', '.export-button', function(){
+        $('#towerco_export').modal('show');
+    });
     
 
 });

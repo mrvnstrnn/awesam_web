@@ -11,6 +11,7 @@
 
     <x-tower-co-modal actor="STS" />
     <x-tower-co-multi-modal actor="STS" />
+    <x-tower-co-export-modal actor="STS" />
 
 @endsection
 
