@@ -106,6 +106,9 @@ $(document).ready(() => {
                 $('.update-button').removeClass('d-none');
                 $('.export-button').addClass('d-none');
                 $('.update-button').find('span').text(table.rows('.selected').data().length);    
+            } else {
+                $('.export-button').removeClass('d-none');
+
             }
     });
 
@@ -153,6 +156,7 @@ $(document).ready(() => {
                 $('.flatpicker').css('background', '#ffffff');
 
                 $('.actor_update').attr('data-actor', actor);
+
             },
 
             error: function (resp) {
@@ -220,7 +224,9 @@ $(document).ready(() => {
             $('.actor_update_multi').text('Update Sites');
             $('.update-button').addClass('d-none');
             $('#towerco_multi').modal('hide');
-            $("#towerco-table").DataTable().ajax.reload();    
+            $("#towerco-table").DataTable().ajax.reload();   
+            $('.export-button').removeClass('d-none');
+
             Swal.fire(
                 'Success', 'Sites Updated','success'
             ); 
