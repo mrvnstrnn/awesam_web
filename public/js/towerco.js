@@ -166,7 +166,7 @@ $(document).ready(() => {
         //         console.log($(this));
         //     }
         // })
-
+        $('#selected-sites tbody').empty();
         table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
             var row = $(this.node());
             if($(row).hasClass('selected')){
@@ -178,6 +178,57 @@ $(document).ready(() => {
 
     });
 
+    var ajax_load = "";
+
+    
+    $(document).on('click', '.actor_update_multi', function(){
+
+        ajax_load = "actor_update_multi";
+
+        var loader = '<i class="fa fa-fw" aria-hidden="true"></i> Saving...';
+        $(this).html(loader);
+
+        $('#selected-sites tbody tr').each(async function (){
+            var active_serial = $(this).find('td:nth-child(2').text();
+
+            $('#multi_serial').val(active_serial);
+            let result;
+
+            try{
+                result = await $.ajax({
+                    url: '/save-towerco/',
+                    method: 'POST',
+                    data: $('#form-towerco-actor-multi').serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(resp){
+                        console.log(resp);
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
+            
+        });
+
+    });
+
+    $(document).ajaxStop(function() {
+
+        if(ajax_load == 'actor_update_multi'){
+            $('.actor_update_multi').text('Update Sites');
+            $('.update-button').addClass('d-none');
+            $('#towerco_multi').modal('hide');
+            $("#towerco-table").DataTable().ajax.reload();    
+            Swal.fire(
+                'Success', 'Sites Updated','success'
+            ); 
+            ajax_load = "";
+        }
+
+
+    });
 
     // SINGLE SITE
 

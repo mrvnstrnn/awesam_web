@@ -3256,9 +3256,10 @@ class GlobeController extends Controller
             ];  
         }
 
-        $actor = '<form id="form-towerco-actor">
+        $actor = '<form id="form-towerco-actor-multi">
             <input type="hidden" name="update user" value="' .   \Auth::user()->id . '">
             <input type="hidden" name="update group" value="' . $who . '">
+            <input type="hidden" id="multi_serial" name="Serial Number" value="">
         ';
 
             $value='';
@@ -3362,11 +3363,12 @@ class GlobeController extends Controller
             // return dd($data);
             unset($data['Serial Number']);
 
+
             // \DB::enableQueryLog(); // Enable query log
 
             \DB::table('towerco')
                 ->where('Serial Number', $request['Serial_Number'])
-                ->update($data);
+                ->update(array_filter($data));
 
             // return dd(\DB::getQueryLog()); // Show results of log
 

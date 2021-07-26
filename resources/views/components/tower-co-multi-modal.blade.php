@@ -44,7 +44,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary modal_close"  data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary actor_update">Update</button>
+            <button type="button" class="btn btn-primary actor_update_multi">Update Sites</button>
         </div>
         </div>
     </div>
