@@ -10,6 +10,7 @@
 @section('modals')
 
     <x-tower-co-modal actor="STS" />
+    <x-tower-co-multi-modal actor="STS" />
 
 @endsection
 

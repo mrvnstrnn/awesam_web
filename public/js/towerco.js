@@ -2,50 +2,192 @@ $(document).ready(() => {
 
     var whatTable = $('#towerco-table');
 
-    $(whatTable).DataTable({
-        processing: true,
-        serverSide: false,
-        filter: true,
-        searching: true,
-        lengthChange: true,
-        regex: true,
-        ajax: {
-            url: $(whatTable).attr('data-href'),
-            type: 'GET',
+    // TOWERCO TABLE
 
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    if(actor == 'towerco'){
+
+        $(whatTable).DataTable({
+            processing: true,
+            serverSide: false,
+            responsive: true,
+            filter: true,
+            searching: true,
+            lengthChange: true,
+            select: true,
+            dom: 'Bfrtip',
+
+            regex: true,
+            ajax: {
+                url: $(whatTable).attr('data-href'),
+                type: 'GET',
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
-        },
+            
+            language: {
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
+            },
+            
+            dataSrc: function(json){
+                return json.data;
+            },
+
+            createdRow: function (row, data, dataIndex) {
+            },
+            
+            columns: [
+                {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
+                {data: 'Serial Number'},
+                {data: 'REGION'},
+                {data: 'Search Ring'},
+            ],    
+
+        }); 
+
+    } else {
+        $(whatTable).DataTable({
+            processing: true,
+            serverSide: false,
+            responsive: true,
+            filter: true,
+            searching: true,
+            lengthChange: true,
+            select: true,
+            dom: 'Bfrtip',
+            regex: true,
+            ajax: {
+                url: $(whatTable).attr('data-href'),
+                type: 'GET',
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            
+            language: {
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
+            },
+            
+            dataSrc: function(json){
+                return json.data;
+            },
+
+            createdRow: function (row, data, dataIndex) {
+            },
+            
+            columns: [
+                {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
+                {data: 'Serial Number'},
+                {data: 'REGION'},
+                {data: 'Search Ring'},
+                {data: 'TOWERCO'},
+            ],    
+
+        }); 
+
+    }
+
+    // MULTIPLE SITES
+
+    $(document).on('click', '.site-add', function(){
+
+        var table = $('#towerco-table').DataTable();
+
+
+            var active_tr = $(this).closest('tr');
+            $(active_tr).toggleClass('selected');
+            
+            $(this).closest('td').html('<i class="site-added fa fa-fw fa-lg" aria-hidden="true" ></i>'); 
+
+
+            if(table.rows('.selected').data().length > 1){
+                $('.update-button').removeClass('d-none');
+                $('.export-button').addClass('d-none');
+                $('.update-button').find('span').text(table.rows('.selected').data().length);    
+            }
+    });
+
+    $(document).on('click', '.site-added', function(){
+
+        var table = $('#towerco-table').DataTable();
+    
+
+        var active_tr = $(this).closest('tr');
+        $(active_tr).toggleClass('selected');
+
+        $(this).closest('td').html('<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>');
+        $(this).closest('tr').addClass('tr-site-added');
         
-        language: {
-            "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
-        },
-        
-        dataSrc: function(json){
-            return json.data;
-        },
+        if(table.rows('.selected').data().length > 1){
+            $('.update-button').find('span').text(table.rows('.selected').data().length);
+            $('.export-button').addClass('d-none');
 
-        createdRow: function (row, data, dataIndex) {
-        },
-        
-        columns: [
-            {data: 'Serial Number'},
-            {data: 'REGION'},
-            {data: 'Search Ring'},
-            {data: 'TOWERCO'},
+        } else {
+            $('.update-button').addClass('d-none');
+            $('.export-button').removeClass('d-none');
 
-        ],    
+        }
+    });
 
-    }); 
+    $('.update-button').on('click', function(e){
 
-
-    $('.assigned-sites-table').on('click', 'tbody tr', function(e){
+        var table = $('#towerco-table').DataTable();
         
         e.preventDefault();
-        $('#towerco_details').modal('show');
+        $('#towerco_multi').modal('show');
 
-        var serial_number = $(this).find('td:first').text();
+        $('#tab-towerco-actor-multi').html('');
+        $('#tab-towerco-site-multi').html('');
+
+        $.ajax({
+            url: "/get-towerco-multi/"+actor,
+            method: 'GET',
+            async: false,
+
+            success: function (resp) {
+                $('#tab-towerco-actor-multi').html(resp.actor);
+
+                flatpickr(".flatpicker");
+                $('.flatpicker').css('background', '#ffffff');
+
+                $('.actor_update').attr('data-actor', actor);
+            },
+
+            error: function (resp) {
+                console.log(resp);
+            }
+
+        });
+
+        // $('#towerco-table tbody tr').each(function (){
+        //     if($(this).hasClass('selected')){
+        //         console.log($(this));
+        //     }
+        // })
+
+        table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+            var row = $(this.node());
+            if($(row).hasClass('selected')){
+
+                $('#selected-sites tbody').append('<tr>' + $(row).html() + '</tr>');
+            }
+            // ... do something with data(), or this.node(), etc
+        } );
+
+    });
+
+
+    // SINGLE SITE
+
+    $('.assigned-sites-table').on('click', 'tbody tr td:not(:first-child)', function(e){
+        
+
+        e.preventDefault();
+        $('#towerco_details').modal('show');
+        var active_tr = $(this).closest('tr');
+        var serial_number = $(active_tr).find('td:nth-child(2)').text();
 
         $('#towerco_details').find('.modal-title').html('<i class="pe-7s-map-marker pe-lg mr-2"></i>' + serial_number);
 
@@ -67,7 +209,7 @@ $(document).ready(() => {
                 $('.flatpicker').css('background', '#ffffff');
 
                 $('.actor_update').attr('data-serial', serial_number);
-                $('.actor_update').attr('data-actor', 'towerco');
+                $('.actor_update').attr('data-actor', actor);
 
                 var xTable =  '<table id="table-towerco-logs" class="table" style="width: 100%">' +
                         '<thead>' +
@@ -109,8 +251,7 @@ $(document).ready(() => {
                             render: function(data, type, row, meta){
                                 return data + '<br><small>' + row.user_group +'</small>';
                             }
-                        },
-                    ],
+                        },                    ],
 
                 }); 
 

@@ -11,6 +11,8 @@
 
     <x-tower-co-modal actor="AGILE" />
 
+    <x-tower-co-multi-modal actor="AGILE" />
+
 @endsection
 
 

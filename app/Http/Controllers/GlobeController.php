@@ -3195,6 +3195,140 @@ class GlobeController extends Controller
 
     }
 
+    public function get_towerco_multi($who)
+    {
+        if($who == 'towerco'){
+
+            $allowed_fields = [
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
+                ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
+                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
+                ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
+                ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
+                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
+                ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
+                ['field' => 'CW START DATE', 'field_type' => 'date'],	
+                ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
+            ];  
+
+        }
+        elseif($who == 'ram'){
+            $allowed_fields = [
+                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'date'],
+                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'number'],
+                ['field' => 'ACCESS', 'field_type' => 'text'],	
+                ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
+                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],	
+                ['field' => 'LEASE AMOUNT', 'field_type' => 'number'],	
+                ['field' => 'LEASE ESCALATION', 'field_type' => 'number']
+            ];  
+        }
+        elseif($who == 'sts'){
+
+            $allowed_fields = [
+                ['field' => 'Search Ring','field_type' => 'text'],
+                ['field' => 'REGION','field_type' => 'text'],
+                ['field' => 'TOWERCO','field_type' => 'text'],
+                ['field' => 'PROVINCE','field_type' => 'text'],
+                ['field' => 'TOWN','field_type' => 'text'],
+                ['field' => '[NP] Latitude','field_type' => 'number'],
+                ['field' => '[NP]Longitude','field_type' => 'number'],
+                ['field' => 'SITE TYPE','field_type' => 'select', 'selection' => ['GREENFIELD', 'ROOFTOP']],
+                ['field' => 'Tower Height','field_type' => 'number'],
+                ['field' => 'FOC/ MW TAGGING','field_type' => 'select', 'selection' => ['FOC', 'MW']],
+                ['field' => 'Wind Speed','field_type' => 'text'],
+                ['field' => 'OFF-GRID/GOOD GRID','field_type' => 'select', 'selection' => ['G1', 'G2', 'G3', 'G4']],
+                ['field' => 'PRIO', 'field_type' => 'select', 'selection' => ['P1', 'P2', 'P3', 'P4']],
+                ['field' => 'BATCH', 'field_type' => 'text']                                    
+            ];  
+        }
+        elseif($who == 'agile'){
+
+            $allowed_fields = [
+                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
+                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date']
+
+            ];  
+        }
+
+        $actor = '<form id="form-towerco-actor">
+            <input type="hidden" name="update user" value="' .   \Auth::user()->id . '">
+            <input type="hidden" name="update group" value="' . $who . '">
+        ';
+
+            $value='';
+
+            foreach ($allowed_fields as $allowed_field){
+
+                    $actor .= '
+                        <div class="row border-bottom mb-1 pb-1">
+                            <div class="col-md-4">
+                                ' . $allowed_field['field'] . '
+                            </div>
+                            <div class="col-md-8">';
+
+                    if($allowed_field['field_type']=='date'){
+                        $actor .= '
+                        <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '"  data-old="'. $value .'" class="form-control flatpicker">
+                        ';
+                    }
+                    elseif($allowed_field['field_type']=='text'){
+                        $actor .= '
+                        <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+                        ';
+                    }
+                    elseif($allowed_field['field_type']=='number'){
+                        $actor .= '
+                        <input type="number" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+                        ';
+                    }
+                    elseif($allowed_field['field_type']=='select'){
+                        $actor .= '
+                            <select class="form-control" name="' . $allowed_field['field'] . '" data-old="'. $value .'" >
+                                <option value=""></option>
+                        ';
+
+                        foreach($allowed_field['selection'] as $option){
+
+                            if($option == $value){
+                                $actor .= '
+                                    <option value="' . $option . '" selected>' . $option . '</option>
+                                ';
+                            }
+                            else {
+                                $actor .= '
+                                    <option value="' . $option . '">' . $option . '</option>
+                                ';
+                            }
+                        }
+
+                        $actor .= '
+                            </select>
+                        ';                        
+                    }
+                    $actor .= '        
+                            </div>
+                        </div>
+                    ';
+
+            }
+
+        $actor .="</form>";
+
+
+
+        return response()->json([ 'error' => false, 'actor' => $actor ]);
+
+
+    }
+
+
+
     public function get_towerco_logs($serial)
     {
 

@@ -10,6 +10,7 @@
 @section('modals')
 
     <x-tower-co-modal actor="RAM" />
+    <x-tower-co-multi-modal actor="RAM" />
 
 @endsection
 
