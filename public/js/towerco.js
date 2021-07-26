@@ -348,5 +348,10 @@ $(document).ready(() => {
         $('#towerco_export').modal('show');
     });
     
+    $(document).on('click', '.actor_export_download', function(){
+        window.open('/get-towerco/export', 'export'); 
+        $('#towerco_export').modal('hide');
+    });
+    
 
 });

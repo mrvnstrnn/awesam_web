@@ -18,6 +18,11 @@ use App\Models\VendorProgram;
 use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
+
+use App\Exports\TowerCoExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
@@ -3382,6 +3387,11 @@ class GlobeController extends Controller
 
         }
 
+    }
+
+    public function TowerCoExport()
+    {
+        return Excel::download(new TowerCoExport, 'towerco.xlsx');
     }
 
 }
