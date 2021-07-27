@@ -3679,7 +3679,7 @@ class GlobeController extends Controller
 
     }
 
-    public function filter_towerco($towerco, $region, $tssr_status, $milestone_status, $actor)
+    public function filter_towerco($towerco=null, $region=null, $tssr_status=null, $milestone_status=null, $actor)
     {
         $base_sql = "select * from `towerco`";
 
