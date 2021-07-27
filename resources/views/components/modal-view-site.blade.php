@@ -99,7 +99,14 @@
                                                         "Lease Renewal Approval",
                                                         "STS Draft Contract Legal Review",
                                                         "STS Head Draft Contract Legal Approval",
-                                                        "Finalize Contract Approval"
+                                                        "Finalize Contract Approval",
+
+                                                        //New Sites
+                                                        "RAM Head PR Memo Approval",
+                                                        "NAM PR Memo Approval",
+                                                        "Set Ariba PR Number to Sites",
+                                                        "Vendor Awarding of Sites",
+                                                        "Approved SSDS / NTP Validation"
 
                                                     );  
                                     
@@ -178,8 +185,10 @@
                                                 $site[0]->activity_name == "Lease Renewal Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "STS Draft Contract Legal Review" && $main_activity == "" ||
                                                 $site[0]->activity_name == "STS Head Draft Contract Legal Approval" && $main_activity == "" ||
-                                                $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == ""
-                                                
+                                                $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == "" ||
+
+                                                $site[0]->activity_name == "Approved SSDS / NTP Validation" && $main_activity == ""
+                                            
                                                 
                                             )
                                                 
@@ -209,6 +218,18 @@
                                             )   
                                             
                                                 <x-site-p-r-approval :site="$site" :pr="$pr" :activity="$site[0]->activity_name" />
+
+                                            @elseif(
+                                                $site[0]->activity_name == "RAM Head PR Memo Approval" && $main_activity == "" && \Auth::user()->profile_id == 9 ||
+                                                $site[0]->activity_name == "NAM PR Memo Approval" && $main_activity == "" && \Auth::user()->profile_id == 10 ||
+
+                                                $site[0]->activity_name == "Set Ariba PR Number to Sites" && $main_activity == "" && \Auth::user()->profile_id == 8 ||
+
+                                                $site[0]->activity_name == "Vendor Awarding of Sites" && $main_activity == "" && \Auth::user()->profile_id == 8
+
+                                            )   
+
+                                                <x-pr-memo-approval :site="$site" :samid="$site[0]->sam_id" :prmemo="$pr_memo" :activity="$site[0]->activity_name" />
 
                                             @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
 

@@ -216,6 +216,8 @@ $(document).ready(() => {
         $('#tab-towerco-actor').html('');
         $('#tab-towerco-logs').html('');
 
+        $("#serial_number").val(serial_number);
+
         $.ajax({
             url: "/get-towerco/"+serial_number+'/'+actor,
             method: 'GET',
@@ -276,6 +278,93 @@ $(document).ready(() => {
 
                 }); 
 
+                htmllist = '<div class="table-responsive table_uploaded_parent my-3">' +
+                    '<table class="table_uploaded_tssr align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th style="width: 20%;">Date</th>' +
+                                '<th>Filename</th>' +
+                                '<th style="width: 20%;">Uploaded By</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>' +
+                '</div>';
+
+                $('.file_viewer_tssr_list').html(htmllist);
+                $(".table_uploaded_tssr").attr("id", "table_uploaded_tssr_files_"+serial_number);
+
+                htmllisttb = '<div class="table-responsive table_uploaded_parent my-3">' +
+                    '<table class="table_uploaded_rtb align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th style="width: 20%;">Date</th>' +
+                                '<th>Filename</th>' +
+                                '<th style="width: 20%;">Uploaded By</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                    '</table>' +
+                '</div>';
+
+                $('.file_viewer_rtb_list').html(htmllisttb);
+                $(".table_uploaded_rtb").attr("id", "table_uploaded_rtb_files_"+serial_number);
+
+                if (! $.fn.DataTable.isDataTable("#table_uploaded_tssr_files_"+serial_number) ){
+                    $("#table_uploaded_tssr_files_"+serial_number).DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "/get-my-towerco-file/"+serial_number+"/tssr",
+                            type: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                        },
+                        dataSrc: function(json){
+                            return json.data;
+                        },
+                        'createdRow': function( row, data, dataIndex ) {
+                            $(row).attr('data-file_name', data.file_name);
+                            $(row).attr('data-id', data.id);
+                            $(row).attr('data-serial_number', data.serial_number);
+                            $(row).attr('style', 'cursor: pointer');
+                        },
+                        columns: [
+                            { data: "date_uploaded" },
+                            { data: "file_name" },
+                            { data: "uploaded_by" },
+                        ],
+                    });
+
+                    $("#table_uploaded_rtb_files_"+serial_number).DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "/get-my-towerco-file/"+serial_number+"/rtb",
+                            type: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                        },
+                        dataSrc: function(json){
+                            return json.data;
+                        },
+                        'createdRow': function( row, data, dataIndex ) {
+                            $(row).attr('data-file_name', data.file_name);
+                            $(row).attr('data-id', data.id);
+                            $(row).attr('data-serial_number', data.serial_number);
+                            $(row).attr('style', 'cursor: pointer');
+                        },
+                        columns: [
+                            { data: "date_uploaded" },
+                            { data: "file_name" },
+                            { data: "uploaded_by" },
+                        ],
+                    });
+                } else {
+                    $("#table_uploaded_tssr_files_"+serial_number).DataTable().ajax.reload();
+                    $("#table_uploaded_rtb_files_"+serial_number).DataTable().ajax.reload();
+                }
+
 
             },
 
@@ -284,6 +373,54 @@ $(document).ready(() => {
             }
 
         });
+    });
+
+    $(document).on("click", ".table_uploaded_tssr tr", function(e){
+        e.preventDefault();
+
+        var extensions = ["pdf", "jpg", "png"];
+
+        var file_name = $(this).attr('data-file_name');
+
+        if( extensions.includes(file_name.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + file_name + '" allowfullscreen></iframe><button class="btn btn-shadow btn-sm btn-secondary my-3 back_to_list_tssr">Back to list</button>';
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + file_name + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div><button class="btn btn-shadow btn-sm btn-secondary my-3 back_to_list_tssr">Back to list</button>';
+        }
+
+        $('.file_viewer_tssr_list').addClass('d-none');
+
+        $('.file_viewer_tssr').html('');
+        $('.file_viewer_tssr').html(htmltoload);
+    });
+
+    $(document).on("click", ".table_uploaded_rtb tr", function(e){
+        e.preventDefault();
+
+        var extensions = ["pdf", "jpg", "png"];
+
+        var file_name = $(this).attr('data-file_name');
+
+        if( extensions.includes(file_name.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + file_name + '" allowfullscreen></iframe><button class="btn btn-shadow btn-sm btn-secondary my-3 back_to_list_rtb">Back to list</button>';
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + file_name + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div><button class="btn btn-shadow btn-sm btn-secondary my-3 back_to_list_rtb">Back to list</button>';
+        }
+
+        $('.file_viewer_rtb_list').addClass('d-none');
+
+        $('.file_viewer_rtb').html('');
+        $('.file_viewer_rtb').html(htmltoload);
+    });
+
+    $(document).on('click', '.back_to_list_tssr', function(){
+        $('.file_viewer_tssr_list').removeClass('d-none');
+        $('.file_viewer_tssr').html('');
+    });
+
+    $(document).on('click', '.back_to_list_rtb', function(){
+        $('.file_viewer_rtb_list').removeClass('d-none');
+        $('.file_viewer_rtb').html('');
     });
 
     $(document).on('click', '.actor_update', function(){

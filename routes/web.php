@@ -136,6 +136,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-towerco/{serial_number}/{actor}', [GlobeController::class, 'get_towerco_serial'])->name('get_towerco_serial');
     Route::post('/save-towerco', [GlobeController::class, 'save_towerco_serial'])->name('save_towerco_serial');
     Route::post('/save-towerco-multi', [GlobeController::class, 'save_towerco_multi'])->name('save_towerco_multi');
+
+    Route::post('/upload-my-file-towerco', [GlobeController::class, 'upload_my_file_towerco']);
+
+    Route::get('/get-my-towerco-file/{serial_number}/{type}', [GlobeController::class, 'get_my_towerco_file']);
     
     Route::get('/get-towerco/export', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
     Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}', [GlobeController::class, 'filter_towerco'])->name('filter_towerco');
@@ -245,8 +249,15 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // PR / PO
     Route::get('/get-fiancial-analysis/{sam_id}', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
+    Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
+    Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);
     
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
+
+    Route::post('/reject-site', [GlobeController::class, 'reject_site']);
+
+    Route::post('/add-remarks-file', [GlobeController::class, 'add_remarks_file']);
+    Route::get('/get-remarks-file/{id}/{sam_id}', [GlobeController::class, 'get_remarks_file']);
 
 });
 
