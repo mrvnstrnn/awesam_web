@@ -143,7 +143,7 @@ $(document).ready(() => {
         $('#selected-sites tbody').empty();
         $('#form-towerco-actor-multi td[name="Serial Number[]"]').remove();   // Matches exactly 'tcol1'
 
-        var ctr = 1;
+        var ctr = 0;
         table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
             var row = $(this.node());
             if($(row).hasClass('selected')){

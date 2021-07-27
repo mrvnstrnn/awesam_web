@@ -46,7 +46,7 @@
             <div class="card-body">
                 <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label>TOWERCO</label>
                                 <select class="form-control mb-0">
@@ -67,7 +67,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label>REGION</label>
                                 <select class="form-control mb-0">
@@ -88,7 +88,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label>TSSR STATUS</label>
                                 <select class="form-control mb-0">
@@ -109,7 +109,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label>MILESTONE STATUS</label>
                                 <select class="form-control mb-0">
