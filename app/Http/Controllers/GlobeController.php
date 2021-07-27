@@ -1221,6 +1221,7 @@ class GlobeController extends Controller
                     'status' => $request->input('action') == "rejected" ? "denied" : "approved",
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                     'approver_id' => \Auth::id(),
+                    'date_approved' => Carbon::now()->toDate(),
                 ]);
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
@@ -2310,6 +2311,7 @@ class GlobeController extends Controller
                                             'status'=> $request->input('action') == "false" ? "denied" : "approved",
                                             'reason'=> $request->input('remarks'),
                                             'approver_id'=> \Auth::id(),
+                                            'date_approved'=> Carbon::now()->toDate(),
                                         ]);
 
                 // $email_receiver = User::select('users.*')
@@ -3143,6 +3145,71 @@ class GlobeController extends Controller
             //     return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             // }
 
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_remarks_file (Request $request)
+    {
+        try {
+
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => 'required',
+            ));
+
+            if ($validate->passes()) {
+
+                $remarks = SubActivityValue::where('type', 'remarks_file')
+                                                ->whereJsonContains('value', [
+                                                    "id" => $request->input("id"),
+                                                ])
+                                                ->first();
+
+                if (is_null($remarks)) {
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => "remarks_file",
+                        'status' => "pending",
+                    ]);
+    
+                    return response()->json(['error' => false, 'message' => "Successfully added remarks." ]);
+                } else {
+
+                    SubActivityValue::where('id', $remarks->id)
+                    ->update([
+                        'sam_id' => $request->input("sam_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => "remarks_file",
+                        'status' => "pending",
+                    ]);
+    
+                    return response()->json(['error' => false, 'message' => "Successfully updated remarks." ]);
+                }
+
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_remarks_file ($id, $sam_id)
+    {
+        try {
+            $remarks_file = SubActivityValue::where('sam_id', $sam_id)
+                        ->where('type', 'remarks_file')
+                        ->whereJsonContains("value", [
+                            "id" => $id
+                        ])
+                        ->first();
+
+            return response()->json([ 'error' => false, 'message' => is_null($remarks_file) ? null : $remarks_file ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

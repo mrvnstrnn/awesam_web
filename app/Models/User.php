@@ -253,4 +253,13 @@ class User extends Authenticatable implements MustVerifyEmail
             return $sub_steps;
         }
     }
+
+    public function getRtbApproved  ($sam_id)
+    {
+        $rtb_declaration = SubActivityValue::where('sam_id', $sam_id)
+                        ->where('type', 'rtb_declaration')
+                        ->first();
+
+        return $rtb_declaration;
+    }
 }

@@ -239,6 +239,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/reject-site', [GlobeController::class, 'reject_site']);
 
+    Route::post('/add-remarks-file', [GlobeController::class, 'add_remarks_file']);
+    Route::get('/get-remarks-file/{id}/{sam_id}', [GlobeController::class, 'get_remarks_file']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
