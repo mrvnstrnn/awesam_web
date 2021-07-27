@@ -76,6 +76,7 @@
                                 </div>
 
                             </div>
+                            <hr>
                             <div>
                                 <H5>RTB DOCS <i class="fa fa-fw fa-md rtb_upload" style="cursor: pointer" aria-hidden="true"></i></H5>
                                 <div class="col-12 file_viewer_rtb">
