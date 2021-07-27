@@ -99,7 +99,7 @@
 
         $("#viewInfoModal .main-card.mb-3.card").append(
             '<div class="modal-footer">' +
-                '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+                '<button type="button" class="btn btn-primary btn-sm btn-accept-endorsement btn-shadow" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
             '</div>'
         );
 
@@ -152,7 +152,12 @@
                 if(!resp.error){
                     $("#"+what_table).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        
+                        Swal.fire(
+                            'Succes',
+                            resp.message,
+                            'success'
+                        )
 
                         $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                         $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
@@ -160,13 +165,22 @@
                     });
                 } else {
                     // $("#loaderModal").modal("hide");
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                     $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                     $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
                 }
             },
             error: function(resp){
                 // $("#loaderModal").modal("hide");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 toastr.error(resp.message, 'Error');
                 $("#btn-accept-endorsement-"+data_complete).removeAttr("disabled");
                 $("#btn-accept-endorsement-"+data_complete).text(data_complete == "false" ? "Reject" : "Accept Endorsement");
@@ -220,18 +234,30 @@
                 if(!resp.error){
                     $("#assigned-sites-"+data_program.replace(" ", "-")+"-table").DataTable().ajax.reload(function(){
                         $("#modal-endorsement").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                         $("#"+id).removeAttr("disabled");
                         $("#"+id).text(text);
                     });
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                     $("#"+id).removeAttr("disabled");
                     $("#"+id).text(text);
                 }
             },
             error: function(resp){
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 $("#"+id).removeAttr("disabled");
                 $("#"+id).text(text);
             }

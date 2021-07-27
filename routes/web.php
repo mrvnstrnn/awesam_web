@@ -244,8 +244,15 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // PR / PO
     Route::get('/get-fiancial-analysis/{sam_id}', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
+    Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
+    Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);
     
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
+
+    Route::post('/reject-site', [GlobeController::class, 'reject_site']);
+
+    Route::post('/add-remarks-file', [GlobeController::class, 'add_remarks_file']);
+    Route::get('/get-remarks-file/{id}/{sam_id}', [GlobeController::class, 'get_remarks_file']);
 
 });
 

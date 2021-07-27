@@ -128,19 +128,34 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
             
-            if ($request->input('activity_name') == "Vendor Awarding") {
-                $validate = Validator::make($request->all(), array(
-                    'po_number' => 'required',
-                ));
+            if ($request->input('activity_name') == "Vendor Awarding" || $request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                if ($request->input('activity_name') == "Vendor Awarding") {
+                    $validate = Validator::make($request->all(), array(
+                        'po_number' => 'required',
+                    ));
 
-                if (!$validate->passes()) {
-                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    if (!$validate->passes()) {
+                        return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    } else {
+                        \DB::connection('mysql2')->table("site")
+                                        ->where("sam_id", $request->input("sam_id"))
+                                        ->update([
+                                            'site_po' => $request->input('po_number'),
+                                        ]);
+                    }
                 } else {
-                    \DB::connection('mysql2')->table("site")
-                                                ->where("sam_id", $request->input("sam_id"))
-                                                ->update([
-                                                    'site_po' => $request->input('po_number'),
-                                                ]);
+                    $validate = Validator::make($request->all(), array(
+                        'pr_number' => 'required',
+                    ));
+                    if (!$validate->passes()) {
+                        return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    } else {
+                        \DB::connection('mysql2')->table("site")
+                                        ->where("sam_id", $request->input("sam_id"))
+                                        ->update([
+                                            'site_pr' => $request->input('pr_number'),
+                                        ]);
+                    }
                 }
             }
 
@@ -156,12 +171,16 @@ class GlobeController extends Controller
                 $notification = "RTB Docs successfully approved";
             } else if ($request->input('activity_name') == "Vendor Awarding") {
                 $notification = "Successfully awarded.";
+            } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                $notification = "Successfully set PR Number.";
             } else {
                 $notification = "Success";
             }
             
             if ($request->input('activity_name') == "Vendor Awarding") {
                 $vendor = $request->input('vendor');
+                $action = $request->input('data_action');
+            } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
                 $action = $request->input('data_action');
             } else {
                 $vendor = $request->input('site_vendor_id');
@@ -869,17 +888,16 @@ class GlobeController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), array(
-                'jtss_schedule' => 'required',
+                $request->input('activity_name') => 'required',
                 'remarks' => 'required',
             ));
 
             // return response()->json(['error' => true, 'message' => json_encode($request->all()) ]);
             if ($validate->passes()) {
+                
                 $jtss_schedule_data = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                                            ->where('type', 'jtss_schedule')
+                                                            ->where('type', $request->input('activity_name'))
                                                             ->first();
-
-
                                                             
     
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
@@ -898,9 +916,14 @@ class GlobeController extends Controller
 
                 if (is_null($jtss_schedule_data)) {
 
+                    if ($request->input('activity_name') == "jtss_schedule") {
+                        $message_info = "Successfully scheduled JTSS.";
+                    } else {
+                        $message_info = "Successfully scheduled site.";
+                    }
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
-                        'type' => "jtss_schedule",
+                        'type' => $request->input('activity_name'),
                         'value' => json_encode($request->all()),
                         'user_id' => \Auth::id(),
                         'status' => "pending",
@@ -910,12 +933,12 @@ class GlobeController extends Controller
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
-                    return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
+                    return response()->json(['error' => false, 'message' => $message_info ]);
                 } else {
                     
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
-                    return response()->json(['error' => false, 'message' => "Successfully scheduled JTSS." ]);
+                    return response()->json(['error' => false, 'message' => $message_info ]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -1203,6 +1226,7 @@ class GlobeController extends Controller
                     'status' => $request->input('action') == "rejected" ? "denied" : "approved",
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                     'approver_id' => \Auth::id(),
+                    'date_approved' => Carbon::now()->toDate(),
                 ]);
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
@@ -1489,6 +1513,17 @@ class GlobeController extends Controller
         }
 
 
+        elseif($activity_type == 'site prmemo'){
+            $sites = \DB::connection('mysql2') 
+                            ->table("milestone_tracking")
+                            ->where('program_id', $program_id)
+                            ->where('activity_type', 'PR / PO')
+                            ->where('profile_id', \Auth::user()->profile_id)
+                            ->where('activity_complete', 'false')
+                            ->get();
+
+        }
+            
         elseif($activity_type == 'doc validation'){
 
             $sites = \DB::connection('mysql2')
@@ -1588,7 +1623,7 @@ class GlobeController extends Controller
 
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
     {
-
+// dd($sub_activity);
         if($sub_activity == 'Add SSDS'){
 
             $what_component = "components.subactivity-ssds";
@@ -1644,6 +1679,19 @@ class GlobeController extends Controller
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+            ])
+            ->render();
+            
+        }
+        elseif($sub_activity == ' Schedule Advanced Site Hunting'){
+
+            $what_component = "components.schedule-advance-site-hunting";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -1792,6 +1840,10 @@ class GlobeController extends Controller
                                     // ->where('sub_activity_value.status', "pending")
                                     ->where('sub_activity_value.type', "create_pr")
                                     ->first();
+                        
+            $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'create_pr')
+                                        ->first();
 
             if($request['vendor_mode']){
                 
@@ -1817,6 +1869,7 @@ class GlobeController extends Controller
                 ->with([
                     'site' => $site,
                     'pr' => $pr,
+                    'pr_memo' => $pr_memo,
                     'sam_id' => $request['sam_id'],
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
@@ -2263,6 +2316,7 @@ class GlobeController extends Controller
                                             'status'=> $request->input('action') == "false" ? "denied" : "approved",
                                             'reason'=> $request->input('remarks'),
                                             'approver_id'=> \Auth::id(),
+                                            'date_approved'=> Carbon::now()->toDate(),
                                         ]);
 
                 // $email_receiver = User::select('users.*')
@@ -2904,33 +2958,65 @@ class GlobeController extends Controller
                 'thru' => 'required',
                 'to' => 'required',
             ));
-            if ($validate->passes()) {
 
-                $array_data = array(
-                    'budget_source' => $request->input("budget_source"),
-                    'date_created' => $request->input("date_created"),
-                    'department' => $request->input("department"),
-                    'division' => $request->input("division"),
-                    'from' => $request->input("from"),
-                    'group' => $request->input("group"),
-                    'recommendation' => $request->input("recommendation"),
-                    'requested_amount' => $request->input("requested_amount"),
-                    'subject' => $request->input("subject"),
-                    'thru' => $request->input("thru"),
-                    'to' => $request->input("to"),
-                );
+            if ($validate->passes()) {
+                
+                $current = \Carbon::now()->format('YmdHs');
+
+                $file_name = 'create-pr-memo-'.$current.'.pdf';
 
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
-                    SubActivityValue::create([
+
+                    $array_data = array(
+                        'budget_source' => $request->input("budget_source"),
+                        'date_created' => $request->input("date_created"),
+                        'department' => $request->input("department"),
+                        'division' => $request->input("division"),
+                        'from' => $request->input("from"),
+                        'group' => $request->input("group"),
+                        'recommendation' => $request->input("recommendation"),
+                        'requested_amount' => $request->input("requested_amount"),
+                        'subject' => $request->input("subject"),
+                        'thru' => $request->input("thru"),
+                        'to' => $request->input("to"),
+                        'file_name' => $file_name,
                         'sam_id' => $request->input("sam_id")[$i],
-                        'value' => json_encode($array_data),
-                        'user_id' => \Auth::id(),
-                        'type' => "create_pr_po",
-                        'status' => "approved",
-                    ]);
+                        'vendor' => $request->input('vendor'),
+                    );
+
+                    \DB::connection('mysql2')->table("site")
+                                    ->where("sam_id", $request->input("sam_id")[$i])
+                                    ->update([
+                                        'site_vendor_id' => $request->input('vendor'),
+                                    ]);
+
+                    $check_sub_act = SubActivityValue::where('sam_id', $request->input("sam_id")[$i])
+                                                            ->where('type', 'create_pr')
+                                                            ->where('status', 'pending')
+                                                            ->first();
+                    if (is_null($check_sub_act)) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->input("sam_id")[$i],
+                            'value' => json_encode($array_data),
+                            'user_id' => \Auth::id(),
+                            'type' => "create_pr",
+                            'status' => "pending",
+                        ]);
+                    } else {
+                        $check_sub_act->delete();
+
+                        SubActivityValue::create([
+                            'sam_id' => $request->input("sam_id")[$i],
+                            'value' => json_encode($array_data),
+                            'user_id' => \Auth::id(),
+                            'type' => "create_pr",
+                            'status' => "pending",
+                        ]);
+                    }
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
                 }
                 
-                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO." ]);
+                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
@@ -2942,56 +3028,195 @@ class GlobeController extends Controller
     public function print_to_pdf_pr_po (Request $request)
     {
         try {
-            // $request->input("budget_source"),
-            // $request->input("date_created"),
-            // $request->input("department"),
-            // $request->input("division"),
-            // $request->input("from"),
-            // $request->input("group"),
-            // $request->input("recommendation"),
-            // $request->input("requested_amount"),
-            // $request->input("subject"),
-            // $request->input("thru"),
-            // $request->input("to")
 
-            $html = '<b>To: </b> '.$request->input("to") ."<br>";
-            $html .= '<b>Thru: </b> '.$request->input("thru") ."<br>";
-            $html .= '<b>From: </b> '.$request->input("from") ."<br>";
-            $html .= '<b>Division: </b> '.$request->input("division") ."<br>";
-            $html .= '<b>Subject: </b> '.$request->input("subject") ."<br>";
-            $html .= '<b>Reqested Amount: </b> '.$request->input("requested_amount") ."<br>";
-            $html .= '<b>Date Created: </b> '.$request->input("date_created") ."<br>";
-            $html .= '<b>Group: </b> '.$request->input("group") ."<br>";
-            $html .= '<b>Department: </b> '.$request->input("department") ."<br>";
-            $html .= '<b>Budget Source: </b> '.$request->input("budget_source") ."<br>";
-            $html .= '<b>Recommendation: </b> '.$request->input("recommendation") ."<br><br><br>";
-
-            $html .= '<table class="table">';
-            $html .= '<thead>';
-            $html .= '<tr>';
-            $html .= '<th style="width: 20%">Sam ID</th>';
-            // $html .= '<th style="width: 40%">Searching Name</th>';
-            // $html .= '<th>Region</th>';
-            // $html .= '<th>Province</th>';
-            // $html .= '<th style="width: 10%">Gross Amount PHP (VAT EXCLUSIVE)</th>';
-
-            $html .= '<tbody>';
-            for ($i=0; $i < count($request->input("sam_id")); $i++) { 
-                $html .= '<tr>';
-                $html .= '<td>'.$request->input("sam_id")[$i].'</td>';
-                $html .= '</tr>';
-            }
-
-            $html .= '</tbody>';
+            $sites = \DB::connection('mysql2')
+                            ->table('new_sites')
+                            ->whereIn('sam_id', $request->input("sam_id"))
+                            ->get();
+                            
+            $view = \View::make('components.create-pr-po-pdf')
+                ->with([
+                    'budget_source' => $request->input("budget_source"),
+                    'date_created' => $request->input("date_created"),
+                    'department' => $request->input("department"),
+                    'division' => $request->input("division"),
+                    'from' => $request->input("from"),
+                    'group' => $request->input("group"),
+                    'recommendation' => $request->input("recommendation"),
+                    'requested_amount' => $request->input("requested_amount"),
+                    'subject' => $request->input("subject"),
+                    'thru' => $request->input("thru"),
+                    'to' => $request->input("to"),
+                    'sites' => $sites,
+                ])
+                ->render();
 
             $pdf = \App::make('dompdf.wrapper');
-            $pdf = PDF::loadHTML($html);
-            $pdf->setPaper('a4');
-            
+            $pdf = PDF::loadHTML($view);
+            $pdf->setPaper('a4', 'landscape');
+            // $pdf->setWarnings(false);
+
+            // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
+
+            \Storage::put('pdf/'.$request->input("file_name"), $pdf->output());
             return $pdf->stream();
 
         } catch (\Throwable $th) {
             abort(403, $th->getMessage());
+        }
+    }
+
+    public function reject_site (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'type' => $request->input("type"),
+                    'status' => "denied",
+                ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully rejected site." ]);
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function approve_reject_pr_memo (Request $request)
+    {
+        try {
+            $required = $request->input("data_action") == "false" ? "required" : "";
+
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => $required
+            ));
+            
+            if ($validate->passes()) {
+                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                    ->where('type', "create_pr")
+                                    ->update([
+                                        'approver_id' => \Auth::id(),
+                                        'reason' => $request->input("data_action") == "false" ? $request->input("remarks") : NULL,
+                                        'status' => $request->input("data_action") == "false" ? "denied" : "approved",
+                                        'date_approved' => $request->input("data_action") == "false" ? NULL : Carbon::now()->toDate(),
+                                    ]);
+
+                if ($request->input("data_action") == "false") {
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                }
+
+                $message_action = $request->input("data_action") == "false" ? "rejected" : "approved";
+                return response()->json(['error' => false, 'message' => "Successfully ".$message_action." PR Memo." ]);
+
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function vendor_awarding_sites (Request $request)
+    {
+        try {
+
+            // $validate = \Validator::make($request->all(), array(
+            //     'vendor' => 'required'
+            // ));
+            
+            // if ($validate->passes()) {
+
+                // \DB::connection('mysql2')->table("site")
+                //                 ->where("sam_id", $request->input("sam_id"))
+                //                 ->update([
+                //                     'site_vendor_id' => $request->input('vendor'),
+                //                 ]);
+
+                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+
+                return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
+
+            // } else {
+            //     return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            // }
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_remarks_file (Request $request)
+    {
+        try {
+
+            $validate = \Validator::make($request->all(), array(
+                'remarks' => 'required',
+            ));
+
+            if ($validate->passes()) {
+
+                $remarks = SubActivityValue::where('type', 'remarks_file')
+                                                ->whereJsonContains('value', [
+                                                    "id" => $request->input("id"),
+                                                ])
+                                                ->first();
+
+                if (is_null($remarks)) {
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => "remarks_file",
+                        'status' => "pending",
+                    ]);
+    
+                    return response()->json(['error' => false, 'message' => "Successfully added remarks." ]);
+                } else {
+
+                    SubActivityValue::where('id', $remarks->id)
+                    ->update([
+                        'sam_id' => $request->input("sam_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => "remarks_file",
+                        'status' => "pending",
+                    ]);
+    
+                    return response()->json(['error' => false, 'message' => "Successfully updated remarks." ]);
+                }
+
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_remarks_file ($id, $sam_id)
+    {
+        try {
+            $remarks_file = SubActivityValue::where('sam_id', $sam_id)
+                        ->where('type', 'remarks_file')
+                        ->whereJsonContains("value", [
+                            "id" => $id
+                        ])
+                        ->first();
+
+            return response()->json([ 'error' => false, 'message' => is_null($remarks_file) ? null : $remarks_file ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 

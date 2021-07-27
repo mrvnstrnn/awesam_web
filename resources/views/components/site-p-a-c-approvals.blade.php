@@ -6,6 +6,9 @@
     </div>
     <div class="col-12 file_viewer">
     </div>
+    <div class="col-12 my-3">
+        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+    </div>
     <div class="col-12 file_viewer_list pt-3">
     </div>
 </div>
@@ -46,7 +49,7 @@
                 }
 
             @endphp
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}">
+            <div class="col-md-4 col-sm-4 view_file_site col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sam_id="{{ $site[0]->sam_id }}">
                 <div class="child_div_{{ $data->sub_activity_id }}">
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -69,6 +72,15 @@
 
     <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
 </div>
+
+@if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
+    <div class="row my-3">
+        <div class="col-12">
+            <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span>
+        </div>
+    </div>
+@endif
+
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">                                            
         <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}">Approve Site</button>
@@ -80,11 +92,18 @@
 
 <script>
     
-    $(".view_file").on("click", function (){
+    $(".view_file_site").on("click", function (e){
+        e.preventDefault();
 
         var extensions = ["pdf", "jpg", "png"];
 
         var values = JSON.parse($(this).attr('data-value'));
+
+        console.log(values);
+
+        var sam_id = $(this).attr('data-sam_id');
+        var sub_activity_id = $(this).attr('data-sub_activity_id');
+        var id = values[0].id;
 
         if( extensions.includes(values[0].value.split('.').pop()) == true) {     
             htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
@@ -97,36 +116,116 @@
 
         $('.file_viewer_list').html('');
 
-        values.forEach(function(item, index){
+        // values.forEach(function(item, index){
             
-            htmllist = "<tr>" + 
-                            "<td>"  + item.id + "</td>" +
-                            "<td>"  + item.value + "</td>" +
-                            "<td>"  + item.status + "</td>" +
-                            "<td>"  + item.date_created + "</td>" +
-                        "</tr>";
-        });
+        //     htmllist = "<tr>" + 
+        //                     "<td>"  + item.id + "</td>" +
+        //                     "<td>"  + item.value + "</td>" +
+        //                     "<td>"  + item.status + "</td>" +
+        //                     "<td>"  + item.date_created + "</td>" +
+        //                 "</tr>";
+        // });
 
-        htmllist = "<table class='table-bordered mb-0 table'>" + 
-                        "<thead>" +
-                            "<tr>" +                           
-                                "<th>#</th>"+
-                                "<th>file</th>"+
-                                "<th>status</th>"+
-                                "<th>timestamp</th>"+
-                            "</tr>" +                           
-                        "</thead>" +
-                        "<tbody>" +
-                            htmllist + 
-                        "</tbody>" +
-                    "</table>";
+        // htmllist = "<table class='table-bordered mb-0 table'>" + 
+        //                 "<thead>" +
+        //                     "<tr>" +                           
+        //                         "<th>#</th>"+
+        //                         "<th>file</th>"+
+        //                         "<th>status</th>"+
+        //                         "<th>timestamp</th>"+
+        //                     "</tr>" +                           
+        //                 "</thead>" +
+        //                 "<tbody>" +
+        //                     htmllist + 
+        //                 "</tbody>" +
+        //             "</table>";
+
+        htmllist = '<div class="table-responsive table_uploaded_parent">' +
+                '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th style="width: 5%">#</th>' +
+                            '<th>Filename</th>' +
+                            '<th style="width: 35%">Status</th>' +
+                            '<th>Date Uploaded</th>' +
+                            '<th>Date Approved</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>' +
+            '</div>';
 
         $('.file_viewer_list').html(htmllist);
+        $(".table_uploaded").attr("id", "table_uploaded_files_"+sub_activity_id);
+
+        remarks_file(id, sam_id);
+
+        if (! $.fn.DataTable.isDataTable("#table_uploaded_files_"+sub_activity_id) ){
+            $("#table_uploaded_files_"+sub_activity_id).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/get-my-sub_act_value/"+sub_activity_id+"/"+sam_id,
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-value', data.value);
+                    $(row).attr('data-status', data.status);
+                    $(row).attr('data-id', data.id);
+                    $(row).attr('data-sub_activity_id', data.sub_activity_id);
+                    $(row).attr('style', 'cursor: pointer');
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "value" },
+                    { data: "status" },
+                    { data: "date_created" },
+                    { data: "date_approved" },
+                ],
+            });
+        } else {
+            $("#table_uploaded_files_"+sub_activity_id).DataTable().ajax.reload();
+        }
 
         $('.file_lists').addClass('d-none');
         $('.file_preview').removeClass('d-none');
 
     });
+
+    function remarks_file (id, sam_id) {
+        $.ajax({
+            url: "/get-remarks-file/"+id+"/"+sam_id,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    if (resp.message == null) {
+                        $(".remarks_paragraph").text("No remarks available.");
+                    } else {
+                        $(".remarks_paragraph").text(JSON.parse(resp.message.value).remarks);
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            },
+        });
+    }
 
     $("#btn_back_to_file_list").on("click", function (){
         $('.file_lists').removeClass('d-none');

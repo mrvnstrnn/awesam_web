@@ -208,6 +208,8 @@ class VendorController extends Controller
                         ->addColumn('action', function($row) use ($program_status){
                             $button = '<button class="btn btn-info view-info btn-sm infoVendorModal" data-href="'.route('info.vendor', $row->vendor_id).'" data-id="'.$row->vendor_id.'" title="View Info"><i class="fa fa-eye"></i></button>';
 
+                            $button .= ' <a class="btn btn-info view-info btn-sm" href="'.route('site.vendor', $row->vendor_id).'" data-id="'.$row->vendor_id.'" title="View sites"><i class="pe-7s-global"></i></a>';
+
                             if ($program_status != "Complete"){
                                 $button .= ' <button class="btn btn-danger view-info btn-sm modalTerminate" data-vendor_sec_reg_name="'.$row->vendor_sec_reg_name.'" data-statusb="'.$program_status.'" data-id="'.$row->vendor_id.'">Terminate</button>';
                             }
@@ -235,6 +237,14 @@ class VendorController extends Controller
                 $status = 'Ongoing Offboarding';
             } else if ($request->input('data_statusb') == 'OngoingOff'){
                 $status = 'Complete Offboarding';
+            }
+
+            $site = \DB::connection('mysql2')->table('site')
+                                        ->where('site_vendor_id', $request->input('id'))
+                                        ->get();
+
+            if (!is_null($site)) {
+                return response()->json(['error' => true, 'message' => 'Unable to terminate this vendor. Transfer all '.count($site).' sites assigned to this vendor. <br><a href="'.route('site.vendor', $request->input('id')).'" target="_blank">View sites</a>']);
             }
 
             \DB::connection('mysql2')->table('vendor')
@@ -313,7 +323,7 @@ class VendorController extends Controller
     public function get_vendor_list()
     {
         try {
-            $vendor = Vendor::select('users.id', 'users.email')
+            $vendor = Vendor::select('vendor.vendor_id', 'users.email', 'vendor.vendor_sec_reg_name', 'vendor.vendor_acronym')
                                 ->where('vendor.vendor_status', 'Active')
                                 ->join('users', 'users.email', 'vendor.vendor_admin_email')
                                 ->get();

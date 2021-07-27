@@ -36,7 +36,7 @@
                         <label for="remarks" rows="6" class="">Remarks</label>
                         <textarea class="form-control" id="remarks" name="remarks" style="height: 95px;"></textarea>
                         <small class="remarks-error text-danger"></small>
-                    </div>        
+                    </div>
                 </div>
             </div>
         </form>

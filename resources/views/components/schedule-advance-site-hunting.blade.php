@@ -3,13 +3,11 @@
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
 </div>
-
 <div class="row pt-4">
     <div class="col-md-12">
-        <H5 id="active_action">Schedule JTSS</H5>
+        <H5 id="active_action">Schedule Advanced Site Hunting</H5>
     </div>
 </div>
-
 <div class="row pt-4">
     <div class="col-lg-6">
         <div id="datepicker" class=""></div>
@@ -19,9 +17,9 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="jtss_schedule">JTSS Schedule</label>
-                        <input type="text" id="jtss_schedule" name="jtss_schedule" value="" class="form-control" readonly />
-                        <small class="jtss_schedule-error text-danger"></small>
+                        <label for="site_schedule">Site Schedule</label>
+                        <input type="text" id="site_schedule" name="site_schedule" value="" class="form-control" readonly />
+                        <small class="site_schedule-error text-danger"></small>
                     </div>        
                 </div>
             </div>
@@ -48,28 +46,28 @@
 
     $(document).ready(function(){
 
-        $('#datepicker').datepicker({
-            minDate : 0
-        });
-
         $(".btn_switch_back_to_actions").on("click", function(){
             $("#actions_box").addClass('d-none');
             $("#actions_list").removeClass('d-none');
         });
 
+        $('#datepicker').datepicker({
+            minDate : 0
+        });
+
         $("#datepicker").on("change",function(){
             var selected = $(this).val();
-            $("#jtss_schedule").val(selected);
+            $("#site_schedule").val(selected);
         });
     
         $(".set_schedule").on("click", function(e) {
             e.preventDefault();
-            var sam_id = $("#modal_sam_id").val();
+            var sam_id = $(".ajax_content_box").attr("data-sam_id");
             var site_vendor_id = $("#modal_site_vendor_id").val();
             var program_id = $("#modal_program_id").val();
             var remarks = $("#remarks").val();
-            var jtss_schedule = $("#jtss_schedule").val();
-            var activity_name = "jtss_schedule";
+            var site_schedule = $("#site_schedule").val();
+            var activity_name = "site_schedule";
 
 
             $(this).attr("disabled", "disabled");
@@ -86,14 +84,14 @@
                     activity_name : activity_name,
                     site_vendor_id : site_vendor_id,
                     program_id : program_id,
-                    jtss_schedule : jtss_schedule,
+                    site_schedule : site_schedule,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(resp){
                     if(!resp.error){
-                        $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
+                        // $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                             $("#viewInfoModal").modal("hide");
 
                             $(".set_schedule").removeAttr("disabled");
@@ -104,7 +102,7 @@
                                 resp.message,
                                 'success'
                             )
-                        });
+                        // });
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
@@ -125,7 +123,7 @@
                 error: function(resp){
                     Swal.fire(
                         'Error',
-                        resp.message,
+                        resp,
                         'error'
                     )
                     $(".set_schedule").removeAttr("disabled");

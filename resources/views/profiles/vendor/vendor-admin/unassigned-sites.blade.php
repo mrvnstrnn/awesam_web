@@ -82,11 +82,19 @@
 
                         $("#modal-assign-sites").modal("show");
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 },
                 error: function (resp) {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
                 }
             });
         }
@@ -126,18 +134,30 @@
                     $("#btn-assign-sites").text('Assign');
                     $("#"+table).DataTable().ajax.reload(function(){
                         $("#modal-assign-sites").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                     });
                 } else {
                     $("#btn-assign-sites").removeAttr('disabled');
                     $("#btn-assign-sites").text('Assign');
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp){
                 $("#btn-assign-sites").removeAttr('disabled');
                 $("#btn-assign-sites").text('Assign');
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

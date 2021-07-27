@@ -117,7 +117,11 @@ $(document).ready(() => {
                 } else {
                     // $('#active-request-table').DataTable().ajax.reload();
                     // $('#reject-request-table').DataTable().ajax.reload(function (){
-                        toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
 
                         $("#message-error").text(resp.message[0]);
                         // $("#modalRequest").modal("hide");
@@ -125,7 +129,11 @@ $(document).ready(() => {
                 }
             },
             error: function (resp) {
-                toastr.error(resp.message, "Error");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

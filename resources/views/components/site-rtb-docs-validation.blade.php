@@ -6,6 +6,9 @@
     </div>
     <div class="col-12 file_viewer">
     </div>
+    <div class="col-12 my-3">
+        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+    </div>
     <div class="col-12 file_viewer_list pt-3">
     </div>
 </div>
@@ -187,7 +190,9 @@
     
     $(".view_file").on("click", function (){
 
-        $(".approve_reject_doc_btn").attr("data-id", $(this).attr("data-id"));
+        var id = $(this).attr("data-id");
+
+        $(".approve_reject_doc_btn").attr("data-id", id);
 
         $(".approve_reject_doc_btn").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
         
@@ -196,10 +201,8 @@
 
         if ($(this).attr("data-status") == "pending"){
             $(".approve_reject_doc_btn").removeClass("d-none");
-            // $(".approve_reject_doc_btn").removeAttr("disabled");
         } else {
             $(".approve_reject_doc_btn").addClass("d-none");
-            // $(".approve_reject_doc_btn").attr("disabled", "disabled");
         }
 
         var extensions = ["pdf", "jpg", "png"];
@@ -221,17 +224,6 @@
 
         $('.file_viewer_list').html('');
 
-        // values.forEach(function(item, index){
-            
-        //     htmllist = "<tr>" + 
-        //                     "<td>"  + item.id + "</td>" +
-        //                     "<td>"  + item.value + "</td>" +
-        //                     "<td>"  + item.status + "</td>" +
-        //                     "<td>"  + item.date_created + "</td>" +
-        //                 "</tr>";
-        // });
-
-        // $(".file_viewer_list").html(
         htmllist = '<div class="table-responsive table_uploaded_parent">' +
                 '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
                     '<thead>' +
@@ -244,10 +236,11 @@
                     '</thead>' +
                 '</table>' +
             '</div>';
-        // );
 
         $('.file_viewer_list').html(htmllist);
         $(".table_uploaded").attr("id", "table_uploaded_files_"+sub_activity_id);
+
+        remarks_file(id, sam_id);
 
         if (! $.fn.DataTable.isDataTable("#table_uploaded_files_"+sub_activity_id) ){
             $("#table_uploaded_files_"+sub_activity_id).DataTable({
@@ -281,33 +274,51 @@
             $("#table_uploaded_files_"+sub_activity_id).DataTable().ajax.reload();
         }
 
-        // htmllist = "<table class='table-bordered mb-0 table'>" + 
-        //                 "<thead>" +
-        //                     "<tr>" +                           
-        //                         "<th>#</th>"+
-        //                         "<th>file</th>"+
-        //                         "<th>status</th>"+
-        //                         "<th>timestamp</th>"+
-        //                     "</tr>" +                           
-        //                 "</thead>" +
-        //                 "<tbody>" +
-        //                     htmllist + 
-        //                 "</tbody>" +
-        //             "</table>";
-
-
         $('.file_lists').addClass('d-none');
         $('.file_preview').removeClass('d-none');
 
     });
 
+    function remarks_file (id, sam_id) {
+        $.ajax({
+            url: "/get-remarks-file/"+id+"/"+sam_id,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    if (resp.message == null) {
+                        $(".remarks_paragraph").text("No remarks available.");
+                    } else {
+                        $(".remarks_paragraph").text(JSON.parse(resp.message.value).remarks);
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            },
+        });
+    }
+
     $(document).on("click", ".table_uploaded tr", function (e) {
+        e.preventDefault();
         var extensions = ["pdf", "jpg", "png"];
 
+        var sam_id = $("#modal_sam_id").val();
         var value = $(this).attr("data-value");
         var id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
 
+        remarks_file(id, sam_id);
         $(".approve_reject_doc_btn").attr("data-sub_activity_id", sub_activity_id);
         $(".approve_reject_doc_btn").attr("data-id", id);
 
@@ -340,7 +351,8 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
-    $(".approve_reject_doc_btn").on("click", function (){
+    $(".approve_reject_doc_btn").on("click", function (e){
+        e.preventDefault();
         $(".confirmation_message").removeClass("d-none");
         $(".file_preview").addClass("d-none");
 
@@ -362,7 +374,8 @@
         }
     });
 
-    $(document).on("click", ".approve_reject_doc_btn_final", function (){
+    $(document).on("click", ".approve_reject_doc_btn_final", function (e){
+        e.preventDefault();
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
@@ -428,7 +441,7 @@
             error: function (resp){
                 Swal.fire(
                     'Error',
-                    resp.message,
+                    resp,
                     'error'
                 )
                     $(".approve_reject_doc_btn_final").removeAttr("disabled");

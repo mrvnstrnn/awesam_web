@@ -159,6 +159,10 @@
             // maxFiles: 1,    
             paramName: "file",
             url: "/upload-file",
+            removedfile: function(file) {
+                file.previewElement.remove();
+                $(".ssds_form input#"+file.upload.uuid).remove();
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

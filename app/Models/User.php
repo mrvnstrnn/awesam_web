@@ -79,9 +79,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAllNavigation()
     {
+        $programs = UserProgram::where('user_id', \Auth::id())->orderBy('program_id', 'asc')->pluck('program_id');
+
         return ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
                                         ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
                                         ->where('profile_permissions.profile_id', \Auth::user()->profile_id);
+                                        // ->whereIn('profile_permissions.program_id', $programs);
+
+                                        // ->whereIn('profile_permissions.program_id', $programs);
                                         // ->get();
     }
 
@@ -247,5 +252,14 @@ class User extends Authenticatable implements MustVerifyEmail
             $sub_steps = \DB::connection('mysql2')->table('sub_activity_step')->select('sub_activity_step_id')->where('sub_activity_id', $sub_activity_id)->get();
             return $sub_steps;
         }
+    }
+
+    public function getRtbApproved  ($sam_id)
+    {
+        $rtb_declaration = SubActivityValue::where('sam_id', $sam_id)
+                        ->where('type', 'rtb_declaration')
+                        ->first();
+
+        return $rtb_declaration;
     }
 }

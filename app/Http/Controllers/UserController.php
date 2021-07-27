@@ -226,7 +226,7 @@ class UserController extends Controller
                 $title_subheading  = ucwords($mode . " : " . $profile);
                 $title_icon = 'home';
         
-                $active_slug = "";
+                $active_slug = "transfer";
         
                 $profile_menu = self::getProfileMenuLinks();
     
@@ -435,6 +435,7 @@ class UserController extends Controller
             ->orderBy('menu', 'asc')
             ->get();
 
+        // return $profile_menu->groupBy('level_two');
         return $profile_menu;
 
     }

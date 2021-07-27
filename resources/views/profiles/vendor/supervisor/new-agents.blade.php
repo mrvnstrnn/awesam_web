@@ -15,12 +15,14 @@
 
         @php
             // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
-            if (\Auth::user()->profile_id == 3) {
-                $user_detail = \Auth::user()->getUserDetail()->first();
-                $programs = \Auth::user()->getUserProgram($user_detail->vendor_id);
-            } else {
-                $programs = \Auth::user()->getUserProgram();
-            }
+            // if (\Auth::user()->profile_id == 3) {
+            //     $user_detail = \Auth::user()->getUserDetail()->first();
+            //     $programs = \Auth::user()->getUserProgram($user_detail->vendor_id);
+            // } else {
+            //     $programs = \Auth::user()->getUserProgram();
+            // }
+
+            $programs = \Auth::user()->getUserProgram();
 
             // dd($user_detail->IS_id);
         @endphp

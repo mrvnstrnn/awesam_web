@@ -1,28 +1,27 @@
-<div class="row file_preview d-none">
-    <div class="col-12 mb-3">
-        <button id="btn_back_to_file_list_2" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+<div class="row border-bottom">
+    <div class="col-6">
+        <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
 </div>
-<div class="row mb-3">
+<div class="row mt-3">
     <div class="col-12 align-right">
         <form id="site_category_form">
-
             <div class="form-group">
                 <label for="site_category">Site Category</label>
                 <select name="site_category" id="site_category" class="form-control">
-                    <option value="CONVENTIONAL - BRGY">CONVENTIONAL - BRGY</option>
+                    {{-- <option value="CONVENTIONAL - BRGY">CONVENTIONAL - BRGY</option>
                     <option value="CONVENTIONAL - HOA">CONVENTIONAL - HOA</option>
                     <option value="MILO - BRGY">MILO - BRGY</option>
                     <option value="MILO - HOA">MILO - HOA</option>
                     <option value="TRANSPORT - BRGY">TRANSPORT - BRGY</option>
                     <option value="TRANSPORT - HOA">TRANSPORT - HOA</option>
                     <option value="OPS CAB - BRGY">OPS CAB - BRGY</option>
-                    <option value="OPS CAB - HOA">OPS CAB - HOA</option>
+                    <option value="OPS CAB - HOA">OPS CAB - HOA</option> --}}
                 </select>
             </div>
         </form>         
 
-        <button class="float-right btn btn-shadow btn-success ml-1" id="site_category_btn" data-sub_activity_id="{{ $sub_activity_id }}" data-sam_id="{{ $sam_id }}" data-activity_name="{{ $sub_activity }}">Set Category</button>
+        <button class="float-right btn btn-shadow btn-success" id="site_category_btn" data-sub_activity_id="{{ $sub_activity_id }}" data-sam_id="{{ $sam_id }}" data-activity_name="{{ $sub_activity }}">Set Category</button>
     </div>
 </div>
 
@@ -83,5 +82,22 @@
                 )
             },
         });
+    });
+
+    $(document).ready(function(){
+        $("select#site_category option").remove();
+        var site_category = $("small.site_category").text();
+        $("select#site_category").append(
+            '<option value="'+site_category+' - BRGY">'+site_category+' - BRGY</option>' +
+            '<option value="'+site_category+' - HOA">'+site_category+' - HOA</option>'
+        );
+    });
+
+    $(".btn_switch_back_to_actions").on("click", function(){
+        $("#actions_box").addClass('d-none');
+        $("#actions_list").removeClass('d-none');
+        
+        $("#actions_box").html('');
+
     });
 </script>

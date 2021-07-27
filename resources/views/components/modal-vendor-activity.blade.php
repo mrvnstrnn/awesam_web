@@ -52,8 +52,8 @@
                                         <div>
                                             <h5 class="menu-header-title">
                                                 {{ $site[0]->site_name }}
-                                                @if($site[0]->site_category != null)
-                                                    <span class="mr-3 badge badge-secondary"><small>{{ $site[0]->site_category }}</small></span>
+                                                @if(!is_null($site[0]->site_category) && $site[0]->site_category != "none")
+                                                    <span class="mr-3 badge badge-secondary"><small class="site_category">{{ $site[0]->site_category }}</small></span>
                                                 @endif
                                             </h5>
                                         </div>
@@ -98,20 +98,48 @@
                                         <div class="col-12">
                                             <ul class="tabs-animated body-tabs-animated nav mb-4">
                                                 <li class="nav-item">
-                                                    <a role="tab" class="nav-link active" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
-                                                        <span>Lessor Engagement</span>
+                                                    <a role="tab" class="nav-link active" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
+                                                        <span>Activity</span>
+                                                        <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
-                                                        <span>Activity</span>
-                                                        <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
+                                                    <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
+                                                        <span>Lessor Engagement</span>
                                                     </a>
                                                 </li>
                                             </ul>
         
                                             <div class="tab-content">
-                                                <div class="tab-pane tabs-animation fade active show" id="tab-content-lessor-engagement" role="tabpanel">
+                                                <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
+                                                    <div class="row border-bottom">
+                                                        <div class="col-8">
+                                                            <H5>Actions to Complete</H5>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="row p-2 pt-3 action_to_complete_parent">
+                                                        @foreach ($sub_activities as $sub_activity)
+                                                            @if($sub_activity->activity_id == $activity_id)
+                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
+                                                                    data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
+                                                                    >
+                                                                    <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset;"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</h6>
+                                                                    
+                                                                    @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
+                                                                    <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                    @endif
+                                                                </div>
+                                                            @endif                               
+                                                        @endforeach
+                                                        <div class="col-12 mt-5">
+                                                        <small>* Required actions are in bold letters</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
                                                     <div id="action_lessor_engagement" class=''>
                                                         <div class="row py-5 px-4" id="control_box_log">
                                                             <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Call">
@@ -178,34 +206,6 @@
                                                         <div class="row">
                                                             <div class="col-12 table-responsive table_lessor_parent_log">
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane tabs-animation fade" id="tab-content-action-to-complete" role="tabpanel">
-                                                    <div class="row border-bottom">
-                                                        <div class="col-8">
-                                                            <H5>Actions to Complete</H5>
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-2 pt-3 action_to_complete_parent">
-                                                        @foreach ($sub_activities as $sub_activity)
-                                                            @if($sub_activity->activity_id == $activity_id)
-                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
-                                                                    data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
-                                                                    >
-                                                                    <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset;"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }}</h6>
-                                                                    
-                                                                    @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
-                                                                    <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
-                                                                    @endif
-                                                                </div>
-                                                            @endif                               
-                                                        @endforeach
-                                                        <div class="col-12 mt-5">
-                                                        <small>* Required actions are in bold letters</small>
                                                         </div>
                                                     </div>
                                                 </div>
