@@ -657,7 +657,7 @@
 
             else if($(this).attr('href')==' /add-contact '){
                 $('#add_contact').modal('show');
-            }
+            }   
 
         });
     
