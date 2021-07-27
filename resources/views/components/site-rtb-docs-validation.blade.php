@@ -174,7 +174,7 @@
                                 toastr.error(resp.message, "Error");
                             }
                         },
-                        error: function (file, response) {
+                        error: function (file, resp) {
                             toastr.error(resp.message, "Error");
                         }
                     });
