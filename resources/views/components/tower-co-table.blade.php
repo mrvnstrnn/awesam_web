@@ -31,7 +31,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0">
                         <h5 class=" menu-header-title text-dark align-left">
                             <i class="header-icon lnr-layers icon-gradient bg-dark mr-1"></i>
-                            {{ $actor }}
+                            
                         </h5>        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0 text-md-right text-sm-center ">
@@ -45,92 +45,95 @@
             </div> 
             <div class="card-body">
                 <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label>TOWERCO</label>
-                                <select class="form-control mb-0">
-                                    @php
-                                        $recs = \DB::connection('mysql2')
-                                            ->table('towerco')
-                                            ->select('TOWERCO')                                            
-                                            ->distinct()
-                                            ->where('TOWERCO', '!=', '')
-                                            ->orderBy('TOWERCO')
-                                            ->get();
-                                        // dd($recs);
-                                    @endphp
-                                    <option value="">-</option>                                    
-                                    @foreach ($recs as $rec)
-                                        <option value="{{ $rec->TOWERCO }}">{{ $rec->TOWERCO }}</option>                                    
-                                    @endforeach
-                                </select>
+                    <form id="towerco-filters-form">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label>TOWERCO</label>
+                                    <select class="form-control mb-0" name="towerco">
+                                        @php
+                                            $recs = \DB::connection('mysql2')
+                                                ->table('towerco')
+                                                ->select('TOWERCO')                                            
+                                                ->distinct()
+                                                ->where('TOWERCO', '!=', '')
+                                                ->orderBy('TOWERCO')
+                                                ->get();
+                                            // dd($recs);
+                                        @endphp
+                                        <option value="-">-</option>                                    
+                                        @foreach ($recs as $rec)
+                                            <option value="{{ $rec->TOWERCO }}">{{ $rec->TOWERCO }}</option>                                    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label>REGION</label>
+                                    <select class="form-control mb-0" name="region">
+                                        @php
+                                            $recs = \DB::connection('mysql2')
+                                                ->table('towerco')
+                                                ->select('REGION')
+                                                ->distinct()
+                                                ->where('REGION', '!=', '')
+                                                ->orderBy('REGION')
+                                                ->get();
+                                            // dd($recs);
+                                        @endphp
+                                        <option value="-">-</option>                                    
+                                        @foreach ($recs as $rec)
+                                            <option value="{{ $rec->REGION }}">{{ $rec->REGION }}</option>                                    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label>TSSR STATUS</label>
+                                    <select class="form-control mb-0" name="tssr_status">
+                                        @php
+                                            $recs = \DB::connection('mysql2')
+                                                ->table('towerco')
+                                                ->select('TSSR STATUS')
+                                                ->distinct()
+                                                ->where('TSSR STATUS', '!=', '')
+                                                ->orderBy('TSSR STATUS')
+                                                ->get();
+                                            // dd($recs);
+                                        @endphp
+                                        <option value="-">-</option>                                    
+                                        @foreach ($recs as $rec)
+                                            <option value="{{ $rec->{'TSSR STATUS'} }}">{{ $rec->{'TSSR STATUS'} }}</option>                                    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label>MILESTONE STATUS</label>
+                                    <select class="form-control mb-0" name="milestone_status">
+                                        @php
+                                            $recs = \DB::connection('mysql2')
+                                                ->table('towerco')
+                                                ->select('MILESTONE STATUS')
+                                                ->distinct()
+                                                ->where('MILESTONE STATUS', '!=', '')
+                                                ->orderBy('MILESTONE STATUS')
+                                                ->get();
+                                            // dd($recs);
+                                        @endphp
+                                        <option value="-">-</option>                                    
+                                        @foreach ($recs as $rec)
+                                            <option value="{{ $rec->{'MILESTONE STATUS'} }}">{{ $rec->{'MILESTONE STATUS'} }}</option>                                    
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label>REGION</label>
-                                <select class="form-control mb-0">
-                                    @php
-                                        $recs = \DB::connection('mysql2')
-                                            ->table('towerco')
-                                            ->select('REGION')
-                                            ->distinct()
-                                            ->where('REGION', '!=', '')
-                                            ->orderBy('REGION')
-                                            ->get();
-                                        // dd($recs);
-                                    @endphp
-                                    <option value="">-</option>                                    
-                                    @foreach ($recs as $rec)
-                                        <option value="{{ $rec->REGION }}">{{ $rec->REGION }}</option>                                    
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label>TSSR STATUS</label>
-                                <select class="form-control mb-0">
-                                    @php
-                                        $recs = \DB::connection('mysql2')
-                                            ->table('towerco')
-                                            ->select('TSSR STATUS')
-                                            ->distinct()
-                                            ->where('TSSR STATUS', '!=', '')
-                                            ->orderBy('TSSR STATUS')
-                                            ->get();
-                                        // dd($recs);
-                                    @endphp
-                                    <option value="">-</option>                                    
-                                    @foreach ($recs as $rec)
-                                        <option value="{{ $rec->{'TSSR STATUS'} }}">{{ $rec->{'TSSR STATUS'} }}</option>                                    
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <label>MILESTONE STATUS</label>
-                                <select class="form-control mb-0">
-                                    @php
-                                        $recs = \DB::connection('mysql2')
-                                            ->table('towerco')
-                                            ->select('MILESTONE STATUS')
-                                            ->distinct()
-                                            ->where('MILESTONE STATUS', '!=', '')
-                                            ->orderBy('MILESTONE STATUS')
-                                            ->get();
-                                        // dd($recs);
-                                    @endphp
-                                    <option value="">-</option>                                    
-                                    @foreach ($recs as $rec)
-                                        <option value="{{ $rec->{'MILESTONE STATUS'} }}">{{ $rec->{'MILESTONE STATUS'} }}</option>                                    
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                        <input type="hidden" value="{{ $actor }}" name="actor" />
+                    </form>
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" class="pull-right btn btn-primary filter-records">Filter Records</button>

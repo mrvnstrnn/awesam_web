@@ -3426,6 +3426,38 @@ class GlobeController extends Controller
 
     }
 
+    public function filter_towerco($towerco, $region, $tssr_status, $milestone_status, $actor)
+    {
+        $base_sql = "select * from `towerco`";
+
+        if($towerco != '-' || $region != '-'|| $tssr_status != '-' || $milestone_status != '-'){
+            $base_sql .= " WHERE ";
+        }
+
+        $conditions = [];
+
+        if($towerco != '-'){
+            array_push($conditions, " `TOWERCO` = '" . $towerco . "'");
+        }
+
+        if($region != '-'){
+            array_push($conditions, " `REGION` = '" . $region . "'");
+        }
+
+        if($tssr_status != '-'){
+            array_push($conditions, " `TSSR STATUS` = '" . $tssr_status . "'");
+        }
+        if($milestone_status != '-'){
+            array_push($conditions, " `MILESTONE STATUS` = '" . $milestone_status . "'");
+        }
+
+        $sites = \DB::statement($base_sql);        
+
+        $dt = DataTables::of($sites);
+        return $dt->make(true);
+
+    }
+
 
     public function TowerCoExport()
     {
