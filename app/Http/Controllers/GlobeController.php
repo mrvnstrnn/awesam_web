@@ -3397,8 +3397,7 @@ class GlobeController extends Controller
             $data = collect($request->all())->mapWithKeys(function($item, $key) {
                     return [str_replace("_", " ", $key) => $item];
             })->toArray();
-
-            unset($data['Serial Number[]']);
+            unset($data['Serial Number']);
 
 
             \DB::enableQueryLog(); // Enable query log
@@ -3407,12 +3406,14 @@ class GlobeController extends Controller
                 ->whereIn('Serial Number', $request['Serial_Number'])
                 ->update(array_filter($data));
 
-            \DB::table('towerco_logs')->insert([
-                'Serial Number' => 'kayla@example.com',
-                'field' => '',
-                'old_value' => '',
-                'new_value' => '',
-            ]);
+            // \DB::connection('mysql2')
+            //     ->table('towerco_logs')
+            //     ->insert([
+            //     'Serial Number' => 'kayla@example.com',
+            //     'field' => '',
+            //     'old_value' => '',
+            //     'new_value' => ''
+            // ]);
 
             return response()->json([ 'error' => false, 'message' => "Successfully updated site", 'db' => \DB::getQueryLog() ]);    
 
