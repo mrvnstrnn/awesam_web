@@ -171,7 +171,7 @@ $(document).ready(() => {
 
         try{
             $.ajax({
-                url: '/save-towerco-multi/',
+                url: '/save-towerco-multi',
                 method: 'POST',
                 data: $('#form-towerco-actor-multi').serialize(),
                 headers: {
