@@ -142,11 +142,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-my-towerco-file/{serial_number}/{type}', [GlobeController::class, 'get_my_towerco_file']);
     
     Route::get('/get-towerco/export', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
-<<<<<<< HEAD
-    Route::get('/get-towerco-filter/{towerco}/{region?}/{tssr_status?}/{milestone_status?}/{actor}', [GlobeController::class, 'filter_towerco'])->name('filter_towerco');
-=======
     Route::get('/get-towerco-filter/{towerco?}/{region?}/{tssr_status?}/{milestone_status?}/{actor?}', [GlobeController::class, 'filter_towerco'])->name('filter_towerco');
->>>>>>> ebc2af885a2b9eb3f665080ab8c43afc4a4e9cb0
 
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
