@@ -23,17 +23,18 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-towerco-actor-multi" role="tabpanel" style="height:auto;">
                         </div>
-                        <div class="tab-pane" id="tab-towerco-sites-multi" role="tabpanel" style="height:auto;">
+                        <div class="tab-pane" id="tab-towerco-sites-multi" role="tabpanel" style="height:auto; overflow: scroll;">
                             <table class="table-responsive table table-bordered" id="selected-sites">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Serial No.</th>
-                                        <th>REGION</th>
                                         <th>Search Ring</th>
-                                        @if(\Auth::user()->profile_id != 21)
                                         <th>TOWERCO</th>
-                                        @endif
+                                        <th>PROJECT TAG</th>
+                                        <th>MILESTONE STATUS</th>
+                                        <th>LOCATION</th>
+                                        <th>GRID</th>
+                                        <th>TSSR STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>

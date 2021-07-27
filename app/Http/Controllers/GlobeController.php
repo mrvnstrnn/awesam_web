@@ -3061,6 +3061,7 @@ class GlobeController extends Controller
                 ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
                 ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
                 ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
+                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'date'],
                 ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
                 ['field' => 'CW START DATE', 'field_type' => 'date'],	
                 ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
@@ -3104,9 +3105,8 @@ class GlobeController extends Controller
         elseif($who == 'agile'){
 
             $allowed_fields = [
-                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'select', 'selection' => ['SUBMITTED', 'NOT YET SUBMITTED']],
                 ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
-                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date'],
                 ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
@@ -3120,6 +3120,10 @@ class GlobeController extends Controller
         ';
 
         foreach ($site[0] as $col => $value){
+
+            if($col == 'Serial Number'){
+                $actor .= '<input type="hidden" id="multi_serial" name="Serial Number" value="' . $value . '">';
+            }
 
             foreach ($allowed_fields as $allowed_field){
                 if($allowed_field['field']==$col){
@@ -3209,6 +3213,7 @@ class GlobeController extends Controller
                 ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
                 ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
                 ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
+                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'date'],
                 ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
                 ['field' => 'CW START DATE', 'field_type' => 'date'],	
                 ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
@@ -3252,9 +3257,8 @@ class GlobeController extends Controller
         elseif($who == 'agile'){
 
             $allowed_fields = [
-                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'select', 'selection' => ['SUBMITTED', 'NOT YET SUBMITTED']],
                 ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
-                ['field' => 'Full Approval Date (TSSR Approved Date)', 'field_type' => 'date'],
                 ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
                 ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
@@ -3369,7 +3373,7 @@ class GlobeController extends Controller
             unset($data['Serial Number']);
 
 
-            // \DB::enableQueryLog(); // Enable query log
+            \DB::enableQueryLog(); // Enable query log
 
             \DB::table('towerco')
                 ->where('Serial Number', $request['Serial_Number'])
@@ -3377,7 +3381,7 @@ class GlobeController extends Controller
 
             // return dd(\DB::getQueryLog()); // Show results of log
 
-            return response()->json([ 'error' => false, 'message' => "Successfully updated site" ]);    
+            return response()->json([ 'error' => false, 'message' => "Successfully updated site", 'db' => \DB::getQueryLog() ]);    
 
 
 

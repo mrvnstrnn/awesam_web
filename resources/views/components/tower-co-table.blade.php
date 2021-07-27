@@ -10,6 +10,16 @@
     }
     table.dataTable tbody tr.selected {
         color: black;
+    }
+    th {
+        font-size: 12px;
+    }
+    td {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
     }    
 </style>
 
@@ -27,27 +37,123 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0 text-md-right text-sm-center ">
                         <button class=" btn btn-dark d-none update-button ">Update Sites
                             <span class=" badge badge-pill badge-light">6</span>
-                        </button>                        
+                        </button>                       
+                        <button class=" btn btn-dark show-filters mr-1"><i class="fa fa-fw fa-lg" aria-hidden="true"></i> Filters</button>                        
                         <button class=" btn btn-dark export-button mr-1"><i class="fa fa-fw fa-lg" aria-hidden="true"></i> Export</button>                        
                     </div>
                 </div>
             </div> 
             <div class="card-body">
+                <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>TOWERCO</label>
+                                <select class="form-control mb-0">
+                                    @php
+                                        $recs = \DB::connection('mysql2')
+                                            ->table('towerco')
+                                            ->select('TOWERCO')                                            
+                                            ->distinct()
+                                            ->where('TOWERCO', '!=', '')
+                                            ->orderBy('TOWERCO')
+                                            ->get();
+                                        // dd($recs);
+                                    @endphp
+                                    <option value="">-</option>                                    
+                                    @foreach ($recs as $rec)
+                                        <option value="{{ $rec->TOWERCO }}">{{ $rec->TOWERCO }}</option>                                    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>REGION</label>
+                                <select class="form-control mb-0">
+                                    @php
+                                        $recs = \DB::connection('mysql2')
+                                            ->table('towerco')
+                                            ->select('REGION')
+                                            ->distinct()
+                                            ->where('REGION', '!=', '')
+                                            ->orderBy('REGION')
+                                            ->get();
+                                        // dd($recs);
+                                    @endphp
+                                    <option value="">-</option>                                    
+                                    @foreach ($recs as $rec)
+                                        <option value="{{ $rec->REGION }}">{{ $rec->REGION }}</option>                                    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>TSSR STATUS</label>
+                                <select class="form-control mb-0">
+                                    @php
+                                        $recs = \DB::connection('mysql2')
+                                            ->table('towerco')
+                                            ->select('TSSR STATUS')
+                                            ->distinct()
+                                            ->where('TSSR STATUS', '!=', '')
+                                            ->orderBy('TSSR STATUS')
+                                            ->get();
+                                        // dd($recs);
+                                    @endphp
+                                    <option value="">-</option>                                    
+                                    @foreach ($recs as $rec)
+                                        <option value="{{ $rec->{'TSSR STATUS'} }}">{{ $rec->{'TSSR STATUS'} }}</option>                                    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>MILESTONE STATUS</label>
+                                <select class="form-control mb-0">
+                                    @php
+                                        $recs = \DB::connection('mysql2')
+                                            ->table('towerco')
+                                            ->select('MILESTONE STATUS')
+                                            ->distinct()
+                                            ->where('MILESTONE STATUS', '!=', '')
+                                            ->orderBy('MILESTONE STATUS')
+                                            ->get();
+                                        // dd($recs);
+                                    @endphp
+                                    <option value="">-</option>                                    
+                                    @foreach ($recs as $rec)
+                                        <option value="{{ $rec->{'MILESTONE STATUS'} }}">{{ $rec->{'MILESTONE STATUS'} }}</option>                                    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" class="pull-right btn btn-primary filter-records">Filter Records</button>
+                            <button type="button" class="pull-right btn btn-secondary mr-1 close-filters">Close</button>
+                        </div>
+                    </div>
+                </div>
 
                 <table id="towerco-table" 
-                    class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table table-responsive"
+                    class=" compact align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table table-responsive"
                     data-href="{{ route('get_towerco_all', $actor) }}"
                     data-program_id="6" data-table_loaded="false"
                     style="width: 100%;">
                     <thead>
                         <tr>
                             <th></th> 
-                            <th>Serial Number</th>
-                            <th>Region</th>
-                            <th>Search Ring</th>
-                            @if($actor != 'TowerCo')
+                            <th>SEARCH RING</th>
                             <th>TOWERCO</th> 
-                            @endif
+                            <th>PROJECT TAG</th>
+                            <th>MILESTONE STATUS</th>
+                            <th>LOCATION</th>
+                            <th>GRID</th>
+                            <th>TSSR STATUS</th>
                         </tr>
                     </thead>
                     <tbody>

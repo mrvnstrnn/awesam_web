@@ -4,90 +4,61 @@ $(document).ready(() => {
 
     // TOWERCO TABLE
 
-    if(actor == 'towerco'){
+    $(whatTable).DataTable({
+        processing: true,
+        serverSide: false,
+        responsive: true,
+        filter: true,
+        searching: true,
+        lengthChange: true,
+        select: true,
+        dom: 'Bfrtip',
 
-        $(whatTable).DataTable({
-            processing: true,
-            serverSide: false,
-            responsive: true,
-            filter: true,
-            searching: true,
-            lengthChange: true,
-            select: true,
-            dom: 'Bfrtip',
+        regex: true,
+        ajax: {
+            url: $(whatTable).attr('data-href'),
+            type: 'GET',
 
-            regex: true,
-            ajax: {
-                url: $(whatTable).attr('data-href'),
-                type: 'GET',
-
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            
-            language: {
-                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
-            },
-            
-            dataSrc: function(json){
-                return json.data;
-            },
+        },
+        
+        language: {
+            "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
+        },
+        
+        dataSrc: function(json){
+            return json.data;
+        },
 
-            createdRow: function (row, data, dataIndex) {
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).attr('data-serial_number', row['Serial Number']);
+        },
+        
+        columns: [
+            {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
+            {data: 'Search Ring',
+            render: function (data, type, row, meta) {
+                return '<strong>' + data + '</strong><div class="sn">' + row['Serial Number'] + '</div>'; }
             },
-            
-            columns: [
-                {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
-                {data: 'Serial Number'},
-                {data: 'REGION'},
-                {data: 'Search Ring'},
-            ],    
+            {data: 'TOWERCO'},
+            {data: 'PROJECT TAG'},
+            {data: 'MILESTONE STATUS'},
+            {data: 'REGION', 
+            render: function (data, type, row, meta) {
+                return data + ' > ' + row['PROVINCE']; }},
+            {data: 'OFF-GRID/GOOD GRID'},
+            {data: 'TSSR STATUS'},
+        ],
+        columnDefs: [
+            {'max-width': '10px', 'targets': 2},
+            {'text-overflow': 'ellipsis', 'targets': 2},
+        ],
+        
 
-        }); 
-
-    } else {
-        $(whatTable).DataTable({
-            processing: true,
-            serverSide: false,
-            responsive: true,
-            filter: true,
-            searching: true,
-            lengthChange: true,
-            select: true,
-            dom: 'Bfrtip',
-            regex: true,
-            ajax: {
-                url: $(whatTable).attr('data-href'),
-                type: 'GET',
-
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-            },
-            
-            language: {
-                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
-            },
-            
-            dataSrc: function(json){
-                return json.data;
-            },
-
-            createdRow: function (row, data, dataIndex) {
-            },
-            
-            columns: [
-                {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
-                {data: 'Serial Number'},
-                {data: 'REGION'},
-                {data: 'Search Ring'},
-                {data: 'TOWERCO'},
-            ],    
-
-        }); 
-
-    }
+    }); 
 
     // MULTIPLE SITES
 
@@ -105,10 +76,11 @@ $(document).ready(() => {
             if(table.rows('.selected').data().length > 1){
                 $('.update-button').removeClass('d-none');
                 $('.export-button').addClass('d-none');
+                $('.show-filters').addClass('d-none');                
                 $('.update-button').find('span').text(table.rows('.selected').data().length);    
             } else {
                 $('.export-button').removeClass('d-none');
-
+                $('.show-filters').removeClass('d-none');
             }
     });
 
@@ -126,10 +98,13 @@ $(document).ready(() => {
         if(table.rows('.selected').data().length > 1){
             $('.update-button').find('span').text(table.rows('.selected').data().length);
             $('.export-button').addClass('d-none');
+            $('.show-filters').addClass('d-none');
+
 
         } else {
             $('.update-button').addClass('d-none');
             $('.export-button').removeClass('d-none');
+            $('.show-filters').removeClass('d-none');
 
         }
     });
@@ -193,7 +168,7 @@ $(document).ready(() => {
         $(this).html(loader);
 
         $('#selected-sites tbody tr').each(async function (){
-            var active_serial = $(this).find('td:nth-child(2').text();
+            var active_serial = $(this).find('td:nth-child(2').find('.sn').text();
 
             $('#multi_serial').val(active_serial);
             let result;
@@ -226,6 +201,7 @@ $(document).ready(() => {
             $('#towerco_multi').modal('hide');
             $("#towerco-table").DataTable().ajax.reload();   
             $('.export-button').removeClass('d-none');
+            $('.show-filters').removeClass('d-none');
 
             Swal.fire(
                 'Success', 'Sites Updated','success'
@@ -244,7 +220,7 @@ $(document).ready(() => {
         e.preventDefault();
         $('#towerco_details').modal('show');
         var active_tr = $(this).closest('tr');
-        var serial_number = $(active_tr).find('td:nth-child(2)').text();
+        var serial_number = $(active_tr).find('td:nth-child(2)').find('.sn').text();
 
         $('#towerco_details').find('.modal-title').html('<i class="pe-7s-map-marker pe-lg mr-2"></i>' + serial_number);
 
@@ -351,6 +327,28 @@ $(document).ready(() => {
     $(document).on('click', '.actor_export_download', function(){
         window.open('/get-towerco/export', 'export'); 
         $('#towerco_export').modal('hide');
+    });    
+
+    // AUTO VALUE
+    $(document).on('change', 'input[name="Tower Co TSSR Submission Date to GT"]',function(){
+            $('select[name="TSSR STATUS"]').val('SUBMITTED');
+    });
+
+    // FILTERS
+
+    $(document).on('click', '.close-filters', function(){
+        $('#filters-box').addClass('d-none');
+    });
+
+    $(document).on('click', '.show-filters', function(){
+        $('#filters-box').toggleClass('d-none');
+    });
+
+    $(document).on('click', '.filter-records', function(){
+
+        var table = $('#towerco-table').DataTable();
+
+        table.ajax.url( '/get-towerco/' ).load();
     });
     
 
