@@ -3681,32 +3681,51 @@ class GlobeController extends Controller
 
     public function filter_towerco($towerco=null, $region=null, $tssr_status=null, $milestone_status=null, $actor)
     {
-        $base_sql = "select * from `towerco`";
+        // $base_sql = "select * from `towerco`";
 
-        if($towerco != '-' || $region != '-'|| $tssr_status != '-' || $milestone_status != '-'){
-            $base_sql .= " WHERE ";
-        }
+        // if($towerco != '-' || $region != '-'|| $tssr_status != '-' || $milestone_status != '-'){
+        //     $base_sql .= " WHERE ";
+        // }
 
-        $conditions = [];
+        // $conditions = [];
+
+        // if($towerco != '-'){
+        //     array_push($conditions, " `TOWERCO` = '" . $towerco . "'");
+        // }
+
+        // if($region != '-'){
+        //     array_push($conditions, " `REGION` = '" . $region . "'");
+        // }
+
+        // if($tssr_status != '-'){
+        //     array_push($conditions, " `TSSR STATUS` = '" . $tssr_status . "'");
+        // }
+        // if($milestone_status != '-'){
+        //     array_push($conditions, " `MILESTONE STATUS` = '" . $milestone_status . "'");
+        // }
+
+
+        $sites = \DB::connection('mysql2')
+                        ->table('towerco');
 
         if($towerco != '-'){
-            array_push($conditions, " `TOWERCO` = '" . $towerco . "'");
+            $sites = $sites->where('TOWERCO', $towerco != '-' ? $towerco : "");
         }
 
         if($region != '-'){
-            array_push($conditions, " `REGION` = '" . $region . "'");
+            $sites = $sites->where('REGION', $region != '-' ? $region : "");
         }
 
         if($tssr_status != '-'){
-            array_push($conditions, " `TSSR STATUS` = '" . $tssr_status . "'");
+            $sites = $sites->where('TSSR STATUS', $tssr_status != '-' ? $tssr_status : "");
         }
         if($milestone_status != '-'){
-            array_push($conditions, " `MILESTONE STATUS` = '" . $milestone_status . "'");
+            $sites = $sites->where('MILESTONE STATUS', $milestone_status != '-' ? $milestone_status : "");
         }
 
-        $sites = \DB::statement($base_sql);        
+        $rows = $sites->get();
 
-        $dt = DataTables::of($sites);
+        $dt = DataTables::of($rows);
         return $dt->make(true);
 
     }
