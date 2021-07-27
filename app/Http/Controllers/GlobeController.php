@@ -18,6 +18,7 @@ use App\Models\VendorProgram;
 use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
+use App\Models\ToweCoFile;
 
 use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -681,6 +682,35 @@ class GlobeController extends Controller
                     'value' => $new_file,
                     'user_id' => \Auth::id(),
                     'status' => "pending",
+                ]);            
+                
+                return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
+            } else {
+                return response()->json(['error' => true, 'message' => "Please upload a file."]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function upload_my_file_towerco(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file_name' => 'required',
+            ));
+
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("activity_name"), $request->input("serial_number"));
+
+            \Storage::move( $request->input("file_name"), $new_file );
+
+            if($validate->passes()){
+
+                ToweCoFile::create([
+                    'serial_number' => $request->input("serial_number"),
+                    'file_name' => $new_file,
+                    'type' => $request->input("activity_name"),
+                    'user_id' => \Auth::id(),
                 ]);            
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
@@ -3353,8 +3383,6 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-            
-
         
     }
 
@@ -3430,6 +3458,26 @@ class GlobeController extends Controller
     public function TowerCoExport()
     {
         return Excel::download(new TowerCoExport, 'towerco.xlsx');
+    }
+
+    public function get_my_towerco_file ($serial_number, $type)
+    {
+        try {
+            $towerco_files = \DB::connection('mysql2')
+                        ->table("towerco_files")
+                        ->join('users', 'users.id', 'towerco_files.user_id')
+                        ->where('towerco_files.serial_number', $serial_number)
+                        ->where('towerco_files.type', $type)
+                        ->get();
+    
+            $dt = DataTables::of($towerco_files)
+                    ->addColumn('uploaded_by', function($row){
+                        return $row->name;                            
+                    });
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
 }

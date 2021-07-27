@@ -136,6 +136,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-towerco/{serial_number}/{actor}', [GlobeController::class, 'get_towerco_serial'])->name('get_towerco_serial');
     Route::post('/save-towerco', [GlobeController::class, 'save_towerco_serial'])->name('save_towerco_serial');
     Route::post('/save-towerco-multi', [GlobeController::class, 'save_towerco_multi'])->name('save_towerco_multi');
+
+    Route::post('/upload-my-file-towerco', [GlobeController::class, 'upload_my_file_towerco']);
+
+    Route::get('/get-my-towerco-file/{serial_number}/{type}', [GlobeController::class, 'get_my_towerco_file']);
     
     Route::get('/get-towerco/export/', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
 
