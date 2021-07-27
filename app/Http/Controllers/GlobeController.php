@@ -3394,12 +3394,11 @@ class GlobeController extends Controller
     {
         try {
 
-
             $data = collect($request->all())->mapWithKeys(function($item, $key) {
                     return [str_replace("_", " ", $key) => $item];
             })->toArray();
 
-            unset($data['Serial Number']);
+            unset($data['Serial Number[]']);
 
 
             \DB::enableQueryLog(); // Enable query log
