@@ -3277,7 +3277,7 @@ class GlobeController extends Controller
                 ->get();
                 break;
 
-            case 'TowerCo': 
+            case 'TowerCo':
                 $sites = \DB::connection('mysql2')
                 ->table("towerco")
                 ->where('TOWERCO', 'CREI')

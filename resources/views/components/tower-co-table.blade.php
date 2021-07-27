@@ -54,7 +54,7 @@
                                         @php
                                             $recs = \DB::connection('mysql2')
                                                 ->table('towerco')
-                                                ->select('TOWERCO')                                            
+                                                ->select('TOWERCO')             
                                                 ->distinct()
                                                 ->where('TOWERCO', '!=', '')
                                                 ->orderBy('TOWERCO')
