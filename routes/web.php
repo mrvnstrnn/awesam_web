@@ -135,6 +135,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-towerco-logs/{serial}', [GlobeController::class, 'get_towerco_logs'])->name('get_towerco_logs');
     Route::get('/get-towerco/{serial_number}/{actor}', [GlobeController::class, 'get_towerco_serial'])->name('get_towerco_serial');
     Route::post('/save-towerco', [GlobeController::class, 'save_towerco_serial'])->name('save_towerco_serial');
+    Route::post('/save-towerco-multi', [GlobeController::class, 'save_towerco_multi'])->name('save_towerco_multi');
     
     Route::get('/get-towerco/export/', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
 

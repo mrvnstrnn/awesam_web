@@ -23,18 +23,13 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-towerco-actor-multi" role="tabpanel" style="height:auto;">
                         </div>
-                        <div class="tab-pane" id="tab-towerco-sites-multi" role="tabpanel" style="height:auto; overflow: scroll;">
-                            <table class="table-responsive table table-bordered" id="selected-sites">
+                        <div class="tab-pane table-responsive" id="tab-towerco-sites-multi" role="tabpanel" style="height:auto;">
+                            <table class="table table table-bordered" id="selected-sites">
                                 <thead>
                                     <tr>
-                                        <th></th>
-                                        <th>Search Ring</th>
                                         <th>TOWERCO</th>
-                                        <th>PROJECT TAG</th>
-                                        <th>MILESTONE STATUS</th>
-                                        <th>LOCATION</th>
-                                        <th>GRID</th>
-                                        <th>TSSR STATUS</th>
+                                        <th>Serial Number</th>
+                                        <th>Search Ring</th>
                                     </tr>
                                 </thead>
                                 <tbody>

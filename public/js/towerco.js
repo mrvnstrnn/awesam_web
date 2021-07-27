@@ -41,7 +41,7 @@ $(document).ready(() => {
             {data: null, render: function(){ return '<i class="site-add fa fa-fw fa-lg" aria-hidden="true"></i>';}},
             {data: 'Search Ring',
             render: function (data, type, row, meta) {
-                return '<strong>' + data + '</strong><div class="sn">' + row['Serial Number'] + '</div>'; }
+                return '<strong>' + data + '</strong><div class="selected-sn">' + row['Serial Number'] + '</div>'; }
             },
             {data: 'TOWERCO'},
             {data: 'PROJECT TAG'},
@@ -117,7 +117,7 @@ $(document).ready(() => {
         $('#towerco_multi').modal('show');
 
         $('#tab-towerco-actor-multi').html('');
-        $('#tab-towerco-site-multi').html('');
+        // $('#tab-towerco-sites-multi').html('');
 
         $.ajax({
             url: "/get-towerco-multi/"+actor,
@@ -139,78 +139,66 @@ $(document).ready(() => {
             }
 
         });
-
-        // $('#towerco-table tbody tr').each(function (){
-        //     if($(this).hasClass('selected')){
-        //         console.log($(this));
-        //     }
-        // })
+        
         $('#selected-sites tbody').empty();
+        $('#form-towerco-actor-multi td[name="Serial Number[]"]').remove();   // Matches exactly 'tcol1'
+
+        var ctr = 1;
         table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
             var row = $(this.node());
             if($(row).hasClass('selected')){
 
-                $('#selected-sites tbody').append('<tr>' + $(row).html() + '</tr>');
+                var sn = $(row).find('.selected-sn').text();
+                var sr = $(row).find(':first-child').text().replace('','');
+                var tw = $(row).find(':nth-child(3)').text();
+
+                $('#form-towerco-actor-multi').append('<input type="hidden" name="Serial Number[]" value="' + sn + '" />')
+
+                $('#selected-sites tbody').append('<tr><td>' + tw +'</td><td>' + sn + '</td><td>' + sr + '</td></tr>');
+                ctr = ctr + 1;
+
             }
             // ... do something with data(), or this.node(), etc
         } );
 
     });
 
-    var ajax_load = "";
-
     
     $(document).on('click', '.actor_update_multi', function(){
-
-        ajax_load = "actor_update_multi";
 
         var loader = '<i class="fa fa-fw" aria-hidden="true"></i> Saving...';
         $(this).html(loader);
 
-        $('#selected-sites tbody tr').each(async function (){
-            var active_serial = $(this).find('td:nth-child(2').find('.sn').text();
+        try{
+            $.ajax({
+                url: '/save-towerco-multi/',
+                method: 'POST',
+                data: $('#form-towerco-actor-multi').serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    $('.actor_update_multi').text('Update Sites');
+                    $('.update-button').addClass('d-none');
+                    $('#towerco_multi').modal('hide');
+                    $("#towerco-table").DataTable().ajax.reload();   
+                    $('.export-button').removeClass('d-none');
+                    $('.show-filters').removeClass('d-none');
 
-            $('#multi_serial').val(active_serial);
-            let result;
+                    $('#tab-towerco-actor-multi').html('');
+                    $('#selected-sites body').empty();
+                    $('#form-towerco-actor-multi').empty();
 
-            try{
-                result = await $.ajax({
-                    url: '/save-towerco/',
-                    method: 'POST',
-                    data: $('#form-towerco-actor-multi').serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(resp){
-                        console.log(resp);
-                    }
-                });
-            } catch (error) {
-                console.error(error);
-            }
-            
-        });
-
-    });
-
-    $(document).ajaxStop(function() {
-
-        if(ajax_load == 'actor_update_multi'){
-            $('.actor_update_multi').text('Update Sites');
-            $('.update-button').addClass('d-none');
-            $('#towerco_multi').modal('hide');
-            $("#towerco-table").DataTable().ajax.reload();   
-            $('.export-button').removeClass('d-none');
-            $('.show-filters').removeClass('d-none');
-
-            Swal.fire(
-                'Success', 'Sites Updated','success'
-            ); 
-            ajax_load = "";
+                    Swal.fire(
+                        'Success', 'Sites Updated','success'
+                    ); 
+                }
+            });
+        } catch (error) {
+            console.error(error);
         }
-
-
     });
+
 
     // SINGLE SITE
 
@@ -220,7 +208,7 @@ $(document).ready(() => {
         e.preventDefault();
         $('#towerco_details').modal('show');
         var active_tr = $(this).closest('tr');
-        var serial_number = $(active_tr).find('td:nth-child(2)').find('.sn').text();
+        var serial_number = $(active_tr).find('td:nth-child(2)').find('.selected-sn').text();
 
         $('#towerco_details').find('.modal-title').html('<i class="pe-7s-map-marker pe-lg mr-2"></i>' + serial_number);
 

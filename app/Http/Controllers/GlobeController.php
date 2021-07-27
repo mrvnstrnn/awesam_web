@@ -3208,7 +3208,6 @@ class GlobeController extends Controller
         if($who == 'towerco'){
 
             $allowed_fields = [
-                ['field' => 'Serial Number', 'field_type' => 'text'],	
                 ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
                 ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
                 ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
@@ -3268,7 +3267,6 @@ class GlobeController extends Controller
         $actor = '<form id="form-towerco-actor-multi">
             <input type="hidden" name="update user" value="' .   \Auth::user()->id . '">
             <input type="hidden" name="update group" value="' . $who . '">
-            <input type="hidden" id="multi_serial" name="Serial Number" value="">
         ';
 
             $value='';
@@ -3360,7 +3358,6 @@ class GlobeController extends Controller
         
     }
 
-
     public function save_towerco_serial(Request $request)
     {
         try {
@@ -3392,6 +3389,43 @@ class GlobeController extends Controller
         }
 
     }
+
+    public function save_towerco_multi(Request $request)
+    {
+        try {
+
+
+            $data = collect($request->all())->mapWithKeys(function($item, $key) {
+                    return [str_replace("_", " ", $key) => $item];
+            })->toArray();
+
+            unset($data['Serial Number']);
+
+
+            \DB::enableQueryLog(); // Enable query log
+
+            \DB::table('towerco')
+                ->whereIn('Serial Number', $request['Serial_Number'])
+                ->update(array_filter($data));
+
+            \DB::table('towerco_logs')->insert([
+                'Serial Number' => 'kayla@example.com',
+                'field' => '',
+                'old_value' => '',
+                'new_value' => '',
+            ]);
+
+            return response()->json([ 'error' => false, 'message' => "Successfully updated site", 'db' => \DB::getQueryLog() ]);    
+
+
+        } catch (\Throwable $th) {
+
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+
+        }
+
+    }
+
 
     public function TowerCoExport()
     {

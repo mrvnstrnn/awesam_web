@@ -33,7 +33,7 @@
                         </div>
                         <div class="tab-pane" id="tab-towerco-documents" role="tabpanel">
                             <div>
-                                <H5>TSSR</H5>
+                                <H5>TSSR <i class="fa fa-fw fa-md" aria-hidden="true"></i></H5>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -52,7 +52,7 @@
                                 </table>
                             </div>
                             <div>
-                                <H5>RTB Docs</H5>
+                                <H5>RTB DOCS <i class="fa fa-fw fa-md" aria-hidden="true"></i></H5>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -71,7 +71,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tab-towerco-logs" role="tabpanel">
+                        <div class="tab-pane table-responsive" id="tab-towerco-logs" role="tabpanel">
                         </div>
                     </div>
                 </div>
