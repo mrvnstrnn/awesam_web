@@ -15,6 +15,7 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\RTBDeclaration;
 use App\Models\VendorProgram;
+use App\Models\Vendor;
 use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
@@ -3278,10 +3279,17 @@ class GlobeController extends Controller
                 break;
 
             case 'TowerCo':
+                $user_detail = \Auth::user()->getUserDetail()->first();
+                $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+                
                 $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->where('TOWERCO', 'CREI')
-                ->get();
+                    ->table("towerco");
+                
+                    if(!is_null($vendor)){
+                        $sites = $sites->where('TOWERCO', $vendor->vendor_sec_reg_name);
+                    }
+
+                    $sites->get();
                 break;
 
             case 'AGILE': 
@@ -3589,8 +3597,6 @@ class GlobeController extends Controller
 
 
     }
-
-
 
     public function get_towerco_logs($serial)
     {
