@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-tower-co-table actor="AGILE" />     
+    <x-tower-co-table actor="AGILE" />  
 
 @endsection
 

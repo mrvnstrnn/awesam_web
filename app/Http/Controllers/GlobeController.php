@@ -3277,7 +3277,7 @@ class GlobeController extends Controller
                 ->get();
                 break;
 
-            case 'TowerCo': 
+            case 'TowerCo':
                 $sites = \DB::connection('mysql2')
                 ->table("towerco")
                 ->where('TOWERCO', 'CREI')
@@ -3679,7 +3679,7 @@ class GlobeController extends Controller
 
     }
 
-    public function filter_towerco($towerco=null, $region=null, $tssr_status=null, $milestone_status=null, $actor)
+    public function filter_towerco($towerco, $region, $tssr_status, $milestone_status, $actor)
     {
         // $base_sql = "select * from `towerco`";
 

@@ -54,14 +54,14 @@
                                         @php
                                             $recs = \DB::connection('mysql2')
                                                 ->table('towerco')
-                                                ->select('TOWERCO')                                            
+                                                ->select('TOWERCO')             
                                                 ->distinct()
                                                 ->where('TOWERCO', '!=', '')
                                                 ->orderBy('TOWERCO')
                                                 ->get();
                                             // dd($recs);
                                         @endphp
-                                        <option value="">-</option>                                    
+                                        <option value="-">-</option>                                    
                                         @foreach ($recs as $rec)
                                             <option value="{{ $rec->TOWERCO }}">{{ $rec->TOWERCO }}</option>                                    
                                         @endforeach
@@ -82,7 +82,7 @@
                                                 ->get();
                                             // dd($recs);
                                         @endphp
-                                        <option value="">-</option>                                    
+                                        <option value="-">-</option>                                    
                                         @foreach ($recs as $rec)
                                             <option value="{{ $rec->REGION }}">{{ $rec->REGION }}</option>                                    
                                         @endforeach
@@ -103,7 +103,7 @@
                                                 ->get();
                                             // dd($recs);
                                         @endphp
-                                        <option value="">-</option>                                    
+                                        <option value="-">-</option>                                    
                                         @foreach ($recs as $rec)
                                             <option value="{{ $rec->{'TSSR STATUS'} }}">{{ $rec->{'TSSR STATUS'} }}</option>                                    
                                         @endforeach
@@ -124,7 +124,7 @@
                                                 ->get();
                                             // dd($recs);
                                         @endphp
-                                        <option value="">-</option>                                    
+                                        <option value="-">-</option>                                    
                                         @foreach ($recs as $rec)
                                             <option value="{{ $rec->{'MILESTONE STATUS'} }}">{{ $rec->{'MILESTONE STATUS'} }}</option>                                    
                                         @endforeach
