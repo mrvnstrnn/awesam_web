@@ -1,12 +1,21 @@
 @php
 
   if(\Auth::user()->profile_id == 21){
-    $rt = \DB::table('towerco_region_totals_per_company')
-          ->where('TOWERCO', 'ISON')
-          ->get();
+    
+    $user_detail = \Auth::user()->getUserDetail()->first();
+    $vendor = \App\Models\Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+
+    $rt = \DB::connection('mysql2')->table('towerco_region_totals_per_company')
+          ->where('TOWERCO', 'ISON');
+
+    if(!is_null($vendor)){
+      $rt = $rt->where('TOWERCO', $vendor->vendor_sec_reg_name);
+    }
+
+    $rt->get();
   }
   else {
-    $rt = \DB::table('towerco_region_totals')->get();
+    $rt = \DB::connection('mysql2')->table('towerco_region_totals')->get();
   }
 
 
