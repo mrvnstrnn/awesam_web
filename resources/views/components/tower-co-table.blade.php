@@ -31,7 +31,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0">
                         <h5 class=" menu-header-title text-dark align-left">
                             <i class="header-icon lnr-layers icon-gradient bg-dark mr-1"></i>
-                            
+                            {{ $actor }}
                         </h5>        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0 text-md-right text-sm-center ">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div> 
-            <div class="card-body w-100">
+            <div class="card-body">
                 <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
                     <form id="towerco-filters-form">
                         <div class="row">
@@ -142,26 +142,27 @@
                     </div>
                 </div>
 
-                <table id="towerco-table" 
-                    class=" compact align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table table-responsive"
-                    data-href="{{ route('get_towerco_all', $actor) }}"
-                    data-program_id="6" data-table_loaded="false"
-                    style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th></th> 
-                            <th>SEARCH RING</th>
-                            <th>TOWERCO</th> 
-                            <th>PROJECT TAG</th>
-                            <th>MILESTONE STATUS</th>
-                            <th>LOCATION</th>
-                            <th>GRID</th>
-                            <th>TSSR STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+
+                    <table id="towerco-table" 
+                        class="compact align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
+                        data-href="{{ route('get_towerco_all', $actor) }}"
+                        data-program_id="6" data-table_loaded="false"
+                        style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th></th> 
+                                <th>SEARCH RING</th>
+                                <th>TOWERCO</th> 
+                                <th>PROJECT TAG</th>
+                                <th>MILESTONE STATUS</th>
+                                <th>LOCATION</th>
+                                <th>GRID</th>
+                                <th>TSSR STATUS</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
