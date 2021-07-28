@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\TowerCo;
+use App\Models\Vendor;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -14,7 +15,8 @@ class TowerCoExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return TowerCo::select(
+
+        $towerco = TowerCo::select(
             "Serial Number", 
             "Search Ring",
             "REGION",
@@ -58,8 +60,17 @@ class TowerCoExport implements FromCollection, WithHeadings
             "ESCALATION",
             "COMMENCEMENT",
             "REMARKS"
-                        )
-                        ->get();
+        );
+
+        
+        if (\Auth::user()->profile_id == 21) {
+            $user_detail = \Auth::user()->getUserDetail()->first();
+            $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+
+            $towerco->where('TOWERCO', $vendor->vendor_sec_reg_name);
+        }
+
+        return $towerco->get();
     }
 
     public function headings() :array
