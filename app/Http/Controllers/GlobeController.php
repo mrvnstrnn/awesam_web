@@ -3714,8 +3714,14 @@ class GlobeController extends Controller
         $sites = \DB::connection('mysql2')
                         ->table('towerco');
 
-        if($towerco != '-'){
+        if($towerco != '-' && $actor != 'TowerCo'){
             $sites = $sites->where('TOWERCO', $towerco != '-' ? $towerco : "");
+        
+        } else {
+            $user_detail = \Auth::user()->getUserDetail()->first();
+            $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+
+            $sites = $sites->where('TOWERCO', $vendor->vendor_sec_reg_name);
         }
 
         if($region != '-'){
