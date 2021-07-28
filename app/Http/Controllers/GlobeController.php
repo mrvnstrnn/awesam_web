@@ -3319,61 +3319,252 @@ class GlobeController extends Controller
         if($who == 'towerco'){
 
             $allowed_fields = [
-                ['field' => 'Serial Number', 'field_type' => 'text'],	
-                ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
-                ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
-                ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
-                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
-                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'date'],
-                ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
-                ['field' => 'CW START DATE', 'field_type' => 'date'],	
-                ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'date'],	
+                // ['field' => 'Serial Number', 'field_type' => 'text'],	
+                // ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'date'],	
+                // ['field' => 'MILESTONE STATUS', 'field_type' => 'select', 'selection' => ['', 'a.Accepted SR', 'b.Site Survey', 'c.TSSR Submitted', 'd.TSSR Approved', 'e.Signed Agreement with the Lessor', 'f.Site Acquired (with LGU permit)', 'g.Civil Works Started', 'h.Civil Works Completed', 'i.RFI (Tempo Power)', 'j.RFI (Permanent Power)']],	
+                // ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'date'],	
+                // ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'date'],	
+                // ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'date'],
+                // ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'date'],	
+                // ['field' => 'CW START DATE', 'field_type' => 'date'],	
+                // ['field' => 'CW COMPLETED DATE', 'field_type' => 'date'],	
+                // ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'date'],	
+
+                ['field' => 'Serial Number', 'field_type' => 'text'],
+                ['field' => 'Search Ring', 'field_type' => 'text'],
+                ['field' => 'REGION', 'field_type' => 'text'],
+                ['field' => 'TOWERCO', 'field_type' => 'text'],
+                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'text'],
+                // ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'text'],
+                // ['field' => 'PROJECT TAG', 'field_type' => 'text'],
+                ['field' => 'MILESTONE STATUS', 'field_type' => 'text'],
+                // ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'text'],
+                // ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'text'],
+                ['field' => 'CW START DATE', 'field_type' => 'text'],
+                ['field' => 'CW COMPLETED DATE', 'field_type' => 'text'],
+                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'text'],
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],
+                ['field' => 'PROVINCE', 'field_type' => 'text'],
+                ['field' => 'TOWN', 'field_type' => 'text'],
+                ['field' => '[NP]Latitude', 'field_type' => 'text'],
+                ['field' => '[NP]Longitude', 'field_type' => 'text'],
+                ['field' => 'SITE TYPE', 'field_type' => 'text'],
+                ['field' => 'Tower Height', 'field_type' => 'text'],
+                ['field' => 'FOC/ MW TAGGING', 'field_type' => 'text'],
+                ['field' => 'Wind Speed', 'field_type' => 'text'],
+                ['field' => 'OFF-GRID/GOOD GRID', 'field_type' => 'text'],
+                ['field' => 'PRIO', 'field_type' => 'text'],
+                ['field' => 'BATCH', 'field_type' => 'text'],
+                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'text'],
+                ['field' => 'ACCESS', 'field_type' => 'text'],
+                ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
+                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],
+                ['field' => 'LEASE AMOUNT', 'field_type' => 'text'],
+                ['field' => 'LEASE ESCALATION', 'field_type' => 'text'],
+                ['field' => 'LEASE TERM', 'field_type' => 'text'],
+                ['field' => 'BASE LEASE FEE', 'field_type' => 'text'],
+                ['field' => 'ESCALATION', 'field_type' => 'text'],
+                ['field' => 'COMMENCEMENT', 'field_type' => 'text'],
+                ['field' => 'REMARKS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'text'],
+                // ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'text'],
+                ['field' => 'VS TOWERCO', 'field_type' => 'text'],
+                ['field' => 'update user', 'field_type' => 'text'],
+                ['field' => 'update group', 'field_type' => 'text'],
             ];  
 
         }
         elseif($who == 'ram'){
             $allowed_fields = [
-                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'date'],
-                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'number'],
-                ['field' => 'ACCESS', 'field_type' => 'text'],	
+                // ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'date'],
+                // ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'number'],
+                // ['field' => 'ACCESS', 'field_type' => 'text'],	
+                // ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
+                // ['field' => 'LANDLORD INFO', 'field_type' => 'text'],	
+                // ['field' => 'LEASE AMOUNT', 'field_type' => 'number'],	
+                // ['field' => 'LEASE ESCALATION', 'field_type' => 'number']
+
+                ['field' => 'Serial Number', 'field_type' => 'text'],
+                ['field' => 'Search Ring', 'field_type' => 'text'],
+                // ['field' => 'REGION', 'field_type' => 'text'],
+                // ['field' => 'TOWERCO', 'field_type' => 'text'],
+                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'text'],
+                ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'text'],
+                ['field' => 'PROJECT TAG', 'field_type' => 'text'],
+                ['field' => 'MILESTONE STATUS', 'field_type' => 'text'],
+                ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'text'],
+                ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'text'],
+                ['field' => 'CW START DATE', 'field_type' => 'text'],
+                ['field' => 'CW COMPLETED DATE', 'field_type' => 'text'],
+                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'text'],
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],
+                ['field' => 'PROVINCE', 'field_type' => 'text'],
+                ['field' => 'TOWN', 'field_type' => 'text'],
+                ['field' => '[NP]Latitude', 'field_type' => 'text'],
+                ['field' => '[NP]Longitude', 'field_type' => 'text'],
+                ['field' => 'SITE TYPE', 'field_type' => 'text'],
+                ['field' => 'Tower Height', 'field_type' => 'text'],
+                ['field' => 'FOC/ MW TAGGING', 'field_type' => 'text'],
+                ['field' => 'Wind Speed', 'field_type' => 'text'],
+                ['field' => 'OFF-GRID/GOOD GRID', 'field_type' => 'text'],
+                ['field' => 'PRIO', 'field_type' => 'text'],
+                ['field' => 'BATCH', 'field_type' => 'text'],
+                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'text'],
+                ['field' => 'ACCESS', 'field_type' => 'text'],
                 ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
-                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],	
-                ['field' => 'LEASE AMOUNT', 'field_type' => 'number'],	
-                ['field' => 'LEASE ESCALATION', 'field_type' => 'number']
+                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],
+                ['field' => 'LEASE AMOUNT', 'field_type' => 'text'],
+                ['field' => 'LEASE ESCALATION', 'field_type' => 'text'],
+                ['field' => 'LEASE TERM', 'field_type' => 'text'],
+                ['field' => 'BASE LEASE FEE', 'field_type' => 'text'],
+                ['field' => 'ESCALATION', 'field_type' => 'text'],
+                ['field' => 'COMMENCEMENT', 'field_type' => 'text'],
+                ['field' => 'REMARKS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'text'],
+                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'text'],
+                ['field' => 'VS TOWERCO', 'field_type' => 'text'],
+                ['field' => 'update user', 'field_type' => 'text'],
+                ['field' => 'update group', 'field_type' => 'text'],
             ];  
         }
         elseif($who == 'sts'){
 
             $allowed_fields = [
-                ['field' => 'Serial Number','field_type' => 'text'],
-                ['field' => 'Search Ring','field_type' => 'text'],
-                ['field' => 'REGION','field_type' => 'text'],
-                ['field' => 'TOWERCO','field_type' => 'text'],
-                ['field' => 'PROVINCE','field_type' => 'text'],
-                ['field' => 'TOWN','field_type' => 'text'],
-                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
-                ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
-                ['field' => '[NP] Latitude','field_type' => 'number'],
-                ['field' => '[NP]Longitude','field_type' => 'number'],
-                ['field' => 'SITE TYPE','field_type' => 'select', 'selection' => ['GREENFIELD', 'ROOFTOP']],
-                ['field' => 'Tower Height','field_type' => 'number'],
-                ['field' => 'FOC/ MW TAGGING','field_type' => 'select', 'selection' => ['FOC', 'MW']],
-                ['field' => 'Wind Speed','field_type' => 'text'],
-                ['field' => 'OFF-GRID/GOOD GRID','field_type' => 'select', 'selection' => ['G1', 'G2', 'G3', 'G4']],
-                ['field' => 'PRIO', 'field_type' => 'select', 'selection' => ['P1', 'P2', 'P3', 'P4']],
-                ['field' => 'BATCH', 'field_type' => 'text']                                    
+                // ['field' => 'Serial Number','field_type' => 'text'],
+                // ['field' => 'Search Ring','field_type' => 'text'],
+                // ['field' => 'REGION','field_type' => 'text'],
+                // ['field' => 'TOWERCO','field_type' => 'text'],
+                // ['field' => 'PROVINCE','field_type' => 'text'],
+                // ['field' => 'TOWN','field_type' => 'text'],
+                // ['field' => 'MLA COMPLETION DATE', 'field_type' => 'date'],	
+                // ['field' => 'PROJECT TAG', 'field_type' => 'select', 'selection' => ['BUILD TO SUIT', 'BUILD GLOBE-ACQUIRED SITES']],	
+                // ['field' => '[NP] Latitude','field_type' => 'number'],
+                // ['field' => '[NP]Longitude','field_type' => 'number'],
+                // ['field' => 'SITE TYPE','field_type' => 'select', 'selection' => ['GREENFIELD', 'ROOFTOP']],
+                // ['field' => 'Tower Height','field_type' => 'number'],
+                // ['field' => 'FOC/ MW TAGGING','field_type' => 'select', 'selection' => ['FOC', 'MW']],
+                // ['field' => 'Wind Speed','field_type' => 'text'],
+                // ['field' => 'OFF-GRID/GOOD GRID','field_type' => 'select', 'selection' => ['G1', 'G2', 'G3', 'G4']],
+                // ['field' => 'PRIO', 'field_type' => 'select', 'selection' => ['P1', 'P2', 'P3', 'P4']],
+                // ['field' => 'BATCH', 'field_type' => 'text']       
+                
+                ['field' => 'Serial Number', 'field_type' => 'text'],
+                ['field' => 'Search Ring', 'field_type' => 'text'],
+                // ['field' => 'REGION', 'field_type' => 'text'],
+                // ['field' => 'TOWERCO', 'field_type' => 'text'],
+                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'text'],
+                ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'text'],
+                ['field' => 'PROJECT TAG', 'field_type' => 'text'],
+                ['field' => 'MILESTONE STATUS', 'field_type' => 'text'],
+                ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'text'],
+                ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'text'],
+                ['field' => 'CW START DATE', 'field_type' => 'text'],
+                ['field' => 'CW COMPLETED DATE', 'field_type' => 'text'],
+                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'text'],
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],
+                ['field' => 'PROVINCE', 'field_type' => 'text'],
+                ['field' => 'TOWN', 'field_type' => 'text'],
+                ['field' => '[NP]Latitude', 'field_type' => 'text'],
+                ['field' => '[NP]Longitude', 'field_type' => 'text'],
+                ['field' => 'SITE TYPE', 'field_type' => 'text'],
+                ['field' => 'Tower Height', 'field_type' => 'text'],
+                ['field' => 'FOC/ MW TAGGING', 'field_type' => 'text'],
+                ['field' => 'Wind Speed', 'field_type' => 'text'],
+                ['field' => 'OFF-GRID/GOOD GRID', 'field_type' => 'text'],
+                ['field' => 'PRIO', 'field_type' => 'text'],
+                ['field' => 'BATCH', 'field_type' => 'text'],
+                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'text'],
+                ['field' => 'ACCESS', 'field_type' => 'text'],
+                ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
+                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],
+                ['field' => 'LEASE AMOUNT', 'field_type' => 'text'],
+                ['field' => 'LEASE ESCALATION', 'field_type' => 'text'],
+                ['field' => 'LEASE TERM', 'field_type' => 'text'],
+                ['field' => 'BASE LEASE FEE', 'field_type' => 'text'],
+                ['field' => 'ESCALATION', 'field_type' => 'text'],
+                ['field' => 'COMMENCEMENT', 'field_type' => 'text'],
+                ['field' => 'REMARKS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'text'],
+                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'text'],
+                ['field' => 'VS TOWERCO', 'field_type' => 'text'],
+                ['field' => 'update user', 'field_type' => 'text'],
+                ['field' => 'update group', 'field_type' => 'text'],
+
             ];  
         }
         elseif($who == 'agile'){
 
             $allowed_fields = [
-                ['field' => 'TSSR STATUS', 'field_type' => 'select', 'selection' => ['SUBMITTED', 'NOT YET SUBMITTED']],
-                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
-                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
-                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
-            ];  
+                // ['field' => 'Serial Number', 'field_type' => 'text'],
+                // ['field' => 'Search Ring', 'field_type' => 'text'],
+                // ['field' => 'TSSR STATUS', 'field_type' => 'select', 'selection' => ['SUBMITTED', 'NOT YET SUBMITTED']],
+                // ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'date'],	
+                // ['field' => 'TSSR APPROVED DATE', 'field_type' => 'date'],	
+                // ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],	
+                // ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],	
+
+                ['field' => 'Serial Number', 'field_type' => 'text'],
+                ['field' => 'Search Ring', 'field_type' => 'text'],
+                ['field' => 'REGION', 'field_type' => 'text'],
+                ['field' => 'TOWERCO', 'field_type' => 'text'],
+                ['field' => 'DATE ENDORSED BY RAM', 'field_type' => 'text'],
+                ['field' => 'MLA COMPLETION DATE', 'field_type' => 'text'],
+                ['field' => 'DATE ACCEPTED BY TOWERCO', 'field_type' => 'text'],
+                // ['field' => 'PROJECT TAG', 'field_type' => 'text'],
+                // ['field' => 'MILESTONE STATUS', 'field_type' => 'text'],
+                // ['field' => 'ESTIMATED RFI DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR SUBMIT DATE', 'field_type' => 'text'],
+                ['field' => 'TSSR APPROVED DATE', 'field_type' => 'text'],
+                // ['field' => 'SITE DATE ACQUIRED', 'field_type' => 'text'],
+                ['field' => 'CW START DATE', 'field_type' => 'text'],
+                ['field' => 'CW COMPLETED DATE', 'field_type' => 'text'],
+                ['field' => 'RFI DATE SUBMITTED', 'field_type' => 'text'],
+                ['field' => 'RFI DATE APPROVED (TEMPO POWER)', 'field_type' => 'date'],
+                ['field' => 'RFI DATE APPROVED (PERMANENT POWER)', 'field_type' => 'date'],
+                // ['field' => 'PROVINCE', 'field_type' => 'text'],
+                // ['field' => 'TOWN', 'field_type' => 'text'],
+                // ['field' => '[NP]Latitude', 'field_type' => 'text'],
+                ['field' => '[NP]Longitude', 'field_type' => 'text'],
+                ['field' => 'SITE TYPE', 'field_type' => 'text'],
+                ['field' => 'Tower Height', 'field_type' => 'text'],
+                ['field' => 'FOC/ MW TAGGING', 'field_type' => 'text'],
+                ['field' => 'Wind Speed', 'field_type' => 'text'],
+                ['field' => 'OFF-GRID/GOOD GRID', 'field_type' => 'text'],
+                ['field' => 'PRIO', 'field_type' => 'text'],
+                ['field' => 'BATCH', 'field_type' => 'text'],
+                ['field' => 'LOT SIZE (sq-m)', 'field_type' => 'text'],
+                ['field' => 'ACCESS', 'field_type' => 'text'],
+                ['field' => 'LINK TO DOCS FOR GLOBE-ACQUIRED SITES', 'field_type' => 'text'],
+                ['field' => 'LANDLORD INFO', 'field_type' => 'text'],
+                ['field' => 'LEASE AMOUNT', 'field_type' => 'text'],
+                ['field' => 'LEASE ESCALATION', 'field_type' => 'text'],
+                ['field' => 'LEASE TERM', 'field_type' => 'text'],
+                ['field' => 'BASE LEASE FEE', 'field_type' => 'text'],
+                ['field' => 'ESCALATION', 'field_type' => 'text'],
+                ['field' => 'COMMENCEMENT', 'field_type' => 'text'],
+                ['field' => 'REMARKS', 'field_type' => 'text'],
+                ['field' => 'TSSR STATUS', 'field_type' => 'text'],
+                ['field' => 'Tower Co TSSR Submission Date to GT', 'field_type' => 'text'],
+                ['field' => 'SITE ACQUIRED FORECAST', 'field_type' => 'text'],
+                ['field' => 'VS TOWERCO', 'field_type' => 'text'],
+                ['field' => 'update user', 'field_type' => 'text'],
+                ['field' => 'update group', 'field_type' => 'text'],
+            ];
         }
 
         $details = '';
@@ -3389,7 +3580,8 @@ class GlobeController extends Controller
             }
 
             foreach ($allowed_fields as $allowed_field){
-                if($allowed_field['field']==$col){
+                
+                if($col == $allowed_field['field']){
 
                     $actor .= '
                         <div class="row border-bottom mb-1 pb-1">
@@ -3442,20 +3634,21 @@ class GlobeController extends Controller
                         </div>
                     ';
 
-                    break;
+                    // break;
+
+                    $details .= '
+                            <div class="row border-bottom mb-1 pb-1">
+                                <div class="col-md-4">
+                                    ' . $col . '
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" value="' . $value . '" class="form-control" readonly>
+                                </div>
+                            </div>            
+                    ';
                 }
             }
-
-            $details .= '
-                    <div class="row border-bottom mb-1 pb-1">
-                        <div class="col-md-4">
-                            ' . $col . '
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" value="' . $value . '" class="form-control" readonly>
-                        </div>
-                    </div>            
-            ';
+            
         }
 
         $actor .="</form>";
