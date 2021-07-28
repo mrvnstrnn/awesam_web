@@ -151,26 +151,27 @@
                     </div>
                 </div>
 
-                <table id="towerco-table" 
-                    class=" compact align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table table-responsive"
-                    data-href="{{ route('get_towerco_all', $actor) }}"
-                    data-program_id="6" data-table_loaded="false"
-                    style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th></th> 
-                            <th>SEARCH RING</th>
-                            <th>TOWERCO</th> 
-                            <th>PROJECT TAG</th>
-                            <th>MILESTONE STATUS</th>
-                            <th>LOCATION</th>
-                            <th>GRID</th>
-                            <th>TSSR STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+
+                    <table id="towerco-table" 
+                        class="compact align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
+                        data-href="{{ route('get_towerco_all', $actor) }}"
+                        data-program_id="6" data-table_loaded="false"
+                        style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th></th> 
+                                <th>SEARCH RING</th>
+                                <th>TOWERCO</th> 
+                                <th>PROJECT TAG</th>
+                                <th>MILESTONE STATUS</th>
+                                <th>LOCATION</th>
+                                <th>GRID</th>
+                                <th>TSSR STATUS</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
