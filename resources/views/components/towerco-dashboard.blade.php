@@ -5,20 +5,13 @@
     $user_detail = \Auth::user()->getUserDetail()->first();
     $vendor = \App\Models\Vendor::where('vendor_id', $user_detail->vendor_id)->first();
 
-    $rt = \DB::connection('mysql2')->table('towerco_region_totals_per_company')
-          ->where('TOWERCO', 'ISON');
-
-    if(!is_null($vendor)){
-      $rt = $rt->where('TOWERCO', $vendor->vendor_sec_reg_name);
-    }
+    $rt = \App\Models\TowerCoRegionPerCompany::where('TOWERCO', $vendor->vendor_acronym);
 
     $rt->get();
   }
   else {
-    $rt = \DB::connection('mysql2')->table('towerco_region_totals')->get();
+    $rt = \App\Models\TowerCoRegion::get();
   }
-
-
 
   $ncr = 0;
   $nlz = 0;
@@ -189,8 +182,7 @@
 
   @php
     if(\Auth::user()->profile_id == 21){
-      $ms = \DB::table('towerco_milestone_totals_per_company')
-          ->where('TOWERCO', 'CREI')
+      $ms = \App\Models\TowerCoMilestoneTotalPerCompany::where('TOWERCO', $vendor->vendor_acronym)
           ->get();
     } else {
       $ms = \DB::table('towerco_milestone_totals')

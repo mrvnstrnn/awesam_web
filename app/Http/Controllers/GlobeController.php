@@ -3286,7 +3286,7 @@ class GlobeController extends Controller
                     ->table("towerco");
                 
                     if(!is_null($vendor)){
-                        $sites = $sites->where('TOWERCO', $vendor->vendor_sec_reg_name);
+                        $sites = $sites->where('TOWERCO', $vendor->vendor_acronym);
                     }
 
                     $sites->get();
@@ -3721,7 +3721,7 @@ class GlobeController extends Controller
             $user_detail = \Auth::user()->getUserDetail()->first();
             $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
 
-            $sites = $sites->where('TOWERCO', $vendor->vendor_sec_reg_name);
+            $sites = $sites->where('TOWERCO', $vendor->vendor_acronym);
         }
 
         if($region != '-'){
