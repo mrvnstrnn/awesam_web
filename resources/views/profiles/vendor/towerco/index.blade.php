@@ -60,7 +60,11 @@
     <script>
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             drawBasic();
-        })    
+        })   
+        $( window ).resize(function() {
+            drawBasic();
+        });        
+        
     </script>
     
 @endsection
