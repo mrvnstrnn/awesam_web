@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div> 
-            <div class="card-body">
+            <div class="card-body w-100">
                 <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
                     <form id="towerco-filters-form">
                         <div class="row">
