@@ -473,13 +473,19 @@ $(document).ready(() => {
 
         var tf = $('#towerco-filters-form').serialize();
 
-        var one = $('select[name="towerco"]').val();
         var two = $('select[name="region"]').val();
         var three = $('select[name="tssr_status"]').val();
         var four = $('select[name="milestone_status"]').val();
         var five = $('input[name="actor"]').val();
 
+        if (five != 'TowerCo') {
+            var one = $('select[name="towerco"]').val();
+        } else {
+            var one = '-';
+        }
+
         var table = $('#towerco-table').DataTable();
+
 
         table.ajax.url( '/get-towerco-filter/' + one + '/' + two + '/' + three + '/' + four + '/' + five ).load();
     });
