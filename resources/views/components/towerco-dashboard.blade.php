@@ -1,5 +1,15 @@
 @php
-  $rt = \DB::table('towerco_region_totals')->get();
+
+  if(\Auth::user()->profile_id == 21){
+    $rt = \DB::table('towerco_region_totals_per_company')
+          ->where('TOWERCO', 'ISON')
+          ->get();
+  }
+  else {
+    $rt = \DB::table('towerco_region_totals')->get();
+  }
+
+
 
   $ncr = 0;
   $nlz = 0;
