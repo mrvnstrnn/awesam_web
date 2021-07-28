@@ -42,7 +42,7 @@
                         <div class="tab-pane" id="tab-towerco-documents" role="tabpanel">
                             <input type="hidden" name="serial_number" id="serial_number">
                             <div>
-                                <H5>TSSR @if (\Auth::user()->profile_id == 8)<i class="fa fa-fw fa-md tssr_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
+                                <H5>TSSR @if (\Auth::user()->profile_id == 21)<i class="fa fa-fw fa-md tssr_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
                                 {{-- <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -64,7 +64,7 @@
                                 <div class="col-12 file_viewer_tssr_list pt-3">
                                 </div>
 
-                                @if (\Auth::user()->profile_id == 8)
+                                @if (\Auth::user()->profile_id == 21)
                                 <div class="col-12 mb-2 dropzone_div_tssr d-none" style='min-height: 100px;'>
                                     <div class="dropzone dropzone_files" data-activity="tssr">
                                         <div class="dz-message">
@@ -79,13 +79,13 @@
                             </div>
                             <hr>
                             <div>
-                                <H5>RTB DOCS @if (\Auth::user()->profile_id == 21)<i class="fa fa-fw fa-md rtb_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
+                                <H5>RTB DOCS @if (\Auth::user()->profile_id == 8)<i class="fa fa-fw fa-md rtb_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
                                 <div class="col-12 file_viewer_rtb">
                                 </div>
                                 <div class="col-12 file_viewer_rtb_list pt-3">
                                 </div>
 
-                                @if (\Auth::user()->profile_id == 21)
+                                @if (\Auth::user()->profile_id == 8)
                                     <div class="col-12 mb-2 dropzone_div_rtb d-none" style='min-height: 100px;'>
                                         <div class="dropzone dropzone_files" data-activity="rtb">
                                             <div class="dz-message">
