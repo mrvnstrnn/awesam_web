@@ -42,7 +42,7 @@
                         <div class="tab-pane" id="tab-towerco-documents" role="tabpanel">
                             <input type="hidden" name="serial_number" id="serial_number">
                             <div>
-                                <H5>TSSR <i class="fa fa-fw fa-md tssr_upload" style="cursor: pointer" aria-hidden="true"></i></H5>
+                                <H5>TSSR @if (\Auth::user()->profile_id == 8)<i class="fa fa-fw fa-md tssr_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
                                 {{-- <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -64,6 +64,7 @@
                                 <div class="col-12 file_viewer_tssr_list pt-3">
                                 </div>
 
+                                @if (\Auth::user()->profile_id == 8)
                                 <div class="col-12 mb-2 dropzone_div_tssr d-none" style='min-height: 100px;'>
                                     <div class="dropzone dropzone_files" data-activity="tssr">
                                         <div class="dz-message">
@@ -74,26 +75,29 @@
 
                                     <button type="button" class="btn btn-secondary btn-sm btn-shadow my-3 back_to_tssr">Back to tssr list</button>
                                 </div>
-
+                                @endif
                             </div>
                             <hr>
                             <div>
-                                <H5>RTB DOCS <i class="fa fa-fw fa-md rtb_upload" style="cursor: pointer" aria-hidden="true"></i></H5>
+                                <H5>RTB DOCS @if (\Auth::user()->profile_id == 21)<i class="fa fa-fw fa-md rtb_upload" style="cursor: pointer" aria-hidden="true"></i>@endif</H5>
                                 <div class="col-12 file_viewer_rtb">
                                 </div>
                                 <div class="col-12 file_viewer_rtb_list pt-3">
                                 </div>
 
-                                <div class="col-12 mb-2 dropzone_div_rtb d-none" style='min-height: 100px;'>
-                                    <div class="dropzone dropzone_files" data-activity="rtb">
-                                        <div class="dz-message">
-                                            <i class="fa fa-plus fa-3x"></i>
-                                            <p><small>RTB</small></p>
+                                @if (\Auth::user()->profile_id == 21)
+                                    <div class="col-12 mb-2 dropzone_div_rtb d-none" style='min-height: 100px;'>
+                                        <div class="dropzone dropzone_files" data-activity="rtb">
+                                            <div class="dz-message">
+                                                <i class="fa fa-plus fa-3x"></i>
+                                                <p><small>RTB</small></p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <button type="button" class="btn btn-secondary btn-sm btn-shadow my-3 back_to_rtb">Back to rtb list</button>
-                                </div>
+                                        <button type="button" class="btn btn-secondary btn-sm btn-shadow my-3 back_to_rtb">Back to rtb list</button>
+                                    </div>
+                                @endif
+
                                 {{-- <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -156,81 +160,83 @@
     
     
     //upload file
-    Dropzone.autoDiscover = false;
-    $(".dropzone_files").dropzone({
-        addRemoveLinks: true,
-        maxFiles: 1,
-        paramName: "file",
-        url: "/upload-file",
-        init: function() {
-            this.on("maxfilesexceeded", function(file){
+    if("{{ \Auth::user()->profile_id == 21 || \Auth::user()->profile_id == 8 }}"){
+        Dropzone.autoDiscover = false;
+        $(".dropzone_files").dropzone({
+            addRemoveLinks: true,
+            maxFiles: 1,
+            paramName: "file",
+            url: "/upload-file",
+            init: function() {
+                this.on("maxfilesexceeded", function(file){
+                    this.removeFile(file);
+                });
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (file, resp) {
                 this.removeFile(file);
-            });
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (file, resp) {
-            this.removeFile(file);
-            if (!resp.error){
-                var serial_number = $("input#serial_number").val();
-                var activity_name = this.element.attributes[1].value;;
-                var file_name = resp.file;
+                if (!resp.error){
+                    var serial_number = $("input#serial_number").val();
+                    var activity_name = this.element.attributes[1].value;;
+                    var file_name = resp.file;
 
-                $.ajax({
-                    url: "/upload-my-file-towerco",
-                    method: "POST",
-                    data: {
-                        serial_number : serial_number,
-                        activity_name : activity_name,
-                        file_name : file_name,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp) {
-                        if (!resp.error){
-                            $("#table_uploaded_"+activity_name+"_files_"+serial_number).DataTable().ajax.reload(function(){
+                    $.ajax({
+                        url: "/upload-my-file-towerco",
+                        method: "POST",
+                        data: {
+                            serial_number : serial_number,
+                            activity_name : activity_name,
+                            file_name : file_name,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error){
+                                $("#table_uploaded_"+activity_name+"_files_"+serial_number).DataTable().ajax.reload(function(){
+                                    
+                                    Swal.fire(
+                                        'Success',
+                                        resp.message,
+                                        'success'
+                                    )
+
+                                    $(".back_to_"+activity_name).trigger("click");
+                                });
                                 
+                            } else {
                                 Swal.fire(
-                                    'Success',
+                                    'Error',
                                     resp.message,
-                                    'success'
+                                    'error'
                                 )
-
-                                $(".back_to_"+activity_name).trigger("click");
-                            });
-                            
-                        } else {
+                            }
+                        },
+                        error: function (resp) {
                             Swal.fire(
                                 'Error',
-                                resp.message,
+                                resp,
                                 'error'
                             )
                         }
-                    },
-                    error: function (resp) {
-                        Swal.fire(
-                            'Error',
-                            resp,
-                            'error'
-                        )
-                    }
-                });
-            } else {
+                    });
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
                 Swal.fire(
                     'Error',
-                    resp.message,
+                    resp,
                     'error'
                 )
             }
-        },
-        error: function (resp) {
-            Swal.fire(
-                'Error',
-                resp,
-                'error'
-            )
-        }
-    });
+        });
+    }
 </script>
