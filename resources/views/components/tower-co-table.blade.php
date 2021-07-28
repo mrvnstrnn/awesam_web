@@ -31,7 +31,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0">
                         <h5 class=" menu-header-title text-dark align-left">
                             <i class="header-icon lnr-layers icon-gradient bg-dark mr-1"></i>
-                            
+                            {{ $actor }}
                         </h5>        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 p-0 text-md-right text-sm-center ">
@@ -47,7 +47,15 @@
                 <div id="filters-box" class="d-none bg-light rounded border p-3" style="margin-bottom: 20px;">
                     <form id="towerco-filters-form">
                         <div class="row">
-                            <div class="col-sm-6 col-md-6 col-lg-3">
+                            @php
+                                if($actor != 'TowerCo'){
+                                    $col_lg = '3';
+                                } else {
+                                    $col_lg = '4';
+                                }
+                            @endphp
+                            @if($actor != 'TowerCo')
+                            <div class="col-sm-6 col-md-6 col-lg-{{ $col_lg }}">
                                 <div class="form-group">
                                     <label>TOWERCO</label>
                                     <select class="form-control mb-0" name="towerco">
@@ -68,7 +76,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-3">
+                            @endif
+                            <div class="col-sm-6 col-md-6 col-lg-{{ $col_lg }}">
                                 <div class="form-group">
                                     <label>REGION</label>
                                     <select class="form-control mb-0" name="region">
@@ -89,7 +98,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-3">
+                            <div class="col-sm-6 col-md-6 col-lg-{{ $col_lg }}">
                                 <div class="form-group">
                                     <label>TSSR STATUS</label>
                                     <select class="form-control mb-0" name="tssr_status">
@@ -110,7 +119,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-3">
+                            <div class="col-sm-6 col-md-6 col-lg-{{ $col_lg }}">
                                 <div class="form-group">
                                     <label>MILESTONE STATUS</label>
                                     <select class="form-control mb-0" name="milestone_status">
