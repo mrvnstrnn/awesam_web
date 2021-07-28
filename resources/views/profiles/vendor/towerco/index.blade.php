@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <div id="chart_div" style="width: 100%; height: 600px;"></div>
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
     </div>
 </div>
 <div class="card">
@@ -16,31 +16,50 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-  google.charts.load('current', {'packages':['bar']});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
 
-    var data = google.visualization.arrayToDataTable([
-          ['2021', 'STS', 'RAM', 'TowerCo', 'Agile'],
-          ['July', 1000, 364, 200, 100],
-          ['June', 1000, 1096, 200, 100],
-          ['May', 1000, 0, 200, 100],
-          ['April', 1000, 148, 200, 100],
-          ['March', 1000, 79, 200, 100],
-        ]);
+  google.charts.load('current', {packages: ['corechart', 'bar']});
+  google.charts.setOnLoadCallback(drawBasic);
+
+  var milestones = [['Milestone', 'Milestone Status', { role: 'style' }, { role: 'annotation' }]];
+
+  @php
+    $ms = \DB::table('towerco_milestone_totals_per_company')
+          ->where('TOWERCO', 'CREI')
+          ->get();
+
+    $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF');
+
+    $ctr = 0;
+    foreach($ms as $m){
+
+      echo "milestones.push(['" . $m->{'MILESTONE STATUS'}  . "', " . $m->counter  . ", '". $colors[$ctr] . "', '" . $m->{'MILESTONE STATUS'}  . " - " . $m->counter  . "']);";    
+      $ctr++;
+
+    }
+
+  @endphp
+  
+
+  function drawBasic() {
+
+    var data = google.visualization.arrayToDataTable(milestones);
 
     var options = {
-        chart: {
-            title: 'TowerCo Site Endorsements',
-            subtitle: 'Endorsed By Teams Per Month',
-            width: '80%'
-          },
-          bars: 'vertical' // Required for Material Bar Charts.
+      title: 'Site Milestones',
+      chartArea: {width: '100%', height: '85%', top: 40},
+      bar: {groupWidth: "80%"},
+      legend: { position: "none" },
+      hAxis: {
+        minValue: 0
+      },
+      vAxis: {
+        textPosition: 'none',
+      }
     };
 
-    var chart = new google.charts.Bar(document.getElementById('chart_div'));
-    chart.draw(data, google.charts.Bar.convertOptions(options));
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 
+    chart.draw(data, options);
   }
 </script>
 

@@ -67,7 +67,6 @@
                                                 ->where('TOWERCO', '!=', '')
                                                 ->orderBy('TOWERCO')
                                                 ->get();
-                                            // dd($recs);
                                         @endphp
                                         <option value="-">-</option>                                    
                                         @foreach ($recs as $rec)
@@ -76,6 +75,8 @@
                                     </select>
                                 </div>
                             </div>
+                            @else
+                                <input type="hidden" value="-" name="towerco" />
                             @endif
                             <div class="col-sm-6 col-md-6 col-lg-{{ $col_lg }}">
                                 <div class="form-group">
