@@ -67,7 +67,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             $user_detail = \Auth::user()->getUserDetail()->first();
             $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
 
-            $towerco->where('TOWERCO', $vendor->vendor_sec_reg_name);
+            $towerco->where('TOWERCO', $vendor->vendor_acronym);
         }
 
         return $towerco->get();
