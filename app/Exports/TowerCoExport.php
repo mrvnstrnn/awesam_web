@@ -22,7 +22,9 @@ class TowerCoExport implements FromCollection, WithHeadings
             "DATE ENDORSED BY RAM",
             "MLA COMPLETION DATE",
             "DATE ACCEPTED BY TOWERCO",
-
+            "SITE ACQUIRED FORECAST",
+            "SITE DATE ACQUIRED",
+            "ESTIMATED RFI DATE",
             "PROJECT TAG",
             "MILESTONE STATUS",
             "PROVINCE",
@@ -35,13 +37,10 @@ class TowerCoExport implements FromCollection, WithHeadings
             "Wind Speed",
             "OFF-GRID/GOOD GRID",
             "BATCH",
-
             "Tower Co TSSR Submission Date to GT",
-
-            "ESTIMATED RFI DATE",
-            "TSSR SUBMIT DATE",
+            "TSSR STATUS",
             "TSSR APPROVED DATE",
-            "SITE DATE ACQUIRED",
+            "TSSR SUBMIT DATE",
             "CW START DATE",
             "CW COMPLETED DATE",
             "RFI DATE SUBMITTED",
@@ -58,10 +57,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "BASE LEASE FEE",
             "ESCALATION",
             "COMMENCEMENT",
-            "REMARKS",
-            "TSSR STATUS",
-            "SITE ACQUIRED FORECAST",
-            "VS TOWERCO"
+            "REMARKS"
                         )
                         ->get();
     }
@@ -76,7 +72,9 @@ class TowerCoExport implements FromCollection, WithHeadings
             "DATE ENDORSED BY RAM",
             "MLA COMPLETION DATE",
             "DATE ACCEPTED BY TOWERCO",
-
+            "SITE ACQUIRED FORECAST",
+            "SITE DATE ACQUIRED",
+            "ESTIMATED RFI DATE",
             "PROJECT TAG",
             "MILESTONE STATUS",
             "PROVINCE",
@@ -89,13 +87,10 @@ class TowerCoExport implements FromCollection, WithHeadings
             "Wind Speed",
             "OFF-GRID/GOOD GRID",
             "BATCH",
-
             "Tower Co TSSR Submission Date to GT",
-
-            "ESTIMATED RFI DATE",
-            "TSSR SUBMIT DATE",
+            "TSSR STATUS",
             "TSSR APPROVED DATE",
-            "SITE DATE ACQUIRED",
+            "TSSR SUBMIT DATE",
             "CW START DATE",
             "CW COMPLETED DATE",
             "RFI DATE SUBMITTED",
@@ -112,10 +107,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "BASE LEASE FEE",
             "ESCALATION",
             "COMMENCEMENT",
-            "REMARKS",
-            "TSSR STATUS",
-            "SITE ACQUIRED FORECAST",
-            "VS TOWERCO"
+            "REMARKS"
         ];
     }
  
