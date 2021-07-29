@@ -1458,13 +1458,27 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine_completed'){
 
+            // $sites = \DB::connection('mysql2')
+            //                 ->table("milestone_tracking")
+            //                 ->distinct()
+            //                 ->where('program_id', $program_id)
+            //                 ->where('activity_complete', 'true')
+            //                 ->where("site_agent_id", \Auth::id())
+            //                 ->get();
+
             $sites = \DB::connection('mysql2')
-            ->table("milestone_tracking")
-            ->distinct()
-            ->where('program_id', $program_id)
-            ->where('activity_complete', 'true')
-            ->where("site_agent_id", \Auth::id())
-            ->get();
+                            ->table("stage_activities")
+                            ->leftjoin('site_stage_tracking', 'site_stage_tracking.activity_id', 'stage_activities.activity_id')
+                            ->leftjoin('site', function($join){
+                                $join->on('site.sam_id', 'site_stage_tracking.sam_id');
+                                $join->on('site.program_id', 'stage_activities.program_id');
+                            })
+                            ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('stage_activities.activity_type', 'complete')
+                            ->where('site.program_id', $program_id)
+                            ->where("site_users.agent_id", \Auth::id())
+                            ->where("site_stage_tracking.activity_complete", 'true')
+                            ->get();
 
             // return \Auth::user()->profile_id;
         }
