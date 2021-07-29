@@ -97,26 +97,6 @@
         $(".card-body .form_fields .position-relative.form-group").remove();
         $(".main-card.mb-3.card .modal-footer").remove();
 
-        if (json_parse.site_fields != null) {
-            var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
-
-            for (let i = 0; i < new_json.length; i++) {
-                // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-                    field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
-                    $("#viewInfoModal .card-body .form_fields").append(
-                        '<div class="position-relative form-group col-md-6">' +
-                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
-                            '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
-                        '</div>'
-                    );
-                // }
-            }
-        } else {
-            $("#viewInfoModal .card-body .form_fields").html(
-                '<div><h1>No fields available.</h1></div>'
-            );
-        }
-        
         if ("{{ \Auth::user()->profile_id != 2 }}") {
             $("#viewInfoModal .main-card.mb-3.card").append(
                 '<div class="modal-footer">' +
@@ -133,6 +113,57 @@
                 '</div>'
             );
         }
+
+        var program = "";
+        var technology = "";
+        var site_type = "";
+
+
+        if (json_parse.site_fields != null) {
+            var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+
+            for (let i = 0; i < new_json.length; i++) {
+                // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                    if (
+                        (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase() == 'enabler') ||
+                        (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase().includes("wttx"))
+                        ) {
+                        var program = 1;FE TO GE
+                    } else if ( 
+                        ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("l21") ) || 
+                        ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("fe to ge") )
+                        ) {
+                        var technology = 1;
+                    } else if ( new_json[i].field_name == 'site_type' && new_json[i].value.toLowerCase().includes("greenfield") ) {
+                        var site_type = 1;
+                    }
+
+                    field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
+                    $("#viewInfoModal .card-body .form_fields").append(
+                        '<div class="position-relative form-group col-md-6">' +
+                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+                            '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                        '</div>'
+                    );
+                // }
+            }
+        } else {
+            $("#viewInfoModal .card-body .form_fields").html(
+                '<div><h1>No fields available.</h1></div>'
+            );
+        }
+
+        // if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6) {
+        // if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
+            $("#viewInfoModal .main-card.mb-3.card .modal-footer").prepend(
+                '<button type="button" class="btn btn btn-success btn-shadow btn-artb btn-sm" data-activity_name="endorse_site_artb" data-complete="true" id="btn-accept-endorsement-artb">Available for Auto RTB</button>'
+            );
+
+            $("#btn-accept-endorsement-artb").attr('data-sam_id', json_parse.sam_id);
+            $("#btn-accept-endorsement-artb").attr('data-site_vendor_id', json_parse.vendor_id);
+            $("#btn-accept-endorsement-artb").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
+            $("#btn-accept-endorsement-artb").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+        // }
 
         $(".modal-title").text(json_parse.site_name);
         $(".btn-reject").attr('data-sam_id', json_parse.sam_id);
@@ -371,6 +402,66 @@
                 $(".confirm_reject").text("Confirm");
             }, 
         })
+    });
+
+    $(document).on("click", "#btn-accept-endorsement-artb", function (e) {
+        e.preventDefault();
+
+        var what_table = $(this).attr('data-what_table');
+        var data_complete = $(this).attr('data-complete');
+        var data_program = $(this).attr('data-program_id');
+        var sam_id = $(this).attr('data-sam_id');
+        var activity_name = $(this).attr('data-activity_name');
+        
+        $("#btn-accept-endorsement-artb").attr("disabled", "disabled");
+        $("#btn-accept-endorsement-artb").text("Processing...");
+
+        $.ajax({
+            url: "/endorse-atrb",
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete,
+                activity_name : activity_name,
+                data_program : data_program,
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if (!resp.error) {
+                    $("#"+what_table).DataTable().ajax.reload(function(){
+                        $("#viewInfoModal").modal("hide");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $("#btn-accept-endorsement-artb").removeAttr("disabled");
+                        $("#btn-accept-endorsement-artb").text("Available for Auto RTB");
+                    });
+
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                    $("#btn-accept-endorsement-artb").removeAttr("disabled");
+                    $("#btn-accept-endorsement-artb").text("Available for Auto RTB");
+                }
+            },
+            error: function(resp){
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+                $("#btn-accept-endorsement-artb").removeAttr("disabled");
+                $("#btn-accept-endorsement-artb").text("Available for Auto RTB");
+            },
+        });
     });
 
 </script>
