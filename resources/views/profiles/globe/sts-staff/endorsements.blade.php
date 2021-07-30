@@ -154,7 +154,7 @@
         }
 
         // if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6) {
-        if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
+        if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
             $("#viewInfoModal .main-card.mb-3.card .modal-footer").prepend(
                 '<button type="button" class="btn btn btn-success btn-shadow btn-artb btn-sm" data-activity_name="endorse_site_artb" data-complete="true" id="btn-accept-endorsement-artb">Available for Auto RTB</button>'
             );
