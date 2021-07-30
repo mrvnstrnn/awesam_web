@@ -326,6 +326,11 @@
                                                             <span>Site Chat</span>
                                                         </a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-site_approval" data-toggle="tab" href="#tab-content-site_approval">
+                                                            <span>Site Approvals</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -387,6 +392,10 @@
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
                                                 <x-site-chat  :site="$site" />
+                                            </div>
+        
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
+                                                <x-site-approval-details :site="$site" />
                                             </div>
                                         </div>
                                     </div>

@@ -104,7 +104,7 @@
             </form>
     
             @if (\Auth::user()->profile_id == 2)
-            <button id="btn_add_remarks" class=" mb-3 btn btn-primary float-right" type="button">Add Remarks</button>
+            <button id="btn_add_remarks" class=" mb-3 btn btn-primary float-right" type="button">Add Update</button>
             @endif
             <button class=" mb-3 btn btn-secondary float-right btn_back_to_list mr-2" type="button">Back to issue list</button>
 
@@ -139,7 +139,7 @@
     
                 <div class="form-row mb-1">
                     <div class="col-4">
-                        <label for="date_engage" class="mr-sm-2">Date Engage</label>
+                        <label for="date_engage" class="mr-sm-2">Date of Update</label>
                     </div>
                     <div class="col-8">
                         <input type="date" class="form-control" name="date_engage" id="date_engage">
@@ -148,7 +148,7 @@
                 </div>
 
                 @if (\Auth::user()->profile_id == 2)
-                <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Remarks</button>
+                <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
                 @endif
                 <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
             </form>

@@ -35,6 +35,8 @@
     }
 
     $('#btn_add_issue_cancel').on( 'click', function (e) {
+        
+        $(".add_issue_form small").text("");
         $('.add_issue_form').addClass('d-none');
         $('#btn_add_issue_switch').removeClass('d-none');
         $('#issue_table').removeClass('d-none');
@@ -72,7 +74,10 @@
         }
     });
 
-    $(".add_issue").on("click", function (){
+    $(".add_issue").on("click", function (e){
+        e.preventDefault();
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
         $("small").text("");
         $.ajax({
             url: "/add-issue",
@@ -91,6 +96,9 @@
                             $('#issue_table').removeClass('d-none');
                         }); 
 
+                        $(".add_issue").removeAttr("disabled");
+                        $(".add_issue").text("Add Issue");
+
                     });
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
@@ -100,10 +108,14 @@
                     } else {
                         toastr.error(resp.message, 'Error');
                     }
+                    $(".add_issue").removeAttr("disabled");
+                    $(".add_issue").text("Add Issue");
                 }
             },
             error: function (resp){
                 toastr.error(resp.message, "Error");
+                $(".add_issue").removeAttr("disabled");
+                $(".add_issue").text("Add Issue");
             }
         });
     });
@@ -143,7 +155,7 @@
                                         '<th style="width: 5%">#</th>' +
                                         '<th style="width: 35%">Remarks</th>' +
                                         '<th>Status</th>' +
-                                        '<th>Date Engage</th>' +
+                                        '<th>Date of Update</th>' +
                                     '</tr>' +
                                 '</thead>' +
                             '</table>' +

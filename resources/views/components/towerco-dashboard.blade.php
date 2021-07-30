@@ -185,8 +185,7 @@
           ->where('TOWERCO', $vendor->vendor_acronym)
           ->get();
     } else {
-      $ms = \DB::table('towerco_milestone_totals')
-          ->get();
+      $ms =  \App\Models\TowerCoMilestoneTotal::get();
     }
 
     $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF');

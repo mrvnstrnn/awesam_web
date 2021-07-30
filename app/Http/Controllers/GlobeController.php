@@ -20,6 +20,7 @@ use App\Models\UserProgram;
 use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
 use App\Models\ToweCoFile;
+use App\Models\SiteStageTracking;
 
 use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1458,13 +1459,33 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine_completed'){
 
+            // $sites = \DB::connection('mysql2')
+            //                 ->table("milestone_tracking")
+            //                 ->distinct()
+            //                 ->where('program_id', $program_id)
+            //                 ->where('activity_complete', 'true')
+            //                 ->where("site_agent_id", \Auth::id())
+            //                 ->get();
+
             $sites = \DB::connection('mysql2')
-            ->table("milestone_tracking")
-            ->distinct()
-            ->where('program_id', $program_id)
-            ->where('activity_complete', 'true')
-            ->where("site_agent_id", \Auth::id())
-            ->get();
+                            ->table("stage_activities")
+                            ->leftjoin('site_stage_tracking', 'site_stage_tracking.activity_id', 'stage_activities.activity_id')
+                            ->leftjoin('site', function($join){
+                                $join->on('site.sam_id', 'site_stage_tracking.sam_id');
+                                $join->on('site.program_id', 'stage_activities.program_id');
+                            })
+                            ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('stage_activities.activity_type', 'complete');
+
+            if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 3 ) {
+                $sites = $sites->where("site_users.agent_id", \Auth::id());
+            } else {
+                $sites->where('site.program_id', $program_id)
+                            ->where("site_stage_tracking.activity_complete", 'true')
+                            ->get();
+            }
+                            
+                            
 
             // return \Auth::user()->profile_id;
         }
@@ -4147,6 +4168,31 @@ class GlobeController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function endorse_atrb(Request $request)
+    {
+        try {
+            $activity = \DB::connection('mysql2')->table('stage_activities')
+                                    ->where('program_id', $request->input('data_program'))
+                                    ->orderby('activity_id', 'desc')
+                                    ->take(1)
+                                    ->get();
+
+            SiteStageTracking::where('sam_id', $request->input('sam_id'))
+                                ->update(['activity_complete' => 'true']);
+
+            SiteStageTracking::create([
+                'sam_id' => $request->input('sam_id'),
+                'activity_id' => $activity[0]->activity_id,
+                'activity_complete' => 'true',
+                'user_id' => \Auth::id(),
+            ]);
+
+            return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 

@@ -69,86 +69,86 @@
 <script src="/js/dropzone/dropzone.js"></script>
 
 <script>  
-    if ("{{ \Auth::user()->profile_id }}" == 2) {
-        Dropzone.autoDiscover = false;
-        $(".dropzone_files").dropzone({
-            addRemoveLinks: true,
-            maxFiles: 1,
-            paramName: "file",
-            url: "/upload-file",
-            init: function() {
-                this.on("maxfilesexceeded", function(file){
-                    this.removeFile(file);
-                });
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (file, resp) {
-                if (!resp.error){
-                    var sam_id = this.element.attributes[1].value;
-                    var sub_activity_id = this.element.attributes[2].value;
-                    var sub_activity_name = this.element.attributes[3].value;
-                    var file_name = resp.file;
+    // if ("{{ \Auth::user()->profile_id }}" == 2) {
+    //     Dropzone.autoDiscover = false;
+    //     $(".dropzone_files").dropzone({
+    //         addRemoveLinks: true,
+    //         maxFiles: 1,
+    //         paramName: "file",
+    //         url: "/upload-file",
+    //         init: function() {
+    //             this.on("maxfilesexceeded", function(file){
+    //                 this.removeFile(file);
+    //             });
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function (file, resp) {
+    //             if (!resp.error){
+    //                 var sam_id = this.element.attributes[1].value;
+    //                 var sub_activity_id = this.element.attributes[2].value;
+    //                 var sub_activity_name = this.element.attributes[3].value;
+    //                 var file_name = resp.file;
 
-                    $.ajax({
-                        url: "/upload-my-file",
-                        method: "POST",
-                        data: {
-                            sam_id : sam_id,
-                            sub_activity_id : sub_activity_id,
-                            file_name : file_name,
-                            sub_activity_name : sub_activity_name
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (resp) {
-                            if (!resp.error){
+    //                 $.ajax({
+    //                     url: "/upload-my-file",
+    //                     method: "POST",
+    //                     data: {
+    //                         sam_id : sam_id,
+    //                         sub_activity_id : sub_activity_id,
+    //                         file_name : file_name,
+    //                         sub_activity_name : sub_activity_name
+    //                     },
+    //                     headers: {
+    //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                     },
+    //                     success: function (resp) {
+    //                         if (!resp.error){
 
-                                var ext = file_name.split('.').pop();
+    //                             var ext = file_name.split('.').pop();
 
-                                var class_name = "";
+    //                             var class_name = "";
 
-                                if (ext == "pdf") {
-                                    class_name = "fa-file-pdf";
-                                } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
-                                    class_name = "fa-file-image";
-                                } else {
-                                    class_name = "fa-file";
-                                }
+    //                             if (ext == "pdf") {
+    //                                 class_name = "fa-file-pdf";
+    //                             } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
+    //                                 class_name = "fa-file-image";
+    //                             } else {
+    //                                 class_name = "fa-file";
+    //                             }
 
-                                $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
+    //                             $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
 
-                                $(".dropzone_div_"+sub_activity_id).append(
-                                    '<div class="child_div_'+sub_activity_id+'">' +
-                                        '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
-                                            '<div>' +
-                                                '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
-                                                '<p><small>'+sub_activity_name+'</small></p>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>'
-                                );
+    //                             $(".dropzone_div_"+sub_activity_id).append(
+    //                                 '<div class="child_div_'+sub_activity_id+'">' +
+    //                                     '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
+    //                                         '<div>' +
+    //                                             '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
+    //                                             '<p><small>'+sub_activity_name+'</small></p>' +
+    //                                         '</div>' +
+    //                                     '</div>' +
+    //                                 '</div>'
+    //                             );
                                 
-                                toastr.success(resp.message, "Success");
-                            } else {
-                                toastr.error(resp.message, "Error");
-                            }
-                        },
-                        error: function (file, response) {
-                            toastr.error(resp.message, "Error");
-                        }
-                    });
-                } else {
-                    toastr.error(resp.message, "Error");
-                }
-            },
-            error: function (file, resp) {
-                toastr.error(resp.message, "Error");
-            }
-        });
-    }
+    //                             toastr.success(resp.message, "Success");
+    //                         } else {
+    //                             toastr.error(resp.message, "Error");
+    //                         }
+    //                     },
+    //                     error: function (file, response) {
+    //                         toastr.error(resp.message, "Error");
+    //                     }
+    //                 });
+    //             } else {
+    //                 toastr.error(resp.message, "Error");
+    //             }
+    //         },
+    //         error: function (file, resp) {
+    //             toastr.error(resp.message, "Error");
+    //         }
+    //     });
+    // }
     
     $(".view_file").on("click", function (){
 
