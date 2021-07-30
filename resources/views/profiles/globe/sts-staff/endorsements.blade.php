@@ -128,7 +128,7 @@
                         (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase() == 'enabler') ||
                         (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase().includes("wttx"))
                         ) {
-                        var program = 1;FE TO GE
+                        var program = 1;
                     } else if ( 
                         ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("l21") ) || 
                         ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("fe to ge") )
@@ -154,7 +154,7 @@
         }
 
         // if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6) {
-        // if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
+        if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
             $("#viewInfoModal .main-card.mb-3.card .modal-footer").prepend(
                 '<button type="button" class="btn btn btn-success btn-shadow btn-artb btn-sm" data-activity_name="endorse_site_artb" data-complete="true" id="btn-accept-endorsement-artb">Available for Auto RTB</button>'
             );
@@ -163,7 +163,7 @@
             $("#btn-accept-endorsement-artb").attr('data-site_vendor_id', json_parse.vendor_id);
             $("#btn-accept-endorsement-artb").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
             $("#btn-accept-endorsement-artb").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
-        // }
+        }
 
         $(".modal-title").text(json_parse.site_name);
         $(".btn-reject").attr('data-sam_id', json_parse.sam_id);
