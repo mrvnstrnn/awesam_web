@@ -4170,25 +4170,64 @@ class GlobeController extends Controller
     public function endorse_atrb(Request $request)
     {
         try {
-            $activity = \DB::connection('mysql2')->table('stage_activities')
-                                    ->where('program_id', $request->input('data_program'))
-                                    ->orderby('activity_id', 'desc')
-                                    ->take(1)
-                                    ->get();
-
-            SiteStageTracking::where('sam_id', $request->input('sam_id'))
-                                ->update(['activity_complete' => 'true']);
-
-            SiteStageTracking::create([
-                'sam_id' => $request->input('sam_id'),
-                'activity_id' => $activity[0]->activity_id,
-                'activity_complete' => 'true',
-                'user_id' => \Auth::id(),
-            ]);
+            for ($i=0; $i < count($request->input('sam_id')); $i++) {
+                $activity = \DB::connection('mysql2')->table('stage_activities')
+                                        ->where('program_id', $request->input('data_program'))
+                                        ->orderby('activity_id', 'desc')
+                                        ->take(1)
+                                        ->get();
+    
+                SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
+                                    ->update(['activity_complete' => 'true']);
+    
+                SiteStageTracking::create([
+                    'sam_id' => $request->input('sam_id')[$i],
+                    'activity_id' => $activity[0]->activity_id,
+                    'activity_complete' => 'true',
+                    'user_id' => \Auth::id(),
+                ]);
+            }
 
             return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_coloc_filter($site_type, $program, $technology)
+    {
+        try {
+            $sites = \DB::connection('mysql2') 
+                    ->table("milestone_tracking")
+                    ->distinct()
+                    ->where('program_id', 3)
+                    ->where('activity_type', 'endorsement')
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('activity_complete', 'false');
+
+            if($site_type != '-'){
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'site_type',
+                    "value" => $site_type,
+                ]);
+            } else if($program != '-') {
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'program',
+                    "value" => $program,
+                ]);
+            } else if($technology != '-') {
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'technology',
+                    "value" => $technology,
+                ]);
+            }
+
+            $sites->get();
+
+            $dt = DataTables::of($sites);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
