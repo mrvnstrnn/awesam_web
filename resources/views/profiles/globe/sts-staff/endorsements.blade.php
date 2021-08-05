@@ -410,7 +410,7 @@
         var what_table = $(this).attr('data-what_table');
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program_id');
-        var sam_id = $(this).attr('data-sam_id');
+        var sam_id = [$(this).attr('data-sam_id')];
         var activity_name = $(this).attr('data-activity_name');
         
         $("#btn-accept-endorsement-artb").attr("disabled", "disabled");
@@ -462,6 +462,169 @@
                 $("#btn-accept-endorsement-artb").text("Available for Auto RTB");
             },
         });
+    });
+
+    $(document).on("click", ".bulk-btn-accept-endorsement-artb", function (e) {
+        e.preventDefault();
+
+        var what_table = $(this).attr('data-what_table');
+        var data_complete = $(this).attr('data-complete');
+        var data_program = $(this).attr('data-program_id');
+        var activity_name = $(this).attr('data-activity_name');
+
+        var inputElements = document.getElementsByName('program3');
+
+        sam_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                sam_id.push(inputElements[i].value);
+            }
+        }
+
+        $(".bulk-btn-accept-endorsement-artb").attr("disabled", "disabled");
+        $(".bulk-btn-accept-endorsement-artb").text("Processing...");
+
+        $.ajax({
+            url: "/endorse-atrb",
+            data: {
+                sam_id : sam_id,
+                data_complete : data_complete,
+                activity_name : activity_name,
+                data_program : data_program,
+            },
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if (!resp.error) {
+                    $("#"+what_table).DataTable().ajax.reload(function(){
+                        $("#viewInfoModal").modal("hide");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".bulk-btn-accept-endorsement-artb").removeAttr("disabled");
+                        $(".bulk-btn-accept-endorsement-artb").text("Available for Auto RTB");
+                    });
+
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                    $(".bulk-btn-accept-endorsement-artb").removeAttr("disabled");
+                    $(".bulk-btn-accept-endorsement-artb").text("Available for Auto RTB");
+                }
+            },
+            error: function(resp){
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+                $(".bulk-btn-accept-endorsement-artb").removeAttr("disabled");
+                $(".bulk-btn-accept-endorsement-artb").text("Available for Auto RTB");
+            },
+        });
+    });
+
+    $(".show-filters").on("click", function(e){
+        e.preventDefault();
+
+        $("#filters-box").removeClass("d-none");
+    });
+
+    $(".close-filters").on("click", function(e){
+        e.preventDefault();
+
+        $('#coloc-filters-form')[0].reset();
+
+        $(".button_endorsement_area .bulk-btn-accept-endorsement-artb").remove();
+
+        $("#filters-box").addClass("d-none");
+    });
+
+    $(".filter-records").on("click", function (e) {
+        e.preventDefault();
+
+        $(".button_endorsement_area .bulk-btn-accept-endorsement-artb").remove();
+
+        // if (
+        //     ( $('#filters-box input[name="site_type"]').val().toUpperCase() == 'GREENFIELD')
+        //         && 
+        //     ($('#filters-box input[name="program"]').val().toUpperCase() == 'ENABLER' || $('#filters-box input[name="program"]').val().toUpperCase() == 'WTTX')
+        //         &&
+        //     ($('#filters-box input[name="technology"]').val().toUpperCase() == 'CARRIER UPGRADE' || $('#filters-box input[name="technology"]').val().toUpperCase() == 'L21 ACTIVATION' || $('#filters-box input[name="technology"]').val().toUpperCase() == 'FE TO GE')
+        //     ) {
+
+            $(".button_endorsement_area").prepend(
+                "<button class='btn btn-sm btn-success btn-shadow bulk-btn-accept-endorsement-artb' data-what_table='assigned-sites-coloc-table    ' data-complete='true' data-program_id='3' data-activity_name>Available for Auto RTB</button>"
+            );
+        // }
+
+        $(".filter_text").removeClass("d-none");
+
+        // if ($('#filters-box select[name="site_type"]').val().replace(/\s/g, '') != '') {
+        if ($('#coloc-filters-form select[name="site_type"]').val() != '') {
+            $(".filter_text button#site_type").remove();
+            $(".filter_text").append(
+                '<button class="btn btn-sm btn-outline-primary filter_button m-r1" id="site_type">'+$('#coloc-filters-form select[name="site_type"]').val()+' x</button>'
+            )
+        }
+        if ($('#coloc-filters-form select[name="program"]').val() != '') {
+            $(".filter_text button#program").remove();
+            $(".filter_text").append(
+                '<button class="btn btn-sm btn-outline-primary filter_button m-r1" id="program">'+$('#coloc-filters-form select[name="program"]').val()+' x</button>'
+            )
+        }
+        if ($('#coloc-filters-form select[name="technology"]').val() != '') {
+            $(".filter_text button#technology").remove();
+            $(".filter_text").append(
+                '<button class="btn btn-sm btn-outline-primary filter_button m-r1" id="technology">'+$('#coloc-filters-form select[name="technology"]').val()+' x</button>'
+            )
+        }
+
+        var site_type = $('#filters-box select[name="site_type"]').val() != '' ? $('#filters-box select[name="site_type"]').val() : "-";
+        var program = $('#filters-box select[name="program"]').val() != '' ? $('#filters-box select[name="program"]').val() : "-";
+        var technology = $('#filters-box select[name="technology"]').val() != '' ? $('#filters-box select[name="technology"]').val() : "-";
+
+        var table = $('#assigned-sites-coloc-table').DataTable();
+
+
+        table.ajax.url( '/get-coloc-filter/' + site_type + '/' + program + '/' + technology ).load();
+    });
+
+    $
+    $(document).on("click", ".filter_button", function (e) {
+        e.preventDefault();
+
+        $(".filter_text button#"+$(this).attr("id")).remove();
+
+        // $("#coloc-filters-form input[name='"+$(this).attr("id")+"']").val("");
+        
+        $("#coloc-filters-form select[name='"+$(this).attr("id")+"']").val("").trigger('change');
+
+        $(".filter-records").trigger("click");
+    });
+
+    $(".clear-records").on("click", function (e) {
+        e.preventDefault();
+
+        $(".filter_button").trigger("click");
+
+        $(".filter_text").addClass("d-none");
+
+        $('#coloc-filters-form')[0].reset();
+
+        $(".button_endorsement_area .bulk-btn-accept-endorsement-artb").remove();
+
+        var table = $('#assigned-sites-coloc-table').DataTable();
+
+        table.ajax.url( '/site-milestones/3/6/new endorsements globe').load();   
     });
 
 </script>

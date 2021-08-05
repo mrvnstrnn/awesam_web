@@ -17,7 +17,7 @@
 
 @section('modals')
 
-{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
@@ -43,9 +43,7 @@
             </div>
         </div>
     </div>
-</div> --}}
-
-    <x-milestone-modal />
+</div>
 
 <div class="modal fade" id="craetePrPoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
@@ -190,16 +188,7 @@
                                             <div class="form-group">
                                                 <label for="financial_analysis">Financial Analysis</label>
                                                 @php
-                                                    // $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                                    $sites = \DB::connection('mysql2')
-                                                                    ->table("milestone_tracking")
-                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking.sam_id")
-                                                                    ->where('milestone_tracking.program_id', 1)
-                                                                    ->where('milestone_tracking.activity_type', 'PR / PO')
-                                                                    ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
-                                                                    ->where('milestone_tracking.activity_complete', 'false')
-                                                                    ->get();
-                                                                    // dd($sites);
+                                                    $sites = \DB::connection('mysql2')->table('new_sites')->get();
                                                 @endphp
                                                 <select name="financial_analysis" id="financial_analysis" class="form-control">
                                                     <option value="">Select site</option>
@@ -258,14 +247,14 @@
     //////////////////////////////////////
     var profile_id = 8;
     var table_to_load = 'site_approvals';
-    // var main_activity = 'New Endorsements Globe';
+    var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////
 </script>
 
 <script type="text/javascript" src="/js/getCols.js"></script>  
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
-<script type="text/javascript" src="/js/modal-loader.js"></script>  
+{{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
 
 <script>
     // $(document).ready(function() {
