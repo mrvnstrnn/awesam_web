@@ -265,6 +265,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //ARTB
     Route::post('/endorse-atrb', [GlobeController::class, 'endorse_atrb']);
 
+    Route::get('/get-coloc-filter/{site_type}/{program}/{technology}', [GlobeController::class, 'get_coloc_filter']);
+
 });
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');

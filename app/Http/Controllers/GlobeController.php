@@ -21,6 +21,8 @@ use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
 use App\Models\ToweCoFile;
 use App\Models\SiteStageTracking;
+use App\Models\PrMemoSite;
+use App\Models\PrMemoTable;
 
 use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1475,6 +1477,7 @@ class GlobeController extends Controller
                                 $join->on('site.program_id', 'stage_activities.program_id');
                             })
                             ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('site.program_id', $program_id)
                             ->where('stage_activities.activity_type', 'complete');
 
             if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 3 ) {
@@ -1568,10 +1571,11 @@ class GlobeController extends Controller
         elseif($activity_type == 'site prmemo'){
             $sites = \DB::connection('mysql2') 
                             ->table("milestone_tracking")
-                            ->where('program_id', $program_id)
-                            ->where('activity_type', 'PR / PO')
-                            ->where('profile_id', \Auth::user()->profile_id)
-                            ->where('activity_complete', 'false')
+                            ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
+                            ->where('milestone_tracking.program_id', $program_id)
+                            ->where('milestone_tracking.activity_type', 'PR / PO')
+                            ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
+                            ->where('milestone_tracking.activity_complete', 'false')
                             ->get();
 
         }
@@ -3017,6 +3021,25 @@ class GlobeController extends Controller
 
                 $file_name = 'create-pr-memo-'.$current.'.pdf';
 
+                $last_pr_memo = PrMemoTable::orderBy('pr_memo_id', 'desc')->first();
+
+                $generated_pr = "PR-MEMO-00000".(!is_null($last_pr_memo) ? $last_pr_memo->pr_memo_id + 1 : 0 + 1);
+
+                $pr_memo_table = PrMemoTable::create([
+                    'budget_source' => $request->input("budget_source"),
+                    'department' => $request->input("department"),
+                    'division' => $request->input("division"),
+                    'from' => $request->input("from"),
+                    'group' => $request->input("group"),
+                    'recommendation' => $request->input("recommendation"),
+                    'requested_amount' => $request->input("requested_amount"),
+                    'subject' => $request->input("subject"),
+                    'thru' => $request->input("thru"),
+                    'to' => $request->input("to"),
+                    'file_name' => $file_name,
+                    'generated_pr_memo' => $generated_pr,
+                ]);
+
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
 
                     $array_data = array(
@@ -3034,7 +3057,13 @@ class GlobeController extends Controller
                         'file_name' => $file_name,
                         'sam_id' => $request->input("sam_id")[$i],
                         'vendor' => $request->input('vendor'),
+                        'generated_pr_memo' => $generated_pr,
                     );
+
+                    PrMemoSite::create([
+                        'sam_id' => $request->input("sam_id")[$i],
+                        'pr_memo_id'=> $generated_pr
+                    ]);
 
                     \DB::connection('mysql2')->table("site")
                                     ->where("sam_id", $request->input("sam_id")[$i])
@@ -3153,17 +3182,21 @@ class GlobeController extends Controller
             ));
             
             if ($validate->passes()) {
-                SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                    ->where('type', "create_pr")
-                                    ->update([
-                                        'approver_id' => \Auth::id(),
-                                        'reason' => $request->input("data_action") == "false" ? $request->input("remarks") : NULL,
-                                        'status' => $request->input("data_action") == "false" ? "denied" : "approved",
-                                        'date_approved' => $request->input("data_action") == "false" ? NULL : Carbon::now()->toDate(),
-                                    ]);
+                $sites = PrMemoSite::where('pr_memo_id', $request->input('pr_memo'))->get();
 
-                if ($request->input("data_action") == "false") {
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                foreach ($sites as $site) {
+                    SubActivityValue::where('sam_id', $site->sam_id)
+                                        ->where('type', "create_pr")
+                                        ->update([
+                                            'approver_id' => \Auth::id(),
+                                            'reason' => $request->input("data_action") == "false" ? $request->input("remarks") : NULL,
+                                            'status' => $request->input("data_action") == "false" ? "denied" : "approved",
+                                            'date_approved' => $request->input("data_action") == "false" ? NULL : Carbon::now()->toDate(),
+                                        ]);
+    
+                    if ($request->input("data_action") == "false") {
+                        $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                    }
                 }
 
                 $message_action = $request->input("data_action") == "false" ? "rejected" : "approved";
@@ -4170,25 +4203,64 @@ class GlobeController extends Controller
     public function endorse_atrb(Request $request)
     {
         try {
-            $activity = \DB::connection('mysql2')->table('stage_activities')
-                                    ->where('program_id', $request->input('data_program'))
-                                    ->orderby('activity_id', 'desc')
-                                    ->take(1)
-                                    ->get();
-
-            SiteStageTracking::where('sam_id', $request->input('sam_id'))
-                                ->update(['activity_complete' => 'true']);
-
-            SiteStageTracking::create([
-                'sam_id' => $request->input('sam_id'),
-                'activity_id' => $activity[0]->activity_id,
-                'activity_complete' => 'true',
-                'user_id' => \Auth::id(),
-            ]);
+            for ($i=0; $i < count($request->input('sam_id')); $i++) {
+                $activity = \DB::connection('mysql2')->table('stage_activities')
+                                        ->where('program_id', $request->input('data_program'))
+                                        ->orderby('activity_id', 'desc')
+                                        ->take(1)
+                                        ->get();
+    
+                SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
+                                    ->update(['activity_complete' => 'true']);
+    
+                SiteStageTracking::create([
+                    'sam_id' => $request->input('sam_id')[$i],
+                    'activity_id' => $activity[0]->activity_id,
+                    'activity_complete' => 'true',
+                    'user_id' => \Auth::id(),
+                ]);
+            }
 
             return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_coloc_filter($site_type, $program, $technology)
+    {
+        try {
+            $sites = \DB::connection('mysql2') 
+                    ->table("milestone_tracking")
+                    ->distinct()
+                    ->where('program_id', 3)
+                    ->where('activity_type', 'endorsement')
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('activity_complete', 'false');
+
+            if($site_type != '-'){
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'site_type',
+                    "value" => $site_type,
+                ]);
+            } else if($program != '-') {
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'program',
+                    "value" => $program,
+                ]);
+            } else if($technology != '-') {
+                $sites = $sites->whereJsonContains("site_fields", [
+                    "field_name" => 'technology',
+                    "value" => $technology,
+                ]);
+            }
+
+            $sites->get();
+
+            $dt = DataTables::of($sites);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
