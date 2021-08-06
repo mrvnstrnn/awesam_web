@@ -793,6 +793,32 @@ class UserController extends Controller
         // dd($timelines[0]->timeline);
     }
 
+    public function my_calendar_activities()
+    {
+        try {
+            $arrayTimeline = collect();
+            
+            $timelines = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.timeline', 'site.site_name')
+                            ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('agent_id', '=', \Auth::id())
+                            ->get();
+
+            foreach ($timelines as $timeline) {
+                // $arrayTimeline->push($timeline->timeline);
+                $arrayTimeline->push($timeline);
+            }
+
+            // dd($timelines[0]->timeline);
+
+            return response()->json([ "error" => false, "message" => $timelines ]);
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
+        }
+
+        // dd($timelines[0]->timeline);
+    }
 
     public function upload_image_file(Request $request)
     {

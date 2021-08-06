@@ -74,6 +74,7 @@
     @endforeach
 </ul> --}}
 
+
 <ul class="vertical-nav-menu">
     <li class="app-sidebar__heading">Tasks</li>
         @foreach ($program_direct_links as $key => $mainmenus)
@@ -84,7 +85,6 @@
                 {{ ucwords($key) }}
                 <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
             </a>
-
             <ul>
                 @foreach ($mainmenus as $submenu)
                     <li class="{{ $submenu->slug == $active_slug ? 'mm-active' : '' }}">

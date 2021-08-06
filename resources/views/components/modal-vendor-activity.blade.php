@@ -105,7 +105,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
-                                                        <span>Lessor Engagement</span>
+                                                        <span>Engagement</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -164,15 +164,15 @@
                                                             <div class="col-12 py-3">
                                                             <form class="engagement_form">
                                                                 <div class="position-relative row form-group">
-                                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">Date</label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="position-relative row form-group">
                                                                     <label for="lessor_method_log" class="col-sm-3 col-form-label">Method</label>
                                                                     <div class="col-sm-9">
                                                                         <input type="text" class="form-control" id="lessor_method_log" name="lessor_method_log" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative row form-group">
+                                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">Date</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control flatpicker">
                                                                     </div>
                                                                 </div>
                                                                 <div class="position-relative row form-group">
@@ -188,7 +188,7 @@
                                                                         <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
                                                                             <option value="active">Approval not yet secured</option>
                                                                             <option value="approved">Approval Secured</option>
-                                                                            <option value="denied">Lessor Rejected</option>
+                                                                            <option value="denied">Rejected</option>
                                                                         </select>
                                                                         <small class="text-danger lessor_approval-errors"></small>
                                                                     </div>
@@ -230,6 +230,12 @@
     <script>
 
     $(document).ready(function(){
+
+        $(".flatpicker").flatpickr(
+        {
+            minDate: "tommorow"
+        }
+    );
 
         $(".btn_switch_show_action").on("click", function(){
 

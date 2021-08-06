@@ -37,20 +37,64 @@
   @endforeach
 </ul>
 <div class="tab-content">
-  @foreach ($programs as $program)
-      @if ($loop->first)
-      <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
-      @else
-      <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
-      @endif
-      
-      @if($program->program_id == 6)
-
-        <x-towerco-dashboard />
-    
-      @endif
-      </div>
-  @endforeach    
+    @foreach ($programs as $program)
+        @if ($loop->first)
+        <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
+        @else
+        <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
+        @endif
+            <div class="mb-3 card">
+                <div class="tabs-lg-alternate card-header">
+                    <ul class="nav nav-justified">
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#tab-{{ $program->program_id  }}-milestones" class="active nav-link">
+                                <div class="widget-number"><i class="fa fa-fw fa-md" aria-hidden="true"></i> Milestones</div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#tab-{{ $program->program_id  }}-productivity" class="nav-link">
+                                <div class="widget-number"><i class="fa fa-fw fa-md" aria-hidden="true"></i> Productivity</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-{{ $program->program_id  }}-milestones" role="tabpanel">
+                        <div class="card-body">
+                            <ul class="nav">
+                                <a href="javascript:void(0);" class="nav-link active">Overall</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">This Week</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">This Month</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Last Month</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">This Quarter</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Last Quarter</a>
+                            </ul>
+                            <hr>                            
+                            @if($program->program_id == 6)
+                            <x-towerco-dashboard />
+                            @else
+                            <p class="mb-0">
+                                STILL UNDER CONSTRUCTION
+                            </p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-{{ $program->program_id  }}-productivity" role="tabpanel">
+                        <div class="card-body">
+                            <ul class="nav">
+                                <a href="javascript:void(0);" class="nav-link active">Dashboard</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Agent Activity</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Weekly Achievements</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Admin Works</a>
+                                <a href="javascript:void(0);" class="nav-link text-secondary">Travels</a>
+                            </ul>            
+                            <hr>                            
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    @endforeach    
 </div>
 
 
@@ -61,6 +105,10 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             drawBasic();
         })    
+
     </script>
+
+@include('profiles.dar_js');
+
     
 @endsection

@@ -200,6 +200,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Calendar
     Route::get('/get-my-calendar', [UserController::class, 'my_calendar']);
+    Route::get('/get-my-calendar-activities', [UserController::class, 'my_calendar_activities']);
+
+    
 
     //RTB Declaration
     Route::post('/declare-rtb', [GlobeController::class, 'declare_rtb']);
