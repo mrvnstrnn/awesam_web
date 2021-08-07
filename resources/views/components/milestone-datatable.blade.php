@@ -54,7 +54,7 @@
                             {{ $tableheader }}
                         </h5>
                         @if ($tableheader == "PR / PO" && \Auth::user()->profile_id == 8)
-                        <button class="btn btn-primary btn-sm btn_create_pr">Create PR / PO</button>
+                        <button class="btn btn-warning btn-shadow btn-sm btn_create_pr">Create PR / PO</button>
                         @endif
                     </div>
                 </div>

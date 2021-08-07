@@ -158,7 +158,7 @@
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
                                                 <label for="requested_amount">Requested Amount</label>
-                                                <input type="number" class="form-control" name="requested_amount" id="requested_amount">
+                                                <input type="number" class="form-control" name="requested_amount" id="requested_amount" value="0" readonly>
                                                 <small class="text-danger requested_amount-error"></small>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@
                                                     @endforeach
                                                 </select>
     
-                                                <button type="button" class="my-3 btn btn-primary btn-sm pull-right add_new_site">Add</button>
+                                                <button type="button" class="my-3 btn btn-primary btn-shadow btn-sm pull-right add_new_site">Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -218,11 +218,11 @@
                                             <thead>
                                                 <tr>
                                                     <th style='width: 20%'>Site ID</th>
-                                                    <th style='width: 40%'>Searching Name</th>
+                                                    <th style='width: 40%'>Search Ring Name</th>
                                                     <th>Region</th>
                                                     <th>Province</th>
                                                     <th style='width: 10%'>Gross Amount PHP (VAT EXCLUSIVE)</th>
-                                                    <th style='width: 20px;'>Action</th>
+                                                    <th style='width: 10%;'>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -231,6 +231,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body line_items_area" class="d-none" style="overflow-y: auto !important; max-height: calc(100vh - 210px);"></div>
                             <div class="file_view d-none">
                                 <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                                     <div class="file_view_child"></div>
@@ -321,6 +322,7 @@
         e.preventDefault();
         
         var sam_id = $("#financial_analysis").val();
+        var vendor = $("#vendor").val();
 
         if (sam_id != "") {
 
@@ -328,7 +330,7 @@
             $(this).text("Processing...");
 
             $.ajax({
-                url: "/get-fiancial-analysis/" + sam_id,
+                url: "/get-fiancial-analysis/" + sam_id + "/" + vendor,
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
@@ -337,10 +339,13 @@
                             "<td>"+resp.message.search_ring+"</td>" +
                             "<td>"+resp.message.region+"</td>" +
                             "<td>"+resp.message.province+"</td>" +
-                            "<td>"+resp.message.province+"</td>" +
-                            "<td></td>" +
-                            "<td><button class='btn btn-danger btn-sm remove_td' data-id='"+resp.message.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                            "<td>"+resp.sites_fsa+"</td>" +
+                            "<td><button type='button' class='btn btn-primary btn-shadow btn-sm line_item_td' data-id='"+resp.message.sam_id+"' data-sam_id='"+sam_id+"'>Line Items</button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+resp.message.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
                             "</tr>");
+
+                        var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
+
+                        $("#requested_amount").val(sum);
 
                         $("select option.option"+resp.message.sam_id).addClass("d-none");
                         
@@ -378,7 +383,13 @@
     });
 
     $(document).on("click", ".remove_td", function(e){
+
         $("tr.tr"+$(this).attr("data-id")).remove();
+
+        var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+
+        $("#requested_amount").val(sum);
+
         $("select option.option"+$(this).attr("data-id")).removeClass("d-none");
         $(".input_hidden input#sam_id"+$(this).attr("data-id")).remove();
     });
@@ -464,8 +475,136 @@
             }
         });
     });
+
+    $(document).on("click", ".line_item_td", function (e){
+        e.preventDefault();
+
+        var sam_id = $(this).attr('data-sam_id');
+        
+        var vendor = $("#vendor").val();
+
+        $("#craetePrPoModal .menu-header-title").text(sam_id);
+
+        $("#craetePrPoModal .line_items_area").removeClass("d-none");
+        $("#craetePrPoModal .form_div").addClass("d-none");
+
+        $(".line_items_area div").remove();
+
+        $.ajax({
+            url: "/get-line-items/" + sam_id + "/" +vendor,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    // console.log(resp.message);
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".line_items_area").append(
+                                '<div><label><b>'+index+'</b></label></div>'
+                            );
+
+                            $.each(data, function(i, checkbox_data) {
+                                $(".line_items_area").append(
+                                    '<div class="form-group">' +
+                                    '<input type="checkbox" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
+                                    '</label></div>'
+                                );
+                            });
+                        });
+
+
+                        resp.site_items.forEach(element => {
+                            $("input[value='" + element.fsa_id + "']").prop('checked', true);
+                        });
+
+                        $(".line_items_area").append(
+                            '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Cancel</button> <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items" data-sam_id="'+sam_id+'"">Save line items</button></div>'
+                        );
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+    });
+
+    $(document).on("click", ".save_line_items", function(e){
+        e.preventDefault();
+
+        var sam_id = $(this).attr('data-sam_id');
+        var inputElements = document.getElementsByName('line_item');
+
+        line_item_id = [];
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                line_item_id.push(inputElements[i].value);
+            }
+        }
+
+        $.ajax({
+            url: "/save-line-items",
+            data: {
+                line_item_id : line_item_id,
+                sam_id : sam_id,
+            },
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp){
+                if (!resp.error) {
+
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+                    
+                    $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
+
+                    
+                    $('#financial_analysis').val(sam_id).trigger('change');
+
+                    $(".add_new_site").trigger("click");
+
+                    $(".cancel_line_items").trigger("click");
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(resp){
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+
+        });
+    });
+
+    $(document).on("click", ".cancel_line_items", function(e){
+        $("#craetePrPoModal .line_items_area").addClass("d-none");
+        $("#craetePrPoModal .form_div").removeClass("d-none");
+    });
     
     $(document).on("click", ".edit_form_pdf", function (e) {
+        $(".line_items_area div").remove();
+
         $(".file_view").addClass("d-none");
         $(".form_div").removeClass("d-none");
     });

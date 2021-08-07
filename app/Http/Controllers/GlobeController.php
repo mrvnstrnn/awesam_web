@@ -23,6 +23,7 @@ use App\Models\ToweCoFile;
 use App\Models\SiteStageTracking;
 use App\Models\PrMemoSite;
 use App\Models\PrMemoTable;
+use App\Models\FsaLineItem;
 
 use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -2975,7 +2976,7 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_fiancial_analysis ($sam_id)
+    public function get_fiancial_analysis ($sam_id, $vendor)
     {
         try {
             $sites = \DB::connection('mysql2')
@@ -2983,8 +2984,96 @@ class GlobeController extends Controller
                             ->where('sam_id', $sam_id)
                             ->first();
 
-            return response()->json([ 'error' => false, 'message' => $sites ]);
+            $fsa_data = \DB::connection('mysql2')
+                            ->table('fsa_table')
+                            ->where('vendor_id', $vendor)
+                            ->where('region', $sites->region)
+                            ->where('province', $sites->province)
+                            ->where('province', $sites->town_city)
+                            ->get();
+
+            $fsa_line_items = FsaLineItem::where('sam_id', $sam_id)->get();
+
+            if (count($fsa_line_items) == 0) {
+                foreach ($fsa_data as $fsa) {
+                    FsaLineItem::create([
+                        'sam_id' => $sam_id,
+                        'fsa_id' => $fsa->fsa_id,
+                    ]);
+                }
+            }
+
+
+            $pricings = FsaLineItem::join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                            ->where('site_line_items.sam_id', $sam_id)->get();
+
+            $sites_fsa = collect();
+            foreach ($pricings as $pricing) {
+                $sites_fsa->push($pricing->price);
+            }
+
+            return response()->json([ 'error' => false, 'message' => $sites, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
             
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function remove_fiancial_analysis($sam_id)
+    {
+        try {
+            FsaLineItem::where('sam_id', $sam_id)->delete();
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_line_items($sam_id, $vendor)
+    {
+        try {
+            // $line_items = FsaLineItem::rightjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+            //                                 ->where('site_line_items.sam_id', $sam_id)
+            //                                 ->get();
+
+            $sites = \DB::connection('mysql2')
+                            ->table('new_sites')
+                            ->where('sam_id', $sam_id)
+                            ->first();
+
+            $line_items = \DB::connection('mysql2')
+                            ->table('fsa_table')
+                            ->where('vendor_id', $vendor)
+                            ->where('region', $sites->region)
+                            ->where('province', $sites->province)
+                            ->where('province', $sites->town_city)
+                            ->get();
+
+            $site_items = FsaLineItem::where('sam_id', $sam_id)
+                                        ->get();
+
+            return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_line_items(Request $request)
+    {
+        try {
+            FsaLineItem::where('sam_id', $request->input('sam_id'))
+                            // ->whereIn('fsa_id', '!=', $request->input('line_item_id'))
+                            ->delete();
+
+            for ($i=0; $i < count($request->input('line_item_id')); $i++) {
+                FsaLineItem::create([
+                    'sam_id' => $request->input('sam_id'),
+                    'fsa_id' => $request->input('line_item_id')[$i],
+                ]);
+            }
+
+            return response()->json([ 'error' => false, 'message' => "Successfully saved line items." ]);
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

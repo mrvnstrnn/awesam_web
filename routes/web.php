@@ -247,10 +247,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/submit-subactivity-step', [GlobeController::class, 'submit_subactivity_step']);
 
     // PR / PO
-    Route::get('/get-fiancial-analysis/{sam_id}', [GlobeController::class, 'get_fiancial_analysis']);
+    Route::get('/get-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
     Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
     Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);
+    
+    Route::get('/remove-fiancial-analysis/{sam_id}', [GlobeController::class, 'remove_fiancial_analysis']);
+    Route::get('/remove-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'remove_fiancial_analysis']);
+
+    Route::get('/get-line-items/{sam_id}/{vendor}', [GlobeController::class, 'get_line_items']);
+    Route::post('/save-line-items', [GlobeController::class, 'save_line_items']);
     
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
 
