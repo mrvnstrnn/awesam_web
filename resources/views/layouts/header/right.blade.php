@@ -61,7 +61,7 @@
                             @else
                                 <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                             @endif --}}
-                            <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                            {{-- <i class="fa fa-angle-down ml-2 opacity-8"></i> --}}
                         </a>
 
                         {{-- HEADER OVERLAY : USER MENU --}}

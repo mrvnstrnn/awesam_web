@@ -366,15 +366,25 @@ class UserController extends Controller
                 $show = $path[0];
             }
 
-            $role = \Auth::user()->getAllNavigation()
-                                    ->where('permissions.slug', $show)
-                                    ->get();
+            $role = \Auth::user()->getUserProfile();
 
-            $mode = $role[0]->mode;
-            $profile = $role[0]->profile;
+                $mode = $role->mode;
+                $profile = $role->profile;
+
+
+            // $role = \DB::table('profiles')
+            //             ->join('users', 'users.profile_id', 'profiles.id')
+            //             ->where('users.id', \Auth::user()->id)
+            //             ->get();
+            
+            // $mode = $role[0]->mode;
+            // $profile = $role[0]->profile;
 
             $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
 
+            $role = \Auth::user()->getAllNavigation()
+                                    ->where('slug', $show)
+                                    ->get();
 
 
             if(count($role)>0){
@@ -442,7 +452,7 @@ class UserController extends Controller
 
     private function getProfileMenuDirectLinks(){
         $profile_direct_links = \Auth::user()->getAllNavigation()
-                                            ->where('permissions.level_one', 'profile_menu')
+                                            ->where('level_one', 'profile_menu')
                                             ->orderBy('sort', 'asc')
                                             ->get();
 
@@ -452,9 +462,11 @@ class UserController extends Controller
 
     private function getProgramMenuDirectLinks(){
         $program_direct_links = \Auth::user()->getAllNavigation()
-                                            ->where('permissions.level_one', 'program_menu')
+                                            ->where('level_one', 'program_menu')
                                             ->orderBy('sort', 'asc')
                                             ->get();
+
+                
         
         return $program_direct_links->groupBy('level_two');
     }
@@ -793,6 +805,32 @@ class UserController extends Controller
         // dd($timelines[0]->timeline);
     }
 
+    public function my_calendar_activities()
+    {
+        try {
+            $arrayTimeline = collect();
+            
+            $timelines = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.timeline', 'site.site_name')
+                            ->join('site_users', 'site_users.sam_id', 'site.sam_id')
+                            ->where('agent_id', '=', \Auth::id())
+                            ->get();
+
+            foreach ($timelines as $timeline) {
+                // $arrayTimeline->push($timeline->timeline);
+                $arrayTimeline->push($timeline);
+            }
+
+            // dd($timelines[0]->timeline);
+
+            return response()->json([ "error" => false, "message" => $timelines ]);
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
+        }
+
+        // dd($timelines[0]->timeline);
+    }
 
     public function upload_image_file(Request $request)
     {

@@ -79,15 +79,41 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAllNavigation()
     {
-        $programs = UserProgram::where('user_id', \Auth::id())->orderBy('program_id', 'asc')->pluck('program_id');
 
-        return ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
-                                        ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
-                                        ->where('profile_permissions.profile_id', \Auth::user()->profile_id);
-                                        // ->whereIn('profile_permissions.program_id', $programs);
+        $programs = \Auth::user()->getUserProgram();
 
-                                        // ->whereIn('profile_permissions.program_id', $programs);
-                                        // ->get();
+        $user_programs = array();
+
+        foreach($programs as $user_program){
+
+            array_push($user_programs, $user_program->program_id);
+        }
+
+        // $user_programs = (object) $user_programs;
+
+
+
+        // $perms = \DB::table('view_profile_menus')
+        //             ->select('icon', 'slug', 'menu', 'permission_id', 'sort', 'title', 'title_subheading','level_one', 'level_two', 'level_three')
+        //             ->distinct()
+        //             ->where('profile_id', \Auth::user()->profile_id)
+        //             ->whereIn('program_id', $user_programs);
+        
+
+        // return $perms;
+
+
+        $perms = ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
+
+                    ->select('icon', 'slug', 'menu', 'permission_id', 'sort', 'title', 'title_subheading','level_one', 'level_two', 'level_three')
+                    ->distinct()
+
+        ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
+        ->where('profile_permissions.profile_id', \Auth::user()->profile_id)
+        ->whereIn('profile_permissions.program_id', $user_programs);
+
+        return $perms;
+
     }
 
     public function getUserProfile()

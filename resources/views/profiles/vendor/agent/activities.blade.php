@@ -72,14 +72,19 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="main-card mb-3 card">
-                <div class="dropdown-menu-header">
-                    <div class="dropdown-menu-header-inner bg-dark">
-                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                <div class="dropdown-menu-header py-2 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                    <div class="row px-4">
                         <div class="menu-header-content btn-pane-right">
-                            <h5 class="menu-header-title">
-                                <i class="header-icon lnr-calendar-full icon-gradient bg-mixed-hopes"></i>
-                                My Activities
+                            <h5 class="menu-header-title text-dark">
+                                <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
+                                 My Activities
                             </h5>
+                        </div>
+                        <div class="btn-actions-pane-right actions-icon-btn">
+                            <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
+                                {{-- <i class="pe-7s-menu btn-icon-wrapper pe-2x font-weight-bold text-dark"></i> --}}
+                                <i class="fa fa-fw fa-lg" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div> 
@@ -98,14 +103,16 @@
         </div>
         <div class="col-lg-6">
             <div class="main-card mb-3 card">
-                <div class="dropdown-menu-header">
-                    <div class="dropdown-menu-header-inner bg-dark">
-                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                <div class="dropdown-menu-header py-3 bg-warning"   style=" background-image: url('/images/modal-background.jpeg'); background-size:150%;">
+                    <div class="row px-4">
                         <div class="menu-header-content btn-pane-right">
-                            <h5 class="menu-header-title">
-                                <i class="header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
-                                Site Progress
+                            <h5 class="menu-header-title text-dark">
+                                <i class="header-icon pe-7s-graph1 pe-lg font-weight-bold mr-1"></i>
+                                {{-- <i class="header-icon lnr-calendar-full font-weight-bold mr-1"></i> --}}
+                                 Site Progress
                             </h5>
+                        </div>
+                        <div class="btn-actions-pane-right actions-icon-btn">
                         </div>
                     </div>
                 </div> 
@@ -130,6 +137,57 @@
 
     <x-milestone-modal />
 
+    <div id="admin-task-modal" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+            <div class="modal-header bg-dark"  style="background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                <h5 class="modal-title text-dark">Add Admin Task</h5>
+                <button type="button" class="close modal_close text-dark" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0" >
+                <form class="">
+                    <div class="position-relative row form-group">
+                        <label for="exampleEmail" class="col-sm-4 col-form-label">Task Type</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option>-</option>
+                                <option>Online Meeting</option>
+                                <option>Office Works</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="position-relative row form-group">
+                        <label for="exampleEmail" class="col-sm-4 col-form-label">Date</label>
+                        <div class="col-sm-8">
+                            <input name="task-date" id="task-date" placeholder="" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="position-relative row form-group">
+                        <label for="exampleEmail" class="col-sm-4 col-form-label">Time</label>
+                        <div class="col-sm-8">
+                            <input name="task-date" id="task-date" placeholder="" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="position-relative row form-group">
+                        <label for="exampleEmail" class="col-sm-4 col-form-label">Remarks</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </div>
+                </form>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal_close"  data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary actor_update">Add</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    
 @endsection
 
 
@@ -177,6 +235,10 @@ $(document).ready(() => {
         error: function (resp){
             toastr.error(resp.message, "Error");
         }
+    });
+
+    $(document).on('click', '#show-admin-tasks', function(){
+        $('#admin-task-modal').modal('show');
     });
     
 
@@ -243,24 +305,6 @@ $(document).find('.circle-progress').each(function(index, element){
 
 
 
-    // Dropzone.autoDiscover = false;
-    // $(".dropzone").dropzone({
-    //     addRemoveLinks: true,
-    //     maxFiles: 1,
-    //     maxFilesize: 5,
-    //     paramName: "file",
-    //     url: "/upload-file",
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     },
-    //     success: function (file, resp) {
-    //         $("#form-upload  #file_name").val(resp.file);
-    //         console.log(resp.message);
-    //     },
-    //     error: function (file, resp) {
-    //         toastr.error(resp.message, "Error");
-    //     }
-    // });
 </script>
 
 
