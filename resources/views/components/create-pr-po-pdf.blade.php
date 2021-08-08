@@ -7,14 +7,14 @@
                 }
 
                 #content {
-                    margin: 20px 40px;
+                    margin: 20px 20px;
                 }
 
                 body {
                     font-family: Arial, Helvetica, sans-serif;
                     background-image: url('globe-logo.png');
                     background-size: 100px 50px;
-                    opacity: .05;
+                    opacity: .15;
                 },
                 
                 textarea {
@@ -73,6 +73,9 @@
                     background-color: #04AA6D;
                     color: white;
                 }
+                table {
+                    font-size: 12px;
+                }
         </style>
     </head>
     <body>
@@ -80,8 +83,12 @@
         <div id="content">
             <table style='width:100%'>
                 <tr>
-                    <td style="width: 120px">
-                        <img src="globe-logo.png" width="200px" height="100px;" />
+                    <td style="width: 50%;">
+                        <img src="globe-logo.png" width="200px" />
+                    </td>
+                    <td style="width: 50%; text-align: right;" valign="top">
+                        <strong>PR Memo Number</strong><br>
+                        PR-MEMO-SAMPLE-1
                     </td>
                 </tr>
             </table>
@@ -97,11 +104,15 @@
 
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
-                    <td style="width: 50%">
+                    <td style="width: 33.3%">
+                        <label for="from">From:</label>
+                        <input type="text" id="from" name="from" value="{{ $from }}" />
+                    </td>
+                    <td style="width: 33.3%">
                         <label for="thru">Thru:</label>
                         <input type="text" id="thru" name="thru" value="{{ $thru }}" />
                     </td>
-                    <td style="width: 50%">
+                    <td style="width: 33.3%">
                         <label for="date_created">Date Created:</label>
                         <input type="text" id="date_created" name="date_created" value="{{ $date_created }}" />
                     </td>
@@ -110,24 +121,15 @@
 
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
-                    <td style="width: 50%">
-                        <label for="from">From:</label>
-                        <input type="text" id="from" name="from" value="{{ $from }}" />
-                    </td>
-                    <td style="width: 50%">
+                    <td style="width: 33.3%">
                         <label for="group">Group:</label>
                         <input type="text" id="group" name="group" value="{{ $group }}" />
                     </td>
-                </tr>
-            </table>
-
-            <table style="width: 100%; margin-top: 0px;">
-                <tr>
-                    <td style="width: 50%">
+                    <td style="width: 33.3%">
                         <label for="division">Division:</label>
                         <input type="text" id="division" name="division" value="{{ $division }}" />
                     </td>
-                    <td style="width: 50%">
+                    <td style="width: 33.3%">
                         <label for="department">Department:</label>
                         <input type="text" id="department" name="department" value="{{ $department }}" />
                     </td>
@@ -143,7 +145,7 @@
                 </tr>
             </table>
 
-            <table style="width: 100%; margin-top: 0px;">
+            {{-- <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 50%">
                         <label for="requested_amount">Requested Amount:</label>
@@ -154,7 +156,7 @@
                         <input type="text" id="budget_source" name="budget_source" value="{{ $budget_source }}" />
                     </td>
                 </tr>
-            </table>
+            </table> --}}
 
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
@@ -173,20 +175,31 @@
                 <tr>
                     <td style="width: 100%">
                         <label for="recommendation">Recommendation:</label>
-                        <textarea type="text" id="recomentdation" name="recomentdation" style="height:auto;">{{ $recommendation }}</textarea>
+                        <textarea type="text" id="recomentdation" name="recomentdation" style="height:270px;">{{ $recommendation }}</textarea>
+                    </td>
+                </tr>
+            </table>
+            <table style='width:100%'>
+                <tr>
+                    <td style="width: 50%;">
+                        <img src="globe-logo.png" width="200px" />
+                    </td>
+                    <td style="width: 50%; text-align: right; padding-top: 20px;" valign="top">
+                        <strong>PR Memo Number</strong><br>
+                        PR-MEMO-SAMPLE-1
                     </td>
                 </tr>
             </table>
 
-            <table style="width: 100%; margin-top: 0px;">
+            <table style="width: 100%; margin-top: 0px; font-size:10px; margin-top:10px;">
                 <tr>
                     <td style="width: 100%">
-                        <label for="financial_analysis">Financial Analysis:</label>
+                        <label for="financial_analysis" style="margin-bottom: 10px;">Financial Analysis:</label>
                         <table id="financial_table">
                             <thead>
                                 <tr>
                                     <th>Site ID</th>
-                                    <th>Searching Name</th>
+                                    <th>Search Ring Name</th>
                                     <th>Region</th>
                                     <th>Province</th>
                                 </tr>
