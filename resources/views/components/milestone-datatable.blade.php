@@ -24,7 +24,7 @@
             $slug = $route->parameters['slug'];
             $slugs = \Auth::user()->getAllNavigation()->where('slug', $slug)->get();
 
-            $prog = \DB::table('profile_permissions')
+            $prog = \DB::connection('mysql2')->table('profile_permissions')
                 ->select('program_id')
                 ->distinct()
                 ->where('permission_id', $slugs[0]->permission_id)

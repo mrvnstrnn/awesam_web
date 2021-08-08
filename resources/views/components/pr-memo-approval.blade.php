@@ -1,236 +1,279 @@
-<div class="row mb-3">
-    <div class="col-12 align-right">
-        @php
-            $json = json_decode($prmemo->value, true);
-        @endphp
-        <ul class="tabs-animated body-tabs-animated nav mb-4">
-            <li class="nav-item">
-                <a role="tab" class="nav-link active" id="tab-action-details" data-toggle="tab" href="#tab-content-action-details">
-                    <span>Details</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-sites">
-                    <span>Sites</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-pdf">
-                    <span>PDF</span>
-                </a>
-            </li>
-        </ul>
+<style>
+    .modal-dialog{
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        box-shadow: 0 5px 15px rgba(0,0,0,0);
+    }   
+</style> 
+<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="background-color: transparent; border: 0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="main-card mb-3 card ">
 
-        <form id="create_pr_form">
-            @if ($activity == "Set Ariba PR Number to Sites")
-                <div class="form-group">
-                    <label for="pr_number">PR #</label>
-                    <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
-                    <small class="pr_number-error text-danger"></small>
-                </div>
-            @elseif ($activity == "Vendor Awarding of Sites")
-                @php
-                    $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $prmemo->sam_id)->first();
-                @endphp
-                <div class="form-group">
-                    <label for="pr_number">PR #</label>
-                    <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
-                    <small class="pr_number-error text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label for="po_number">PO #</label>
-                    <input type="text" name="po_number" id="po_number" class="form-control">
-                    <small class="po_number-error text-danger"></small>
-                </div>
-            @endif
-            <div class="tab-content">
-                <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
+                        <div class="dropdown-menu-header">
+                            <div class="dropdown-menu-header-inner bg-dark">
+                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                <div class="menu-header-content btn-pane-right">
+                                        <h5 class="menu-header-title">
+                                            {{ $site_name }}
+                                            {{-- @if($site[0]->site_category != 'none')
+                                                <span class="mr-3 badge badge-secondary"><small>{{ $site[0]->site_category }}</small></span>
+                                            @endif --}}
+                                        </h5>
+                                </div>
+                            </div>
+                        </div> 
 
-                    {{-- <form> --}}
-                        @php
-                            $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
-                            $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
-                        @endphp
-                        <div class="form-row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="vendor">Vendor</label>
-                                    <input type="text" class="form-control" name="vendor" id="vendor" readonly value="{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})">
-                                </div>
-                            </div>
-                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-12 align-right">
+                                    @php
+                                        $json = json_decode($pr_memo->value, true);
+                                    @endphp
+                                    <ul class="tabs-animated body-tabs-animated nav mb-4">
+                                        <li class="nav-item">
+                                            <a role="tab" class="nav-link active" id="tab-action-details" data-toggle="tab" href="#tab-content-action-details">
+                                                <span>Details</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-sites">
+                                                <span>Sites</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-pdf">
+                                                <span>PDF</span>
+                                            </a>
+                                        </li>
+                                    </ul>
 
-                        <hr>
+                                    <form id="create_pr_form">
+                                        @if ($activity == "Set Ariba PR Number to Sites")
+                                            <div class="form-group">
+                                                <label for="pr_number">PR #</label>
+                                                <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                                                <small class="pr_number-error text-danger"></small>
+                                            </div>
+                                        @elseif ($activity == "Vendor Awarding of Sites")
+                                            @php
+                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo->sam_id)->first();
+                                            @endphp
+                                            <div class="form-row">
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="pr_number">PR #</label>
+                                                        <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                                                        <small class="pr_number-error text-danger"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="po_number">PO #</label>
+                                                        <input type="text" name="po_number" id="po_number" class="form-control">
+                                                        <small class="po_number-error text-danger"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="tab-content">
+                                            <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
 
-                        <div class="form-row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="to">To</label>
-                                    <input type="text" class="form-control" name="to" id="to" readonly value="{{ $json['to'] }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="thru">Thru</label>
-                                    <input type="text" class="form-control" name="thru" id="thru" readonly value="{{ $json['thru'] }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="date_created">Date Created</label>
-                                    <input type="text" class="form-control" name="date_created" id="date_created" readonly value="{{ $json['date_created'] }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="from">From</label>
-                                    <input type="text" class="form-control" name="from" id="from" readonly value="{{ $json['from'] }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="group">Group</label>
-                                    <input type="text" class="form-control" name="group" id="group" readonly value="{{ $json['group'] }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="division">Division</label>
-                                    <input type="text" class="form-control" name="division" id="division" readonly value="{{ $json['division'] }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="department">Department</label>
-                                    <input type="text" class="form-control" name="department" id="department" readonly value="{{ $json['department'] }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class=" col-12">
-                                <div class="form-group">
-                                    <label for="subject">Subject</label>
-                                    <input type="text" class="form-control" name="subject" id="subject" readonly value="{{ $json['subject'] }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="requested_amount">Requested Amount</label>
-                                    <input type="text" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($json['requested_amount'], 2) }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-12">
-                                <div class="form-group">
-                                    <label for="budget_source">Budget Source</label>
-                                    <input type="text" class="form-control" name="budget_source" id="budget_source" readonly value="{{ $json['budget_source'] }}">
-                                </div>
-                            </div>
-                        </div>
+                                                {{-- <form> --}}
+                                                    @php
+                                                        $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
+                                                        $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
+                                                    @endphp
+                                                    <div class="form-row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="vendor">Vendor</label>
+                                                                <input type="text" class="form-control" name="vendor" id="vendor" readonly value="{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})">
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                        <hr>
+                                                    <hr>
 
-                        <div class="form-row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="recommendation">Recommendation</label>
-                                    <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation" readonly>{{ $json['recommendation'] }}</textarea>
+                                                    <div class="form-row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="to">To</label>
+                                                                <input type="text" class="form-control" name="to" id="to" readonly value="{{ $json['to'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="thru">Thru</label>
+                                                                <input type="text" class="form-control" name="thru" id="thru" readonly value="{{ $json['thru'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="date_created">Date Created</label>
+                                                                <input type="text" class="form-control" name="date_created" id="date_created" readonly value="{{ $json['date_created'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="from">From</label>
+                                                                <input type="text" class="form-control" name="from" id="from" readonly value="{{ $json['from'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="group">Group</label>
+                                                                <input type="text" class="form-control" name="group" id="group" readonly value="{{ $json['group'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="division">Division</label>
+                                                                <input type="text" class="form-control" name="division" id="division" readonly value="{{ $json['division'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="department">Department</label>
+                                                                <input type="text" class="form-control" name="department" id="department" readonly value="{{ $json['department'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class=" col-12">
+                                                            <div class="form-group">
+                                                                <label for="subject">Subject</label>
+                                                                <input type="text" class="form-control" name="subject" id="subject" readonly value="{{ $json['subject'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="requested_amount">Requested Amount</label>
+                                                                <input type="text" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($json['requested_amount'], 2) }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="budget_source">Budget Source</label>
+                                                                <input type="text" class="form-control" name="budget_source" id="budget_source" readonly value="{{ $json['budget_source'] }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr>
+
+                                                    <div class="form-row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="recommendation">Recommendation</label>
+                                                                <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation" readonly>{{ $json['recommendation'] }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {{-- </form> --}}
+                                            </div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover pr_memo_site">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>SAM ID</th>
+                                                                <th>Site Name</th>
+                                                                <th>Site Address</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($generated_pr_memos as $generated_pr_memo)
+                                                            <tr>
+                                                                <td>{{ $generated_pr_memo->sam_id }}</td>
+                                                                <td>{{ $generated_pr_memo->site_name }}</td>
+                                                                <td>{{ $generated_pr_memo->site_address }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-pdf" role="tabpanel">
+                                                {{-- <form id="create_pr_form"> --}}
+                                                    {{-- @if ($activity == "Set Ariba PR Number to Sites")
+                                                        <div class="form-group">
+                                                            <label for="pr_number">PR #</label>
+                                                            <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }}>
+                                                            <small class="pr_number-error text-danger"></small>
+                                                        </div>
+                                        
+                                                    @endif --}}
+                                        
+                                                    {{-- <div class="form-group">
+                                                        <label for="vendor">Vendor</label>
+                                                        @php
+                                                            $vendor_name = \App\Models\Vendor::where('vendor_id', $json['vendor'])->first();
+                                                        @endphp
+                                                        <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $vendor_name->vendor_sec_reg_name }} ({{ $vendor_name->vendor_acronym }})" readonly>
+                                                    </div> --}}
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="pr_file">PR Memo File</label>
+                                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen></iframe>
+                                                    </div>
+                                                    
+                                                {{-- </form> --}}
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        
+                                        @if ($activity == "Set Ariba PR Number to Sites")
+                                            
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR</button>
+                                        @elseif ($activity == "Vendor Awarding of Sites")
+                                        
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                        @else
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+
+                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                        @endif
+
+                                    </form>
+                                        
+                                    <div class="row reject_remarks d-none">
+                                        <div class="col-12">
+                                            <p class="message_p">Are you sure you want to reject PR Memo?</p>
+                                            <form class="reject_form">
+                                                <div class="form-group">
+                                                    <label for="remarks">Remarks:</label>
+                                                    <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                                                    <small class="text-danger remarks-error"></small>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR</button>
+                                                    
+                                                    <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                    {{-- </form> --}}
-                </div>
-                <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
-                    <div class="table-responsive">
-                        <table class="table table-hover pr_memo_site">
-                            <thead>
-                                <tr>
-                                    <th>SAM ID</th>
-                                    <th>Site Name</th>
-                                    <th>Site Address</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($generated_pr_memos as $generated_pr_memo)
-                                <tr>
-                                    <td>{{ $generated_pr_memo->sam_id }}</td>
-                                    <td>{{ $generated_pr_memo->site_name }}</td>
-                                    <td>{{ $generated_pr_memo->site_address }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
                 </div>
-                <div class="tab-pane tabs-animation fade" id="tab-content-pdf" role="tabpanel">
-                    {{-- <form id="create_pr_form"> --}}
-                        {{-- @if ($activity == "Set Ariba PR Number to Sites")
-                            <div class="form-group">
-                                <label for="pr_number">PR #</label>
-                                <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }}>
-                                <small class="pr_number-error text-danger"></small>
-                            </div>
-            
-                        @endif --}}
-            
-                        {{-- <div class="form-group">
-                            <label for="vendor">Vendor</label>
-                            @php
-                                $vendor_name = \App\Models\Vendor::where('vendor_id', $json['vendor'])->first();
-                            @endphp
-                            <input type="text" name="vendor" id="vendor" class="form-control" value="{{ $vendor_name->vendor_sec_reg_name }} ({{ $vendor_name->vendor_acronym }})" readonly>
-                        </div> --}}
-                        
-                        <div class="form-group">
-                            <label for="pr_file">PR Memo File</label>
-                            <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen></iframe>
-                        </div>
-                        
-                    {{-- </form> --}}
-                </div>
-                
-                
-            </div>
-            
-            @if ($activity == "Set Ariba PR Number to Sites")
-                
-                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR</button>
-            @elseif ($activity == "Vendor Awarding of Sites")
-            
-                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
-            @else
-                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
-
-                <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
-            @endif
-
-        </form>
-            
-        <div class="row reject_remarks d-none">
-            <div class="col-12">
-                <p class="message_p">Are you sure you want to reject PR Memo?</p>
-                <form class="reject_form">
-                    <div class="form-group">
-                        <label for="remarks">Remarks:</label>
-                        <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
-                        <small class="text-danger remarks-error"></small>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $prmemo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR</button>
-                        
-                        <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
-                    </div>
-                </form>
             </div>
         </div>
-
     </div>
 </div>
 

@@ -1920,6 +1920,19 @@ class GlobeController extends Controller
 
             } else {
 
+                if ($request->input('activity') == "Vendor Awarding of Sites") {
+                    $what_modal = "components.pr-memo-approval";
+
+                    return \View::make($what_modal)
+                    ->with([
+                        'pr_memo' => $pr_memo,
+                        'activity' => $request->input('activity'),
+                        'samid' => $request['sam_id'],
+                        'site_name' => $site[0]->site_name
+                    ])
+                    ->render();
+                }
+
                 $what_modal = "components.modal-view-site";
 
                 return \View::make($what_modal)
