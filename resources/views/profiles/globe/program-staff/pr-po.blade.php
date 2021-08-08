@@ -411,11 +411,11 @@
             },
             success: function (resp){
                 if (!resp.error) {
-                    // Swal.fire(
-                    //     'Success',
-                    //     resp.message,
-                    //     'success'
-                    // )
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
 
                     $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
 
@@ -423,6 +423,8 @@
                     
                     $(".pr_po_form #file_name").val(resp.file_name);
                     $(".print_to_pdf").trigger("click");
+
+                    $("#craetePrPoModal").modal("hide");
 
                     // $(".file_view").removeClass("d-none");
                     // $(".form_div").addClass("d-none");

@@ -25,10 +25,23 @@
             @if ($activity == "Set Ariba PR Number to Sites")
                 <div class="form-group">
                     <label for="pr_number">PR #</label>
-                    <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }}>
+                    <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
                     <small class="pr_number-error text-danger"></small>
                 </div>
-
+            @elseif ($activity == "Vendor Awarding of Sites")
+                @php
+                    $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $prmemo->sam_id)->first();
+                @endphp
+                <div class="form-group">
+                    <label for="pr_number">PR #</label>
+                    <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                    <small class="pr_number-error text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label for="po_number">PO #</label>
+                    <input type="text" name="po_number" id="po_number" class="form-control">
+                    <small class="po_number-error text-danger"></small>
+                </div>
             @endif
             <div class="tab-content">
                 <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
@@ -111,7 +124,7 @@
                             <div class="col-md-6 col-lg-6 col-12">
                                 <div class="form-group">
                                     <label for="requested_amount">Requested Amount</label>
-                                    <input type="number" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($json['requested_amount'], 2) }}">
+                                    <input type="text" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($json['requested_amount'], 2) }}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12">
@@ -261,6 +274,7 @@
             $("#create_pr_form small").text("");
             var sam_id = sam_id;
             var vendor = $("#vendor").val();
+            var po_number = $("#po_number").val();
 
             var button_text = "Award to vendor";
 
@@ -268,6 +282,7 @@
                 sam_id : sam_id,
                 activity_name : activity_name,
                 data_action : data_action,
+                po_number : po_number
                 // vendor : vendor
             }
         } else {
