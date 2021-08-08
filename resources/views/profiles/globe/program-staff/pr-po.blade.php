@@ -45,7 +45,7 @@
     </div>
 </div> --}}
 
-    <x-milestone-modal />
+<div class="ajax_content_box"></div>
 
 <div class="modal fade" id="craetePrPoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">

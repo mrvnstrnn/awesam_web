@@ -16,7 +16,7 @@
 
 @section('modals')
 
-    <x-milestone-modal />
+<div class="ajax_content_box"></div>
 
 @endsection
 
