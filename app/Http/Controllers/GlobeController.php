@@ -1920,6 +1920,19 @@ class GlobeController extends Controller
 
             } else {
 
+                if ($request->input('activity') == "Vendor Awarding of Sites") {
+                    $what_modal = "components.pr-memo-approval";
+
+                    return \View::make($what_modal)
+                    ->with([
+                        'pr_memo' => $pr_memo,
+                        'activity' => $request->input('activity'),
+                        'samid' => $request['sam_id'],
+                        'site_name' => $site[0]->site_name
+                    ])
+                    ->render();
+                }
+
                 $what_modal = "components.modal-view-site";
 
                 return \View::make($what_modal)
@@ -3304,11 +3317,11 @@ class GlobeController extends Controller
     {
         try {
 
-            // $validate = \Validator::make($request->all(), array(
-            //     'vendor' => 'required'
-            // ));
+            $validate = \Validator::make($request->all(), array(
+                'po_number' => 'required'
+            ));
             
-            // if ($validate->passes()) {
+            if ($validate->passes()) {
 
                 // \DB::connection('mysql2')->table("site")
                 //                 ->where("sam_id", $request->input("sam_id"))
@@ -3316,13 +3329,19 @@ class GlobeController extends Controller
                 //                     'site_vendor_id' => $request->input('vendor'),
                 //                 ]);
 
+                \DB::connection('mysql2')->table("site")
+                                ->where("sam_id", $request->input("sam_id"))
+                                ->update([
+                                    'site_po' => $request->input('po_number'),
+                                ]);
+
                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
 
                 return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
 
-            // } else {
-            //     return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
-            // }
+            } else {
+                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+            }
 
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
