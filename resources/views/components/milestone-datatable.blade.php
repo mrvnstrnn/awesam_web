@@ -19,13 +19,37 @@
             $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
         } else {
             $programs = \Auth::user()->getUserProgram();
+
+            $route = Route::current();
+            $slug = $route->parameters['slug'];
+            $slugs = \Auth::user()->getAllNavigation()->where('slug', $slug)->get();
+
+            $prog = \DB::table('profile_permissions')
+                ->select('program_id')
+                ->distinct()
+                ->where('permission_id', $slugs[0]->permission_id)
+                ->where('profile_id', \Auth::user()->profile_id)
+                ->get();
+
+            $allowed_programs = array();
+
+            foreach($prog as $pg){
+                array_push($allowed_programs, $pg->program_id);
+            }
+
+            $li_ctr = 0;
+
         }
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
     @foreach ($programs as $program)
+        @if(in_array($program->program_id, $allowed_programs))
+            @php
+                $li_ctr++;
+            @endphp
         <li class="nav-item">
-            @if ($loop->first)
+            @if ($li_ctr === 1)
                 @php
                     $active = "active";
                 @endphp
@@ -39,6 +63,7 @@
                 <span>{{ $program->program }}</span>
             </a>
         </li>
+        @endif
     @endforeach
 </ul>
 
@@ -68,6 +93,12 @@
             <div class="card-body">
                 <div class="tab-content">
                     @foreach ($programs as $program)
+
+                        @if(in_array($program->program_id, $allowed_programs))
+                        @php
+                            $li_ctr++;
+                        @endphp
+        
                         @if (\Auth::user()->profile_id == 6 && $program->program_id == 3)
                                                    
                             <button class="mb-3 btn btn-dark show-filters"><i class="fa fa-fw fa-lg" aria-hidden="true"></i> Filters</button>
@@ -152,6 +183,7 @@
                                     {{-- @endif --}}
                                 @endif
                            </div>
+                        @endif
                     @endforeach
                 </div>                
             </div>
