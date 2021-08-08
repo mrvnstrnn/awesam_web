@@ -214,7 +214,7 @@
                                     </div>
     
                                     <div class="table_financial_analysis table-responsive">
-                                        <table class="table">
+                                        <table class="table table-hovered">
                                             <thead>
                                                 <tr>
                                                     <th style='width: 20%'>Site ID</th>
@@ -222,7 +222,7 @@
                                                     <th>Region</th>
                                                     <th>Province</th>
                                                     <th style='width: 10%'>Gross Amount PHP (VAT EXCLUSIVE)</th>
-                                                    <th style='width: 10%;'>Action</th>
+                                                    <th style='width: 15%;'>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
