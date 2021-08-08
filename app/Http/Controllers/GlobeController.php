@@ -1920,7 +1920,7 @@ class GlobeController extends Controller
 
             } else {
 
-                if ($request->input('activity') == "Vendor Awarding of Sites") {
+                if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
                     $what_modal = "components.pr-memo-approval";
 
                     return \View::make($what_modal)
