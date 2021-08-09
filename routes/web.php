@@ -347,6 +347,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
 
+    Route::get('/export/line-items/{sam_id}', [GlobeController::class, 'export_line_items']);
+
     Route::post('/reject-site', [GlobeController::class, 'reject_site']);
 
     Route::post('/add-remarks-file', [GlobeController::class, 'add_remarks_file']);
