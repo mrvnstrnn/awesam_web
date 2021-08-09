@@ -401,7 +401,6 @@
         e.preventDefault();
         $("#create_pr_form").addClass("d-none");
         $(".reject_remarks").removeClass("d-none");
-
     });
 
     $(".cancel_reject").on("click", function(e){

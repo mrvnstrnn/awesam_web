@@ -1900,6 +1900,7 @@ class GlobeController extends Controller
                         
             $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', 'create_pr')
+                                        ->orderBy('date_created', 'desc')
                                         ->first();
 
             if($request['vendor_mode']){
