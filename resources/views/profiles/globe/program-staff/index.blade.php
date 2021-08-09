@@ -61,18 +61,12 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab-{{ $program->program_id  }}-milestones" role="tabpanel">
                         <div class="card-body">
-                            <ul class="nav">
-                                <a href="javascript:void(0);" class="nav-link active">Overall</a>
-                                <a href="javascript:void(0);" class="nav-link text-secondary">This Week</a>
-                                <a href="javascript:void(0);" class="nav-link text-secondary">This Month</a>
-                                <a href="javascript:void(0);" class="nav-link text-secondary">Last Month</a>
-                                <a href="javascript:void(0);" class="nav-link text-secondary">This Quarter</a>
-                                <a href="javascript:void(0);" class="nav-link text-secondary">Last Quarter</a>
-                            </ul>
-                            <hr>                            
                             @if($program->program_id == 6)
-                            <x-towerco-dashboard />
+                                <x-towerco-dashboard />
+                            @elseif($program->program_id == 1)
+                                @include('profiles.globe.dashboards.newsites-milestones')
                             @else
+                                
                             <p class="mb-0">
                                 STILL UNDER CONSTRUCTION
                             </p>

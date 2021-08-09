@@ -8,7 +8,7 @@
 </div>
 <div class="row pt-4">
     <div class="col-md-12">
-        <H5 id="active_action">Add SSDS</H5>
+        <H5 id="active_action">Add Target Sites</H5>
     </div>
 </div>
 <div class="row pt-3" id="ssds_table">

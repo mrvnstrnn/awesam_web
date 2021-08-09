@@ -18,6 +18,48 @@ use App\Http\Controllers\GlobeController;
 |
 */
 
+//////////////////////// TowerCo ////////////////////////
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/get-towerco', [TowerCoController::class, 'get_towerco'])->name('get_towerco');
+    Route::get('/get-towerco-all/{actor}', [TowerCoController::class, 'get_towerco_all'])->name('get_towerco_all');
+    Route::get('/get-towerco-multi/{actor}', [TowerCoController::class, 'get_towerco_multi'])->name('get_towerco_multi');
+    Route::get('/get-towerco-logs/{serial}', [TowerCoController::class, 'get_towerco_logs'])->name('get_towerco_logs');
+    Route::get('/get-towerco/{serial_number}/{actor}', [TowerCoController::class, 'get_towerco_serial'])->name('get_towerco_serial');
+    Route::post('/save-towerco', [TowerCoController::class, 'save_towerco_serial'])->name('save_towerco_serial');
+    Route::post('/save-towerco-multi', [TowerCoController::class, 'save_towerco_multi'])->name('save_towerco_multi');
+
+    Route::post('/upload-my-file-towerco', [TowerCoController::class, 'upload_my_file_towerco']);
+
+    Route::get('/get-my-towerco-file/{serial_number}/{type}', [TowerCoController::class, 'get_my_towerco_file']);
+    
+    Route::get('/get-towerco/export', [TowerCoController::class, 'TowerCoExport'])->name('TowerCoExport');
+    Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}/{actor}', [TowerCoController::class, 'filter_towerco'])->name('filter_towerco');
+
+});
+
+//////////////////////// TowerCo ////////////////////////
+
+
+//////////////////////// LocalCOOP ////////////////////////
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
+    
+    Route::get('/localcoop-details/{coop}', [LocalCoopController::class, 'get_localcoop_details'])->name('get_localcoop_details');
+
+    Route::get('/localcoop-values/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values'])->name('get_localcoop_values');
+
+    Route::get('/localcoop-values-data/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
+
+});
+
+//////////////////////// LocalCOOP ////////////////////////
+
+
+
 //ROUTE TO USER'S HOME
 Route::group(['middleware' => ['auth', 'verified']], function () {
     //Notifications
@@ -119,30 +161,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Milestone Datatable Source
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
-    Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_localcoop'])->name('get_localcoop');
-    
-    Route::get('/localcoop-details/{coop}', [GlobeController::class, 'get_localcoop_details'])->name('get_localcoop_details');
 
-    Route::get('/localcoop-values/{coop}/{type}', [GlobeController::class, 'get_localcoop_values'])->name('get_localcoop_values');
-
-    Route::get('/localcoop-values-data/{coop}/{type}', [GlobeController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
-
-
-    // TowerCo
-    Route::get('/get-towerco', [GlobeController::class, 'get_towerco'])->name('get_towerco');
-    Route::get('/get-towerco-all/{actor}', [GlobeController::class, 'get_towerco_all'])->name('get_towerco_all');
-    Route::get('/get-towerco-multi/{actor}', [GlobeController::class, 'get_towerco_multi'])->name('get_towerco_multi');
-    Route::get('/get-towerco-logs/{serial}', [GlobeController::class, 'get_towerco_logs'])->name('get_towerco_logs');
-    Route::get('/get-towerco/{serial_number}/{actor}', [GlobeController::class, 'get_towerco_serial'])->name('get_towerco_serial');
-    Route::post('/save-towerco', [GlobeController::class, 'save_towerco_serial'])->name('save_towerco_serial');
-    Route::post('/save-towerco-multi', [GlobeController::class, 'save_towerco_multi'])->name('save_towerco_multi');
-
-    Route::post('/upload-my-file-towerco', [GlobeController::class, 'upload_my_file_towerco']);
-
-    Route::get('/get-my-towerco-file/{serial_number}/{type}', [GlobeController::class, 'get_my_towerco_file']);
-    
-    Route::get('/get-towerco/export', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
-    Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}/{actor}', [GlobeController::class, 'filter_towerco'])->name('filter_towerco');
 
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);

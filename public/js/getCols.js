@@ -48,6 +48,8 @@ function getCols(active_program, active_table, active_profile){
                     );
 
                 }
+
+                
                 resp.forEach(function(field){
                     
                     switch(field['source_field']){
@@ -99,6 +101,21 @@ function getCols(active_program, active_table, active_profile){
                                         });
                                         return results.length < 1 ? "" : results[0]['value'];
                                     
+                                    }
+                                }
+                            );
+                            break;
+
+                        case "site_name":
+
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    searchable: true,
+                                    regex: true,
+                                    render : function(data,  row){
+                                        return "<strong>" + data +"</strong><br>" + row[0];
                                     }
                                 }
                             );
