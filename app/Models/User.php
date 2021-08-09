@@ -104,13 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
         $perms = ProfilePermission::join('permissions', 'permissions.id', 'profile_permissions.permission_id')
-
-                    ->select('icon', 'slug', 'menu', 'permission_id', 'sort', 'title', 'title_subheading','level_one', 'level_two', 'level_three')
+                    ->select('menu_sort', 'icon', 'slug', 'menu', 'permission_id', 'sort', 'title', 'title_subheading','level_one', 'level_two', 'level_three')
                     ->distinct()
-
-        ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
-        ->where('profile_permissions.profile_id', \Auth::user()->profile_id)
-        ->whereIn('profile_permissions.program_id', $user_programs);
+                    ->join('profiles', 'profiles.id', 'profile_permissions.profile_id')
+                    ->where('profile_permissions.profile_id', \Auth::user()->profile_id)
+                    ->whereIn('profile_permissions.program_id', $user_programs);
 
         return $perms;
 

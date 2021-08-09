@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\VendorController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GlobeController;
+use App\Http\Controllers\LocalCoopController;
+use App\Http\Controllers\TowerCoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,37 +20,144 @@ use App\Http\Controllers\GlobeController;
 |
 */
 
-//ROUTE TO USER'S HOME
+///////////////////////////////////////////////////////////
+//                                                       //
+//                   VENDOR MANAGEMENT                   //
+//                                                       //
+///////////////////////////////////////////////////////////
+
 Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/onboarding', [UserController::class, 'onboarding']);
+
+    Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');
+
+    Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
+
+    Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
+
+    Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
+
+    Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
+
+    Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');
+
+    Route::get('/vendor-data/{vendor_id}', [VendorController::class, 'get_vendor'])->name('get.vendors');
+
+    Route::get('/getVendorList/{program_status}', [VendorController::class, 'vendor_list'])->name('vendor.list');
+
+    Route::post('/terminateVendor', [VendorController::class, 'terminate_vendor'])->name('terminate.vendor');
+    
+    Route::get('/info-vendor/{vendor_id}', [VendorController::class, 'info_vendor'])->name('info.vendor');
+
+    Route::get('/site-vendor/{vendor_id}', [UserController::class, 'site_vendor'])->name('site.vendor');
+
+    Route::get('/site-vendordata/{vendor_id}', [VendorController::class, 'site_vendor_table'])->name('site.vendortable');
+
+    Route::get('/get-vendor', [VendorController::class, 'get_vendor_list'])->name('get.vendor');
+
+    Route::post('/transfer-vendor', [VendorController::class, 'transfer_vendor'])->name('transfer.vendor');
+
+    Route::post('/upload-image-file', [UserController::class, 'upload_image_file']);
+
+});
+//******************** END OF Vendor Management ********************//
+
+
+
+///////////////////////////////////////////////////////////
+//                                                       //
+//                         TOWERCO                       //
+//                                                       //
+///////////////////////////////////////////////////////////
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/get-towerco', [TowerCoController::class, 'get_towerco'])->name('get_towerco');
+    
+    Route::get('/get-towerco-all/{actor}', [TowerCoController::class, 'get_towerco_all'])->name('get_towerco_all');
+    
+    Route::get('/get-towerco-multi/{actor}', [TowerCoController::class, 'get_towerco_multi'])->name('get_towerco_multi');
+    
+    Route::get('/get-towerco-logs/{serial}', [TowerCoController::class, 'get_towerco_logs'])->name('get_towerco_logs');
+    
+    Route::get('/get-towerco/{serial_number}/{actor}', [TowerCoController::class, 'get_towerco_serial'])->name('get_towerco_serial');
+    
+    Route::post('/save-towerco', [TowerCoController::class, 'save_towerco_serial'])->name('save_towerco_serial');
+    
+    Route::post('/save-towerco-multi', [TowerCoController::class, 'save_towerco_multi'])->name('save_towerco_multi');
+
+    Route::post('/upload-my-file-towerco', [TowerCoController::class, 'upload_my_file_towerco']);
+
+    Route::get('/get-my-towerco-file/{serial_number}/{type}', [TowerCoController::class, 'get_my_towerco_file']);
+    
+    Route::get('/get-towerco/export', [TowerCoController::class, 'TowerCoExport'])->name('TowerCoExport');
+    
+    Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}/{actor}', [TowerCoController::class, 'filter_towerco'])->name('filter_towerco');
+
+});
+//******************** END OF TowerCo ********************//
+
+
+
+///////////////////////////////////////////////////////////
+//                                                       //
+//                       LocalCOOP                       //
+//                                                       //
+///////////////////////////////////////////////////////////
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
+    
+    Route::get('/localcoop-details/{coop}', [LocalCoopController::class, 'get_localcoop_details'])->name('get_localcoop_details');
+
+    Route::get('/localcoop-values/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values'])->name('get_localcoop_values');
+
+    Route::get('/localcoop-values-data/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
+
+});
+//******************* END OF LocalCOOP *******************//
+
+
+
+///////////////////////////////////////////////////////////
+//                                                       //
+//                         Unused                        //
+//                                                       //
+///////////////////////////////////////////////////////////
+
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
+
+
+});
+//******************* END OF Unused *******************//
+
+
+
+///////////////////////////////////////////////////////////
+//                                                       //
+//                     Multi Program                     //
+//                                                       //
+///////////////////////////////////////////////////////////
+
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/', [UserController::class, 'index']);
+
+
     //Notifications
     Route::get('/notifications', [UserController::class, 'notifications'])->name('notifications');
     Route::get('/read-notification/{id}/{action}', [UserController::class, 'read_notifications']);
 
 
     Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
-    Route::get('/', [UserController::class, 'index']);
-    Route::get('/onboarding', [UserController::class, 'onboarding']);
-    Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');
-    Route::post('/send-invitation', [InviteController::class, 'send_invitation'])->name('invite.send');
-    Route::post('/change-password', [UserController::class, 'change_password'])->name('update.password');
-    Route::post('/finish-onboarding', [UserController::class, 'finish_onboarding'])->name('finish.onboarding');
-    Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
-    Route::post('/upload-image-file', [UserController::class, 'upload_image_file']);
-
-    Route::post('/add-vendor', [VendorController::class, 'add_vendor'])->name('add.vendor');
-    Route::get('/all-vendor-list', [VendorController::class, 'all_vendor'])->name('all.vendors');
-    Route::get('/vendor-data/{vendor_id}', [VendorController::class, 'get_vendor'])->name('get.vendors');
-    Route::get('/getVendorList/{program_status}', [VendorController::class, 'vendor_list'])->name('vendor.list');
-    Route::post('/terminateVendor', [VendorController::class, 'terminate_vendor'])->name('terminate.vendor');
 
     
-    Route::get('/info-vendor/{vendor_id}', [VendorController::class, 'info_vendor'])->name('info.vendor');
-    Route::get('/site-vendor/{vendor_id}', [UserController::class, 'site_vendor'])->name('site.vendor');
-    Route::get('/site-vendordata/{vendor_id}', [VendorController::class, 'site_vendor_table'])->name('site.vendortable');
-    Route::get('/get-vendor', [VendorController::class, 'get_vendor_list'])->name('get.vendor');
-
-    Route::post('/transfer-vendor', [VendorController::class, 'transfer_vendor'])->name('transfer.vendor');
-
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');
@@ -118,31 +227,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Milestone Datatable Source
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
-
-    Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_localcoop'])->name('get_localcoop');
-    
-    Route::get('/localcoop-details/{coop}', [GlobeController::class, 'get_localcoop_details'])->name('get_localcoop_details');
-
-    Route::get('/localcoop-values/{coop}/{type}', [GlobeController::class, 'get_localcoop_values'])->name('get_localcoop_values');
-
-    Route::get('/localcoop-values-data/{coop}/{type}', [GlobeController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
-
-
-    // TowerCo
-    Route::get('/get-towerco', [GlobeController::class, 'get_towerco'])->name('get_towerco');
-    Route::get('/get-towerco-all/{actor}', [GlobeController::class, 'get_towerco_all'])->name('get_towerco_all');
-    Route::get('/get-towerco-multi/{actor}', [GlobeController::class, 'get_towerco_multi'])->name('get_towerco_multi');
-    Route::get('/get-towerco-logs/{serial}', [GlobeController::class, 'get_towerco_logs'])->name('get_towerco_logs');
-    Route::get('/get-towerco/{serial_number}/{actor}', [GlobeController::class, 'get_towerco_serial'])->name('get_towerco_serial');
-    Route::post('/save-towerco', [GlobeController::class, 'save_towerco_serial'])->name('save_towerco_serial');
-    Route::post('/save-towerco-multi', [GlobeController::class, 'save_towerco_multi'])->name('save_towerco_multi');
-
-    Route::post('/upload-my-file-towerco', [GlobeController::class, 'upload_my_file_towerco']);
-
-    Route::get('/get-my-towerco-file/{serial_number}/{type}', [GlobeController::class, 'get_my_towerco_file']);
-    
-    Route::get('/get-towerco/export', [GlobeController::class, 'TowerCoExport'])->name('TowerCoExport');
-    Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}/{actor}', [GlobeController::class, 'filter_towerco'])->name('filter_towerco');
 
     // Site issues
     Route::get('/get-site-issue-details/{issue_id}/{what_table}', [GlobeController::class, 'get_site_issues']);
@@ -274,6 +358,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-coloc-filter/{site_type}/{program}/{technology}', [GlobeController::class, 'get_coloc_filter']);
 
 });
+
+//******************* END OF Multi Program *******************//
+
 
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
 
