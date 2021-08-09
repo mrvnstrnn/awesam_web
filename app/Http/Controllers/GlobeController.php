@@ -1900,6 +1900,7 @@ class GlobeController extends Controller
                         
             $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', 'create_pr')
+                                        ->orderBy('date_created', 'desc')
                                         ->first();
 
             if($request['vendor_mode']){
@@ -3287,6 +3288,17 @@ class GlobeController extends Controller
                 $sites = PrMemoSite::where('pr_memo_id', $request->input('pr_memo'))->get();
 
                 foreach ($sites as $site) {
+                    
+                    SubActivityValue::where('sam_id', $site->sam_id)
+                                        ->where('type', "recommend_pr")
+                                        ->update([
+                                            'value' => $request->input("recommendation_site"),
+                                            'user_id' => \Auth::id(),
+                                            'approver_id' => \Auth::id(),
+                                            'status' => "pending",
+                                            'date_created' => Carbon::now()->toDate(),
+                                        ]);
+
                     SubActivityValue::where('sam_id', $site->sam_id)
                                         ->where('type', "create_pr")
                                         ->update([
@@ -3297,7 +3309,7 @@ class GlobeController extends Controller
                                         ]);
     
                     if ($request->input("data_action") == "false") {
-                        $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                        $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
                     }
                 }
 
