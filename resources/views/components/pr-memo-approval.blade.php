@@ -6,6 +6,7 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0);
     }   
 </style> 
+
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
@@ -19,9 +20,6 @@
                                 <div class="menu-header-content btn-pane-right">
                                         <h5 class="menu-header-title">
                                             {{ $site_name }}
-                                            {{-- @if($site[0]->site_category != 'none')
-                                                <span class="mr-3 badge badge-secondary"><small>{{ $site[0]->site_category }}</small></span>
-                                            @endif --}}
                                         </h5>
                                 </div>
                             </div>
@@ -91,7 +89,7 @@
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <label for="vendor">Vendor</label>
-                                                                <input type="text" class="form-control" name="vendor" id="vendor" readonly value="{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})">
+                                                                <input type="text" class="form-control" data-id="{{ $json['vendor'] }}" name="vendor" id="vendor" readonly value="{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -184,13 +182,16 @@
                                                 {{-- </form> --}}
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
-                                                <div class="table-responsive">
+                                                
+                                                <div class="line_items_area p-3" class="d-none"></div>
+                                                <div class="table-responsive pr_memo_site_table">
                                                     <table class="table table-hover pr_memo_site">
                                                         <thead>
                                                             <tr>
                                                                 <th>SAM ID</th>
                                                                 <th>Site Name</th>
                                                                 <th>Site Address</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -199,6 +200,7 @@
                                                                 <td>{{ $generated_pr_memo->sam_id }}</td>
                                                                 <td>{{ $generated_pr_memo->site_name }}</td>
                                                                 <td>{{ $generated_pr_memo->site_address }}</td>
+                                                                <td><button class="btn btn-sm btn-shadow btn-primary view-line-items" data-sam_id='{{ $generated_pr_memo->sam_id }}'>View line items</button></td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
@@ -242,7 +244,14 @@
                                         
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @if (\Auth::user()->profile_id == 10)
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
+
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr d-none" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @else
+
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @endif
 
                                             <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                         @endif
@@ -278,6 +287,10 @@
 </div>
 
 <script>
+
+    $(document).on("click", ".recommend, .no_thanks", function(e){
+        $(".approve_reject_pr[data-data_action=true]").trigger("click");
+    });
     
     $(".approve_reject_pr, .confirm_reject").on("click", function(e){
         e.preventDefault();
@@ -330,6 +343,7 @@
             }
         } else {
             $(".reject_form small").text("");
+            var recommendation_site = $("#recommendation_site").val();
             var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
             url = "/approve-reject-pr-memo";
             data = {
@@ -338,7 +352,8 @@
                 data_action : data_action,
                 id : id,
                 remarks : remarks,
-                pr_memo : pr_memo
+                pr_memo : pr_memo,
+                recommendation_site : recommendation_site
             }
         }
 
@@ -353,6 +368,7 @@
                 if(!resp.error){
                     $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
+                        $("#recommendationModal").modal("hide");
                         Swal.fire(
                             'Success',
                             resp.message,
@@ -400,7 +416,6 @@
         e.preventDefault();
         $("#create_pr_form").addClass("d-none");
         $(".reject_remarks").removeClass("d-none");
-
     });
 
     $(".cancel_reject").on("click", function(e){
@@ -411,6 +426,74 @@
     });
 
     $(".pr_memo_site").DataTable();
+
+
+    $(document).on("click", ".view-line-items", function (e){
+        e.preventDefault();
+
+        var sam_id = $(this).attr('data-sam_id');
+        
+        var vendor = $("#vendor").attr('data-id');
+
+        $("#viewInfoModal .line_items_area").removeClass("d-none");
+        $("#viewInfoModal .pr_memo_site_table").addClass("d-none");
+
+        $(".line_items_area div").remove();
+
+        $.ajax({
+            url: "/get-line-items/" + sam_id + "/" +vendor,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".line_items_area").append(
+                                '<div><label><b>'+index+'</b></label></div>'
+                            );
+
+                            $.each(data, function(i, checkbox_data) {
+                                $(".line_items_area").append(
+                                    '<div class="form-group">' +
+                                    '<input type="checkbox" data-text="'+ $("#viewInfoModal .menu-header-title").text() +'" disabled="disabled" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
+                                    '</label></div>'
+                                );
+                            });
+                        });
+
+
+                        resp.site_items.forEach(element => {
+                            $("input[value='" + element.fsa_id + "']").prop('checked', true);
+                        });
+
+                        $(".line_items_area").append(
+                            '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button></div>'
+                        );
+
+                        $("#viewInfoModal .menu-header-title").text(sam_id);
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });        
+    });
+
+    $(document).on("click", ".cancel_line_items", function(e){
+        $("#viewInfoModal .menu-header-title").text( $(this).attr("data-text") );
+        $("#viewInfoModal .line_items_area").addClass("d-none");
+        $("#viewInfoModal .pr_memo_site_table").removeClass("d-none");
+    });
     
 
 </script>
