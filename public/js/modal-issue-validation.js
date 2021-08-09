@@ -4,13 +4,13 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
     var what_table = $(this).attr("data-what_table");
 
     $(".resolve_issue").attr("data-what_table", what_table);
-
+    var site = $(this).attr("data-site");
     $.ajax({
         url: "/get-site-issue-details/" + $(this).attr("data-issue_id") + "/" + $(this).attr("data-what_table"),
         method: "GET",
         success: function (resp) {
             if (!resp.error) {
-
+                $("#viewIssueModal .menu-header-title").text(site);
                 $(".update_issue_form input[name=hidden_issue_id]").val(resp.site.issue_id);
                 $(".update_issue_form input[name=issue]").val(resp.site.issue);
                 $(".update_issue_form input[name=start_date]").val(resp.site.start_date);
