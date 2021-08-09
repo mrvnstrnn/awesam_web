@@ -6,6 +6,7 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0);
     }   
 </style> 
+
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
@@ -243,7 +244,14 @@
                                         
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @if (\Auth::user()->profile_id == 10)
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
+
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr d-none" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @else
+
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                            @endif
 
                                             <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                         @endif
@@ -279,6 +287,10 @@
 </div>
 
 <script>
+
+    $(document).on("click", ".recommend, .no_thanks", function(e){
+        $(".approve_reject_pr[data-data_action=true]").trigger("click");
+    });
     
     $(".approve_reject_pr, .confirm_reject").on("click", function(e){
         e.preventDefault();
@@ -331,6 +343,7 @@
             }
         } else {
             $(".reject_form small").text("");
+            var recommendation_site = $("#recommendation_site").val();
             var button_text = data_action == "false" ? "Reject PR" : "Approve PR";
             url = "/approve-reject-pr-memo";
             data = {
@@ -339,7 +352,8 @@
                 data_action : data_action,
                 id : id,
                 remarks : remarks,
-                pr_memo : pr_memo
+                pr_memo : pr_memo,
+                recommendation_site : recommendation_site
             }
         }
 
@@ -354,6 +368,7 @@
                 if(!resp.error){
                     $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
+                        $("#recommendationModal").modal("hide");
                         Swal.fire(
                             'Success',
                             resp.message,
