@@ -19,7 +19,8 @@
                                 <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                 <div class="menu-header-content btn-pane-right">
                                         <h5 class="menu-header-title">
-                                            {{ $site_name }}
+                                            {{-- {{ $site_name }} --}}
+                                            PR Memo
                                         </h5>
                                 </div>
                             </div>
@@ -32,29 +33,54 @@
                                         $json = json_decode($pr_memo->value, true);
                                     @endphp
                                     <ul class="tabs-animated body-tabs-animated nav mb-4">
-                                        <li class="nav-item">
+                                        <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link active" id="tab-action-details" data-toggle="tab" href="#tab-content-action-details">
                                                 <span>Details</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-sites">
                                                 <span>Sites</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-pdf">
                                                 <span>PDF</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
+                                            <a role="tab" class="nav-link" id="tab-approvals" data-toggle="tab" href="#tab-content-approvals">
+                                                <span>Approvals</span>
                                             </a>
                                         </li>
                                     </ul>
 
                                     <form id="create_pr_form">
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            <div class="form-group">
+                                        <div class="text-center my-5">
+                                            <i class="fa fa-file-pdf display-1"></i><br>
+                                            <small>{{ $json['file_name'] }}</small>
+                                        </div>
+                                        <p>
+                                            Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
+
+                                            If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.
+                                        </p>
+                                        {{-- <div class="text-center my-5">
+                                            <a target="_blank" href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}">
+                                                <i class="fa fa-file display-1"></i>
+                                                <H5>Download PDF</H5>
+                                            </a>
+                                            <small>{{ $json['file_name'] }}</small>
+                                        </div> --}}
+
+                                            <div class="form-group pr_number_area d-none">
                                                 <label for="pr_number">PR #</label>
-                                                <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                                                <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
                                                 <small class="pr_number-error text-danger"></small>
+                                                {{-- <small>Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
+
+                                                    If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.</small> --}}
                                             </div>
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
@@ -71,7 +97,7 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="po_number">PO #</label>
-                                                        <input type="text" name="po_number" id="po_number" class="form-control">
+                                                        <input type="text" name="po_number" id="po_number" autofocus class="form-control">
                                                         <small class="po_number-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -81,7 +107,9 @@
                                             <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
 
                                                 {{-- <form> --}}
+                                                <div class="form_details_pr {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                                     @php
+                                                        $pr_sam_id = collect();
                                                         $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
                                                         $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
                                                     @endphp
@@ -179,6 +207,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                                 {{-- </form> --}}
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
@@ -196,11 +225,14 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($generated_pr_memos as $generated_pr_memo)
+                                                            @php
+                                                                $pr_sam_id->push($generated_pr_memo->sam_id);
+                                                            @endphp
                                                             <tr>
                                                                 <td>{{ $generated_pr_memo->sam_id }}</td>
                                                                 <td>{{ $generated_pr_memo->site_name }}</td>
                                                                 <td>{{ $generated_pr_memo->site_address }}</td>
-                                                                <td><button class="btn btn-sm btn-shadow btn-primary view-line-items" data-sam_id='{{ $generated_pr_memo->sam_id }}'>View line items</button></td>
+                                                                <td><button class="btn btn-sm btn-shadow btn-primary view-line-items" type="button" data-sam_id='{{ $generated_pr_memo->sam_id }}'>View line items</button></td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
@@ -233,15 +265,53 @@
                                                     
                                                 {{-- </form> --}}
                                             </div>
-                                            
+                                            <div class="tab-pane tabs-animation fade" id="tab-content-approvals" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hovered pr_approval">
+                                                        @php
+                                                            // print_r($pr_sam_id->all());
+                                                            $approval_sites = \App\Models\SubActivityValue::whereIn('sam_id', $pr_sam_id->all())
+                                                                                                                ->whereIn('type', ['create_pr'])
+                                                                                                                ->get();
+                                                        @endphp
+                                                        <thead>
+                                                            <tr>
+                                                                <th>SAM ID</th>
+                                                                <th>Type</th>
+                                                                <th>Created By</th>
+                                                                <th>Date Created</th>
+                                                                <th>Date Approved</th>
+                                                                <th>Approver</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($approval_sites as $approval_site)
+                                                            @php
+                                                                $creator = \App\Models\User::select('name')->where('id', $approval_site->user_id)->first();
+                                                                $approver = \App\Models\User::select('name')->where('id', $approval_site->approver_id)->first();
+                                                            @endphp
+                                                            <tr>
+                                                                <td>{{ $approval_site->sam_id }}</td>
+                                                                <td>{{ $approval_site->type }}</td>
+                                                                <td>{{ $creator->name }}</td>
+                                                                <td>{{ $approval_site->date_created }}</td>
+                                                                <td>{{ is_null($approval_site) ? "Not yet approved." : $approval_site->date_approved }}</td>
+                                                                <td>{{ is_null($approver) ? "Not yet approved." : $approver->name }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                             
                                         </div>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
+
+                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1">Download PDF</a>
                                         @elseif ($activity == "Vendor Awarding of Sites")
-                                        
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
                                             @if (\Auth::user()->profile_id == 10)
@@ -288,6 +358,24 @@
 
 <script>
 
+    $(".pr_memo_site").DataTable();
+    $(".pr_approval").DataTable();
+
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+    });
+
+    $(".form_details").on("click", function(e){
+        
+        e.preventDefault();
+
+        $(".pr_number_area").removeClass("d-none");
+        $(".form_details_pr").removeClass("d-none");
+        $(".approve_reject_pr").removeClass("d-none");
+
+        $(".form_details").addClass("d-none");
+    });
+
     $(document).on("click", ".recommend, .no_thanks", function(e){
         $(".approve_reject_pr[data-data_action=true]").trigger("click");
     });
@@ -316,7 +404,7 @@
             var sam_id = [sam_id];
             var pr_number = $("#pr_number").val();
 
-            var button_text = "Set PR";
+            var button_text = "Set PR Number";
 
             data = {
                 sam_id : sam_id,
@@ -425,10 +513,7 @@
 
     });
 
-    $(".pr_memo_site").DataTable();
-
-
-    $(document).on("click", ".view-line-items", function (e){
+    $(".view-line-items").on("click", function (e){
         e.preventDefault();
 
         var sam_id = $(this).attr('data-sam_id');
@@ -453,9 +538,10 @@
 
                             $.each(data, function(i, checkbox_data) {
                                 $(".line_items_area").append(
+                                    '<div class="col-md-6 col-12">' +
                                     '<div class="form-group">' +
                                     '<input type="checkbox" data-text="'+ $("#viewInfoModal .menu-header-title").text() +'" disabled="disabled" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
-                                    '</label></div>'
+                                    '</label></div></div>'
                                 );
                             });
                         });
@@ -466,7 +552,7 @@
                         });
 
                         $(".line_items_area").append(
-                            '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button></div>'
+                            '<div><form action="/export/line-items/'+sam_id+'" method="GET" target="_blank"><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button> <button type="submit" class="btn btn-shadow btn-sm btn-success" type="submit">Export Line Items</button></form></div>'
                         );
 
                         $("#viewInfoModal .menu-header-title").text(sam_id);
@@ -490,7 +576,9 @@
     });
 
     $(document).on("click", ".cancel_line_items", function(e){
-        $("#viewInfoModal .menu-header-title").text( $(this).attr("data-text") );
+        e.preventDefault();
+        
+        $("#viewInfoModal .menu-header-title").text( "PR Memo" );
         $("#viewInfoModal .line_items_area").addClass("d-none");
         $("#viewInfoModal .pr_memo_site_table").removeClass("d-none");
     });

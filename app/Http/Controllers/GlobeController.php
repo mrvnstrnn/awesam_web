@@ -26,8 +26,9 @@ use App\Models\FsaLineItem;
 
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
-// use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
+use App\Exports\SiteLineItemsExport;
 
 use Illuminate\Support\Facades\Schema;
 use Validator;
@@ -149,18 +150,26 @@ class GlobeController extends Controller
                                             'site_po' => $request->input('po_number'),
                                         ]);
                     }
+
+                // } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                //     $validate = Validator::make($request->all(), array(
+                //         'pr_number' => 'required',
+                //     ));
+                //     if (!$validate->passes()) {
+                //         return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                //     }
                 } else {
                     $validate = Validator::make($request->all(), array(
                         'pr_number' => 'required',
                     ));
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
-                    } else {
-                        \DB::connection('mysql2')->table("site")
-                                        ->where("sam_id", $request->input("sam_id"))
-                                        ->update([
-                                            'site_pr' => $request->input('pr_number'),
-                                        ]);
+                    // } else {
+                    //     \DB::connection('mysql2')->table("site")
+                    //                     ->where("sam_id", $request->input("sam_id"))
+                    //                     ->update([
+                    //                         'site_pr' => $request->input('pr_number'),
+                    //                     ]);
                     }
                 }
             }
@@ -177,21 +186,44 @@ class GlobeController extends Controller
                 $notification = "RTB Docs successfully approved";
             } else if ($request->input('activity_name') == "Vendor Awarding") {
                 $notification = "Successfully awarded.";
-            } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
-                $notification = "Successfully set PR Number.";
-            } else {
-                $notification = "Success";
-            }
-            
-            if ($request->input('activity_name') == "Vendor Awarding") {
                 $vendor = $request->input('vendor');
                 $action = $request->input('data_action');
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
+
+                $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id')[0])->first();
+
+                $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
+
+                foreach ($sites as $site) {
+                    SiteEndorsementEvent::dispatch($site->sam_id);
+
+                    \DB::connection('mysql2')->table("site")
+                                        ->where("sam_id", $site->sam_id)
+                                        ->update([
+                                            'site_pr' => $request->input('pr_number'),
+                                        ]);
+
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
+                }
+
+                return response()->json(['error' => false, 'message' => $notification ]);
             } else {
+                $notification = "Success";
                 $vendor = $request->input('site_vendor_id');
                 $action = $request->input('data_complete');
             }
+            
+            // if ($request->input('activity_name') == "Vendor Awarding") {
+            //     $vendor = $request->input('vendor');
+            //     $action = $request->input('data_action');
+            // } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+            //     $action = $request->input('data_action');
+            // } else {
+            //     $vendor = $request->input('site_vendor_id');
+            //     $action = $request->input('data_complete');
+            // }
             for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
@@ -3189,19 +3221,31 @@ class GlobeController extends Controller
             
             if ($validate->passes()) {
 
+                $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id'))->first();
+
+                $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
+
+                foreach ($sites as $site) {
+                    SiteEndorsementEvent::dispatch($site->sam_id);
+
+                    \DB::connection('mysql2')->table("site")
+                                        ->where("sam_id", $site->sam_id)
+                                        ->update([
+                                            'site_po' => $request->input('po_number'),
+                                        ]);
+
+                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                }
+
+
+
                 // \DB::connection('mysql2')->table("site")
                 //                 ->where("sam_id", $request->input("sam_id"))
                 //                 ->update([
-                //                     'site_vendor_id' => $request->input('vendor'),
+                //                     'site_po' => $request->input('po_number'),
                 //                 ]);
 
-                \DB::connection('mysql2')->table("site")
-                                ->where("sam_id", $request->input("sam_id"))
-                                ->update([
-                                    'site_po' => $request->input('po_number'),
-                                ]);
-
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
 
                 return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
 
@@ -3212,6 +3256,11 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    public function export_line_items($sam_id)
+    {
+        return Excel::download(new SiteLineItemsExport($sam_id), $sam_id.'.xlsx');
     }
 
     public function add_remarks_file (Request $request)
