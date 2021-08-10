@@ -180,10 +180,13 @@ class GlobeController extends Controller
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
             if ($request->input('activity_name') == "endorse_site") {
                 $notification = "Successfully " .$message. " endorsement.";
+                $action = $request->input('data_complete');
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
                 $notification = "Site successfully " .$message;
+                $action = $request->input('data_complete');
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
                 $notification = "RTB Docs successfully approved";
+                $action = $request->input('data_complete');
             } else if ($request->input('activity_name') == "Vendor Awarding") {
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
