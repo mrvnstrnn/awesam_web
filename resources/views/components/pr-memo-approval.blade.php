@@ -33,7 +33,7 @@
                                         $json = json_decode($pr_memo->value, true);
                                     @endphp
                                     <ul class="tabs-animated body-tabs-animated nav mb-4">
-                                        <li class="nav-item">
+                                        <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link active" id="tab-action-details" data-toggle="tab" href="#tab-content-action-details">
                                                 <span>Details</span>
                                             </a>
@@ -58,18 +58,29 @@
                                     <form id="create_pr_form">
                                         @if ($activity == "Set Ariba PR Number to Sites")
                                         <div class="text-center my-5">
-                                            <a target="_blank" href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}">
-                                                <i class="fa fa-file display-1"></i>
-                                                <H5>Download Document</H5>
-                                            </a>
+                                            <i class="fa fa-file-pdf display-1"></i><br>
                                             <small>{{ $json['file_name'] }}</small>
                                         </div>
+                                        <p>
+                                            Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
 
-                                            <div class="form-group">
+                                            If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.
+                                        </p>
+                                        {{-- <div class="text-center my-5">
+                                            <a target="_blank" href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}">
+                                                <i class="fa fa-file display-1"></i>
+                                                <H5>Download PDF</H5>
+                                            </a>
+                                            <small>{{ $json['file_name'] }}</small>
+                                        </div> --}}
+
+                                            <div class="form-group pr_number_area d-none">
                                                 <label for="pr_number">PR #</label>
                                                 <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
                                                 <small class="pr_number-error text-danger"></small>
-                                                <small>Note: Please download the approved PR Memo and use it in your Arriba submission. If you already have an Arriba issued PR Number click on Set PR Number button now.</small>
+                                                {{-- <small>Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
+
+                                                    If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.</small> --}}
                                             </div>
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
@@ -96,7 +107,7 @@
                                             <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
 
                                                 {{-- <form> --}}
-                                                <div class="{{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
+                                                <div class="form_details_pr {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                                     @php
                                                         $pr_sam_id = collect();
                                                         $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
@@ -296,7 +307,10 @@
                                         </div>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
+
+                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1">Download PDF</a>
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
@@ -349,6 +363,17 @@
 
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();
+    });
+
+    $(".form_details").on("click", function(e){
+        
+        e.preventDefault();
+
+        $(".pr_number_area").removeClass("d-none");
+        $(".form_details_pr").removeClass("d-none");
+        $(".approve_reject_pr").removeClass("d-none");
+
+        $(".form_details").addClass("d-none");
     });
 
     $(document).on("click", ".recommend, .no_thanks", function(e){
