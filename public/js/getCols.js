@@ -139,6 +139,18 @@ function getCols(active_program, active_table, active_profile){
                             );
                             break;
 
+                        case 'pr_memo_id':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        return data ? data : "";
+                                    }
+                                }
+                            );
+                            break;
+
                         default:
                             cols.push(
                                 {
