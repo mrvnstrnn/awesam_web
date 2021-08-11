@@ -110,6 +110,7 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->where('profile_permissions.profile_id', \Auth::user()->profile_id)
                     ->whereIn('profile_permissions.program_id', $user_programs);
 
+
         return $perms;
 
     }
