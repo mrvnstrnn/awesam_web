@@ -49,7 +49,7 @@
                                         </li>
                                         <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-pdf">
-                                                <span>PDF</span>
+                                                <span>Preview</span>
                                             </a>
                                         </li>
                                         <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
@@ -216,10 +216,8 @@
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
                                                 
-                                                <div class="line_items_area p-3" class="d-none"></div>
-                                                {{-- <form action="/export/line-items/{{ $json['generated_pr_memo'] }}" method="GET" target="_blank"> --}}
-                                                    <button class="btn btn-sm btn-shadow btn-success pull-right my-3 export_button" type="button">Export Line Items</button>
-                                                {{-- </form> --}}
+                                                <div class="line_items_area" class="d-none"></div>
+                                                    {{-- <button class="btn btn-sm btn-shadow btn-success pull-right my-3 export_button" type="button">Export Line Items</button> --}}
                                                 <div class="table-responsive pr_memo_site_table">
                                                     <table class="table table-hover pr_memo_site">
                                                         <thead>
@@ -269,6 +267,10 @@
                                                         <label for="pr_file">PR Memo File</label>
                                                         <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen></iframe>
                                                     </div>
+
+                                                    <div class="my-3">
+                                                        <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
+                                                    </div>
                                                     
                                                 {{-- </form> --}}
                                             </div>
@@ -312,6 +314,8 @@
                                             </div>
                                             
                                         </div>
+
+                                        <hr>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>

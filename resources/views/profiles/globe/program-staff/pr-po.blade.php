@@ -241,7 +241,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR/PO</button>
+                                <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR Memo</button>
                                 <button type="submit" class="print_to_pdf d-none"></button>
                             </div>
                         </form>
