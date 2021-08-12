@@ -321,7 +321,7 @@
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
                                             <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
-                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1 my-3">Download PDF</a>
+                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1">Download PDF</a>
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
