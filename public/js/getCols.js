@@ -115,7 +115,9 @@ function getCols(active_program, active_table, active_profile){
                                     searchable: true,
                                     regex: true,
                                     render : function(data,  row){
-                                        return "<strong>" + data +"</strong><br>" + row[0];
+                                        // return "<strong>" + data +"</strong><br>" + row[0];
+                                        return "<strong>" + data +"</strong><br>";
+                                        // return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] + '</small>';
                                     }
                                 }
                             );
@@ -134,6 +136,18 @@ function getCols(active_program, active_table, active_profile){
                                         } else {
                                             return "";
                                         }
+                                    }
+                                }
+                            );
+                            break;
+
+                        case 'pr_memo_id':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        return data ? data : "";
                                     }
                                 }
                             );

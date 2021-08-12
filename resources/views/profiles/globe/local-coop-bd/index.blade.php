@@ -20,6 +20,14 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
+
+    label {
+        text-transform: uppercase;
+    }
+
+    .table_issues_child thead th, .table_history_child thead th, .table_engagements_child thead th, .table_contact_child thead th {
+        font-size: 11px !important;
+    }
 </style>
 
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -260,7 +268,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <div id="issue_history_box" class="d-none">
+                            <div id="issue_history_box" class="d-none mt-5">
                                 <div class="row border-bottom mb-3">
                                     <div class="col-sm-6">
                                         <H5>Issue History</H5>
@@ -751,7 +759,7 @@
 
                         Object.keys(columns).forEach(function (key, index){
                             field_name = key.charAt(0).toUpperCase() + key.slice(1);
-                            html = html + "<div class='row'><div class='col-5'>" + field_name.split('_').join(' ') + "</div><div class='col-7'><input class='form-control mb-2' type='text' value='" + columns[key] + "' readonly /></div></div>";
+                            html = html + "<div class='row'><div class='col-5'><label>" + field_name.split('_').join(' ') + "</label></div><div class='col-7'><input class='form-control mb-2' type='text' value='" + columns[key] + "' readonly /></div></div>";
                         });
 
                         $('#tab-coop-details').html(html);

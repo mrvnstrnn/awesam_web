@@ -32,6 +32,10 @@
                                     @php
                                         $json = json_decode($pr_memo->value, true);
                                     @endphp
+                                    
+                                    <form class="d-none" action="/export/line-items/{{ $json['generated_pr_memo'] }}" method="GET" target="_blank">
+                                        <button class="btn btn-sm btn-shadow btn-success pull-right my-3 export_all_line_tems" type="submit">Export Line Items</button>
+                                    </form>
                                     <ul class="tabs-animated body-tabs-animated nav mb-4">
                                         <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link active" id="tab-action-details" data-toggle="tab" href="#tab-content-action-details">
@@ -45,7 +49,7 @@
                                         </li>
                                         <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                             <a role="tab" class="nav-link" id="tab-sites" data-toggle="tab" href="#tab-content-pdf">
-                                                <span>PDF</span>
+                                                <span>Preview</span>
                                             </a>
                                         </li>
                                         <li class="nav-item {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
@@ -212,7 +216,8 @@
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-sites" role="tabpanel">
                                                 
-                                                <div class="line_items_area p-3" class="d-none"></div>
+                                                <div class="line_items_area" class="d-none"></div>
+                                                    {{-- <button class="btn btn-sm btn-shadow btn-success pull-right my-3 export_button" type="button">Export Line Items</button> --}}
                                                 <div class="table-responsive pr_memo_site_table">
                                                     <table class="table table-hover pr_memo_site">
                                                         <thead>
@@ -262,6 +267,10 @@
                                                         <label for="pr_file">PR Memo File</label>
                                                         <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen></iframe>
                                                     </div>
+
+                                                    <div class="my-3">
+                                                        <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
+                                                    </div>
                                                     
                                                 {{-- </form> --}}
                                             </div>
@@ -305,25 +314,27 @@
                                             </div>
                                             
                                         </div>
+
+                                        <hr>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
                                             <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
-                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1">Download PDF</a>
+                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1 my-3">Download PDF</a>
                                         @elseif ($activity == "Vendor Awarding of Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
                                             @if (\Auth::user()->profile_id == 10)
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 my-3" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
 
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr d-none" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr d-none my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
                                             @else
 
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
                                             @endif
 
-                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr my-3">Reject PR</button>
                                         @endif
 
                                     </form>
@@ -364,6 +375,11 @@
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();
     });
+
+    $(".export_button").on("click", function(){
+        $(".export_all_line_tems").trigger("click");
+    });
+    
 
     $(".form_details").on("click", function(e){
         
@@ -552,7 +568,8 @@
                         });
 
                         $(".line_items_area").append(
-                            '<div><form action="/export/line-items/'+sam_id+'" method="GET" target="_blank"><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button> <button type="submit" class="btn btn-shadow btn-sm btn-success" type="submit">Export Line Items</button></form></div>'
+                            // '<div><form action="/export/line-items/'+sam_id+'" method="GET" target="_blank"><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button> <button type="submit" class="btn btn-shadow btn-sm btn-success" type="submit">Export Line Items</button></form></div>'
+                            '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Back to site list</button></div>'
                         );
 
                         $("#viewInfoModal .menu-header-title").text(sam_id);

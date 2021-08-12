@@ -29,6 +29,7 @@ use App\Models\FsaLineItem;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\SiteLineItemsExport;
+use App\Exports\PerSheetPrExport;
 
 use Illuminate\Support\Facades\Schema;
 use Validator;
@@ -1449,7 +1450,9 @@ class GlobeController extends Controller
         elseif($activity_type == 'site prmemo'){
             $sites = \DB::connection('mysql2') 
                             ->table("milestone_tracking")
+                            ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr')
                             ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
+                            ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
                             ->where('milestone_tracking.program_id', $program_id)
                             ->where('milestone_tracking.activity_type', 'PR / PO')
                             ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
@@ -3261,9 +3264,9 @@ class GlobeController extends Controller
         }
     }
 
-    public function export_line_items($sam_id)
+    public function export_line_items($generated_pr)
     {
-        return Excel::download(new SiteLineItemsExport($sam_id), $sam_id.'.xlsx');
+        return Excel::download(new PerSheetPrExport($generated_pr), strtolower($generated_pr).'.xlsx');
     }
 
     public function add_remarks_file (Request $request)
