@@ -259,7 +259,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'site_approvals';
+    var table_to_load = 'pr_po';
     // var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////

@@ -114,9 +114,6 @@ function getCols(active_program, active_table, active_profile){
                                     name: field['field_name'],
                                     searchable: true,
                                     regex: true,
-                                    render : function(data,  row){
-                                        return "<strong>" + data +"</strong><br>" + row[0];
-                                    }
                                 }
                             );
                             break;
