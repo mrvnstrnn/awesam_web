@@ -1450,7 +1450,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'site prmemo'){
             $sites = \DB::connection('mysql2') 
                             ->table("milestone_tracking")
-                            ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr')
+                            ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
                             ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
                             ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
                             ->where('milestone_tracking.program_id', $program_id)
