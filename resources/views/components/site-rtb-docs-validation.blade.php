@@ -18,16 +18,17 @@
     @endphp
 
     @forelse ($datas as $data)
-        @if (is_null($data->files))
-            <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
+        {{-- @if (is_null($data->files)) --}}
+            {{-- <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
                 <div class="dropzone dropzone_files" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                     <div class="dz-message">
                         <i class="fa fa-plus fa-3x"></i>
                         <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
                     </div>
                 </div>
-            </div>
-        @else
+            </div> --}}
+        {{-- @else --}}
+        @if (!is_null($data->files))
             @php
                 $uploaded_files = json_decode($data->files);
 

@@ -241,7 +241,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR/PO</button>
+                                <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR Memo</button>
                                 <button type="submit" class="print_to_pdf d-none"></button>
                             </div>
                         </form>
@@ -274,44 +274,44 @@
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
     // });
     
-    // $('.assigned-sites-table').on( 'click', 'tr td', function (e) {
-    //     e.preventDefault();
-    //     $(document).find('#viewInfoModal').modal('show');
+    $('.assigned-sites-table').on( 'click', 'tr td', function (e) {
+        e.preventDefault();
+        $(document).find('#viewInfoModal').modal('show');
 
-    //     var json_parse = JSON.parse($(this).parent().attr('data-site_all'));
+        var json_parse = JSON.parse($(this).parent().attr('data-site_all'));
 
-    //     $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
+        $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
-    //     allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
+        allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
 
-    //     // $("..content-data .position-relative.form-group").remove();
-    //     $(".card-body .position-relative.form-group").remove();
-    //     $("#viewInfoModal .main-card.mb-3.card .modal-footer").remove();
+        // $("..content-data .position-relative.form-group").remove();
+        $(".card-body .position-relative.form-group").remove();
+        $("#viewInfoModal .main-card.mb-3.card .modal-footer").remove();
 
-    //     if (json_parse.site_fields != null) {
-    //         var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+        if (json_parse.site_fields != null) {
+            var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
 
-    //         for (let i = 0; i < new_json.length; i++) {
-    //             // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-    //                 $("#viewInfoModal .card-body").append(
-    //                     '<div class="position-relative form-group col-md-6">' +
-    //                         '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
-    //                         '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
-    //                     '</div>'
-    //                 );
-    //             // }
-    //         }
-    //     } else {
-    //         $("#viewInfoModal .card-body").append(
-    //             '<div><h1>No fields available.</h1></div>'
-    //         );
-    //     }
-    //     $(".modal-title").text(json_parse.site_name);
-    //     $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
-    //     $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
-    //     $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
-    //     $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
-    // } );
+            for (let i = 0; i < new_json.length; i++) {
+                // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
+                    $("#viewInfoModal .card-body").append(
+                        '<div class="position-relative form-group col-md-6">' +
+                            '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' +  new_json[i].field_name + '</label>' +
+                            '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                        '</div>'
+                    );
+                // }
+            }
+        } else {
+            $("#viewInfoModal .card-body").append(
+                '<div><h1>No fields available.</h1></div>'
+            );
+        }
+        $(".modal-title").text(json_parse.site_name);
+        $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+        $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
+        $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
+        $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+    } );
 
     $(document).on("click", ".btn_create_pr", function(e){
         e.preventDefault();

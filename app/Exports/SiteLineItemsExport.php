@@ -5,13 +5,14 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\FsaLineItem;
+use App\Models\PrMemoSite;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class SiteLineItemsExport implements FromCollection, WithHeadings
+class SiteLineItemsExport implements FromCollection, WithHeadings, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    protected $sam_id;
 
     function __construct($sam_id) {
         $this->sam_id = $sam_id;
@@ -23,7 +24,7 @@ class SiteLineItemsExport implements FromCollection, WithHeadings
                                     ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
                                     ->where('site_line_items.sam_id', $this->sam_id)
                                     ->get();
-            
+
         return $site_items->groupBy('fsa_table.category');
     }
 
@@ -36,5 +37,10 @@ class SiteLineItemsExport implements FromCollection, WithHeadings
             "Item", 
             "Price", 
         ];
+    }
+
+    public function title(): string
+    {
+        return $this->sam_id;
     }
 }

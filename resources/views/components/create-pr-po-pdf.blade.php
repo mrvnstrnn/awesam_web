@@ -228,13 +228,13 @@
                 </tr>
             </table>
 
-            <table style="width: 100%; margin-top: 0px;">
+            {{-- <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
                         <label for="created_by">Ceated by: SAM Tool Document Maker</label>
                     </td>
                 </tr>
-            </table>
+            </table> --}}
         </div>
     </body>
 </html>
