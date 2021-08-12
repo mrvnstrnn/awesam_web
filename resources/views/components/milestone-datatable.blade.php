@@ -10,32 +10,36 @@
 <ul class="tabs-animated body-tabs-animated nav">
 
     @php
-        // if (\Request::path() == 'endorsements') {
-        //     $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
-        // } else {
-        // }
+        if (\Request::path() == 'endorsements') {
+            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+        } else {
+        }
         if (\Auth::user()->profile_id == 1) {
             $user_details = \Auth::user()->getUserDetail()->first();
             $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
         } else {
             $programs = \Auth::user()->getUserProgram();
 
-            $route = Route::current();
-            $slug = $route->parameters['slug'];
-            $slugs = \Auth::user()->getAllNavigation()->where('slug', $slug)->get();
 
-            $prog = \DB::connection('mysql2')->table('profile_permissions')
-                ->select('program_id')
-                ->distinct()
-                ->where('permission_id', $slugs[0]->permission_id)
-                ->where('profile_id', \Auth::user()->profile_id)
-                ->get();
+            // if($route->uri != '/'){
+            //     $slug = $route->parameters['slug'];
+            //     $slugs = \Auth::user()->getAllNavigation()->where('slug', $slug)->get();
 
-            $allowed_programs = array();
+            //     $prog = \DB::connection('mysql2')->table('profile_permissions')
+            //     ->select('program_id')
+            //     ->distinct()
+            //     ->where('permission_id', $slugs[0]->permission_id)
+            //     ->where('profile_id', \Auth::user()->profile_id)
+            //     ->get();
+            // } else {
+            // }
 
-            foreach($prog as $pg){
-                array_push($allowed_programs, $pg->program_id);
-            }
+
+            // $allowed_programs = array();
+
+            // foreach($prog as $pg){
+            //     array_push($allowed_programs, $pg->program_id);
+            // }
 
             $li_ctr = 0;
 
@@ -44,7 +48,7 @@
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
     @foreach ($programs as $program)
-        @if(in_array($program->program_id, $allowed_programs))
+        {{-- @if(in_array($program->program_id, $allowed_programs)) --}}
             @php
                 $li_ctr++;
             @endphp
@@ -63,7 +67,7 @@
                 <span>{{ $program->program }}</span>
             </a>
         </li>
-        @endif
+        {{-- @endif --}}
     @endforeach
 </ul>
 
@@ -94,7 +98,7 @@
                 <div class="tab-content">
                     @foreach ($programs as $program)
 
-                        @if(in_array($program->program_id, $allowed_programs))
+                        {{-- @if(in_array($program->program_id, $allowed_programs)) --}}
                         @php
                             $li_ctr++;
                         @endphp
@@ -183,7 +187,7 @@
                                     {{-- @endif --}}
                                 @endif
                            </div>
-                        @endif
+                        {{-- @endif --}}
                     @endforeach
                 </div>                
             </div>

@@ -516,9 +516,9 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item ul-group-label">
+                            {{-- <li class="list-group-item ul-group-label">
                                 <H5 class="mb-0 mt-2">Site Hunting</H5>
-                            </li>
+                            </li> --}}
                             <li class="list-group-item">
                                 <div class="widget-content p-0">
                                     <div class="widget-content-wrapper">
@@ -555,9 +555,9 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item ul-group-label">
+                            {{-- <li class="list-group-item ul-group-label">
                                 <H5 class="mb-0 mt-3">JTSS</H5>
-                            </li>
+                            </li> --}}
                             <li class="list-group-item">
                                 <div class="widget-content p-0">
                                     <div class="widget-content-wrapper">
@@ -594,9 +594,9 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item ul-group-label">
+                            {{-- <li class="list-group-item ul-group-label">
                                 <H5 class="mb-0 mt-2">SSDS</H5>
-                            </li>
+                            </li> --}}
                             <li class="list-group-item">
                                 <div class="widget-content p-0">
                                     <div class="widget-content-wrapper">

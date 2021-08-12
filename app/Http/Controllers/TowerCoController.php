@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 
+use App\Models\Vendor;
 use App\Models\User;
 use App\Models\ToweCoFile;
 use App\Exports\TowerCoExport;
