@@ -37,13 +37,13 @@ class LocalCoopController extends Controller
         $coop_details = \DB::connection('mysql2')
             ->table("local_coop")
             ->select(
-                'region', 
                 'id', 
-                'prioritization_tagging', 
-                'endorsement_tagging', 
                 'coop_name',
                 'coop_full_name',
-                'province'
+                'prioritization_tagging', 
+                'endorsement_tagging', 
+                'region', 
+                'province',
             )
             ->where('coop_name', $coop)
             ->get();
