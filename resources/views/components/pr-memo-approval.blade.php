@@ -61,15 +61,17 @@
 
                                     <form id="create_pr_form">
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                        <div class="text-center my-5">
-                                            <i class="fa fa-file-pdf display-1"></i><br>
-                                            <small>{{ $json['file_name'] }}</small>
+                                        <div class="preview_div my-5">
+                                            <div class="text-center">
+                                                <i class="fa fa-file-pdf display-1"></i><br>
+                                                <small>{{ $json['file_name'] }}</small>
+                                            </div>
+                                            <p>
+                                                Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
+    
+                                                If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.
+                                            </p>
                                         </div>
-                                        <p>
-                                            Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
-
-                                            If you want to view the details of this approved PR Memo or you already have a PR Number click on the Details button.
-                                        </p>
                                         {{-- <div class="text-center my-5">
                                             <a target="_blank" href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}">
                                                 <i class="fa fa-file display-1"></i>
@@ -318,7 +320,7 @@
                                         <hr>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
                                             <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
                                             <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-warning ml-1">Download PDF</a>
@@ -326,7 +328,7 @@
                                             <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                         @else
                                             @if (\Auth::user()->profile_id == 10)
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 my-3" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
 
                                                 <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr d-none my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
                                             @else
@@ -334,7 +336,7 @@
                                                 <button type="button" class="float-right btn btn-shadow btn-success ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
                                             @endif
 
-                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr my-3">Reject PR</button>
+                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                         @endif
 
                                     </form>
@@ -390,6 +392,8 @@
         $(".approve_reject_pr").removeClass("d-none");
 
         $(".form_details").addClass("d-none");
+
+        $(".preview_div").addClass("d-none");
     });
 
     $(document).on("click", ".recommend, .no_thanks", function(e){
