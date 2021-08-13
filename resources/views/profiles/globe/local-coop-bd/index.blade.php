@@ -89,11 +89,12 @@
                                                 @php
                                                     $coops = \DB::connection('mysql2')
                                                         ->table("local_coop")
+                                                        ->orderBy('coop_name')
                                                         ->get();
                                                 @endphp
                                                 <option value="">Select COOP</option>
                                                 @foreach ($coops as $coop)
-                                                    <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                                                    <option value="{{$coop->coop_name}}">{{ strtoupper($coop->coop_name)}}</option>
                                                 @endforeach
                                             </select>
                                             <small class="text-danger coop-error"></small>
@@ -316,7 +317,7 @@
 
                                             <div class="form-group">
                                                 <label for="user_id">Staff</label>
-                                                <select class="form-control" name="user_id" id="user_id"></select>
+                                                <select class="form-control" name="user_id" id="user_id" readonly></select>
                                                 <small class="user_id-error text-danger"></small>
                                             </div>
                                             
@@ -374,11 +375,12 @@
                         @php
                             $coops = \DB::connection('mysql2')
                                 ->table("local_coop")
+                                ->orderBy('coop_name')
                                 ->get();
                         @endphp
                         <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
-                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                            <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
                         @endforeach
                     </select>
                     <small class="text-danger coop-error"></small>
@@ -498,11 +500,12 @@
                         @php
                             $coops = \DB::connection('mysql2')
                                 ->table("local_coop")
+                                ->orderBy('coop_name')
                                 ->get();
                         @endphp
                         <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
-                            <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                            <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
                         @endforeach
                     </select>
                     <small class="text-danger coop-error"></small>
@@ -572,11 +575,12 @@
                             @php
                                 $coops = \DB::connection('mysql2')
                                     ->table("local_coop")
+                                    ->orderBy('coop_name')
                                     ->get();
                             @endphp
                             <option value="">Select COOP</option>
                             @foreach ($coops as $coop)
-                                <option value="{{$coop->coop_name}}">{{$coop->coop_name}}</option>
+                                <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
                             @endforeach
                         </select>
                         <small class="text-danger coop-error"></small>

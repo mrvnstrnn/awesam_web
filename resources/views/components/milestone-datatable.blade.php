@@ -83,6 +83,7 @@
                         </h5>
                         @if ($tableheader == "PR / PO" && \Auth::user()->profile_id == 8)
                         <button class="btn btn-warning btn-shadow btn-sm btn_create_pr">Create PR Memo</button>
+
                         @endif
                     </div>
                 </div>
@@ -156,7 +157,55 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                        {{-- NEW SITES PR/PO COUNTER  --}}
+                        @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && $tableheader == "PR / PO")
+
+                            @php
+
+                            @endphp
+
+                            <div class="row mb-3 pb-3 text-center border-bottom">
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">PR Memo Creation</h6>
+                                        </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">RAM Head Approval</h6>
+                                        </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">NAM Approval</h6>
+                                        </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">Arriba PR # Issuance</h6>
+                                        </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">Vendor Awarding</h6>
+                                        </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                            <h1 class="menu-header-title">0</h1>
+                                            <h6 class="menu-header-subtitle" style="font-size: 12px;">Total Sites</h6>
+                                        </div>
+                                </div>
+                            </div>
                         @endif
+
+                        
                         @if ($loop->first)
                             <div class="tab-pane tabs-animation fade active show" id="tab-content-{{ $program->program_id  }}" role="tabpanel">            
                         @else
@@ -193,4 +242,9 @@
         </div>
     </div>
 </div>
+
+<script>
+
+
+</script>
 

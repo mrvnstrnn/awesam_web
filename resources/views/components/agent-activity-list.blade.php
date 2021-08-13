@@ -42,33 +42,49 @@ else {
 <div class="widget-content p-0">
     <div class="widget-content-wrapper">
         <div class="widget-content-left mr-3 ml-2">
-            <i class="pe-7s-note2 pe-2x"></i>
+            {{-- <i class="pe-7s-note2 pe-2x"></i> --}}
+            @php
+                if($activity->activity_name == "Advanced Site Hunting"){
+                    $activity_schedule = \DB::table('sub_activity_value')
+                                        ->where('sam_id', $activity->sam_id)
+                                        ->where('type', 'site_schedule')
+                                        ->get();
+
+                    $sched = json_decode($activity_schedule[0]->value);
+
+                    dd(getdate(strtotime($sched->site_schedule)));
+                }               
+            @endphp
+            <div class="text-center">
+                <div class="m-0 p-0" style="font-size: 12px;">OCT</div>
+                <div class="m-0 p-0" style="font-size: 24px;">30</div>
+            </div>
         </div>
-        <div class="widget-content-left">
-            <div class="widget-heading">
+        <div class="widget-content-left ml-2">
+            <div class="">
                 {{ $activity->activity_name }}
-                <div class="badge badge-{{ $activity_color }} ml-2">{{ $activity_badge }}</div>
                 {{-- @if ($activity->activity_complete == 'false')
                 <div class="badge badge-primary ml-0">Active</div>                                                                
                 @endif --}}
             </div>
-            <div class="widget-subheading">
-                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
+            <div class="" style="font-weight: bolder; font-size: 14px;">
+                {{ $activity->site_name }}
             </div>
-            <div class="widget-subheading">
-                <h6 class="m-0 p-0">{{ $activity->site_name }}</h6>
-            </div>
-            <div class="widget-subheading">
+            <div class="" style="font-size: 12px;">
                 <i class="m-0 p-0">{{ $activity->sam_id }}</i>
             </div>
-
+            <div class="mt-1">
+                <i class="lnr-calendar-full"></i>
+                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>                
+                <div class="badge badge-{{ $activity_color }} ml-2" stlye="font-size: 10px; padding:0">{{ $activity_badge }}</div>
+            </div>
         </div>
         @if(in_array($activity->profile_id, array("2", "3")))
-        <div class="widget-content-right">
+        {{-- <div class="widget-content-right">
             <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $activity->sam_id }}' data-site='{{ $activity->site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
                 <i class="fa fa-angle-double-right fa-lg"></i>
             </button>
-        </div>
+        </div> --}}
         @endif
     </div>
 </div>
@@ -91,16 +107,16 @@ var lastday_week = new Date(date_today.setDate(date_today.getDate() - date_today
 // console.log(lastday_week);
 
 if($(element).attr('data-profile_id') != "2"){
-        $(element).addClass('d-none');
+        // $(element).addClass('d-none');
 }
 
 
 if($(element).attr('data-activity_complete') == "true"){
-        $(element).addClass('d-none');
+        // $(element).addClass('d-none');
 }
 
 if($(element).attr('data-activity_complete') == ""){
-        $(element).addClass('d-none');
+        // $(element).addClass('d-none');
 }
 
 });
