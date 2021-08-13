@@ -315,7 +315,11 @@
                                                 <small class="date_history-error text-danger"></small>
                                             </div> --}}
 
-                                            <input type="hidden" class="form-control" name="user_id" id="user_id" readonly></select>
+                                            <div class="form-group">
+                                                <label for="user_id">Staff</label>
+                                                <select class="form-control" name="user_id" id="user_id"></select>
+                                                <small class="user_id-error text-danger"></small>
+                                            </div>
                                             
                                             <div class="form-group">
                                                 <label for="status_of_issue">Status of Issue</label>
