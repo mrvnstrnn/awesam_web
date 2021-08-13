@@ -72,7 +72,7 @@
                                                         "STS Assessment",
                                                         "STS Head Endorsement to RAM",
 
-                                                        "Create PR",
+                                                        // "Create PR",
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
@@ -193,18 +193,18 @@
                                             )
                                                 
                                                 <x-site-p-a-c-approvals :site="$site" />
-
+{{-- 
                                             @elseif(
 
-                                                // NEW SITES APPROVALS                                             
+                                                NEW SITES APPROVALS                                             
                                                 $site[0]->activity_name == "Create PR" && $main_activity == "" && \Auth::user()->profile_id == 8
-                                                // $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
-                                                // $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
-                                                // $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
+                                                $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
+                                                $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
+                                                $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
 
                                             )   
                                             
-                                                <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" />
+                                                <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" /> --}}
 
                                             
                                             @elseif(

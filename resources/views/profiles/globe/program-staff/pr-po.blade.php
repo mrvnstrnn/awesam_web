@@ -48,7 +48,7 @@
 <div class="ajax_content_box"></div>
 
 <div class="modal fade" id="craetePrPoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -70,87 +70,65 @@
                             <div class="form_div">
                                 <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                                     
-                                    <div class="form-group">
-                                        <label for="vendor">Vendor</label>
-                                        <select name="vendor" id="vendor" class="form-control">
-                                            @php
-                                                $vendors = \App\Models\Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
-                                                                    ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
-                                                                    ->where("vendor_programs.programs", 1)
-                                                                    ->get();
-                                            @endphp
-                                            @foreach ($vendors as $vendor)
-                                                <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
-                                            @endforeach
-                                        </select>
-                                        <small class="text-danger vendor-error"></small>
-                                    </div>
-
-                                    <hr>
-
                                     <div class="form-row">
-                                        <div class="col-12">
+                                        <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
                                                 <label for="to">To</label>
                                                 <input type="text" class="form-control" name="to" id="to">
                                                 <small class="text-danger to-error"></small>
                                             </div>
                                         </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="subject">Subject</label>
+                                                <input type="text" class="form-control" name="subject" id="subject">
+                                                <small class="text-danger subject-error"></small>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="thru">Thru</label>
                                                 <input type="text" class="form-control" name="thru" id="thru">
                                                 <small class="text-danger thru-error"></small>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="date_created">Date Created</label>
                                                 <input type="text" class="form-control" name="date_created" id="date_created" value="{{ \Carbon\Carbon::now() }}" readonly>
                                                 <small class="text-danger date_created-error"></small>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="from">From</label>
                                                 <input type="text" class="form-control" name="from" id="from" value="{{ \Auth::user()->name }}" readonly>
                                                 <small class="text-danger from-error"></small>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="group">Group</label>
                                                 <input type="text" class="form-control" name="group" id="group" value="Network Technical" readonly>
                                                 <small class="text-danger group-error"></small>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="division">Division</label>
                                                 <input type="text" class="form-control" name="division" id="division" value="Network Technical Group" readonly>
                                                 <small class="text-danger division-error"></small>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 col-12">
+                                        <div class="col-md-4 col-lg-4 col-12">
                                             <div class="form-group">
                                                 <label for="department">Department</label>
                                                 <input type="text" class="form-control" name="department" id="department" value="Site Aquisition and Management" readonly>
                                                 <small class="text-danger department-error"></small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class=" col-12">
-                                            <div class="form-group">
-                                                <label for="subject">Subject</label>
-                                                <input type="text" class="form-control" name="subject" id="subject">
-                                                <small class="text-danger subject-error"></small>
                                             </div>
                                         </div>
                                     </div>
@@ -170,9 +148,7 @@
                                             </div>
                                         </div>
                                     </div>
-    
-                                    <hr>
-    
+        
                                     <div class="form-row">
                                         <div class="col-12">
                                             <div class="form-group">
@@ -182,13 +158,28 @@
                                             </div>
                                         </div>
                                     </div>
-    
-                                    <hr>
-    
+
                                     <div class="form-row">
-                                        <div class="col-12">
+                                        <div class="col-md-5">
                                             <div class="form-group">
-                                                <label for="financial_analysis">Financial Analysis</label>
+                                                <label for="vendor">Vendor</label>
+                                                <select name="vendor" id="vendor" class="form-control">
+                                                    @php
+                                                        $vendors = \App\Models\Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
+                                                                            ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+                                                                            ->where("vendor_programs.programs", 1)
+                                                                            ->get();
+                                                    @endphp
+                                                    @foreach ($vendors as $vendor)
+                                                        <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
+                                                    @endforeach
+                                                </select>
+                                                <small class="text-danger vendor-error"></small>
+                                            </div>        
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label for="financial_analysis">Add Site</label>
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
                                                     $sites = \DB::connection('mysql2')
@@ -208,7 +199,7 @@
                                                     <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->search_ring }}</option>
                                                     @endforeach
                                                 </select>
-    
+
                                                 <button type="button" class="my-3 btn btn-primary btn-shadow btn-sm pull-right add_new_site">Add</button>
                                             </div>
                                         </div>
@@ -218,12 +209,12 @@
                                         <table class="table table-hovered">
                                             <thead>
                                                 <tr>
-                                                    <th style='width: 20%'>Site ID</th>
-                                                    <th style='width: 40%'>Search Ring Name</th>
+                                                    {{-- <th style='width: 20%'>Site ID</th> --}}
+                                                    <th>Search Ring Name</th>
                                                     <th>Region</th>
                                                     <th>Province</th>
-                                                    <th style='width: 10%'>Gross Amount PHP (VAT EXCLUSIVE)</th>
-                                                    <th style='width: 15%;'>Action</th>
+                                                    <th>Gross Amount</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -282,7 +273,7 @@
 
     //     $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
-    //     allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
+    //     // allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
 
     //     // $("..content-data .position-relative.form-group").remove();
     //     $(".card-body .position-relative.form-group").remove();
@@ -336,12 +327,11 @@
                 success: function (resp) {
                     if (!resp.error) {
                         $(".table_financial_analysis table tbody").append("<tr class='tr"+resp.message.sam_id+"'>" + 
-                            "<td>"+resp.message.serial_number+"</td>" +
-                            "<td>"+resp.message.search_ring+"</td>" +
+                            "<td><strong>"+resp.message.search_ring+"</strong><br><small><strong>S/N:</strong> "+ resp.message.serial_number +" | <strong>SAM ID: </strong>"+ resp.message.sam_id +"</small></td>" +
                             "<td>"+resp.message.region+"</td>" +
                             "<td>"+resp.message.province+"</td>" +
                             "<td>"+resp.sites_fsa+"</td>" +
-                            "<td><button type='button' class='btn btn-primary btn-shadow btn-sm line_item_td' data-id='"+resp.message.sam_id+"' data-sam_id='"+sam_id+"'>Line Items</button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+resp.message.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                            "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+resp.message.sam_id+"' data-sam_id='"+sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+resp.message.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
                             "</tr>");
 
                         var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);

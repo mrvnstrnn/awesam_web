@@ -1489,12 +1489,14 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2') 
                     ->table("milestone_tracking")
+                    ->leftjoin('site', 'milestone_tracking.sam_id', 'site.sam_id')
                     ->distinct()
-                    ->where('program_id', $program_id)
+                    ->where('milestone_tracking.program_id', $program_id)
                     ->where('activity_type', 'endorsement')
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->where('activity_complete', 'false')
                     ->get();
+
         }
         elseif($activity_type == 'new endorsements vendor'){
             
