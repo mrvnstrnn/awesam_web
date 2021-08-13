@@ -12,8 +12,8 @@
     @php
         if (\Request::path() == 'endorsements') {
             $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
-        } else {
         }
+
         if (\Auth::user()->profile_id == 1) {
             $user_details = \Auth::user()->getUserDetail()->first();
             $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
@@ -41,9 +41,8 @@
             //     array_push($allowed_programs, $pg->program_id);
             // }
 
-            $li_ctr = 0;
-
         }
+        $li_ctr = 0;
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
