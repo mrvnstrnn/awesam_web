@@ -248,6 +248,9 @@
             var document_type = $(this).attr('data-document_type');
             var substep_same = $(this).attr('data-substep_same');
 
+            var site_category = "{{ $site[0]->site_category }}";
+            var activity_id = "{{ $activity_id }}";
+
             $("#sub_activity_id").val(sub_activity_id);
 
             var program_id = $('#modal_program_id').val();
@@ -267,10 +270,10 @@
 
             if (document_type == "permit") {
                 if (substep_same == "same") {
-                    ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id);
+                    ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id, site_category, activity_id);
                 } else {
                     $.ajax({
-                        url: "/subactivity-step/" + sub_activity_id + "/" + active_sam_id + "/" + active_subactivity ,
+                        url: "/subactivity-step/" + sub_activity_id + "/" + active_sam_id + "/" + active_subactivity + "/" + site_category + "/" + activity_id,
                         method: "GET",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -306,16 +309,16 @@
                     });
                 }
             } else {
-                ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id) 
+                ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id, site_category, activity_id) 
             }
             
 
         });
 
-        function ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id) 
+        function ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id, site_category, activity_id) 
         {
             $.ajax({
-                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id,
+                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id + "/" + site_category + "/" + activity_id,
                 method: "GET",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

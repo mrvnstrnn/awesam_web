@@ -114,7 +114,9 @@
 
         $(".modal-title").text(json_parse.site_name);
         $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+        $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
         $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
+        $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
         $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
         $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
     } );
@@ -140,6 +142,8 @@
         var data_program = $("#"+what_table).attr('data-program_id');
         var activity_name = $(this).attr('data-activity_name');
         var site_vendor_id = [$(this).attr('data-site_vendor_id')];
+        var site_category = [$(this).attr('data-site_category')];
+        var activity_id = [$(this).attr('data-activity_id')];
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -152,6 +156,8 @@
                 activity_name : activity_name,
                 site_vendor_id : site_vendor_id,
                 data_program : data_program,
+                site_category : site_category,
+                activity_id : activity_id,
             },
             type: 'POST',
             headers: {
@@ -217,10 +223,14 @@
 
         sam_id = [];
         site_vendor_id = [];
+        site_category = [];
+        activity_id = [];
         for(var i=0; inputElements[i]; ++i){
             if(inputElements[i].checked){
                 sam_id.push(inputElements[i].value);
                 site_vendor_id.push(inputElements[i].attributes[5].value);
+                site_category.push(inputElements[i].attributes[6].value);
+                activity_id.push(inputElements[i].attributes[6].value);
             }
         }
 
@@ -232,6 +242,8 @@
                 activity_name : activity_name,
                 data_program : data_program,
                 site_vendor_id : site_vendor_id,
+                site_category : site_category,
+                activity_id : activity_id,
             },
             type: 'POST',
             headers: {

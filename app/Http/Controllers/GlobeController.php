@@ -23,6 +23,8 @@ use App\Models\SiteStageTracking;
 use App\Models\PrMemoSite;
 use App\Models\PrMemoTable;
 use App\Models\FsaLineItem;
+use App\Models\Site;
+use App\Models\SubActivity;
 
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
@@ -131,7 +133,6 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-            
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -179,20 +180,34 @@ class GlobeController extends Controller
             $id = \Auth::user()->id;
 
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
+
+
             if ($request->input('activity_name') == "endorse_site") {
+
                 $notification = "Successfully " .$message. " endorsement.";
                 $action = $request->input('data_complete');
+                $program_id = $request->input('data_program');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
+
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
+
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
+
                 $notification = "RTB Docs successfully approved";
                 $action = $request->input('data_complete');
+
             } else if ($request->input('activity_name') == "Vendor Awarding") {
+
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
                 $action = $request->input('data_action');
+
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                
                 $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
 
@@ -219,18 +234,9 @@ class GlobeController extends Controller
                 $action = $request->input('data_complete');
             }
             
-            // if ($request->input('activity_name') == "Vendor Awarding") {
-            //     $vendor = $request->input('vendor');
-            //     $action = $request->input('data_action');
-            // } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
-            //     $action = $request->input('data_action');
-            // } else {
-            //     $vendor = $request->input('site_vendor_id');
-            //     $action = $request->input('data_complete');
-            // }
-            for ($i=0; $i < count($request->input('sam_id')); $i++) { 
+            // for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+            //     SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
                 // if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
                     
@@ -255,12 +261,91 @@ class GlobeController extends Controller
                 // }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
-            }
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
+            // }
+
+            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
+            //     $get_past_activities = \DB::connection('mysql2')
+            //                             ->table('site_stage_tracking')
+            //                             ->where('sam_id', $request->input('sam_id')[$i])
+            //                             ->where('activity_complete', 'false')
+            //                             ->get();
+    
+            //     $get_activities = \DB::connection('mysql2')
+            //                             ->table('stage_activities')
+            //                             ->where('activity_id', $get_past_activities[0]->activity_id)
+            //                             ->where('program_id', $program_id)
+            //                             ->where('category', $site_category[$i])
+            //                             ->get();
+            //                             return response()->json(['error' => true, 'message' => $get_activities]);
+
+            // }
+
+            $this->move_site($request->input('sam_id'), $program_id, $action, $site_category, $activity_id);
 
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
+    {
+        for ($i=0; $i < count($sam_id); $i++) {
+            // $get_past_activities = \DB::connection('mysql2')
+            //                         ->table('site_stage_tracking')
+            //                         ->where('sam_id', $sam_id[$i])
+            //                         ->where('activity_complete', 'false')
+            //                         ->get();
+
+            $get_activities = \DB::connection('mysql2')
+                                    ->table('stage_activities')
+                                    ->where('activity_id', $activity_id[$i])
+                                    ->where('program_id', $program_id)
+                                    ->where('category', $site_category[$i])
+                                    ->get();
+
+            foreach ($get_activities as $get_activity) {
+
+                if ($action == "true") {
+                    $activity = $get_activity->next_activity;
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                        ->where('activity_complete', 'false')
+                                        ->update([
+                                            'activity_complete' => "true"
+                                        ]);
+
+
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => $activity,
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                } else {
+                    $activity = $get_activity->return_activity;
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                            ->where('activity_id', ">", $activity)
+                                            ->delete();
+
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                            ->where('activity_id', $activity)
+                                            ->update([
+                                                'activity_complete' => "false"
+                                            ]);
+                }
+
+                $array = array(
+                    'activity_id' => $activity,
+                    'profile_id' => \Auth::user()->profile_id,
+                    'category' => $site_category[$i]
+                );
+
+                Site::where('sam_id', $sam_id[$i])
+                ->update([
+                    'activities' => json_encode($array)
+                ]);
+            }
         }
     }
 
@@ -284,7 +369,6 @@ class GlobeController extends Controller
     public function unassignedSites($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-            // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
             $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
 
@@ -343,12 +427,15 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", $request->input('site_category'), [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
 
-                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
@@ -725,24 +812,43 @@ class GlobeController extends Controller
     public function upload_my_file(Request $request)
     {
         try {
+            return response()->json(['error' => true, 'message' => $request->input("activity_id")]);
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
 
-            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"), $request->input("site_category"));
 
             \Storage::move( $request->input("file_name"), $new_file );
 
             // sub_activity_name
             if($validate->passes()){
-
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => $new_file,
                     'user_id' => \Auth::id(),
                     'status' => "pending",
-                ]);            
+                ]);
+
+                $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->get();
+
+                $array_sub_activity = collect();
+
+                foreach ($sub_activities as $sub_activity) {
+                    $array_sub_activity->push($sub_activity->sub_activity_id);
+                }
+
+                $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'pending')
+                                                        ->groupBy('sub_activity_id')->get();
+
+                if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")]);
+                }
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
@@ -754,7 +860,7 @@ class GlobeController extends Controller
     }
 
 
-    public function rename_file($filename_data, $sub_activity_name, $sam_id)
+    public function rename_file($filename_data, $sub_activity_name, $sam_id, $site_category = null)
     {
         $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
 
@@ -774,7 +880,9 @@ class GlobeController extends Controller
 
             $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
 
-            $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            $cat = $site_category == 'none' ? "-" : "-".$site_category."-";
+
+            $new_file = $imploded_name .$cat. $counter . "." .$ext;
 
             while (file_exists( public_path()."/files/". $new_file)) {
                 $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
@@ -1572,9 +1680,9 @@ class GlobeController extends Controller
             
     }
 
-    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
+    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
     {
-// dd($sub_activity);
+    // dd($sub_activity);
         if($sub_activity == 'Add Target Sites'){
 
             $what_component = "components.subactivity-ssds";
@@ -1584,6 +1692,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
 
@@ -1597,6 +1707,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1610,6 +1722,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1623,6 +1737,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1636,6 +1752,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1649,6 +1767,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1662,6 +1782,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
         }
@@ -1685,7 +1807,7 @@ class GlobeController extends Controller
             } 
             elseif($component == 'agent-activities'){
 
-                $what_modal = "components.agent-activity-list";      
+                $what_modal = "components.agent-activity-list";
                 return \View::make($what_modal)
                         ->render();
           

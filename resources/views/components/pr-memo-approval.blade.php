@@ -421,6 +421,7 @@
     $(".form_details").on("click", function(e){
         
         e.preventDefault();
+        document.getElementById("pr_number").focus();
 
         $(".pr_number_area").removeClass("d-none");
         $(".form_details_pr").removeClass("d-none");

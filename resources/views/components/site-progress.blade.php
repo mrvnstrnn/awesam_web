@@ -27,7 +27,7 @@
           ">{{ $site_->site_name }}</div>
             <div class="badge badge-dark" style="font-size: 9px !important;">{{ $site_->activity_name }}</div>
             <div>
-            <small>{{ $site_->sam_id }} {{ $site_->site_category }}</small>
+            <small>{{ $site_->sam_id }} {{ $site_->site_category == "none" ? "" : $site_->site_category }}</small>
             </div>
         </div>   
         </div>
