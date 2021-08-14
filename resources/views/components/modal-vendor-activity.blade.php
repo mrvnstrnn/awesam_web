@@ -57,7 +57,12 @@
                                                 @endif
                                             </h5>
                                         </div>
-                                        <div class="btn-actions-pane-right">
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="card-body">
+                                        <div class="mb-4">
                                             @php
 
                                                 // dd($site);
@@ -70,17 +75,12 @@
                                             @endphp
 
                                             @if($main_activity == "")
-                                                <span class="ml-1 badge badge-light text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                                <span class="ml-1 badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
                                             @else
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
                                             @endif
                                         </div>                                            
-                                    </div>
-                                </div>
-                            </div> 
-
-                            <div class="card-body">
                                 @php
 
                                         $sub_activities = \DB::connection('mysql2')
