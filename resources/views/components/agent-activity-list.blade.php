@@ -37,12 +37,11 @@ else {
 
 @endphp
 
-<li class="list-group-item activity_list_item" data-sam_id="{{ $activity->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
+<li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activity->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
 <div class="todo-indicator bg-{{ $activity_color }}"></div>
 <div class="widget-content p-0">
     <div class="widget-content-wrapper">
         <div class="widget-content-left mr-3 ml-2">
-            {{-- <i class="pe-7s-note2 pe-2x"></i> --}}
             @php
                 if($activity->activity_name == "Advanced Site Hunting"){
                     $activity_schedule = \DB::table('sub_activity_value')
@@ -51,14 +50,18 @@ else {
                                         ->get();
 
                     $sched = json_decode($activity_schedule[0]->value);
+                    $sched = getdate(strtotime($sched->site_schedule));
 
-                    dd(getdate(strtotime($sched->site_schedule)));
-                }               
+                }    
             @endphp
-            <div class="text-center">
-                <div class="m-0 p-0" style="font-size: 12px;">OCT</div>
-                <div class="m-0 p-0" style="font-size: 24px;">30</div>
-            </div>
+            @if($activity->activity_name == "Advanced Site Hunting")
+                <div class="text-center">
+                    <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
+                    <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
+                </div>
+            @else
+                <i class="pe-7s-note2 pe-2x"></i>
+            @endif
         </div>
         <div class="widget-content-left ml-2">
             <div class="">
@@ -67,7 +70,14 @@ else {
                 <div class="badge badge-primary ml-0">Active</div>                                                                
                 @endif --}}
             </div>
-            <div class="" style="font-weight: bolder; font-size: 14px;">
+            <div class="" style="  width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            font-weight: bold; 
+            cursor: pointer;
+          ">
                 {{ $activity->site_name }}
             </div>
             <div class="" style="font-size: 12px;">
@@ -76,7 +86,7 @@ else {
             <div class="mt-1">
                 <i class="lnr-calendar-full"></i>
                 <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>                
-                <div class="badge badge-{{ $activity_color }} ml-2" stlye="font-size: 10px; padding:0">{{ $activity_badge }}</div>
+                <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
             </div>
         </div>
         @if(in_array($activity->profile_id, array("2", "3")))

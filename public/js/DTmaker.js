@@ -43,6 +43,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
 
                 $(row).attr('data-program_id', data.program_id ? data.program_id : "");
                 $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
+                $(row).attr('data-site_category', data.site_category);
             },
             
             columns: whatCols,

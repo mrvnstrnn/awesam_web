@@ -13,6 +13,7 @@ class Site extends Model
 
     protected $connection = 'mysql2';
     protected $table = 'site';
+    public $timestamps = false;
 
     public function broadcastOn($event)
     {

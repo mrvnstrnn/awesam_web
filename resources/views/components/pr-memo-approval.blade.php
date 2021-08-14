@@ -41,7 +41,12 @@
                                             $show_list = "";
                                             $show_message = 'd-none';
                                             $po_enable = "";
+                                        } else {
+                                            $show_list = "";
+                                            $show_message = 'd-none';
+                                            $po_enable = "d-none";
                                         }
+
                                     @endphp
                                 
                                 <div class="col-12 align-right">
@@ -130,8 +135,8 @@
                                                                             ->leftjoin('location_sam_regions', 'location_regions.sam_region_id', 'location_sam_regions.sam_region_id')
                                                                             ->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
 
-                                                        // dd($generated_pr_memos);
                                                     @endphp
+                                                    {{-- @if($activity == 'Set Ariba PR Number' || $activity == 'Vendor Awarding of Sites') --}}
                                                     <div class="form-row">
                                                         <div class="col-md-6">
                                                             <div class="form-group pr_number_area">
@@ -149,6 +154,7 @@
                                                         </div>        
                                                     </div>
                                                     <hr>
+                                                    {{-- @endif --}}
                                                     <div class="form-row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
@@ -295,7 +301,7 @@
                                                     
                                                     <div class="form-group">
                                                         <label for="pr_file">PR Memo File</label>
-                                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen></iframe>
+                                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen defaultZoomValue:page-width></iframe>
                                                     </div>
 
                                                     <div class="my-3">

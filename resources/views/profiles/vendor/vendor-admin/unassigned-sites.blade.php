@@ -55,7 +55,7 @@
 <script>
     $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
-        if ($(this).attr("colspan") != 5) {
+        if ($(this).attr("colspan") != 4) {
             $(document).find('#modal-assign-sites').modal('show');
 
             $("#sam_id").val($(this).parent().attr('data-sam_id'));
@@ -65,6 +65,7 @@
             
             $("#btn-assign-sites").attr("data-site_name", $(this).parent().attr('data-site'));
             $("#btn-assign-sites").attr("data-program_id", $(this).parent().attr('data-program_id'));
+            $("#btn-assign-sites").attr("data-site_category", $(this).parent().attr('data-site_category'));
 
             $("#modal-assign-sites select#agent_id option").remove();
 
@@ -113,6 +114,7 @@
         var site_name = $(this).attr('data-site_name');
         var activity_name = $(this).attr('data-activity_name');
         var site_vendor_id = $(this).attr('data-site_vendor_id');
+        var site_category = $(this).attr('data-site_category');
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -122,7 +124,8 @@
                 site_name : site_name,
                 activity_name : activity_name,
                 site_vendor_id : site_vendor_id,
-                data_program : data_program
+                data_program : data_program,
+                site_category : site_category
             },
             method: "POST",
             headers: {
