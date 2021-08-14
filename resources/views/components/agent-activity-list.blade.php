@@ -37,7 +37,7 @@ else {
 
 @endphp
 
-<li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activity->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
+<li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activity->sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}" style="cursor: pointer;">
 <div class="todo-indicator bg-{{ $activity_color }}"></div>
 <div class="widget-content p-0">
     <div class="widget-content-wrapper">
@@ -75,8 +75,7 @@ else {
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: 14px;
-            font-weight: bold; 
-            cursor: pointer;
+            font-weight: bold;
           ">
                 {{ $activity->site_name }}
             </div>

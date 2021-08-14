@@ -214,6 +214,9 @@
                         var sub_activity_id = "{{ $sub_activity_id }}";
                         var sub_activity_name = "{{ $sub_activity }}";
                         var file_name = resp.file;
+                        var site_category = "{{ $site_category }}";
+                        var activity_id = "{{ $activity_id }}";
+                        var program_id = "{{ $program_id }}";
 
                         // var sub_activity_name = $(this).attr("data-sub_activity_name");
 
@@ -224,7 +227,10 @@
                                 sam_id : sam_id,
                                 sub_activity_id : sub_activity_id,
                                 file_name : file_name,
-                                sub_activity_name : sub_activity_name
+                                sub_activity_name : sub_activity_name,
+                                site_category : site_category,
+                                activity_id : activity_id,
+                                program_id : program_id,
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

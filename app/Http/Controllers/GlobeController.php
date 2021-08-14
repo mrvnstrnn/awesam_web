@@ -24,6 +24,7 @@ use App\Models\PrMemoSite;
 use App\Models\PrMemoTable;
 use App\Models\FsaLineItem;
 use App\Models\Site;
+use App\Models\SubActivity;
 
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
@@ -810,24 +811,43 @@ class GlobeController extends Controller
     public function upload_my_file(Request $request)
     {
         try {
+            return response()->json(['error' => true, 'message' => $request->input("activity_id")]);
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
 
-            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"), $request->input("site_category"));
 
             \Storage::move( $request->input("file_name"), $new_file );
 
             // sub_activity_name
             if($validate->passes()){
-
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => $new_file,
                     'user_id' => \Auth::id(),
                     'status' => "pending",
-                ]);            
+                ]);
+
+                $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->get();
+
+                $array_sub_activity = collect();
+
+                foreach ($sub_activities as $sub_activity) {
+                    $array_sub_activity->push($sub_activity->sub_activity_id);
+                }
+
+                $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'pending')
+                                                        ->groupBy('sub_activity_id')->get();
+
+                if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")]);
+                }
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
@@ -839,7 +859,7 @@ class GlobeController extends Controller
     }
 
 
-    public function rename_file($filename_data, $sub_activity_name, $sam_id)
+    public function rename_file($filename_data, $sub_activity_name, $sam_id, $site_category = null)
     {
         $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
 
@@ -859,7 +879,9 @@ class GlobeController extends Controller
 
             $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
 
-            $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            $cat = $site_category == 'none' ? "-" : "-".$site_category."-";
+
+            $new_file = $imploded_name .$cat. $counter . "." .$ext;
 
             while (file_exists( public_path()."/files/". $new_file)) {
                 $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
@@ -1657,9 +1679,9 @@ class GlobeController extends Controller
             
     }
 
-    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id)
+    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
     {
-// dd($sub_activity);
+    // dd($sub_activity);
         if($sub_activity == 'Add Target Sites'){
 
             $what_component = "components.subactivity-ssds";
@@ -1669,6 +1691,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
 
@@ -1682,6 +1706,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1695,6 +1721,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1708,6 +1736,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1721,6 +1751,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1734,6 +1766,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
             
@@ -1747,6 +1781,8 @@ class GlobeController extends Controller
                 'sam_id' => $sam_id,
                 'sub_activity_id' => $sub_activity_id,
                 'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
         }
