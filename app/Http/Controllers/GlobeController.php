@@ -188,6 +188,7 @@ class GlobeController extends Controller
                 $action = $request->input('data_complete');
                 $program_id = $request->input('data_program');
                 $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
 
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
 
@@ -280,7 +281,7 @@ class GlobeController extends Controller
 
             // }
 
-            $this->move_site($request->input('sam_id'), $program_id, $action, $site_category);
+            $this->move_site($request->input('sam_id'), $program_id, $action, $site_category, $activity_id);
 
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
@@ -288,18 +289,18 @@ class GlobeController extends Controller
         }
     }
 
-    private function move_site($sam_id, $program_id, $action, $site_category)
+    private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
-            $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->where('activity_complete', 'false')
-                                    ->get();
+            // $get_past_activities = \DB::connection('mysql2')
+            //                         ->table('site_stage_tracking')
+            //                         ->where('sam_id', $sam_id[$i])
+            //                         ->where('activity_complete', 'false')
+            //                         ->get();
 
             $get_activities = \DB::connection('mysql2')
                                     ->table('stage_activities')
-                                    ->where('activity_id', $get_past_activities[0]->activity_id)
+                                    ->where('activity_id', $activity_id[$i])
                                     ->where('program_id', $program_id)
                                     ->where('category', $site_category[$i])
                                     ->get();
@@ -428,13 +429,13 @@ class GlobeController extends Controller
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", $request->input('site_category'));
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", $request->input('site_category'), [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')]);
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
