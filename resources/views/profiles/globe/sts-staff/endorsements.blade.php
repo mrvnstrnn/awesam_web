@@ -470,6 +470,7 @@
         var what_table = $(this).attr('data-what_table');
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program_id');
+        var data_program_id = $(this).attr('data-id');
         var activity_name = $(this).attr('data-activity_name');
 
         var inputElements = document.getElementsByName('program3');
@@ -490,7 +491,7 @@
                 sam_id : sam_id,
                 data_complete : data_complete,
                 activity_name : activity_name,
-                data_program : data_program,
+                data_program : data_program_id,
             },
             type: 'POST',
             headers: {

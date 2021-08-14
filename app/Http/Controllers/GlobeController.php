@@ -179,20 +179,32 @@ class GlobeController extends Controller
             $id = \Auth::user()->id;
 
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
+
+
             if ($request->input('activity_name') == "endorse_site") {
+
                 $notification = "Successfully " .$message. " endorsement.";
                 $action = $request->input('data_complete');
+                $program_id = $request->input('data_program');
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
+
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
+
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
+
                 $notification = "RTB Docs successfully approved";
                 $action = $request->input('data_complete');
+
             } else if ($request->input('activity_name') == "Vendor Awarding") {
+
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
                 $action = $request->input('data_action');
+
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
+                
                 $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
 
@@ -219,18 +231,9 @@ class GlobeController extends Controller
                 $action = $request->input('data_complete');
             }
             
-            // if ($request->input('activity_name') == "Vendor Awarding") {
-            //     $vendor = $request->input('vendor');
-            //     $action = $request->input('data_action');
-            // } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
-            //     $action = $request->input('data_action');
-            // } else {
-            //     $vendor = $request->input('site_vendor_id');
-            //     $action = $request->input('data_complete');
-            // }
-            for ($i=0; $i < count($request->input('sam_id')); $i++) { 
+            // for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
-                SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
+            //     SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
                 // if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
                     
@@ -255,12 +258,60 @@ class GlobeController extends Controller
                 // }
 
                 // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
-            }
+                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
+            // }
+
+            $this->move_site($request->input('sam_id'), $program_id, $action);
 
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    private function move_site($sam_id, $program_id, $action)
+    {
+        for ($i=0; $i < count($sam_id); $i++) {
+            $get_past_activities = \DB::connection('mysql2')
+                                    ->table('site_stage_tracking')
+                                    ->where('sam_id', $sam_id[$i])
+                                    ->where('activity_complete', 'false')
+                                    ->get();
+
+            $get_activities = \DB::connection('mysql2')
+                                    ->table('stage_activities')
+                                    ->where('activity_id', $get_past_activities[0]->activity_id)
+                                    ->where('program_id', $program_id)
+                                    ->get();
+
+            foreach ($get_activities as $get_activity) {
+
+                if ($action == "true") {
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                        ->where('activity_complete', 'false')
+                                        ->update([
+                                            'activity_complete' => "true"
+                                        ]);
+
+
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => $get_activity->next_activity,
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                } else {
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                            ->where('activity_id', ">", $get_activity->return_activity)
+                                            ->delete();
+
+                    SiteStageTracking::where('sam_id', $sam_id[$i])
+                                            ->where('activity_id', $get_activity->return_activity)
+                                            ->update([
+                                                'activity_complete' => "false"
+                                            ]);
+                }
+            }
         }
     }
 
@@ -284,7 +335,6 @@ class GlobeController extends Controller
     public function unassignedSites($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
-            // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
 
             $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
 
@@ -343,12 +393,15 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true");
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
 
-                \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true");
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }

@@ -147,7 +147,8 @@ class User extends Authenticatable implements MustVerifyEmail
                     // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
                     ->where('user_programs.user_id', \Auth::user()->id)
                     // ->where('page_route.profile_id', \Auth::user()->profile_id)
-                    ->orderBy('program.program_id', 'asc')->get();
+                    ->orderBy('program.program_id', 'asc')
+                    ->get();
         } else {
             return VendorProgram::select('program.program_id', 'program.program')
                                                             ->join('program', 'program.program_id', 'vendor_programs.programs')
@@ -165,7 +166,7 @@ class User extends Authenticatable implements MustVerifyEmail
                         ->where('user_programs.user_id', \Auth::user()->id)
                         ->where('page_route.profile_id', \Auth::user()->profile_id)
                         ->where('page_route.route_name', $route)
-                        ->orderBy('program.program')->get();
+                        ->orderBy('program.program_id', 'asc')->get();
     }
 
     public function getUserProgramAct($activity, $program_id)

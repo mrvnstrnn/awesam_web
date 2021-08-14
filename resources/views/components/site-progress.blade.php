@@ -15,7 +15,7 @@
         </div>
         {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
         <div class="ml-0 col">
-            <div class=""><H6 class='mb-0' style="font-weight: bold;">{{ $site_->site_name }} {{ $site_->site_category }}</H6></div>
+            <div class=""><H6 class='mb-0' style="font-weight: bold;">{{ $site_->site_name }} {{ $site_->site_category == 'none' ? "" : $site_->site_category }}</H6></div>
             {{-- <div>
             {{ $site_->sam_id }} {{ $site_->site_category }}
             </div> --}}
