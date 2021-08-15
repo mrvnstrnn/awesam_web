@@ -451,8 +451,6 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
-            
-
             $email_receiver = User::find($request->input('agent_id'));
 
             SiteEndorsementEvent::dispatch($request->input('sam_id'));
@@ -468,7 +466,7 @@ class GlobeController extends Controller
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", $request->input('site_category'), [$request->input('activity_id')]);
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
@@ -871,6 +869,7 @@ class GlobeController extends Controller
 
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -1421,10 +1420,20 @@ class GlobeController extends Controller
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
                 $user = User::find($sub_activity_files->user_id);
 
-                $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                // $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                //                                 ->where('program_id', $request->input("program_id"))
+                //                                 ->get();
+
+                $sub_activitiess = SubActivity::where('sub_activity_id', $sub_activity_files->sub_activity_id)
                                                 ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
+                                                ->first();
+
+                $sub_activities = SubActivity::where('activity_id', $sub_activitiess->activity_id)
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
                                                 ->get();
-                
+
                 $array_sub_activity = collect();
 
                 foreach ($sub_activities as $sub_activity) {
@@ -1436,6 +1445,7 @@ class GlobeController extends Controller
                                                         ->where('status', 'approved')
                                                         ->groupBy('sub_activity_id')->get();
 
+                                                        // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
                 if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
@@ -2879,7 +2889,6 @@ class GlobeController extends Controller
     public function set_site_category(Request $request)
     {
         try {
-
             // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
             // if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
@@ -2900,14 +2909,22 @@ class GlobeController extends Controller
             
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
+
+            $get_category = \DB::connection('mysql2')->table("site")
+                                ->select('site_category')
+                                ->where("sam_id", $request->input("sam_id"))
+                                ->first();
             
+            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+
+
+            $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$get_category->site_category], $request->input("activity_id"));
+
             \DB::connection('mysql2')->table("site")
                                     ->where("sam_id", $request->input("sam_id"))
                                     ->update([
                                         'site_category' => $request->input('site_category'),
                                     ]);
-                                              
-            $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
         } catch (\Throwable $th) {

@@ -208,6 +208,7 @@
         // var sam_id = $(this).attr('data-sam_id');
         var data_complete = $(this).attr('data-complete');
         var data_program = $(this).attr('data-program');
+        var data_program_id = $(this).attr('data-id');
         var data_id = $(this).attr('data-id');
         var activity_name = $(this).attr('data-activity_name');
 
@@ -230,7 +231,7 @@
                 sam_id.push(inputElements[i].value);
                 site_vendor_id.push(inputElements[i].attributes[5].value);
                 site_category.push(inputElements[i].attributes[6].value);
-                activity_id.push(inputElements[i].attributes[6].value);
+                activity_id.push(inputElements[i].attributes[7].value);
             }
         }
 
@@ -240,7 +241,7 @@
                 sam_id : sam_id,
                 data_complete : data_complete,
                 activity_name : activity_name,
-                data_program : data_program,
+                data_program : data_program_id,
                 site_vendor_id : site_vendor_id,
                 site_category : site_category,
                 activity_id : activity_id,

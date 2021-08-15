@@ -124,18 +124,20 @@
 
             for (let i = 0; i < new_json.length; i++) {
                 // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-                    if (
-                        (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase() == 'enabler') ||
-                        (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase().includes("wttx"))
-                        ) {
-                        var program = 1;
-                    } else if ( 
-                        ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("l21") ) || 
-                        ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("fe to ge") )
-                        ) {
-                        var technology = 1;
-                    } else if ( new_json[i].field_name == 'site_type' && new_json[i].value.toLowerCase().includes("greenfield") ) {
-                        var site_type = 1;
+                    if (new_json[i].value != null) {
+                        if (
+                            (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase() == 'enabler') ||
+                            (new_json[i].field_name == 'program' && new_json[i].value.toLowerCase().includes("wttx"))
+                            ) {
+                            var program = 1;
+                        } else if ( 
+                            ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("l21") ) || 
+                            ( new_json[i].field_name == 'technology' && new_json[i].value.toLowerCase().includes("fe to ge") )
+                            ) {
+                            var technology = 1;
+                        } else if ( new_json[i].field_name == 'site_type' && new_json[i].value.toLowerCase().includes("greenfield") ) {
+                            var site_type = 1;
+                        }
                     }
 
                     field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
