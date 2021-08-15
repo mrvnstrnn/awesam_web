@@ -65,6 +65,9 @@
             var site_vendor_id = $("#modal_site_vendor_id").val();
             var program_id = $("#modal_program_id").val();
             var activity_name = "rtb_declation";
+
+            var activity_id = ["{{ $activityid }}"];
+            var site_category = ["{{ $sitecategory }}"];
             // var remarks = $("#remarks").val();
 
             $(this).attr("disabled", "disabled");
@@ -82,6 +85,8 @@
                     activity_name : activity_name,
                     site_vendor_id : site_vendor_id,
                     program_id : program_id,
+                    activity_id : activity_id,
+                    site_category : site_category,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

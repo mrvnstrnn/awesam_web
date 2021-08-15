@@ -194,11 +194,17 @@ class GlobeController extends Controller
 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
                 $notification = "RTB Docs successfully approved";
                 $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
 
             } else if ($request->input('activity_name') == "Vendor Awarding") {
 
@@ -338,14 +344,14 @@ class GlobeController extends Controller
 
                         $activity = $get_activity->activity_id;
 
-                        if (count($check_done) <= 1) {
-
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
                                                 ->where('activity_id', $activity_id[$i])
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
+
+                        if (count($check_done) <= 1) {
         
                             SiteStageTracking::create([
                                 'sam_id' => $sam_id[$i],
@@ -875,7 +881,7 @@ class GlobeController extends Controller
 
                 $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'pending')
+                                                        // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
                 if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
@@ -2380,6 +2386,7 @@ class GlobeController extends Controller
     {
         try {
 
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
             $validate = \Validator::make($request->all(), array(
                 'rtb_declaration_date' => 'required',
                 'rtb_declaration' => 'required',
@@ -2418,13 +2425,17 @@ class GlobeController extends Controller
                     ]); 
 
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-                    
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 } else {
                     
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-                    
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 }
             } else {
@@ -2470,6 +2481,8 @@ class GlobeController extends Controller
                 // for ($j=0; $j < count($email_receiver); $j++) { 
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
                 // }
+
+                $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
 

@@ -155,11 +155,11 @@
 
                                             @if($site[0]->activity_name == "RTB Declaration Approval" && $main_activity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $main_activity == "" )
 
-                                                <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" />
+                                                <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
 
                                             @elseif($site[0]->activity_name == "RTB Declaration" && $main_activity == "" || $site[0]->activity_name == "STS RTB Declaration" && $main_activity == "")
 
-                                                <x-site-rtb-declaration />
+                                                <x-site-rtb-declaration :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
 
                                             @elseif(
 
