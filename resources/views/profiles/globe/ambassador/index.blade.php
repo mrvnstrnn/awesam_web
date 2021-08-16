@@ -30,18 +30,18 @@
     }
 </style>
 @php
-    $sites_locations = \DB::connection('mysql2')
+    if (\Auth::user()->profile_id != 18) {
+        $sites_locations = \DB::connection('mysql2')
             ->table("local_coop_user_locations")
             ->where('user_id', \Auth::id())
             ->get();
 
-    $locations = collect();
+        $locations = collect();
 
-    foreach ($sites_locations as $sites_location) {
-        $locations->push($sites_location->region);
-    }
+        foreach ($sites_locations as $sites_location) {
+            $locations->push($sites_location->region);
+        }
 
-    if (\Auth::user()->profile_id != 18) {
         $coops = \DB::connection('mysql2')
                         ->table("local_coop")
                         ->whereIn('region', $locations->all())
