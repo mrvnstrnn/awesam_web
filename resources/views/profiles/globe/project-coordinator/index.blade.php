@@ -333,7 +333,7 @@
                                                 <small class="date_history-error text-danger"></small>
                                             </div> --}}
 
-                                            <div class="form-group">
+                                            <div class="form-group d-none">
                                                 <label for="user_id">Staff</label>
                                                 <select class="form-control" name="user_id" id="user_id"></select>
                                                 <small class="user_id-error text-danger"></small>
@@ -416,6 +416,7 @@
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
                         <option value="Nature of Issue">Nature of Issue</option>
+                        <option value="XDEAL">XDEAL</option>
                         <option value="Bills Payment">Bills Payment</option>
                         <option value="Power Upgrade">Power Upgrade</option>
                         <option value="Power Application">Power Application</option>
@@ -523,6 +524,8 @@
                     <select name="engagement_type" id="engagement_type" class="form-control">
                         <option value="">Select Engagement Type</option>
                         <option value="Power Upgrade">Power Upgrade</option>
+                        <option value="Transport">Transport</option>
+                        <option value="XDEALS">XDEALS</option>
                         <option value="New Sites">New Sites</option>
                         <option value="Sites for Permanent Power">Sites for Permanent Power</option>
                         <option value="RTA">RTA</option>
@@ -593,6 +596,11 @@
                             <option value="">Select Contact Type</option>
                             <option value="Engineering">Engineering</option>
                             <option value="COOP Contact">COOP Contact</option>
+                            <option value="GM">GM</option>
+                            <option value="Executive Assistant to GM">Executive Assistant to GM</option>
+                            <option value="Secretary Admin">Secretary Admin</option>
+                            <option value="Technical Support Department">Technical Support Department</option>
+                            <option value="Acccounting">Acccounting</option>
                         </select>
                         <small class="text-danger contact_type-error"></small>
                     </div>
