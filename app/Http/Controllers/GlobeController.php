@@ -1653,10 +1653,14 @@ class GlobeController extends Controller
         elseif($activity_type == 'jtss'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("milestone_tracking")
-                    ->select('sam_id', 'site_name', 'site_fields')
+                    ->table("site")
+                    ->join('site_stage_tracking', 'site.sam_id', 'site_stage_tracking.sam_id')
+                    ->join('stage_activities', 'stage_activities.program_id', 'site.program_id', 'stage_activities.category', 'site.category')
                     ->where('program_id', $program_id)
+                    ->where('stage_activities.activity_name', 'Schedule JTSS')
                     ->get();
+
+                    dd($sites);
 
         }
 
