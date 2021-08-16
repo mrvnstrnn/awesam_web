@@ -13,18 +13,50 @@ class LocalCoopController extends Controller
     public function get_localcoop($program_id, $profile_id, $activity_type)
     {
         if($activity_type == 'all'){
+            $sites_locations = \DB::connection('mysql2')
+                                ->table("local_coop_user_locations")
+                                ->where('user_id', \Auth::id())
+                                ->get();
+
+            $locations = collect();
+
+            foreach ($sites_locations as $sites_location) {
+                $locations->push($sites_location->region);
+            }
+
             $sites = \DB::connection('mysql2')
-            ->table("local_coop")
-            ->select(
-                'region', 
-                'id', 
-                'prioritization_tagging', 
-                'endorsement_tagging', 
-                'coop_name',
-                'coop_full_name',
-                'province'
-            )
-            ->get();
+                                ->table("local_coop")
+                                ->select(
+                                    'region', 
+                                    'id', 
+                                    'prioritization_tagging', 
+                                    'endorsement_tagging', 
+                                    'coop_name',
+                                    'coop_full_name',
+                                    'province'
+                                )
+                                ->distinct();
+
+            if (\Auth::user()->profile_id == 18) {
+                $sites->get();
+            } else {
+                $sites->whereIn('region', $locations->all())
+                ->get();
+            }
+            
+
+            // $sites = \DB::connection('mysql2')
+            // ->table("local_coop")
+            // ->select(
+            //     'region', 
+            //     'id', 
+            //     'prioritization_tagging', 
+            //     'endorsement_tagging', 
+            //     'coop_name',
+            //     'coop_full_name',
+            //     'province'
+            // )
+            // ->get();
         }
 
         $dt = DataTables::of($sites);
