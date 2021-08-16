@@ -83,8 +83,8 @@
 
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">                                            
-        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}">Approve Site</button>
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}">Reject Site</button>                                      
+        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
+        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
     </div>
 </div>
 
@@ -242,9 +242,11 @@
 
         var sam_id = [$(this).attr('data-sam_id')];
         var data_complete = $(this).attr('data-complete');
+        var site_category = [$(this).attr('data-site_category')];
+        var activity_id = [$(this).attr('data-activity_id')];
         var activity_name = $("#modal_activity_name").val();
         var site_vendor_id = [$("#modal_site_vendor_id").val()];
-        var program_id = [$("#modal_program_id").val()];
+        var program_id = $("#modal_program_id").val();
 
         // if ("{{ \Auth::user()->profile_id }}" == 10) {
         //     activity_name = "pac_approval";
@@ -265,6 +267,8 @@
                 activity_name : activity_name,
                 site_vendor_id : site_vendor_id,
                 program_id : program_id,
+                site_category : site_category,
+                activity_id : activity_id,
             },
             type: 'POST',
             headers: {

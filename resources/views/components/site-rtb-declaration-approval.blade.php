@@ -64,6 +64,9 @@
             var remarks = $("#remarks").val();
             var activity_name = "rtb_declation_approval";
 
+            var activity_id = ["{{ $activityid }}"];
+            var site_category = ["{{ $sitecategory }}"];
+
 
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
@@ -83,6 +86,8 @@
                     activity_name : activity_name,
                     site_vendor_id : site_vendor_id,
                     program_id : program_id,
+                    activity_id : activity_id,
+                    site_category : site_category,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

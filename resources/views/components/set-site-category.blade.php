@@ -31,6 +31,10 @@
         var sub_activity_id = $(this).attr("data-sub_activity_id");
         var activity_name = $(this).attr("data-activity_name");
 
+        // var site_category = ["{{ $site_category }}"];
+        var activity_id = ["{{ $activity_id }}"];
+        var program_id = "{{ $program_id }}";
+
         var site_category = $("#site_category").val();
 
         $(this).attr("disabled", "disabled");
@@ -44,6 +48,8 @@
                 sub_activity_id : sub_activity_id,
                 activity_name : activity_name,
                 site_category : site_category,
+                activity_id : activity_id,
+                program_id : program_id,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

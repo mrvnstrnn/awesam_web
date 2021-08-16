@@ -84,7 +84,6 @@
 
 
 <script>
-    
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
@@ -117,6 +116,9 @@
         var sub_activity_id = $("#sub_activity_id").val();
         var site_name = $("#viewInfoModal .menu-header-title").text();
 
+        var activity_id = ["{{ $activity_id }}"];
+        var site_category = ["{{ $site_category }}"];
+
         $(this).attr('disabled', 'disabled');
         $(this).text('Processing...');
 
@@ -133,7 +135,9 @@
                 sub_activity_id : sub_activity_id,
                 site_name : site_name,
                 site_vendor_id : site_vendor_id,
-                program_id : program_id
+                program_id : program_id,
+                activity_id : activity_id,
+                site_category : site_category,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

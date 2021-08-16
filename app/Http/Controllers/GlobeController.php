@@ -194,11 +194,17 @@ class GlobeController extends Controller
 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
                 $notification = "RTB Docs successfully approved";
                 $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
 
             } else if ($request->input('activity_name') == "Vendor Awarding") {
 
@@ -292,59 +298,92 @@ class GlobeController extends Controller
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
-            // $get_past_activities = \DB::connection('mysql2')
-            //                         ->table('site_stage_tracking')
-            //                         ->where('sam_id', $sam_id[$i])
-            //                         ->where('activity_complete', 'false')
-            //                         ->get();
-
-            $get_activities = \DB::connection('mysql2')
-                                    ->table('stage_activities')
-                                    ->where('activity_id', $activity_id[$i])
-                                    ->where('program_id', $program_id)
-                                    ->where('category', $site_category[$i])
+            $get_past_activities = \DB::connection('mysql2')
+                                    ->table('site_stage_tracking')
+                                    ->where('sam_id', $sam_id[$i])
+                                    ->where('activity_complete', 'false')
                                     ->get();
 
-            foreach ($get_activities as $get_activity) {
+                                    $past_activities = collect();
 
-                if ($action == "true") {
-                    $activity = $get_activity->next_activity;
-                    SiteStageTracking::where('sam_id', $sam_id[$i])
-                                        ->where('activity_complete', 'false')
-                                        ->update([
-                                            'activity_complete' => "true"
-                                        ]);
+            for ($j=0; $j < count($get_past_activities); $j++) {
+                $past_activities->push($get_past_activities[$j]->activity_id);
+            }
 
+            if ( in_array($activity_id[$i], $past_activities->all()) ) {
+                $activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('next_activity')
+                                        ->where('activity_id', $activity_id[$i])
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[$i])
+                                        ->first();
 
-                    SiteStageTracking::create([
-                        'sam_id' => $sam_id[$i],
+                $get_activitiess = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('next_activity')
+                                        ->where('activity_id', $activities->next_activity)
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[$i])
+                                        ->first();
+
+                $get_activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->where('next_activity', $get_activitiess->next_activity)
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[$i])
+                                        ->get();
+
+                foreach ($get_activities as $get_activity) {
+                    if ($action == "true") {
+                        $check_done = \DB::connection('mysql2')
+                                                ->table('site_stage_tracking')
+                                                ->where('sam_id', $sam_id[$i])
+                                                ->where('activity_complete', 'false')
+                                                ->get();
+
+                        $activity = $get_activity->activity_id;
+
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                ->where('activity_complete', 'false')
+                                                ->where('activity_id', $activity_id[$i])
+                                                ->update([
+                                                    'activity_complete' => "true"
+                                                ]);
+
+                        if (count($check_done) <= 1) {
+        
+                            SiteStageTracking::create([
+                                'sam_id' => $sam_id[$i],
+                                'activity_id' => $activity,
+                                'activity_complete' => 'false',
+                                'user_id' => \Auth::id()
+                            ]);
+                        }
+                    } else {
+                        $activity = $get_activity->return_activity;
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                ->where('activity_id', ">", $activity)
+                                                ->delete();
+    
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                ->where('activity_id', $activity)
+                                                ->update([
+                                                    'activity_complete' => "false"
+                                                ]);
+                    }
+    
+                    $array = array(
                         'activity_id' => $activity,
-                        'activity_complete' => 'false',
-                        'user_id' => \Auth::id()
+                        'profile_id' => \Auth::user()->profile_id,
+                        'category' => $site_category[$i]
+                    );
+    
+                    Site::where('sam_id', $sam_id[$i])
+                    ->update([
+                        'activities' => json_encode($array)
                     ]);
-                } else {
-                    $activity = $get_activity->return_activity;
-                    SiteStageTracking::where('sam_id', $sam_id[$i])
-                                            ->where('activity_id', ">", $activity)
-                                            ->delete();
-
-                    SiteStageTracking::where('sam_id', $sam_id[$i])
-                                            ->where('activity_id', $activity)
-                                            ->update([
-                                                'activity_complete' => "false"
-                                            ]);
                 }
-
-                $array = array(
-                    'activity_id' => $activity,
-                    'profile_id' => \Auth::user()->profile_id,
-                    'category' => $site_category[$i]
-                );
-
-                Site::where('sam_id', $sam_id[$i])
-                ->update([
-                    'activities' => json_encode($array)
-                ]);
             }
         }
     }
@@ -412,8 +451,6 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
 
-            
-
             $email_receiver = User::find($request->input('agent_id'));
 
             SiteEndorsementEvent::dispatch($request->input('sam_id'));
@@ -429,7 +466,7 @@ class GlobeController extends Controller
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", $request->input('site_category'), [$request->input('activity_id')]);
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
@@ -811,8 +848,7 @@ class GlobeController extends Controller
 
     public function upload_my_file(Request $request)
     {
-        try {
-            return response()->json(['error' => true, 'message' => $request->input("activity_id")]);
+        try {            
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
@@ -833,6 +869,7 @@ class GlobeController extends Controller
 
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -843,11 +880,11 @@ class GlobeController extends Controller
 
                 $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'pending')
+                                                        // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
                 if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")]);
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
@@ -1367,7 +1404,7 @@ class GlobeController extends Controller
             if ($request->input('action') == "rejected") {
                 $required = "required";
             }
-
+            
             $validate = Validator::make($request->all(), array(
                 'reason' => $required
             ));
@@ -1382,6 +1419,37 @@ class GlobeController extends Controller
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
                 $user = User::find($sub_activity_files->user_id);
+
+                // $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                //                                 ->where('program_id', $request->input("program_id"))
+                //                                 ->get();
+
+                $sub_activitiess = SubActivity::where('sub_activity_id', $sub_activity_files->sub_activity_id)
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
+                                                ->first();
+
+                $sub_activities = SubActivity::where('activity_id', $sub_activitiess->activity_id)
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
+                                                ->get();
+
+                $array_sub_activity = collect();
+
+                foreach ($sub_activities as $sub_activity) {
+                    $array_sub_activity->push($sub_activity->sub_activity_id);
+                }
+
+                $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'approved')
+                                                        ->groupBy('sub_activity_id')->get();
+
+                                                        // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
+                if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                }
+
 
                 // $email_receiver = User::select('users.*')
                 //                 ->join('user_details', 'users.id', 'user_details.user_id')
@@ -2328,6 +2396,7 @@ class GlobeController extends Controller
     {
         try {
 
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
             $validate = \Validator::make($request->all(), array(
                 'rtb_declaration_date' => 'required',
                 'rtb_declaration' => 'required',
@@ -2366,13 +2435,17 @@ class GlobeController extends Controller
                     ]); 
 
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-                    
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 } else {
                     
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-                    
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
                 }
             } else {
@@ -2418,6 +2491,8 @@ class GlobeController extends Controller
                 // for ($j=0; $j < count($email_receiver); $j++) { 
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
                 // }
+
+                $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
 
@@ -2541,7 +2616,7 @@ class GlobeController extends Controller
                 "lessor_remarks" => "required",
             ));
 
-            // return response()->json(['error' => true, 'message' => json_encode($request->all()) ]);
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             if ($validate->passes()) {
                 SubActivityValue::create([
@@ -2552,6 +2627,11 @@ class GlobeController extends Controller
                     'status' => $request->input('lessor_approval'),
                     'type' => 'lessor_engagement',
                 ]); 
+
+                if ($request->input('lessor_approval') == "approved") {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], $request->input('activity_id'));
+                }
+                
 
                 // $email_receiver = User::select('users.*')
                 //                 ->join('user_details', 'users.id', 'user_details.user_id')
@@ -2809,7 +2889,6 @@ class GlobeController extends Controller
     public function set_site_category(Request $request)
     {
         try {
-
             // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
             // if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
@@ -2830,14 +2909,22 @@ class GlobeController extends Controller
             
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
+
+            $get_category = \DB::connection('mysql2')->table("site")
+                                ->select('site_category')
+                                ->where("sam_id", $request->input("sam_id"))
+                                ->first();
             
+            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
+
+
+            $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$get_category->site_category], $request->input("activity_id"));
+
             \DB::connection('mysql2')->table("site")
                                     ->where("sam_id", $request->input("sam_id"))
                                     ->update([
                                         'site_category' => $request->input('site_category'),
                                     ]);
-                                              
-            $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
         } catch (\Throwable $th) {

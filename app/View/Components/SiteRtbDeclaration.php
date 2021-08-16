@@ -11,9 +11,12 @@ class SiteRtbDeclaration extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $activityid, $sitecategory;
+
+    public function __construct($activityid, $sitecategory)
     {
-        //
+        $this->activityid = $activityid;
+        $this->sitecategory = $sitecategory;
     }
 
     /**

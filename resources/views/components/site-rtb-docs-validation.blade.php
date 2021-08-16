@@ -1,8 +1,8 @@
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
         <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-        <button class="float-right mt-0 btn btn-success approve_reject_doc_btn" data-action="approve" type="button">Approve Document</button>
-        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btn" data-action="reject" type="button">Reject Document</button>
+        <button class="float-right mt-0 btn btn-success approve_reject_doc_btns" data-action="approve" type="button">Approve Document</button>
+        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
     </div>
     <div class="col-12 file_viewer">
     </div>
@@ -62,7 +62,7 @@
                     </div>
                 @else
                     @if($loop->first)
-                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
+                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
                             <div class="child_div_{{ $data->sub_activity_id }}">
                                 <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                                     <div>
@@ -97,7 +97,7 @@
         {{-- <small class="text_area_reason-error text-danger"></small> --}}
         
         <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
-        <button type="button" class="btn btn-sm approve_reject_doc_btn_final">Confirm</button>
+        <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
     </div>
 </div>
 
@@ -189,21 +189,25 @@
         });
     }
     
-    $(".view_file").on("click", function (){
+    $(".view_file").on("click", function (e){
+
+        e.preventDefault();
 
         var id = $(this).attr("data-id");
 
-        $(".approve_reject_doc_btn").attr("data-id", id);
+        $(".approve_reject_doc_btns").attr("data-id", id);
 
-        $(".approve_reject_doc_btn").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
+        $(".approve_reject_doc_btns").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
+        $(".approve_reject_doc_btns").attr("data-activity_id", $(this).attr("data-activity_id"));
+        $(".approve_reject_doc_btns").attr("data-site_category", $(this).attr("data-site_category"));
         
         var sub_activity_id = $(this).attr("data-sub_activity_id");
-        $(".approve_reject_doc_btn").attr("data-sub_activity_id", sub_activity_id);
+        $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
 
         if ($(this).attr("data-status") == "pending"){
-            $(".approve_reject_doc_btn").removeClass("d-none");
+            $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
-            $(".approve_reject_doc_btn").addClass("d-none");
+            $(".approve_reject_doc_btns").addClass("d-none");
         }
 
         var extensions = ["pdf", "jpg", "png"];
@@ -320,13 +324,13 @@
         var sub_activity_id = $(this).attr("data-sub_activity_id");
 
         remarks_file(id, sam_id);
-        $(".approve_reject_doc_btn").attr("data-sub_activity_id", sub_activity_id);
-        $(".approve_reject_doc_btn").attr("data-id", id);
+        $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
+        $(".approve_reject_doc_btns").attr("data-id", id);
 
         if ($(this).attr("data-status") == "pending"){
-            $(".approve_reject_doc_btn").removeClass("d-none");
+            $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
-            $(".approve_reject_doc_btn").addClass("d-none");
+            $(".approve_reject_doc_btns").addClass("d-none");
         }
 
 
@@ -352,7 +356,7 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
-    $(".approve_reject_doc_btn").on("click", function (e){
+    $(".approve_reject_doc_btns").on("click", function (e){
         e.preventDefault();
         $(".confirmation_message").removeClass("d-none");
         $(".file_preview").addClass("d-none");
@@ -360,26 +364,30 @@
 
         $(".confirmation_message b").text($(this).attr("data-action"));
         $(".confirmation_message span.sub_activity_name").text($(this).attr("data-sub_activity_name"));
-        $(".approve_reject_doc_btn_final").attr("data-action", $(this).attr("data-action") == "reject" ? "rejected" : "approved");
-        $(".approve_reject_doc_btn_final").attr("data-id", $(this).attr("data-id"));
-        $(".approve_reject_doc_btn_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
+        $(".approve_reject_doc_btns_final").attr("data-action", $(this).attr("data-action") == "reject" ? "rejected" : "approved");
+        $(".approve_reject_doc_btns_final").attr("data-id", $(this).attr("data-id"));
+        $(".approve_reject_doc_btns_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
+        $(".approve_reject_doc_btns_final").attr("data-activity_id", $(this).attr("data-activity_id"));
+        $(".approve_reject_doc_btns_final").attr("data-site_category", $(this).attr("data-site_category"));
 
         if ($(this).attr("data-action") == "reject"){
             $(".confirmation_message textarea").removeClass("d-none");
-            $(".approve_reject_doc_btn_final").addClass("btn-danger");
-            $(".approve_reject_doc_btn_final").removeClass("btn-primary");
+            $(".approve_reject_doc_btns_final").addClass("btn-danger");
+            $(".approve_reject_doc_btns_final").removeClass("btn-primary");
         } else {
             $(".confirmation_message textarea").addClass("d-none");
-            $(".approve_reject_doc_btn_final").addClass("btn-primary");
-            $(".approve_reject_doc_btn_final").removeClass("btn-danger");
+            $(".approve_reject_doc_btns_final").addClass("btn-primary");
+            $(".approve_reject_doc_btns_final").removeClass("btn-danger");
         }
     });
 
-    $(document).on("click", ".approve_reject_doc_btn_final", function (e){
+    $(document).on("click", ".approve_reject_doc_btns_final", function (e){
         e.preventDefault();
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
+        var activity_id = $(this).attr("data-activity_id");
+        var site_category = $(this).attr("data-site_category");
 
         var text_area_reason = $("#text_area_reason").val();
 
@@ -403,14 +411,16 @@
                 filename : filename,
                 site_vendor_id : site_vendor_id,
                 program_id : program_id,
+                activity_id : activity_id,
+                site_category : site_category,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (resp){
                 if (!resp.error){
-                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
-                    $(".approve_reject_doc_btn_final").text("Confirm");
+                    $(".approve_reject_doc_btns_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btns_final").text("Confirm");
 
                     $(".dropzone_div_"+sub_activity_id).attr("data-status", data_action);
 
@@ -435,8 +445,8 @@
                         resp.message,
                         'error'
                     )
-                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
-                    $(".approve_reject_doc_btn_final").text("Confirm");
+                    $(".approve_reject_doc_btns_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btns_final").text("Confirm");
                 }
             },
             error: function (resp){
@@ -445,8 +455,8 @@
                     resp,
                     'error'
                 )
-                    $(".approve_reject_doc_btn_final").removeAttr("disabled");
-                    $(".approve_reject_doc_btn_final").text("Confirm");
+                    $(".approve_reject_doc_btns_final").removeAttr("disabled");
+                    $(".approve_reject_doc_btns_final").text("Confirm");
             },
         });
     });
