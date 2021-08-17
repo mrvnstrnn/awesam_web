@@ -39,6 +39,9 @@ class LocalCoopController extends Controller
 
             if (\Auth::user()->profile_id == 18) {
                 $sites->get();
+            }
+            elseif (\Auth::user()->profile_id == 25) {
+                $sites->get();
             } else {
                 $sites->whereIn('region', $locations->all())
                 ->get();

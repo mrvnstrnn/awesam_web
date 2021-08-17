@@ -3097,6 +3097,13 @@ class GlobeController extends Controller
         }
     }
 
+    
+    ///////////////////////////////////////////////////
+    //                                               //
+    //                PR / PO Module                 //
+    //                                               //
+    ///////////////////////////////////////////////////
+
     public function get_fiancial_analysis ($sam_id, $vendor)
     {
         try {
@@ -3532,7 +3539,7 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-
+    
     public function get_remarks_file ($id, $sam_id)
     {
         try {
@@ -3548,6 +3555,14 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    //******************** E N D ********************//
+    //                                               //
+    //                PR / PO Module                 //
+    //                                               //
+    //***********************************************//
+
+
 
     public function endorse_atrb(Request $request)
     {
