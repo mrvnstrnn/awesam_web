@@ -188,7 +188,7 @@
                                                                     ->table("milestone_tracking")
                                                                     ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking.sam_id")
                                                                     ->where('milestone_tracking.program_id', 1)
-                                                                    ->where('milestone_tracking.activity_type', 'PR / PO')
+                                                                    ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
                                                                     ->where('milestone_tracking.activity_name', 'Create PR')
                                                                     ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
                                                                     ->where('milestone_tracking.activity_complete', 'false')

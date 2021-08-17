@@ -103,6 +103,49 @@
         $("#lessor_date").val(today);
     });
 
+    var sub_activity_id = "{{ $sub_activity_id }}";
+    var sam_id = "{{ $sam_id }}";
+
+    htmllist = '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th style="width: 5%">#</th>' +
+                            '<th>Method</th>' +
+                            '<th style="width: 35%">Remarks</th>' +
+                            '<th style="width: 35%">Status</th>' +
+                            '<th>Date Approved</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                '</table>';
+
+    $('.table_lessor_parent').html(htmllist);
+    $(".table_uploaded").attr("id", "table_lessor_"+sub_activity_id);
+
+    if (! $.fn.DataTable.isDataTable("#table_lessor_"+sub_activity_id) ){
+        $("#table_lessor_"+sub_activity_id).DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/get-engagement/"+sub_activity_id+"/"+sam_id,
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            columns: [
+                { data: "id" },
+                { data: "method" },
+                { data: "value" },
+                { data: "status" },
+                { data: "date_created" },
+            ],
+        });
+    } else {
+        $("#table_lessor_"+sub_activity_id).DataTable().ajax.reload();
+    }
 
     $(".save_engagement").on("click",  function (e){
         // e.preventDefault();
@@ -111,9 +154,9 @@
         var lessor_remarks = $("#lessor_remarks").val();
         var site_vendor_id = $("#modal_site_vendor_id").val();
         var program_id = $("#modal_program_id").val();
-        var sam_id = $(".ajax_content_box").attr("data-sam_id");
+        var sam_id = "{{ $sam_id }}";
         // var sub_activity_id = $(this).attr("data-sub_activity_id");
-        var sub_activity_id = $("#sub_activity_id").val();
+        var sub_activity_id = "{{ $sub_activity_id }}";
         var site_name = $("#viewInfoModal .menu-header-title").text();
 
         var activity_id = ["{{ $activity_id }}"];
