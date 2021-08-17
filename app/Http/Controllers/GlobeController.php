@@ -190,6 +190,8 @@ class GlobeController extends Controller
                 $site_category = $request->input('site_category');
                 $activity_id = $request->input('activity_id');
 
+                $samid = $request->input('sam_id');
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
 
                 $notification = "Site successfully " .$message;
@@ -197,6 +199,8 @@ class GlobeController extends Controller
                 $site_category = $request->input('site_category');
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
+
+                $samid = $request->input('sam_id');
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
@@ -221,6 +225,10 @@ class GlobeController extends Controller
 
                 $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
 
+                $activity_id_collect = collect();
+                $samid_collect = collect();
+                $sitecategory_collect = collect();
+
                 foreach ($sites as $site) {
                     SiteEndorsementEvent::dispatch($site->sam_id);
 
@@ -230,10 +238,19 @@ class GlobeController extends Controller
                                             'site_pr' => $request->input('pr_number'),
                                         ]);
 
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
+                    $samid_collect->push($site->sam_id);
+                    $activity_id_collect->push(5);
+                    $sitecategory_collect->push("none");
+
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
                 }
 
-                return response()->json(['error' => false, 'message' => $notification ]);
+                $site_category = $sitecategory_collect->all();
+                $samid = $samid_collect->all();
+                $activity_id = $activity_id_collect->all();
+                $program_id = 1;
+
+                // return response()->json(['error' => false, 'message' => $notification ]);
             } else {
                 $notification = "Success";
                 $vendor = $request->input('site_vendor_id');
@@ -286,8 +303,7 @@ class GlobeController extends Controller
             //                             return response()->json(['error' => true, 'message' => $get_activities]);
 
             // }
-
-            $this->move_site($request->input('sam_id'), $program_id, $action, $site_category, $activity_id);
+            $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
@@ -801,7 +817,7 @@ class GlobeController extends Controller
             $pdf = \App::make('dompdf.wrapper');
             $pdf = PDF::loadHTML($request->input('editordata'));
             $pdf->setPaper('a4');
-            
+            $pdf->download();
             return $pdf->stream();
 
         } catch (\Throwable $th) {
@@ -3244,6 +3260,8 @@ class GlobeController extends Controller
                     'to' => $request->input("to"),
                     'file_name' => $file_name,
                     'generated_pr_memo' => $generated_pr,
+                    'activity_id' => $request->input("activity_id"),
+                    'site_category' => $request->input("site_category"),
                 ]);
 
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
@@ -3264,6 +3282,8 @@ class GlobeController extends Controller
                         'sam_id' => $request->input("sam_id")[$i],
                         'vendor' => $request->input('vendor'),
                         'generated_pr_memo' => $generated_pr,
+                        'activity_id' => $request->input("activity_id"),
+                        'site_category' => $request->input("site_category"),
                     );
 
                     PrMemoSite::create([
@@ -3300,7 +3320,11 @@ class GlobeController extends Controller
                             'status' => "pending",
                         ]);
                     }
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                    
+                    $this->move_site($request->input('sam_id'), 1, "true", ["none"], ["2"]);
+
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
                 }
                 
                 return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
@@ -3389,9 +3413,18 @@ class GlobeController extends Controller
             
             if ($validate->passes()) {
                 $sites = PrMemoSite::where('pr_memo_id', $request->input('pr_memo'))->get();
+                $sam_id = collect();
+                $activity_id = collect();
+                $site_category = collect();
 
                 foreach ($sites as $site) {
-                    
+                    $sam_id->push($site->sam_id);
+                    if ($request->input("activity_name") == "NAM PR Memo Approval") {
+                        $activity_id->push('4');
+                    } else if ($request->input("activity_name") == "RAM Head PR Memo Approval") {
+                        $activity_id->push('3');
+                    }
+                    $site_category->push('none');
                     SubActivityValue::where('sam_id', $site->sam_id)
                                         ->where('type', "recommend_pr")
                                         ->update([
@@ -3410,11 +3443,12 @@ class GlobeController extends Controller
                                             'status' => $request->input("data_action") == "false" ? "denied" : "approved",
                                             'date_approved' => $request->input("data_action") == "false" ? NULL : Carbon::now()->toDate(),
                                         ]);
-    
-                    if ($request->input("data_action") == "false") {
-                        $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
-                    }
                 }
+
+                // if ($request->input("data_action") == "false") {
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
+                    $this->move_site( $sam_id->all(), 1, $request->input("data_action"), $site_category->all(), $activity_id->all() );
+                // }
 
                 $message_action = $request->input("data_action") == "false" ? "rejected" : "approved";
                 return response()->json(['error' => false, 'message' => "Successfully ".$message_action." PR Memo." ]);
@@ -3442,6 +3476,10 @@ class GlobeController extends Controller
 
                 $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
 
+                $samid_collect = collect();
+                $sitecategory_collect = collect();
+                $activityid_collect = collect();
+
                 foreach ($sites as $site) {
                     SiteEndorsementEvent::dispatch($site->sam_id);
 
@@ -3451,18 +3489,18 @@ class GlobeController extends Controller
                                             'site_po' => $request->input('po_number'),
                                         ]);
 
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                    $samid_collect->push($site->sam_id);
+                    $sitecategory_collect->push("none");
+                    $activityid_collect->push(6);
+                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
                 }
+                $sam_id = $samid_collect->all();
+                $site_category = $sitecategory_collect->all();
+                $activity_id = $activityid_collect->all();
+                $program_id = 1;
 
-
-
-                // \DB::connection('mysql2')->table("site")
-                //                 ->where("sam_id", $request->input("sam_id"))
-                //                 ->update([
-                //                     'site_po' => $request->input('po_number'),
-                //                 ]);
-
-                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                
+                $this->move_site($sam_id, $program_id, "true", $site_category, $activity_id);
 
                 return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
 

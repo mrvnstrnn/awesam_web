@@ -227,9 +227,9 @@
 
                                                 $site[0]->activity_name == "Vendor Awarding of Sites" && $main_activity == "" && \Auth::user()->profile_id == 8
 
-                                            )   
+                                            )
 
-                                                <x-pr-memo-approval :site="$site" :samid="$site[0]->sam_id" :prmemo="$pr_memo" :activity="$site[0]->activity_name" />
+                                                <x-pr-memo-approval :site="$site" :samid="$site[0]->sam_id" :prmemo="$pr_memo" :activity="$site[0]->activity_name" :sitecategory="$site[0]->site_category" :activityid="$site[0]->activity_id"  />
 
                                             @elseif($site[0]->activity_name == "RTB Docs Approval" && $main_activity == "")
 
