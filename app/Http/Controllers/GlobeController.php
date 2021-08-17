@@ -182,6 +182,7 @@ class GlobeController extends Controller
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
 
+            // return response()->json(['error' => true, 'message' => $request->all()]);
             if ($request->input('activity_name') == "endorse_site") {
 
                 $notification = "Successfully " .$message. " endorsement.";
@@ -192,7 +193,7 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval") {
 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
@@ -209,12 +210,16 @@ class GlobeController extends Controller
                 $site_category = $request->input('site_category');
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
 
             } else if ($request->input('activity_name') == "Vendor Awarding") {
 
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
                 $action = $request->input('data_action');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
 
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
                 
@@ -255,6 +260,9 @@ class GlobeController extends Controller
                 $notification = "Success";
                 $vendor = $request->input('site_vendor_id');
                 $action = $request->input('data_complete');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
             }
             
             // for ($i=0; $i < count($request->input('sam_id')); $i++) { 
@@ -1646,7 +1654,7 @@ class GlobeController extends Controller
                             ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
                             ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
                             ->where('milestone_tracking.program_id', $program_id)
-                            ->where('milestone_tracking.activity_type', 'PR / PO')
+                            ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
                             ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
                             ->where('milestone_tracking.activity_complete', 'false')
                             ->get();
@@ -1671,7 +1679,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("site")                    
                     ->where('program_id', $program_id)
-                    ->whereJsonContains('activities->activity_id', '11')
+                    ->whereJsonContains('activities->activity_id', '12')
                     // ->orwhereJsonContains('activities->activity_id', '22')
                     ->whereJsonContains('activities->profile_id', '8')
 
@@ -1817,7 +1825,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT'){
+        elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
@@ -2661,7 +2669,6 @@ class GlobeController extends Controller
     public function save_engagement(Request $request)
     {
         try {
-
             $validate = Validator::make($request->all(), array(
                 "lessor_approval" => "required",
                 "lessor_remarks" => "required",
@@ -2680,7 +2687,7 @@ class GlobeController extends Controller
                 ]); 
 
                 if ($request->input('lessor_approval') == "approved") {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], $request->input('activity_id'));
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
                 }
                 
 
@@ -2965,11 +2972,33 @@ class GlobeController extends Controller
                                 ->select('site_category')
                                 ->where("sam_id", $request->input("sam_id"))
                                 ->first();
-            
+
+            $activities = \DB::connection('mysql2')
+                    ->table('stage_activities')
+                    ->select('next_activity')
+                    ->where('activity_id', $request->input("activity_id"))
+                    ->where('program_id', $request->input('program_id'))
+                    ->where('category', $get_category->site_category)
+                    ->first();
+
             // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
 
-            $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$get_category->site_category], $request->input("activity_id"));
+            // $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$get_category->site_category], [$request->input("activity_id")]);
+
+            SiteStageTracking::where('sam_id', $request->input('sam_id'))
+                                                ->where('activity_complete', 'false')
+                                                ->where('activity_id', $request->input("activity_id"))
+                                                ->update([
+                                                    'activity_complete' => "true"
+                                                ]);
+        
+            SiteStageTracking::create([
+                'sam_id' => $request->input('sam_id'),
+                'activity_id' => $activities->next_activity,
+                'activity_complete' => 'false',
+                'user_id' => \Auth::id()
+            ]);
 
             \DB::connection('mysql2')->table("site")
                                     ->where("sam_id", $request->input("sam_id"))
