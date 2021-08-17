@@ -1671,10 +1671,10 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("site")                    
                     // ->where('program_id', $program_id)
-                    ->whereJsonContains('activities->activity_id', '11')
+                    ->where('current_activities->activity_id', '11')
                     ->get();
 
-                    dd($sites);
+                    // dd($sites);
 
         }
 
