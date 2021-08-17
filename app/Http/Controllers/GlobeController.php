@@ -1681,6 +1681,36 @@ class GlobeController extends Controller
 
         }
 
+        elseif($activity_type == 'ssds'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("site")                    
+                    ->where('program_id', $program_id)
+                    ->whereJsonContains('activities->activity_id', '11')
+                    // ->orwhereJsonContains('activities->activity_id', '22')
+                    ->whereJsonContains('activities->profile_id', '8')
+
+                    ->get();    
+
+                    // dd($sites);
+
+        }
+
+        elseif($activity_type == 'site-hunting'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("site")                    
+                    ->where('program_id', $program_id)
+                    ->whereJsonContains('activities->activity_id', '11')
+                    // ->orwhereJsonContains('activities->activity_id', '22')
+                    ->whereJsonContains('activities->profile_id', '8')
+
+                    ->get();    
+
+                    // dd($sites);
+
+        }
+
         
         elseif($activity_type == 'new endorsements globe'){
 
