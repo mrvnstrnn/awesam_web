@@ -1670,9 +1670,10 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("site")                    
-                    // ->where('program_id', $program_id)
-                    ->where('current_activities->activity_id', '11')
-                    ->get();
+                    ->where('program_id', $program_id)
+                    ->whereJsonContains('activities->activity_id', '11')
+                    ->whereJsonContains('activities->profile_id', '8')
+                    ->get();    
 
                     // dd($sites);
 
