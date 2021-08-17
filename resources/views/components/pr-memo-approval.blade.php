@@ -15,7 +15,6 @@
                     <div class="main-card mb-3 card ">
                         @php
                             $json = json_decode($pr_memo->value, true);
-
                         @endphp
                         <div class="dropdown-menu-header">
                             <div class="dropdown-menu-header-inner bg-dark">
@@ -469,7 +468,7 @@
                 sam_id : sam_id,
                 activity_name : activity_name,
                 data_action : data_action,
-                pr_number : pr_number
+                pr_number : pr_number,
             }
         } else if (activity_name == "Vendor Awarding of Sites") {
             var url = "/vendor-awarding-sites";
@@ -485,7 +484,7 @@
                 sam_id : sam_id,
                 activity_name : activity_name,
                 data_action : data_action,
-                po_number : po_number
+                po_number : po_number,
                 // vendor : vendor
             }
         } else {
@@ -500,7 +499,7 @@
                 id : id,
                 remarks : remarks,
                 pr_memo : pr_memo,
-                recommendation_site : recommendation_site
+                recommendation_site : recommendation_site,
             }
         }
 

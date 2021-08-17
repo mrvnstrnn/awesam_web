@@ -70,6 +70,8 @@
                             <div class="form_div">
                                 <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                                     
+                                    <input type="hidden" class="form-control" name="site_category" id="site_category" value="none">
+                                    <input type="hidden" class="form-control" name="activity_id" id="activity_id" value="2">
                                     <div class="form-row">
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
