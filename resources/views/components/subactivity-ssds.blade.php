@@ -11,7 +11,7 @@
         <H5 id="active_action">Add Target Sites</H5>
     </div>
 </div>
-{{-- <ul class="tabs-animated body-tabs-animated nav mb-4">
+<ul class="tabs-animated body-tabs-animated nav mb-4">
     <li class="nav-item">
         <a role="tab" class="nav-link active" id="tab-target-sites" data-toggle="tab" href="#tab-content-target-sites">
             <span>Target Sites</span>
@@ -23,8 +23,8 @@
         </a>
     </li>
 </ul>
-<div class="tab-content"> --}}
-    {{-- <div class="tab-pane tabs-animation fade active show" id="tab-content-target-sites" role="tabpanel"> --}}
+<div class="tab-content">
+    <div class="tab-pane tabs-animation fade active show" id="tab-content-target-sites" role="tabpanel">
         <div class="row pt-3" id="ssds_table">
             <div class="col-md-12">
                 <table class="table" id="dtTable">
@@ -108,11 +108,11 @@
 
             </div>
         </div>
-    {{-- </div> --}}
-    {{-- <div class="tab-pane tabs-animation fade" id="tab-content-dshr" role="tabpanel">
+    </div>
+    <div class="tab-pane tabs-animation fade" id="tab-content-dshr" role="tabpanel">
         @include('components.subactivity-doc-upload')
     </div>
-</div> --}}
+</div>
 
 <script src="/js/dropzone/dropzone.js"></script>
 
