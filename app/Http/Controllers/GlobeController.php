@@ -1689,7 +1689,10 @@ class GlobeController extends Controller
                             ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
                             ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
                             ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                            // ->where('site.activities->activity_id', '3')
+                            // ->whereJsonContains('site.activities->activity_id', '3')
+                            ->whereJsonContains('activities->activity_id', '3')
+                            ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
+                            // ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
                             ->get();
         }
 
@@ -1702,9 +1705,11 @@ class GlobeController extends Controller
                                 ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
                                 ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
                                 ->where('site.program_id', $program_id)
-                                ->where('activities->activity_id', '2')
-                                ->where('activities->profile_id', '8')
-
+                                // ->where('activities->activity_id', '2')
+                                // ->where('activities->profile_id', \Auth::user()->profile_id)
+                                
+                                ->whereJsonContains('activities->activity_id', '2')
+                                ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
                             // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
                             // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
                             ->get();
@@ -3397,14 +3402,49 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                
-                $current = \Carbon::now()->format('YmdHs');
-
-                $file_name = 'create-pr-memo-'.$current.'.pdf';
 
                 $last_pr_memo = PrMemoTable::orderBy('pr_memo_id', 'desc')->first();
 
                 $generated_pr = "PR-MEMO-00000".(!is_null($last_pr_memo) ? $last_pr_memo->pr_memo_id + 1 : 0 + 1);
+
+                $current = \Carbon::now()->format('YmdHs');
+
+                $file_name = 'create-pr-memo-'.$current.'.pdf';
+
+                $sites = \DB::connection('mysql2')
+                                ->table('new_sites')
+                                ->whereIn('sam_id', $request->input("sam_id"))
+                                ->get();
+
+                $view = \View::make('components.create-pr-po-pdf')
+                    ->with([
+                        'budget_source' => $request->input("budget_source"),
+                        'date_created' => $request->input("date_created"),
+                        'department' => $request->input("department"),
+                        'division' => $request->input("division"),
+                        'from' => $request->input("from"),
+                        'group' => $request->input("group"),
+                        'recommendation' => $request->input("recommendation"),
+                        'requested_amount' => $request->input("requested_amount"),
+                        'subject' => $request->input("subject"),
+                        'thru' => $request->input("thru"),
+                        'to' => $request->input("to"),
+                        'sites' => $sites,
+                    ])
+                    ->render();
+
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf = PDF::loadHTML($view);
+                $pdf->setPaper('a4', 'landscape');
+                $pdf->download();
+                // $pdf->setWarnings(false);
+
+                // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
+
+                \Storage::put('pdf/'.$file_name, $pdf->output());
+
+
+                // return response()->json([ 'error' => true, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
 
                 $pr_memo_table = PrMemoTable::create([
                     'budget_source' => $request->input("budget_source"),

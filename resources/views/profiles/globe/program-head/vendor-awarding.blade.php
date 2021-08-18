@@ -10,12 +10,40 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New CLP" activitytype="new clp"/>
+<x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Vendor Awarding" activitytype="vendor awarding"/>
 
 @endsection
 
 
 @section('modals')
+
+{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="background-color: transparent; border: 0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="main-card mb-3 card ">
+
+                        <div class="dropdown-menu-header">
+                            <div class="dropdown-menu-header-inner bg-dark">
+                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                <div class="menu-header-content btn-pane-right">
+                                    <h5 class="menu-header-title">
+                                        Endorsement
+                                    </h5>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
 
 <div class="ajax_content_box"></div>
 
@@ -156,18 +184,16 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                                    $sites = \DB::connection('mysql2') 
-                                                                    ->table("site")
-                                                                    ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                                                    ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                                                    ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                                                    ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                                                    ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "site.sam_id")
-                                                                    ->where('site.program_id', 1)
-                                                                    ->where('activities->activity_id', '2')
-                                                                    ->where('activities->profile_id', '8')
+                                                    $sites = \DB::connection('mysql2')
+                                                                    ->table("milestone_tracking")
+                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking.sam_id")
+                                                                    ->where('milestone_tracking.program_id', 1)
+                                                                    ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
+                                                                    ->where('milestone_tracking.activity_name', 'Create PR')
+                                                                    ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
+                                                                    ->where('milestone_tracking.activity_complete', 'false')
                                                                     ->get();
+                                                                    // dd($sites);
                                                 @endphp
                                                 <select name="financial_analysis" id="financial_analysis" class="form-control">
                                                     <option value="">Select site</option>
@@ -226,7 +252,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'new_clp';
+    var table_to_load = 'vendor_awarding';
     // var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////
@@ -378,19 +404,17 @@
             },
             success: function (resp){
                 if (!resp.error) {
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
                     $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
 
                     
                         $(".pr_po_form #file_name").val(resp.file_name);
-                        // $(".print_to_pdf").trigger("click");
-
-                        var pdf_link = "/files/pdf/" + resp.file_name;
-
-                        Swal.fire(
-                            'Success',
-                            resp.message + "<br><a href='"+pdf_link+"' download='"+resp.file_name+"'>Download PR Memo</a>",
-                            'success'
-                        )
+                        $(".print_to_pdf").trigger("click");
 
                         $("#craetePrPoModal").modal("hide");
                         
