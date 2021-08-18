@@ -155,7 +155,7 @@ function getCols(active_program, active_table, active_profile){
                                     name: field['field_name'],
                                     render : function(data){
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                        return col['activity_id'];
+                                        return col['activity_name'];
                                     }
                                 }
                             );
