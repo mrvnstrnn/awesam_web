@@ -338,7 +338,7 @@ class GlobeController extends Controller
             if ( in_array($activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                         ->table('stage_activities')
-                                        ->select('next_activity', 'activity_name')
+                                        ->select('next_activity')
                                         ->where('activity_id', $activity_id[$i])
                                         ->where('program_id', $program_id)
                                         ->where('category', $site_category[$i])
@@ -346,7 +346,7 @@ class GlobeController extends Controller
 
                 $get_activitiess = \DB::connection('mysql2')
                                         ->table('stage_activities')
-                                        ->select('next_activity')
+                                        ->select('next_activity', 'activity_name')
                                         ->where('activity_id', $activities->next_activity)
                                         ->where('program_id', $program_id)
                                         ->where('category', $site_category[$i])
@@ -400,7 +400,7 @@ class GlobeController extends Controller
     
                     $array = array(
                         'activity_id' => $activity,
-                        'activity_name' => $activities->activity_name,
+                        'activity_name' => $get_activitiess->activity_name,
                         'profile_id' => $get_activity->profile_id,
                         'category' => $site_category[$i],
                         'activity_created' => Carbon::now()->toDateString(),
