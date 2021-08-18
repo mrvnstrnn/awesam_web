@@ -311,7 +311,7 @@ class GlobeController extends Controller
             //                             return response()->json(['error' => true, 'message' => $get_activities]);
 
             // }
-
+            
             $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             return response()->json(['error' => false, 'message' => $notification ]);
@@ -338,7 +338,7 @@ class GlobeController extends Controller
             if ( in_array($activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                         ->table('stage_activities')
-                                        ->select('next_activity')
+                                        ->select('next_activity', 'activity_name')
                                         ->where('activity_id', $activity_id[$i])
                                         ->where('program_id', $program_id)
                                         ->where('category', $site_category[$i])
