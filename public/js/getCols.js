@@ -148,6 +148,19 @@ function getCols(active_program, active_table, active_profile){
                             );
                             break;
 
+                        case 'activities':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render : function(data){
+                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                        return col['activity_id'];
+                                    }
+                                }
+                            );
+                            break;
+
                         default:
                             cols.push(
                                 {
