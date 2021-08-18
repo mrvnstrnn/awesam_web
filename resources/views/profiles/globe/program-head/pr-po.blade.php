@@ -10,7 +10,7 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR / PO" activitytype="site prmemo"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR / PO" activitytype="pr memo"/>
 
 @endsection
 
@@ -64,7 +64,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 10;
-    var table_to_load = 'pr_po';
+    var table_to_load = 'pr_memo';
 
     //////////////////////////////////////
 </script>

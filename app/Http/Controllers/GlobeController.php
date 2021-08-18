@@ -346,7 +346,7 @@ class GlobeController extends Controller
 
                 $get_activitiess = \DB::connection('mysql2')
                                         ->table('stage_activities')
-                                        ->select('next_activity', 'activity_name')
+                                        ->select('next_activity', 'activity_name', 'profile_id')
                                         ->where('activity_id', $activities->next_activity)
                                         ->where('program_id', $program_id)
                                         ->where('category', $site_category[$i])
@@ -401,9 +401,9 @@ class GlobeController extends Controller
                     $array = array(
                         'activity_id' => $activity,
                         'activity_name' => $get_activitiess->activity_name,
-                        'profile_id' => $get_activity->profile_id,
+                        'profile_id' => $get_activitiess->profile_id,
                         'category' => $site_category[$i],
-                        'actiity_created' => Carbon::now()->toDate(),
+                        'activity_created' => Carbon::now()->toString(),
                     );
     
                     Site::where('sam_id', $sam_id[$i])
@@ -1688,8 +1688,8 @@ class GlobeController extends Controller
                             ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
                             ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
                             ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                            ->where('site.activities->activity_id', '3')
                             ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                            // ->where('site.activities->activity_id', '3')
                             ->get();
         }
 
@@ -2132,7 +2132,7 @@ class GlobeController extends Controller
                         
             $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', 'create_pr')
-                                        ->orderBy('date_created', 'desc')
+                                        // ->orderBy('date_created', 'desc')
                                         ->first();
 
             if($request['vendor_mode']){
@@ -2152,9 +2152,9 @@ class GlobeController extends Controller
                 ->render();
 
             } else {
-
                 if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
                     $what_modal = "components.pr-memo-approval";
+
 
                     return \View::make($what_modal)
                     ->with([
@@ -2167,7 +2167,6 @@ class GlobeController extends Controller
                 }
 
                 $what_modal = "components.modal-view-site";
-
                 return \View::make($what_modal)
                 ->with([
                     'site' => $site,
@@ -3481,11 +3480,62 @@ class GlobeController extends Controller
                         ]);
                     }
 
-                    
-                    $this->move_site($request->input('sam_id'), 1, "true", ["none"], ["2"]);
+                    SiteStageTracking::where('sam_id', $request->input("sam_id")[$i])
+                                                ->where('activity_complete', 'false')
+                                                ->where('activity_id', $request->input("activity_id"))
+                                                ->update([
+                                                    'activity_complete' => "true"
+                                                ]);
 
+                    $activities = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('next_activity')
+                                                ->where('activity_id', $request->input("activity_id"))
+                                                ->where('program_id', 1)
+                                                ->where('category', $request->input("site_category"))
+                                                ->first();
+        
+                    $get_activitiess = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('next_activity', 'activity_name', 'profile_id')
+                                                ->where('activity_id', $activities->next_activity)
+                                                ->where('program_id', 1)
+                                                ->where('category', $request->input("site_category"))
+                                                ->first();
+
+
+                    $site_check = SiteStageTracking::where('sam_id', $request->input("sam_id")[$i])
+                                                        ->where('activity_id', $activities->next_activity)
+                                                        ->where('activity_complete', "false")
+                                                        ->where('user_id', \Auth::id())
+                                                        ->first();
+
+                    if (is_null($site_check)) {
+
+                        SiteStageTracking::create([
+                            'sam_id' => $request->input("sam_id")[$i],
+                            'activity_id' => $activities->next_activity,
+                            'activity_complete' => 'false',
+                            'user_id' => \Auth::id()
+                        ]);
+                    }
+                        
+                    $array = array(
+                        'activity_id' => $request->input("activity_id"),
+                        'activity_name' => $get_activitiess->activity_name,
+                        'profile_id' => $get_activitiess->profile_id,
+                        'category' => $request->input("site_category"),
+                        'activity_created' => Carbon::now()->toString(),
+                    );
+    
+                    Site::where('sam_id', $request->input("sam_id")[$i])
+                    ->update([
+                        'activities' => json_encode($array)
+                    ]);
                     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
                 }
+
+                // $this->move_site($samid_collect->all(), 1, "true", $sitecategory_collect->all(), $activity_id_collect->all());
                 
                 return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
             } else {
@@ -3565,6 +3615,7 @@ class GlobeController extends Controller
     public function approve_reject_pr_memo (Request $request)
     {
         try {
+            // return response()->json([ 'error' => true, 'message' => $request->all() ]);
             $required = $request->input("data_action") == "false" ? "required" : "";
 
             $validate = \Validator::make($request->all(), array(
