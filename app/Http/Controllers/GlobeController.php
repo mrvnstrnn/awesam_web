@@ -1647,19 +1647,48 @@ class GlobeController extends Controller
         }
 
 
-        elseif($activity_type == 'site prmemo'){
+        // elseif($activity_type == 'site prmemo'){
+        //     $sites = \DB::connection('mysql2') 
+        //                     ->table("milestone_tracking")
+        //                     ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
+        //                     ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
+        //                     ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
+        //                     ->where('milestone_tracking.program_id', $program_id)
+        //                     ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
+        //                     ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
+        //                     ->where('milestone_tracking.activity_complete', 'false')
+        //                     ->get();
+
+        // }
+
+        elseif($activity_type == 'pr memo'){
             $sites = \DB::connection('mysql2') 
-                            ->table("milestone_tracking")
-                            ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
-                            ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
-                            ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
-                            ->where('milestone_tracking.program_id', $program_id)
-                            ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
-                            ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
-                            ->where('milestone_tracking.activity_complete', 'false')
+                            ->table("pr_memo_table")
+                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
+                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
+                            ->where('site.activities->activity_id', '3')
+                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                             ->get();
 
         }
+
+        elseif($activity_type == 'new clp'){
+            $sites = \DB::connection('mysql2') 
+                                ->table("site")
+                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                ->where('site.program_id', $program_id)
+                                ->where('activities->activity_id', '2')
+                                ->where('activities->profile_id', '8')
+
+                            // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
+                            // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
+                            ->get();
+
+        }
+
             
         elseif($activity_type == 'doc validation'){
 
