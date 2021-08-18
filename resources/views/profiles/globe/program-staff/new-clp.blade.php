@@ -156,16 +156,18 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                                    $sites = \DB::connection('mysql2')
-                                                                    ->table("milestone_tracking")
-                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking.sam_id")
-                                                                    ->where('milestone_tracking.program_id', 1)
-                                                                    ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
-                                                                    ->where('milestone_tracking.activity_name', 'Create PR')
-                                                                    ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
-                                                                    ->where('milestone_tracking.activity_complete', 'false')
+                                                    $sites = \DB::connection('mysql2') 
+                                                                    ->table("site")
+                                                                    ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                                                    ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                                                    ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                                                    ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                                                    ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "site.sam_id")
+                                                                    ->where('site.program_id', 1)
+                                                                    ->where('activities->activity_id', '2')
+                                                                    ->where('activities->profile_id', '8')
                                                                     ->get();
-                                                                    // dd($sites);
                                                 @endphp
                                                 <select name="financial_analysis" id="financial_analysis" class="form-control">
                                                     <option value="">Select site</option>
