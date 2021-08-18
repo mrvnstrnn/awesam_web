@@ -10,7 +10,7 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Vendor Awarding" activitytype="site prmemo"/>
+<x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Vendor Awarding" activitytype="vendor awarding"/>
 
 @endsection
 
@@ -252,7 +252,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'pr_po';
+    var table_to_load = 'vendor_awarding';
     // var main_activity = 'New Endorsements Globe';
 
     //////////////////////////////////////

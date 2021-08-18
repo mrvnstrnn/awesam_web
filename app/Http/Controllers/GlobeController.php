@@ -1661,6 +1661,17 @@ class GlobeController extends Controller
 
         // }
 
+        elseif($activity_type == 'pr issuance'){
+            $sites = \DB::connection('mysql2') 
+                            ->table("pr_memo_table")
+                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
+                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
+                            ->where('site.activities->activity_id', '3')
+                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                            ->get();
+
+        }
+
         elseif($activity_type == 'pr memo'){
             $sites = \DB::connection('mysql2') 
                             ->table("pr_memo_table")
