@@ -311,6 +311,7 @@ class GlobeController extends Controller
             //                             return response()->json(['error' => true, 'message' => $get_activities]);
 
             // }
+
             $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             return response()->json(['error' => false, 'message' => $notification ]);
@@ -399,8 +400,10 @@ class GlobeController extends Controller
     
                     $array = array(
                         'activity_id' => $activity,
-                        'profile_id' => \Auth::user()->profile_id,
-                        'category' => $site_category[$i]
+                        'activity_name' => $activities->activity_name,
+                        'profile_id' => $get_activity->profile_id,
+                        'category' => $site_category[$i],
+                        'actiity_created' => Carbon::now()->toDate(),
                     );
     
                     Site::where('sam_id', $sam_id[$i])
@@ -1688,7 +1691,6 @@ class GlobeController extends Controller
                             ->where('site.activities->activity_id', '3')
                             ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                             ->get();
-
         }
 
         elseif($activity_type == 'new clp'){

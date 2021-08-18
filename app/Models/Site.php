@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 
-
 class Site extends Model
 {
     use BroadcastsEvents, HasFactory;
@@ -19,7 +18,7 @@ class Site extends Model
 
     public function broadcastOn($event)
     {
-        return [new Channel('site.tracking')];
+        return [new PrivateChannel('site-tracking.'.\Auth::id())];
     }
     
     public function broadcastAs()
