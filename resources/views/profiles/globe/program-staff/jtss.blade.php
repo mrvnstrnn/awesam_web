@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="JTSS Schedule" activitytype="jtss"/>
+  <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="JTSS Schedule" activitytype="schedule jtss"/>
 
 @endsection
 
@@ -17,7 +17,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'jtss';
+    var table_to_load = 'schedule_jtss';
     var main_activity = 'JTSS Schedule';
  
     //////////////////////////////////////

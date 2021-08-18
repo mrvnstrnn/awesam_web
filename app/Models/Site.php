@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
+
 
 class Site extends Model
 {
-    use HasFactory;
+    use BroadcastsEvents, HasFactory;
 
     protected $connection = 'mysql2';
     protected $table = 'site';

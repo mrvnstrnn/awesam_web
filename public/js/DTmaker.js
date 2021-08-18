@@ -11,6 +11,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
             filter: true,
             searching: true,
             lengthChange: true,
+            responsive: true,
             regex: true,
             ajax: {
                 url: $(whatTable).attr('data-href'),
@@ -55,7 +56,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     "visible": true,
                     "searchable": true,
                     "render": function ( data, type, row ) {
-                        return '<div class="font-weight-bold">' + data +'</div> <small>'+ row['sam_id'] + '</small>';
+                        return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div>';
                     },
                 },
                 {
