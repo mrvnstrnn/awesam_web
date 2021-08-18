@@ -18,7 +18,7 @@ class Site extends Model
 
     public function broadcastOn($event)
     {
-        return [new PrivateChannel('site-tracking.'.\Auth::id())];
+        return [new PrivateChannel('site-tracking')];
     }
     
     public function broadcastAs()

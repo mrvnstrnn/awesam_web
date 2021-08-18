@@ -403,7 +403,7 @@ class GlobeController extends Controller
                         'activity_name' => $get_activitiess->activity_name,
                         'profile_id' => $get_activitiess->profile_id,
                         'category' => $site_category[$i],
-                        'activity_created' => Carbon::now()->toString(),
+                        'activity_created' => Carbon::now()->toDateString(),
                     );
     
                     Site::where('sam_id', $sam_id[$i])
