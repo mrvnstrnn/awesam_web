@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Site Hunting" activitytype="site-hunting"/>
+  <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Site Hunting" activitytype="site hunting validation"/>
 
 @endsection
 
@@ -17,7 +17,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 8;
-    var table_to_load = 'site-hunting';
+    var table_to_load = 'site_hunting';
     var main_activity = 'Site Huting';
  
     //////////////////////////////////////

@@ -10,7 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 
 class Site extends Model
 {
-    use HasFactory;
+    use BroadcastsEvents, HasFactory;
 
     protected $connection = 'mysql2';
     protected $table = 'site';
