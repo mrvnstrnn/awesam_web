@@ -399,7 +399,7 @@ class GlobeController extends Controller
     
                     $array = array(
                         'activity_id' => $activity,
-                        'profile_id' => \Auth::user()->profile_id,
+                        'profile_id' => $get_activity->profile_id,
                         'category' => $site_category[$i]
                     );
     
