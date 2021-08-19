@@ -135,7 +135,7 @@
                                                                             ->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
 
                                                     @endphp
-                                                    {{-- @if($activity == 'Set Ariba PR Number' || $activity == 'Vendor Awarding of Sites') --}}
+                                                    @if($activity == 'Set Ariba PR Number to Sites' || $activity == 'Vendor Awarding of Sites')
                                                     <div class="form-row">
                                                         <div class="col-md-6">
                                                             <div class="form-group pr_number_area">
@@ -153,7 +153,7 @@
                                                         </div>        
                                                     </div>
                                                     <hr>
-                                                    {{-- @endif --}}
+                                                    @endif
                                                     <div class="form-row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
@@ -428,7 +428,7 @@
     $(".form_details").on("click", function(e){
         
         e.preventDefault();
-        document.getElementById("pr_number").focus();
+        // document.getElementById("pr_number").focus();
 
         $(".pr_number_area").removeClass("d-none");
         $(".form_details_pr").removeClass("d-none");

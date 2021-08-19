@@ -3688,19 +3688,30 @@ class GlobeController extends Controller
                     $sam_id->push($site->sam_id);
                     if ($request->input("activity_name") == "NAM PR Memo Approval") {
                         $activity_id->push('4');
+                        
+                        // SubActivityValue::where('sam_id', $site->sam_id)
+                        //                 ->where('type', "recommend_pr")
+                        //                 ->update([
+                        //                     'value' => $request->input("recommendation_site"),
+                        //                     'user_id' => \Auth::id(),
+                        //                     'approver_id' => \Auth::id(),
+                        //                     'status' => "pending",
+                        //                     'date_created' => Carbon::now()->toDate(),
+                        //                 ]);
+
+                        if (!is_null($request->input('recommendation_site'))) {
+                            SubActivityValue::create([
+                                'sam_id' => $site->sam_id,
+                                'type' => "recommend_pr",
+                                'value' => $request->input("recommendation_site"),
+                                'user_id' => \Auth::id(),
+                                'status' => "pending",
+                            ]);
+                        }
                     } else if ($request->input("activity_name") == "RAM Head PR Memo Approval") {
                         $activity_id->push('3');
                     }
                     $site_category->push('none');
-                    SubActivityValue::where('sam_id', $site->sam_id)
-                                        ->where('type', "recommend_pr")
-                                        ->update([
-                                            'value' => $request->input("recommendation_site"),
-                                            'user_id' => \Auth::id(),
-                                            'approver_id' => \Auth::id(),
-                                            'status' => "pending",
-                                            'date_created' => Carbon::now()->toDate(),
-                                        ]);
 
                     SubActivityValue::where('sam_id', $site->sam_id)
                                         ->where('type', "create_pr")
