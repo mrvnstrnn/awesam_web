@@ -1663,6 +1663,21 @@ class GlobeController extends Controller
         //                     ->get();
 
         // }
+        elseif($activity_type == 'vendor awarding'){
+            $sites = \DB::connection('mysql2') 
+                            ->table("pr_memo_table")
+                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
+                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
+                            ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                            ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                            ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                            ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                            // ->where('site.activities->activity_id', '3')
+                            ->whereJsonContains('site.activities->activity_id', '6')
+                            ->get();
+
+        }
 
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2') 
@@ -1673,8 +1688,9 @@ class GlobeController extends Controller
                             ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
                             ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
                             ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                            ->where('site.activities->activity_id', '3')
                             ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                            // ->where('site.activities->activity_id', '3')
+                            ->whereJsonContains('site.activities->activity_id', '5')
                             ->get();
 
         }
@@ -1689,9 +1705,9 @@ class GlobeController extends Controller
                             ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
                             ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
                             ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                            // ->whereJsonContains('site.activities->activity_id', '3')
-                            ->whereJsonContains('activities->activity_id', '3')
-                            ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
+                            // ->whereJsonContains('site.activities->activity_id', '2')
+                            ->whereIn('site.activities->activity_id', ['3', '4'])
+                            // ->whereJsonContains('site.activities->profile_id', \Auth::user()->profile_id)
                             // ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
                             ->get();
         }
@@ -3577,7 +3593,7 @@ class GlobeController extends Controller
 
                 // $this->move_site($samid_collect->all(), 1, "true", $sitecategory_collect->all(), $activity_id_collect->all());
                 
-                return response()->json([ 'error' => false, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
+                return response()->json([ 'error' => false, 'message' => "Successfully added PR Memo.", "file_name" => $file_name ]);
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
