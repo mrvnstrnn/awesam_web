@@ -3577,11 +3577,11 @@ class GlobeController extends Controller
                     }
                         
                     $array = array(
-                        'activity_id' => $request->input("activity_id"),
+                        'activity_id' => $activities->next_activity,
                         'activity_name' => $get_activitiess->activity_name,
                         'profile_id' => $get_activitiess->profile_id,
                         'category' => $request->input("site_category"),
-                        'activity_created' => Carbon::now()->toString(),
+                        'activity_created' => Carbon::now()->toDateString(),
                     );
     
                     Site::where('sam_id', $request->input("sam_id")[$i])
