@@ -353,23 +353,28 @@
                                         <hr>
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
-                                            <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
+                                            @if (\Auth::user()->profile_id == 8)
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
-                                            <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
-                                        @elseif ($activity == "Vendor Awarding of Sites")
-                                            <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
-                                        @else
-                                            @if (\Auth::user()->profile_id == 10)
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
-
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
-                                            @else
-
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
                                             @endif
+                                        @elseif ($activity == "Vendor Awarding of Sites")
+                                            @if (\Auth::user()->profile_id == 8)
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                            @endif
+                                        @else
+                                            {{-- @if (\Auth::user()->profile_id != 8) --}}
+                                                @if (\Auth::user()->profile_id == 10)
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
 
-                                            <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                @elseif (\Auth::user()->profile_id == 9)
+
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                @endif
+                                                <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                            {{-- @endif --}}
                                         @endif
 
                                     </form>

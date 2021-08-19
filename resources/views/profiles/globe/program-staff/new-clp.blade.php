@@ -378,17 +378,19 @@
             },
             success: function (resp){
                 if (!resp.error) {
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
-
                     $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
 
                     
                         $(".pr_po_form #file_name").val(resp.file_name);
-                        $(".print_to_pdf").trigger("click");
+                        // $(".print_to_pdf").trigger("click");
+
+                        var pdf_link = "/files/pdf/" + resp.file_name;
+
+                        Swal.fire(
+                            'Success',
+                            resp.message + "<br><a href='"+pdf_link+"' download='"+resp.file_name+"'>Download PR Memo</a>",
+                            'success'
+                        )
 
                         $("#craetePrPoModal").modal("hide");
                         
