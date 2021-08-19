@@ -34,11 +34,9 @@ function makeDT(whatTable, whatCols, table_to_load) {
             createdRow: function (row, data, dataIndex) {
                 var activity_name = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
 
-                
-                console.log(JSON.parse(activity_name).activity_name);
                 $(row).attr('data-site_all', JSON.stringify(data));
                 // $(row).attr('data-activity', data.activity_name);
-                $(row).attr('data-activity', JSON.parse(activity_name).activity_name);
+                $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
                 $(row).attr('data-main_activity', main_activity);
