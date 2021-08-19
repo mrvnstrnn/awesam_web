@@ -369,11 +369,14 @@
                                                     <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
 
                                                     <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                    
+                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                                 @elseif (\Auth::user()->profile_id == 9 && $activity == "RAM Head PR Memo Approval")
 
                                                     <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+
+                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                                 @endif
-                                                <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
                                             {{-- @endif --}}
                                         @endif
 
