@@ -45,6 +45,13 @@ class UserController extends Controller
 
     public function onboarding()
     {
+        if(count(\Auth::user()->getUserDetail()->get()) < 1){
+            $locate = Location::select('region');
+            $locations = $locate->groupBy('region')->get();
+
+            $user_details = \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first();
+            return view('profiles.enrollment', compact('locations', 'user_details'));
+        }
         if(is_null(\Auth::user()->profile_id)){
             $locate = Location::select('region');
             $locations = $locate->groupBy('region')->get();
@@ -305,6 +312,9 @@ class UserController extends Controller
 
     public function index()
     {
+        if(count(\Auth::user()->getUserDetail()->get()) < 1){
+            return redirect('/onboarding');
+        }
         if(is_null(\Auth::user()->profile_id)){
             return redirect('/onboarding');
         } else {

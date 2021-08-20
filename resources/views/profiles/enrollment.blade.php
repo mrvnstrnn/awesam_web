@@ -54,7 +54,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="middlename">Middlename</label>
-                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control" value="{{ \Auth::user()->getUserDetail()->first()->middlename ? \Auth::user()->getUserDetail()->first()->middlename : "" }}">
+                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->middlename : "" }}">
                                                         <small class="middlename-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -83,14 +83,14 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="nickname">Nickname</label>
-                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required value="{{ \Auth::user()->getUserDetail()->first()->nickname ? \Auth::user()->getUserDetail()->first()->nickname : "" }}">
+                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->nickname : "" }}">
                                                         <small class="nickname-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="birthday">Birthday</label>
-                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required value="{{ \Auth::user()->getUserDetail()->first()->birthday ? \Auth::user()->getUserDetail()->first()->birthday : "" }}">
+                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->birthday : "" }}">
                                                         <small class="birthday-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -125,14 +125,14 @@
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="contact_no">Cellphone</label>
-                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX"  type="text" class="form-control" value="{{ \Auth::user()->getUserDetail()->first()->contact_no ? \Auth::user()->getUserDetail()->first()->contact_no : "" }}" required>
+                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX"  type="text" class="form-control" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->contact_no : "" }}" required>
                                                         <small class="contact_no-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="landline">Landline</label>
-                                                        <input name="landline" id="landline" value="{{ \Auth::user()->getUserDetail()->first()->landline ? \Auth::user()->getUserDetail()->first()->landline : "" }}" placeholder="Telephone Number"  type="text" class="form-control">
+                                                        <input name="landline" id="landline" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->landline : "" }}" placeholder="Telephone Number"  type="text" class="form-control">
                                                         <small class="landline-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -172,7 +172,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="address">Address</label>
-                                                        <textarea name="address" id="address" value="{{ \Auth::user()->getUserDetail()->first()->address ? \Auth::user()->getUserDetail()->first()->address : "" }}" class="form-control"></textarea>
+                                                        <textarea name="address" id="address" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->address : "" }}" class="form-control"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,11 +188,16 @@
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="designation">Designation</label>
-                                                        <select name="designation" id="designation"  class="form-control" required>
-                                                            <option  disabled selected>Designation</option>
-                                                            <option value="2">Agent</option>
-                                                            <option value="3">Supervisor</option>
-                                                        </select>
+                                                        @if (\Auth::user()->getUserProfile()->mode == "vendor")
+                                                            <select name="designation" id="designation"  class="form-control" required>
+                                                                <option  disabled selected>Designation</option>
+                                                                <option value="2">Agent</option>
+                                                                <option value="3">Supervisor</option>
+                                                            </select>
+                                                        @else
+                                                            <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
+                                                            <input type="hidden" value="{{ \Auth::user()->profile_id }}">
+                                                        @endif
                                                         <small class="designation-error text-danger"></small>
                                                     </div>
                                                 </div>
