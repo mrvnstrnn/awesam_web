@@ -251,8 +251,8 @@
                                                     <div class="position-relative form-group">
 
                                                         <div class="justify-content-center mb-3 upload-take-button">
-                                                            <button id="take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
-                                                             or 
+                                                            {{-- <button id="take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
+                                                             or  --}}
                                                             <button id="upload_phto" type="button" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Upload photo</button>
                                                         </div>
 
@@ -458,42 +458,42 @@
     var btnCapture = document.getElementById( "shoot_camera" );
     var stream = document.getElementById( "player" );
 
-    btnCapture.addEventListener( "click", captureSnapshot );
+    // btnCapture.addEventListener( "click", captureSnapshot );
 
-    var capture = document.getElementById( "canvas" );
+    // var capture = document.getElementById( "canvas" );
 
-    const constraints = {
-        video: true,
-    };
+    // const constraints = {
+    //     video: true,
+    // };
 
-    navigator.mediaDevices.getUserMedia(constraints)
-    .then((stream) => {
-        player.srcObject = stream;
-    });
+    // navigator.mediaDevices.getUserMedia(constraints)
+    // .then((stream) => {
+    //     player.srcObject = stream;
+    // });
 
-    function captureSnapshot() {
-        var ctx = capture.getContext( '2d' );
-        var img = new Image();
+    // function captureSnapshot() {
+    //     var ctx = capture.getContext( '2d' );
+    //     var img = new Image();
 
-        ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+    //     ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
-        var dataUrl = capture.toDataURL( "image/png" );
-        img.src = capture.toDataURL( "image/png" );
-        // img.width = 240;
-        img.setAttribute("class", "w-100 h-auto");
+    //     var dataUrl = capture.toDataURL( "image/png" );
+    //     img.src = capture.toDataURL( "image/png" );
+    //     // img.width = 240;
+    //     img.setAttribute("class", "w-100 h-auto");
 
-        snapshot.innerHTML = '';
+    //     snapshot.innerHTML = '';
 
-        snapshot.appendChild( img );
+    //     snapshot.appendChild( img );
 
-        $("input[name=capture_image]").val(dataUrl);
+    //     $("input[name=capture_image]").val(dataUrl);
 
-        $("#snapshot").removeClass("d-none");
-        $("#player").addClass("d-none");
-        $("#shoot_camera").addClass("d-none");
+    //     $("#snapshot").removeClass("d-none");
+    //     $("#player").addClass("d-none");
+    //     $("#shoot_camera").addClass("d-none");
 
-        $("#change_photo").removeClass("d-none");
-    }
+    //     $("#change_photo").removeClass("d-none");
+    // }
 
     $("#change_photo").on("click", function(){
         $("#snapshot").addClass("d-none");
