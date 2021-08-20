@@ -85,7 +85,7 @@
                                     <div class="position-relative row form-group">
                                         <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                                         <div class="col-sm-9">
-                                            <select name="coop" id="coop" class="form-control">
+                                            <select name="coop" id="coop" class="form-control" readonly>
                                                 @php
                                                     $coops = \DB::connection('mysql2')
                                                         ->table("local_coop")

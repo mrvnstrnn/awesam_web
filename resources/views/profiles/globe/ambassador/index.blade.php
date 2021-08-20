@@ -111,7 +111,7 @@
                                     <div class="position-relative row form-group">
                                         <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                                         <div class="col-sm-9">
-                                            <select name="coop" id="coop" class="form-control">
+                                            <select name="coop" id="coop" class="form-control" readonly>
                                                 <option value="">Select COOP</option>
                                                 @foreach ($coops as $coop)
                                                     <option value="{{$coop->coop_name}}">{{ strtoupper($coop->coop_name)}}</option>
@@ -335,7 +335,7 @@
                                                 <small class="date_history-error text-danger"></small>
                                             </div> --}}
 
-                                            <div class="form-group">
+                                            <div class="form-group d-none">
                                                 <label for="user_id">Staff</label>
                                                 <select class="form-control" name="user_id" id="user_id"></select>
                                                 <small class="user_id-error text-danger"></small>
@@ -418,6 +418,7 @@
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
                         <option value="">Nature of Issue</option>
+                        <option value="XDEAL">XDEAL</option>
                         <option value="Bills Payment">Bills Payment</option>
                         <option value="Power Upgrade">Power Upgrade</option>
                         <option value="Power Application">Power Application</option>
@@ -865,27 +866,27 @@
                 $("#table_issues_child_" + id).DataTable().ajax.reload();
             }
 
-            $.ajax({
-                    url: "/agent-based-program/"+$(this).parent().parent().attr('data-program_id'),
-                    method: "GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (resp){
-                        if (!resp.error) {
-                            resp.message.forEach(element => {
-                                $(".add_history_form select#user_id").append(
-                                    '<option value="'+element.id+'">'+element.name+'</option>'
-                                );
-                            });
-                        } else {
-                            toastr.error(resp.message, "Error");
-                        }
-                    },
-                    error: function (resp){
-                        toastr.error(resp, "Error");
-                    }
-            });
+            // $.ajax({
+            //         url: "/agent-based-program/"+$(this).parent().parent().attr('data-program_id'),
+            //         method: "GET",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         success: function (resp){
+            //             if (!resp.error) {
+            //                 resp.message.forEach(element => {
+            //                     $(".add_history_form select#user_id").append(
+            //                         '<option value="'+element.id+'">'+element.name+'</option>'
+            //                     );
+            //                 });
+            //             } else {
+            //                 toastr.error(resp.message, "Error");
+            //             }
+            //         },
+            //         error: function (resp){
+            //             toastr.error(resp, "Error");
+            //         }
+            // });
 
         });
 

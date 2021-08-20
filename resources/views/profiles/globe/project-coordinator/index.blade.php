@@ -110,7 +110,7 @@
                                     <div class="position-relative row form-group">
                                         <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                                         <div class="col-sm-9">
-                                            <select name="coop" id="coop" class="form-control">
+                                            <select name="coop" id="coop" class="form-control" readonly>
                                                 <option value="">Select COOP</option>
                                                 @foreach ($coops as $coop)
                                                     <option value="{{$coop->coop_name}}">{{ strtoupper($coop->coop_name)}}</option>
