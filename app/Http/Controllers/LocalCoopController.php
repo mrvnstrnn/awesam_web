@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
+use App\Models\LocalCoopValue;
 
 use App\Models\User;
+use Validator;
 
 
 class LocalCoopController extends Controller
@@ -67,6 +69,17 @@ class LocalCoopController extends Controller
         return $dt->make(true);
 
     }
+
+
+    public function get_coop_issues()
+    {
+        $coop_issues = \DB::table('view_local_coop_issues')->get();
+        $dt = DataTables::of($coop_issues);
+
+        return $dt->make(true);
+                        
+    }
+
 
     public function get_localcoop_details($coop)
     {
@@ -341,7 +354,7 @@ class LocalCoopController extends Controller
             throw $th;
         }
     }
-    
+
     public function get_contact($id, $action)
     {
         try {

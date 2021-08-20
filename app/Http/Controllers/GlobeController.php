@@ -17,7 +17,6 @@ use App\Models\RTBDeclaration;
 use App\Models\VendorProgram;
 use App\Models\Vendor;
 use App\Models\UserProgram;
-use App\Models\LocalCoopValue;
 use App\Models\IssueRemark;
 use App\Models\SiteStageTracking;
 use App\Models\PrMemoSite;

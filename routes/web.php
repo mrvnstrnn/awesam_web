@@ -122,6 +122,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/edit-contact/{id}/{action?}', [LocalCoopController::class, 'get_contact']);
 
+    Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
+
+    
+
 });
 //******************* END OF LocalCOOP *******************//
 
