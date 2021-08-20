@@ -534,8 +534,14 @@
                     //     resp.message,
                     //     'success'
                     // )
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("#" + index + "-error").text(data);
+                        });
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
 
-                    toastr.error(resp.message, "Error");
 
                     $(".update_password").removeAttr("disabled");
                     $(".update_password").text("Update");
@@ -549,7 +555,7 @@
                 //     'error'
                 // )
 
-                toastr.error(resp.message, "Error");
+                toastr.error(resp, "Error");
 
                 $(".update_password").removeAttr("disabled");
                 $(".update_password").text("Update");
