@@ -32,11 +32,18 @@ function makeDT(whatTable, whatCols, table_to_load) {
             },
 
             createdRow: function (row, data, dataIndex) {
-                var activity_name = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
+                if (data.activities != undefined) {
+                    var activity_names = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
+
+                    var activity_name = JSON.parse(activity_names) != null ? JSON.parse(activity_names).activity_name : "";
+                } else {
+                    var activity_name = data.activity_name;
+                }
 
                 $(row).attr('data-site_all', JSON.stringify(data));
                 // $(row).attr('data-activity', data.activity_name);
-                $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
+                $(row).attr('data-activity', activity_name);
+                // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
                 $(row).attr('data-main_activity', main_activity);
