@@ -44,14 +44,171 @@
                 <div class="card-header">
                     <ul class="nav nav-justified">
                         <li class="nav-item">
-                            <a data-toggle="tab" href="#tab-coop-issues" class="nav-link active">Issues</a>
+                            <a data-toggle="tab" href="#tab-coop-details" class="nav-link active">Details</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#tab-coop-contacts" class="nav-link">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#tab-coop-engagements" class="nav-link">Engagements</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#tab-coop-issues" class="nav-link">Issues</a>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-coop-issues" role="tabpanel">
-                            <div id="issue_table_box">                                
+                        <div class="tab-pane active" id="tab-coop-details" role="tabpanel">
+                        </div>
+                        <div class="tab-pane" id="tab-coop-contacts" role="tabpanel">
+                            {{-- <table class="table" id="contacts_table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Staff</th>
+                                        <th>Type</th>
+                                        <th>Firstame</th>
+                                        <th>Lastame</th>
+                                        <th>Cellphone</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table> --}}
+
+                            <div class="contact_div_edit d-none">
+                                <form class="contact_form_update">
+                                    <input type="hidden" name="action" id="action" value="contacts">
+                                    <input type="hidden" name="ID" id="ID">
+                                    <div class="position-relative row form-group">
+                                        <label for="coop" class="col-sm-3 col-form-label">COOP</label>
+                                        <div class="col-sm-9">
+                                            <select name="coop" id="coop" class="form-control">
+                                                @php
+                                                    $coops = \DB::connection('mysql2')
+                                                        ->table("local_coop")
+                                                        ->orderBy('coop_name')
+                                                        ->get();
+                                                @endphp
+                                                <option value="">Select COOP</option>
+                                                @foreach ($coops as $coop)
+                                                    <option value="{{$coop->coop_name}}">{{ strtoupper($coop->coop_name)}}</option>
+                                                @endforeach
+                                            </select>
+                                            <small class="text-danger coop-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
+                                        <div class="col-sm-9">
+                                            <select id="contact_type" name="contact_type" class="form-control">
+                                                <option value="">Select Contact Type</option>
+                                                <option value="Engineering">Engineering</option>
+                                                <option value="COOP Contact">COOP Contact</option>
+                                            </select>
+                                            <small class="text-danger contact_type-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="firstname" class="col-sm-3 col-form-label">Firstname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Firstname" name="firstname" id="firstname" class="form-control" />
+                                            <small class="text-danger firstname-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="lastname" class="col-sm-3 col-form-label">Lastname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Lastname" name="lastname" id="lastname" class="form-control"/>
+                                            <small class="text-danger lastname-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="contact_number" class="col-sm-3 col-form-label">Cellphone</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Cellphone" name="contact_number" id="contact_number" class="form-control"/>
+                                            <small class="text-danger contact_number-error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-group">
+                                        <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input type="email" placeholder="Email" name="email" id="email" class="form-control"/>
+                                            <small class="text-danger email-error"></small>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary btn-sm btn-shadow add_engagement" data-type="contacts" id="btn_update_contact">Update</button>
+                                    <button type="button" class="btn btn-secondary btn-sm btn-shadow cancel_update">Cancel</button>
+                                </form>
+                            </div>
+                            <div class="table-responsive table_contact_parent"></div>
+                        </div>
+                        <div class="tab-pane" id="tab-coop-engagements" role="tabpanel">
+                            {{-- <table class="table" id="engagement_table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Staff</th>
+                                        <th>Type</th>
+                                        <th>Result</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table> --}}
+
+                            <div class="table-responsive table_engagements_parent"></div>
+                            <form class="engagement_form_view d-none">
+                                <div class="position-relative row form-group">
+                                    <label for="coop" class="col-sm-3 col-form-label">COOP</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="coop" id="coop" disabled>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
+                                    <label for="engagement_type" class="col-sm-3 col-form-label">Engagement Type</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="engagement_type" id="engagement_type" disabled>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
+                                    <label for="result_of_engagement" class="col-sm-3 col-form-label">Result of Engagement</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="result_of_engagement" id="engagement_type" disabled>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
+                                    <label for="remarks" class="col-sm-3 col-form-label">Remarks</label>
+                                    <div class="col-sm-9">
+                                        <textarea name="remarks" id="remarks" class="form-control" disabled></textarea>
+                                        <small class="text-danger remarks-error"></small>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-secondary btn-sm back_to_engagement_list" type="button">Back to engagement list</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="tab-coop-issues" role="tabpanel">
+                            <div id="issue_table_box">
+                                {{-- <table class="table" id="issues_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Staff</th>
+                                            <th>Dependency</th>
+                                            <th>Nature of Issue</th>
+                                            <th>Description</th>
+                                            <th>Status of Issue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table> --}}
+                                
                                 <div class="table-responsive table_issues_parent"></div>
                             </div>
                             
@@ -182,7 +339,7 @@
                                                 <small class="remarks-error text-danger"></small>
                                             </div>
 
-                                            <button class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                            <button type="button" class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
                                         </form>
                                     </div>
                                 </div>
@@ -246,7 +403,7 @@
                 <label for="nature_of_issue" class="col-sm-3 col-form-label">Nature of Issue </label>
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
-                        <option value="Nature of Issue">Nature of Issue</option>
+                        <option value="">Nature of Issue</option>
                         <option value="Bills Payment">Bills Payment</option>
                         <option value="Power Upgrade">Power Upgrade</option>
                         <option value="Power Application">Power Application</option>
@@ -477,8 +634,31 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
   
+
+<div id="coop_issues" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+            <h5 class="modal-title text-dark"><i class="pe-7s-plugin pe-lg mr-2"></i>Coop Issues</h5>
+            <button type="button" class="close text-dark" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="table-coop-issues-div" class="table-responsive">
+
+            </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 @endsection
 
 
@@ -514,7 +694,64 @@
                 $('#add_contact').modal('show');
             }   
 
+            else if($(this).attr('href')==' /coop-issues '){
+                $('#table-coop-issues-div').html('');
+
+                $('#table-coop-issues-div').html('<table id="table-coop-issues" class="align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>COOP</th>' +
+                            '<th>Region</th>' +
+                            '<th>Province</th>' +
+                            '<th>Dependency</th>' +
+                            '<th>Nature of Issue</th>' +
+                            '<th>Description</th>' +
+                            '<th>Status</th>' +
+                            '<th>Aging</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '</tbody>' +
+                '</table>'
+                );
+
+                $('#coop_issues').modal('show');
+
+
+                $("#table-coop-issues").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/localcoop-issues",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    columns: [
+                        { data: "coop_name" },
+                        { data: "region" },
+                        { data: "province" },
+                        { data: "dependency" },
+                        { data: "nature_of_issue" },
+                        { data: "description" },
+                        { data: "status_of_issue" },
+                        { data: "aging"},
+                    ],
+                });
+
+            }   
+
+
         });
+
+        
+
+        $(document).on('click', '#table-coop-issues tbody tr', function(e){
+            e.preventDefault();
+        });
+
+        
     
         $('.assigned-sites-table').on('click', 'tbody tr', function(e){
             e.preventDefault();
@@ -910,7 +1147,7 @@
                         $(button_id).removeAttr("disabled");
                         $(button_id).text(button_text);
 
-                        if ($(".add_engagement").attr("data-type") == "issue_history") {
+                        if ($(button_id).attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
                             $("#table_history_child_" + issue_id).DataTable().ajax.reload();
                             $("#table_issues_child_" + table_id).DataTable().ajax.reload();
