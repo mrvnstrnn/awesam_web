@@ -339,7 +339,7 @@
                                                 <small class="remarks-error text-danger"></small>
                                             </div>
 
-                                            <button class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                            <button type="button" class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
                                         </form>
                                     </div>
                                 </div>
@@ -403,7 +403,7 @@
                 <label for="nature_of_issue" class="col-sm-3 col-form-label">Nature of Issue </label>
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
-                        <option value="Nature of Issue">Nature of Issue</option>
+                        <option value="">Nature of Issue</option>
                         <option value="Bills Payment">Bills Payment</option>
                         <option value="Power Upgrade">Power Upgrade</option>
                         <option value="Power Application">Power Application</option>
@@ -1067,7 +1067,7 @@
                         $(button_id).removeAttr("disabled");
                         $(button_id).text(button_text);
 
-                        if ($(".add_engagement").attr("data-type") == "issue_history") {
+                        if ($(button_id).attr("data-type") == "issue_history") {
                             $("#btn_cancel_add_issues").trigger("click");
                             $("#table_history_child_" + issue_id).DataTable().ajax.reload();
                             $("#table_issues_child_" + table_id).DataTable().ajax.reload();
