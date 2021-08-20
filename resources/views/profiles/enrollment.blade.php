@@ -196,7 +196,7 @@
                                                             </select>
                                                         @else
                                                             <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
-                                                            <input type="hidden" value="{{ \Auth::user()->profile_id }}">
+                                                            <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->profile_id }}">
                                                         @endif
                                                         <small class="designation-error text-danger"></small>
                                                     </div>
