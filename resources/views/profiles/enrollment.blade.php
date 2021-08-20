@@ -354,7 +354,7 @@
 @endsection
 
 @section('modals')
-{{-- <div class="modal fade" id="firsttimeModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="firsttimeModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -389,7 +389,7 @@
             </form>
         </div>
     </div>
-</div> --}}
+</div>
 @endsection
 
 @section('scripts')
@@ -397,6 +397,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js" integrity="sha512-VQQXLthlZQO00P+uEu4mJ4G4OAgqTtKG1hri56kQY1DtdLeIqhKUp9W/lllDDu3uN3SnUNawpW7lBda8+dSi7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+
+        $(document).ready(function(){
+            console.log("test");
+            if ("{{ \Auth::user()->first_time_login }}" == "0") {
+                $("#firsttimeModal").modal("show");
+            }
+        });
 
         $("#take_photo, #drop_take_photo").on("click", function(){
             console.log("take photo");
@@ -498,6 +505,59 @@
         $("input[name=capture_image]").val("");
         $("#change_photo").addClass("d-none");
     });    
+
+    $(document).on("click", ".update_password", function(){
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $.ajax({
+            url: "/change-password",
+            method: "POST",
+            data: $("#passwordUpdateForm").serialize(),
+            success: function (resp) {
+                if (!resp.error) {
+                    // Swal.fire(
+                    //     'Success',
+                    //     resp.message,
+                    //     'success'
+                    // )
+
+                    toastr.success(resp.message, "Success");
+
+                    $("#firsttimeModal").modal("hide");
+
+                    $(".update_password").removeAttr("disabled");
+                    $(".update_password").text("Update");
+                } else {
+                    // Swal.fire(
+                    //     'Success',
+                    //     resp.message,
+                    //     'success'
+                    // )
+
+                    toastr.error(resp.message, "Error");
+
+                    $(".update_password").removeAttr("disabled");
+                    $(".update_password").text("Update");
+                }
+            },
+
+            error: function (resp) {
+                // Swal.fire(
+                //     'Error',
+                //     resp,
+                //     'error'
+                // )
+
+                toastr.error(resp.message, "Error");
+
+                $(".update_password").removeAttr("disabled");
+                $(".update_password").text("Update");
+            }
+        })
+
+        
+    });
     </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection
