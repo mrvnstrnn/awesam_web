@@ -175,4 +175,186 @@ class LocalCoopController extends Controller
 
         return $dt->make(true);
     }
+
+    public function add_coop_value (Request $request)
+    {
+        try { 
+            if ($request->input('action') == 'engagements') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'engagement_type' => 'required',
+                    'result_of_engagement' => 'required',
+                    'remarks' => 'required',
+                ));
+
+                $array = array(
+                    'engagement_type' => $request->input('engagement_type'),
+                    'result_of_engagement' => $request->input('result_of_engagement'),
+                    'remarks' => $request->input('remarks'),
+                );
+
+                $coop = $request->input('coop');
+
+                $message = "Successfuly added engagements.";
+            } else if ($request->input('action') == 'contacts') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'contact_number' => 'required',
+                    'contact_type' => 'required',
+                    'email' => 'required | email',
+                    'firstname' => 'required',
+                    'lastname' => 'required',
+                ));
+
+                $array = array(
+                    'contact_type' => $request->input('contact_type'),
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'contact_number' => $request->input('contact_number'),
+                    'email' => $request->input('email'),
+                );
+
+                $coop = $request->input('coop');
+
+                $message = "Successfuly added contacts.";
+
+                if (!is_null($request->input('ID'))) {
+                    LocalCoopValue::where('ID', $request->input('ID'))
+                    ->update([
+                        'coop' => $coop,
+                        'type' => $request->input('action'),
+                        'value' => json_encode($array),
+                        'user_id' => \Auth::id(),
+                    ]);
+
+                    $message = "Successfuly updated contacts.";
+
+                    return response()->json(['error' => false, 'message' => $message ]);
+                }
+            } else if ($request->input('action') == 'issues') {
+                $validate = Validator::make($request->all(), array(
+                    'coop' => 'required',
+                    'date_of_issue' => 'required',
+                    'dependency' => 'required',
+                    'description' => 'required',
+                    'issue_assigned_to' => 'required',
+                    'issue_raised_by' => 'required',
+                    'issue_raised_by_name' => 'required',
+                    'nature_of_issue' => 'required',
+                    'status_of_issue' => 'required',
+                ));
+
+                $array = array(
+                    'dependency' => $request->input('dependency'),
+                    'nature_of_issue' => $request->input('nature_of_issue'),
+                    'description' => $request->input('description'),
+                    'issue_raised_by' => $request->input('issue_raised_by'),
+                    'issue_raised_by_name' => $request->input('issue_raised_by_name'),
+                    'date_of_issue' => $request->input('date_of_issue'),
+                    'issue_assigned_to' => $request->input('issue_assigned_to'),
+                    'status_of_issue' => $request->input('status_of_issue'),
+                );
+
+                $coop = $request->input('coop');
+
+                $message = "Successfuly added issue.";
+            } else if ($request->input('action') == 'issue_history') {
+                $validate = Validator::make($request->all(), array(
+                    // 'date_history' => 'required',
+                    'remarks' => 'required',
+                    'status_of_issue' => 'required',
+                ));
+
+                $coop_data = LocalCoopValue::where('ID', $request->input('issue_id') )->first();
+
+                $array_update = array(
+                    'dependency' => json_decode($coop_data->value)->dependency,
+                    'nature_of_issue' => json_decode($coop_data->value)->nature_of_issue,
+                    'description' => json_decode($coop_data->value)->description,
+                    'issue_raised_by' => json_decode($coop_data->value)->issue_raised_by,
+                    'issue_raised_by_name' => json_decode($coop_data->value)->issue_raised_by_name,
+                    'date_of_issue' => json_decode($coop_data->value)->date_of_issue,
+                    'issue_assigned_to' => json_decode($coop_data->value)->issue_assigned_to,
+                    'status_of_issue' => $request->input('status_of_issue'),
+                );
+
+                LocalCoopValue::where('ID', $request->input('issue_id') )
+                                ->update([
+                                    'value' => json_encode($array_update),
+                                ]);
+
+                $array = array(
+                    'id' => $request->input('issue_id'),
+                    // 'date_history' => $request->input('date_history'),
+                    'user_id' => $request->input('user_id'),
+                    'remarks' => $request->input('remarks'),
+                    'status_of_issue' => $request->input('status_of_issue'),
+                );
+
+                $coop = $coop_data->coop;
+
+                $message = "Successfuly added history.";
+            }
+
+
+            if ($validate->passes()) {
+                LocalCoopValue::create([
+                    'coop' => $coop,
+                    'type' => $request->input('action'),
+                    'value' => json_encode($array),
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                return response()->json(['error' => false, 'message' => $message ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function issue_history_data($id)
+    {
+        try {
+
+            $history = LocalCoopValue::where('type', 'issue_history')
+                                        ->whereJsonContains('value', ['id' => $id ])
+                                        ->orderBy('add_timestamp', 'desc')
+                                        ->get();
+
+            $dt = DataTables::of($history)
+                        ->addColumn('staff', function($row){
+                            $user = User::find(json_decode($row->value)->user_id);
+                            return $user->name;
+                        })
+                        ->addColumn('remarks', function($row){
+                            return json_decode($row->value)->remarks;
+                        })
+                        ->addColumn('status', function($row){
+                            return json_decode($row->value)->status_of_issue;
+                        });
+            
+            // $dt->rawColumns(['checkbox', 'technology']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    
+    public function get_contact($id, $action)
+    {
+        try {
+            $contact = LocalCoopValue::where('type', 'contacts')
+                                            ->where('ID', $id)
+                                            ->first();
+            
+            return response()->json(['error' => false, 'message' => $contact ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+
+
 }
