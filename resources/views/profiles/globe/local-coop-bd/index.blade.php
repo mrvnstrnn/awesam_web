@@ -647,23 +647,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="table-responsive">
-                <table id="table-coop-issues" class="align-middle mb-0 table table-borderless table-striped table-hover w-100">
-                    <thead>
-                        <tr>
-                            <th>COOP</th>
-                            <th>Region</th>
-                            <th>Province</th>
-                            <th>Dependency</th>
-                            <th>Nature of Issue</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Aging</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div id="table-coop-issues-div" class="table-responsive">
 
             </div>
   
@@ -711,7 +695,28 @@
             }   
 
             else if($(this).attr('href')==' /coop-issues '){
+                $('#table-coop-issues-div').html('');
+
+                $('#table-coop-issues-div').html('<table id="table-coop-issues" class="align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>COOP</th>' +
+                            '<th>Region</th>' +
+                            '<th>Province</th>' +
+                            '<th>Dependency</th>' +
+                            '<th>Nature of Issue</th>' +
+                            '<th>Description</th>' +
+                            '<th>Status</th>' +
+                            '<th>Aging</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '</tbody>' +
+                '</table>'
+                );
+
                 $('#coop_issues').modal('show');
+
 
                 $("#table-coop-issues").DataTable({
                     processing: true,
