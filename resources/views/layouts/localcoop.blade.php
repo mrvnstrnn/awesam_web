@@ -118,13 +118,20 @@
                                         <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
                                         <div class="col-sm-9">
                                             <select id="contact_type" name="contact_type" class="form-control">
-                                                <option value="">Select Contact Type</option>
+                                                @php
+                                                    $contacts = \DB::connection('mysql2')->table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
+                                                @endphp
+                                                    <option value="">Select Contact Type</option>
+                                                @foreach ($contacts as $contact)
+                                                    <option value="{{ $contact->contact_type }}">{{ $contact->contact_type }}</option>
+                                                @endforeach 
+                                                {{-- <option value="">Select Contact Type</option>
                                                 <option value="Accounting">Accounting</option>
                                                 <option value="Area Engineer">Area Engineer</option>
                                                 <option value="Engineering">Engineering</option>
                                                 <option value="Exeutive Assistant to the GM">Exeutive Assistant to the GM</option>
                                                 <option value="General Manager">General Manager</option>
-                                                <option value="Secretary">Secretary</option>
+                                                <option value="Secretary">Secretary</option> --}}
                                             </select>
                                             <small class="text-danger contact_type-error"></small>
                                         </div>
@@ -440,8 +447,8 @@
             <div class="position-relative row form-group">
                 <label for="issue" class="col-sm-3 col-form-label">Issue </label>
                 <div class="col-sm-9">
-                    <select name="issue" id="issue" class="form-control">
-                        <option value="">Select Issue</option>
+                    <select name="issue" id="issue" class="form-control" disabled="disabled">
+                        {{-- <option value="">Select Issue</option> --}}
                     </select>
                     <small class="text-danger issue-error"></small>
                 </div>
@@ -609,13 +616,20 @@
                     <label for="contact_type" class="col-sm-3 col-form-label">Contact Type</label>
                     <div class="col-sm-9">
                         <select id="contact_type" name="contact_type" class="form-control">
-                            <option value="">Select Contact Type</option>
+                            {{-- <option value="">Select Contact Type</option>
                             <option value="Accounting">Accounting</option>
                             <option value="Area Engineer">Area Engineer</option>
                             <option value="Engineering">Engineering</option>
                             <option value="Exeutive Assistant to the GM">Exeutive Assistant to the GM</option>
                             <option value="General Manager">General Manager</option>
-                            <option value="Secretary">Secretary</option>
+                            <option value="Secretary">Secretary</option> --}}
+                            @php
+                                $contacts = \DB::connection('mysql2')->table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
+                            @endphp
+                                <option value="">Select Contact Type</option>
+                            @foreach ($contacts as $contact)
+                                <option value="{{ $contact->contact_type }}">{{ $contact->contact_type }}</option>
+                            @endforeach 
                         </select>
                         <small class="text-danger contact_type-error"></small>
                     </div>
