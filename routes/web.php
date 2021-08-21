@@ -116,6 +116,19 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/localcoop-values-data/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values_data'])->name('get_localcoop_values_data');
 
+    Route::post('/add-coop-value', [LocalCoopController::class, 'add_coop_value']);
+
+    Route::get('/issue-history-data/{id}', [LocalCoopController::class, 'issue_history_data']);
+
+    Route::get('/edit-contact/{id}/{action?}', [LocalCoopController::class, 'get_contact']);
+
+    Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
+
+    Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
+
+    Route::get('/localcoop-get-issue-list/{issue_type}', [LocalCoopController::class, 'get_coop_issue_list']);
+        
+
 });
 //******************* END OF LocalCOOP *******************//
 
@@ -308,12 +321,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-my-uploaded-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploaded_site']);
     Route::post('/set-approve-site', [GlobeController::class, 'set_approve_site']);
 
-    //COOP
-    Route::post('/add-coop-value', [GlobeController::class, 'add_coop_value']);
-    Route::get('/issue-history-data/{id}', [GlobeController::class, 'issue_history_data']);
-
-
-    Route::get('/edit-contact/{id}/{action?}', [GlobeController::class, 'get_contact']);
 
     //Site Category
     Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
