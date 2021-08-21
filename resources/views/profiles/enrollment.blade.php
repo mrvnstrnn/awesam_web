@@ -1,5 +1,3 @@
-
-
 @extends('layouts.enrollment')
 
 @section('content')
@@ -197,6 +195,7 @@
                                                         @else
                                                             <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
                                                             <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->profile_id }}">
+                                                            <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->getUserProfile()->mode }}">
                                                         @endif
                                                         <small class="designation-error text-danger"></small>
                                                     </div>
@@ -326,7 +325,7 @@
                                             <div class="results-title">You can now submit your details for validation!</div>
                                             <div class="mt-3 mb-3"></div>
                                             <div class="text-center">
-                                                <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">Request Validation</button>
+                                                <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">{{ \Auth::user()->getUserProfile()->mode == "vendor" ? "Request Validation" : "Finish Onboarding" }}</button>
                                             </div>
                                         </div>                                        
                                     </div>
@@ -426,30 +425,30 @@
 
 
     Dropzone.autoDiscover = false;  
-        $(".dropzone").dropzone({
-            addRemoveLinks: true,
-            maxFiles: 1,
-            // maxFilesize: 1,
-            acceptedFiles: '.jpg, .jpeg, png',
-            paramName: "file",
-            url: "/upload-image-file",
-            init: function() {
-                this.on("maxfilesexceeded", function(file){
-                    this.removeFile(file);
-                });
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (file, resp) {
-                $("input[name=capture_image]").val(resp.file);
-                console.log(resp.message);
-            },
-            error: function (file, resp) {
-                $("input[name=capture_image]").val("");
-                toastr.error(resp, "Error");
-            }
-        });
+    $(".dropzone").dropzone({
+        addRemoveLinks: true,
+        maxFiles: 1,
+        // maxFilesize: 1,
+        acceptedFiles: '.jpg, .jpeg, png',
+        paramName: "file",
+        url: "/upload-image-file",
+        init: function() {
+            this.on("maxfilesexceeded", function(file){
+                this.removeFile(file);
+            });
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (file, resp) {
+            $("input[name=capture_image]").val(resp.file);
+            console.log(resp.message);
+        },
+        error: function (file, resp) {
+            $("input[name=capture_image]").val("");
+            toastr.error(resp, "Error");
+        }
+    });
             
     $("#change_photo").addClass("d-none");
 
@@ -562,8 +561,74 @@
             }
         })
 
-        
     });
+
+    $("#finish-btn").on('click', function(){
+        $.ajax({
+            url: $(this).attr('data-href'),
+            data: $("#onboardingForm").serialize(),
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp) {
+                if (!resp.error){   
+                    $(".step-1-li").removeClass('active');
+                    $(".step-2-li").removeClass('active');
+                    $(".step-3-li").removeClass('active');
+
+                    $(".step-1-li").addClass('done');
+                    $(".step-2-li").addClass('done');
+                    $(".step-3-li").addClass('done');
+
+                    $("#step-1").addClass('d-none');
+                    $("#step-2").addClass('d-none');
+                    $("#step-3").addClass('d-none');
+
+                    $(".results-title").text($("#mode").val());
+
+                    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "globe") {
+                        location.reload(); 
+                    } else {
+                        toastr.success(resp.message, 'Success');
+                    }
+
+                } else {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("." + index + "-error").text(data);
+                        });
+
+                        $(".step-1-li").addClass('active');
+                        $(".step-2-li").removeClass('done');
+                        $(".step-3-li").removeClass('done');
+                        $(".step-4-li").removeClass('done');
+
+                        $("#step-1").removeClass('d-none');
+                        $("#step-2").addClass('d-none');
+                        $("#step-3").addClass('d-none');
+                        $("#step-4").addClass('d-none');
+                    } else {
+                        toastr.error(resp.message, 'Error');
+
+                        $(".step-1-li").addClass('active');
+                        $(".step-2-li").removeClass('done');
+                        $(".step-3-li").removeClass('done');
+                        $(".step-4-li").removeClass('done');
+
+                        $("#step-1").removeClass('d-none');
+                        $("#step-2").addClass('d-none');
+                        $("#step-3").addClass('d-none');
+                        $("#step-4").addClass('d-none');
+                    }
+                }
+            },
+            error: function(resp) {
+                toastr.error(resp.message, 'Error');
+            }
+        });
+    });
+
     </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>
 @endsection
