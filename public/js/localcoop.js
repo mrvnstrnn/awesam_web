@@ -77,30 +77,40 @@
         $(document).on('change', '#nature_of_issue', function(e){
             e.preventDefault();
             
-            $('#issue')
-                .find('option')
-                .remove()
-                .end()
-                .append('<option value="">Select Issue</option>')
-                .val('');
+            // $('#issue')
+            //     .find('option')
+            //     .remove()
+            //     .end()
+            //     .append('<option value="">Select Issue</option>')
+            //     .val('');
+            
+            $('select#issue option').remove();
+            $("select#issue").attr("disabled", "disabled");
 
-            $.ajax({
+            if ($(this).val() != "") {
+                $.ajax({
                     url: "/localcoop-get-issue-list/" + $(this).val(),
                     method: "GET",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (resp){
-
+    
+                        $('#issue').append('<option value="">Select Issue</option>');
                         resp.forEach(function(data) {
-                            $("#issue").append(new Option(data.issue, data.issue));
+                            if ($("#nature_of_issue").val() == "") {
+                                $("select#issue").removeAttr("disabled");
+                                // $("#issue").append(new Option(data.issue, data.issue));
+                                $("select#issue").append("<option value='" + data.issue + "'>" + data.issue + "</option>");
+                            }
                         });                        
-
+    
                     },
                     error: function (resp){
-                        toastr.error(resp.message, "Error");
+                        toastr.error(resp, "Error");
                     }
-            });
+                });
+            }
 
 
 
