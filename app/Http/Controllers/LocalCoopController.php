@@ -29,10 +29,7 @@ class LocalCoopController extends Controller
                                 )
                                 ->distinct();
 
-            if (\Auth::user()->profile_id == 18) {
-                $sites->get();
-            }
-            elseif (\Auth::user()->profile_id == 25) {
+            if (\Auth::user()->profile_id == 18 || \Auth::user()->profile_id == 25) {
                 $sites->get();
             } else {
                 $sites_locations = \DB::connection('mysql2')

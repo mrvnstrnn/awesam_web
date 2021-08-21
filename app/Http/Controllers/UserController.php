@@ -155,7 +155,7 @@ class UserController extends Controller
             ));
 
             if($validate->passes()){
-
+                $mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "" : "globe";
                 $address = Location::where('province', $request->input('hidden_province'))
                                         ->where('lgu', $request->input('hidden_lgu'))
                                         ->where('region', $request->input('hidden_region'))
@@ -173,6 +173,7 @@ class UserController extends Controller
                 if(!is_null($user_details)){
                     UserDetail::where('user_id', \Auth::id())
                                 ->update([
+                                    'mode' => $mode,
                                     'birthday' => $request->get('birthday'),
                                     'gender' => $request->get('gender'),
                                     'contact_no' => $request->get('contact_no'),
@@ -191,6 +192,7 @@ class UserController extends Controller
 
                     $detail = new UserDetail();
                     $detail->address_id = $address->id;
+                    $detail->mode = $mode;
                     $detail->user_id = \Auth::user()->id;
                     $detail->birthday = $request->get('birthday');
                     $detail->gender = $request->get('gender');
