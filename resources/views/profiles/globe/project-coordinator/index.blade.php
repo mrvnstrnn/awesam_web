@@ -29,32 +29,7 @@
         font-size: 11px !important;
     }
 </style>
-@php
 
-    if (\Auth::user()->profile_id != 18) {
-        $sites_locations = \DB::connection('mysql2')
-                ->table("local_coop_user_locations")
-                ->where('user_id', \Auth::id())
-                ->get();
-
-        $locations = collect();
-
-        foreach ($sites_locations as $sites_location) {
-            $locations->push($sites_location->region);
-        }
-        
-        $coops = \DB::connection('mysql2')
-                        ->table("local_coop")
-                        ->whereIn('region', $locations->all())
-                        ->orderBy('coop_name')
-                        ->get();
-    } else {
-        $coops = \DB::connection('mysql2')
-                        ->table("local_coop")
-                        ->orderBy('coop_name')
-                        ->get();
-    }
-@endphp
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -111,6 +86,12 @@
                                         <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                                         <div class="col-sm-9">
                                             <select name="coop" id="coop" class="form-control">
+                                                @php
+                                                    $coops = \DB::connection('mysql2')
+                                                        ->table("local_coop")
+                                                        ->orderBy('coop_name')
+                                                        ->get();
+                                                @endphp
                                                 <option value="">Select COOP</option>
                                                 @foreach ($coops as $coop)
                                                     <option value="{{$coop->coop_name}}">{{ strtoupper($coop->coop_name)}}</option>
@@ -251,6 +232,12 @@
                                     </div>
                                 </div>
                                 <div class="position-relative row form-group">
+                                    <label for="issue" class="col-sm-3 col-form-label">Issue </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="issue" id="nature_of_issue" disabled>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
                                     <label for="description" class="col-sm-3 col-form-label">Description</label>
                                     <div class="col-sm-9">
                                         <textarea name="description" id="description" class="form-control" disabled></textarea>
@@ -334,7 +321,7 @@
                                                 <small class="date_history-error text-danger"></small>
                                             </div> --}}
 
-                                            <div class="form-group d-none">
+                                            <div class="form-group">
                                                 <label for="user_id">Staff</label>
                                                 <select class="form-control" name="user_id" id="user_id"></select>
                                                 <small class="user_id-error text-danger"></small>
@@ -391,6 +378,12 @@
                 <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                 <div class="col-sm-9">
                     <select name="coop" id="coop" class="form-control">
+                        @php
+                            $coops = \DB::connection('mysql2')
+                                ->table("local_coop")
+                                ->orderBy('coop_name')
+                                ->get();
+                        @endphp
                         <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
                             <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
@@ -416,19 +409,29 @@
                 <label for="nature_of_issue" class="col-sm-3 col-form-label">Nature of Issue </label>
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
+
+                        @php
+                            $issues = \DB::table('issue_type')
+                                    ->select('issue_type')
+                                    ->distinct()
+                                    ->where('program_id', 7)
+                                    ->get();
+                        @endphp     
                         <option value="">Nature of Issue</option>
-                        <option value="XDEAL">XDEAL</option>
-                        <option value="Bills Payment">Bills Payment</option>
-                        <option value="Power Upgrade">Power Upgrade</option>
-                        <option value="Power Application">Power Application</option>
-                        <option value="Cable Regrooming">Cable Regrooming</option>
-                        <option value="Pole Related Concern">Pole Related Concern</option>
-                        <option value="JPA">JPA</option>
-                        <option value="RTA">RTA</option>
-                        <option value="Business Related Concerns">Business Related Concerns</option>
-                        <option value="Others">Others</option>
+                        @foreach ($issues as $issue)
+                            <option value="{{ $issue->issue_type }}">{{ $issue->issue_type }}</option>
+                        @endforeach
                     </select>
                     <small class="text-danger nature_of_issue-error"></small>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="issue" class="col-sm-3 col-form-label">Issue </label>
+                <div class="col-sm-9">
+                    <select name="issue" id="issue" class="form-control">
+                        <option value="">Select Issue</option>
+                    </select>
+                    <small class="text-danger issue-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
@@ -511,6 +514,12 @@
                 <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                 <div class="col-sm-9">
                     <select name="coop" id="coop" class="form-control">
+                        @php
+                            $coops = \DB::connection('mysql2')
+                                ->table("local_coop")
+                                ->orderBy('coop_name')
+                                ->get();
+                        @endphp
                         <option value="">Select COOP</option>
                         @foreach ($coops as $coop)
                             <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
@@ -525,8 +534,6 @@
                     <select name="engagement_type" id="engagement_type" class="form-control">
                         <option value="">Select Engagement Type</option>
                         <option value="Power Upgrade">Power Upgrade</option>
-                        <option value="Transport">Transport</option>
-                        <option value="XDEALS">XDEALS</option>
                         <option value="New Sites">New Sites</option>
                         <option value="Sites for Permanent Power">Sites for Permanent Power</option>
                         <option value="RTA">RTA</option>
@@ -582,6 +589,12 @@
                     <label for="coop" class="col-sm-3 col-form-label">COOP</label>
                     <div class="col-sm-9">
                         <select name="coop" id="coop" class="form-control">
+                            @php
+                                $coops = \DB::connection('mysql2')
+                                    ->table("local_coop")
+                                    ->orderBy('coop_name')
+                                    ->get();
+                            @endphp
                             <option value="">Select COOP</option>
                             @foreach ($coops as $coop)
                                 <option value="{{$coop->coop_name}}">{{strtoupper($coop->coop_name)}}</option>
@@ -597,11 +610,6 @@
                             <option value="">Select Contact Type</option>
                             <option value="Engineering">Engineering</option>
                             <option value="COOP Contact">COOP Contact</option>
-                            <option value="GM">GM</option>
-                            <option value="Executive Assistant to GM">Executive Assistant to GM</option>
-                            <option value="Secretary Admin">Secretary Admin</option>
-                            <option value="Technical Support Department">Technical Support Department</option>
-                            <option value="Acccounting">Acccounting</option>
                         </select>
                         <small class="text-danger contact_type-error"></small>
                     </div>
@@ -643,8 +651,31 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
   
+
+<div id="coop_issues" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+            <h5 class="modal-title text-dark"><i class="pe-7s-plugin pe-lg mr-2"></i>Coop Issues</h5>
+            <button type="button" class="close text-dark" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="table-coop-issues-div" class="table-responsive">
+
+            </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 @endsection
 
 
@@ -680,7 +711,102 @@
                 $('#add_contact').modal('show');
             }   
 
+            else if($(this).attr('href')==' /coop-issues '){
+                $('#table-coop-issues-div').html('');
+
+                $('#table-coop-issues-div').html('<table id="table-coop-issues" class="align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>COOP</th>' +
+                            '<th>Region</th>' +
+                            '<th>Province</th>' +
+                            '<th>Dependency</th>' +
+                            '<th>Issue</th>' +
+                            '<th>Description</th>' +
+                            '<th>Status</th>' +
+                            '<th>Aging</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '</tbody>' +
+                '</table>'
+                );
+
+                $('#coop_issues').modal('show');
+
+
+                $("#table-coop-issues").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "/localcoop-issues",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    columns: [
+                        { data: "coop_name" },
+                        { data: "region" },
+                        { data: "province" },
+                        { data: "dependency" },
+                        { 
+                            data: "nature_of_issue", 
+                            render: function ( data, type, row ) {
+                                return row['issue'] + '<br><small>' + data + '</small>';
+                            } 
+                        },
+                        { data: "description" },
+                        { data: "status_of_issue" },
+                        { data: "aging"},
+                    ],
+                });
+
+            }   
+
+
         });
+
+        
+
+        $(document).on('change', '#nature_of_issue', function(e){
+            e.preventDefault();
+            
+            $('#issue')
+                .find('option')
+                .remove()
+                .end()
+                .append('<option value="">Select Issue</option>')
+                .val('');
+
+            $.ajax({
+                    url: "/localcoop-get-issue-list/" + $(this).val(),
+                    method: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+
+                        resp.forEach(function(data) {
+                            $("#issue").append(new Option(data.issue, data.issue));
+                        });                        
+
+                    },
+                    error: function (resp){
+                        toastr.error(resp.message, "Error");
+                    }
+            });
+
+
+
+        });
+
+
+        $(document).on('click', '#table-coop-issues tbody tr', function(e){
+            e.preventDefault();
+        });
+
+        
     
         $('.assigned-sites-table').on('click', 'tbody tr', function(e){
             e.preventDefault();
@@ -906,6 +1032,7 @@
                 $(".issue_form_view #coop").val(value_data.coop);
                 $(".issue_form_view #dependency").val(value_data.dependency);
                 $(".issue_form_view #nature_of_issue").val(value_data.nature_of_issue);
+                $(".issue_form_view #issue").val(value_data.issue);
                 $(".issue_form_view #description").text(value_data.description);
                 $(".issue_form_view #issue_raised_by").val(value_data.issue_raised_by);
                 $(".issue_form_view #issue_raised_by_name").val(value_data.issue_raised_by_name);

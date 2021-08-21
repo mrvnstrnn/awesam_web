@@ -232,6 +232,12 @@
                                     </div>
                                 </div>
                                 <div class="position-relative row form-group">
+                                    <label for="issue" class="col-sm-3 col-form-label">Issue </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="issue" id="nature_of_issue" disabled>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
                                     <label for="description" class="col-sm-3 col-form-label">Description</label>
                                     <div class="col-sm-9">
                                         <textarea name="description" id="description" class="form-control" disabled></textarea>
@@ -403,18 +409,29 @@
                 <label for="nature_of_issue" class="col-sm-3 col-form-label">Nature of Issue </label>
                 <div class="col-sm-9">
                     <select name="nature_of_issue" id="nature_of_issue" class="form-control">
+
+                        @php
+                            $issues = \DB::table('issue_type')
+                                    ->select('issue_type')
+                                    ->distinct()
+                                    ->where('program_id', 7)
+                                    ->get();
+                        @endphp     
                         <option value="">Nature of Issue</option>
-                        <option value="Bills Payment">Bills Payment</option>
-                        <option value="Power Upgrade">Power Upgrade</option>
-                        <option value="Power Application">Power Application</option>
-                        <option value="Cable Regrooming">Cable Regrooming</option>
-                        <option value="Pole Related Concern">Pole Related Concern</option>
-                        <option value="JPA">JPA</option>
-                        <option value="RTA">RTA</option>
-                        <option value="Business Related Concerns">Business Related Concerns</option>
-                        <option value="Others">Others</option>
+                        @foreach ($issues as $issue)
+                            <option value="{{ $issue->issue_type }}">{{ $issue->issue_type }}</option>
+                        @endforeach
                     </select>
                     <small class="text-danger nature_of_issue-error"></small>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="issue" class="col-sm-3 col-form-label">Issue </label>
+                <div class="col-sm-9">
+                    <select name="issue" id="issue" class="form-control">
+                        <option value="">Select Issue</option>
+                    </select>
+                    <small class="text-danger issue-error"></small>
                 </div>
             </div>
             <div class="position-relative row form-group">
@@ -704,7 +721,7 @@
                             '<th>Region</th>' +
                             '<th>Province</th>' +
                             '<th>Dependency</th>' +
-                            '<th>Nature of Issue</th>' +
+                            '<th>Issue</th>' +
                             '<th>Description</th>' +
                             '<th>Status</th>' +
                             '<th>Aging</th>' +
@@ -733,7 +750,12 @@
                         { data: "region" },
                         { data: "province" },
                         { data: "dependency" },
-                        { data: "nature_of_issue" },
+                        { 
+                            data: "nature_of_issue", 
+                            render: function ( data, type, row ) {
+                                return row['issue'] + '<br><small>' + data + '</small>';
+                            } 
+                        },
                         { data: "description" },
                         { data: "status_of_issue" },
                         { data: "aging"},
@@ -746,6 +768,39 @@
         });
 
         
+
+        $(document).on('change', '#nature_of_issue', function(e){
+            e.preventDefault();
+            
+            $('#issue')
+                .find('option')
+                .remove()
+                .end()
+                .append('<option value="">Select Issue</option>')
+                .val('');
+
+            $.ajax({
+                    url: "/localcoop-get-issue-list/" + $(this).val(),
+                    method: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+
+                        resp.forEach(function(data) {
+                            $("#issue").append(new Option(data.issue, data.issue));
+                        });                        
+
+                    },
+                    error: function (resp){
+                        toastr.error(resp.message, "Error");
+                    }
+            });
+
+
+
+        });
+
 
         $(document).on('click', '#table-coop-issues tbody tr', function(e){
             e.preventDefault();
@@ -977,6 +1032,7 @@
                 $(".issue_form_view #coop").val(value_data.coop);
                 $(".issue_form_view #dependency").val(value_data.dependency);
                 $(".issue_form_view #nature_of_issue").val(value_data.nature_of_issue);
+                $(".issue_form_view #issue").val(value_data.issue);
                 $(".issue_form_view #description").text(value_data.description);
                 $(".issue_form_view #issue_raised_by").val(value_data.issue_raised_by);
                 $(".issue_form_view #issue_raised_by_name").val(value_data.issue_raised_by_name);

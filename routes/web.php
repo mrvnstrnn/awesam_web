@@ -124,7 +124,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
 
-    
+    Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
+
+    Route::get('/localcoop-get-issue-list/{issue_type}', [LocalCoopController::class, 'get_coop_issue_list']);
+        
 
 });
 //******************* END OF LocalCOOP *******************//

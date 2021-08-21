@@ -73,13 +73,50 @@ class LocalCoopController extends Controller
 
     public function get_coop_issues()
     {
-        $coop_issues = \DB::table('view_local_coop_issues')->get();
+
+
+        $coop_issues = \DB::table('view_local_coop_issues');
+
+
+        if (\Auth::user()->profile_id == 18) {
+            $coop_issues->get();
+        }
+        elseif (\Auth::user()->profile_id == 25) {
+            $coop_issues->get();
+        } else {
+            $sites_locations = \DB::connection('mysql2')
+                            ->table("local_coop_user_locations")
+                            ->where('user_id', \Auth::id())
+                            ->get();
+
+            $locations = collect();
+
+            foreach ($sites_locations as $sites_location) {
+                $locations->push($sites_location->region);
+            }
+            
+            $coop_issues->whereIn('region', $locations->all())
+            ->get();
+        }
+
+
         $dt = DataTables::of($coop_issues);
 
         return $dt->make(true);
                         
     }
 
+    public function get_coop_issue_list($issue_type)
+    {
+        $issues = \DB::table('issue_type')
+                        ->where('issue_type', $issue_type)
+                        ->where('program_id', 7)
+                        ->orderBy('issue')
+                        ->get();        
+        return $issues;
+    }
+
+    
 
     public function get_localcoop_details($coop)
     {
@@ -254,12 +291,14 @@ class LocalCoopController extends Controller
                     'issue_raised_by' => 'required',
                     'issue_raised_by_name' => 'required',
                     'nature_of_issue' => 'required',
+                    'issue' => 'required',
                     'status_of_issue' => 'required',
                 ));
 
                 $array = array(
                     'dependency' => $request->input('dependency'),
                     'nature_of_issue' => $request->input('nature_of_issue'),
+                    'issue' => $request->input('issue'),
                     'description' => $request->input('description'),
                     'issue_raised_by' => $request->input('issue_raised_by'),
                     'issue_raised_by_name' => $request->input('issue_raised_by_name'),
