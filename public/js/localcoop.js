@@ -452,6 +452,7 @@
             $('.issue_form_view').addClass('d-none');
 
             $(".add_history_title").text($(".issue_form_view #nature_of_issue").val());
+            $(".add_history_desc").text($(".issue_form_view #issue").val());
 
         });
         
@@ -462,6 +463,7 @@
             $('.issue_form_view').removeClass('d-none');
 
             $(".add_history_title").text("Add History");
+            $(".add_history_desc").text("Description");
 
         });
         

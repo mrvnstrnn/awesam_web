@@ -328,6 +328,7 @@
                                 <div class="row border-bottom mb-3">
                                     <div class="col-sm-6">
                                         <H5 class="add_history_title">Add History</H5>
+                                        <small class="add_history_desc">Add History</small>
                                     </div>
                                     {{-- <div class="col-sm-6 text-right">
                                         <button type="button" class="btn btn-secondary mb-1" id="btn_cancel_add_issues" >Cancel Add Issue</button>
