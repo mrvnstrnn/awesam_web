@@ -327,11 +327,11 @@
                             <div id="issue_add_box" class="d-none">
                                 <div class="row border-bottom mb-3">
                                     <div class="col-sm-6">
-                                        <H5>Add History</H5>
+                                        <H5 class="add_history_title">Add History</H5>
                                     </div>
-                                    <div class="col-sm-6 text-right">
+                                    {{-- <div class="col-sm-6 text-right">
                                         <button type="button" class="btn btn-secondary mb-1" id="btn_cancel_add_issues" >Cancel Add Issue</button>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="row">
@@ -370,7 +370,8 @@
                                                 <small class="remarks-error text-danger"></small>
                                             </div>
 
-                                            <button type="button" class="btn btn-sm btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                            <button type="button" class="btn btn-sm btn-shadow btn-primary add_engagement" id="save_history" data-type="issue_history">Save History</button>
+                                            <button type="button" class="btn btn-sm btn-shadow btn-secondary" id="btn_cancel_add_issues" >Cancel Add Issue</button>
                                         </form>
                                     </div>
                                 </div>
