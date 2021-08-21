@@ -25,6 +25,29 @@
         
 @endphp
 
+<style>
+    #issues_table tbody tr:hover {
+        cursor: pointer;
+        background-color: rgb(221, 221, 221);
+    }
+    .table_issues_child tbody tr td:nth-child(4), .table_history_child tbody tr td:nth-child(3), .table_engagements_child tbody tr td:nth-child(4) {
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    label {
+        text-transform: uppercase;
+    }
+
+    .table_issues_child thead th, .table_history_child thead th, .table_engagements_child thead th, .table_contact_child thead th {
+        font-size: 11px !important;
+    }
+</style>
+
+
 <div id="coop_details" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
