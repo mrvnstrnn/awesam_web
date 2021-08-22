@@ -28,6 +28,7 @@
                 </div>
             </div> --}}
         {{-- @else --}}
+        
         @if (!is_null($data->files))
             @php
                 $uploaded_files = json_decode($data->files);

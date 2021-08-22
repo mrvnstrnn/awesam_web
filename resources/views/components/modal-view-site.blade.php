@@ -106,7 +106,9 @@
                                                         "NAM PR Memo Approval",
                                                         "Set Ariba PR Number to Sites",
                                                         "Vendor Awarding of Sites",
-                                                        "Approved SSDS / NTP Validation"
+                                                        "Approved SSDS / NTP Validation",
+
+                                                        "Advanced Site Hunting Validation"
 
                                                     );  
                                     
@@ -255,7 +257,7 @@
 
                                             @else
 
-                                                @if($main_activity == "Document Validation" || $site[0]->activity_name == "RAM Documents Validation" || $site[0]->activity_name == "Draft Contract Approval" || $site[0]->activity_name == "Lease Package" || $site[0]->activity_name == "RAM Validation of  Advanced Site Hunting  Documents")
+                                                @if($main_activity == "Document Validation" || $site[0]->activity_name == "RAM Documents Validation" || $site[0]->activity_name == "Draft Contract Approval" || $site[0]->activity_name == "Lease Package" || $site[0]->activity_name == "RAM Validation of  Advanced Site Hunting  Documents" || $site[0]->activity_name == "Advanced Site Hunting Validation")
 
                                                     <x-site-rtb-docs-validation  :site="$site" />
 
