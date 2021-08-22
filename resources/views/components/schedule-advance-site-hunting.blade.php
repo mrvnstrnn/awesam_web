@@ -62,9 +62,11 @@
     
         $(".set_schedule").on("click", function(e) {
             e.preventDefault();
-            var sam_id = $(".ajax_content_box").attr("data-sam_id");
+            var sam_id = "{{ $sam_id }}";
             var site_vendor_id = $("#modal_site_vendor_id").val();
-            var program_id = $("#modal_program_id").val();
+            var program_id = "{{ $program_id }}";
+            var site_category = "{{ $site_category }}";
+            var activity_id = "{{ $activity_id }}";
             var remarks = $("#remarks").val();
             var site_schedule = $("#site_schedule").val();
             var activity_name = "site_schedule";
@@ -85,6 +87,8 @@
                     site_vendor_id : site_vendor_id,
                     program_id : program_id,
                     site_schedule : site_schedule,
+                    site_category : site_category,
+                    activity_id : activity_id,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

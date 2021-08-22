@@ -25,9 +25,9 @@ class NewSitesController extends Controller
 
             if ($validate->passes()) {
                 
-                $jtss_schedule_data = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                                            ->where('type', $request->input('activity_name'))
-                                                            ->first();
+                // $jtss_schedule_data = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                //                                             ->where('type', $request->input('activity_name'))
+                //                                             ->first();
                                                             
     
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
@@ -44,13 +44,8 @@ class NewSitesController extends Controller
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('site_vendor_id'), $request->input('activity_name'), "") );
                 // }
 
-                if (is_null($jtss_schedule_data)) {
+                // if (is_null($jtss_schedule_data)) {
 
-                    if ($request->input('activity_name') == "jtss_schedule") {
-                        $message_info = "Successfully scheduled JTSS.";
-                    } else {
-                        $message_info = "Successfully scheduled site.";
-                    }
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'type' => $request->input('activity_name'),
@@ -59,17 +54,31 @@ class NewSitesController extends Controller
                         'status' => "pending",
                     ]); 
 
+                    if ($request->input('activity_name') == "jtss_schedule") {
+                        $message_info = "Successfully scheduled JTSS.";
+                    } else {
+                        $message_info = "Successfully scheduled site.";
+                        $this->move_site([$request->input("sam_id")], $request->input("program_id"), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                    }
+
                     
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
                     return response()->json(['error' => false, 'message' => $message_info ]);
-                } else {
-                    
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+                // } else {
 
-                    return response()->json(['error' => false, 'message' => $message_info ]);
-                }
+                //     if ($request->input('activity_name') == "jtss_schedule") {
+                //         $message_info = "Successfully scheduled JTSS.";
+                //     } else {
+                //         $message_info = "Successfully scheduled site.";
+                //         $this->move_site([$request->input("sam_id")], $request->input("program_id"), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                //     }
+                    
+                //     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+
+                //     return response()->json(['error' => false, 'message' => $message_info ]);
+                // }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
