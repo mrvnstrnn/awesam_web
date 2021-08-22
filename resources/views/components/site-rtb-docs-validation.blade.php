@@ -28,7 +28,6 @@
                 </div>
             </div> --}}
         {{-- @else --}}
-        {{ dd($datas) }}
         
         @if (!is_null($data->files))
             @php
