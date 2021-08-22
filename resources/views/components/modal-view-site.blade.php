@@ -247,7 +247,7 @@
 
                                             @elseif($site[0]->activity_name == "Schedule JTSS" && $main_activity == "")
 
-                                                <x-site-schedule-jtss />
+                                                <x-site-schedule-jtss :activityid="$site[0]->activity_id" :samid="$site[0]->sam_id" :sitecategory="$site[0]->site_category" />
 
                                             @elseif($main_activity == "Issue Validation")
 

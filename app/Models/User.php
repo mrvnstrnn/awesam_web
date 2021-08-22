@@ -290,4 +290,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $rtb_declaration;
     }
+
+    public function check_schedule_jtss ($sam_id)
+    {
+        $schedule_jtss = SubActivityValue::where('sam_id', $sam_id)
+                        ->where('type', 'jtss_schedule')
+                        ->get();
+
+        return $schedule_jtss;
+    }
 }
