@@ -11,9 +11,13 @@ class SiteScheduleJtss extends Component
      *
      * @return void
      */
-    public function __construct()
+
+    public $samid, $activityid, $sitecategory;
+    public function __construct($samid, $activityid, $sitecategory)
     {
-        //
+        $this->samid = $samid;
+        $this->activityid = $activityid;
+        $this->sitecategory = $sitecategory;
     }
 
     /**

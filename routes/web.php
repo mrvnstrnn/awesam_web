@@ -7,6 +7,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\GlobeController;
 use App\Http\Controllers\LocalCoopController;
 use App\Http\Controllers\TowerCoController;
+use App\Http\Controllers\NewSitesController;
 
 
 /*
@@ -313,9 +314,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
     Route::get('/agent-based-program/{program_id}', [GlobeController::class, 'agent_based_program']);
 
+    // NewSites
     // SSDS
     Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
-    Route::post('/schedule-jtss', [GlobeController::class, 'schedule_jtss']);
+    Route::post('/schedule-jtss', [NewSitesController::class, 'schedule_jtss']);
+    Route::get('/get-my-scheduled-jtss/{sam_id}', [NewSitesController::class, 'get_my_scheduled_jtss']);
+    Route::post('/confirm-schedule', [NewSitesController::class, 'confirm_schedule']);
     Route::get('/get-my-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_site']);
 
     Route::get('/get-my-uploaded-site/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploaded_site']);
