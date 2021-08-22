@@ -1950,21 +1950,21 @@ class GlobeController extends Controller
             ->render();
             
         }
-        elseif($sub_activity == 'Set Approved Site'){
+        // elseif($sub_activity == 'Set Approved Site'){
 
-            $what_component = "components.subactivity-set-approved-site";
-            return \View::make($what_component)
-            ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
-            ])
-            ->render();
+        //     $what_component = "components.subactivity-set-approved-site";
+        //     return \View::make($what_component)
+        //     ->with([
+        //         'sub_activity' => $sub_activity,
+        //         'sam_id' => $sam_id,
+        //         'sub_activity_id' => $sub_activity_id,
+        //         'program_id' => $program_id,
+        //         'site_category' => $site_category,
+        //         'activity_id' => $activity_id,
+        //     ])
+        //     ->render();
             
-        }
+        // }
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
