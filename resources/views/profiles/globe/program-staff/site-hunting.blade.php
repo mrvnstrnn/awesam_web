@@ -18,7 +18,8 @@
     //////////////////////////////////////
     var profile_id = 8;
     var table_to_load = 'site_hunting';
-    var main_activity = 'Site Huting';
+    // var main_activity = 'Site Huting';
+    var main_activity = '';
  
     //////////////////////////////////////
 

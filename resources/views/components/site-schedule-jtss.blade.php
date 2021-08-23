@@ -186,6 +186,8 @@
                             )
                         });
 
+                        $(".table_scheduled_jtss").removeClass("d-none");
+
                         $('#table_scheduled_jtss_'+  "{{ $samid }}").DataTable().ajax.reload();
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {

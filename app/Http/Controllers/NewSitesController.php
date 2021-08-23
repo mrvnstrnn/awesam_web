@@ -125,6 +125,7 @@ class NewSitesController extends Controller
                                 ]);
 
             $this->move_site($request->input("sam_id"), $request->input("program_id"), "true", $request->input("site_category"), $request->input("activity_id"));
+            return response()->json(['error' => false, 'message' => "Successfully confirmed schedule."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }

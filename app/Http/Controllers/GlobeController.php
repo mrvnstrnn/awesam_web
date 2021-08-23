@@ -343,72 +343,75 @@ class GlobeController extends Controller
                                         ->where('category', $site_category[$i])
                                         ->first();
 
-                $get_activitiess = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->select('next_activity', 'activity_name', 'profile_id')
-                                        ->where('activity_id', $activities->next_activity)
-                                        ->where('program_id', $program_id)
-                                        ->where('category', $site_category[$i])
-                                        ->first();
-
-                $get_activities = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->where('next_activity', $get_activitiess->next_activity)
-                                        ->where('program_id', $program_id)
-                                        ->where('category', $site_category[$i])
-                                        ->get();
-
-                foreach ($get_activities as $get_activity) {
-                    if ($action == "true") {
-                        $check_done = \DB::connection('mysql2')
-                                                ->table('site_stage_tracking')
-                                                ->where('sam_id', $sam_id[$i])
-                                                ->where('activity_complete', 'false')
-                                                ->get();
-
-                        $activity = $get_activity->activity_id;
-
-                        SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                ->where('activity_complete', 'false')
-                                                ->where('activity_id', $activity_id[$i])
-                                                ->update([
-                                                    'activity_complete' => "true"
-                                                ]);
-
-                        if (count($check_done) <= 1) {
+                if (!is_null($activities)) {
+                    $get_activitiess = \DB::connection('mysql2')
+                                            ->table('stage_activities')
+                                            ->select('next_activity', 'activity_name', 'profile_id')
+                                            ->where('activity_id', $activities->next_activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[$i])
+                                            ->first();
+    
+                    $get_activities = \DB::connection('mysql2')
+                                            ->table('stage_activities')
+                                            ->where('next_activity', $get_activitiess->next_activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[$i])
+                                            ->get();
+    
+                    foreach ($get_activities as $get_activity) {
+                        
+                        if ($action == "true") {
+                            $check_done = \DB::connection('mysql2')
+                                                    ->table('site_stage_tracking')
+                                                    ->where('sam_id', $sam_id[$i])
+                                                    ->where('activity_complete', 'false')
+                                                    ->get();
+    
+                            $activity = $get_activity->activity_id;
+    
+                            SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                    ->where('activity_complete', 'false')
+                                                    ->where('activity_id', $activity_id[$i])
+                                                    ->update([
+                                                        'activity_complete' => "true"
+                                                    ]);
+    
+                            if (is_null($check_done)) {
+            
+                                SiteStageTracking::create([
+                                    'sam_id' => $sam_id[$i],
+                                    'activity_id' => $activity,
+                                    'activity_complete' => 'false',
+                                    'user_id' => \Auth::id()
+                                ]);
+                            }
+                        } else {
+                            $activity = $get_activity->return_activity;
+                            SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                    ->where('activity_id', ">", $activity)
+                                                    ->delete();
         
-                            SiteStageTracking::create([
-                                'sam_id' => $sam_id[$i],
-                                'activity_id' => $activity,
-                                'activity_complete' => 'false',
-                                'user_id' => \Auth::id()
-                            ]);
+                            SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                    ->where('activity_id', $activity)
+                                                    ->update([
+                                                        'activity_complete' => "false"
+                                                    ]);
                         }
-                    } else {
-                        $activity = $get_activity->return_activity;
-                        SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                ->where('activity_id', ">", $activity)
-                                                ->delete();
-    
-                        SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                ->where('activity_id', $activity)
-                                                ->update([
-                                                    'activity_complete' => "false"
-                                                ]);
+        
+                        $array = array(
+                            'activity_id' => $activity,
+                            'activity_name' => $get_activitiess->activity_name,
+                            'profile_id' => $get_activitiess->profile_id,
+                            'category' => $site_category[$i],
+                            'activity_created' => Carbon::now()->toDateString(),
+                        );
+        
+                        Site::where('sam_id', $sam_id[$i])
+                        ->update([
+                            'activities' => json_encode($array)
+                        ]);
                     }
-    
-                    $array = array(
-                        'activity_id' => $activity,
-                        'activity_name' => $get_activitiess->activity_name,
-                        'profile_id' => $get_activitiess->profile_id,
-                        'category' => $site_category[$i],
-                        'activity_created' => Carbon::now()->toDateString(),
-                    );
-    
-                    Site::where('sam_id', $sam_id[$i])
-                    ->update([
-                        'activities' => json_encode($array)
-                    ]);
                 }
             }
         }
@@ -1904,22 +1907,23 @@ class GlobeController extends Controller
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
     {
     // dd($sub_activity);
-        if($sub_activity == 'Add Target Sites'){
+        // if($sub_activity == 'Add Target Sites'){
 
-            $what_component = "components.subactivity-ssds";
-            return \View::make($what_component)
-            ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
-            ])
-            ->render();
+        //     $what_component = "components.subactivity-ssds";
+        //     return \View::make($what_component)
+        //     ->with([
+        //         'sub_activity' => $sub_activity,
+        //         'sam_id' => $sam_id,
+        //         'sub_activity_id' => $sub_activity_id,
+        //         'program_id' => $program_id,
+        //         'site_category' => $site_category,
+        //         'activity_id' => $activity_id,
+        //     ])
+        //     ->render();
 
-        }
-        elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+        // }
+        if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+            // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
@@ -1949,21 +1953,21 @@ class GlobeController extends Controller
             ->render();
             
         }
-        elseif($sub_activity == 'Set Approved Site'){
+        // elseif($sub_activity == 'Set Approved Site'){
 
-            $what_component = "components.subactivity-set-approved-site";
-            return \View::make($what_component)
-            ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
-            ])
-            ->render();
+        //     $what_component = "components.subactivity-set-approved-site";
+        //     return \View::make($what_component)
+        //     ->with([
+        //         'sub_activity' => $sub_activity,
+        //         'sam_id' => $sam_id,
+        //         'sub_activity_id' => $sub_activity_id,
+        //         'program_id' => $program_id,
+        //         'site_category' => $site_category,
+        //         'activity_id' => $activity_id,
+        //     ])
+        //     ->render();
             
-        }
+        // }
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";

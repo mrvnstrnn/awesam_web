@@ -28,6 +28,7 @@
                 </div>
             </div> --}}
         {{-- @else --}}
+        
         @if (!is_null($data->files))
             @php
                 $uploaded_files = json_decode($data->files);
@@ -49,7 +50,7 @@
                     }
                 }
             @endphp
-
+            
             @foreach ($uploaded_files as $item)
                 @if ($item->status == "denied")
                     <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
