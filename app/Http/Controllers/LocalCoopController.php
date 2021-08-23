@@ -201,9 +201,9 @@ class LocalCoopController extends Controller
                 ->addColumn('nature_of_issue', function($row){
                     return json_decode($row->value)->nature_of_issue;
                 })
-                ->addColumn('issue', function($row){
-                    return json_decode($row->value)->issue;
-                })
+                // ->addColumn('issue', function($row){
+                //     return json_decode($row->value)->issue;
+                // })
                 ->addColumn('description', function($row){
                     return json_decode($row->value)->description;
                 })
