@@ -302,7 +302,9 @@
                         { 
                             data: "nature_of_issue",
                             render: function ( data, type, row ) {
-                                return row['issue'] + '<br><small>' + data + '</small>';
+                                // console.log( JSON.parse(row['value'].replace(/&quot;/g,'"')).issue );
+                                var issue = JSON.parse(row['value'].replace(/&quot;/g,'"')).issue == undefined ? "" : JSON.parse(row['value'].replace(/&quot;/g,'"')).issue;
+                                return issue + '<br><small>' + data + '</small>';
                             } 
                         },
                         { data: "description" },
