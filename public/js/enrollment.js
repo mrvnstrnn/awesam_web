@@ -90,12 +90,12 @@ $(document).ready(() => {
                         if(id == 'region'){
                             $("#"+resp.new_id).append('<option value="">Please select province</option>');
                             resp.message.forEach(element => {
-                                $("#"+resp.new_id).append('<option value="'+element.province+'">'+element.province+'</option>');
+                                $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
                             });
                         } else if (id == 'province'){
                             $("#"+resp.new_id).append('<option value="">Please select city</option>');
                             resp.message.forEach(element => {
-                                $("#"+resp.new_id).append('<option value="'+element.lgu+'">'+element.lgu+'</option>');
+                                $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
                             });
                         }
                     }
@@ -104,7 +104,7 @@ $(document).ready(() => {
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, 'Error');
+                toastr.error(resp, 'Error');
             }
         });
     });

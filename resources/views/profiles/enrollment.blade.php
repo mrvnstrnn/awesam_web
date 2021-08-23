@@ -150,7 +150,7 @@
                                                         <select class="form-control" name="address" id="region" autocomplete="off">
                                                             <option >Please select region</option>
                                                             @foreach ($locations as $location)
-                                                            <option value="{{ $location->region }}">{{ $location->region }}</option>
+                                                            <option value="{{ $location->region_id }}">{{ $location->region_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
