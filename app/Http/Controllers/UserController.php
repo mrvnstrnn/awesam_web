@@ -45,16 +45,15 @@ class UserController extends Controller
 
     public function onboarding()
     {
+        $locations = \DB::connection('mysql2')->table('location_regions')->get();
         if(count(\Auth::user()->getUserDetail()->get()) < 1){
-            $locate = Location::select('region');
-            $locations = $locate->groupBy('region')->get();
+            // $locate = Location::select('region');
+            // $locations = $locate->groupBy('region')->get();
 
             $user_details = \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first();
             return view('profiles.enrollment', compact('locations', 'user_details'));
         }
         if(is_null(\Auth::user()->profile_id)){
-            $locate = Location::select('region');
-            $locations = $locate->groupBy('region')->get();
 
             $user_details = \Auth::user()->getUserDetail()->where('user_details.address_id', '!=', null)->first();
             return view('profiles.enrollment', compact('locations', 'user_details'));
@@ -94,17 +93,25 @@ class UserController extends Controller
 
             if ($id == 'region') {
                 $select = "province";
+                $where = "region_id";
+                $table = "location_provinces";
             } else if ($id == 'province') {
                 $select = "lgu";
+                $where = "province_id";
+                $table = "location_lgus";
             } else {
                 $select = 'lgu';
             }
 
-            $locate = Location::select($select)->where($id, $val);
+            // $locate = Location::select($select)->where($id, $val);
+            // $locate = Location::select($select)->where($id, $val);
 
-            $location = $locate->groupBy($select)->get();
+            // $location = $locate->groupBy($select)->get();
+
+            $location = \DB::connection('mysql2')->table($table)->where($where, $val)->get();
 
             
+            // return response()->json(['error' => true, 'message' => $location ]);
             return response()->json(['error' => false, 'message' => $location, 'new_id' => $select ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
@@ -114,7 +121,6 @@ class UserController extends Controller
     public function finish_onboarding(Request $request)
     {
         try {
-
             $img = $request->input('capture_image');
 
             if (preg_match('/^data:image\/(\w+);base64,/', $img)) {
@@ -156,10 +162,17 @@ class UserController extends Controller
 
             if($validate->passes()){
                 $mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "" : "globe";
-                $address = Location::where('province', $request->input('hidden_province'))
-                                        ->where('lgu', $request->input('hidden_lgu'))
-                                        ->where('region', $request->input('hidden_region'))
-                                        ->first();
+                // $address = Location::where('province', $request->input('hidden_province'))
+                //                         ->where('lgu', $request->input('hidden_lgu'))
+                //                         ->where('region', $request->input('hidden_region'))
+                //                         ->first();
+
+                $address = \DB::connection('mysql2')
+                                ->table('location_lgus')
+                                ->where('lgu_id', $request->input('hidden_lgu'))
+                                ->where('region_id', $request->input('hidden_region'))
+                                ->where('province_id', $request->input('hidden_province'))
+                                ->first();
                                         
                 $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
     
@@ -183,7 +196,7 @@ class UserController extends Controller
                                     'employment_classification' => $request->get('employment_classification'),
                                     'employment_status' => $request->get('employment_status'),
                                     'hiring_date' => $request->get('hiring_date'),
-                                    'address_id' => $address->id,
+                                    'address_id' => $address->lgu_id,
                                     'image' => $imageName,
                                 ]);
 
@@ -191,7 +204,7 @@ class UserController extends Controller
                 } else {
 
                     $detail = new UserDetail();
-                    $detail->address_id = $address->id;
+                    $detail->address_id = $address->lgu_id;
                     $detail->mode = $mode;
                     $detail->user_id = \Auth::user()->id;
                     $detail->birthday = $request->get('birthday');
