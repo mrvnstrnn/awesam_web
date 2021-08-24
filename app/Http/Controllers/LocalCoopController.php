@@ -408,6 +408,26 @@ class LocalCoopController extends Controller
         }
     }
 
+    public function update_coop_details (Request $request) {
+        try {
+            $array = array(
+                'id' => $request->input('id'),
+                'endorsement_tagging' => $request->input('endorsement_tagging'),
+                'prioritization_tagging' => $request->input('prioritization_tagging'),
+            );
 
+            LocalCoopValue::create([
+                'coop' => $request->input('coop_name'),
+                'type' => "update_details",
+                'value' => json_encode($array),
+                'user_id' => \Auth::id()
+            ]);
+
+            return response()->json(['error' => false, 'message' => "This was sent for approval of BD." ]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
 
 }

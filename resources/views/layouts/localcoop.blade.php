@@ -674,7 +674,6 @@
       </div>
     </div>
 </div>
-  
 
 <div id="coop_issues" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">

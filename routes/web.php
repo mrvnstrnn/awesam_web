@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
+    Route::post('/update-coop-details', [LocalCoopController::class, 'update_coop_details'])->name('update_coop_details');
     
     Route::get('/localcoop-details/{coop}', [LocalCoopController::class, 'get_localcoop_details'])->name('get_localcoop_details');
 
