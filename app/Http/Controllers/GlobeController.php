@@ -2115,7 +2115,12 @@ class GlobeController extends Controller
                     ->where('activity_complete', "=", 'false')
                     ->get();
 
-            $site_fields = json_decode($site[0]->site_fields);
+            if ( count($site) < 1 ) {
+                $site_fields = "";
+            } else {
+                $site_fields = json_decode($site[0]->site_fields);
+            }
+            
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
@@ -2164,13 +2169,12 @@ class GlobeController extends Controller
                 if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
                     $what_modal = "components.pr-memo-approval";
 
-
                     return \View::make($what_modal)
                     ->with([
                         'pr_memo' => $pr_memo,
                         'activity' => $request->input('activity'),
                         'samid' => $request['sam_id'],
-                        'site_name' => $site[0]->site_name
+                        'site_name' => count($site) < 1 ? "" : $site[0]->site_name
                     ])
                     ->render();
                 }

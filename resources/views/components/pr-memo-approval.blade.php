@@ -366,16 +366,16 @@
                                         @else
                                             {{-- @if (\Auth::user()->profile_id != 8) --}}
                                                 @if (\Auth::user()->profile_id == 10 && $activity == "NAM PR Memo Approval")
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR Memo</button>
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
                                                     
-                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @elseif (\Auth::user()->profile_id == 9 && $activity == "RAM Head PR Memo Approval")
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @endif
                                             {{-- @endif --}}
                                         @endif
@@ -384,7 +384,7 @@
                                         
                                     <div class="row reject_remarks d-none">
                                         <div class="col-12">
-                                            <p class="message_p">Are you sure you want to reject PR Memo?</p>
+                                            <p class="message_p">Are you sure you want to reject this PR Memo?</p>
                                             <form class="reject_form">
                                                 <div class="form-group">
                                                     <label for="remarks">Remarks:</label>
@@ -392,7 +392,7 @@
                                                     <small class="text-danger remarks-error"></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR</button>
+                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR Memo</button>
                                                     
                                                     <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                                 </div>
