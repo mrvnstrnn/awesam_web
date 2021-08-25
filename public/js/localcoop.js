@@ -769,7 +769,7 @@
         });
 
 
-        $(document).on("click", ".approve_coop_detail", function (e) {
+        $(document).on("click", ".approve_disapprove_coop_detail", function (e) {
             e.preventDefault();
 
             $(".details_approval_area").removeClass("d-none");
@@ -779,11 +779,80 @@
             var endorsement_tagging = $(this).attr("data-endorsement_tagging");
             var prioritization_tagging = $(this).attr("data-prioritization_tagging");
 
-            console.log(endorsement_tagging);
+            $(".approve_reject_details").attr("data-id", $(this).attr("data-id"));
+            $(".approve_reject_details").attr("data-status", $(this).attr("data-action"));
+
+            if ($(this).attr("data-action") == "approved") {
+                $("p.message_details").text("Are you sure you want to approve this details?");
+                $(".approve_reject_details").text("Approve");
+            } else {
+                $("p.message_details").text("Are you sure you want to reject this details?");
+                $(".approve_reject_details").text("Reject");
+            }
 
             $("span.coop").text(coop);
             $("span.endorsement_tagging").text(endorsement_tagging);
             $("span.prioritization_tagging").text(prioritization_tagging);
-        })
+        });
+
+        $(document).on("click", ".approve_reject_details", function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("data-id");
+            var status = $(this).attr("data-status");
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $.ajax({
+                url: "/approve-change-details/" + id + "/" + status,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+
+                        $("#coop_approval_table").DataTable().ajax.reload(function (){
+
+                            $(".approve_reject_details").removeAttr("disabled");
+                            $(".approve_reject_details").text("Approve");
+                
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+    
+                            $(".cancel_details").trigger("click");
+                        });
+
+                    } else {
+                        $(".approve_reject_details").removeAttr("disabled");
+                        $(".approve_reject_details").text("Approve");
+
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    $(".approve_reject_details").removeAttr("disabled");
+                    $(".approve_reject_details").text("Approve");
+        
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        });
+
+        $(document).on("click", ".cancel_details", function (e) {
+            e.preventDefault();
+
+            $(".details_approval_area").addClass("d-none");
+            $(".coop_approval_table_area").removeClass("d-none");
+        });
 
 });

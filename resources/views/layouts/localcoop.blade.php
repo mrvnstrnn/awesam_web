@@ -732,15 +732,20 @@
                 </table>
             </div>
             
-            <div class="row details_approval_area d-none">
-                <div class="col-12">
-                    <p>Are you sure you want to approve this details?</p>
-                    <b>COOP Name: </b><span class="coop"></span><br>
-                    <b>Prioritization Tagging: </b><span class="prioritization_tagging"></span><br>
-                    <b>Endorsement Tagging: </b><span class="endorsement_tagging"></span>
+            <div class="details_approval_area d-none">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="message_details">Are you sure you want to approve this details?</p>
+                        <b>COOP Name: </b><span class="coop"></span><br>
+                        <b>Prioritization Tagging: </b><span class="prioritization_tagging"></span><br>
+                        <b>Endorsement Tagging: </b><span class="endorsement_tagging"></span>
+                    </div>
                 </div>
-                <div class="col-12">
-                    <button class="btn btn-sm btn-shadow btn-primary approve_details">Approve</button>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-sm btn-shadow btn-primary approve_reject_details">Approve</button>
+                        <button class="btn btn-sm btn-shadow btn-secondary cancel_details">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
