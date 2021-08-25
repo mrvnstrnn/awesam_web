@@ -328,7 +328,7 @@ class GlobeController extends Controller
                                     ->where('activity_complete', 'false')
                                     ->get();
 
-                                    $past_activities = collect();
+            $past_activities = collect();
 
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
@@ -376,8 +376,8 @@ class GlobeController extends Controller
                                                     ->update([
                                                         'activity_complete' => "true"
                                                     ]);
-    
-                            if (is_null($check_done)) {
+
+                            if (count($check_done) <= 1) {
             
                                 SiteStageTracking::create([
                                     'sam_id' => $sam_id[$i],
@@ -3537,10 +3537,10 @@ class GlobeController extends Controller
                                         ]);
                 }
 
-                // if ($request->input("data_action") == "false") {
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
-                    $this->move_site( $sam_id->all(), 1, $request->input("data_action"), $site_category->all(), $activity_id->all() );
-                // }
+                    // if ($request->input("data_action") == "false") {
+                        // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
+                    // }
+                $asd = $this->move_site( $sam_id->all(), 1, $request->input("data_action"), $site_category->all(), $activity_id->all() );
 
                 $message_action = $request->input("data_action") == "false" ? "rejected" : "approved";
                 return response()->json(['error' => false, 'message' => "Successfully ".$message_action." PR Memo." ]);

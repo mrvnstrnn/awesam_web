@@ -369,6 +369,12 @@
         
         $(".pr_po_form small").text("");
 
+        var sam_id = [];
+        var values = $("input[name='sam_id[]']")
+                        .map(function(){
+                            sam_id.push($(this).val())
+                        }).get();
+
         $.ajax({
             url: "/add-pr-po",
             method: "POST",
@@ -378,6 +384,11 @@
             },
             success: function (resp){
                 if (!resp.error) {
+                    for (let i = 0; i < sam_id.length; i++) {
+                        $("select option.option"+sam_id[i]).addClass("d-none");
+                        $(".input_hidden input#sam_id"+sam_id[i]).remove();
+                    }
+
                     $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
 
                     
@@ -396,7 +407,7 @@
                         
                         $(".add_pr_po").removeAttr("disabled");
                         $(".add_pr_po").text("Create PR/PO");
-                        $(".remove_td").trigger("click");
+                        // $(".remove_td").trigger("click");
                         $(".pr_po_form")[0].reset();
                     });
 

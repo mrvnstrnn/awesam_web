@@ -674,7 +674,6 @@
       </div>
     </div>
 </div>
-  
 
 <div id="coop_issues" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">
@@ -697,3 +696,56 @@
       </div>
     </div>
 </div>
+
+<div id="approve_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+              <h5 class="modal-title text-dark"><i class="pe-7s-gleam pe-lg mr-2"></i>Add Issue</h5>
+              <button type="button" class="close text-dark" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        <div class="modal-body">
+            <div class="table-responsive coop_approval_table_area">
+                <table class="table table-hovered" id="coop_approval_table">
+                    {{-- @php
+                        $values = \DB::connection('mysql2')
+                                        ->table('local_coop_values')
+                                        ->where('type', 'update_details')
+                                        ->whereJsonContains('value', [
+                                            'status' => 'pending'
+                                        ])
+                                        ->get();
+
+                                        $json = json_encode($values);
+                    @endphp --}}
+                    <thead>
+                        <tr>
+                            <th>Coop name</th>
+                            <th>Prioritization Tagging</th>
+                            <th>Endorsement Tagging</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            
+            <div class="row details_approval_area d-none">
+                <div class="col-12">
+                    <p>Are you sure you want to approve this details?</p>
+                    <b>COOP Name: </b><span class="coop"></span><br>
+                    <b>Prioritization Tagging: </b><span class="prioritization_tagging"></span><br>
+                    <b>Endorsement Tagging: </b><span class="endorsement_tagging"></span>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-sm btn-shadow btn-primary approve_details">Approve</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<input type="hidden" name="hidden_profile_id" id="hidden_profile_id" value="{{ \Auth::user()->profile_id }}">

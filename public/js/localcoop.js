@@ -1,10 +1,14 @@
-    
+    $(document).ready(function () {
     // $('.show_activity_modal').on( 'click', function (e) {
     // });
         $('li').on('click','a', function(e){
             e.preventDefault();
 
-            if($(this).attr('href')==' /add-issue '){
+            if($(this).attr('href')==''){
+                location.reload();
+            }
+
+            else if($(this).attr('href')==' /add-issue '){
                 $('#add_issue').modal('show');
             }
 
@@ -14,6 +18,10 @@
 
             else if($(this).attr('href')==' /add-contact '){
                 $('#add_contact').modal('show');
+            }  
+
+            else if($(this).attr('href')==' /approval '){
+                $('#approve_modal').modal('show');
             }   
 
             else if($(this).attr('href')==' /coop-issues '){
@@ -197,6 +205,8 @@
             $(".table_contact_parent table").attr("id", "table_contact_child_" + id);
             $(".table_engagements_parent table").attr("id", "table_engagements_child_" + id);
             $(".table_issues_parent table").attr("id", "table_issues_child_" + id);
+
+            $('#tab-coop-details button').remove();
             
             $.ajax({
                     url: "/localcoop-details/" + $(this).find('td:first').text(),
@@ -214,14 +224,22 @@
                         Object.keys(columns).forEach(function (key, index){
                             var value_column = columns[key] == null ? "" : columns[key];
                             field_name = key.charAt(0).toUpperCase() + key.slice(1);
-                            html = html + "<div class='row'><div class='col-5'><label>" + field_name.split('_').join(' ') + "</label></div><div class='col-7'><input class='form-control mb-2' type='text' value='" + value_column + "' readonly /></div></div>";
+                            
+                            className = field_name != "Id" ? "" : "d-none";
+                            html = html + "<div class='row "+className+"'><div class='col-5'><label>" + field_name.split('_').join(' ') + "</label></div><div class='col-7'><input class='form-control mb-2' type='text' name='" + field_name + "' id='" + field_name + "' value='" + value_column + "' readonly /></div></div>";
                         });
 
                         $('#tab-coop-details').html(html);
 
+                        if ($("#hidden_profile_id").val() == 24) {
+                            $('#tab-coop-details').append(
+                                "<button class='btn btn-success btn-sm btn-shadow edit_details_btn' type='button'>Edit</button> <div class='div_update_area_btn d-none'><button class='btn btn-secondary btn-sm btn-shadow cancel_details_btn' type='button'>Cancel</button> <button class='btn btn-primary btn-sm btn-shadow update_details_btn' type='button'>Update</button></div>"
+                            );
+                        }
+
                     },
                     error: function (resp){
-                        toastr.error(resp.message, "Error");
+                        toastr.error(resp, "Error");
                     }
             });
 
@@ -433,7 +451,6 @@
 
         });
 
-        
         $(document).on('click', '.back_to_engagement_list', function(e){ 
             $('.engagement_form_view').addClass('d-none');
             $('.table_engagements_parent').removeClass('d-none');
@@ -604,7 +621,7 @@
                     } else {
                         Swal.fire(
                             'Error',
-                            resp,
+                            resp.error,
                             'error'
                         )
                     }
@@ -640,3 +657,133 @@
             
         });
 
+        $(document).on("click", ".edit_details_btn", function (e) {
+            e.preventDefault();
+
+            var Endorsement_tagging = $("#Endorsement_tagging").val();
+            var Prioritization_tagging = $("#Prioritization_tagging").val();
+
+            $("#Endorsement_tagging").removeAttr("readonly");
+            $("#Prioritization_tagging").removeAttr("readonly");
+
+            $(".div_update_area_btn").removeClass("d-none");
+            $(".edit_details_btn").addClass("d-none");
+        });
+
+        $(document).on("click", ".cancel_details_btn", function (e) {
+            e.preventDefault();
+
+            $("#Endorsement_tagging").attr("readonly", "readonly");
+            $("#Prioritization_tagging").attr("readonly", "readonly");
+
+            $(".div_update_area_btn").addClass("d-none");
+            $(".edit_details_btn").removeClass("d-none");
+        });
+
+        $(document).on("click", ".update_details_btn", function (e) {
+            e.preventDefault();
+
+            var id = $("#Id").val();
+            var Endorsement_tagging = $("#Endorsement_tagging").val();
+            var Prioritization_tagging = $("#Prioritization_tagging").val();
+            var Coop_name = $("#Coop_name").val();
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $.ajax({
+                url: "/update-coop-details",
+                method: "POST",
+                data: {
+                    endorsement_tagging : Endorsement_tagging,
+                    prioritization_tagging : Prioritization_tagging,
+                    id : id,
+                    coop_name : Coop_name,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+
+                        $(".cancel_details_btn").trigger("click");
+
+                        $(".update_details_btn").removeAttr("disabled");
+                        $(".update_details_btn").text("Update");
+                        
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+                    } else {
+
+                        $(".update_details_btn").removeAttr("disabled");
+                        $(".update_details_btn").text("Update");
+
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+
+                    $(".update_details_btn").removeAttr("disabled");
+                    $(".update_details_btn").text("Update");
+
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        });
+
+
+        $("#coop_approval_table").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/localcoop-details-approval",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            createdRow: function (row, data) {
+                $(row).attr('data-endorsement_tagging', JSON.parse(JSON.stringify(data)).endorsement_tagging);
+                $(row).attr('data-prioritization_tagging', JSON.parse(JSON.stringify(data)).prioritization_tagging);
+                $(row).attr('data-status', JSON.parse(JSON.stringify(data)).status);
+                $(row).attr('data-id', data.ID);
+            },
+            columns: [
+                { data: "coop" },
+                { data: "prioritization_tagging" },
+                { data: "endorsement_tagging" },
+                { data: "status" },
+                { data: "action" },
+            ],
+        });
+
+
+        $(document).on("click", ".approve_coop_detail", function (e) {
+            e.preventDefault();
+
+            $(".details_approval_area").removeClass("d-none");
+            $(".coop_approval_table_area").addClass("d-none");
+
+            var coop = $(this).attr("data-coop");
+            var endorsement_tagging = $(this).attr("data-endorsement_tagging");
+            var prioritization_tagging = $(this).attr("data-prioritization_tagging");
+
+            console.log(endorsement_tagging);
+
+            $("span.coop").text(coop);
+            $("span.endorsement_tagging").text(endorsement_tagging);
+            $("span.prioritization_tagging").text(prioritization_tagging);
+        })
+
+});
