@@ -395,6 +395,45 @@ class LocalCoopController extends Controller
         }
     }
 
+    public function localcoop_details_approval ()
+    {
+
+        try {
+
+            $values = \DB::connection('mysql2')
+                                        ->table('local_coop_values')
+                                        ->where('type', 'update_details')
+                                        ->whereJsonContains('value', [
+                                            'status' => 'pending'
+                                        ])
+                                        ->get();
+
+            $dt = DataTables::of($values)
+                                ->addColumn('prioritization_tagging', function($row){
+                                    return json_decode($row->value)->prioritization_tagging;
+                                })
+                                ->addColumn('endorsement_tagging', function($row){
+                                    return json_decode($row->value)->endorsement_tagging;
+                                })
+                                ->addColumn('status', function($row){
+                                    return json_decode($row->value)->status;
+                                })
+                                ->addColumn('action', function($row){
+                                    return "<button class='btn btn-sm btn-shadow btn-primary approve_coop_detail' data-endorsement_tagging='".json_decode($row->value)->endorsement_tagging."' data-prioritization_tagging='".json_decode($row->value)->prioritization_tagging."' data-id='".$row->ID."' data-coop='".$row->coop."' data-action='approve'>Approve</button> <button class='btn btn-sm btn-shadow btn-danger approve_disapprove_coop_detail' data-id='".$row->ID."' data-action='disapprove'>Disapprove</button>";
+                                });
+                        // ->addColumn('remarks', function($row){
+                        //     return json_decode($row->value)->remarks;
+                        // })
+                        // ->addColumn('status', function($row){
+                        //     return json_decode($row->value)->status_of_issue;
+                        // });
+            $dt->rawColumns(['action']);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function get_contact($id, $action)
     {
         try {
@@ -414,6 +453,7 @@ class LocalCoopController extends Controller
                 'id' => $request->input('id'),
                 'endorsement_tagging' => $request->input('endorsement_tagging'),
                 'prioritization_tagging' => $request->input('prioritization_tagging'),
+                'status' => 'pending',
             );
 
             LocalCoopValue::create([
