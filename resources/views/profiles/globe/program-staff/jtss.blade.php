@@ -18,7 +18,8 @@
     //////////////////////////////////////
     var profile_id = 8;
     var table_to_load = 'schedule_jtss';
-    var main_activity = 'JTSS Schedule';
+    // var main_activity = 'JTSS Schedule';
+    var main_activity = '';
  
     //////////////////////////////////////
 
