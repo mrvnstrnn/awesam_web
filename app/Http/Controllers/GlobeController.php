@@ -1907,22 +1907,22 @@ class GlobeController extends Controller
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
     {
     // dd($sub_activity);
-        // if($sub_activity == 'Add Target Sites'){
+        if($sub_activity == 'Add Target Sites'){
 
-        //     $what_component = "components.subactivity-ssds";
-        //     return \View::make($what_component)
-        //     ->with([
-        //         'sub_activity' => $sub_activity,
-        //         'sam_id' => $sam_id,
-        //         'sub_activity_id' => $sub_activity_id,
-        //         'program_id' => $program_id,
-        //         'site_category' => $site_category,
-        //         'activity_id' => $activity_id,
-        //     ])
-        //     ->render();
+            $what_component = "components.subactivity-ssds";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
 
-        // }
-        if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+        }
+        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
             // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
