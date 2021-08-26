@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Models\LocalCoopValue;
+use App\Models\LocalCoop;
 
 use App\Models\User;
 use Validator;
@@ -21,7 +22,7 @@ class LocalCoopController extends Controller
                                 ->select(
                                     'region', 
                                     'id', 
-                                    'prioritization_tagging', 
+                                    'endorsement_tagging', 
                                     'endorsement_tagging', 
                                     'coop_name',
                                     'coop_full_name',
@@ -419,7 +420,10 @@ class LocalCoopController extends Controller
                                     return json_decode($row->value)->status;
                                 })
                                 ->addColumn('action', function($row){
-                                    return "<button class='btn btn-sm btn-shadow btn-primary approve_coop_detail' data-endorsement_tagging='".json_decode($row->value)->endorsement_tagging."' data-prioritization_tagging='".json_decode($row->value)->prioritization_tagging."' data-id='".$row->ID."' data-coop='".$row->coop."' data-action='approve'>Approve</button> <button class='btn btn-sm btn-shadow btn-danger approve_disapprove_coop_detail' data-id='".$row->ID."' data-action='disapprove'>Disapprove</button>";
+                                    $btn = "<button class='btn btn-sm btn-shadow btn-primary approve_disapprove_coop_detail' data-endorsement_tagging='".json_decode($row->value)->endorsement_tagging."' data-prioritization_tagging='".json_decode($row->value)->prioritization_tagging."' data-id='".$row->ID."' data-coop='".$row->coop."' data-action='approved'>Approve</button>";
+                                    
+                                    $btn .= "<button class='btn btn-sm btn-shadow btn-danger approve_disapprove_coop_detail' data-endorsement_tagging='".json_decode($row->value)->endorsement_tagging."' data-prioritization_tagging='".json_decode($row->value)->prioritization_tagging."' data-id='".$row->ID."' data-coop='".$row->coop."' data-action='rejected'>Disapprove</button>";
+                                    return $btn;
                                 });
                         // ->addColumn('remarks', function($row){
                         //     return json_decode($row->value)->remarks;
@@ -465,6 +469,41 @@ class LocalCoopController extends Controller
 
             return response()->json(['error' => false, 'message' => "This was sent for approval of BD." ]);
 
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function approve_change_details ($id, $status) 
+    {
+        try {
+            $values = \DB::connection('mysql2')
+                                        ->table('local_coop_values')
+                                        ->where('type', 'update_details')
+                                        ->where('ID', $id)
+                                        ->first();
+
+            $array = array(
+                'endorsement_tagging' => json_decode($values->value)->endorsement_tagging,
+                'prioritization_tagging' => json_decode($values->value)->prioritization_tagging,
+                'status' => $status,
+            );
+
+            LocalCoopValue::where('ID', $id)
+            ->update([
+                'value' => $array
+            ]);
+            
+            if ($status == "approved") {
+    
+                LocalCoop::where('coop_name', $values->coop)
+                ->update([
+                    'prioritization_tagging' => json_decode($values->value)->endorsement_tagging,
+                    'endorsement_tagging' => json_decode($values->value)->endorsement_tagging,
+                ]);
+            }
+            
+            return response()->json(['error' => false, 'message' => "Details have been " .$status ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }

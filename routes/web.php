@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/localcoop-details-approval', [LocalCoopController::class, 'localcoop_details_approval'])->name('localcoop_details_approval');
     
     Route::get('/localcoop-details/{coop}', [LocalCoopController::class, 'get_localcoop_details'])->name('get_localcoop_details');
+    Route::get('/approve-change-details/{id}/{status}', [LocalCoopController::class, 'approve_change_details'])->name('approve-change-details');
 
     Route::get('/localcoop-values/{coop}/{type}', [LocalCoopController::class, 'get_localcoop_values'])->name('get_localcoop_values');
 
