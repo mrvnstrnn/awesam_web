@@ -22,7 +22,7 @@ class LocalCoopController extends Controller
                                 ->select(
                                     'region', 
                                     'id', 
-                                    'endorsement_tagging', 
+                                    'prioritization_tagging', 
                                     'endorsement_tagging', 
                                     'coop_name',
                                     'coop_full_name',
