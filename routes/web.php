@@ -318,6 +318,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/agent-based-program/{program_id}', [GlobeController::class, 'agent_based_program']);
 
     // NewSites
+
+    // PR Memo
+    Route::post('/get-pr-memo', [GlobeController::class, 'get_PRMemo']);
+
+
     // SSDS
     Route::post('/add-ssds', [GlobeController::class, 'add_ssds']);
     Route::post('/schedule-jtss', [NewSitesController::class, 'schedule_jtss']);

@@ -225,7 +225,9 @@ class GlobeController extends Controller
                 $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
 
+
                 $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id')[0])->first();
+                return dd($request->generated_);
 
                 $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
 
@@ -1668,34 +1670,17 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2') 
-                            ->table("pr_memo_table")
-                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
-                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
-                            ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                            ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                            ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                            ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                            ->table("view_pr_memo")
                             // ->where('site.activities->activity_id', '3')
-                            ->whereJsonContains('site.activities->activity_id', '5')
+                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
                             ->get();
 
         }
 
         elseif($activity_type == 'pr memo'){
             $sites = \DB::connection('mysql2') 
-                            ->table("pr_memo_table")
-                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
-                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
-                            ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                            ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                            ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                            ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                            // ->whereJsonContains('site.activities->activity_id', '2')
-                            ->whereIn('site.activities->activity_id', ['3', '4'])
-                            // ->whereJsonContains('site.activities->profile_id', \Auth::user()->profile_id)
-                            // ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
+                            ->table("view_pr_memo")
+                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
                             ->get();
         }
 
@@ -2096,7 +2081,27 @@ class GlobeController extends Controller
         }
     }
 
-    
+    public function get_PRMemo (Request $request)
+    {
+        try {
+
+            $what_modal = "components.pr-memo-approval";
+
+            return \View::make($what_modal)
+            ->with([
+                'pr_memo' => $request->input('pr_memo'),
+                'activity' => $request->input('activity')
+            ])
+            ->render();
+
+
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+
     public function get_all_docs(Request $request)
     {   
         // return "test";
