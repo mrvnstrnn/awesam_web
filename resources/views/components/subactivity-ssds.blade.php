@@ -2,9 +2,9 @@
     <div class="col-6">
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
-    <div class="col-6 align-right  text-right">
+    {{-- <div class="col-6 align-right  text-right">
         <button class="add_site_button btn btn-outline btn-outline-primary btn-sm mb-3">Add Site</button>     
-    </div>
+    </div> --}}
 </div>
 <div class="row pt-4">
     <div class="col-md-12">
@@ -25,6 +25,11 @@
 </ul>
 <div class="tab-content">
     <div class="tab-pane tabs-animation fade active show" id="tab-content-target-sites" role="tabpanel">
+        <div class="row">
+            <div class="col-12 align-right  text-right">
+                <button class="add_site_button btn btn-outline btn-outline-primary btn-sm mb-3">Add Site</button>     
+            </div>
+        </div>
         <div class="row pt-3" id="ssds_table">
             <div class="col-md-12">
                 <table class="table" id="dtTable">
