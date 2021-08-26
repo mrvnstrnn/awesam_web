@@ -13,17 +13,25 @@
 
     $data = json_decode($pr_memo);
 
+    // dd( json_decode($data->value) );
     // UNIQUE KEY
-    $pr_memo_number = $data->generated_pr_memo;
+    if (isset($data->generated_pr_memo)) {
+        $pr_memo_number = $data->generated_pr_memo;
 
-
-    $pr_memo_data = \DB::table('pr_memo_table')
+        $pr_memo_data = \DB::table('pr_memo_table')
                             ->join('view_pr_memo', 'pr_memo_table.generated_pr_memo', 'view_pr_memo.generated_pr_memo')
                             ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
                             ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
                             ->first();
+    } else {
+        $json = json_decode($data->value);
 
-    // dd($pr_memo_data);
+        $pr_memo_number = $json->generated_pr_memo;
+
+        $pr_memo_data = $json;
+    }
+
+                            // dd($pr_memo_data);
 
     $pr_memo_sites = \DB::table('pr_memo_site')
                             ->join('view_sites_with_location', 'view_sites_with_location.sam_id', 'pr_memo_site.sam_id')
@@ -251,7 +259,15 @@
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="vendor">Vendor</label>
-                                                                <input type="text" class="form-control" data-id="{{ $pr_memo_data->vendor_acronym }}" name="vendor" id="vendor" readonly value="{{ $pr_memo_data->vendor_acronym }}">
+                                                                @php
+                                                                    if ( isset($pr_memo_data->vendor_acronym) ) {
+                                                                        $vendor = $pr_memo_data->vendor_acronym;
+                                                                    } else {
+                                                                        $vendors = \App\Models\Vendor::where('vendor_id', $pr_memo_data->vendor_id)->first();
+                                                                        $vendor = $vendors->vendor_acronym;
+                                                                    }
+                                                                @endphp
+                                                                <input type="text" class="form-control" data-id="{{ $vendor }}" name="vendor" id="vendor" readonly value="{{ $vendor }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -476,6 +492,7 @@
         var activity_name = $(this).attr('data-activity_name');
         var id = $(this).attr('data-id');
         var pr_memo = $(this).attr('data-pr_memo');
+        var pr_id = $(this).attr('data-id');
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -500,6 +517,7 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 pr_number : pr_number,
+                pr_id : pr_id
             }
         } else if (activity_name == "Vendor Awarding of Sites") {
             var url = "/vendor-awarding-sites";
@@ -516,6 +534,7 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 po_number : po_number,
+                pr_id : pr_id
                 // vendor : vendor
             }
         } else {

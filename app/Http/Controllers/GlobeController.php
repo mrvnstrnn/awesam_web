@@ -225,18 +225,12 @@ class GlobeController extends Controller
                 $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
 
-
-                $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id')[0])->first();
-                return dd($request->generated_);
-
-                $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
-
+                $sites = PrMemoSite::where('pr_memo_id', $request->input('pr_id'))->get();
                 $activity_id_collect = collect();
                 $samid_collect = collect();
                 $sitecategory_collect = collect();
 
                 foreach ($sites as $site) {
-                    SiteEndorsementEvent::dispatch($site->sam_id);
 
                     \DB::connection('mysql2')->table("site")
                                         ->where("sam_id", $site->sam_id)
@@ -247,9 +241,32 @@ class GlobeController extends Controller
                     $samid_collect->push($site->sam_id);
                     $activity_id_collect->push(5);
                     $sitecategory_collect->push("none");
-
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
                 }
+
+
+                // $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id')[0])->first();
+
+                // $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
+
+                // $activity_id_collect = collect();
+                // $samid_collect = collect();
+                // $sitecategory_collect = collect();
+
+                // foreach ($sites as $site) {
+                //     SiteEndorsementEvent::dispatch($site->sam_id);
+
+                //     \DB::connection('mysql2')->table("site")
+                //                         ->where("sam_id", $site->sam_id)
+                //                         ->update([
+                //                             'site_pr' => $request->input('pr_number'),
+                //                         ]);
+
+                //     $samid_collect->push($site->sam_id);
+                //     $activity_id_collect->push(5);
+                //     $sitecategory_collect->push("none");
+
+                //     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
+                // }
 
                 $site_category = $sitecategory_collect->all();
                 $samid = $samid_collect->all();
@@ -364,6 +381,7 @@ class GlobeController extends Controller
                     foreach ($get_activities as $get_activity) {
                         
                         if ($action == "true") {
+                            $activity_name = $get_activitiess->activity_name;
                             $check_done = \DB::connection('mysql2')
                                                     ->table('site_stage_tracking')
                                                     ->where('sam_id', $sam_id[$i])
@@ -389,6 +407,7 @@ class GlobeController extends Controller
                                 ]);
                             }
                         } else {
+                            $activity_name = $activities->activity_name;
                             $activity = $get_activity->return_activity;
                             SiteStageTracking::where('sam_id', $sam_id[$i])
                                                     ->where('activity_id', ">", $activity)
@@ -403,7 +422,7 @@ class GlobeController extends Controller
         
                         $array = array(
                             'activity_id' => $activity,
-                            'activity_name' => $get_activitiess->activity_name,
+                            'activity_name' => $activity_name,
                             'profile_id' => $get_activitiess->profile_id,
                             'category' => $site_category[$i],
                             'activity_created' => Carbon::now()->toDateString(),
@@ -2094,8 +2113,6 @@ class GlobeController extends Controller
             ])
             ->render();
 
-
-
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -2153,7 +2170,7 @@ class GlobeController extends Controller
                                         ->where('type', 'create_pr')
                                         // ->orderBy('date_created', 'desc')
                                         ->first();
-
+                                        
             if($request['vendor_mode']){
                 
                 $what_modal = "components.modal-vendor-activity";
@@ -3296,6 +3313,8 @@ class GlobeController extends Controller
                     'generated_pr_memo' => $generated_pr,
                     'activity_id' => $request->input("activity_id"),
                     'site_category' => $request->input("site_category"),
+                    'vendor_id' => $request->input("vendor"),
+                    'user_id' => \Auth::id(),
                 ]);
 
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
@@ -3318,6 +3337,8 @@ class GlobeController extends Controller
                         'generated_pr_memo' => $generated_pr,
                         'activity_id' => $request->input("activity_id"),
                         'site_category' => $request->input("site_category"),
+                        'vendor_id' => $request->input("vendor"),
+                        'user_id' => \Auth::id(),
                     );
 
                     PrMemoSite::create([
@@ -3490,7 +3511,6 @@ class GlobeController extends Controller
     public function approve_reject_pr_memo (Request $request)
     {
         try {
-            // return response()->json([ 'error' => true, 'message' => $request->all() ]);
             $required = $request->input("data_action") == "false" ? "required" : "";
 
             $validate = \Validator::make($request->all(), array(
@@ -3563,6 +3583,7 @@ class GlobeController extends Controller
     {
         try {
 
+            return response()->json([ 'error' => true, 'message' => $request->all() ]);
             $validate = \Validator::make($request->all(), array(
                 'po_number' => 'required'
             ));
