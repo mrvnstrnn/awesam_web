@@ -5,7 +5,36 @@
         -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
         box-shadow: 0 5px 15px rgba(0,0,0,0);
     }   
-</style> 
+</style>
+
+@php
+    // DATA DEFINITIONS
+
+
+    $data = json_decode($pr_memo);
+
+    // UNIQUE KEY
+    $pr_memo_number = $data->generated_pr_memo;
+
+
+    $pr_memo_data = \DB::table('pr_memo_table')
+                            ->join('view_pr_memo', 'pr_memo_table.generated_pr_memo', 'view_pr_memo.generated_pr_memo')
+                            ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
+                            ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
+                            ->first();
+
+    // dd($pr_memo_data);
+
+    $pr_memo_sites = \DB::table('pr_memo_site')
+                            ->join('view_sites_with_location', 'view_sites_with_location.sam_id', 'pr_memo_site.sam_id')
+                            ->select('view_sites_with_location.*')
+                            ->where('pr_memo_site.pr_memo_id', $pr_memo_number)
+                            ->get();
+
+    $pr_sam_id = collect();
+
+                            
+@endphp
 
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
@@ -13,15 +42,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="main-card mb-3 card ">
-                        @php
-                            $json = json_decode($pr_memo->value, true);
-                        @endphp
                         <div class="dropdown-menu-header">
                             <div class="dropdown-menu-header-inner bg-dark">
                                 <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                 <div class="menu-header-content btn-pane-right">
                                         <h5 class="menu-header-title">
-                                            {{ $json['generated_pr_memo'] }}
+                                            {{ $pr_memo_number }}
                                         </h5>
                                 </div>
                             </div>
@@ -52,7 +78,7 @@
                                     <div class="preview_div my-5 {{ $show_message}}">
                                         <div class="text-center">
                                             <i class="fa fa-file-pdf display-1"></i><br>
-                                            <small>{{ $json['file_name'] }}</small>
+                                            {{-- <small>{{ $json['file_name'] }}</small> --}}
                                         </div>
                                         <p>
                                             Note: Are you submitting this approved PR Memo to Arriba to get a PR Number? If yes you can click on the Download button to get the PDF file.
@@ -61,7 +87,7 @@
                                         </p>
                                     </div>
                                 
-                                    <form class="d-none" action="/export/line-items/{{ $json['generated_pr_memo'] }}" method="GET" target="_blank">
+                                    <form class="d-none" action="/export/line-items/{{ $pr_memo_number }}" method="GET" target="_blank">
                                         <button class="btn btn-sm btn-shadow btn-success pull-right my-3 export_all_line_tems" type="submit">Export Line Items</button>
                                     </form>
 
@@ -91,16 +117,16 @@
                                     <form id="create_pr_form">
                                         @if ($activity == "Set Ariba PR Number to Sites")
                                         {{-- <div class="text-center my-5">
-                                            <a target="_blank" href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}">
+                                            <a target="_blank" href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}">
                                                 <i class="fa fa-file display-1"></i>
                                                 <H5>Download PDF</H5>
                                             </a>
-                                            <small>{{ $json['file_name'] }}</small>
+                                            <small>{{ $pr_memo_data->file_name }}</small>
                                         </div> --}}
 
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
-                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo->sam_id)->first();
+                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_data->sam_id)->first();
                                             @endphp
                                             {{-- <div class="form-row">
                                                 <div class="col-md-6 col-12">
@@ -119,20 +145,21 @@
                                                 </div>
                                             </div> --}}
                                         @endif
+
+                                        
                                         <div class="tab-content">
                                             <div class="tab-pane tabs-animation fade active show" id="tab-content-action-details" role="tabpanel">
 
                                                 {{-- <form> --}}
                                                 <div class="form_details_pr {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
                                                     @php
-                                                        $pr_sam_id = collect();
-                                                        $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
-                                                        $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')
-                                                                            ->leftjoin('location_regions', 'site.site_region_id', 'location_regions.region_id')
-                                                                            ->leftjoin('location_provinces', 'site.site_province_id', 'location_provinces.province_id')
-                                                                            ->leftjoin('location_lgus', 'site.site_lgu_id', 'location_lgus.lgu_id')
-                                                                            ->leftjoin('location_sam_regions', 'location_regions.sam_region_id', 'location_sam_regions.sam_region_id')
-                                                                            ->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
+                                                        // $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
+                                                        // $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')
+                                                        //                     ->leftjoin('location_regions', 'site.site_region_id', 'location_regions.region_id')
+                                                        //                     ->leftjoin('location_provinces', 'site.site_province_id', 'location_provinces.province_id')
+                                                        //                     ->leftjoin('location_lgus', 'site.site_lgu_id', 'location_lgus.lgu_id')
+                                                        //                     ->leftjoin('location_sam_regions', 'location_regions.sam_region_id', 'location_sam_regions.sam_region_id')
+                                                        //                     ->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
 
                                                     @endphp
                                                     @if($activity == 'Set Ariba PR Number to Sites' || $activity == 'Vendor Awarding of Sites')
@@ -158,13 +185,13 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="to">To</label>
-                                                                <input type="text" class="form-control" name="to" id="to" readonly value="{{ $json['to'] }}">
+                                                                <input type="text" class="form-control" name="to" id="to" readonly value="{{ $pr_memo_data->to }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="subject">Subject</label>
-                                                                <input type="text" class="form-control" name="subject" id="subject" readonly value="{{ $json['subject'] }}">
+                                                                <input type="text" class="form-control" name="subject" id="subject" readonly value="{{ $pr_memo_data->subject }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -172,19 +199,19 @@
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="from">From</label>
-                                                                <input type="text" class="form-control" name="from" id="from" readonly value="{{ $json['from'] }}">
+                                                                <input type="text" class="form-control" name="from" id="from" readonly value="{{ $pr_memo_data->from }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="date_created">Date Created</label>
-                                                                <input type="text" class="form-control" name="date_created" id="date_created" readonly value="{{ $json['date_created'] }}">
+                                                                <input type="text" class="form-control" name="date_created" id="date_created" readonly value="{{ $pr_memo_data->date_created }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="thru">Thru</label>
-                                                                <input type="text" class="form-control" name="thru" id="thru" readonly value="{{ $json['thru'] }}">
+                                                                <input type="text" class="form-control" name="thru" id="thru" readonly value="{{ $pr_memo_data->thru }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -192,33 +219,39 @@
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="group">Group</label>
-                                                                <input type="text" class="form-control" name="group" id="group" readonly value="{{ $json['group'] }}">
+                                                                <input type="text" class="form-control" name="group" id="group" readonly value="{{ $pr_memo_data->group }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="division">Division</label>
-                                                                <input type="text" class="form-control" name="division" id="division" readonly value="{{ $json['division'] }}">
+                                                                <input type="text" class="form-control" name="division" id="division" readonly value="{{ $pr_memo_data->division }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="department">Department</label>
-                                                                <input type="text" class="form-control" name="department" id="department" readonly value="{{ $json['department'] }}">
+                                                                <input type="text" class="form-control" name="department" id="department" readonly value="{{ $pr_memo_data->department }}">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                        <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="requested_amount">Requested Amount</label>
-                                                                <input type="text" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($json['requested_amount'], 2) }}">
+                                                                <input type="text" class="form-control" name="requested_amount" id="requested_amount" readonly value="{{ number_format($pr_memo_data->requested_amount, 2) }}">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                        <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="budget_source">Budget Source</label>
-                                                                <input type="text" class="form-control" name="budget_source" id="budget_source" readonly value="{{ $json['budget_source'] }}">
+                                                                <input type="text" class="form-control" name="budget_source" id="budget_source" readonly value="{{ $pr_memo_data->budget_source }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 col-lg-4 col-12">
+                                                            <div class="form-group">
+                                                                <label for="vendor">Vendor</label>
+                                                                <input type="text" class="form-control" data-id="{{ $pr_memo_data->vendor_acronym }}" name="vendor" id="vendor" readonly value="{{ $pr_memo_data->vendor_acronym }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -229,19 +262,10 @@
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <label for="recommendation">Recommendation</label>
-                                                                <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation" readonly>{{ $json['recommendation'] }}</textarea>
+                                                                <textarea style="resize: vertical;" type="text" cols="50" rows="5" class="form-control" name="recommendation" id="recommendation" readonly>{{ $pr_memo_data->recommendation }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-row">
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="vendor">Vendor</label>
-                                                                <input type="text" class="form-control" data-id="{{ $json['vendor'] }}" name="vendor" id="vendor" readonly value="{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                 </div>
                                                 {{-- </form> --}}
                                             </div>
@@ -253,7 +277,6 @@
                                                     <table class="table table-hover pr_memo_site">
                                                         <thead>
                                                             <tr>
-                                                                {{-- <th>SAM ID</th> --}}
                                                                 <th>Search Ring</th>
                                                                 <th>Region</th>
                                                                 <th>Province</th>
@@ -262,25 +285,25 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($generated_pr_memos as $generated_pr_memo)
-                                                            @php
-                                                                $pr_sam_id->push($generated_pr_memo->sam_id);
-                                                            @endphp
-                                                            <tr>
-                                                                {{-- <td>{{ $generated_pr_memo->sam_id }}</td> --}}
-                                                                <td><strong>{{ $generated_pr_memo->site_name }}</strong><br><small><strong>SAM ID: </strong>{{ $generated_pr_memo->sam_id }}</small></td>
-                                                                <td>{{ $generated_pr_memo->sam_region_name }}</td>
-                                                                <td>{{ $generated_pr_memo->province_name }}</td>
-                                                                <td>{{ $generated_pr_memo->lgu_name }}</td>
-                                                                <td><button class="btn btn-sm btn-shadow btn-success view-line-items" type="button" data-sam_id='{{ $generated_pr_memo->sam_id }}' data-site_name='{{ $generated_pr_memo->site_name }}'><i class="fa fa-fw fa-lg" aria-hidden="true"></i></button></td>
-                                                            </tr>
+                                                            @foreach ($pr_memo_sites as $pr_memo_site)
+                                                                @php
+
+                                                                    $pr_sam_id->push($pr_memo_site->sam_id);
+                                                                @endphp
+                                                                <tr>
+                                                                    <td><strong>{{ $pr_memo_site->site_name }}</strong><br><small><strong>SAM ID: </strong>{{ $pr_memo_site->sam_id }}</small></td>
+                                                                    <td>{{ $pr_memo_site->sam_region_name }}</td>
+                                                                    <td>{{ $pr_memo_site->province_name }}</td>
+                                                                    <td>{{ $pr_memo_site->lgu_name }}</td>
+                                                                    <td><button class="btn btn-sm btn-shadow btn-success view-line-items" type="button" data-sam_id='{{ $pr_memo_site->sam_id }}' data-site_name='{{ $pr_memo_site->site_name }}'><i class="fa fa-fw fa-lg" aria-hidden="true"></i></button></td>
+                                                                </tr>
                                                             @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                             <div class="tab-pane tabs-animation fade" id="tab-content-pdf" role="tabpanel">
-                                                {{-- <form id="create_pr_form"> --}}
+                                                <form id="create_pr_form">
                                                     {{-- @if ($activity == "Set Ariba PR Number to Sites")
                                                         <div class="form-group">
                                                             <label for="pr_number">PR #</label>
@@ -300,11 +323,11 @@
                                                     
                                                     <div class="form-group">
                                                         <label for="pr_file">PR Memo File</label>
-                                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{ $json['file_name'] }}" allowfullscreen defaultZoomValue:page-width></iframe>
+                                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/{{  $pr_memo_data->file_name }}" allowfullscreen defaultZoomValue:page-width></iframe>
                                                     </div>
 
                                                     <div class="my-3">
-                                                        <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
+                                                        <a href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
                                                     </div>
                                                     
                                                 {{-- </form> --}}
@@ -329,20 +352,20 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($approval_sites as $approval_site)
-                                                            @php
-                                                                $creator = \App\Models\User::select('name')->where('id', $approval_site->user_id)->first();
-                                                                $approver = \App\Models\User::select('name')->where('id', $approval_site->approver_id)->first();
-                                                            @endphp
-                                                            <tr>
-                                                                <td>{{ $approval_site->sam_id }}</td>
-                                                                <td>{{ $approval_site->type }}</td>
-                                                                <td>{{ $creator->name }}</td>
-                                                                <td>{{ $approval_site->date_created }}</td>
-                                                                <td>{{ is_null($approval_site) ? "Not yet approved." : $approval_site->date_approved }}</td>
-                                                                <td>{{ is_null($approver) ? "Not yet approved." : $approver->name }}</td>
-                                                            </tr>
-                                                            @endforeach
+                                                                @foreach ($approval_sites as $approval_site)
+                                                                @php
+                                                                    $creator = \App\Models\User::select('name')->where('id', $approval_site->user_id)->first();
+                                                                    $approver = \App\Models\User::select('name')->where('id', $approval_site->approver_id)->first();
+                                                                @endphp
+                                                                <tr>
+                                                                    <td>{{ $approval_site->sam_id }}</td>
+                                                                    <td>{{ $approval_site->type }}</td>
+                                                                    <td>{{ $creator->name }}</td>
+                                                                    <td>{{ $approval_site->date_created }}</td>
+                                                                    <td>{{ is_null($approval_site) ? "Not yet approved." : $approval_site->date_approved }}</td>
+                                                                    <td>{{ is_null($approver) ? "Not yet approved." : $approver->name }}</td>
+                                                                </tr>
+                                                                @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -354,26 +377,26 @@
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
                                             @if (\Auth::user()->profile_id == 8)
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->generated_pr_memo }}" data-sam_id="" data-activity_name="{{ $activity }}">Set PR Number</button>
                                                 <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
-                                                <a href="/files/{{ $json['file_name'] }}" download="{{ $json['file_name'] }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
+                                                <a href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
                                             @endif
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @if (\Auth::user()->profile_id == 8)
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                             @endif
                                         @else
                                             {{-- @if (\Auth::user()->profile_id != 8) --}}
                                                 @if (\Auth::user()->profile_id == 10 && $activity == "NAM PR Memo Approval")
                                                     <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR Memo</button>
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
                                                     
                                                     <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @elseif (\Auth::user()->profile_id == 9 && $activity == "RAM Head PR Memo Approval")
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-pr_memo="{{ $json['generated_pr_memo'] }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
 
                                                     <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @endif
@@ -392,7 +415,7 @@
                                                     <small class="text-danger remarks-error"></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR Memo</button>
+                                                    {{-- <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_data->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR Memo</button> --}}
                                                     
                                                     <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                                 </div>
