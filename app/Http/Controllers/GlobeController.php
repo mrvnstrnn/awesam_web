@@ -384,6 +384,7 @@ class GlobeController extends Controller
                             $activity_name = $get_activitiess->activity_name;
                             $check_done = \DB::connection('mysql2')
                                                     ->table('site_stage_tracking')
+                                                    ->select('sam_id')
                                                     ->where('sam_id', $sam_id[$i])
                                                     ->where('activity_complete', 'false')
                                                     ->get();
@@ -397,8 +398,15 @@ class GlobeController extends Controller
                                                         'activity_complete' => "true"
                                                     ]);
 
-                            if (count($check_done) <= 1) {
-            
+                            $check_if_added = \DB::connection('mysql2')
+                                                ->table('site_stage_tracking')
+                                                ->select('sam_id')
+                                                ->where('sam_id', $sam_id[$i])
+                                                ->where('activity_id', $activities->next_activity)
+                                                ->where('activity_complete', 'false')
+                                                ->get();
+
+                            if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
                                 SiteStageTracking::create([
                                     'sam_id' => $sam_id[$i],
                                     'activity_id' => $activity,
