@@ -13,9 +13,7 @@
 
     $data = json_decode($pr_memo);
 
-    // dd( json_decode($data->value) );
     // UNIQUE KEY
-    if (isset($data->generated_pr_memo)) {
         $pr_memo_number = $data->generated_pr_memo;
 
         $pr_memo_data = \DB::table('pr_memo_table')
@@ -23,15 +21,6 @@
                             ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
                             ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
                             ->first();
-    } else {
-        $json = json_decode($data->value);
-
-        $pr_memo_number = $json->generated_pr_memo;
-
-        $pr_memo_data = $json;
-    }
-
-                            // dd($pr_memo_data);
 
     $pr_memo_sites = \DB::table('pr_memo_site')
                             ->join('view_sites_with_location', 'view_sites_with_location.sam_id', 'pr_memo_site.sam_id')
@@ -134,7 +123,7 @@
 
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
-                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_data->sam_id)->first();
+                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
                                             @endphp
                                             {{-- <div class="form-row">
                                                 <div class="col-md-6 col-12">
@@ -303,7 +292,6 @@
                                                         <tbody>
                                                             @foreach ($pr_memo_sites as $pr_memo_site)
                                                                 @php
-
                                                                     $pr_sam_id->push($pr_memo_site->sam_id);
                                                                 @endphp
                                                                 <tr>
@@ -400,7 +388,8 @@
                                             @endif
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @if (\Auth::user()->profile_id == 8)
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                                {{-- <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button> --}}
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                             @endif
                                         @else
                                             {{-- @if (\Auth::user()->profile_id != 8) --}}

@@ -1672,19 +1672,23 @@ class GlobeController extends Controller
 
         // }
         elseif($activity_type == 'vendor awarding'){
-            $sites = \DB::connection('mysql2') 
-                            ->table("pr_memo_table")
-                            ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
-                            ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
-                            ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                            ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                            ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                            ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                            ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                            // ->where('site.activities->activity_id', '3')
-                            ->whereJsonContains('site.activities->activity_id', '6')
-                            ->get();
+            // $sites = \DB::connection('mysql2') 
+            //                 ->table("pr_memo_table")
+            //                 ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
+            //                 ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
+            //                 ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                 ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                 ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                 ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                 ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                 // ->where('site.activities->activity_id', '3')
+            //                 ->whereJsonContains('site.activities->activity_id', '6')
+            //                 ->get();
 
+            $sites = \DB::connection('mysql2') 
+                            ->table("view_pr_memo")
+                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
+                            ->get();
         }
 
         elseif($activity_type == 'pr issuance'){
@@ -3582,37 +3586,38 @@ class GlobeController extends Controller
     public function vendor_awarding_sites (Request $request)
     {
         try {
-
-            return response()->json([ 'error' => true, 'message' => $request->all() ]);
             $validate = \Validator::make($request->all(), array(
                 'po_number' => 'required'
             ));
             
             if ($validate->passes()) {
 
-                $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id'))->first();
+                // $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id'))->first();
 
-                $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
+                // $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
 
-                $samid_collect = collect();
+                // $samid_collect = collect();
+                $samid_collect = json_decode($request->input('sam_id'));
                 $sitecategory_collect = collect();
                 $activityid_collect = collect();
 
-                foreach ($sites as $site) {
-                    SiteEndorsementEvent::dispatch($site->sam_id);
+                // foreach ($sites as $site) {
+                for ($i=0; $i < count($samid_collect); $i++) { 
+                    SiteEndorsementEvent::dispatch($samid_collect[$i]);
 
                     \DB::connection('mysql2')->table("site")
-                                        ->where("sam_id", $site->sam_id)
+                                        ->where("sam_id", $samid_collect[$i])
                                         ->update([
                                             'site_po' => $request->input('po_number'),
                                         ]);
 
-                    $samid_collect->push($site->sam_id);
+                    // $samid_collect->push($site->sam_id);
                     $sitecategory_collect->push("none");
                     $activityid_collect->push(6);
                     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
                 }
-                $sam_id = $samid_collect->all();
+                // }
+                $sam_id = $samid_collect;
                 $site_category = $sitecategory_collect->all();
                 $activity_id = $activityid_collect->all();
                 $program_id = 1;
