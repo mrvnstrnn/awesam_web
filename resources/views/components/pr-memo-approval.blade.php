@@ -14,16 +14,13 @@
     $data = json_decode($pr_memo);
 
     // UNIQUE KEY
-    $pr_memo_number = $data->generated_pr_memo;
+        $pr_memo_number = $data->generated_pr_memo;
 
-
-    $pr_memo_data = \DB::table('pr_memo_table')
+        $pr_memo_data = \DB::table('pr_memo_table')
                             ->join('view_pr_memo', 'pr_memo_table.generated_pr_memo', 'view_pr_memo.generated_pr_memo')
                             ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
                             ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
                             ->first();
-
-    // dd($pr_memo_data);
 
     $pr_memo_sites = \DB::table('pr_memo_site')
                             ->join('view_sites_with_location', 'view_sites_with_location.sam_id', 'pr_memo_site.sam_id')
@@ -126,7 +123,7 @@
 
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
-                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_data->sam_id)->first();
+                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
                                             @endphp
                                             {{-- <div class="form-row">
                                                 <div class="col-md-6 col-12">
@@ -251,7 +248,15 @@
                                                         <div class="col-md-4 col-lg-4 col-12">
                                                             <div class="form-group">
                                                                 <label for="vendor">Vendor</label>
-                                                                <input type="text" class="form-control" data-id="{{ $pr_memo_data->vendor_acronym }}" name="vendor" id="vendor" readonly value="{{ $pr_memo_data->vendor_acronym }}">
+                                                                @php
+                                                                    if ( isset($pr_memo_data->vendor_acronym) ) {
+                                                                        $vendor = $pr_memo_data->vendor_acronym;
+                                                                    } else {
+                                                                        $vendors = \App\Models\Vendor::where('vendor_id', $pr_memo_data->vendor_id)->first();
+                                                                        $vendor = $vendors->vendor_acronym;
+                                                                    }
+                                                                @endphp
+                                                                <input type="text" class="form-control" data-id="{{ $vendor }}" name="vendor" id="vendor" readonly value="{{ $vendor }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -287,7 +292,6 @@
                                                         <tbody>
                                                             @foreach ($pr_memo_sites as $pr_memo_site)
                                                                 @php
-
                                                                     $pr_sam_id->push($pr_memo_site->sam_id);
                                                                 @endphp
                                                                 <tr>
@@ -384,7 +388,8 @@
                                             @endif
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @if (\Auth::user()->profile_id == 8)
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                                {{-- <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button> --}}
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}">Award to vendor</button>
                                             @endif
                                         @else
                                             {{-- @if (\Auth::user()->profile_id != 8) --}}
@@ -476,6 +481,7 @@
         var activity_name = $(this).attr('data-activity_name');
         var id = $(this).attr('data-id');
         var pr_memo = $(this).attr('data-pr_memo');
+        var pr_id = $(this).attr('data-id');
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -500,6 +506,7 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 pr_number : pr_number,
+                pr_id : pr_id
             }
         } else if (activity_name == "Vendor Awarding of Sites") {
             var url = "/vendor-awarding-sites";
@@ -516,6 +523,7 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 po_number : po_number,
+                pr_id : pr_id
                 // vendor : vendor
             }
         } else {
