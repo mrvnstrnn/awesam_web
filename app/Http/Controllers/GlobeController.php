@@ -1672,22 +1672,9 @@ class GlobeController extends Controller
 
         // }
         elseif($activity_type == 'vendor awarding'){
-            // $sites = \DB::connection('mysql2') 
-            //                 ->table("pr_memo_table")
-            //                 ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
-            //                 ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
-            //                 ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-            //                 ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-            //                 ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-            //                 ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-            //                 ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-            //                 // ->where('site.activities->activity_id', '3')
-            //                 ->whereJsonContains('site.activities->activity_id', '6')
-            //                 ->get();
-
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
-                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
+                            ->whereIn('activity_id', [6])
                             ->get();
         }
 
@@ -1695,7 +1682,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
                             // ->where('site.activities->activity_id', '3')
-                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
+                            ->whereIn('activity_id', [5])
                             ->get();
 
         }
@@ -1703,7 +1690,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'pr memo'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
-                            ->whereIn('activity_id', [2, 3, 4, 5, 6])
+                            ->whereIn('activity_id', [2, 3, 4])
                             ->get();
         }
 
@@ -1729,19 +1716,24 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site hunting validation'){
             $sites = \DB::connection('mysql2') 
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                ->where('activities->activity_id', '11')
-                                ->where('activities->profile_id', '8')
+
+                                ->table("view_pr_memo")
+                                ->whereIn('activity_id', [9, 10])
+                                ->get();
+
+                                // ->table("site")
+                                // ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                // ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                // ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                // ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                // ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                                // ->where('site.program_id', $program_id)
+                                // ->where('activities->activity_id', '11')
+                                // ->where('activities->profile_id', '8')
 
                             // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
                             // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
-                            ->get();
+                            // ->get();
 
         }
             
