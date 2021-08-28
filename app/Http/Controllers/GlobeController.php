@@ -1737,8 +1737,15 @@ class GlobeController extends Controller
         elseif($activity_type == 'site hunting validation'){
             $sites = \DB::connection('mysql2') 
 
-                                ->table("view_pr_memo")
-                                ->whereIn('activity_id', [9, 10])
+                                ->table("site")
+                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                                ->where('site.program_id', $program_id)
+                                ->whereJsonContains('activities->activity_id', '9')
+                                ->orWhereJsonContains('activities->activity_id', '10')
                                 ->get();
 
                                 // ->table("site")
