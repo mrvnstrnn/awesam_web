@@ -108,7 +108,8 @@
                     <input type="hidden" name="sam_id" value="{{ $sam_id }}">
                     <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
                     <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
-                    <input type="hidden" name="type" value="advanced_site_hunting">
+                    {{-- <input type="hidden" name="type" value="advanced_site_hunting"> --}}
+                    <input type="hidden" name="type" value="jtss_add_site">
                     <div class="position-relative row form-group ">
                         <div class="col-sm-12">
                             <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>

@@ -1363,7 +1363,7 @@ class GlobeController extends Controller
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
                                                         ->where('user_id', \Auth::id())
-                                                        ->where('type', 'advanced_site_hunting')
+                                                        ->where('type', 'jtss_add_site')
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 
@@ -1929,7 +1929,7 @@ class GlobeController extends Controller
         if($sub_activity == 'Add Target Sites'){
 
             $advanced_site_hunting = SubActivityValue::where('sam_id', $sam_id)
-                                                    ->where('type', 'advanced_site_hunting')
+                                                    ->where('type', 'jtss_add_site')
                                                     ->get();
 
             $ssds = SubActivityValue::where('sam_id', $sam_id)
