@@ -11,9 +11,11 @@
         <H5 id="active_action">Add Target Sites</H5>
     </div>
     
-    <div class="col-md-16 col-12 {{ count($check_if_added) > 0 && count($check_if_added_ssds) > 0 ? '' : 'd-none' }}">
-        <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs complete_button_act"><small>MARK AS COMPLETED</small></button>    
-    </div>
+    {{-- @if (count($check_if_added) > 0 && count($check_if_added_ssds) > 0) --}}
+        <div class="col-md-16 col-12 mark_complete_area {{ count($check_if_added) > 0 && count($check_if_added_ssds) > 0 ? '' : 'd-none' }}">
+            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs complete_button_act"><small>MARK AS COMPLETED</small></button>    
+        </div>
+    {{-- @endif --}}
 </div>
 <ul class="tabs-animated body-tabs-animated nav mb-4">
     <li class="nav-item">
@@ -106,7 +108,8 @@
                     <input type="hidden" name="sam_id" value="{{ $sam_id }}">
                     <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
                     <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
-                    <input type="hidden" name="type" value="advanced_site_hunting">
+                    {{-- <input type="hidden" name="type" value="advanced_site_hunting"> --}}
+                    <input type="hidden" name="type" value="jtss_add_site">
                     <div class="position-relative row form-group ">
                         <div class="col-sm-12">
                             <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>

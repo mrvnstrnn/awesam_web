@@ -247,6 +247,8 @@
                                         )
                                         // $(".btn_switch_back_to_actions").trigger("click");
 
+                                        $(".mark_complete_area").removeClass("d-none");
+
                                         $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
                                             '<i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>'
                                         );
