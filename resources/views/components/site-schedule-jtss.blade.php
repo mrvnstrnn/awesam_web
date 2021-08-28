@@ -1,8 +1,8 @@
-<div class="row border-bottom">
+{{-- <div class="row border-bottom">
     <div class="col-6">
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
-</div>
+</div> --}}
 
 <div class="row pt-4">
     <div class="col-md-12">
@@ -15,7 +15,7 @@
         <div id="datepicker" class=""></div>
     </div>
     <div class="col-lg-6">
-        <form>
+        <form class="jtss_form">
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
@@ -68,7 +68,7 @@
         $(".back_button_sched").on("click", function (e) {
             e.preventDefault();
 
-            $("form")[0].reset();
+            $("form.jtss_form")[0].reset();
             $(".confirm_schedule_button").addClass('d-none');
             $(".set_schedule").removeClass('d-none');
         })
@@ -175,6 +175,8 @@
                     if(!resp.error){
                         $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                             // $("#viewInfoModal").modal("hide");
+
+                            $("form.jtss_form")[0].reset();
 
                             $(".set_schedule").removeAttr("disabled");
                             $(".set_schedule").text("Set Schedule");

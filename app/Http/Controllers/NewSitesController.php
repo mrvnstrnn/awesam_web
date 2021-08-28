@@ -125,6 +125,7 @@ class NewSitesController extends Controller
                                 ]);
 
             $this->move_site($request->input("sam_id"), $request->input("program_id"), "true", $request->input("site_category"), $request->input("activity_id"));
+            
             return response()->json(['error' => false, 'message' => "Successfully confirmed schedule."]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -173,13 +174,23 @@ class NewSitesController extends Controller
 
                 foreach ($get_activities as $get_activity) {
                     if ($action == "true") {
+                        $activity_name = $get_activitiess->activity_name;
                         $check_done = \DB::connection('mysql2')
                                                 ->table('site_stage_tracking')
+                                                ->select('sam_id')
                                                 ->where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
                                                 ->get();
 
                         $activity = $get_activity->activity_id;
+
+                        $check_if_added = \DB::connection('mysql2')
+                                                ->table('site_stage_tracking')
+                                                ->select('sam_id')
+                                                ->where('sam_id', $sam_id[$i])
+                                                ->where('activity_id', $activities->next_activity)
+                                                ->where('activity_complete', 'false')
+                                                ->get();
 
                         SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
@@ -188,8 +199,7 @@ class NewSitesController extends Controller
                                                     'activity_complete' => "true"
                                                 ]);
 
-                        if (count($check_done) <= 1) {
-        
+                        if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
                             SiteStageTracking::create([
                                 'sam_id' => $sam_id[$i],
                                 'activity_id' => $activity,
@@ -198,6 +208,7 @@ class NewSitesController extends Controller
                             ]);
                         }
                     } else {
+                        $activity_name = $activities->activity_name;
                         $activity = $get_activity->return_activity;
                         SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_id', ">", $activity)
@@ -212,7 +223,7 @@ class NewSitesController extends Controller
     
                     $array = array(
                         'activity_id' => $activity,
-                        'activity_name' => $get_activitiess->activity_name,
+                        'activity_name' => $activity_name,
                         'profile_id' => $get_activitiess->profile_id,
                         'category' => $site_category[$i],
                         'activity_created' => Carbon::now()->toDateString(),

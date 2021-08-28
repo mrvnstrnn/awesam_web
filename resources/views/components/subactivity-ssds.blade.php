@@ -7,8 +7,12 @@
     </div> --}}
 </div>
 <div class="row pt-4">
-    <div class="col-md-12">
+    <div class="col-md-16 col-12">
         <H5 id="active_action">Add Target Sites</H5>
+    </div>
+    
+    <div class="col-md-16 col-12 {{ count($check_if_added) > 0 && count($check_if_added_ssds) > 0 ? '' : 'd-none' }}">
+        <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs complete_button_act"><small>MARK AS COMPLETED</small></button>    
     </div>
 </div>
 <ul class="tabs-animated body-tabs-animated nav mb-4">
@@ -17,7 +21,7 @@
             <span>Target Sites</span>
         </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item advance_site_hunting_tab {{ count($check_if_added) < 1 ? 'd-none' : ''}}">
         <a role="tab" class="nav-link" id="tab-dshr" data-toggle="tab" href="#tab-content-dshr">
             <span>Advance Site Hunting Report</span>
         </a>
@@ -92,7 +96,7 @@
                     <div class="divider"></div>
                     <div class="position-relative row form-group">
                         <label for="file_documents" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
-                        <div class="dropzone dropzone_files_activities mx-3 mt-0 w-100">
+                        <div class="dropzone dropzone_files_activities_ssds mx-3 mt-0 w-100">
                             <div class="dz-message">
                                 <i class="fa fa-plus fa-3x"></i>
                                 <p><small class="sub_activity_name">Drag and Drop files here</small></p>
@@ -119,7 +123,7 @@
     </div>
 </div>
 
-<script src="/js/dropzone/dropzone.js"></script>
+{{-- <script src="/js/dropzone/dropzone.js"></script> --}}
 
 <script>
 
@@ -178,15 +182,15 @@
 
     if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
         Dropzone.autoDiscover = false;
-        $(".dropzone_files_activities").dropzone({
+        $(".dropzone_files_activities_ssds").dropzone({
             addRemoveLinks: true,
             // maxFiles: 1,    
             paramName: "file",
             url: "/upload-file",
-            removedfile: function(file) {
-                file.previewElement.remove();
-                $(".ssds_form input#"+file.upload.uuid).remove();
-            },
+            // removedfile: function(file) {
+            //     file.previewElement.remove();
+            //     $(".ssds_form input#"+file.upload.uuid).remove();
+            // },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -240,7 +244,10 @@
                         $("#btn_save_ssds").removeAttr("disabled");
                         $("#btn_save_ssds").text("Save Site");
                         
-                        $(".btn_switch_back_to_actions").trigger("click");
+                        // $(".btn_switch_back_to_actions").trigger("click");
+                        $("#btn_cancel_ssds").trigger("click");
+                        
+                        $(".advance_site_hunting_tab").removeClass("d-none");
                     });
 
                 } else {
@@ -269,6 +276,66 @@
                 $("#btn_save_ssds").text("Save Site");
             }
         });
+        
+    });
+
+    $(".complete_button_act").on("click", function() {
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        var sam_id = ["{{ $sam_id }}"];
+        var sub_activity_id = "{{ $sub_activity_id }}";
+        var activity_name = "{{ $sub_activity }}";
+        var site_category = ["{{ $site_category }}"];
+        var activity_id = ["{{ $activity_id }}"];
+        var program_id = "{{ $program_id }}";
+
+        $.ajax({
+            url: "/accept-reject-endorsement",
+            method: "POST",
+            data: {
+                sam_id : sam_id,
+                sub_activity_id : sub_activity_id,
+                activity_name : activity_name,
+                site_category : site_category,
+                activity_id : activity_id,
+                program_id : program_id,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+                    $(".complete_button_act").removeAttr("disabled");
+                    $(".complete_button_act").text("MARK AS COMPLETE");
+
+                    $("#viewInfoModal").modal("hide");
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                    $(".complete_button_act").removeAttr("disabled");
+                    $(".complete_button_act").text("MARK AS COMPLETE");
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+                $(".complete_button_act").removeAttr("disabled");
+                $(".complete_button_act").text("MARK AS COMPLETE");
+            }
+        });
+
     });
 
 </script>
