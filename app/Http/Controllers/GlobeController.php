@@ -132,6 +132,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -219,6 +220,16 @@ class GlobeController extends Controller
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
+
+            } else if ($request->input('activity_name') == "Add Target Sites") {
+
+                $notification = "Successfully mark this site as complete.";
+                // $vendor = $request->input('vendor');
+                $action = "true";
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+                $site_category = $request->input('site_category');
 
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
                 
@@ -941,7 +952,7 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-                if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
+                if (count($array_sub_activity->all()) <= count($sub_activity_value) && $request->input('activity_id') ) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
                 
@@ -1352,6 +1363,7 @@ class GlobeController extends Controller
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
                                                         ->where('user_id', \Auth::id())
+                                                        ->where('type', 'advanced_site_hunting')
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 
@@ -1925,6 +1937,14 @@ class GlobeController extends Controller
     // dd($sub_activity);
         if($sub_activity == 'Add Target Sites'){
 
+            $advanced_site_hunting = SubActivityValue::where('sam_id', $sam_id)
+                                                    ->where('type', 'advanced_site_hunting')
+                                                    ->get();
+
+            $ssds = SubActivityValue::where('sam_id', $sam_id)
+                                                    ->whereNull('type')
+                                                    ->get();
+
             $what_component = "components.subactivity-ssds";
             return \View::make($what_component)
             ->with([
@@ -1934,6 +1954,8 @@ class GlobeController extends Controller
                 'program_id' => $program_id,
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
+                'check_if_added' => $advanced_site_hunting,
+                'check_if_added_ssds' => $ssds
             ])
             ->render();
 
@@ -2715,7 +2737,7 @@ class GlobeController extends Controller
             }
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         ->where('sub_activity_id', $sub_activity_id)
-                                                        // ->whereNull('type')
+                                                        ->whereNull('type')
                                                         ->whereIn('user_id', $array_id)
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
@@ -2726,7 +2748,9 @@ class GlobeController extends Controller
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
                                         
-                                        return $json['lessor_remarks'];
+                                        return isset($json['lessor_remarks']) ? $json['lessor_remarks'] : $json['file'];
+                                        // return $json['lessor'];
+                                        // return $json['lessor_remarks'];
                                     } else {
                                         return $row->value;  
                                     }                      
@@ -2736,7 +2760,7 @@ class GlobeController extends Controller
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
                                         
-                                        return $json['lessor_method'];
+                                        return isset($json['lessor_method']) ? "" : "";
                                     } else {
                                         return $row->value;  
                                     }                      
