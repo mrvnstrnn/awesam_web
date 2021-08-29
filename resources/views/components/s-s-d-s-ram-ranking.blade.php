@@ -83,7 +83,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="rank_number" class="col-sm-4 col-form-label">Rank</label>
                                             <div class="col-8">
-                                                <input type="number" class="form-control" id="rank_number" name="rank_number" placeholder="Rank" min="1" max="5">
+                                                <input type="number" class="form-control" id="rank_number" name="rank_number" placeholder="Rank">
                                                 <small class="text-danger rank_number-error"></small>
                                             </div>
                                         </div>
@@ -92,18 +92,21 @@
                                             <label for="lessor_remarks" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
                                         </div>
                                         <div class="row file_lists"></div>
-                                        <div class="position-relative row form-group">
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="file_viewer d-none"></div>
+                                                <button class="btn float-right btn-secondary mr-1 d-none" id="btn_back_ssds" type="button">Back to form</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative row form-group mt-3">
                                             <div class="col-sm-12">
                                                 <button class="btn float-right btn-primary" id="btn_set_rank" type="button">Set Rank</button>
                                                 <button class="btn float-right btn-ouline-secondary mr-1" id="btn_cancel_set_rank" type="button">Back to list</button>
                                             </div>
                                         </div>
                                     </form>
-                            
-                                    <div class="row file_viewer d-none">
-                                        
-                                    </div>
-                                    <button class="btn float-right btn-secondary mr-1 d-none" id="btn_back_ssds" type="button">Back to form</button>
                             
                                 </div>
                             </div>
@@ -251,6 +254,8 @@
                             $("#btn_set_rank").removeAttr("disabled");
                             $("#btn_set_rank").text("Set Rank");
 
+                            $("#rank_number").val("");
+
                             if (resp.done) {
                                 $(".complete_button_area").removeClass("d-none");
                             }
@@ -340,6 +345,36 @@
             });
 
         });
+
+        $(document).on("click", ".view_file", function (e){
+            e.preventDefault();
+
+            var extensions = ["pdf", "jpg", "png"];
+
+            var values =  $(this).attr('data-value');
+
+            if( extensions.includes(values.split('.').pop()) == true) {     
+                htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
+            } else {
+            htmltoload = '<div class="text-center my-5"><a target="_blank" href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+            }
+                    
+            $('.file_viewer').html('');
+            $('.file_viewer').html(htmltoload);
+
+            $(".file_viewer").removeClass("d-none");
+            $(".file_lists").addClass("d-none");
+            $("#btn_back_ssds").removeClass("d-none");
+        });
+
+        $(document).on("click", "#btn_back_ssds", function (e){
+            e.preventDefault();
+            
+            $(".file_viewer").addClass("d-none");
+            $("#btn_back_ssds").addClass("d-none");
+            $(".file_lists").removeClass("d-none");
+        });
+        
         
     });
 </script>
