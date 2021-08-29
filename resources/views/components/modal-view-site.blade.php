@@ -253,7 +253,11 @@
 
                                             @elseif($main_activity == "Issue Validation")
 
-                                                <x-site-issue-validation  :site="$site"/>
+                                                <x-site-issue-validation :site="$site"/>
+
+                                            {{-- @elseif($site[0]->activity_name == "SSDS RAM Validation")
+
+                                                <x-s-s-d-s-ram-ranking :samid="$sam_id" :site="$site" /> --}}
 
                                             @else
 
