@@ -180,6 +180,8 @@
                         $("#hidden_id").val(resp.id);
                         $("#hidden_sam_id").val(resp.sam_id);
 
+                        $("#rank_number").val(resp.message.rank_number);
+
                         for (let i = 0; i < resp.message.file.length; i++) {
                             $(".file_lists").append(
                                 "<div class='col-md-4 col-sm-4 view_file col-12 mb-2' style='cursor: pointer;' data-value='"+ resp.message.file[i] +"'>" +
