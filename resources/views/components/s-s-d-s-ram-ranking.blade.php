@@ -356,7 +356,7 @@
             if( extensions.includes(values.split('.').pop()) == true) {     
                 htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
             } else {
-            htmltoload = '<div class="text-center my-5"><a target="_blank" href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+            htmltoload = '<div class="text-center my-5"><a target="_blank" href="/files/' + values + '" download="'+ values +'"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
             }
                     
             $('.file_viewer').html('');
