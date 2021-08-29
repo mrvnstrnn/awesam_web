@@ -220,8 +220,8 @@ class GlobeController extends Controller
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
-
-            } else if ($request->input('activity_name') == "Add Target Sites") {
+                
+            } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation") {
 
                 $notification = "Successfully mark this site as complete.";
                 // $vendor = $request->input('vendor');
@@ -1022,17 +1022,20 @@ class GlobeController extends Controller
                 'address' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
+                'file' => 'required',
             ));
 
             if ($validate->passes()) {
 
-                $file = collect();
-                for ($i=0; $i < count($request->input("file")); $i++) { 
-                    $new_file = $this->rename_file($request->input("file")[$i], $request->input("sub_activity_name"), $request->input("sam_id"));
-    
-                    \Storage::move( $request->input("file")[$i], $new_file );
+                if (!is_null($request->input("file"))) {
+                    $file = collect();
+                    for ($i=0; $i < count($request->input("file")); $i++) { 
+                        $new_file = $this->rename_file($request->input("file")[$i], $request->input("sub_activity_name"), $request->input("sam_id"));
+        
+                        \Storage::move( $request->input("file")[$i], $new_file );
 
-                    $file->push($new_file);
+                        $file->push($new_file);
+                    }
                 }
 
                 $json = array(
@@ -1913,14 +1916,10 @@ class GlobeController extends Controller
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
     {
     // dd($sub_activity);
-        if($sub_activity == 'Add Target Sites'){
+        if($sub_activity == 'SSDS'){
 
-            $advanced_site_hunting = SubActivityValue::where('sam_id', $sam_id)
+            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
                                                     ->where('type', 'jtss_add_site')
-                                                    ->get();
-
-            $ssds = SubActivityValue::where('sam_id', $sam_id)
-                                                    ->whereNull('type')
                                                     ->get();
 
             $what_component = "components.subactivity-ssds";
@@ -1932,8 +1931,7 @@ class GlobeController extends Controller
                 'program_id' => $program_id,
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
-                'check_if_added' => $advanced_site_hunting,
-                'check_if_added_ssds' => $ssds
+                'check_if_added' => $jtss_add_site,
             ])
             ->render();
 
@@ -2208,6 +2206,34 @@ class GlobeController extends Controller
                         'pr_memo' => $pr_memo,
                         'activity' => $request->input('activity'),
                         'samid' => $request['sam_id'],
+                        'site_name' => count($site) < 1 ? "" : $site[0]->site_name
+                    ])
+                    ->render();
+                } 
+                
+                else if ($request->input('activity') == 'SSDS RAM Validation') {
+                    $what_modal = "components.s-s-d-s-ram-ranking";
+
+                    $jtss_sites = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->get();
+
+                    $jtss_sites_json = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->where('value->rank_number', '!=', 'null')
+                                                        ->get();
+
+                    return \View::make($what_modal)
+                    ->with([
+                        'jtss_sites' => $jtss_sites,
+                        'jtss_sites_json' => $jtss_sites_json,
+                        'activity_id' => $site[0]->activity_id,
+                        'site_category' => $site[0]->site_category,
+                        'activity' => $request->input('activity'),
+                        'sam_id' => $request->input('sam_id'),
+                        'program_id' => $request->input('program_id'),
                         'site_name' => count($site) < 1 ? "" : $site[0]->site_name
                     ])
                     ->render();

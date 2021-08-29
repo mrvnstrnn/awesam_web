@@ -7,126 +7,104 @@
     </div> --}}
 </div>
 <div class="row pt-4">
-    <div class="col-md-16 col-12">
-        <H5 id="active_action">Add Target Sites</H5>
+    <div class="col-12 col-md-6">
+        <H5 id="active_action">{{ $sub_activity }}</H5>
     </div>
-    
-    {{-- @if (count($check_if_added) > 0 && count($check_if_added_ssds) > 0) --}}
-        <div class="col-md-16 col-12 mark_complete_area {{ count($check_if_added) > 0 && count($check_if_added_ssds) > 0 ? '' : 'd-none' }}">
-            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs complete_button_act"><small>MARK AS COMPLETED</small></button>    
-        </div>
-    {{-- @endif --}}
-</div>
-<ul class="tabs-animated body-tabs-animated nav mb-4">
-    <li class="nav-item">
-        <a role="tab" class="nav-link active" id="tab-target-sites" data-toggle="tab" href="#tab-content-target-sites">
-            <span>Target Sites</span>
-        </a>
-    </li>
-    <li class="nav-item advance_site_hunting_tab {{ count($check_if_added) < 1 ? 'd-none' : ''}}">
-        <a role="tab" class="nav-link" id="tab-dshr" data-toggle="tab" href="#tab-content-dshr">
-            <span>Advance Site Hunting Report</span>
-        </a>
-    </li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane tabs-animation fade active show" id="tab-content-target-sites" role="tabpanel">
-        <div class="row">
-            <div class="col-12 align-right  text-right">
-                <button class="add_site_button btn btn-outline btn-outline-primary btn-sm mb-3">Add Site</button>     
-            </div>
-        </div>
-        <div class="row pt-3" id="ssds_table">
-            <div class="col-md-12">
-                <table class="table" id="dtTable">
-                    <thead>
-                        <tr>
-                            <th>Site Name</th>
-                            <th>Lessor</th>
-                            <th>Address</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Site Name</td>
-                            <td>Lessor</td>
-                            <td>Address</td>
-                            <td>Latitude</td>
-                            <td>Longitude</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row pt-3 d-none" id="ssds_form">
-            <div class="col-md-12">
-                <form class="ssds_form">
-                    <div class="position-relative row form-group">
-                        <label for="site_name" class="col-sm-4 col-form-label">Location</label>
-                        <div class="col-sm-8">
-                            <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Location">
-                            <small class="text-danger site_name-errors"></small>
-                        </div>
-                    </div>
-                    <div class="position-relative row form-group">
-                        <label for="lessor" class="col-sm-4 col-form-label">Lessor</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Lessor">
-                            <small class="text-danger lessor-errors"></small>
-                        </div>
-                    </div>
-                    <div class="position-relative row form-group">
-                        <label for="address" class="col-sm-4 col-form-label">Address</label>
-                        <div class="col-sm-8">
-                            <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
-                            <small class="text-danger address-errors"></small>
-                        </div>
-                    </div>
-                    <div class="position-relative row form-group">
-                        <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
-                        <div class="col-sm-4">
-                            <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
-                            <small class="text-danger latitude-errors"></small>
-                        </div>
-                        <div class="col-sm-4">
-                            <input type="number" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
-                            <small class="text-danger longitude-errors"></small>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="position-relative row form-group">
-                        <label for="file_documents" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
-                        <div class="dropzone dropzone_files_activities_ssds mx-3 mt-0 w-100">
-                            <div class="dz-message">
-                                <i class="fa fa-plus fa-3x"></i>
-                                <p><small class="sub_activity_name">Drag and Drop files here</small></p>
-                            </div>
-                        </div>                                            
-                    </div>
-                    <input type="hidden" name="sam_id" value="{{ $sam_id }}">
-                    <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
-                    <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
-                    {{-- <input type="hidden" name="type" value="advanced_site_hunting"> --}}
-                    <input type="hidden" name="type" value="jtss_add_site">
-                    <div class="position-relative row form-group ">
-                        <div class="col-sm-12">
-                            <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>
-                            <button class="btn float-right btn-ouline-secondary mr-1" id="btn_cancel_ssds" type="button">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane tabs-animation fade" id="tab-content-dshr" role="tabpanel">
-        @include('components.subactivity-doc-upload')
+    <div class="col-12 col-md-6 align-right  text-right">
+        <button class="add_site_button btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Add Site</button>
+        <button class="float-right btn-sm btn-shadow btn btn-primary complete_button_act {{ count($check_if_added) > 0 ? '' : 'd-none' }}">MARK SSDS COMPLETED</button>
     </div>
 </div>
 
-{{-- <script src="/js/dropzone/dropzone.js"></script> --}}
+<div class="row pt-3" id="ssds_table">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="dtTable">
+                <thead>
+                    <tr>
+                        <th>Site Name</th>
+                        <th>Lessor</th>
+                        <th>Address</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Site Name</td>
+                        <td>Lessor</td>
+                        <td>Address</td>
+                        <td>Latitude</td>
+                        <td>Longitude</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row pt-3 d-none" id="ssds_form">
+    <div class="col-md-12">
+        <form class="ssds_form">
+            <div class="position-relative row form-group">
+                <label for="site_name" class="col-sm-4 col-form-label">Location</label>
+                <div class="col-sm-8">
+                    <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Location">
+                    <small class="text-danger site_name-errors"></small>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="lessor" class="col-sm-4 col-form-label">Lessor</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Lessor">
+                    <small class="text-danger lessor-errors"></small>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="address" class="col-sm-4 col-form-label">Address</label>
+                <div class="col-sm-8">
+                    <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
+                    <small class="text-danger address-errors"></small>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+                    <small class="text-danger latitude-errors"></small>
+                </div>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+                    <small class="text-danger longitude-errors"></small>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="position-relative row form-group">
+                <label for="file_documents" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
+                <div class="dropzone dropzone_files_activities_ssds mx-3 mt-0 w-100">
+                    <div class="dz-message">
+                        <i class="fa fa-plus fa-3x"></i>
+                        <p><small class="sub_activity_name">Drag and Drop files here</small></p>
+                    </div>
+                </div>
+                <small class="text-danger file-errors"></small>                                       
+            </div>
+            <input type="hidden" name="sam_id" value="{{ $sam_id }}">
+            <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
+            <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
+            {{-- <input type="hidden" name="type" value="advanced_site_hunting"> --}}
+            <input type="hidden" name="type" value="jtss_add_site">
+            <div class="position-relative row form-group ">
+                <div class="col-sm-12">
+                    <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>
+                    <button class="btn float-right btn-ouline-secondary mr-1" id="btn_cancel_ssds" type="button">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script src="/js/dropzone/dropzone.js"></script>
 
 <script>
 
@@ -250,7 +228,7 @@
                         // $(".btn_switch_back_to_actions").trigger("click");
                         $("#btn_cancel_ssds").trigger("click");
                         
-                        $(".advance_site_hunting_tab").removeClass("d-none");
+                        $(".complete_button_act").removeClass("d-none");
                     });
 
                 } else {
