@@ -1549,10 +1549,8 @@ class GlobeController extends Controller
         
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
-            ->table("site_milestone")
-            ->distinct()
+            ->table("view_sites_per_program")
             ->where('program_id', $program_id)
-            ->where('activity_complete', 'false')
             ->get();
         }
 
@@ -1716,20 +1714,9 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'new clp'){
             $sites = \DB::connection('mysql2') 
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                // ->where('activities->activity_id', '2')
-                                // ->where('activities->profile_id', \Auth::user()->profile_id)
-                                
-                                ->whereJsonContains('activities->activity_id', '2')
-                                ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
-                            // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
-                            // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
+                                ->table("view_sites_per_program")
+                                ->where('program_id', $program_id)                                
+                                ->whereIn('activity_id', [2])
                             ->get();
 
         }
