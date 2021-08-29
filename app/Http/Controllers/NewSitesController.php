@@ -341,19 +341,19 @@ class NewSitesController extends Controller
             ));
 
             if ($validate->passes()) {
-                    $data = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                            ->where('type', 'jtss_add_site')
-                                            ->whereJsonContains('value', [
-                                                'rank_number' => $request->input('rank_number')
-                                            ])
-                                            ->first();
+                $data = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'jtss_add_site')
+                                        ->whereJsonContains('value', [
+                                            'rank_number' => $request->input('rank_number')
+                                        ])
+                                        ->first();
+
+                $get_data = SubActivityValue::where('id', $request->input('id'))
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'jtss_add_site')
+                                        ->first();
 
                 if ( is_null($data) ) {
-
-                    $get_data = SubActivityValue::where('id', $request->input('id'))
-                                                    ->where('sam_id', $request->input('sam_id'))
-                                                    ->where('type', 'jtss_add_site')
-                                                    ->first();
 
                     $json = json_decode($get_data->value);
 
@@ -389,8 +389,40 @@ class NewSitesController extends Controller
                     return response()->json(['error' => false, 'message' => "Successfully set a rank.", 'done' => $done ]);
                 } else {
                     $json = json_decode($data->value);
+                    if ($request->input('id') == $data->id) {
+                        $array = array(
+                            'site_name' => $json->site_name,
+                            'lessor' => $json->lessor,
+                            'address' => $json->address,
+                            'latitude' => $json->latitude,
+                            'longitude' => $json->longitude,
+                            'file' => $json->file,
+                            'rank_number' => $request->input('rank_number'),
+                        );
+
+                        SubActivityValue::where('id', $request->input('id'))
+                                        ->update([
+                                            'value' => json_encode($array)
+                                        ]);
+
+                                        $jtss_sites = SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'jtss_add_site')
+                                        ->get();
+
+                        $jtss_sites_json = SubActivityValue::select('sam_id')
+                                                            ->where('sam_id', $request->input('sam_id'))
+                                                            ->where('type', 'jtss_add_site')
+                                                            ->where('value->rank_number', '!=', 'null')
+                                                            ->get();
+
+                        $done = count($jtss_sites) == count($jtss_sites_json);
+
+                        return response()->json(['error' => false, 'message' => "Successfully set a rank.", 'done' => $done ]);
+                    } else {
+                        return response()->json(['error' => true, 'message' => "This rank already exist on " . $json->site_name ]);
+                    }
                     
-                    return response()->json(['error' => true, 'message' => "This rank already exist on " . $json->site_name ]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
