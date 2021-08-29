@@ -237,4 +237,166 @@ class NewSitesController extends Controller
             }
         }
     }
+
+    public function get_jtss_site_table ($sam_id)
+    {
+        try {
+            $data = SubActivityValue::where('sam_id', $sam_id)
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->get();
+
+                                    
+            $dt = DataTables::of($data)
+                                ->addColumn('site_name', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['site_name'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('lessor', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['lessor'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('latitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['latitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('address', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['address'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('longitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return $json['longitude'];
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                })
+                                ->addColumn('rank', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+                                        
+                                        return isset($json['rank_number']) ? $json['rank_number'] : "Not yet ranked.";
+                                    } else {
+                                        return $row->value;  
+                                    }                      
+                                });
+            
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function view_jtss_site ($id)
+    {
+        try {
+            $data = SubActivityValue::where('id', $id)
+                                        ->where('type', 'jtss_add_site')
+                                        ->first();
+
+                                                        
+            return response()->json(['error' => false, 'message' => json_decode($data->value), 'sam_id' => $data->sam_id, 'id' => $data->id ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function set_rank_site (Request $request)
+    {
+        try {
+            $count_data = SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'jtss_add_site')
+                                        ->get();
+
+            $validate = Validator::make($request->all(), array(
+                'rank_number' => ['required', 'numeric', 'min:1', 'max:'.count($count_data) ]
+            ));
+
+            if ($validate->passes()) {
+                    $data = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                            ->where('type', 'jtss_add_site')
+                                            ->whereJsonContains('value', [
+                                                'rank_number' => $request->input('rank_number')
+                                            ])
+                                            ->first();
+
+                if ( is_null($data) ) {
+
+                    $get_data = SubActivityValue::where('id', $request->input('id'))
+                                                    ->where('sam_id', $request->input('sam_id'))
+                                                    ->where('type', 'jtss_add_site')
+                                                    ->first();
+
+                    $json = json_decode($get_data->value);
+
+                    $array = array(
+                        'site_name' => $json->site_name,
+                        'lessor' => $json->lessor,
+                        'address' => $json->address,
+                        'latitude' => $json->latitude,
+                        'longitude' => $json->longitude,
+                        'file' => $json->file,
+                        'rank_number' => $request->input('rank_number'),
+                    );
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                        ->update([
+                                            'value' => json_encode($array)
+                                        ]);
+
+
+                    $jtss_sites = SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request->input('sam_id'))
+                                        ->where('type', 'jtss_add_site')
+                                        ->get();
+
+                    $jtss_sites_json = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->where('value->rank_number', '!=', 'null')
+                                                        ->get();
+
+                    $done = count($jtss_sites) == count($jtss_sites_json);
+
+                    return response()->json(['error' => false, 'message' => "Successfully set a rank.", 'done' => $done ]);
+                } else {
+                    $json = json_decode($data->value);
+                    
+                    return response()->json(['error' => true, 'message' => "This rank already exist on " . $json->site_name ]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }
