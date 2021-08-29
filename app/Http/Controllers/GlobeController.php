@@ -1997,7 +1997,7 @@ class GlobeController extends Controller
             ->render();
             
         }
-        elseif($sub_activity == ' Schedule Advanced Site Hunting'){
+        elseif($sub_activity == 'Schedule Advanced Site Hunting'){
 
             $what_component = "components.schedule-advance-site-hunting";
             return \View::make($what_component)
