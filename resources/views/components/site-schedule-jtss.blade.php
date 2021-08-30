@@ -44,6 +44,7 @@
 
         <div class="confirm_schedule_button d-none">
             <button class="float-right btn btn-shadow btn-primary confirm_schedule" id="confirm_schedule" data-action="true">Confirm Schedule</button>
+            <button class="float-right btn btn-shadow btn-danger back_button_sched" id="re_schedule">Reschedule</button>
             <button class="float-right btn btn-shadow btn-secondary mr-1 back_button_sched" id="back_button_sched">Back</button>
         </div>
     </div>
@@ -231,6 +232,26 @@
             $("form #remarks").val(remarks);
 
             $(".confirm_schedule").attr("data-id", id);
+
+
+            var monthfield = jtss_schedule.split('/')[0]; //12
+            var dayfield = jtss_schedule.split('/')[1]; //08
+            var yearfield = jtss_schedule.split('/')[2]; //2012
+            var inputDate = new Date(yearfield, monthfield - 1, dayfield);
+            var today = new Date();
+
+            today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            var endDate = new Date(today);
+            endDate.setMonth(endDate.getMonth() + 6);
+
+            if(inputDate >= today && inputDate <= endDate) {
+                $("#confirm_schedule").removeClass("d-none");
+                $("#re_schedule").addClass("d-none");
+            } else {
+                $("#confirm_schedule").addClass("d-none");
+                $("#re_schedule").removeClass("d-none");
+            }
 
             $(".confirm_schedule_button").removeClass('d-none');
             $(".set_schedule").addClass('d-none');
