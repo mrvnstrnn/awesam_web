@@ -1258,8 +1258,8 @@ class GlobeController extends Controller
                                                         // ->where('sub_activity_id', $sub_activity_id)
                                                         ->where('type', "jtss_add_site")
                                                         ->where('user_id', \Auth::id())
-                                                        // ->where('type', "advanced_site_hunting")
-                                                        ->where('type', "jtss_add_site")
+                                                        ->where('type', "advanced_site_hunting")
+                                                        // ->where('type', "jtss_add_site")
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 

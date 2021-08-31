@@ -97,35 +97,69 @@ $(".btn_switch_back_to_actions").on("click", function(){
 
 // $('#dtTable').DataTable();
 
-$('#dtTable').on('click', 'tr', function(){
-    $(".file_lists div").remove();
-    var new_json = JSON.parse($(this).attr("data-value").replace(/&quot;/g,'"'));
-    
-    $("#site_name").val(new_json.site_name);
-    $("#lessor").val(new_json.lessor);
-    $("#longitude").val(new_json.longitude);
-    $("#latitude").val(new_json.latitude);
-    $("#address").text(new_json.address);
-    $("#hidden_id").val($(this).attr("data-id"));
+$(document).on("click", ".site_details", function (e) {
+    e.preventDefault();
 
-    for (let i = 0; i < new_json.file.length; i++) {
-        $(".file_lists").append(
-            '<div class="col-md-4 col-sm-4 view_file col-12 mb-2" data-file_name="'+new_json.file[i]+'" style="cursor: pointer;" data-value="">' +
-                '<div class="child_div_">' +
-                    '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;">' +
-                        '<div>' +
-                        '<i class="fa fa-file fa-3x text-dark"></i><br>' +
-                        '<p><small>'+new_json.file[i]+'</small></p>' +
-                        '</div>' +
-                    '</div>' +
-                    // '<i class="fa fa-check-circle fa-lg text-secondary" style="position: absolute; top:10px; right: 20px"></i><br>' +
-                '</div>' +
-            '</div>'
-        );
-    }
+    var id = $(this).attr("data-id");
 
-    $('#ssds_table').addClass('d-none');
-    $('#ssds_form').removeClass('d-none');
+    $.ajax({
+        url: "/view-jtss-site/" + id,
+        type: "GET",
+        success: function (resp) {
+            if (!resp.error) {
+                $("#ssds_form").removeClass("d-none");
+                $("#ssds_table").addClass("d-none");
+
+                $(".file_lists .view_file").remove();
+
+                $("#site_name").val(resp.message.site_name);
+                $("#lessor").val(resp.message.lessor);
+                $("#address").val(resp.message.address);
+                $("#latitude").val(resp.message.latitude);
+                $("#longitude").val(resp.message.longitude);
+                $("#hidden_id").val(resp.id);
+                $("#hidden_sam_id").val(resp.sam_id);
+
+                $("#rank_number").val(resp.message.rank_number);
+
+                for (let i = 0; i < resp.message.file.length; i++) {
+                    $(".file_lists").append(
+                        "<div class='col-md-4 col-sm-4 view_file col-12 mb-2' style='cursor: pointer;' data-value='"+ resp.message.file[i] +"'>" +
+                            "<div class='dz-message text-center align-center border' style='padding: 25px 0px 15px 0px;'>" +
+                                "<i class='fa fa-file-pdf fa-3x text-dark'></i><br>" +
+                                "<p><small>" + resp.message.file[i] + "</small></p>" +
+                            "</div>" +
+                        "</div>"
+                    );
+                }
+
+                // Swal.fire(
+                //     'Success',
+                //     resp.message,
+                //     'success'
+                // )
+                // $(".rank_site").removeAttr("disabled");
+                // $(".rank_site").text("Set Rank");
+            } else {
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
+                // $(".rank_site").removeAttr("disabled");
+                // $(".rank_site").text("Set Rank");
+            }
+        },
+        error: function (resp) {
+            Swal.fire(
+                'Error',
+                resp,
+                'error'
+            )
+            // $(".rank_site").removeAttr("disabled");
+            // $(".rank_site").text("Set Rank");
+        }
+    });
 });
 
 $('#btn_cancel_ssds').on("click", function(){
@@ -149,7 +183,7 @@ $(document).on("click", ".view_file", function (e){
 
     var extensions = ["pdf", "jpg", "png"];
 
-    var values = $(this).attr("data-file_name");
+    var values = $(this).attr('data-value');
 
     if( extensions.includes(values.split('.').pop()) == true) {     
         htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
@@ -180,7 +214,7 @@ if (! $.fn.DataTable.isDataTable("#dtTable") ){
         },
         'createdRow': function( row, data, dataIndex ) {
             $(row).attr('data-id', data.id);
-            $(row).addClass('rank_site');
+            $(row).addClass('site_details');
             $(row).attr('style', 'cursor: pointer');
         },
         columns: [
