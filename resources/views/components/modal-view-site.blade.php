@@ -194,7 +194,7 @@
                                                 
                                             )
                                                 
-                                                <x-site-p-a-c-approvals :site="$site" />
+                                                <x-site-p-a-c-approvals :site="$site" :sitecategory="$site[0]->site_category" :activityid="$site[0]->activity_id" :samid="$site[0]->sam_id" />
 {{-- 
                                             @elseif(
 

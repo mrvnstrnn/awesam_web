@@ -193,7 +193,7 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation") {
 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
