@@ -18,6 +18,7 @@
                     <th>Address</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
+                    <th>Rank</th>
                 </tr>
             </thead>
         </table>
@@ -168,7 +169,7 @@ if (! $.fn.DataTable.isDataTable("#dtTable") ){
         processing: true,
         serverSide: true,
         ajax: {
-            url: "/get-my-uploaded-site/{{ $sub_activity_id }}/{{ $sam_id }}",
+            url: "/get-jtss-site-table/{{ $sam_id }}",
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -178,16 +179,17 @@ if (! $.fn.DataTable.isDataTable("#dtTable") ){
             return json.data;
         },
         'createdRow': function( row, data, dataIndex ) {
-            $(row).attr('data-value', data.value);
             $(row).attr('data-id', data.id);
+            $(row).addClass('rank_site');
             $(row).attr('style', 'cursor: pointer');
         },
         columns: [
-            { data: "sitename" },
+            { data: "site_name" },
             { data: "lessor" },
             { data: "address" },
             { data: "latitude" },
             { data: "longitude" },
+            { data: "rank" },
         ],
     });
 } else {
