@@ -1586,24 +1586,44 @@ class GlobeController extends Controller
             //                 ->where("site_agent_id", \Auth::id())
             //                 ->get();
 
-            $sites = \DB::connection('mysql2')
-                            ->table("stage_activities")
-                            ->leftjoin('site_stage_tracking', 'site_stage_tracking.activity_id', 'stage_activities.activity_id')
-                            ->leftjoin('site', function($join){
-                                $join->on('site.sam_id', 'site_stage_tracking.sam_id');
-                                $join->on('site.program_id', 'stage_activities.program_id');
-                            })
-                            ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
-                            ->where('site.program_id', $program_id)
-                            ->where('stage_activities.activity_type', 'complete');
+            // $sites = \DB::connection('mysql2')
+            //                 ->table("stage_activities")
+            //                 ->leftjoin('site_stage_tracking', 'site_stage_tracking.activity_id', 'stage_activities.activity_id')
+            //                 ->leftjoin('site', function($join){
+            //                     $join->on('site.sam_id', 'site_stage_tracking.sam_id');
+            //                     $join->on('site.program_id', 'stage_activities.program_id');
+            //                 })
+            //                 ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
+            //                 ->where('site.program_id', $program_id)
+            //                 ->where('stage_activities.activity_type', 'complete');
 
-            if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 3 ) {
-                $sites = $sites->where("site_users.agent_id", \Auth::id());
-            } else {
-                $sites->where('site.program_id', $program_id)
-                            ->where("site_stage_tracking.activity_complete", 'true')
-                            ->get();
-            }
+            // if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 3 ) {
+            //     $sites = $sites->where("site_users.agent_id", \Auth::id());
+            // } else {
+            //     $sites->where('site.program_id', $program_id)
+            //                 ->where("site_stage_tracking.activity_complete", 'true')
+            //                 ->get();
+            // }
+
+            $last_act = \DB::connection('mysql2') 
+                                        ->table("stage_activities")
+                                        ->select('activity_id')
+                                        ->where('program_id', $program_id)
+                                        ->orderBy('activity_id', 'desc')
+                                        ->first();
+
+                                        // dd($last_act);
+
+            $sites = \DB::connection('mysql2') 
+                                ->table("site")
+                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                                ->where('site.program_id', $program_id)
+                                ->where('activities->activity_id', $last_act->activity_id)
+                                ->get();
                             
                             
 
