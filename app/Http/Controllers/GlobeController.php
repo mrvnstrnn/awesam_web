@@ -1256,8 +1256,10 @@ class GlobeController extends Controller
         try {
             $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
                                                         // ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('type', "jtss_add_site")
                                                         ->where('user_id', \Auth::id())
-                                                        ->where('type', "advanced_site_hunting")
+                                                        // ->where('type', "advanced_site_hunting")
+                                                        ->where('type', "jtss_add_site")
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 
@@ -1347,9 +1349,13 @@ class GlobeController extends Controller
             // }
 
             // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-            $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
-            if ($request->input('activity_name') != 'Vendor Awarding') {
+            $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+            
+            if ($request->input('activity_name') == 'Set Approved Site') {
+                return response()->json(['error' => false, 'message' => "Successfully set a approve site."]);
+            } else if ($request->input('activity_name') != 'Vendor Awarding') {
                 return response()->json(['error' => false, 'message' => "Successfully approved a SSDS."]);
             } else {
                 return response()->json(['error' => false, 'message' => "Successfully awarded."]);
@@ -1936,6 +1942,28 @@ class GlobeController extends Controller
             ->render();
 
         }
+
+        else if($sub_activity == 'Set Approved Site'){
+
+            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+                                                    ->where('type', 'jtss_add_site')
+                                                    ->get();
+
+            $what_component = "components.set-approved-site";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'check_if_added' => $jtss_add_site,
+            ])
+            ->render();
+
+        }
+
         else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
             // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
