@@ -230,11 +230,18 @@ class NewSitesController extends Controller
                                                         'activity_complete' => "true"
                                                     ]);
         
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    ->where('activity_id', $activity)
-                                                    ->update([
-                                                        'activity_complete' => "false"
-                                                    ]);
+                            // SiteStageTracking::where('sam_id', $sam_id[$i])
+                            //                         ->where('activity_id', $activity)
+                            //                         ->update([
+                            //                             'activity_complete' => "false"
+                            //                         ]);
+
+                            SiteStageTracking::create([
+                                'sam_id' => $sam_id[$i],
+                                'activity_id' => $activity,
+                                'activity_complete' => 'false',
+                                'user_id' => \Auth::id()
+                            ]);
                         }
         
                         $array = array(
