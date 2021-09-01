@@ -351,14 +351,18 @@
 
     $(document).on("click", ".remove_td", function(e){
 
-        $("tr.tr"+$(this).attr("data-id")).remove();
+        var sam_id = $(this).attr("data-id");
+
+        $("tr.tr" + sam_id).remove();
 
         var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
 
         $("#requested_amount").val(sum);
 
-        $("select option.option"+$(this).attr("data-id")).removeClass("d-none");
-        $(".input_hidden input#sam_id"+$(this).attr("data-id")).remove();
+        $("select option.option" + sam_id).removeClass("d-none");
+        $(".input_hidden input#sam_id" + sam_id).remove();
+
+        
     });
 
     $(document).on("click", ".add_pr_po", function (e) {
