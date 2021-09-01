@@ -367,31 +367,40 @@ class GlobeController extends Controller
             if ( in_array($activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                         ->table('stage_activities')
-                                        ->select('next_activity')
+                                        ->select('next_activity', 'activity_name', 'return_activity')
                                         ->where('activity_id', $activity_id[$i])
                                         ->where('program_id', $program_id)
                                         ->where('category', $site_category[$i])
                                         ->first();
 
                 if (!is_null($activities)) {
-                    $get_activitiess = \DB::connection('mysql2')
+                    // $get_activitiess = \DB::connection('mysql2')
+                    //                         ->table('stage_activities')
+                    //                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                    //                         ->where('activity_id', $activities->next_activity)
+                    //                         ->where('program_id', $program_id)
+                    //                         ->where('category', $site_category[$i])
+                    //                         ->first();
+    
+                    // $get_activities = \DB::connection('mysql2')
+                    //                         ->table('stage_activities')
+                    //                         ->where('next_activity', $get_activitiess->next_activity)
+                    //                         ->where('program_id', $program_id)
+                    //                         ->where('category', $site_category[$i])
+                    //                         ->get();
+    
+                    // foreach ($get_activities as $get_activity) {
+                        
+                        if ($action == "true") {
+
+                            $get_activitiess = \DB::connection('mysql2')
                                             ->table('stage_activities')
-                                            ->select('next_activity', 'activity_name', 'profile_id')
+                                            ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                             ->where('activity_id', $activities->next_activity)
                                             ->where('program_id', $program_id)
                                             ->where('category', $site_category[$i])
                                             ->first();
-    
-                    $get_activities = \DB::connection('mysql2')
-                                            ->table('stage_activities')
-                                            ->where('next_activity', $get_activitiess->next_activity)
-                                            ->where('program_id', $program_id)
-                                            ->where('category', $site_category[$i])
-                                            ->get();
-    
-                    foreach ($get_activities as $get_activity) {
-                        
-                        if ($action == "true") {
+
                             $activity_name = $get_activitiess->activity_name;
                             $check_done = \DB::connection('mysql2')
                                                     ->table('site_stage_tracking')
@@ -400,7 +409,8 @@ class GlobeController extends Controller
                                                     ->where('activity_complete', 'false')
                                                     ->get();
     
-                            $activity = $get_activity->activity_id;
+                            // $activity = $get_activity->activity_id;
+                            $activity = $get_activitiess->activity_id;
     
                             SiteStageTracking::where('sam_id', $sam_id[$i])
                                                     ->where('activity_complete', 'false')
@@ -413,7 +423,8 @@ class GlobeController extends Controller
                                                 ->table('site_stage_tracking')
                                                 ->select('sam_id')
                                                 ->where('sam_id', $sam_id[$i])
-                                                ->where('activity_id', $activities->next_activity)
+                                                // ->where('activity_id', $activities->next_activity)
+                                                ->where('activity_id', $activity)
                                                 ->where('activity_complete', 'false')
                                                 ->get();
 
@@ -426,17 +437,43 @@ class GlobeController extends Controller
                                 ]);
                             }
                         } else {
-                            $activity_name = $activities->activity_name;
-                            $activity = $get_activity->return_activity;
+                            // $activity_name = $activities->activity_name;
+                            // $activity = $get_activity->return_activity;
+
+                            $activity = $activities->return_activity;
+
+                            $get_activitiess = \DB::connection('mysql2')
+                                            ->table('stage_activities')
+                                            ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                            ->where('activity_id', $activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[$i])
+                                            ->first();
+
+                            $activity_name = $get_activitiess->activity_name;
+
+                            // SiteStageTracking::where('sam_id', $sam_id[$i])
+                            //                         ->where('activity_id', ">", $activity)
+                            //                         ->delete();
+
                             SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    ->where('activity_id', ">", $activity)
-                                                    ->delete();
-        
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    ->where('activity_id', $activity)
+                                                    // ->where('activity_id', $activity_id[$i])
                                                     ->update([
-                                                        'activity_complete' => "false"
+                                                        'activity_complete' => "true"
                                                     ]);
+        
+                            // SiteStageTracking::where('sam_id', $sam_id[$i])
+                            //                         ->where('activity_id', $activity)
+                            //                         ->update([
+                            //                             'activity_complete' => "false"
+                            //                         ]);
+
+                            SiteStageTracking::create([
+                                'sam_id' => $sam_id[$i],
+                                'activity_id' => $activity,
+                                'activity_complete' => 'false',
+                                'user_id' => \Auth::id()
+                            ]);
                         }
         
                         $array = array(
@@ -451,7 +488,7 @@ class GlobeController extends Controller
                         ->update([
                             'activities' => json_encode($array)
                         ]);
-                    }
+                    // }
                 }
             }
         }
@@ -3654,6 +3691,7 @@ class GlobeController extends Controller
                         // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
                     // }
                 $asd = $this->move_site( $sam_id->all(), 1, $request->input("data_action"), $site_category->all(), $activity_id->all() );
+                // return response()->json([ 'error' => true, 'message' => $asd ]);
 
                 $message_action = $request->input("data_action") == "false" ? "rejected" : "approved";
                 return response()->json(['error' => false, 'message' => "Successfully ".$message_action." PR Memo." ]);

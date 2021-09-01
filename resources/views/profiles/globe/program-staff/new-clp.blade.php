@@ -7,7 +7,7 @@
         -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
         -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
         box-shadow: 0 5px 15px rgba(0,0,0,0);
-    }   
+    }
 </style>    
 
     <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New CLP" activitytype="new clp"/>
@@ -134,7 +134,7 @@
                                     </div>
 
                                     <div class="form-row">
-                                        <div class="col-md-5">
+                                        <div class="col-12">
                                             <div class="form-group">
                                                 <label for="vendor">Vendor</label>
                                                 <select name="vendor" id="vendor" class="form-control">
@@ -151,7 +151,9 @@
                                                 <small class="text-danger vendor-error"></small>
                                             </div>        
                                         </div>
-                                        <div class="col-md-7">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
                                             <div class="form-group">
                                                 <label for="financial_analysis">Add Site</label>
                                                 @php
@@ -236,7 +238,15 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 <script type="text/javascript" src="/js/modal-loader.js"></script>  
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
+
+    // $(document).ready(function() {
+    //     $('#financial_analysis').select2();
+    // });
+
     // $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
     // });
@@ -362,7 +372,7 @@
         $("select option.option" + sam_id).removeClass("d-none");
         $(".input_hidden input#sam_id" + sam_id).remove();
 
-        
+
     });
 
     $(document).on("click", ".add_pr_po", function (e) {
