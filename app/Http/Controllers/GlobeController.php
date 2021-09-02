@@ -341,8 +341,9 @@ class GlobeController extends Controller
 
             // }
             
-            $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
+            $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
+            // return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -392,49 +393,66 @@ class GlobeController extends Controller
                     // foreach ($get_activities as $get_activity) {
                         
                         if ($action == "true") {
+                             $get_activitiess = \DB::connection('mysql2')
+                                                    ->table('stage_activities')
+                                                    ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                                    ->where('activity_id', $activities->next_activity)
+                                                    ->where('program_id', $program_id)
+                                                    ->where('category', $site_category[$i])
+                                                    ->first();
 
-                            $get_activitiess = \DB::connection('mysql2')
+                            $get_activities = \DB::connection('mysql2')
                                             ->table('stage_activities')
-                                            ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                            ->where('activity_id', $activities->next_activity)
+                                            ->where('next_activity', $get_activitiess->next_activity)
                                             ->where('program_id', $program_id)
                                             ->where('category', $site_category[$i])
-                                            ->first();
+                                            ->get();
 
-                            $activity_name = $get_activitiess->activity_name;
-                            $check_done = \DB::connection('mysql2')
+                            foreach ($get_activities as $get_activity) {
+                                $get_activitiess = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                                ->where('activity_id', $activities->next_activity)
+                                                ->where('program_id', $program_id)
+                                                ->where('category', $site_category[$i])
+                                                ->first();
+
+                                // $activity_name = $get_activitiess->activity_name;
+                                $activity_name = $get_activity->activity_name;
+                                $check_done = \DB::connection('mysql2')
+                                                        ->table('site_stage_tracking')
+                                                        ->select('sam_id')
+                                                        ->where('sam_id', $sam_id[$i])
+                                                        ->where('activity_complete', 'false')
+                                                        ->get();
+        
+                                $activity = $get_activity->activity_id;
+                                // $activity = $get_activitiess->activity_id;
+        
+                                SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                        ->where('activity_complete', 'false')
+                                                        ->where('activity_id', $activity_id[$i])
+                                                        ->update([
+                                                            'activity_complete' => "true"
+                                                        ]);
+
+                                $check_if_added = \DB::connection('mysql2')
                                                     ->table('site_stage_tracking')
                                                     ->select('sam_id')
                                                     ->where('sam_id', $sam_id[$i])
+                                                    // ->where('activity_id', $activities->next_activity)
+                                                    ->where('activity_id', $activity)
                                                     ->where('activity_complete', 'false')
                                                     ->get();
-    
-                            // $activity = $get_activity->activity_id;
-                            $activity = $get_activitiess->activity_id;
-    
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    ->where('activity_complete', 'false')
-                                                    ->where('activity_id', $activity_id[$i])
-                                                    ->update([
-                                                        'activity_complete' => "true"
-                                                    ]);
 
-                            $check_if_added = \DB::connection('mysql2')
-                                                ->table('site_stage_tracking')
-                                                ->select('sam_id')
-                                                ->where('sam_id', $sam_id[$i])
-                                                // ->where('activity_id', $activities->next_activity)
-                                                ->where('activity_id', $activity)
-                                                ->where('activity_complete', 'false')
-                                                ->get();
-
-                            if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
-                                SiteStageTracking::create([
-                                    'sam_id' => $sam_id[$i],
-                                    'activity_id' => $activity,
-                                    'activity_complete' => 'false',
-                                    'user_id' => \Auth::id()
-                                ]);
+                                if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
+                                    SiteStageTracking::create([
+                                        'sam_id' => $sam_id[$i],
+                                        'activity_id' => $activity,
+                                        'activity_complete' => 'false',
+                                        'user_id' => \Auth::id()
+                                    ]);
+                                }
                             }
                         } else {
                             // $activity_name = $activities->activity_name;

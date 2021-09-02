@@ -67,7 +67,7 @@
 
     </div>
     <div class="row">
-        <div class="col-12 table-responsive table_lessor_parent">
+        <div class="col-12 table-responsive table_lessor_engage_parent">
             {{-- <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
                 <thead>
                     <tr>
@@ -118,11 +118,11 @@
                     '</thead>' +
                 '</table>';
 
-    $('.table_lessor_parent').html(htmllist);
-    $(".table_uploaded").attr("id", "table_lessor_"+sub_activity_id);
+    $('.table_lessor_engage_parent').html(htmllist);
+    $(".table_uploaded").attr("id", "table_lessor_engage_"+sub_activity_id);
 
-    if (! $.fn.DataTable.isDataTable("#table_lessor_"+sub_activity_id) ){
-        $("#table_lessor_"+sub_activity_id).DataTable({
+    if (! $.fn.DataTable.isDataTable("#table_lessor_engage_"+sub_activity_id) ){
+        $("#table_lessor_engage_"+sub_activity_id).DataTable({
             processing: true,
             serverSide: true,
             ajax: {
@@ -144,7 +144,7 @@
             ],
         });
     } else {
-        $("#table_lessor_"+sub_activity_id).DataTable().ajax.reload();
+        $("#table_lessor_engage_"+sub_activity_id).DataTable().ajax.reload();
     }
 
     $(".save_engagement").on("click",  function (e){
@@ -188,7 +188,7 @@
             success: function (resp){
                 if (!resp.error) {
 
-                    $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
+                    $('#table_lessor_engage_'+sub_activity_id).DataTable().ajax.reload(function (){
                         Swal.fire(
                             'Success',
                             resp.message,

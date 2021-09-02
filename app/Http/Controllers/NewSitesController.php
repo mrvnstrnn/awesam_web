@@ -159,8 +159,23 @@ class NewSitesController extends Controller
 
                 if (!is_null($activities)) {
                         
-                        if ($action == "true") {
+                    if ($action == "true") {
+                            $get_activitiess = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                                ->where('activity_id', $activities->next_activity)
+                                                ->where('program_id', $program_id)
+                                                ->where('category', $site_category[$i])
+                                                ->first();
 
+                        $get_activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->where('next_activity', $get_activitiess->next_activity)
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[$i])
+                                        ->get();
+
+                        foreach ($get_activities as $get_activity) {
                             $get_activitiess = \DB::connection('mysql2')
                                             ->table('stage_activities')
                                             ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
@@ -169,7 +184,7 @@ class NewSitesController extends Controller
                                             ->where('category', $site_category[$i])
                                             ->first();
 
-                            $activity_name = $get_activitiess->activity_name;
+                            $activity_name = $get_activity->activity_name;
                             $check_done = \DB::connection('mysql2')
                                                     ->table('site_stage_tracking')
                                                     ->select('sam_id')
@@ -177,8 +192,7 @@ class NewSitesController extends Controller
                                                     ->where('activity_complete', 'false')
                                                     ->get();
     
-                            // $activity = $get_activity->activity_id;
-                            $activity = $get_activitiess->activity_id;
+                            $activity = $get_activity->activity_id;
     
                             SiteStageTracking::where('sam_id', $sam_id[$i])
                                                     ->where('activity_complete', 'false')
@@ -191,7 +205,6 @@ class NewSitesController extends Controller
                                                 ->table('site_stage_tracking')
                                                 ->select('sam_id')
                                                 ->where('sam_id', $sam_id[$i])
-                                                // ->where('activity_id', $activities->next_activity)
                                                 ->where('activity_id', $activity)
                                                 ->where('activity_complete', 'false')
                                                 ->get();
@@ -204,59 +217,48 @@ class NewSitesController extends Controller
                                     'user_id' => \Auth::id()
                                 ]);
                             }
-                        } else {
-                            // $activity_name = $activities->activity_name;
-                            // $activity = $get_activity->return_activity;
-
-                            $activity = $activities->return_activity;
-
-                            $get_activitiess = \DB::connection('mysql2')
-                                            ->table('stage_activities')
-                                            ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                            ->where('activity_id', $activity)
-                                            ->where('program_id', $program_id)
-                                            ->where('category', $site_category[$i])
-                                            ->first();
-
-                            $activity_name = $get_activitiess->activity_name;
-
-                            // SiteStageTracking::where('sam_id', $sam_id[$i])
-                            //                         ->where('activity_id', ">", $activity)
-                            //                         ->delete();
-
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    // ->where('activity_id', $activity_id[$i])
-                                                    ->update([
-                                                        'activity_complete' => "true"
-                                                    ]);
-        
-                            // SiteStageTracking::where('sam_id', $sam_id[$i])
-                            //                         ->where('activity_id', $activity)
-                            //                         ->update([
-                            //                             'activity_complete' => "false"
-                            //                         ]);
-
-                            SiteStageTracking::create([
-                                'sam_id' => $sam_id[$i],
-                                'activity_id' => $activity,
-                                'activity_complete' => 'false',
-                                'user_id' => \Auth::id()
-                            ]);
                         }
-        
-                        $array = array(
+                    } else {
+
+                        $activity = $activities->return_activity;
+
+                        $get_activitiess = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                        ->where('activity_id', $activity)
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[$i])
+                                        ->first();
+
+                        $activity_name = $get_activitiess->activity_name;
+
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
+                                                // ->where('activity_id', $activity_id[$i])
+                                                ->update([
+                                                    'activity_complete' => "true"
+                                                ]);
+    
+
+                        SiteStageTracking::create([
+                            'sam_id' => $sam_id[$i],
                             'activity_id' => $activity,
-                            'activity_name' => $activity_name,
-                            'profile_id' => $get_activitiess->profile_id,
-                            'category' => $site_category[$i],
-                            'activity_created' => Carbon::now()->toDateString(),
-                        );
-        
-                        Site::where('sam_id', $sam_id[$i])
-                        ->update([
-                            'activities' => json_encode($array)
+                            'activity_complete' => 'false',
+                            'user_id' => \Auth::id()
                         ]);
-                    // }
+                    }
+    
+                    $array = array(
+                        'activity_id' => $activity,
+                        'activity_name' => $activity_name,
+                        'profile_id' => $get_activitiess->profile_id,
+                        'category' => $site_category[$i],
+                        'activity_created' => Carbon::now()->toDateString(),
+                    );
+    
+                    Site::where('sam_id', $sam_id[$i])
+                    ->update([
+                        'activities' => json_encode($array)
+                    ]);
                 }
             }
         }
