@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 
 
 use App\Models\User;
+use App\Models\UserLog;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -65,6 +66,11 @@ class FortifyServiceProvider extends ServiceProvider
     
             if ($user &&
                 Hash::check($request->password, $user->password)) {
+
+                UserLog::create([
+                    'user_id' => $user->id
+                ]);
+
                 return $user;
             }
         });

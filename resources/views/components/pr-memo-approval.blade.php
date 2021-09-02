@@ -420,7 +420,7 @@
                                                     <small class="text-danger remarks-error"></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    {{-- <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_data->id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $json['generated_pr_memo'] }}">Reject PR Memo</button> --}}
+                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_number }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}">Reject PR Memo</button>
                                                     
                                                     <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                                 </div>
