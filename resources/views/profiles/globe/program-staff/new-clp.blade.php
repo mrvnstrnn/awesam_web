@@ -382,6 +382,8 @@
 
         var sam_id = $(this).attr("data-id");
 
+        console.log("test");
+
         $("tr.tr" + sam_id).remove();
 
         var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
@@ -410,7 +412,6 @@
                         .map(function(){
                             sam_id.push($(this).val())
                         }).get();
-
         $.ajax({
             url: "/add-pr-po",
             method: "POST",
@@ -443,7 +444,7 @@
                         
                         $(".add_pr_po").removeAttr("disabled");
                         $(".add_pr_po").text("Create PR/PO");
-                        // $(".remove_td").trigger("click");
+                        $(".remove_td").trigger("click");
                         $(".pr_po_form")[0].reset();
                     });
 

@@ -1793,6 +1793,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
                             ->whereIn('activity_id', [2, 3, 4])
+                            ->where('profile_id', \Auth::user()->profile_id)
                             ->get();
         }
 
