@@ -1633,41 +1633,12 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine_completed'){
 
-            // $sites = \DB::connection('mysql2')
-            //                 ->table("milestone_tracking")
-            //                 ->distinct()
-            //                 ->where('program_id', $program_id)
-            //                 ->where('activity_complete', 'true')
-            //                 ->where("site_agent_id", \Auth::id())
-            //                 ->get();
-
-            // $sites = \DB::connection('mysql2')
-            //                 ->table("stage_activities")
-            //                 ->leftjoin('site_stage_tracking', 'site_stage_tracking.activity_id', 'stage_activities.activity_id')
-            //                 ->leftjoin('site', function($join){
-            //                     $join->on('site.sam_id', 'site_stage_tracking.sam_id');
-            //                     $join->on('site.program_id', 'stage_activities.program_id');
-            //                 })
-            //                 ->leftjoin('site_users', 'site_users.sam_id', 'site.sam_id')
-            //                 ->where('site.program_id', $program_id)
-            //                 ->where('stage_activities.activity_type', 'complete');
-
-            // if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 3 ) {
-            //     $sites = $sites->where("site_users.agent_id", \Auth::id());
-            // } else {
-            //     $sites->where('site.program_id', $program_id)
-            //                 ->where("site_stage_tracking.activity_complete", 'true')
-            //                 ->get();
-            // }
-
             $last_act = \DB::connection('mysql2') 
                                         ->table("stage_activities")
                                         ->select('activity_id')
                                         ->where('program_id', $program_id)
                                         ->orderBy('activity_id', 'desc')
                                         ->first();
-
-                                        // dd($last_act);
 
             $sites = \DB::connection('mysql2') 
                                 ->table("site")
@@ -1680,9 +1651,6 @@ class GlobeController extends Controller
                                 ->where('activities->activity_id', $last_act->activity_id)
                                 ->get();
                             
-                            
-
-            // return \Auth::user()->profile_id;
         }
 
         elseif($activity_type == 'is'){
@@ -1738,7 +1706,6 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site approval'){
 
-            // if (\Auth::user()->profile_id == 9 || \Auth::user()->profile_id == 10 || \Auth::user()->profile_id == 6 || \Auth::user()->profile_id == 7 ) {
                 $sites = \DB::connection('mysql2') 
                                 ->table("milestone_tracking")
                                 ->where('program_id', $program_id)
@@ -1746,33 +1713,9 @@ class GlobeController extends Controller
                                 ->where('profile_id', \Auth::user()->profile_id)
                                 ->where('activity_complete', 'false')
                                 ->get();
-            // } else {
-            //     $sites = \DB::connection('mysql2') 
-            //                 ->table("milestone_tracking")
-            //                 ->distinct()
-            //                 ->where('program_id', $program_id)
-            //                 ->where('activity_type', 'site approval')
-            //                 ->where('profile_id', \Auth::user()->profile_id)
-            //                 ->where('activity_complete', 'false')
-            //                 ->get();
-            // }
 
         }
 
-
-        // elseif($activity_type == 'site prmemo'){
-        //     $sites = \DB::connection('mysql2') 
-        //                     ->table("milestone_tracking")
-        //                     ->select('milestone_tracking.*', 'pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
-        //                     ->leftjoin("pr_memo_site", "pr_memo_site.sam_id", "milestone_tracking.sam_id")
-        //                     ->leftjoin("site", "site.sam_id", "milestone_tracking.sam_id")
-        //                     ->where('milestone_tracking.program_id', $program_id)
-        //                     ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
-        //                     ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
-        //                     ->where('milestone_tracking.activity_complete', 'false')
-        //                     ->get();
-
-        // }
         elseif($activity_type == 'vendor awarding'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
@@ -1783,7 +1726,6 @@ class GlobeController extends Controller
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
-                            // ->where('site.activities->activity_id', '3')
                             ->whereIn('activity_id', [5])
                             ->get();
 
@@ -1910,37 +1852,30 @@ class GlobeController extends Controller
         elseif($activity_type == 'new endorsements globe'){
 
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
-                    ->leftjoin('site', 'milestone_tracking.sam_id', 'site.sam_id')
-                    ->distinct()
-                    ->where('milestone_tracking.program_id', $program_id)
-                    ->where('activity_type', 'endorsement')
+                    ->table("view_sites_activity")
+                    ->whereIn('activity_id', [7])
                     ->where('profile_id', \Auth::user()->profile_id)
-                    ->where('activity_complete', 'false')
                     ->get();
 
         }
         elseif($activity_type == 'new endorsements vendor'){
             
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
-                    ->distinct()
+                    ->table("view_sites_activity")
                     ->where('program_id', $program_id)
-                    ->where('activity_type', 'endorsement')
+                    ->whereIn('activity_id', [7])
                     ->where('profile_id', \Auth::user()->profile_id)
-                    ->where('activity_complete', 'false')
                     ->get();
         }
 
         elseif($activity_type == 'unassigned sites'){
             
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
-                    ->distinct()
-                    ->where('program_id', $program_id)
-                    ->where('activity_type', 'unassigned site')
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+                ->table("view_sites_activity")
+                ->where('program_id', $program_id)
+                ->whereIn('activity_id', [8])
+                ->where('profile_id', \Auth::user()->profile_id)
+                ->get();
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')
