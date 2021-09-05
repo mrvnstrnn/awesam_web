@@ -65,7 +65,11 @@ function makeDT(whatTable, whatCols, table_to_load) {
                     "visible": true,
                     "searchable": true,
                     "render": function ( data, type, row ) {
-                        return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div>';
+                        if (row['region_name'] == undefined || row['province_name'] == undefined || row['lgu_name'] == undefined) {
+                            return '<div class="font-weight-bold">' + data +'</div><div></div><div> <small>'+ row['sam_id'] + '</small></div>';
+                        } else {
+                            return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div>';
+                        }
                     },
                 },
                 {

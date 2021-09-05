@@ -358,7 +358,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/submit-subactivity-step', [GlobeController::class, 'submit_subactivity_step']);
 
     // PR / PO
-    Route::get('/get-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'get_fiancial_analysis']);
+    // Route::get('/get-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'get_fiancial_analysis']);
+    Route::post('/get-fiancial-analysis', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
     Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
     Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);

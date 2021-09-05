@@ -472,6 +472,9 @@
 
     $(document).on("click", ".recommend, .no_thanks", function(e){
         $(".approve_reject_pr[data-data_action=true]").trigger("click");
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
     });
     
     $(".approve_reject_pr, .confirm_reject").on("click", function(e){
@@ -553,7 +556,6 @@
                 if(!resp.error){
                     $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
-                        $("#recommendationModal").modal("hide");
                         Swal.fire(
                             'Success',
                             resp.message,
@@ -564,6 +566,15 @@
 
                         $("#"+button_id).removeAttr("disabled");
                         $("#"+button_id).text(button_text);
+
+                        if (activity_name == "NAM PR Memo Approval") {
+                            $("#recommendationModal").modal("hide");
+                            $(".recommend").removeAttr("disabled");
+                            $(".no_thanks").removeAttr("disabled");
+
+                            $(".recommend").text("Recommend");
+                            $(".no_thanks").text("No, thanks");
+                        }
                     });
                 } else {
                     
@@ -582,6 +593,14 @@
                     
                     $("#"+button_id).removeAttr("disabled");
                     $("#"+button_id).text(button_text);
+
+                    if (activity_name == "NAM PR Memo Approval") {
+                        $(".recommend").removeAttr("disabled");
+                        $(".no_thanks").removeAttr("disabled");
+
+                        $(".recommend").text("Recommend");
+                        $(".no_thanks").text("No, thanks");
+                    }
                 }
             },
             error: function(resp){
@@ -592,6 +611,14 @@
                 )
                 $("#"+button_id).removeAttr("disabled");
                 $("#"+button_id).text(button_text);
+
+                if (activity_name == "NAM PR Memo Approval") {
+                    $(".recommend").removeAttr("disabled");
+                    $(".no_thanks").removeAttr("disabled");
+
+                    $(".recommend").text("Recommend");
+                    $(".no_thanks").text("No, thanks");
+                }
             }
         });
 
