@@ -1793,6 +1793,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
                             ->whereIn('activity_id', [2, 3, 4])
+                            ->where('profile_id', \Auth::user()->profile_id)
                             ->get();
         }
 
@@ -3268,43 +3269,51 @@ class GlobeController extends Controller
     //                                               //
     ///////////////////////////////////////////////////
 
-    public function get_fiancial_analysis ($sam_id, $vendor)
+    // public function get_fiancial_analysis ($sam_id, $vendor)
+    public function get_fiancial_analysis (Request $request)
     {
         try {
-            $sites = \DB::connection('mysql2')
+            $sam_id = $request->input('sam_id');
+            $vendor = $request->input('vendor');
+
+            $sites_collect = collect();
+            for ($i=0; $i < count($sam_id); $i++) { 
+                $sites = \DB::connection('mysql2')
                             ->table('new_sites')
-                            ->where('sam_id', $sam_id)
+                            ->where('sam_id', $sam_id[$i])
                             ->first();
 
-            $fsa_data = \DB::connection('mysql2')
-                            ->table('fsa_table')
-                            ->where('vendor_id', $vendor)
-                            ->where('region', $sites->region)
-                            ->where('province', $sites->province)
-                            ->where('province', $sites->town_city)
-                            ->get();
+                $fsa_data = \DB::connection('mysql2')
+                                ->table('fsa_table')
+                                ->where('vendor_id', $vendor)
+                                ->where('region', $sites->region)
+                                ->where('province', $sites->province)
+                                ->where('province', $sites->town_city)
+                                ->get();
 
-            $fsa_line_items = FsaLineItem::where('sam_id', $sam_id)->get();
+                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->get();
 
-            if (count($fsa_line_items) == 0) {
-                foreach ($fsa_data as $fsa) {
-                    FsaLineItem::create([
-                        'sam_id' => $sam_id,
-                        'fsa_id' => $fsa->fsa_id,
-                    ]);
+                if (count($fsa_line_items) == 0) {
+                    foreach ($fsa_data as $fsa) {
+                        FsaLineItem::create([
+                            'sam_id' => $sam_id[$i],
+                            'fsa_id' => $fsa->fsa_id,
+                        ]);
+                    }
                 }
+
+                $sites_collect->push($sites);
             }
 
-
-            $pricings = FsaLineItem::join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-                            ->where('site_line_items.sam_id', $sam_id)->get();
-
+            $pricings = FsaLineItem::select('fsa_table.price')
+                            ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                            ->whereIn('site_line_items.sam_id', $sam_id)->get();
             $sites_fsa = collect();
             foreach ($pricings as $pricing) {
                 $sites_fsa->push($pricing->price);
             }
 
-            return response()->json([ 'error' => false, 'message' => $sites, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
+            return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
             
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

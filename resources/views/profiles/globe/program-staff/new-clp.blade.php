@@ -171,8 +171,8 @@
                                                                     ->where('activities->profile_id', '8')
                                                                     ->get();
                                                 @endphp
-                                                <select name="financial_analysis" id="financial_analysis" class="form-control">
-                                                    <option value="">Select site</option>
+                                                <select name="financial_analysis[]" id="financial_analysis" style="width: 100%" class="form-control" multiple="multiple">
+                                                    {{-- <option value="">Select site</option> --}}
                                                     @foreach ($sites as $site)
                                                     <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->search_ring }}</option>
                                                     @endforeach
@@ -243,9 +243,9 @@
 
 <script>
 
-    // $(document).ready(function() {
-    //     $('#financial_analysis').select2();
-    // });
+    $(document).ready(function() {
+        $('#financial_analysis').select2();
+    });
 
     // $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
@@ -308,27 +308,46 @@
             $(this).text("Processing...");
 
             $.ajax({
-                url: "/get-fiancial-analysis/" + sam_id + "/" + vendor,
-                method: "GET",
+                url: "/get-fiancial-analysis",
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data : {
+                    sam_id : sam_id,
+                    vendor : vendor,
+                },
                 success: function (resp) {
                     if (!resp.error) {
-                        $(".table_financial_analysis table tbody").append("<tr class='tr"+resp.message.sam_id+"'>" + 
-                            "<td><strong>"+resp.message.search_ring+"</strong><br><small><strong>S/N:</strong> "+ resp.message.serial_number +" | <strong>SAM ID: </strong>"+ resp.message.sam_id +"</small></td>" +
-                            "<td>"+resp.message.region+"</td>" +
-                            "<td>"+resp.message.province+"</td>" +
-                            "<td>"+resp.sites_fsa+"</td>" +
-                            "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+resp.message.sam_id+"' data-sam_id='"+sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+resp.message.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
-                            "</tr>");
+                        resp.message.forEach(element => {
+                            $(".table_financial_analysis table tbody").append("<tr class='tr"+element.sam_id+"'>" + 
+                                "<td><strong>"+element.search_ring+"</strong><br><small><strong>S/N:</strong> "+ element.serial_number +" | <strong>SAM ID: </strong>"+ element.sam_id +"</small></td>" +
+                                "<td>"+element.region+"</td>" +
+                                "<td>"+element.province+"</td>" +
+                                "<td>"+resp.sites_fsa+"</td>" +
+                                "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element.sam_id+"' data-sam_id='"+sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+element.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                                "</tr>");
+
+
+                            // $("select option.option"+element.sam_id).addClass("d-none");
+                            $("select option.option"+element.sam_id).attr("disabled", "disabled");
+
+                            $("#financial_analysis").val(null).trigger("change"); 
+                    
+                            $(".input_hidden").append(
+                                "<input class='hidden_sam_id' value='"+element.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element.sam_id+"'>"
+                            );
+                        });
 
                         var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
 
                         $("#requested_amount").val(sum);
 
-                        $("select option.option"+resp.message.sam_id).addClass("d-none");
+                        // $("select option.option"+resp.message.sam_id).addClass("d-none");
                         
-                        $(".input_hidden").append(
-                            "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
-                        );
+                        // $(".input_hidden").append(
+                        //     "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
+                        // );
 
                         $("#financial_analysis").val("");
 
@@ -363,13 +382,18 @@
 
         var sam_id = $(this).attr("data-id");
 
+        console.log("test");
+
         $("tr.tr" + sam_id).remove();
 
         var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
 
         $("#requested_amount").val(sum);
 
-        $("select option.option" + sam_id).removeClass("d-none");
+        // $("select option.option" + sam_id).removeClass("d-none");
+        
+        $("select option.option" + sam_id).removeAttr("disabled");
+
         $(".input_hidden input#sam_id" + sam_id).remove();
 
 
@@ -388,7 +412,6 @@
                         .map(function(){
                             sam_id.push($(this).val())
                         }).get();
-
         $.ajax({
             url: "/add-pr-po",
             method: "POST",
@@ -421,7 +444,7 @@
                         
                         $(".add_pr_po").removeAttr("disabled");
                         $(".add_pr_po").text("Create PR/PO");
-                        // $(".remove_td").trigger("click");
+                        $(".remove_td").trigger("click");
                         $(".pr_po_form")[0].reset();
                     });
 

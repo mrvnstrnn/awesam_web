@@ -162,47 +162,55 @@
                         @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("New CLP", "PR Memo", "PR Issuance", "Vendor Awarding")))
 
                             <div class="row mb-3 pb-3 text-center border-bottom">
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title pr_memo_creation_count">{{ \Auth::user()->newsite_count_site(2, $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">PR Memo Creation</h6>
+                                <div class="col-md-5 col-12">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title pr_memo_creation_count">{{ \Auth::user()->newsite_count_site(2, $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">PR Memo Creation</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title ram_head_approval_count">{{ \Auth::user()->newsite_count_site(3, $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">RAM Head Approval</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title nam_approval_count">{{ \Auth::user()->newsite_count_site(4, $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">NAM Approval</h6>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title ram_head_approval_count">{{ \Auth::user()->newsite_count_site(3, $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">RAM Head Approval</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title nam_approval_count">{{ \Auth::user()->newsite_count_site(4, $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">NAM Approval</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title arriba_pr_no_issuance_number">{{ \Auth::user()->newsite_count_site(5, $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Arriba PR # Issuance</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title vendor_awarding_count">{{ \Auth::user()->newsite_count_site(6, $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Vendor Awarding</h6>
-                                    </div>
-                                </div>
-                                {{-- <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">{{ \Auth::user()->newsite_count_site("", $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Completed</h6>
-                                    </div>
-                                </div> --}}
 
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">{{ \Auth::user()->newsite_count_site("completed", $program->program_id) }}</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Total Sites</h6>
+                                <div class="col-md-7 col-12">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title arriba_pr_no_issuance_number">{{ \Auth::user()->newsite_count_site(5, $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Arriba PR # Issuance</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title vendor_awarding_count">{{ \Auth::user()->newsite_count_site(6, $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Vendor Awarding</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title">{{ \Auth::user()->newsite_count_site("completed", $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Completed</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
+                                            <div>
+                                                <h1 class="menu-header-title">{{ \Auth::user()->newsite_count_site("", $program->program_id) }}</h1>
+                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Total Sites</h6>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
