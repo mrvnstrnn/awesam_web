@@ -275,7 +275,7 @@
                                     <tbody>
                                     </tbody>
                                 </table>                        
-                                @if($activitytype=='new endorsements globe' || $activitytype=='new endorsements vendor')
+                                @if($activitytype=='new endorsements globe' || $activitytype=='new endorsements vendor' || $activitytype=='new endorsements apmo')
                                     {{-- @if (\Auth::user()->profile_id != 8 && $program->program_id == 5) --}}
                                         <div class="text-right mt-2 pt-2 button_endorsement_area">
                                             <button type="button" class="btn btn-primary btn-sm btn-bulk-acceptreject-endorsement btn-shadow" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">
