@@ -1886,7 +1886,7 @@ class GlobeController extends Controller
                     ->table("view_sites_activity")
                     ->where('program_id', $program_id)
                     // ->whereIn('activity_id', [7])
-                    ->where('activity_id', [7])
+                    // ->where('activity_id', [7])
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
         }
@@ -3340,6 +3340,7 @@ class GlobeController extends Controller
     public function add_pr_po(Request $request)
     {
         try {
+            // return response()->json(['error' => false, 'message' => "test"]);
             // $file= public_path() . "/files/1623380277user_details.csv";
 
             // $headers = array(
@@ -3546,6 +3547,41 @@ class GlobeController extends Controller
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_create_pr_memo ()
+    {
+        try {
+
+            $what_modal = "components.create-pr-memo";
+
+            $vendors = Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
+                                            ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+                                            ->where("vendor_programs.programs", 1)
+                                            ->get();
+
+            $sites = \DB::connection('mysql2') 
+                                ->table("site")
+                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                                ->leftjoin("new_sites", "new_sites.sam_id", "site.sam_id")
+                                ->where('site.program_id', 1)
+                                ->where('activities->activity_id', '2')
+                                ->where('activities->profile_id', '8')
+                                ->get();
+
+            return \View::make($what_modal)
+            ->with([
+                'vendors' => $vendors,
+                'sites' => $sites
+            ])
+            ->render();
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
