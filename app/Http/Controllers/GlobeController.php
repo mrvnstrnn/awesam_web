@@ -1859,6 +1859,17 @@ class GlobeController extends Controller
                     ->get();
 
         }
+
+        elseif($activity_type == 'new endorsements apmo'){
+
+            $sites = \DB::connection('mysql2') 
+                    ->table("view_sites_activity")
+                    ->whereNull('activity_id')
+                    ->whereNull('profile_id')
+                    ->get();
+
+        }
+
         elseif($activity_type == 'new endorsements vendor'){
             
             $sites = \DB::connection('mysql2') 
