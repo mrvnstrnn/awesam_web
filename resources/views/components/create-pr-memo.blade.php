@@ -1,4 +1,4 @@
-<div class="modal fade" id="craetePrPoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+<div class="modal fade" id="craetePrPoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
@@ -187,76 +187,260 @@
         });
     });
 
-    $(".add_new_site").unbind("click").on("click", function(e){
-        e.preventDefault();
-        
-        var sam_id = $("#financial_analysis").val();
-        var vendor = $("#vendor").val();
+        $(".add_new_site").unbind("click").on("click", function(e){
+            e.preventDefault();
+            
+            var sam_id = $("#financial_analysis").val();
+            var vendor = $("#vendor").val();
 
-        if (sam_id != "") {
+            if (sam_id != "") {
 
-            $(this).attr("disabled", "disabled");
-            $(this).text("Processing...");
+                $(this).attr("disabled", "disabled");
+                $(this).text("Processing...");
 
-            $.ajax({
-                url: "/get-fiancial-analysis",
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data : {
-                    sam_id : sam_id,
-                    vendor : vendor,
-                },
-                success: function (resp) {
-                    if (!resp.error) {
-                        resp.message.forEach(element => {
-                            
-                            var sum_fsa = 0;
-                            for (let i = 0; i < element.length; i++) {
-                                sum_fsa = Number(sum_fsa) + Number(element[i].price);
-                            }
+                $.ajax({
+                    url: "/get-fiancial-analysis",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data : {
+                        sam_id : sam_id,
+                        vendor : vendor,
+                    },
+                    success: function (resp) {
+                        if (!resp.error) {
+                            resp.message.forEach(element => {
+                                
+                                var sum_fsa = 0;
+                                for (let i = 0; i < element.length; i++) {
+                                    sum_fsa = Number(sum_fsa) + Number(element[i].price);
+                                }
 
-                            $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
-                                "<td><strong>"+element[0].search_ring+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
-                                "<td>"+element[0].region+"</td>" +
-                                "<td>"+element[0].province+"</td>" +
-                                "<td>"+sum_fsa+"</td>" +
-                                "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
-                                "</tr>");
+                                $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
+                                    "<td><strong>"+element[0].search_ring+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                    "<td>"+element[0].region+"</td>" +
+                                    "<td>"+element[0].province+"</td>" +
+                                    "<td>"+sum_fsa+"</td>" +
+                                    "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                                    "</tr>");
 
-                            $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
+                                $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
 
-                            $("#financial_analysis").val(null).trigger("change"); 
-                    
-                            $(".input_hidden").append(
-                                "<input class='hidden_sam_id' value='"+element[0].sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element[0].sam_id+"'>"
-                            );
-                        });
-
-                        var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
-
-                        $("#requested_amount").val(sum);
-
-                        // $("select option.option"+resp.message.sam_id).addClass("d-none");
+                                $("#financial_analysis").val(null).trigger("change"); 
                         
-                        // $(".input_hidden").append(
-                        //     "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
-                        // );
+                                $(".input_hidden").append(
+                                    "<input class='hidden_sam_id' value='"+element[0].sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element[0].sam_id+"'>"
+                                );
+                            });
 
-                        $("#financial_analysis").val("");
+                            var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
+
+                            $("#requested_amount").val(sum);
+
+                            // $("select option.option"+resp.message.sam_id).addClass("d-none");
+                            
+                            // $(".input_hidden").append(
+                            //     "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
+                            // );
+
+                            $("#financial_analysis").val("");
+
+                            $(".add_new_site").removeAttr("disabled");
+                            $(".add_new_site").text("Add");
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+
+                            $(".add_new_site").removeAttr("disabled");
+                            $(".add_new_site").text("Add");
+                        }
+                    },
+                    error: function (resp) {
+                        Swal.fire(
+                            'Error',
+                            resp,
+                            'error'
+                        )
 
                         $(".add_new_site").removeAttr("disabled");
                         $(".add_new_site").text("Add");
+                    }
+                });
+            }
+        });
+
+        $(document).unbind("click").on("click", ".remove_td", function(e){
+            console.log("test");
+
+            var sam_id = $(this).attr("data-id");
+
+            $("tr.tr" + sam_id).remove();
+
+            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+
+            $("#requested_amount").val(sum);
+
+            // $("select option.option" + sam_id).removeClass("d-none");
+            
+            $("select option.option" + sam_id).removeAttr("disabled");
+
+            $(".input_hidden input#sam_id" + sam_id).remove();
+
+        });
+
+        $(document).unbind("click").on("click", ".add_pr_po", function (e) {
+            e.preventDefault();
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+            
+            $(".pr_po_form small").text("");
+
+            var sam_id = [];
+            var values = $("input[name='sam_id[]']")
+                            .map(function(){
+                                sam_id.push($(this).val())
+                            }).get();
+            $.ajax({
+                url: "/add-pr-po",
+                method: "POST",
+                data: $(".pr_po_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+                        for (let i = 0; i < sam_id.length; i++) {
+                            $("select option.option"+sam_id[i]).addClass("d-none");
+                            $(".input_hidden input#sam_id"+sam_id[i]).remove();
+                        }
+
+                        $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
+
+                        
+                            $(".pr_po_form #file_name").val(resp.file_name);
+                            // $(".print_to_pdf").trigger("click");
+
+                            var pdf_link = "/files/pdf/" + resp.file_name;
+
+                            Swal.fire(
+                                'Success',
+                                resp.message + "<br><a href='"+pdf_link+"' download='"+resp.file_name+"'>Download PR Memo</a>",
+                                'success'
+                            )
+
+                            // $(".table_site_count").load(location.href + " .table_site_count");
+
+                            $("#craetePrPoModal").modal("hide");
+                            
+                            $(".add_pr_po").removeAttr("disabled");
+                            $(".add_pr_po").text("Create PR Memo");
+                            $(".remove_td").trigger("click");
+                            $(".pr_po_form")[0].reset();
+                        });
+
+                        // $(".file_view").removeClass("d-none");
+                        // $(".form_div").addClass("d-none");
+
+                        // var extensions = ["pdf", "jpg", "png"];
+                        
+                        // if( extensions.includes(resp.file_name.split('.').pop()) == true) {     
+                        //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/' + resp.file_name + '" allowfullscreen></iframe>';
+                        // } else {
+                        //     htmltoload = '<div class="text-center my-5"><a href="/files/pdf/' + resp.file_name + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+                        // }
+                        
+                        // $('.file_view_child').html('');
+                        // $('.file_view_child').html(htmltoload);
+
+                        // $(".input_hidden input").remove();
+
+                        
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".pr_po_form ." + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".add_pr_po").removeAttr("disabled");
+                        $(".add_pr_po").text("Create PR Memo");
+                    }
+                },
+                error: function (resp){
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                    $(".add_pr_po").removeAttr("disabled");
+                    $(".add_pr_po").text("Create PR Memo");
+                }
+            });
+        });
+
+        $(".table_financial_analysis").unbind("click").on("click", ".line_item_td", function (e){
+            e.preventDefault();
+
+            var sam_id = $(this).attr('data-sam_id');
+            
+            var vendor = $("#vendor").val();
+
+            $("#craetePrPoModal .menu-header-title").text(sam_id);
+
+            $("#craetePrPoModal .line_items_area").removeClass("d-none");
+            $("#craetePrPoModal .form_div").addClass("d-none");
+
+            $(".line_items_area div").remove();
+
+            $.ajax({
+                url: "/get-line-items/" + sam_id + "/" +vendor,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        // console.log(resp.message);
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".line_items_area").append(
+                                    '<div><label><b>'+index+'</b></label></div>'
+                                );
+
+                                $.each(data, function(i, checkbox_data) {
+                                    $(".line_items_area").append(
+                                        '<div class="form-group">' +
+                                        '<input type="checkbox" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
+                                        '</label></div>'
+                                    );
+                                });
+                            });
+
+
+                            resp.site_items.forEach(element => {
+                                $("input[value='" + element.fsa_id + "']").prop('checked', true);
+                            });
+
+                            $(".line_items_area").append(
+                                '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Cancel</button> <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items" data-sam_id="'+sam_id+'"">Save line items</button></div>'
+                            );
+                        }
                     } else {
                         Swal.fire(
                             'Error',
                             resp.message,
                             'error'
                         )
-
-                        $(".add_new_site").removeAttr("disabled");
-                        $(".add_new_site").text("Add");
                     }
                 },
                 error: function (resp) {
@@ -265,263 +449,93 @@
                         resp,
                         'error'
                     )
-
-                    $(".add_new_site").removeAttr("disabled");
-                    $(".add_new_site").text("Add");
                 }
             });
-        }
-    });
+        });
 
-    $(document).on("click", ".remove_td", function(e){
+        $(".line_items_area").unbind("click").on("click", ".save_line_items", function(e){
+            e.preventDefault();
 
-        var sam_id = $(this).attr("data-id");
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
 
-        $("tr.tr" + sam_id).remove();
+            var sam_id = $(this).attr('data-sam_id');
+            var inputElements = document.getElementsByName('line_item');
 
-        var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+            line_item_id = [];
+            for(var i=0; inputElements[i]; ++i){
+                if(inputElements[i].checked){
+                    line_item_id.push(inputElements[i].value);
+                }
+            }
 
-        $("#requested_amount").val(sum);
-
-        // $("select option.option" + sam_id).removeClass("d-none");
-        
-        $("select option.option" + sam_id).removeAttr("disabled");
-
-        $(".input_hidden input#sam_id" + sam_id).remove();
-
-    });
-
-    $("#craetePrPoModal").unbind("click").on("click", ".add_pr_po", function (e) {
-        e.preventDefault();
-
-        $(this).attr("disabled", "disabled");
-        $(this).text("Processing...");
-        
-        $(".pr_po_form small").text("");
-
-        var sam_id = [];
-        var values = $("input[name='sam_id[]']")
-                        .map(function(){
-                            sam_id.push($(this).val())
-                        }).get();
-        $.ajax({
-            url: "/add-pr-po",
-            method: "POST",
-            data: $(".pr_po_form").serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                if (!resp.error) {
-                    for (let i = 0; i < sam_id.length; i++) {
-                        $("select option.option"+sam_id[i]).addClass("d-none");
-                        $(".input_hidden input#sam_id"+sam_id[i]).remove();
-                    }
-
-                    $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
-
-                    
-                        $(".pr_po_form #file_name").val(resp.file_name);
-                        // $(".print_to_pdf").trigger("click");
-
-                        var pdf_link = "/files/pdf/" + resp.file_name;
+            $.ajax({
+                url: "/save-line-items",
+                data: {
+                    line_item_id : line_item_id,
+                    sam_id : sam_id,
+                },
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if (!resp.error) {
 
                         Swal.fire(
                             'Success',
-                            resp.message + "<br><a href='"+pdf_link+"' download='"+resp.file_name+"'>Download PR Memo</a>",
+                            resp.message,
                             'success'
                         )
-
-                        // $(".table_site_count").load(location.href + " .table_site_count");
-
-                        $("#craetePrPoModal").modal("hide");
                         
-                        $(".add_pr_po").removeAttr("disabled");
-                        $(".add_pr_po").text("Create PR/PO");
-                        $(".remove_td").trigger("click");
-                        $(".pr_po_form")[0].reset();
-                    });
+                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
+                        
+                        $('#financial_analysis').val(sam_id).trigger('change');
 
-                    // $(".file_view").removeClass("d-none");
-                    // $(".form_div").addClass("d-none");
+                        $(".add_new_site").trigger("click");
 
-                    // var extensions = ["pdf", "jpg", "png"];
-                    
-                    // if( extensions.includes(resp.file_name.split('.').pop()) == true) {     
-                    //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/pdf/' + resp.file_name + '" allowfullscreen></iframe>';
-                    // } else {
-                    //     htmltoload = '<div class="text-center my-5"><a href="/files/pdf/' + resp.file_name + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
-                    // }
-                    
-                    // $('.file_view_child').html('');
-                    // $('.file_view_child').html(htmltoload);
+                        $(".cancel_line_items").trigger("click");
 
-                    // $(".input_hidden input").remove();
-
-                    
-                } else {
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $(".pr_po_form ." + index + "-error").text(data);
-                        });
+                        $(".save_line_items").removeAttr("disabled");
+                        $(".save_line_items").text("Save line items");
                     } else {
                         Swal.fire(
                             'Error',
                             resp.message,
                             'error'
                         )
+
+                        $(".save_line_items").removeAttr("disabled");
+                        $(".save_line_items").text("Save line items");
                     }
+                },
+                error: function(resp){
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
 
-                    $(".add_pr_po").removeAttr("disabled");
-                    $(".add_pr_po").text("Create PR/PO");
+                    $(".save_line_items").removeAttr("disabled");
+                        $(".save_line_items").text("Save line items");
                 }
-            },
-            error: function (resp){
-                
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
 
-                $(".add_pr_po").removeAttr("disabled");
-                $(".add_pr_po").text("Create PR/PO");
-            }
+            });
         });
-    });
 
-    $(document).on("click", ".line_item_td", function (e){
-        e.preventDefault();
-
-        var sam_id = $(this).attr('data-sam_id');
+        $("#craetePrPoModal").unbind("click").on("click", ".cancel_line_items", function(e){
+            $("#craetePrPoModal .line_items_area").addClass("d-none");
+            $("#craetePrPoModal .form_div").removeClass("d-none");
+        });
         
-        var vendor = $("#vendor").val();
+        $(document).on("click", ".edit_form_pdf", function (e) {
+            $(".line_items_area div").remove();
 
-        $("#craetePrPoModal .menu-header-title").text(sam_id);
-
-        $("#craetePrPoModal .line_items_area").removeClass("d-none");
-        $("#craetePrPoModal .form_div").addClass("d-none");
-
-        $(".line_items_area div").remove();
-
-        $.ajax({
-            url: "/get-line-items/" + sam_id + "/" +vendor,
-            method: "GET",
-            success: function (resp) {
-                if (!resp.error) {
-                    // console.log(resp.message);
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $(".line_items_area").append(
-                                '<div><label><b>'+index+'</b></label></div>'
-                            );
-
-                            $.each(data, function(i, checkbox_data) {
-                                $(".line_items_area").append(
-                                    '<div class="form-group">' +
-                                    '<input type="checkbox" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
-                                    '</label></div>'
-                                );
-                            });
-                        });
-
-
-                        resp.site_items.forEach(element => {
-                            $("input[value='" + element.fsa_id + "']").prop('checked', true);
-                        });
-
-                        $(".line_items_area").append(
-                            '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Cancel</button> <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items" data-sam_id="'+sam_id+'"">Save line items</button></div>'
-                        );
-                    }
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-                }
-            },
-            error: function (resp) {
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
+            $(".file_view").addClass("d-none");
+            $(".form_div").removeClass("d-none");
         });
-    });
-
-    $(document).on("click", ".save_line_items", function(e){
-        e.preventDefault();
-
-        var sam_id = $(this).attr('data-sam_id');
-        var inputElements = document.getElementsByName('line_item');
-
-        line_item_id = [];
-        for(var i=0; inputElements[i]; ++i){
-            if(inputElements[i].checked){
-                line_item_id.push(inputElements[i].value);
-            }
-        }
-
-        $.ajax({
-            url: "/save-line-items",
-            data: {
-                line_item_id : line_item_id,
-                sam_id : sam_id,
-            },
-            method: "POST",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if (!resp.error) {
-
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
-                    
-                    $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
-
-                    
-                    $('#financial_analysis').val(sam_id).trigger('change');
-
-                    $(".add_new_site").trigger("click");
-
-                    $(".cancel_line_items").trigger("click");
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-                }
-            },
-            error: function(resp){
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
-
-        });
-    });
-
-    $(document).on("click", ".cancel_line_items", function(e){
-        $("#craetePrPoModal .line_items_area").addClass("d-none");
-        $("#craetePrPoModal .form_div").removeClass("d-none");
-    });
-    
-    $(document).on("click", ".edit_form_pdf", function (e) {
-        $(".line_items_area div").remove();
-
-        $(".file_view").addClass("d-none");
-        $(".form_div").removeClass("d-none");
-    });
+        
+    // });
     
 
 </script>

@@ -3682,6 +3682,11 @@ class GlobeController extends Controller
                 $activity_id = collect();
                 $site_category = collect();
 
+                PrMemoTable::where('generated_pr_memo', $request->input('pr_memo'))
+                                ->update([
+                                    'status' => $request->input("data_action")
+                                ]);
+
                 foreach ($sites as $site) {
                     $sam_id->push($site->sam_id);
                     if ($request->input("activity_name") == "NAM PR Memo Approval") {
