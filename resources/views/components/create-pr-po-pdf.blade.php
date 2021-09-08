@@ -220,7 +220,7 @@
                                             }
                                         @endphp
 
-                                        {{ $sum_total }}
+                                        {{ number_format($sum_total, 2) }}
                                     </td>
                                     {{-- <td>{{ $sum_total = $sum_total + $site[0]->price }}</td> --}}
                                 </tr>
