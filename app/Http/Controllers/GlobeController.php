@@ -3355,14 +3355,6 @@ class GlobeController extends Controller
     public function add_pr_po(Request $request)
     {
         try {
-            // return response()->json(['error' => false, 'message' => "test"]);
-            // $file= public_path() . "/files/1623380277user_details.csv";
-
-            // $headers = array(
-            //         'Content-Type: application/pdf',
-            //     );
-
-            // return \Response::download($file, 'filename.pdf', $headers);
 
             $validate = \Validator::make($request->all(), array(
                 'budget_source' => 'required',
@@ -3390,7 +3382,10 @@ class GlobeController extends Controller
 
                 $sites = \DB::connection('mysql2')
                                 ->table('new_sites')
-                                ->whereIn('sam_id', $request->input("sam_id"))
+                                ->select('site_line_items.fsa_id', 'new_sites.*', 'fsa_table.price')
+                                ->leftjoin('site_line_items', 'site_line_items.sam_id', 'new_sites.sam_id')
+                                ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                                ->whereIn('new_sites.sam_id', $request->input("sam_id"))
                                 ->get();
 
                 $view = \View::make('components.create-pr-po-pdf')
@@ -3406,14 +3401,22 @@ class GlobeController extends Controller
                         'subject' => $request->input("subject"),
                         'thru' => $request->input("thru"),
                         'to' => $request->input("to"),
-                        'sites' => $sites,
+                        // 'sites' => $sites,
+                        'sites' => $sites->groupBy('sam_id'),
                     ])
                     ->render();
+
+                // $asd = collect();
+                // foreach ($sites as $site) {
+                //     $asd->push($site->price);
+                // }
+                // return response()->json([ 'error' => true, 'message' => $asd->all() ]);
 
                 $pdf = \App::make('dompdf.wrapper');
                 $pdf = PDF::loadHTML($view);
                 $pdf->setPaper('a4', 'landscape');
                 $pdf->download();
+
                 // $pdf->setWarnings(false);
 
                 // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
