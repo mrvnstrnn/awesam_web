@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Ceate PR Memo</title>
+        <title>Create PR Memo</title>
         <style>
                 @page {
                     margin: 0px; 
