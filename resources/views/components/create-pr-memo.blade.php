@@ -187,7 +187,7 @@
         });
     });
 
-    $(document).on("click", ".add_new_site", function(e){
+    $(".add_new_site").unbind("click").on("click", function(e){
         e.preventDefault();
         
         var sam_id = $("#financial_analysis").val();
@@ -211,22 +211,26 @@
                 success: function (resp) {
                     if (!resp.error) {
                         resp.message.forEach(element => {
-                            $(".table_financial_analysis table tbody").append("<tr class='tr"+element.sam_id+"'>" + 
-                                "<td><strong>"+element.search_ring+"</strong><br><small><strong>S/N:</strong> "+ element.serial_number +" | <strong>SAM ID: </strong>"+ element.sam_id +"</small></td>" +
-                                "<td>"+element.region+"</td>" +
-                                "<td>"+element.province+"</td>" +
-                                "<td>"+resp.sites_fsa+"</td>" +
-                                "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element.sam_id+"' data-sam_id='"+sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+resp.sites_fsa+"' data-sam_id='"+sam_id+"' data-id='"+element.sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                            
+                            var sum_fsa = 0;
+                            for (let i = 0; i < element.length; i++) {
+                                sum_fsa = Number(sum_fsa) + Number(element[i].price);
+                            }
+
+                            $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
+                                "<td><strong>"+element[0].search_ring+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                "<td>"+element[0].region+"</td>" +
+                                "<td>"+element[0].province+"</td>" +
+                                "<td>"+sum_fsa+"</td>" +
+                                "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
                                 "</tr>");
 
-
-                            // $("select option.option"+element.sam_id).addClass("d-none");
-                            $("select option.option"+element.sam_id).attr("disabled", "disabled");
+                            $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
 
                             $("#financial_analysis").val(null).trigger("change"); 
                     
                             $(".input_hidden").append(
-                                "<input class='hidden_sam_id' value='"+element.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element.sam_id+"'>"
+                                "<input class='hidden_sam_id' value='"+element[0].sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element[0].sam_id+"'>"
                             );
                         });
 
@@ -287,7 +291,7 @@
 
     });
 
-    $(document).on("click", ".add_pr_po", function (e) {
+    $("#craetePrPoModal").unbind("click").on("click", ".add_pr_po", function (e) {
         e.preventDefault();
 
         $(this).attr("disabled", "disabled");
@@ -327,6 +331,8 @@
                             resp.message + "<br><a href='"+pdf_link+"' download='"+resp.file_name+"'>Download PR Memo</a>",
                             'success'
                         )
+
+                        // $(".table_site_count").load(location.href + " .table_site_count");
 
                         $("#craetePrPoModal").modal("hide");
                         
