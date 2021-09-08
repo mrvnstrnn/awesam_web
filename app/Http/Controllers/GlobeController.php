@@ -1722,6 +1722,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'vendor awarding'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
+                            ->where('status', '!=', 'denied')
                             ->whereIn('activity_id', [6])
                             ->get();
         }
@@ -1729,6 +1730,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
+                            ->where('status', '!=', 'denied')
                             ->whereIn('activity_id', [5])
                             ->get();
 
@@ -1738,6 +1740,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
                             ->whereIn('activity_id', [2, 3, 4])
+                            ->where('status', '!=', 'denied')
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->get();
         }
@@ -3684,7 +3687,7 @@ class GlobeController extends Controller
 
                 PrMemoTable::where('generated_pr_memo', $request->input('pr_memo'))
                                 ->update([
-                                    'status' => $request->input("data_action")
+                                    'status' => $request->input("data_action") == "false" ? "denied" : "approved"
                                 ]);
 
                 foreach ($sites as $site) {
