@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Ceate PR Memo</title>
+        <title>Create PR Memo</title>
         <style>
                 @page {
                     margin: 0px; 
@@ -198,19 +198,31 @@
                         <table id="financial_table">
                             <thead>
                                 <tr>
-                                    <th>Site ID</th>
-                                    <th>Search Ring Name</th>
-                                    <th>Region</th>
-                                    <th>Province</th>
+                                    <th style="width: 15%">Site ID</th>
+                                    <th style="width: 40%">Search Ring Name</th>
+                                    <th style="width: 15%">Region</th>
+                                    <th style="width: 15%">Province</th>
+                                    <th style="width: 15%">GROSS AMOUNT PHP  (VAT EXCULUSIVE)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($sites as $site)
+                                @php $sum_total = 0; @endphp
                                 <tr>
-                                    <td>{{ $site->serial_number }}</td>
-                                    <td>{{ $site->search_ring }}</td>
-                                    <td>{{ $site->region }}</td>
-                                    <td>{{ $site->province }}</td>
+                                    <td>{{ $site[0]->serial_number }}</td>
+                                    <td>{{ $site[0]->search_ring }}</td>
+                                    <td>{{ $site[0]->region }}</td>
+                                    <td>{{ $site[0]->province }}</td>
+                                    <td>
+                                        @php
+                                            for ($i = 0; $i < count($site); $i++) {
+                                                $sum_total = $sum_total + $site[$i]->price;
+                                            }
+                                        @endphp
+
+                                        {{ number_format($sum_total, 2) }}
+                                    </td>
+                                    {{-- <td>{{ $sum_total = $sum_total + $site[0]->price }}</td> --}}
                                 </tr>
                                 @endforeach
                             </tbody>

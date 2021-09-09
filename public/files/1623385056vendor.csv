@@ -1,5 +1,0 @@
-"vendor_id","vendor_fullname","vendor_admin_email","vendor_sec_reg_name","vendor_acronym","vendor_office_address","vendor_status","created_at","updated_at"
-"1","Huawei","huawei@gmail.com","Sec huawei","HT","HT Headquarter, Makati City","Complete Offboarding","2021-05-04 13:01:00","2021-05-04 13:01:00"
-"2","Nokia","nokia@gmail.com","Sec nokia","NK","NK plaza, BGC, taguig City","Ongoing Offboarding","2021-05-04 13:05:00","2021-05-04 13:05:00"
-"3","Marvin Esternon","maesternon@absi.ph","Huawei Philippines","Huawei PH","713 Barangay Poblacion 7 Tanauan City, Batangas","Ongoing Offboarding",NULL,NULL
-"4","aris salvador","arhizsx@gmail.com","TEST VENDOR","TV","QC","Ongoing Offboarding",NULL,NULL

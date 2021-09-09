@@ -312,44 +312,46 @@ class User extends Authenticatable implements MustVerifyEmail
 
             $sites = \DB::connection('mysql2') 
                         ->table("site")
-                        ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                        ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                        ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                        ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                        ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                        ->where('site.program_id', $program_id)
+                        ->select('sam_id')
+                        ->where('program_id', $program_id)
                         ->where('activities->activity_id', $last_act->activity_id)
                         ->get();
+                        
         } else if ( $activity != "" ) {
-            if ( $activity == 2 ) {
+            // if ( $activity == 2 ) {
+            //     $sites = \DB::connection('mysql2') 
+            //                     ->table("site")
+            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                     ->where('site.program_id', $program_id)
+            //                     ->whereJsonContains('activities->activity_id', '2')
+            //                     ->whereJsonContains('activities->profile_id', 8)
+            //                     ->get();
+                                
+            // } else {
+                // $sites = \DB::connection('mysql2') 
+                //                 ->table("pr_memo_table")
+                //                 ->select('site.sam_id')
+                //                 ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
+                //                 ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
+                //                 ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+                //                 ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+                //                 ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+                //                 ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+                //                 ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+                //                 ->where('site.activities->activity_id', $activity)
+                //                 ->get();
                 $sites = \DB::connection('mysql2') 
                                 ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                ->whereJsonContains('activities->activity_id', '2')
-                                ->whereJsonContains('activities->profile_id', \Auth::user()->profile_id)
+                                ->select('sam_id')
+                                ->where('program_id', $program_id)
+                                ->where('activities->activity_id', $activity)
                                 ->get();
-                                
-            } else {
-                $sites = \DB::connection('mysql2') 
-                                ->table("pr_memo_table")
-                                ->select('site.sam_id')
-                                ->join('pr_memo_site', 'pr_memo_table.generated_pr_memo', 'pr_memo_site.pr_memo_id')
-                                ->join('site', 'pr_memo_site.sam_id', 'site.sam_id')
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                // ->whereJsonContains('activities->activity_id', $activity)
-                                ->where('site.activities->activity_id', $activity)
-                                ->get();
-            }
-        } else {
+            // }
+        } else if ( $activity == "" ) {
             $last_act = \DB::connection('mysql2') 
                                 ->table("stage_activities")
                                 ->select('activity_id')
@@ -359,12 +361,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
             $sites = \DB::connection('mysql2') 
                                 ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
+                                ->select('sam_id')
+                                ->where('program_id', $program_id)
                                 ->where('activities->activity_id', '!=', $last_act->activity_id)
                                 ->get();
         }

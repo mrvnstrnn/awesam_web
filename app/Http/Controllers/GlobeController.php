@@ -1722,6 +1722,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'vendor awarding'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
+                            ->where('status', '!=', 'denied')
                             ->whereIn('activity_id', [6])
                             ->get();
         }
@@ -1729,6 +1730,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
+                            ->where('status', '!=', 'denied')
                             ->whereIn('activity_id', [5])
                             ->get();
 
@@ -1738,6 +1740,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo")
                             ->whereIn('activity_id', [2, 3, 4])
+                            ->where('status', '!=', 'denied')
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->get();
         }
@@ -3234,23 +3237,24 @@ class GlobeController extends Controller
             $vendor = $request->input('vendor');
 
             $sites_collect = collect();
+            $sites_fsa = collect();
             for ($i=0; $i < count($sam_id); $i++) { 
-                $sites = \DB::connection('mysql2')
+                $sites_data = \DB::connection('mysql2')
                             ->table('new_sites')
                             ->where('sam_id', $sam_id[$i])
                             ->first();
-
+                            
                 $fsa_data = \DB::connection('mysql2')
                                 ->table('fsa_table')
                                 ->where('vendor_id', $vendor)
-                                ->where('region', $sites->region)
-                                ->where('province', $sites->province)
-                                ->where('province', $sites->town_city)
+                                ->where('region', $sites_data->region)
+                                ->where('province', $sites_data->province)
+                                ->where('province', $sites_data->town_city)
                                 ->get();
 
                 $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->get();
 
-                if (count($fsa_line_items) == 0) {
+                if (count($fsa_line_items) < 1) {
                     foreach ($fsa_data as $fsa) {
                         FsaLineItem::create([
                             'sam_id' => $sam_id[$i],
@@ -3259,16 +3263,27 @@ class GlobeController extends Controller
                     }
                 }
 
+                $sites = \DB::connection('mysql2')
+                            ->table('site_line_items')
+                            ->leftjoin('new_sites', 'new_sites.sam_id', 'site_line_items.sam_id')
+                            ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                            ->where('new_sites.sam_id', $sam_id[$i])
+                            ->get();
+
                 $sites_collect->push($sites);
+
+                $pricings = FsaLineItem::select('fsa_table.price')
+                            ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                            ->where('site_line_items.sam_id', $sam_id[$i])
+                            ->get();
+
+                foreach ($pricings as $pricing) {
+                    $sites_fsa->push($pricing->price);
+                }
+
             }
 
-            $pricings = FsaLineItem::select('fsa_table.price')
-                            ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-                            ->whereIn('site_line_items.sam_id', $sam_id)->get();
-            $sites_fsa = collect();
-            foreach ($pricings as $pricing) {
-                $sites_fsa->push($pricing->price);
-            }
+            // return response()->json(['error' => true, 'message' => $sites_collect ]);
 
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
             
@@ -3340,14 +3355,6 @@ class GlobeController extends Controller
     public function add_pr_po(Request $request)
     {
         try {
-            // return response()->json(['error' => false, 'message' => "test"]);
-            // $file= public_path() . "/files/1623380277user_details.csv";
-
-            // $headers = array(
-            //         'Content-Type: application/pdf',
-            //     );
-
-            // return \Response::download($file, 'filename.pdf', $headers);
 
             $validate = \Validator::make($request->all(), array(
                 'budget_source' => 'required',
@@ -3375,7 +3382,10 @@ class GlobeController extends Controller
 
                 $sites = \DB::connection('mysql2')
                                 ->table('new_sites')
-                                ->whereIn('sam_id', $request->input("sam_id"))
+                                ->select('site_line_items.fsa_id', 'new_sites.*', 'fsa_table.price')
+                                ->leftjoin('site_line_items', 'site_line_items.sam_id', 'new_sites.sam_id')
+                                ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                                ->whereIn('new_sites.sam_id', $request->input("sam_id"))
                                 ->get();
 
                 $view = \View::make('components.create-pr-po-pdf')
@@ -3391,14 +3401,22 @@ class GlobeController extends Controller
                         'subject' => $request->input("subject"),
                         'thru' => $request->input("thru"),
                         'to' => $request->input("to"),
-                        'sites' => $sites,
+                        // 'sites' => $sites,
+                        'sites' => $sites->groupBy('sam_id'),
                     ])
                     ->render();
+
+                // $asd = collect();
+                // foreach ($sites as $site) {
+                //     $asd->push($site->price);
+                // }
+                // return response()->json([ 'error' => true, 'message' => $asd->all() ]);
 
                 $pdf = \App::make('dompdf.wrapper');
                 $pdf = PDF::loadHTML($view);
                 $pdf->setPaper('a4', 'landscape');
                 $pdf->download();
+
                 // $pdf->setWarnings(false);
 
                 // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
@@ -3425,6 +3443,7 @@ class GlobeController extends Controller
                     'site_category' => $request->input("site_category"),
                     'vendor_id' => $request->input("vendor"),
                     'user_id' => \Auth::id(),
+                    'status' => "pending",
                 ]);
 
                 for ($i=0; $i < count($request->input("sam_id")); $i++) { 
@@ -3574,6 +3593,7 @@ class GlobeController extends Controller
                                 ->where('site.program_id', 1)
                                 ->where('activities->activity_id', '2')
                                 ->where('activities->profile_id', '8')
+                                ->orderBy('search_ring', 'asc')
                                 ->get();
 
             return \View::make($what_modal)
@@ -3667,6 +3687,11 @@ class GlobeController extends Controller
                 $sam_id = collect();
                 $activity_id = collect();
                 $site_category = collect();
+
+                PrMemoTable::where('generated_pr_memo', $request->input('pr_memo'))
+                                ->update([
+                                    'status' => $request->input("data_action") == "false" ? "denied" : "approved"
+                                ]);
 
                 foreach ($sites as $site) {
                     $sam_id->push($site->sam_id);

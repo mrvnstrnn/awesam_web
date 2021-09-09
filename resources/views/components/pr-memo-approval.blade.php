@@ -14,13 +14,13 @@
     $data = json_decode($pr_memo);
 
     // UNIQUE KEY
-        $pr_memo_number = $data->generated_pr_memo;
+    $pr_memo_number = $data->generated_pr_memo;
 
-        $pr_memo_data = \DB::table('pr_memo_table')
-                            ->join('view_pr_memo', 'pr_memo_table.generated_pr_memo', 'view_pr_memo.generated_pr_memo')
-                            ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
-                            ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
-                            ->first();
+    $pr_memo_data = \DB::table('pr_memo_table')
+                        ->join('view_pr_memo', 'pr_memo_table.generated_pr_memo', 'view_pr_memo.generated_pr_memo')
+                        ->select('pr_memo_table.*', 'view_pr_memo.vendor_acronym')
+                        ->where('pr_memo_table.generated_pr_memo', $pr_memo_number)
+                        ->first();
 
     $pr_memo_sites = \DB::table('pr_memo_site')
                             ->join('view_sites_with_location', 'view_sites_with_location.sam_id', 'pr_memo_site.sam_id')
@@ -256,7 +256,7 @@
                                                                         $vendor = $vendors->vendor_acronym;
                                                                     }
                                                                 @endphp
-                                                                <input type="text" class="form-control" data-id="{{ $vendor }}" name="vendor" id="vendor" readonly value="{{ $vendor }}">
+                                                                <input type="text" class="form-control" data-id="{{ $vendor }}" data-vendor_id="{{ $pr_memo_data->vendor_id }}" name="vendor" id="vendor" readonly value="{{ $vendor }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -420,7 +420,7 @@
                                                     <small class="text-danger remarks-error"></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_number }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}">Reject PR Memo</button>
+                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_number }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" type="button" data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}">Reject PR Memo</button>
                                                     
                                                     <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                                 </div>
@@ -470,14 +470,14 @@
         $(".preview_div").addClass("d-none");
     });
 
-    $(document).on("click", ".recommend, .no_thanks", function(e){
+    $(".recommend, .no_thanks").unbind("click").on("click", function(e){
         $(".approve_reject_pr[data-data_action=true]").trigger("click");
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
     });
     
-    $(".approve_reject_pr, .confirm_reject").on("click", function(e){
+    $(".approve_reject_pr, .confirm_reject").unbind("click").on("click", function(e){
         e.preventDefault();
 
         var data_action = $(this).attr('data-data_action');
@@ -643,7 +643,7 @@
         var sam_id = $(this).attr('data-sam_id');
         var site_name = $(this).attr('data-site_name');
         
-        var vendor = $("#vendor").attr('data-id');
+        var vendor = $("#vendor").attr('data-vendor_id');
 
         $("#viewInfoModal .line_items_area").removeClass("d-none");
         $("#viewInfoModal .pr_memo_site_table").addClass("d-none");
@@ -660,6 +660,7 @@
 
                         $(".line_items_area").append('<H4>' + site_name +'</H4><hr>');
 
+                        var total_price = 0;
                         $.each(resp.message, function(index, data) {
                             $(".line_items_area").append(
                                 '<div class="mt-3"><label><b>'+index+'</b></label></div>'
@@ -679,8 +680,21 @@
                                         '</div>' + 
                                     '</div>'
                                 );
+
+                                total_price = Number( total_price ) + Number( checkbox_data.price );
                             });
                         });
+
+                        $(".line_items_area").append(
+                            '<hr>' +
+                            '<div class="row pt-2">'+
+                                '<div class="col-md-4 col-4"></div>' + 
+                                '<div class="col-md-4 col-4"><div class="row float-right"><label for="line_item_total"><b>Total: </b></label></div></div>' + 
+                                '<div class="col-md-4 col-4">' +
+                                    total_price +
+                                '</div>' + 
+                            '</div>'
+                        );
 
 
                         resp.site_items.forEach(element => {
@@ -712,7 +726,7 @@
         });        
     });
 
-    $(document).on("click", ".cancel_line_items", function(e){
+    $("#viewInfoModal").unbind("click").on("click", ".cancel_line_items", function(e){
         e.preventDefault();
         
         // $("#viewInfoModal .menu-header-title").text( "PR Memo" );
