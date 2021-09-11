@@ -1745,12 +1745,31 @@ class GlobeController extends Controller
                             ->get();
         }
 
+        elseif($activity_type == 'pr memo approved'){
+            $sites = \DB::connection('mysql2') 
+                            ->table("view_pr_memo")
+                            ->whereIn('activity_id', [2, 3, 4])
+                            ->where('status', '!=', 'denied');
+
+                            if (\Auth::user()->profile_id == 10) {
+                                $sites->where('profile_id', \Auth::user()->profile_id)
+                                ->get();
+                            } else if (\Auth::user()->profile_id == 9) {
+                                $sites->whereIn('profile_id', [8, 10])
+                                ->get();
+                            } else {
+                                $sites->whereIn('profile_id', [9, 10])
+                                ->get();
+                            }
+        }
+
         elseif($activity_type == 'new clp'){
             $sites = \DB::connection('mysql2') 
                                 ->table("view_sites_per_program")
                                 ->where('program_id', $program_id)                                
                                 ->whereIn('activity_id', [2])
-                            ->get();
+                                ->where('profile_id', \Auth::user()->profile_id)
+                                ->get();
 
         }
 

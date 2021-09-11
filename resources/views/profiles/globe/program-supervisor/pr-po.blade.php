@@ -12,6 +12,10 @@
 
     <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Memo" activitytype="pr memo"/>
 
+    @if (\Auth::user()->profile_id != 10)
+        <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="Memo Approved" activitytype="pr memo approved"/>
+    @endif
+
 @endsection
 
 
