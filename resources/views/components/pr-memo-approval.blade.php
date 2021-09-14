@@ -576,6 +576,12 @@
                             $(".no_thanks").text("No, thanks");
                         }
                     });
+
+                    if (activity_name == "RAM Head PR Memo Approval") {
+                        $(".assigned-sites-table").DataTable().ajax.reload();
+                    } else if (activity_name == "NAM PR Memo Approval") {
+                        $(".assigned-sites-table").DataTable().ajax.reload();
+                    }
                 } else {
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {

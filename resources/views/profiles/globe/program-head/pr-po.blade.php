@@ -10,7 +10,8 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Memo" activitytype="pr memo"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo for Approval" activitytype="pr memo"/>
+    <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo List" activitytype="pr memo approved"/>
 
 @endsection
 

@@ -10,11 +10,8 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo" activitytype="pr memo"/>
-
-    @if (\Auth::user()->profile_id != 10)
-    <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo Approved" activitytype="pr memo approved"/>
-    @endif
+    <x-pr-po-pending-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo Pending Approval" activitytype="pr memo pending approval"/>
+    <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo List" activitytype="pr memo"/>
 
 @endsection
 

@@ -482,13 +482,13 @@
                 success: function(resp){
                     if (!resp.error) {
 
+                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
+
                         Swal.fire(
                             'Success',
                             resp.message,
                             'success'
                         )
-                        
-                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
                         
                         $('#financial_analysis').val(sam_id).trigger('change');
 
