@@ -11,7 +11,7 @@
 </style>    
 
     <x-pr-po-pending-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo Pending Approval" activitytype="pr memo pending approval"/>
-    <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo List" activitytype="pr memo"/>
+    <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo List" activitytype="pr memo approved"/>
 
 @endsection
 

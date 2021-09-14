@@ -1738,28 +1738,18 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'pr memo'){
             $sites = \DB::connection('mysql2') 
-                            ->table("view_pr_memo_v2");
+                            ->table("view_pr_memo");
                             // ->where('status', '!=', 'denied');
 
                             if (\Auth::user()->profile_id == 8) {
-                                $sites
-                                // ->whereIn('activity_id', [3, 4])
+                                $sites->where('activity_id', '>', 3)
                                 ->get();
                             } else if (\Auth::user()->profile_id == 9) {
-                                $sites
-                                // ->where('profile_id', \Auth::user()->profile_id)
-                                //         ->whereIn('activity_id', [3])
+                                $sites->where('activity_id', 3)
                                         ->get();
                             } else if (\Auth::user()->profile_id == 10) {
-                                $sites
-                                // ->where('profile_id', \Auth::user()->profile_id)
-                                        // ->whereIn('activity_id', [4])
-                                        ->get();
-                            } 
-                            // else if () {
-                                
-                            // }
-                            // ->where('profile_id', \Auth::user()->profile_id)
+                                $sites->where('activity_id', 4)->get();
+                            }
                             
         }
 
@@ -1773,11 +1763,11 @@ class GlobeController extends Controller
                                     ->whereIn('profile_id', [8, 9, 10])
                                     ->get();
                             } else if (\Auth::user()->profile_id == 9) {
-                                $sites->whereIn('activity_id', [2, 3, 4])
-                                        ->whereIn('profile_id', [8, 10])
+                                $sites->whereIn('activity_id', [4])
+                                        ->whereIn('profile_id', [8, 10])    
                                         ->get();
-                            } else {
-                                $sites->whereIn('activity_id', [3, 4])
+                            } else if (\Auth::user()->profile_id == 8) {
+                                $sites->whereIn('activity_id', [3])
                                         ->whereIn('profile_id', [9, 10])
                                         ->get();
                             }
@@ -1786,8 +1776,18 @@ class GlobeController extends Controller
         elseif($activity_type == 'pr memo approved'){
             $sites = \DB::connection('mysql2') 
                             ->table("view_pr_memo_v2")
-                            ->whereIn('profile_id', [8, 9, 10])
-                            ->get();
+                            ->whereIn('profile_id', [8, 9, 10]);
+
+                            if (\Auth::user()->profile_id == 10) {
+                                $sites->where('activity_id', '>', 4)
+                                    ->get();
+                            } else if (\Auth::user()->profile_id == 9) {
+                                $sites->where('activity_id', '>', 4)   
+                                        ->get();
+                            } else if (\Auth::user()->profile_id == 8) {
+                                $sites->where('activity_id', '>', '2')
+                                        ->get();
+                            }
         }
 
         elseif($activity_type == 'new clp'){
