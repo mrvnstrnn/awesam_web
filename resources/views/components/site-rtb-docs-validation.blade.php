@@ -357,7 +357,7 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
-    $(".approve_reject_doc_btns").on("click", function (e){
+    $(".file_preview").on("click", ".approve_reject_doc_btns", function (e){
         e.preventDefault();
         $(".confirmation_message").removeClass("d-none");
         $(".file_preview").addClass("d-none");

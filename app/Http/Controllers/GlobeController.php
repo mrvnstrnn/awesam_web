@@ -3032,7 +3032,12 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $dt = DataTables::of($sub_activity_id);
+            $dt = DataTables::of($sub_activity_id)
+                                ->addColumn('value', function($row){
+                                    $json = json_decode($row->value, true);
+
+                                    return $json['file'];
+                                });
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
