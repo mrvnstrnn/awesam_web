@@ -46,6 +46,11 @@ use App\Notifications\SiteEndorsementNotification;
 
 class GlobeController extends Controller
 {
+    public function clean_table ()
+    {
+        return \DB::connection('mysql2')->statement('call `clean_variables`()');
+    }
+
     public function getDataNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
     {
         try {
@@ -200,7 +205,7 @@ class GlobeController extends Controller
                     }
                 }
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation") {
 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
