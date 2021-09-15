@@ -248,14 +248,14 @@
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
     // });
 
-    $(".btn_create_pr").unbind("click").on("click", function(e){
+    $(".btn_create_pr").on("click", function(e){
         e.preventDefault();
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        loader = '<div class="p-2">Loading...</div>';
-        $.blockUI({ message: loader });
+        // loader = '<div class="p-2">Loading...</div>';
+        // $.blockUI({ message: loader });
 
         $.ajax({
             url: "/get-create-pr-memo",
@@ -266,7 +266,7 @@
             },
             success: function (resp){
                 // if (!resp.error) {
-                    $.unblockUI();
+                    // $.unblockUI();
 
                     $(".btn_create_pr").removeAttr("disabled");
                     $(".btn_create_pr").text("Create PR Memo");
@@ -282,7 +282,7 @@
                 // }
             },
             error: function (resp){
-                $.unblockUI();
+                // $.unblockUI();
 
                 $(".btn_create_pr").removeAttr("disabled");
                 $(".btn_create_pr").text("Create PR Memo");

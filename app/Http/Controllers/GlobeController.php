@@ -192,6 +192,14 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
+                if (\Auth::user()->profile_id == 12) {
+                    for ($i=0; $i < count($samid); $i++) { 
+                        Site::where('sam_id', $samid)->update([
+                            'program_endorsement_date' => Carbon::now()
+                        ]);
+                    }
+                }
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation") {
 
                 $notification = "Site successfully " .$message;
@@ -422,12 +430,12 @@ class GlobeController extends Controller
 
                                 // $activity_name = $get_activitiess->activity_name;
                                 $activity_name = $get_activity->activity_name;
-                                $check_done = \DB::connection('mysql2')
-                                                        ->table('site_stage_tracking')
-                                                        ->select('sam_id')
-                                                        ->where('sam_id', $sam_id[$i])
-                                                        ->where('activity_complete', 'false')
-                                                        ->get();
+                                // $check_done = \DB::connection('mysql2')
+                                //                         ->table('site_stage_tracking')
+                                //                         ->select('sam_id')
+                                //                         ->where('sam_id', $sam_id[$i])
+                                //                         ->where('activity_complete', 'false')
+                                //                         ->get();
         
                                 $activity = $get_activity->activity_id;
                                 // $activity = $get_activitiess->activity_id;
@@ -448,14 +456,14 @@ class GlobeController extends Controller
                                                     ->where('activity_complete', 'false')
                                                     ->get();
 
-                                if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
+                                // if ( count($check_if_added) <= 1 ) {
                                     SiteStageTracking::create([
                                         'sam_id' => $sam_id[$i],
                                         'activity_id' => $activity,
                                         'activity_complete' => 'false',
                                         'user_id' => \Auth::id()
                                     ]);
-                                }
+                                // }
                             }
                         } else {
                             // $activity_name = $activities->activity_name;
@@ -1412,7 +1420,7 @@ class GlobeController extends Controller
             $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
             
             if ($request->input('activity_name') == 'Set Approved Site') {
-                return response()->json(['error' => false, 'message' => "Successfully set a approve site."]);
+                return response()->json(['error' => false, 'message' => "Successfully set a approved site."]);
             } else if ($request->input('activity_name') != 'Vendor Awarding') {
                 return response()->json(['error' => false, 'message' => "Successfully approved a SSDS."]);
             } else {
@@ -1737,7 +1745,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr memo'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                             ->table("view_pr_memo");
                             // ->where('status', '!=', 'denied');
 
@@ -1775,8 +1783,8 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'pr memo approved'){
             $sites = \DB::connection('mysql2') 
-                            ->table("view_pr_memo_v2")
-                            ->whereIn('profile_id', [8, 9, 10]);
+                            ->table("view_pr_memo_v2");
+                            // ->whereIn('profile_id', [8, 9, 10]);
 
                             if (\Auth::user()->profile_id == 10) {
                                 $sites->where('activity_id', '>', 4)

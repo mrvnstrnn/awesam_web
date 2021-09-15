@@ -482,7 +482,7 @@
                 success: function(resp){
                     if (!resp.error) {
 
-                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
+                        $("button.remove_td[data-sam_id='"+sam_id+"']").unbind("click").trigger("click");
 
                         Swal.fire(
                             'Success',
