@@ -3308,17 +3308,27 @@ class GlobeController extends Controller
             $sites_fsa = collect();
             for ($i=0; $i < count($sam_id); $i++) { 
                 $sites_data = \DB::connection('mysql2')
-                            ->table('new_sites')
+                            ->table('site')
                             ->where('sam_id', $sam_id[$i])
                             ->first();
                             
+                // $fsa_data = \DB::connection('mysql2')
+                //                 ->table('fsa_table')
+                //                 ->where('vendor_id', $vendor)
+                //                 ->where('region', $sites_data->region)
+                //                 ->where('province', $sites_data->province)
+                //                 ->where('province', $sites_data->town_city)
+                //                 ->get();
+
                 $fsa_data = \DB::connection('mysql2')
-                                ->table('fsa_table')
+                                ->table('fsaq')
                                 ->where('vendor_id', $vendor)
-                                ->where('region', $sites_data->region)
-                                ->where('province', $sites_data->province)
-                                ->where('province', $sites_data->town_city)
+                                ->where('region_id', $sites_data->site_region_id)
+                                ->where('province_id', $sites_data->site_province_id)
+                                // ->where('lgu_id', $sites_data->site_lgu_id)
                                 ->get();
+
+                                // return response()->json(['error' => true, 'message' => $fsa_data]);
 
                 $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '!=', 'denied')->get();
 
@@ -3326,30 +3336,36 @@ class GlobeController extends Controller
                     foreach ($fsa_data as $fsa) {
                         FsaLineItem::create([
                             'sam_id' => $sam_id[$i],
-                            'fsa_id' => $fsa->fsa_id,
+                            // 'fsa_id' => $fsa->fsa_id,
+                            'fsa_id' => $fsa->id,
                             'status' => 'pending',
                         ]);
                     }
                 }
 
-                $sites = \DB::connection('mysql2')
-                            ->table('site_line_items')
-                            ->leftjoin('new_sites', 'new_sites.sam_id', 'site_line_items.sam_id')
-                            ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-                            ->where('new_sites.sam_id', $sam_id[$i])
+                $sites = FsaLineItem::leftjoin('site', 'site.sam_id', 'site_line_items.sam_id')
+                            // ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                            ->leftjoin('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
+                            ->where('site.sam_id', $sam_id[$i])
                             ->where('site_line_items.status', '!=', 'denied')
                             ->get();
 
                 $sites_collect->push($sites);
 
-                $pricings = FsaLineItem::select('fsa_table.price')
-                            ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                // $pricings = FsaLineItem::select('fsaq.price')
+                //             ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                //             ->where('site_line_items.sam_id', $sam_id[$i])
+                //             ->where('site_line_items.status', '!=', 'denied')
+                //             ->get();
+
+                $pricings = FsaLineItem::select('fsaq.amount')
+                            ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                             ->where('site_line_items.sam_id', $sam_id[$i])
                             ->where('site_line_items.status', '!=', 'denied')
                             ->get();
 
                 foreach ($pricings as $pricing) {
-                    $sites_fsa->push($pricing->price);
+                    $sites_fsa->push($pricing->amount);
                 }
 
             }

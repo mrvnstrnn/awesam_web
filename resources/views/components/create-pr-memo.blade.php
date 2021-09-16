@@ -233,14 +233,19 @@
                                 
                                 var sum_fsa = 0;
                                 for (let i = 0; i < element.length; i++) {
-                                    sum_fsa = Number(sum_fsa) + Number(element[i].price);
+                                    // sum_fsa = Number(sum_fsa) + Number(element[i].price);
+
+                                    if (element[i].amount != '-' && element[i].amount != undefined) {
+                                        // sum_fsa = Number(sum_fsa) + Number(element[i].amount.replaceAll(/\s/g,''));
+                                        sum_fsa += Number(element[i].amount);
+                                    }
                                 }
 
                                 $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
-                                    "<td><strong>"+element[0].search_ring+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
-                                    "<td>"+element[0].region+"</td>" +
-                                    "<td>"+element[0].province+"</td>" +
-                                    "<td>"+sum_fsa+"</td>" +
+                                    "<td><strong>"+element[0].site_address+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                    "<td>"+element[0].region_id+"</td>" +
+                                    "<td>"+element[0].province_id+"</td>" +
+                                    "<td>"+sum_fsa.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+"</td>" +
                                     "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
                                     "</tr>");
 
