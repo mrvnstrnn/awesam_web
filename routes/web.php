@@ -27,6 +27,8 @@ use App\Http\Controllers\NewSitesController;
 //                                                       //
 ///////////////////////////////////////////////////////////
 
+Route::get('/clean', [GlobeController::class, 'clean_table']);
+
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/onboarding', [UserController::class, 'onboarding']);
@@ -278,7 +280,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
-
     
     Route::get('/get-my-uploaded-file-data/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploade_file_data']);
 
