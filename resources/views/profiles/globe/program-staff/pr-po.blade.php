@@ -11,7 +11,7 @@
 </style>    
 
     <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo" activitytype="pr memo"/>
-
+    
 @endsection
 
 

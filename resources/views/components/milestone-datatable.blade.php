@@ -89,16 +89,10 @@
                 </div>
             </div> 
 
-            {{-- <div class="card-header-tab card-header">
-                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                 {{ $tableheader }}
-                </div>
-            </div> --}}
             <div class="card-body" style="overflow-x: auto; max-width: 100%;">
                 <div class="tab-content">
                     @foreach ($programs as $program)
 
-                        {{-- @if(in_array($program->program_id, $allowed_programs)) --}}
                         @php
                             $li_ctr++;
                         @endphp
@@ -147,7 +141,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <p>Note 1: By clicking 'Clear Filter' will remove the filter on the table.</p> --}}
                                 </form>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -217,7 +210,6 @@
 
                         {{-- NEW SITES  JTSS  COUNTER  --}}
                         @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("Site Hunting", "JTSS Schedule", "SSDS")))
-
                             <div class="row mb-3 pb-3 text-center border-bottom">
                                 <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
                                     <div>
@@ -274,26 +266,31 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
-                                </table>                        
+                                </table> 
+
+
+                                <hr>
+
                                 @if($activitytype=='new endorsements globe' || $activitytype=='new endorsements vendor' || $activitytype=='new endorsements apmo')
-                                    {{-- @if (\Auth::user()->profile_id != 8 && $program->program_id == 5) --}}
-                                        <div class="text-right mt-2 pt-2 button_endorsement_area">
-                                            <button type="button" class="btn btn-primary btn-sm btn-bulk-acceptreject-endorsement btn-shadow" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">
-                                                @if (\Auth::user()->profile_id == 12)
-                                                    Endorse New Sites
-                                                @else
-                                                    Accept Endorsement
-                                                @endif
-                                            </button>
-                                        </div>
-                                    {{-- @endif --}}
+                                    <div class="text-right mt-2 pt-2 button_endorsement_area">
+                                        <button type="button" class="btn btn-primary btn-sm btn-bulk-acceptreject-endorsement btn-shadow" data-activity_name="endorse_site" data-program="{{ strtolower($program->program) }}" data-id="{{ $program->program_id }}" data-complete="true" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}" data-href="{{ route('accept-reject.endorsement') }}">
+                                            @if (\Auth::user()->profile_id == 12)
+                                                Endorse New Sites
+                                            @else
+                                                Accept Endorsement
+                                            @endif
+                                        </button>
+                                    </div>
                                 @endif
+
+
                            </div>
                         {{-- @endif --}}
                     @endforeach
                 </div>                
             </div>
         </div>
+
     </div>
 </div>
 
