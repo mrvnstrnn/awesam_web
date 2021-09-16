@@ -216,6 +216,11 @@
                 if (!resp.error){
 
                     $("#dtTable").DataTable().ajax.reload(function(){
+
+                        Dropzone.forElement(".dropzone_files_activities_ssds").removeAllFiles(true);
+
+                        $("input[name='file[]']").remove();
+
                         Swal.fire(
                             'Success',
                             resp.message,

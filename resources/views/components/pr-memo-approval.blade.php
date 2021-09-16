@@ -384,7 +384,7 @@
                                                 <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->generated_pr_memo }}" data-sam_id="" data-activity_name="{{ $activity }}">Set PR Number</button>
                                                 <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
-                                                <a href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
+                                                <a href="/files/pdf/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
                                             @endif
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @if (\Auth::user()->profile_id == 8)
@@ -576,6 +576,12 @@
                             $(".no_thanks").text("No, thanks");
                         }
                     });
+
+                    if (activity_name == "RAM Head PR Memo Approval") {
+                        $(".assigned-sites-table").DataTable().ajax.reload();
+                    } else if (activity_name == "NAM PR Memo Approval") {
+                        $(".assigned-sites-table").DataTable().ajax.reload();
+                    }
                 } else {
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {

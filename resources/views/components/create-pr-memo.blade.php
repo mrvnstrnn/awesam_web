@@ -185,9 +185,28 @@
         $('#financial_analysis').select2({
             width: '100%'
         });
-    });
+    // });
 
-        $(".add_new_site").unbind("click").on("click", function(e){
+        $(".remove_td").on("click", function(e){
+            console.log("test");
+
+            var sam_id = $(this).attr("data-id");
+
+            $("tr.tr" + sam_id).remove();
+
+            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+
+            $("#requested_amount").val(sum);
+
+            // $("select option.option" + sam_id).removeClass("d-none");
+            
+            $("select option.option" + sam_id).removeAttr("disabled");
+
+            $(".input_hidden input#sam_id" + sam_id).remove();
+
+        });
+
+        $(".add_new_site").on("click", function(e){
             e.preventDefault();
             
             var sam_id = $("#financial_analysis").val();
@@ -214,14 +233,19 @@
                                 
                                 var sum_fsa = 0;
                                 for (let i = 0; i < element.length; i++) {
-                                    sum_fsa = Number(sum_fsa) + Number(element[i].price);
+                                    // sum_fsa = Number(sum_fsa) + Number(element[i].price);
+
+                                    if (element[i].amount != '-' && element[i].amount != undefined) {
+                                        // sum_fsa = Number(sum_fsa) + Number(element[i].amount.replaceAll(/\s/g,''));
+                                        sum_fsa += Number(element[i].amount);
+                                    }
                                 }
 
                                 $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
-                                    "<td><strong>"+element[0].search_ring+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
-                                    "<td>"+element[0].region+"</td>" +
-                                    "<td>"+element[0].province+"</td>" +
-                                    "<td>"+sum_fsa+"</td>" +
+                                    "<td><strong>"+element[0].site_address+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                    "<td>"+element[0].region_id+"</td>" +
+                                    "<td>"+element[0].province_id+"</td>" +
+                                    "<td>"+sum_fsa.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+"</td>" +
                                     "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
                                     "</tr>");
 
@@ -271,25 +295,6 @@
                     }
                 });
             }
-        });
-
-        $(document).unbind("click").on("click", ".remove_td", function(e){
-            console.log("test");
-
-            var sam_id = $(this).attr("data-id");
-
-            $("tr.tr" + sam_id).remove();
-
-            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
-
-            $("#requested_amount").val(sum);
-
-            // $("select option.option" + sam_id).removeClass("d-none");
-            
-            $("select option.option" + sam_id).removeAttr("disabled");
-
-            $(".input_hidden input#sam_id" + sam_id).remove();
-
         });
 
         $(document).unbind("click").on("click", ".add_pr_po", function (e) {
@@ -482,13 +487,13 @@
                 success: function(resp){
                     if (!resp.error) {
 
+                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
+
                         Swal.fire(
                             'Success',
                             resp.message,
                             'success'
                         )
-                        
-                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
                         
                         $('#financial_analysis').val(sam_id).trigger('change');
 
@@ -523,7 +528,7 @@
             });
         });
 
-        $("#craetePrPoModal").unbind("click").on("click", ".cancel_line_items", function(e){
+        $("#craetePrPoModal").on("click", ".cancel_line_items", function(e){
             $("#craetePrPoModal .line_items_area").addClass("d-none");
             $("#craetePrPoModal .form_div").removeClass("d-none");
         });
@@ -535,7 +540,7 @@
             $(".form_div").removeClass("d-none");
         });
         
-    // });
+    });
     
 
 </script>
