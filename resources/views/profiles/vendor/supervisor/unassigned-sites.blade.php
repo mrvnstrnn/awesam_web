@@ -105,6 +105,8 @@
     $(document).on('click',"#btn-assign-sites", function(e){
         e.preventDefault();
 
+        $("#btn-assign-sites").unbind("click");
+
         $(this).attr('disabled', 'disabled');
         $(this).text('Processing...');
         var sam_id = $("#sam_id").val();

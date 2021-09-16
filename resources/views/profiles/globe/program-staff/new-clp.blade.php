@@ -244,55 +244,56 @@
 
 <script>
 
-    // $(document).ready(function() {
+    $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
     // });
 
-    $(".btn_create_pr").on("click", function(e){
-        e.preventDefault();
+        $(".btn_create_pr").on("click", function(e){
+            e.preventDefault();
 
-        $(this).attr("disabled", "disabled");
-        $(this).text("Processing...");
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
 
-        // loader = '<div class="p-2">Loading...</div>';
-        // $.blockUI({ message: loader });
+            // loader = '<div class="p-2">Loading...</div>';
+            // $.blockUI({ message: loader });
 
-        $.ajax({
-            url: "/get-create-pr-memo",
-            method: "POST",
-            data: $(".pr_po_form").serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                // if (!resp.error) {
+            $.ajax({
+                url: "/get-create-pr-memo",
+                method: "POST",
+                data: $(".pr_po_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    // if (!resp.error) {
+                        // $.unblockUI();
+
+                        $(".btn_create_pr").removeAttr("disabled");
+                        $(".btn_create_pr").text("Create PR Memo");
+
+                        $(".ajax_content_box").html(resp);
+                        $("#craetePrPoModal").modal("show");
+                    // } else {
+                    //     Swal.fire(
+                    //         'Error',
+                    //         resp.message,
+                    //         'error'
+                    //     )
+                    // }
+                },
+                error: function (resp){
                     // $.unblockUI();
 
                     $(".btn_create_pr").removeAttr("disabled");
                     $(".btn_create_pr").text("Create PR Memo");
 
-                    $(".ajax_content_box").html(resp);
-                    $("#craetePrPoModal").modal("show");
-                // } else {
-                //     Swal.fire(
-                //         'Error',
-                //         resp.message,
-                //         'error'
-                //     )
-                // }
-            },
-            error: function (resp){
-                // $.unblockUI();
-
-                $(".btn_create_pr").removeAttr("disabled");
-                $(".btn_create_pr").text("Create PR Memo");
-
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
         });
     });
     

@@ -417,14 +417,14 @@ class GlobeController extends Controller
                                                     ->where('category', $site_category[$i])
                                                     ->first();
 
-                            $get_activities = \DB::connection('mysql2')
-                                            ->table('stage_activities')
-                                            ->where('next_activity', $get_activitiess->next_activity)
-                                            ->where('program_id', $program_id)
-                                            ->where('category', $site_category[$i])
-                                            ->get();
+                            // $get_activities = \DB::connection('mysql2')
+                            //                 ->table('stage_activities')
+                            //                 ->where('next_activity', $get_activitiess->next_activity)
+                            //                 ->where('program_id', $program_id)
+                            //                 ->where('category', $site_category[$i])
+                            //                 ->get();
 
-                            foreach ($get_activities as $get_activity) {
+                            // foreach ($get_activities as $get_activity) {
                                 $get_activitiess = \DB::connection('mysql2')
                                                 ->table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
@@ -433,8 +433,8 @@ class GlobeController extends Controller
                                                 ->where('category', $site_category[$i])
                                                 ->first();
 
-                                // $activity_name = $get_activitiess->activity_name;
-                                $activity_name = $get_activity->activity_name;
+                                $activity_name = $get_activitiess->activity_name;
+                                // $activity_name = $get_activity->activity_name;
                                 // $check_done = \DB::connection('mysql2')
                                 //                         ->table('site_stage_tracking')
                                 //                         ->select('sam_id')
@@ -442,8 +442,8 @@ class GlobeController extends Controller
                                 //                         ->where('activity_complete', 'false')
                                 //                         ->get();
         
-                                $activity = $get_activity->activity_id;
-                                // $activity = $get_activitiess->activity_id;
+                                // $activity = $get_activity->activity_id;
+                                $activity = $get_activitiess->activity_id;
         
                                 SiteStageTracking::where('sam_id', $sam_id[$i])
                                                         ->where('activity_complete', 'false')
@@ -461,15 +461,15 @@ class GlobeController extends Controller
                                                     ->where('activity_complete', 'false')
                                                     ->get();
 
-                                // if ( count($check_if_added) <= 1 ) {
+                                if ( count($check_if_added) <= 1 ) {
                                     SiteStageTracking::create([
                                         'sam_id' => $sam_id[$i],
                                         'activity_id' => $activity,
                                         'activity_complete' => 'false',
                                         'user_id' => \Auth::id()
                                     ]);
-                                // }
-                            }
+                                }
+                            // }
                         } else {
                             // $activity_name = $activities->activity_name;
                             // $activity = $get_activity->return_activity;
@@ -1947,7 +1947,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2') 
                     ->table("view_sites_activity")
                     ->where('program_id', $program_id)
-                    // ->whereIn('activity_id', [7])
+                    ->whereIn('activity_id', [7])
                     // ->where('activity_id', [7])
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
@@ -2265,10 +2265,14 @@ class GlobeController extends Controller
         try {
             $site = \DB::connection('mysql2')
                     ->table('site_milestone')
+                    // ->table('view_sites_activity')
                     ->distinct()
                     ->where('sam_id', '=', $request['sam_id'])
                     ->where('activity_complete', "=", 'false')
+                    ->take(100)
                     ->get();
+                    
+            return response()->json(['error' => true, 'message' => $site]);
 
             if ( count($site) < 1 ) {
                 $site_fields = "";

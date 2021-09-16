@@ -160,7 +160,7 @@ class NewSitesController extends Controller
                 if (!is_null($activities)) {
                         
                     if ($action == "true") {
-                            $get_activitiess = \DB::connection('mysql2')
+                        $get_activitiess = \DB::connection('mysql2')
                                                 ->table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
@@ -168,14 +168,14 @@ class NewSitesController extends Controller
                                                 ->where('category', $site_category[$i])
                                                 ->first();
 
-                        $get_activities = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->where('next_activity', $get_activitiess->next_activity)
-                                        ->where('program_id', $program_id)
-                                        ->where('category', $site_category[$i])
-                                        ->get();
+                        // $get_activities = \DB::connection('mysql2')
+                        //                 ->table('stage_activities')
+                        //                 ->where('next_activity', $get_activitiess->next_activity)
+                        //                 ->where('program_id', $program_id)
+                        //                 ->where('category', $site_category[$i])
+                        //                 ->get();
 
-                        foreach ($get_activities as $get_activity) {
+                        // foreach ($get_activities as $get_activity) {
                             $get_activitiess = \DB::connection('mysql2')
                                             ->table('stage_activities')
                                             ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
@@ -184,19 +184,21 @@ class NewSitesController extends Controller
                                             ->where('category', $site_category[$i])
                                             ->first();
 
-                            $activity_name = $get_activity->activity_name;
-                            $check_done = \DB::connection('mysql2')
-                                                    ->table('site_stage_tracking')
-                                                    ->select('sam_id')
-                                                    ->where('sam_id', $sam_id[$i])
-                                                    ->where('activity_complete', 'false')
-                                                    ->get();
+                            $activity_name = $get_activitiess->activity_name;
+                            // $activity_name = $get_activity->activity_name;
+                            // $check_done = \DB::connection('mysql2')
+                            //                         ->table('site_stage_tracking')
+                            //                         ->select('sam_id')
+                            //                         ->where('sam_id', $sam_id[$i])
+                            //                         ->where('activity_complete', 'false')
+                            //                         ->get();
     
-                            $activity = $get_activity->activity_id;
+                            // $activity = $get_activity->activity_id;
+                            $activity = $get_activitiess->activity_id;
     
                             SiteStageTracking::where('sam_id', $sam_id[$i])
                                                     ->where('activity_complete', 'false')
-                                                    ->where('activity_id', $activity_id[$i])
+                                                    ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
                                                     ->update([
                                                         'activity_complete' => "true"
                                                     ]);
@@ -205,19 +207,20 @@ class NewSitesController extends Controller
                                                 ->table('site_stage_tracking')
                                                 ->select('sam_id')
                                                 ->where('sam_id', $sam_id[$i])
+                                                // ->where('activity_id', $activities->next_activity)
                                                 ->where('activity_id', $activity)
                                                 ->where('activity_complete', 'false')
                                                 ->get();
 
-                            if ( count($check_done) <= 1 && count($check_if_added) < 1 ) {
+                            // if ( count($check_if_added) <= 1 ) {
                                 SiteStageTracking::create([
                                     'sam_id' => $sam_id[$i],
                                     'activity_id' => $activity,
                                     'activity_complete' => 'false',
                                     'user_id' => \Auth::id()
                                 ]);
-                            }
-                        }
+                            // }
+                        // }
                     } else {
 
                         $activity = $activities->return_activity;

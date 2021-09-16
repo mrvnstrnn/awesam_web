@@ -185,9 +185,28 @@
         $('#financial_analysis').select2({
             width: '100%'
         });
-    });
+    // });
 
-        $(".add_new_site").unbind("click").on("click", function(e){
+        $(".remove_td").on("click", function(e){
+            console.log("test");
+
+            var sam_id = $(this).attr("data-id");
+
+            $("tr.tr" + sam_id).remove();
+
+            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+
+            $("#requested_amount").val(sum);
+
+            // $("select option.option" + sam_id).removeClass("d-none");
+            
+            $("select option.option" + sam_id).removeAttr("disabled");
+
+            $(".input_hidden input#sam_id" + sam_id).remove();
+
+        });
+
+        $(".add_new_site").on("click", function(e){
             e.preventDefault();
             
             var sam_id = $("#financial_analysis").val();
@@ -271,25 +290,6 @@
                     }
                 });
             }
-        });
-
-        $(document).unbind("click").on("click", ".remove_td", function(e){
-            console.log("test");
-
-            var sam_id = $(this).attr("data-id");
-
-            $("tr.tr" + sam_id).remove();
-
-            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
-
-            $("#requested_amount").val(sum);
-
-            // $("select option.option" + sam_id).removeClass("d-none");
-            
-            $("select option.option" + sam_id).removeAttr("disabled");
-
-            $(".input_hidden input#sam_id" + sam_id).remove();
-
         });
 
         $(document).unbind("click").on("click", ".add_pr_po", function (e) {
@@ -482,7 +482,7 @@
                 success: function(resp){
                     if (!resp.error) {
 
-                        $("button.remove_td[data-sam_id='"+sam_id+"']").unbind("click").trigger("click");
+                        $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
 
                         Swal.fire(
                             'Success',
@@ -523,7 +523,7 @@
             });
         });
 
-        $("#craetePrPoModal").unbind("click").on("click", ".cancel_line_items", function(e){
+        $("#craetePrPoModal").on("click", ".cancel_line_items", function(e){
             $("#craetePrPoModal .line_items_area").addClass("d-none");
             $("#craetePrPoModal .form_div").removeClass("d-none");
         });
@@ -535,7 +535,7 @@
             $(".form_div").removeClass("d-none");
         });
         
-    // });
+    });
     
 
 </script>
