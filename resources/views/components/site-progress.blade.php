@@ -5,7 +5,17 @@
         ->where('site_agent_id', "=", \Auth::id())
         ->where('activity_complete', "=", 'false')
         ->where('profile_id', "=", '2')
-        ->get();    
+        ->get();  
+        
+    // $site_status = \DB::connection('mysql2')
+    //     ->table('view_sites_activity')
+    //     ->select('site_name', 'progress', 'sam_id', 'site_category','activity_name')
+    //     ->whereJsonContains('site_agent', [
+    //         'user_id' => \Auth::id()
+    //     ])
+    //     ->where('activity_complete', 'false')
+    //     ->where('profile_id', 2)
+    //     ->get();
 @endphp
 
 @foreach ($site_status as $site_)

@@ -88,7 +88,8 @@
                     </td>
                     <td style="width: 50%; text-align: right;" valign="top">
                         <strong>PR Memo Number</strong><br>
-                        PR-MEMO-SAMPLE-1
+                        {{-- PR-MEMO-SAMPLE-1 --}}
+                        {{ $generated_pr }}
                     </td>
                 </tr>
             </table>
@@ -186,7 +187,7 @@
                     </td>
                     <td style="width: 50%; text-align: right; padding-top: 20px;" valign="top">
                         <strong>PR Memo Number</strong><br>
-                        PR-MEMO-SAMPLE-1
+                        {{ $generated_pr }}
                     </td>
                 </tr>
             </table>
@@ -198,7 +199,7 @@
                         <table id="financial_table">
                             <thead>
                                 <tr>
-                                    <th style="width: 15%">Site ID</th>
+                                    {{-- <th style="width: 15%">Site Name</th> --}}
                                     <th style="width: 40%">Search Ring Name</th>
                                     <th style="width: 15%">Region</th>
                                     <th style="width: 15%">Province</th>
@@ -206,27 +207,45 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php   
+                                $array_amount_site = collect(); 
+                                @endphp
                                 @foreach ($sites as $site)
-                                @php $sum_total = 0; @endphp
+                                @php 
+                                    $array_amount = collect(); 
+                                @endphp
                                 <tr>
-                                    <td>{{ $site[0]->serial_number }}</td>
-                                    <td>{{ $site[0]->search_ring }}</td>
-                                    <td>{{ $site[0]->region }}</td>
-                                    <td>{{ $site[0]->province }}</td>
+                                    {{-- <td>{{ $site[0]->site_name }}</td> --}}
+                                    <td>{{ $site[0]->site_address }}</td>
+                                    <td>{{ $site[0]->region_name }}</td>
+                                    <td>{{ $site[0]->province_name }}</td>
                                     <td>
                                         @php
                                             for ($i = 0; $i < count($site); $i++) {
-                                                $sum_total = $sum_total + $site[$i]->price;
+                                                // $sum_total = $sum_total + $site[$i]->amount;
+                                                $array_amount->push($site[$i]->amount);
                                             }
+
+                                            $array_amount_site->push(array_sum( $array_amount->all()) );
                                         @endphp
 
-                                        {{ number_format($sum_total, 2) }}
+                                        {{ number_format(array_sum($array_amount->all()), 2) }}
                                     </td>
                                     {{-- <td>{{ $sum_total = $sum_total + $site[0]->price }}</td> --}}
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table style='width:100%'>
+                <tr>
+                    <td style="width: 50%;">
+                    </td>
+                    <td style="width: 50%; text-align: right; padding-top: 20px;" valign="top">
+                        <strong>Total: </strong> {{ number_format(array_sum($array_amount_site->all()), 2) }}
                     </td>
                 </tr>
             </table>

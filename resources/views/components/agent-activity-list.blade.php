@@ -4,6 +4,14 @@ $activities = \DB::connection('mysql2')
     ->where('site_agent_id', "=", \Auth::id())
     ->where('profile_id', "=", 2)
     ->get();
+
+// $activities = \DB::connection('mysql2')
+//     ->table('view_sites_activity')
+//     ->whereJsonContains('site_agent', [
+//         'user_id' => \Auth::id()
+//     ])
+//     ->where('profile_id', 2)
+//     ->get();
 @endphp
 
 @foreach($activities as $activity)

@@ -10,7 +10,7 @@
 </div>
 <div class="row pt-3" id="ssds_table">
     <div class="col-md-12">
-        <table class="table" id="dtTable">
+        <table class="table table-hover" id="dtTable">
             <thead>
                 <tr>
                     <th>Site Name</th>
@@ -119,16 +119,6 @@
 
     </div>
 </div>
-
-<style>
-    #ssds_table tr{
-        cursor: pointer;
-    }
-    #ssds_table tbody tr:hover{
-        background-color: gray;
-        color: white;
-    }
-</style>
 
 <script>
 

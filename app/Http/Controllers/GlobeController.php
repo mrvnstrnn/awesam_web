@@ -192,6 +192,7 @@ class GlobeController extends Controller
                 $notification = "Successfully " .$message. " endorsement.";
                 $action = $request->input('data_complete');
                 $program_id = $request->input('data_program');
+                // $site_category = $request->input('site_category') == NULL ? ['none'] : $request->input('site_category');
                 $site_category = $request->input('site_category');
                 $activity_id = $request->input('activity_id');
 
@@ -213,6 +214,16 @@ class GlobeController extends Controller
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
 
+                $samid = $request->input('sam_id');
+
+            } else if ($request->input('activity_name') == "Approved SSDS / NTP Validation") {
+
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
+                $notification = "Site successfully " . $message;
+                $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
@@ -265,31 +276,6 @@ class GlobeController extends Controller
                     $activity_id_collect->push(5);
                     $sitecategory_collect->push("none");
                 }
-
-
-                // $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id')[0])->first();
-
-                // $sites = PrMemoSite::where('pr_memo_id', $pr_memo->pr_memo_id)->get();
-
-                // $activity_id_collect = collect();
-                // $samid_collect = collect();
-                // $sitecategory_collect = collect();
-
-                // foreach ($sites as $site) {
-                //     SiteEndorsementEvent::dispatch($site->sam_id);
-
-                //     \DB::connection('mysql2')->table("site")
-                //                         ->where("sam_id", $site->sam_id)
-                //                         ->update([
-                //                             'site_pr' => $request->input('pr_number'),
-                //                         ]);
-
-                //     $samid_collect->push($site->sam_id);
-                //     $activity_id_collect->push(5);
-                //     $sitecategory_collect->push("none");
-
-                //     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.$profile_id.', '.$id.', "'.$action.'")');
-                // }
 
                 $site_category = $sitecategory_collect->all();
                 $samid = $samid_collect->all();
@@ -366,7 +352,6 @@ class GlobeController extends Controller
     {
         for ($i=0; $i < count($sam_id); $i++) {
             
-            // $activity_id = ( is_null($activity_id) ||  $activity_id == "null" ) ? [1] : $activity_id;
 
             $get_past_activities = \DB::connection('mysql2')
                                     ->table('site_stage_tracking')
@@ -379,8 +364,6 @@ class GlobeController extends Controller
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-
-            // return $activity_id;
 
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
@@ -1580,9 +1563,16 @@ class GlobeController extends Controller
                                                         ->where('status', 'approved')
                                                         ->groupBy('sub_activity_id')->get();
 
+                $sub_activity_value_rejected = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'pending')
+                                                        ->groupBy('sub_activity_id')->get();
+
                                                         // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
-                if (count($array_sub_activity->all()) <= count($sub_activity_value)) {
+                if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                } else if ( count($array_sub_activity->all()) <= count($sub_activity_value_rejected) ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "false", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
 
 
@@ -1904,13 +1894,21 @@ class GlobeController extends Controller
         elseif($activity_type == 'doc validation'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_for_doc_validation")
-                    ->select('sam_id', 'site_name', 'site_fields', 'counter')
+                    ->table("view_doc_validation_2")
+                    ->select('sam_id', 'site_name', 'site_fields', 'count')
                     ->distinct()
                     ->where('program_id', $program_id)
-                    ->where('activity_complete', 'false')
-                    ->where('counter', '>', 0)
+                    // ->where('activity_complete', 'false')
+                    ->where('count', '>', 0)
                     ->get();
+
+                    // SELECT * 
+
+                    // FROM sub_activity_value
+                    //     left join sub_activity
+                    //     on sub_activity_value.sub_activity_id = sub_activity.sub_activity_id
+                        
+                    // where action = 'doc upload'
 
         }
 
@@ -2264,22 +2262,19 @@ class GlobeController extends Controller
         // dd( $request->all() );
         try {
             $site = \DB::connection('mysql2')
-                    ->table('site_milestone')
-                    // ->table('view_sites_activity')
+                    // ->table('site_milestone')
+                    ->table('view_sites_activity')
                     ->distinct()
-                    ->where('sam_id', '=', $request['sam_id'])
-                    ->where('activity_complete', "=", 'false')
-                    ->take(100)
+                    ->where('sam_id', $request['sam_id'])
+                    // ->where('activity_complete', "=", 'false')
+                    // ->where('activity_id', $request['activity_id'])
                     ->get();
-                    
-            return response()->json(['error' => true, 'message' => $site]);
 
             if ( count($site) < 1 ) {
                 $site_fields = "";
             } else {
                 $site_fields = json_decode($site[0]->site_fields);
             }
-            
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
@@ -2364,20 +2359,43 @@ class GlobeController extends Controller
                         'site_name' => count($site) < 1 ? "" : $site[0]->site_name
                     ])
                     ->render();
-                }
+                } 
+                // else if ($request->input('activity') == "Approved SSDS / NTP Validation") {
 
-                $what_modal = "components.modal-view-site";
-                return \View::make($what_modal)
-                ->with([
-                    'site' => $site,
-                    'pr' => $pr,
-                    'pr_memo' => $pr_memo,
-                    'sam_id' => $request['sam_id'],
-                    'site_fields' => $site_fields,
-                    'rtbdeclaration' => $rtbdeclaration,
-                    'main_activity' => $mainactivity,
-                ])
-                ->render();
+                //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                //                                 ->where('status', 'approved')
+                //                                 ->where('type', 'jtss_add_site')
+                //                                 ->first();
+
+                //     $what_modal = "components.site-approved-ssds-ntp-validation";
+
+                //     return \View::make($what_modal)
+                //     ->with([
+                //         'sam_id' => $request['sam_id'],
+                //         'site_name' => $site[0]->site_name,
+                //         'program_id' => $site[0]->program_id,
+                //         'site_category' => $site[0]->site_category,
+                //         'activity_id' => $site[0]->activity_id,
+                //         'data' => $data,
+                //         'activity' => $request->input('activity')
+                //     ])
+                //     ->render();
+
+                // } 
+                else {
+                    $what_modal = "components.modal-view-site";
+                    return \View::make($what_modal)
+                    ->with([
+                        'site' => $site,
+                        'pr' => $pr,
+                        'pr_memo' => $pr_memo,
+                        'sam_id' => $request['sam_id'],
+                        'site_fields' => $site_fields,
+                        'rtbdeclaration' => $rtbdeclaration,
+                        'main_activity' => $mainactivity,
+                    ])
+                    ->render();
+                }
     
             }
 
@@ -3311,24 +3329,14 @@ class GlobeController extends Controller
                             ->table('site')
                             ->where('sam_id', $sam_id[$i])
                             ->first();
-                            
-                // $fsa_data = \DB::connection('mysql2')
-                //                 ->table('fsa_table')
-                //                 ->where('vendor_id', $vendor)
-                //                 ->where('region', $sites_data->region)
-                //                 ->where('province', $sites_data->province)
-                //                 ->where('province', $sites_data->town_city)
-                //                 ->get();
 
                 $fsa_data = \DB::connection('mysql2')
                                 ->table('fsaq')
                                 ->where('vendor_id', $vendor)
-                                ->where('region_id', $sites_data->site_region_id)
-                                ->where('province_id', $sites_data->site_province_id)
+                                // ->where('region_id', $sites_data->site_region_id)
+                                // ->where('province_id', $sites_data->site_province_id)
                                 // ->where('lgu_id', $sites_data->site_lgu_id)
                                 ->get();
-
-                                // return response()->json(['error' => true, 'message' => $fsa_data]);
 
                 $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '!=', 'denied')->get();
 
@@ -3336,21 +3344,24 @@ class GlobeController extends Controller
                     foreach ($fsa_data as $fsa) {
                         FsaLineItem::create([
                             'sam_id' => $sam_id[$i],
-                            // 'fsa_id' => $fsa->fsa_id,
-                            'fsa_id' => $fsa->id,
+                            'fsa_id' => $fsa->fsaq_id,
                             'status' => 'pending',
                         ]);
                     }
                 }
 
-                $sites = FsaLineItem::leftjoin('site', 'site.sam_id', 'site_line_items.sam_id')
-                            // ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                $sites = FsaLineItem::select('site.site_name', 'site.site_address', 'site.sam_id', 'location_regions.region_name', 'location_provinces.province_name', 'fsaq.amount')
+                            ->leftjoin('site', 'site.sam_id', 'site_line_items.sam_id')
                             ->leftjoin('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                             ->where('site.sam_id', $sam_id[$i])
                             ->where('site_line_items.status', '!=', 'denied')
+                            ->leftjoin('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->leftjoin('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
                             ->get();
 
-                $sites_collect->push($sites);
+                if (count($sites) > 1) {
+                    $sites_collect->push($sites);
+                }
 
                 // $pricings = FsaLineItem::select('fsaq.price')
                 //             ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
@@ -3364,8 +3375,10 @@ class GlobeController extends Controller
                             ->where('site_line_items.status', '!=', 'denied')
                             ->get();
 
-                foreach ($pricings as $pricing) {
-                    $sites_fsa->push($pricing->amount);
+                if (count($pricings) > 1) {
+                    foreach ($pricings as $pricing) {
+                        $sites_fsa->push($pricing->amount);
+                    }
                 }
 
             }
@@ -3396,17 +3409,25 @@ class GlobeController extends Controller
             //                                 ->get();
 
             $sites = \DB::connection('mysql2')
-                            ->table('new_sites')
+                            ->table('site')
                             ->where('sam_id', $sam_id)
                             ->first();
 
+            // $line_items = \DB::connection('mysql2')
+            //                 ->table('fsa_table')
+            //                 ->where('vendor_id', $vendor)
+            //                 ->where('region', $sites->region)
+            //                 ->where('province', $sites->province)
+            //                 ->where('province', $sites->town_city)
+            //                 ->get();
+
             $line_items = \DB::connection('mysql2')
-                            ->table('fsa_table')
-                            ->where('vendor_id', $vendor)
-                            ->where('region', $sites->region)
-                            ->where('province', $sites->province)
-                            ->where('province', $sites->town_city)
-                            ->get();
+                                ->table('fsaq')
+                                ->where('vendor_id', $vendor)
+                                ->where('region_id', $sites->site_region_id)
+                                // ->where('province_id', $sites_data->site_province_id)
+                                // ->where('lgu_id', $sites_data->site_lgu_id)
+                                ->get();
 
             $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
                                         ->get();
@@ -3469,12 +3490,23 @@ class GlobeController extends Controller
 
                 $file_name = 'create-pr-memo-'.$current.'.pdf';
 
+                // $sites = \DB::connection('mysql2')
+                //                 ->table('new_sites')
+                //                 ->select('site_line_items.fsa_id', 'new_sites.*', 'fsa_table.price')
+                //                 ->leftjoin('site_line_items', 'site_line_items.sam_id', 'new_sites.sam_id')
+                //                 ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+                //                 ->whereIn('new_sites.sam_id', $request->input("sam_id"))
+                //                 ->get();
+
                 $sites = \DB::connection('mysql2')
-                                ->table('new_sites')
-                                ->select('site_line_items.fsa_id', 'new_sites.*', 'fsa_table.price')
-                                ->leftjoin('site_line_items', 'site_line_items.sam_id', 'new_sites.sam_id')
-                                ->leftjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-                                ->whereIn('new_sites.sam_id', $request->input("sam_id"))
+                                ->table('site')
+                                ->select('site_line_items.fsa_id', 'site.site_name', 'site.site_address', 'site.sam_id', 'location_regions.region_name', 'location_provinces.province_name', 'fsaq.amount')
+                                ->leftjoin('site_line_items', 'site_line_items.sam_id', 'site.sam_id')
+                                ->leftjoin('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
+                                ->leftjoin('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                                ->leftjoin('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                                ->whereIn('site.sam_id', $request->input("sam_id"))
+                                ->where('site_line_items.status', '!=', 'denied')
                                 ->get();
 
                 $view = \View::make('components.create-pr-po-pdf')
@@ -3490,30 +3522,17 @@ class GlobeController extends Controller
                         'subject' => $request->input("subject"),
                         'thru' => $request->input("thru"),
                         'to' => $request->input("to"),
-                        // 'sites' => $sites,
                         'sites' => $sites->groupBy('sam_id'),
+                        'generated_pr' => $generated_pr,
                     ])
                     ->render();
-
-                // $asd = collect();
-                // foreach ($sites as $site) {
-                //     $asd->push($site->price);
-                // }
-                // return response()->json([ 'error' => true, 'message' => $asd->all() ]);
 
                 $pdf = \App::make('dompdf.wrapper');
                 $pdf = PDF::loadHTML($view);
                 $pdf->setPaper('a4', 'landscape');
                 $pdf->download();
 
-                // $pdf->setWarnings(false);
-
-                // $file_name = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"));
-
                 \Storage::put('pdf/'.$file_name, $pdf->output());
-
-
-                // return response()->json([ 'error' => true, 'message' => "Successfully added PR / PO.", "file_name" => $file_name ]);
 
                 $pr_memo_table = PrMemoTable::create([
                     'budget_source' => $request->input("budget_source"),

@@ -187,8 +187,7 @@
         });
     // });
 
-        $(".remove_td").on("click", function(e){
-            console.log("test");
+        $(document).off().on("click", ".remove_td", function(e){
 
             var sam_id = $(this).attr("data-id");
 
@@ -229,47 +228,59 @@
                     },
                     success: function (resp) {
                         if (!resp.error) {
-                            resp.message.forEach(element => {
-                                
-                                var sum_fsa = 0;
-                                for (let i = 0; i < element.length; i++) {
-                                    // sum_fsa = Number(sum_fsa) + Number(element[i].price);
-
-                                    if (element[i].amount != '-' && element[i].amount != undefined) {
-                                        // sum_fsa = Number(sum_fsa) + Number(element[i].amount.replaceAll(/\s/g,''));
-                                        sum_fsa += Number(element[i].amount);
-                                    }
-                                }
-
-                                $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
-                                    "<td><strong>"+element[0].site_address+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
-                                    "<td>"+element[0].region_id+"</td>" +
-                                    "<td>"+element[0].province_id+"</td>" +
-                                    "<td>"+sum_fsa.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+"</td>" +
-                                    "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
-                                    "</tr>");
-
-                                $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
-
+                            if (resp.message.length < 1) {
                                 $("#financial_analysis").val(null).trigger("change"); 
-                        
-                                $(".input_hidden").append(
-                                    "<input class='hidden_sam_id' value='"+element[0].sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element[0].sam_id+"'>"
-                                );
-                            });
+                                Swal.fire(
+                                    'Error',
+                                    'No available data.',
+                                    'error'
+                                )
+                            } else {
+                                resp.message.forEach(element => {
+                                    
+                                    var sum_fsa = 0;
+                                    for (let i = 0; i < element.length; i++) {
+                                        // sum_fsa = Number(sum_fsa) + Number(element[i].price);
 
-                            var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
+                                        
+                                        if (element[i] != undefined) {
+                                            if (element[i].amount != '-') {
+                                                // sum_fsa = Number(sum_fsa) + Number(element[i].amount.replaceAll(/\s/g,''));
+                                                sum_fsa += Number(element[i].amount);
+                                            }
+                                        }
+                                    }
 
-                            $("#requested_amount").val(sum);
+                                    $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
+                                        "<td><strong>"+element[0].site_address+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                        "<td>"+element[0].region_name+"</td>" +
+                                        "<td>"+element[0].province_name+"</td>" +
+                                        "<td>"+sum_fsa.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+"</td>" +
+                                        "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                                        "</tr>");
 
-                            // $("select option.option"+resp.message.sam_id).addClass("d-none");
+                                    $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
+
+                                    $("#financial_analysis").val(null).trigger("change"); 
                             
-                            // $(".input_hidden").append(
-                            //     "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
-                            // );
+                                    $(".input_hidden").append(
+                                        "<input class='hidden_sam_id' value='"+element[0].sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+element[0].sam_id+"'>"
+                                    );
+                                });
 
-                            $("#financial_analysis").val("");
+                                var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
 
+                                $("#requested_amount").val(sum);
+
+                                // $("select option.option"+resp.message.sam_id).addClass("d-none");
+                                
+                                // $(".input_hidden").append(
+                                //     "<input class='hidden_sam_id' value='"+resp.message.sam_id+"' type='hidden' name='sam_id[]' id='sam_id"+resp.message.sam_id+"'>"
+                                // );
+
+                                $("#financial_analysis").val("");
+                            }
+                            
                             $(".add_new_site").removeAttr("disabled");
                             $(".add_new_site").text("Add");
                         } else {
@@ -297,7 +308,7 @@
             }
         });
 
-        $(document).unbind("click").on("click", ".add_pr_po", function (e) {
+        $("#craetePrPoModal").on("click", ".add_pr_po", function (e) {
             e.preventDefault();
 
             $(this).attr("disabled", "disabled");
@@ -396,7 +407,7 @@
             });
         });
 
-        $(".table_financial_analysis").unbind("click").on("click", ".line_item_td", function (e){
+        $(".table_financial_analysis").on("click", ".line_item_td", function (e){
             e.preventDefault();
 
             var sam_id = $(this).attr('data-sam_id');
@@ -419,14 +430,19 @@
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
                                 $(".line_items_area").append(
-                                    '<div><label><b>'+index+'</b></label></div>'
+                                    '<div class="mt-3"><label><b>'+index+'</b></label></div>'
                                 );
 
                                 $.each(data, function(i, checkbox_data) {
                                     $(".line_items_area").append(
-                                        '<div class="form-group">' +
-                                        '<input type="checkbox" value="'+checkbox_data.fsa_id+'" name="line_item" id="line_item'+checkbox_data.fsa_id+'"> <label for="line_item'+checkbox_data.fsa_id+'">' + checkbox_data.item +
-                                        '</label></div>'
+                                        '<div class="form-row">' +
+                                            '<div class="col-6">' +
+                                        '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'"> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
+                                        '</label></div></div>' +
+
+                                        '<div class="col-6">' +
+                                            checkbox_data.amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +
+                                        '</div>' 
                                     );
                                 });
                             });
@@ -458,7 +474,7 @@
             });
         });
 
-        $(".line_items_area").unbind("click").on("click", ".save_line_items", function(e){
+        $(".line_items_area").on("click", ".save_line_items", function(e){
             e.preventDefault();
 
             $(this).attr("disabled", "disabled");

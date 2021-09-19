@@ -257,7 +257,7 @@
             $(".set_schedule").addClass('d-none');
         });
 
-        $(document).on("click", ".confirm_schedule", function (e) { 
+        $(".confirm_schedule_button").on("click", ".confirm_schedule", function (e) { 
             e.preventDefault();
 
             var sam_id = ["{{ $samid }}"];
