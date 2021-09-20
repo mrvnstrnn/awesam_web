@@ -246,7 +246,7 @@ class GlobeController extends Controller
                 
             } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation") {
 
-                $notification = "Successfully mark this site as complete.";
+                $notification = "Successfully mark this site as completed.";
                 // $vendor = $request->input('vendor');
                 $action = "true";
                 $activity_id = $request->input('activity_id');
@@ -408,13 +408,13 @@ class GlobeController extends Controller
                             //                 ->get();
 
                             // foreach ($get_activities as $get_activity) {
-                                $get_activitiess = \DB::connection('mysql2')
-                                                ->table('stage_activities')
-                                                ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                                ->where('activity_id', $activities->next_activity)
-                                                ->where('program_id', $program_id)
-                                                ->where('category', $site_category[$i])
-                                                ->first();
+                                // $get_activitiess = \DB::connection('mysql2')
+                                //                 ->table('stage_activities')
+                                //                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                                //                 ->where('activity_id', $activities->next_activity)
+                                //                 ->where('program_id', $program_id)
+                                //                 ->where('category', $site_category[$i])
+                                //                 ->first();
 
                                 $activity_name = $get_activitiess->activity_name;
                                 // $activity_name = $get_activity->activity_name;
@@ -444,7 +444,7 @@ class GlobeController extends Controller
                                                     ->where('activity_complete', 'false')
                                                     ->get();
 
-                                if ( count($check_if_added) <= 1 ) {
+                                if ( count($check_if_added) < 1 ) {
                                     SiteStageTracking::create([
                                         'sam_id' => $sam_id[$i],
                                         'activity_id' => $activity,
@@ -1003,10 +1003,12 @@ class GlobeController extends Controller
 
                 $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-                if (count($array_sub_activity->all()) <= count($sub_activity_value) && $request->input('activity_id') ) {
+                                                        // return response()->json(['error' => false, 'message' => count($sub_activity_value)]);
+                if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
                 
@@ -1561,19 +1563,22 @@ class GlobeController extends Controller
                 $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
                                                         ->where('status', 'approved')
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         ->groupBy('sub_activity_id')->get();
 
                 $sub_activity_value_rejected = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
                                                         ->where('status', 'pending')
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         ->groupBy('sub_activity_id')->get();
 
                                                         // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
                 if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                } else if ( count($array_sub_activity->all()) <= count($sub_activity_value_rejected) ) {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "false", [$request->input("site_category")], [$request->input("activity_id")]);
-                }
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                } 
+                // else if ( count($array_sub_activity->all()) <= count($sub_activity_value_rejected) ) {
+                //     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "false", [$request->input("site_category")], [$request->input("activity_id")]);
+                // }
 
 
                 // $email_receiver = User::select('users.*')
@@ -1699,34 +1704,51 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'rtb declaration'){
 
+            // $sites = \DB::connection('mysql2') 
+            //         ->table("milestone_tracking")
+            //         ->distinct()
+            //         ->where('program_id', $program_id)
+            //         ->where('activity_type', 'rtb declaration')
+            //         ->where('activity_complete', 'false')
+            //         ->where('profile_id', \Auth::user()->profile_id)
+            //         ->get();
+
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
-                    ->distinct()
-                    ->where('program_id', $program_id)
-                    ->where('activity_type', 'rtb declaration')
-                    ->where('activity_complete', 'false')
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+                        ->table("view_sites_per_program")
+                        ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                        ->where('view_sites_per_program.program_id', $program_id)
+                        ->whereIn('stage_activities.activity_type', ['rtb declaration'])
+                        ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                        // ->whereIn('view_sites_per_program.activity_id', [16])
+                        ->get();
 
         }
 
         elseif($activity_type == 'site approval'){
 
+                // $sites = \DB::connection('mysql2') 
+                //                 ->table("milestone_tracking")
+                //                 ->where('program_id', $program_id)
+                //                 ->whereIn('activity_type', ['doc approval', 'site approval'])
+                //                 ->where('profile_id', \Auth::user()->profile_id)
+                //                 ->where('activity_complete', 'false')
+                //                 ->get();
                 $sites = \DB::connection('mysql2') 
-                                ->table("milestone_tracking")
-                                ->where('program_id', $program_id)
-                                ->whereIn('activity_type', ['doc approval', 'site approval'])
-                                ->where('profile_id', \Auth::user()->profile_id)
-                                ->where('activity_complete', 'false')
+                                ->table("view_sites_per_program")
+                                ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                                ->where('view_sites_per_program.program_id', $program_id)
+                                ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
+                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                                // ->whereIn('view_sites_per_program.activity_id', [16])
                                 ->get();
-
         }
 
         elseif($activity_type == 'vendor awarding'){
             $sites = \DB::connection('mysql2') 
-                            ->table("view_pr_memo")
+                            // ->table("view_pr_memo")
+                            ->table("view_pr_memo_v2")
                             ->where('status', '!=', 'denied')
-                            ->whereIn('activity_id', [6])
+                            ->where('activity_id', 6)
                             ->get();
         }
 
@@ -1782,13 +1804,23 @@ class GlobeController extends Controller
                             // ->whereIn('profile_id', [8, 9, 10]);
 
                             if (\Auth::user()->profile_id == 10) {
-                                $sites->where('activity_id', '>', 4)
+                                $sites->where(function($q) {
+                                    $q->where('activity_id', '>', '4')
+                                        ->orWhere('activity_id', -1);
+                                    })
                                     ->get();
                             } else if (\Auth::user()->profile_id == 9) {
-                                $sites->where('activity_id', '>', 4)   
+                                $sites->where(function($q) {
+                                        $q->where('activity_id', '>', '4')
+                                            ->orWhere('activity_id', -1);
+                                        })
                                         ->get();
                             } else if (\Auth::user()->profile_id == 8) {
-                                $sites->where('activity_id', '>', '2')
+                                // $sites->where('activity_id', '>', '2')
+                                $sites->where(function($q) {
+                                        $q->where('activity_id', '>', '2')
+                                            ->orWhere('activity_id', -1);
+                                        })
                                         ->get();
                             }
         }
@@ -1805,7 +1837,6 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site hunting validation'){
             $sites = \DB::connection('mysql2') 
-
                                 ->table("view_site_hunting")
                                 ->get();
 
@@ -2360,28 +2391,28 @@ class GlobeController extends Controller
                     ])
                     ->render();
                 } 
-                // else if ($request->input('activity') == "Approved SSDS / NTP Validation") {
+                else if ($request->input('activity') == "Approved SSDS / NTP Validation") {
 
-                //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                //                                 ->where('status', 'approved')
-                //                                 ->where('type', 'jtss_add_site')
-                //                                 ->first();
+                    $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                                                ->where('status', 'approved')
+                                                ->where('type', 'jtss_add_site')
+                                                ->first();
 
-                //     $what_modal = "components.site-approved-ssds-ntp-validation";
+                    $what_modal = "components.site-approved-ssds-ntp-validation";
 
-                //     return \View::make($what_modal)
-                //     ->with([
-                //         'sam_id' => $request['sam_id'],
-                //         'site_name' => $site[0]->site_name,
-                //         'program_id' => $site[0]->program_id,
-                //         'site_category' => $site[0]->site_category,
-                //         'activity_id' => $site[0]->activity_id,
-                //         'data' => $data,
-                //         'activity' => $request->input('activity')
-                //     ])
-                //     ->render();
+                    return \View::make($what_modal)
+                    ->with([
+                        'sam_id' => $request['sam_id'],
+                        'site_name' => $site[0]->site_name,
+                        'program_id' => $site[0]->program_id,
+                        'site_category' => $site[0]->site_category,
+                        'activity_id' => $site[0]->activity_id,
+                        'data' => $data,
+                        'activity' => $request->input('activity')
+                    ])
+                    ->render();
 
-                // } 
+                } 
                 else {
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
@@ -3062,16 +3093,20 @@ class GlobeController extends Controller
     public function get_my_sub_act_value($sub_activity_id, $sam_id)
     {
         try {
-
-            $sub_activity_id = SubActivityValue::where('sub_activity_id', $sub_activity_id)
+            $sub_activity_ids = SubActivityValue::where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $dt = DataTables::of($sub_activity_id)
-                                ->addColumn('value', function($row){
-                                    $json = json_decode($row->value, true);
+            $dt = DataTables::of($sub_activity_ids)
+                                ->addColumn('value', function($row) use ($sub_activity_id) {
 
-                                    return $json['file'];
+                                    if ($sub_activity_id == 75) {
+                                        $json = json_decode($row->value, true);
+    
+                                        return $json['file'];
+                                    } else {
+                                        return $row;
+                                    }
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -3690,18 +3725,25 @@ class GlobeController extends Controller
                                             ->where("vendor_programs.programs", 1)
                                             ->get();
 
+            // $sites = \DB::connection('mysql2') 
+            //                     ->table("site")
+            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                     ->leftjoin("new_sites", "new_sites.sam_id", "site.sam_id")
+            //                     ->where('site.program_id', 1)
+            //                     ->where('activities->activity_id', '2')
+            //                     ->where('activities->profile_id', '8')
+            //                     ->orderBy('search_ring', 'asc')
+            //                     ->get();
+
             $sites = \DB::connection('mysql2') 
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->leftjoin("new_sites", "new_sites.sam_id", "site.sam_id")
-                                ->where('site.program_id', 1)
-                                ->where('activities->activity_id', '2')
-                                ->where('activities->profile_id', '8')
-                                ->orderBy('search_ring', 'asc')
+                                ->table("view_sites_per_program")
+                                ->where('program_id', 1)                                
+                                ->where('activity_id', 2)
+                                ->orderBy('site_name')
                                 ->get();
 
             return \View::make($what_modal)

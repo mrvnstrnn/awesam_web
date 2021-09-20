@@ -132,7 +132,7 @@
                                                 <select name="financial_analysis[]" id="financial_analysis" class="form-control" multiple="multiple">
                                                     {{-- <option value="">Select site</option> --}}
                                                     @foreach ($sites as $site)
-                                                    <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->search_ring }}</option>
+                                                    <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->site_name }}</option>
                                                     @endforeach
                                                 </select>
 

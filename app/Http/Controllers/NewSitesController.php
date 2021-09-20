@@ -176,13 +176,13 @@ class NewSitesController extends Controller
                         //                 ->get();
 
                         // foreach ($get_activities as $get_activity) {
-                            $get_activitiess = \DB::connection('mysql2')
-                                            ->table('stage_activities')
-                                            ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                            ->where('activity_id', $activities->next_activity)
-                                            ->where('program_id', $program_id)
-                                            ->where('category', $site_category[$i])
-                                            ->first();
+                            // $get_activitiess = \DB::connection('mysql2')
+                            //                 ->table('stage_activities')
+                            //                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+                            //                 ->where('activity_id', $activities->next_activity)
+                            //                 ->where('program_id', $program_id)
+                            //                 ->where('category', $site_category[$i])
+                            //                 ->first();
 
                             $activity_name = $get_activitiess->activity_name;
                             // $activity_name = $get_activity->activity_name;

@@ -244,7 +244,7 @@
 
 <script>
 
-    $(document).ready(function() {
+    // $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
     // });
 
@@ -295,7 +295,7 @@
                 }
             });
         });
-    });
+    // });
     
 
 </script>
