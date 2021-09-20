@@ -286,7 +286,7 @@
                                                                 <th>Region</th>
                                                                 <th>Province</th>
                                                                 <th>LGU</th>
-                                                                <th></th>
+                                                                {{-- <th></th> --}}
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -299,7 +299,7 @@
                                                                     <td>{{ $pr_memo_site->sam_region_name }}</td>
                                                                     <td>{{ $pr_memo_site->province_name }}</td>
                                                                     <td>{{ $pr_memo_site->lgu_name }}</td>
-                                                                    <td><button class="btn btn-sm btn-shadow btn-success view-line-items" type="button" data-sam_id='{{ $pr_memo_site->sam_id }}' data-site_name='{{ $pr_memo_site->site_name }}'><i class="fa fa-fw fa-lg" aria-hidden="true"></i></button></td>
+                                                                    {{-- <td><button class="btn btn-sm btn-shadow btn-success view-line-items" type="button" data-sam_id='{{ $pr_memo_site->sam_id }}' data-site_name='{{ $pr_memo_site->site_name }}'><i class="fa fa-fw fa-lg" aria-hidden="true"></i></button></td> --}}
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

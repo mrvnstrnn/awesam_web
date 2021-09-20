@@ -357,6 +357,7 @@
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
     });
 
+    // $(".file_preview").off().on("click", ".approve_reject_doc_btns", function (e){
     $(".file_preview").on("click", ".approve_reject_doc_btns", function (e){
         e.preventDefault();
         $(".confirmation_message").removeClass("d-none");
@@ -381,8 +382,8 @@
             $(".approve_reject_doc_btns_final").removeClass("btn-danger");
         }
     });
-
-    $(document).on("click", ".approve_reject_doc_btns_final", function (e){
+    // confirmation_message
+    $(".confirmation_message").off().on("click", ".approve_reject_doc_btns_final", function (e){
         e.preventDefault();
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");

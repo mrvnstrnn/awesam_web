@@ -57,6 +57,33 @@
     </div>
 </div>
 
+{{-- @section('modals')
+    <div class="modal fade" id="jtss_modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="background-color: transparent; border: 0">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="main-card mb-3 card">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-dark">
+                                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                    <div class="menu-header-content btn-pane-right">
+                                        <h5 class="menu-header-title">
+                                            Create PR Memo
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection --}}
 
 <script>
 
@@ -174,24 +201,26 @@
                 },
                 success: function(resp){
                     if(!resp.error){
-                        $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
+                        // $('#table_scheduled_jtss_'+  "{{ $samid }}").DataTable().ajax.reload();
+                        // $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
+                            $('#table_scheduled_jtss_'+  "{{ $samid }}").DataTable().ajax.reload(function(){
                             // $("#viewInfoModal").modal("hide");
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
 
                             $("form.jtss_form")[0].reset();
 
                             $(".set_schedule").removeAttr("disabled");
                             $(".set_schedule").text("Set Schedule");
 
-                            Swal.fire(
-                                'Success',
-                                resp.message,
-                                'success'
-                            )
                         });
 
                         $(".table_scheduled_jtss").removeClass("d-none");
 
-                        $('#table_scheduled_jtss_'+  "{{ $samid }}").DataTable().ajax.reload();
+                        
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
@@ -257,7 +286,7 @@
             $(".set_schedule").addClass('d-none');
         });
 
-        $(document).on("click", ".confirm_schedule", function (e) { 
+        $(".confirm_schedule_button").on("click", ".confirm_schedule", function (e) { 
             e.preventDefault();
 
             var sam_id = ["{{ $samid }}"];

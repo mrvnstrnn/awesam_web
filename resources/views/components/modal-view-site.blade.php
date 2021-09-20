@@ -139,8 +139,13 @@
                                     <div id="site_action_view" class="{{ $site_action_view }}">
                                         <div class="mb-3">
                                             @php
-                                            if($site[0]->end_date > now()){
-                                                $badge_color = "success";
+                                            if (isset($site[0]->end_date)) {
+
+                                                if($site[0]->end_date > now()){
+                                                    $badge_color = "success";
+                                                } else {
+                                                    $badge_color = "danger";
+                                                }
                                             } else {
                                                 $badge_color = "danger";
                                             }
@@ -148,7 +153,7 @@
                                             @endphp
 
                                             @if($main_activity == "")
-                                                <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                                <span class="badge badge-dark text-sm mb-0 p-2">{{ isset($site[0]->stage_name) ? $site[0]->stage_name : "" }}</span>
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
                                             @else
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
@@ -347,8 +352,13 @@
                                         </div>
                                         <div class='mb-3'>
                                             @php
-                                            if($site[0]->end_date > now()){
-                                                $badge_color = "success";
+
+                                            if (isset($site[0]->end_date)) {
+                                                if($site[0]->end_date > now()){
+                                                    $badge_color = "success";
+                                                } else {
+                                                    $badge_color = "danger";
+                                                }
                                             } else {
                                                 $badge_color = "danger";
                                             }
@@ -356,7 +366,7 @@
                                             @endphp
                                     
                                             @if($main_activity == "")
-                                                <span class="badge badge-dark text-sm mb-0 p-2">{{ $site[0]->stage_name }}</span>
+                                                <span class="badge badge-dark text-sm mb-0 p-2">{{ isset($site[0]->stage_name) ? $site[0]->stage_name : "" }}</span>
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
                                             @else
                                                 <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>

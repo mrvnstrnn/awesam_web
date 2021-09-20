@@ -363,7 +363,7 @@ class User extends Authenticatable implements MustVerifyEmail
                                 ->table("site")
                                 ->select('sam_id')
                                 ->where('program_id', $program_id)
-                                ->where('activities->activity_id', '!=', $last_act->activity_id)
+                                // ->where('activities->activity_id', '!=', $last_act->activity_id)
                                 ->get();
         }
         
