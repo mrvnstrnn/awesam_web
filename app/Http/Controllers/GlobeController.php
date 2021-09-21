@@ -1692,7 +1692,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'set site value'){
 
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
+                    ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'set site value')
@@ -1964,7 +1964,11 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2') 
                     ->table("view_sites_activity")
-                    ->whereNull('activity_id')
+                    ->where(function($q) {
+                        $q->whereNull('activity_id')
+                          ->orWhere('activity_id', 1);
+                    })
+                    // ->whereNull('activity_id')
                     ->whereNull('profile_id')
                     ->where('program_id', $program_id)
                     ->get();
@@ -2013,7 +2017,7 @@ class GlobeController extends Controller
         else {
 
             $sites = \DB::connection('mysql2')
-                    ->table("milestone_tracking")
+                    ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -4087,7 +4091,7 @@ class GlobeController extends Controller
     {
         try {
             $sites = \DB::connection('mysql2') 
-                    ->table("milestone_tracking")
+                    ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', 3)
                     ->where('activity_type', 'endorsement')
