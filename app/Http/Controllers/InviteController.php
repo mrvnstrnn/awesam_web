@@ -55,8 +55,9 @@ class InviteController extends Controller
                     }
                 } else {
                     $email = $request->input('email')."@".substr(strstr(\Auth::user()->email, '@'), 1);
+                    
                     if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($email, '@'), 1)){
-                        return response()->json(['error' => true, 'message' => "erro" ]);
+                        return response()->json(['error' => true, 'message' => "Error" ]);
                     }
                 }
 
