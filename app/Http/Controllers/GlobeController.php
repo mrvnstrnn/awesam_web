@@ -1607,7 +1607,8 @@ class GlobeController extends Controller
     public function get_site_approvals($program_id, $profile_id)
     {
         $sites = \DB::connection('mysql2')
-                    ->table("site_milestone")
+                    // ->table("site_milestone")
+                    ->table("milestone_tracking_2")
                     ->select("program_id, sam_id, stage_name, activity_name, activity_type, activity_complete, profile_id, stage_id, pending_count, site_name, site_fields, site_agent")
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -1632,7 +1633,9 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine'){
 
             $sites = \DB::connection('mysql2')
-            ->table("site_milestone")
+            // ->table("site_milestone")
+            ->table("milestone_tracking_2")
+            
             ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
@@ -1667,7 +1670,8 @@ class GlobeController extends Controller
         elseif($activity_type == 'is'){
 
             $sites = \DB::connection('mysql2')
-            ->table("site_milestone")
+            // ->table("site_milestone")
+            ->table("milestone_tracking_2")
             ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
@@ -1680,7 +1684,8 @@ class GlobeController extends Controller
         elseif($activity_type == 'vendor'){
 
             $sites = \DB::connection('mysql2')
-            ->table("site_milestone")
+            // ->table("site_milestone")
+            ->table("milestone_tracking_2")
             ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
@@ -2035,7 +2040,8 @@ class GlobeController extends Controller
     public function get_site_doc_validation($program_id, $profile_id, $activity_type)
     {
         $sites = \DB::connection('mysql2')
-                    ->table("site_milestone")
+                    // ->table("site_milestone")
+                    ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -2237,8 +2243,15 @@ class GlobeController extends Controller
             } 
             elseif($component == 'site-modal-site_fields'){
 
+                // $sites = \DB::connection('mysql2')
+                // ->table("site_milestone")
+                // ->select('site_fields')
+                // ->distinct()
+                // ->where('sam_id', $sam_id)
+                // ->where('activity_complete', 'false')
+                // ->get();
                 $sites = \DB::connection('mysql2')
-                ->table("site_milestone")
+                ->table("milestone_tracking_2")
                 ->select('site_fields')
                 ->distinct()
                 ->where('sam_id', $sam_id)
