@@ -185,13 +185,13 @@
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
                                                     $sites = \DB::connection('mysql2')
-                                                                    ->table("milestone_tracking")
-                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking.sam_id")
-                                                                    ->where('milestone_tracking.program_id', 1)
-                                                                    ->whereIn('milestone_tracking.activity_type', ['PR / PO', 'site approval'])
-                                                                    ->where('milestone_tracking.activity_name', 'Create PR')
-                                                                    ->where('milestone_tracking.profile_id', \Auth::user()->profile_id)
-                                                                    ->where('milestone_tracking.activity_complete', 'false')
+                                                                    ->table("milestone_tracking_2")
+                                                                    ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking_2.sam_id")
+                                                                    ->where('milestone_tracking_2.program_id', 1)
+                                                                    ->whereIn('milestone_tracking_2.activity_type', ['PR / PO', 'site approval'])
+                                                                    ->where('milestone_tracking_2.activity_name', 'Create PR')
+                                                                    ->where('milestone_tracking_2.profile_id', \Auth::user()->profile_id)
+                                                                    ->where('milestone_tracking_2.activity_complete', 'false')
                                                                     ->get();
                                                                     // dd($sites);
                                                 @endphp

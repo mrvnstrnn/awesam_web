@@ -1,6 +1,6 @@
 @php
     $site_status = \DB::connection('mysql2')
-        ->table('milestone_tracking')
+        ->table('milestone_tracking_2')
         ->select('site_name', 'progress', 'sam_id', 'site_category','activity_name')
         ->where('site_agent_id', "=", \Auth::id())
         ->where('activity_complete', "=", 'false')
