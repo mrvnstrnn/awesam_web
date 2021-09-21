@@ -222,20 +222,20 @@ $(document).ready(() => {
         }
     });
 
-    $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/agent-progress",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
-            $('#agent_site_progress').html("");   
-            $('#agent_site_progress').html(resp);
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });
+    // $.ajax({
+    //     url: "/modal-view-site-component/" + sam_id + "/agent-progress",
+    //     method: "GET",
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     },
+    //     success: function (resp){
+    //         $('#agent_site_progress').html("");   
+    //         $('#agent_site_progress').html(resp);
+    //     },
+    //     error: function (resp){
+    //         toastr.error(resp.message, "Error");
+    //     }
+    // });
 
     $(document).on('click', '#show-admin-tasks', function(){
         $('#admin-task-modal').modal('show');

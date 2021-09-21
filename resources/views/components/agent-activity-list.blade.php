@@ -19,7 +19,6 @@ $activities = \DB::connection('mysql2')
     ])
     ->where('profile_id', 2)
     ->get();
-
 @endphp
 
 {{-- @foreach($activities as $activity) --}}
