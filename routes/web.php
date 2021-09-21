@@ -280,6 +280,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
+
+    Route::get('/get-uploaded-files/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_uploaded_files']);
     
     Route::get('/get-my-uploaded-file-data/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploade_file_data']);
 

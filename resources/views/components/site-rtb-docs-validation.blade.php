@@ -253,7 +253,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/get-my-sub_act_value/"+sub_activity_id+"/"+sam_id,
+                    url: "/get-uploaded-files/"+sub_activity_id+"/"+sam_id,
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

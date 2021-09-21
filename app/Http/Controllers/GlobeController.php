@@ -1008,9 +1008,9 @@ class GlobeController extends Controller
                                                         ->groupBy('sub_activity_id')->get();
 
                                                         // return response()->json(['error' => false, 'message' => count($sub_activity_value)]);
-                if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                }
+                // if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
+                //     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                // }
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
@@ -1739,7 +1739,7 @@ class GlobeController extends Controller
                                 ->where('view_sites_per_program.program_id', $program_id)
                                 ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                // ->whereIn('view_sites_per_program.activity_id', [16])
+                                ->whereIn('view_sites_per_program.activity_id', [16])
                                 ->get();
         }
 
@@ -3107,6 +3107,26 @@ class GlobeController extends Controller
                                     } else {
                                         return $row;
                                     }
+                                });
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+
+    public function get_uploaded_files($sub_activity_id, $sam_id)
+    {
+        try {
+            $sub_activity_ids = SubActivityValue::where('sub_activity_id', $sub_activity_id)
+                                        ->where('sam_id', $sam_id)
+                                        ->get();
+
+            $dt = DataTables::of($sub_activity_ids)
+                                ->addColumn('value', function($row) {
+                                    $json = json_decode($row->value, true);
+
+                                    return $json['file'];
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
