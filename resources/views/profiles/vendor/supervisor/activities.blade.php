@@ -85,7 +85,8 @@
 
     @php
         $sites = \DB::connection('mysql2')
-            ->table('site_milestone')
+            // ->table("site_milestone")
+            ->table("milestone_tracking_2")
             ->select('sam_id', 'site_name', 'site_category', 'program_id')
             ->distinct()
             ->where('site_IS_id', "=", \Auth::id())
@@ -99,7 +100,8 @@
             ->get();
 
         $activities = \DB::connection('mysql2')
-            ->table('site_milestone')
+            // ->table("site_milestone")
+            ->table("milestone_tracking_2")
             ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
             ->distinct()
             ->where('site_IS_id', "=", \Auth::id())
