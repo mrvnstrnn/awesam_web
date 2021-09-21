@@ -19,7 +19,10 @@ $(document).ready(() => {
     }
 
     $("#invite_btn").on('click', function(){
+
         $(this).text('Sending...');
+        $(this).attr("disabled", "disabled");
+        
         $("small").text('');
         $.ajax({
             url: $(this).attr('data-href'),
@@ -29,6 +32,7 @@ $(document).ready(() => {
                 if(!resp.error) {
                     $("#invitation_form")[0].reset();
                     toastr.success(resp.message, 'Success');
+                    $("#invite_btn").removeAttr("disabled");
                     $("#invite_btn").text('Invite');
                 } else {
                     
@@ -39,11 +43,14 @@ $(document).ready(() => {
                     } else {
                         toastr.error(resp.message, 'Error');
                     }
+                    $("#invite_btn").removeAttr("disabled");
                     $("#invite_btn").text('Invite');
                 }
             },
 
             error: function (resp) {
+                $("#invite_btn").removeAttr("disabled");
+                $("#invite_btn").text('Invite');
                 toastr.error(resp.message, 'Error');
             }
         });
