@@ -69,13 +69,8 @@ return [
             'host' => env('DB_HOST_SECOND', '104.199.219.205'),
             'port' => env('DB_PORT_SECOND', '3306'),
             'database' => env('DB_DATABASE_SECOND', 'samtool'),
-<<<<<<< HEAD
             'username' => env('DB_USERNAME_SECOND', 'liveserver'),
             'password' => env('DB_PASSWORD_SECOND', 'P_U9*F)@f9&K5(W:'),
-=======
-            'username' => env('DB_USERNAME_SECOND', 'marvin'),
-            'password' => env('DB_PASSWORD_SECOND', 'X9Ed&Zchmksts39!'),
->>>>>>> a9baf103e5416ef6ecc509d5ca6a66428712904e
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
