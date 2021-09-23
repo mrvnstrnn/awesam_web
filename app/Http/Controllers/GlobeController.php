@@ -1982,7 +1982,6 @@ class GlobeController extends Controller
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
-            
     }
 
     public function get_site_doc_validation($program_id, $profile_id, $activity_type)

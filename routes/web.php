@@ -343,6 +343,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/set-approve-site', [GlobeController::class, 'set_approve_site']);
 
 
+    // NEWSITES PR-PO COUNTER
+    Route::get('/newsites/get-pr-po-counter', [NewSitesController::class, 'get_pr_po_counter']);
+
+
+
     //Site Category
     Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
 
@@ -388,6 +393,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/endorse-atrb', [GlobeController::class, 'endorse_atrb']);
 
     Route::get('/get-coloc-filter/{site_type}/{program}/{technology}', [GlobeController::class, 'get_coloc_filter']);
+
+
+
 
 });
 
