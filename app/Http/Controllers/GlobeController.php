@@ -951,7 +951,8 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-                                                        // return response()->json(['error' => false, 'message' => count($sub_activity_value)]);
+                
+                
                 // if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                 //     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 // }
