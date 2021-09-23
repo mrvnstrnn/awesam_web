@@ -132,6 +132,22 @@ class NewSitesController extends Controller
         }
     }
 
+    
+    // NEWSIES PR-PO COUNTER VIA AJAX
+    public function get_pr_po_counter()
+    {
+        try {
+            $counters = \DB::select(
+                'call milestones_newsites()'
+            );
+    
+            return response()->json(['error' => false, 'message' => $counters]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+
+    }
+
     //moving site
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
