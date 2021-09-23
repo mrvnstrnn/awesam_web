@@ -7,11 +7,12 @@ function makeDT(whatTable, whatCols, table_to_load) {
         
         $(whatTable).DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             filter: true,
             searching: true,
             lengthChange: true,
             responsive: true,
+            stateSave: true,
             regex: true,
             ajax: {
                 url: $(whatTable).attr('data-href'),

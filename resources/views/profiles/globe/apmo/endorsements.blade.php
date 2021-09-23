@@ -97,8 +97,8 @@
                     // }
                 }
             } else {
-                $("#viewInfoModal  .card-body").append(
-                    '<div><h1>No fields available.</h1></div>'
+                $("#viewInfoModal .card-body").append(
+                    '<div class="position-relative form-group"><h1>No fields available.</h1></div>'
                 );
             }
 
@@ -119,6 +119,7 @@
 
         $(document).on("click", ".checkAll", function(e){
             e.preventDefault();
+            
             var val = $(this).val();
             var atLeastOneIsChecked = $('input[name='+val+']:checkbox:checked').length > 0;
             

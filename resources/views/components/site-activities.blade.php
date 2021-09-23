@@ -42,13 +42,13 @@
     // dd($site);
         $activities = \DB::connection('mysql2')
             // ->table("site_milestone")
-            ->table("milestone_tracking_2")
+            ->table("milestone_tracking_3")
             ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
             ->distinct()
             ->where('sam_id', "=", $sam_id)
             ->get();
 
-        // dd($sites);
+        // dd($activities);
     @endphp
         <div id="accordion" class="accordion-wrapper mb-3">
 
