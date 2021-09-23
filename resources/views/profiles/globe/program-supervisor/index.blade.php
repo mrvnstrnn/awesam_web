@@ -10,5 +10,7 @@
 
 
     @include('profiles.dar_js')
+<!-- PR PO Counter -->
+<script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>  
 
 @endsection

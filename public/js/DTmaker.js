@@ -7,7 +7,7 @@ function makeDT(whatTable, whatCols, table_to_load) {
         
         $(whatTable).DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             filter: true,
             searching: true,
             lengthChange: true,

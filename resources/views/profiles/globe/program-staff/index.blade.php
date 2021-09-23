@@ -62,9 +62,9 @@
                     <div class="tab-pane active" id="tab-{{ $program->program_id  }}-milestones" role="tabpanel">
                         <div class="card-body">
                             @if($program->program_id == 6)
-                                <x-towerco-dashboard />
+                                <!-- <x-towerco-dashboard /> -->
                             @elseif($program->program_id == 1)
-                                @include('profiles.globe.dashboards.newsites-milestones')
+                                <!-- @include('profiles.globe.dashboards.newsites-milestones') -->
                             @else
                                 
                             <p class="mb-0">
@@ -95,14 +95,19 @@
 @endsection
 
 @section('js_script')
+
+
+<!-- PR PO Counter -->
+<script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>  
+
     <script>
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            drawBasic();
-        })    
+        // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        //     drawBasic();
+        // })    
 
     </script>
 
-@include('profiles.dar_js');
+<!-- @include('profiles.dar_js'); -->
 
     
 @endsection

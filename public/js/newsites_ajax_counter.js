@@ -3,13 +3,6 @@ $(document).ready(() => {
 
     refresh_counters();
 
-    $('a:contains("New CLP")').append(
-        '&nbsp;&nbsp;<span class="badge badge-pill badge-success" style="font-size: 10px; padding: 2px;">6</span>'
-    );
-
-    $('a:contains("PR Memo")').append(
-        '&nbsp;&nbsp;<span class="badge badge-pill badge-success" style="font-size: 10px; padding: 2px;">6</span>'
-    );
 
 
 });    
@@ -41,7 +34,42 @@ function refresh_counters() {
             $('.vendor_awarding_count').text(AWAITING_PO);
             $('.completed_count').text(COMPLETED);
             $('.total_sites').text(TOTAL_SITES);
+
+
+            $( ".sidebar_counter" ).remove();
+
+
+            $('a:contains("PR / PO")').append(
+
+            '<span class="sidebar_counter badge badge-dot badge-dot-md badge-danger">PR / PO</span>'
+
+            );    
+
             
+            if(OPEN > 0){
+                $('a:contains("New CLP")').append(
+                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 9px; padding: 2px !important;">' + OPEN + '</span>'
+                );    
+            }
+        
+            if(FOR_RAM_APPROVAL > 0 || FOR_NAM_APPROVAL > 0){
+                $('a:contains("PR Memo")').append(
+                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 9px; padding: 2px !important;">' + (+FOR_RAM_APPROVAL + +FOR_NAM_APPROVAL)  + '</span>'
+                );
+            }
+        
+            if(FOR_ARRIBA_PR_ISSUANCE > 0){
+                $('a:contains("PR Issuance")').append(
+                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 9px; padding: 2px !important;">' + FOR_ARRIBA_PR_ISSUANCE + '</span>'
+                );
+            }
+
+            if(AWAITING_PO > 0){
+                $('a:contains("Vendor Awarding")').append(
+                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 9px; padding: 2px !important;">' + AWAITING_PO + '</span>'
+                );
+            }
+
 
         },
         complete: function(){

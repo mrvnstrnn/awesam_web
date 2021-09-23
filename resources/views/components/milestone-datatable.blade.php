@@ -153,7 +153,6 @@
                             
                         {{-- NEW SITES PR/PO COUNTER  --}}
                         @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("New CLP", "PR Memo for Approval", "PR Issuance", "Vendor Awarding")))
-
                             <div class="row mb-3 pb-3 text-center border-bottom">
                                 <div class="col-md-5 col-12">
                                     <div class="row">
