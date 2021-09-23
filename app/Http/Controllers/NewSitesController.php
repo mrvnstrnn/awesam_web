@@ -136,91 +136,66 @@ class NewSitesController extends Controller
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
+            
+
             $get_past_activities = \DB::connection('mysql2')
                                     ->table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
 
-                                    $past_activities = collect();
+            $past_activities = collect();
 
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
 
-            if ( in_array($activity_id[$i], $past_activities->all()) ) {
-                $activities = \DB::connection('mysql2')
+            if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
+                    $activities = \DB::connection('mysql2')
                                         ->table('stage_activities')
                                         ->select('next_activity', 'activity_name', 'return_activity')
-                                        ->where('activity_id', $activity_id[$i])
+                                        ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
                                         ->where('program_id', $program_id)
-                                        ->where('category', $site_category[$i])
+                                        ->where('category', is_null($site_category[$i]) ? "none" : $site_category[$i])
                                         ->first();
 
                 if (!is_null($activities)) {
-                        
                     if ($action == "true") {
                         $get_activitiess = \DB::connection('mysql2')
                                                 ->table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
                                                 ->where('program_id', $program_id)
-                                                ->where('category', $site_category[$i])
+                                                ->where('category', is_null($site_category[$i]) ? "none" : $site_category[$i])
                                                 ->first();
 
-                        // $get_activities = \DB::connection('mysql2')
-                        //                 ->table('stage_activities')
-                        //                 ->where('next_activity', $get_activitiess->next_activity)
-                        //                 ->where('program_id', $program_id)
-                        //                 ->where('category', $site_category[$i])
-                        //                 ->get();
+                        $activity_name = $get_activitiess->activity_name;
+                        
+                        $activity = $get_activitiess->activity_id;
 
-                        // foreach ($get_activities as $get_activity) {
-                            // $get_activitiess = \DB::connection('mysql2')
-                            //                 ->table('stage_activities')
-                            //                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                            //                 ->where('activity_id', $activities->next_activity)
-                            //                 ->where('program_id', $program_id)
-                            //                 ->where('category', $site_category[$i])
-                            //                 ->first();
-
-                            $activity_name = $get_activitiess->activity_name;
-                            // $activity_name = $get_activity->activity_name;
-                            // $check_done = \DB::connection('mysql2')
-                            //                         ->table('site_stage_tracking')
-                            //                         ->select('sam_id')
-                            //                         ->where('sam_id', $sam_id[$i])
-                            //                         ->where('activity_complete', 'false')
-                            //                         ->get();
-    
-                            // $activity = $get_activity->activity_id;
-                            $activity = $get_activitiess->activity_id;
-    
-                            SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                    ->where('activity_complete', 'false')
-                                                    ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
-                                                    ->update([
-                                                        'activity_complete' => "true"
-                                                    ]);
-
-                            $check_if_added = \DB::connection('mysql2')
-                                                ->table('site_stage_tracking')
-                                                ->select('sam_id')
-                                                ->where('sam_id', $sam_id[$i])
-                                                // ->where('activity_id', $activities->next_activity)
-                                                ->where('activity_id', $activity)
+                        SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
-                                                ->get();
+                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
+                                                ->update([
+                                                    'activity_complete' => "true"
+                                                ]);
 
-                            // if ( count($check_if_added) <= 1 ) {
-                                SiteStageTracking::create([
-                                    'sam_id' => $sam_id[$i],
-                                    'activity_id' => $activity,
-                                    'activity_complete' => 'false',
-                                    'user_id' => \Auth::id()
-                                ]);
-                            // }
-                        // }
+                        $check_if_added = \DB::connection('mysql2')
+                                            ->table('site_stage_tracking')
+                                            ->select('sam_id')
+                                            ->where('sam_id', $sam_id[$i])
+                                            ->where('activity_id', $activity)
+                                            ->where('activity_complete', 'false')
+                                            ->get();
+
+                        if ( count($check_if_added) < 1 ) {
+                            SiteStageTracking::create([
+                                'sam_id' => $sam_id[$i],
+                                'activity_id' => $activity,
+                                'activity_complete' => 'false',
+                                'user_id' => \Auth::id()
+                            ]);
+                        }
                     } else {
 
                         $activity = $activities->return_activity;
@@ -230,17 +205,15 @@ class NewSitesController extends Controller
                                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                         ->where('activity_id', $activity)
                                         ->where('program_id', $program_id)
-                                        ->where('category', $site_category[$i])
+                                        ->where('category', is_null($site_category[$i]) ? "none" : $site_category[$i])
                                         ->first();
 
                         $activity_name = $get_activitiess->activity_name;
 
                         SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                // ->where('activity_id', $activity_id[$i])
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
-    
 
                         SiteStageTracking::create([
                             'sam_id' => $sam_id[$i],
@@ -254,7 +227,7 @@ class NewSitesController extends Controller
                         'activity_id' => $activity,
                         'activity_name' => $activity_name,
                         'profile_id' => $get_activitiess->profile_id,
-                        'category' => $site_category[$i],
+                        'category' => is_null($site_category[$i]) ? "none" : $site_category[$i],
                         'activity_created' => Carbon::now()->toDateString(),
                     );
     
