@@ -701,7 +701,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
           <div class="modal-header "  style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
-              <h5 class="modal-title text-dark"><i class="pe-7s-gleam pe-lg mr-2"></i>Add Issue</h5>
+              <h5 class="modal-title text-dark"><i class="pe-7s-gleam pe-lg mr-2"></i>Approval</h5>
               <button type="button" class="close text-dark" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
               </button>
