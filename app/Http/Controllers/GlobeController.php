@@ -1767,7 +1767,7 @@ class GlobeController extends Controller
                                         ->whereIn('profile_id', [8, 10])    
                                         ->get();
                             } else if (\Auth::user()->profile_id == 8) {
-                                $sites->whereIn('activity_id', [3])
+                                $sites->whereIn('activity_id', [3,4])
                                         ->whereIn('profile_id', [9, 10])
                                         ->get();
                             }
@@ -1793,7 +1793,9 @@ class GlobeController extends Controller
                             } else if (\Auth::user()->profile_id == 8) {
                                 // $sites->where('activity_id', '>', '2')
                                 $sites->where(function($q) {
-                                        $q->where('activity_id', '>', '2')
+                                        $q
+                                            ->where('activity_id', '>', '4')
+                                            ->where('activity_id', '<', '7')
                                             ->orWhere('activity_id', -1);
                                         })
                                         ->get();

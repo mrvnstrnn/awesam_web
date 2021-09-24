@@ -236,6 +236,9 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 <script type="text/javascript" src="/js/modal-loader.js"></script>  
 
+<!-- PR PO Counter -->
+<script type="text/javascript" src="/js/newsites_ajax_counter.js"></script> 
+
 <script>
     // $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();

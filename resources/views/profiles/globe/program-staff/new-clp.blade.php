@@ -276,6 +276,8 @@
                         $(".btn_create_pr").text("Create PR Memo");
 
                         $(".ajax_content_box").html(resp);
+                        refresh_counters();
+
                         $("#craetePrPoModal").modal("show");
                     // } else {
                     //     Swal.fire(
