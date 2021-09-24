@@ -926,12 +926,29 @@ class GlobeController extends Controller
 
             // sub_activity_name
             if($validate->passes()){
+
+                $sub_activities = SubActivity::select('requires_validation', 'requirements')
+                                                ->where('activity_id', $request->input("activity_id"))
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                ->first();
+
+                if ( $sub_activities->requirements == "required" ) {
+                    if ( is_null($sub_activities->requires_validation) ) {
+                        $file_status = "approved";
+                    } else {
+                        $file_status = "pending";
+                    }
+                } else {
+                    $file_status = "approved";
+                }
+
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => $new_file,
                     'user_id' => \Auth::id(),
-                    'status' => "pending",
+                    'status' => $file_status,
                 ]);
 
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
@@ -951,10 +968,19 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-                                                        // return response()->json(['error' => false, 'message' => count($sub_activity_value)]);
-                // if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                //     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                // }
+                
+                
+                if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
+                    $stage_activities = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('activity_type')
+                                                ->where('program_id', $request->input('program_id'))
+                                                ->where('activity_id', $request->input('activity_id'))
+                                                ->first();
+                    if ($stage_activities->activity_type != 'doc upload') {
+                        $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                    }
+                }
                 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
@@ -1688,7 +1714,7 @@ class GlobeController extends Controller
                                 ->where('view_sites_per_program.program_id', $program_id)
                                 ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                ->whereIn('view_sites_per_program.activity_id', [16])
+                                // ->whereIn('view_sites_per_program.activity_id', [16])
                                 ->get();
         }
 
@@ -1878,7 +1904,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("view_doc_validation_2")
                     ->select('sam_id', 'site_name', 'site_fields', 'count')
-                    ->distinct()
+                    // ->distinct()
                     ->where('program_id', $program_id)
                     // ->where('activity_complete', 'false')
                     ->where('count', '>', 0)

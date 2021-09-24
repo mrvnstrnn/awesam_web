@@ -94,12 +94,16 @@ function getCols(active_program, active_table, active_profile){
                                     searchable: true,
                                     regex: true,
                                     render : function(data){
-                                        col = JSON.parse(data.replace(/&quot;/g,'"'));
-                                        var results = $.map( col, function(e,i){
-                                            if( e.field_name === field['search_field'] ) 
-                                            return e; 
-                                        });
-                                        return results.length < 1 ? "" : results[0]['value'];
+                                        if (data != null) {
+                                            col = JSON.parse(data.replace(/&quot;/g,'"'));
+                                            var results = $.map( col, function(e,i){
+                                                if( e.field_name === field['search_field'] ) 
+                                                return e; 
+                                            });
+                                            return results.length < 1 ? "" : results[0]['value'];
+                                        } else {
+                                            return "";
+                                        }
                                     
                                     }
                                 }
