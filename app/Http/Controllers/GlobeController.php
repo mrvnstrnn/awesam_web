@@ -3381,29 +3381,79 @@ class GlobeController extends Controller
                                 ->where('vendor_id', $vendor)
                                 ->where('region_id', $sites_data->site_region_id)
                                 ->where('province_id', $sites_data->site_province_id)
-                                // ->where('lgu_id', $sites_data->site_lgu_id)
+                                ->where('lgu_id', $sites_data->site_lgu_id)
+                                ->where('site_type', "ROOFTOP")
+                                ->where('account_type', "BAU")
+                                ->where('solution_type', "MACRO")
                                 ->get();
 
-                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '!=', 'denied')->get();
+                // Works up to LGU 
+                if(count($fsa_data)>0){
 
-                if (count($fsa_line_items) < 1) {
-                    foreach ($fsa_data as $fsa) {
-                        FsaLineItem::create([
-                            'sam_id' => $sam_id[$i],
-                            'fsa_id' => $fsa->fsaq_id,
-                            'status' => 'pending',
-                        ]);
-                    }
+                } else {
+
+                    $fsa_data = \DB::connection('mysql2')
+                        ->table('fsaq')
+                        ->where('vendor_id', $vendor)
+                        ->where('region_id', $sites_data->site_region_id)
+                        ->where('province_id', $sites_data->site_province_id)
+                        ->whereNull('lgu_id')
+                        ->where('site_type', "ROOFTOP")
+                        ->where('account_type', "BAU")
+                        ->where('solution_type', "MACRO")
+                        ->get();
+
+                    // Works up to province 
+                    if(count($fsa_data)>0){
+
+                    } else {
+
+                        $fsa_data = \DB::connection('mysql2')
+                        ->table('fsaq')
+                        ->where('vendor_id', $vendor)
+                        ->where('region_id', $sites_data->site_region_id)
+                        ->whereNull('province_id')
+                        ->whereNull('lgu_id')
+                        ->where('site_type', "ROOFTOP")
+                        ->where('account_type', "BAU")
+                        ->where('solution_type', "MACRO")
+                        ->get();
+
+                        if(count($fsa_data)>0){
+
+                        } else {
+
+                        }
+                    } 
+
+                }
+
+                // GET PENDING FSA LINE ITEMS
+                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
+
+                // CLEANUP PENDING
+                if (count($fsa_line_items) > 0) {
+                  FsaLineItem::where('sam_id', $sam_id[$i])->delete();
+                }
+
+                foreach ($fsa_data as $fsa) {
+                    FsaLineItem::create([
+                        'sam_id' => $sam_id[$i],
+                        'fsa_id' => $fsa->fsaq_id,
+                        'status' => 'pending',
+                    ]);
                 }
 
                 $sites = FsaLineItem::select('site.site_name', 'site.site_address', 'site.sam_id', 'location_regions.region_name', 'location_provinces.province_name', 'fsaq.amount')
                             ->leftjoin('site', 'site.sam_id', 'site_line_items.sam_id')
                             ->leftjoin('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
-                            ->where('site.sam_id', $sam_id[$i])
-                            ->where('site_line_items.status', '!=', 'denied')
                             ->leftjoin('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->leftjoin('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->leftjoin('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.sam_id', $sam_id[$i])
+                            ->where('site_line_items.status', '!=', 'denied')
                             ->get();
+
 
                 if (count($sites) > 1) {
                     $sites_collect->push($sites);
@@ -3417,19 +3467,24 @@ class GlobeController extends Controller
 
                 $pricings = FsaLineItem::select('fsaq.amount')
                             ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
-                            ->where('site_line_items.sam_id', $sam_id[$i])
                             ->where('site_line_items.status', '!=', 'denied')
-                            ->get();
+                            ->where('site_line_items.sam_id', '=', $sam_id[$i])
+                            ->get();                
 
                 if (count($pricings) > 1) {
                     foreach ($pricings as $pricing) {
-                        $sites_fsa->push($pricing->amount);
+
+                        $amount = (float)$pricing->amount;
+
+                        $sites_fsa->push($amount);
                     }
                 }
 
+
+
             }
 
-            // return response()->json(['error' => true, 'message' => $sites_collect ]);
+
 
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
             
@@ -3467,18 +3522,90 @@ class GlobeController extends Controller
             //                 ->where('province', $sites->town_city)
             //                 ->get();
 
+
+
+
             $line_items = \DB::connection('mysql2')
                                 ->table('fsaq')
-                                ->where('vendor_id', $vendor)
+                                ->where('vendor_id', $vendor)                                
                                 ->where('region_id', $sites->site_region_id)
-                                // ->where('province_id', $sites_data->site_province_id)
-                                // ->where('lgu_id', $sites_data->site_lgu_id)
+                                ->where('province_id', $sites->site_province_id)
+                                ->where('lgu_id', $sites->site_lgu_id)
+                                ->where('fsaq.site_type', '=', 'ROOFTOP')
+                                ->where('fsaq.account_type', '=', 'BAU')
+                                ->where('fsaq.solution_type', '=', 'MACRO')
                                 ->get();
+            // return dd($line_items);
 
-            $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
+            if(count($line_items)>0){
+
+                $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
+                ->get();
+
+                return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
+
+            } else {
+
+                $fsaq_regions = \DB::connection('mysql2')
+                                    ->table('fsaq')
+                                    ->select('vendor', \DB::raw('count(`fsaq_id`) as counter'))
+                                    ->groupBy('vendor')
+                                    ->where('vendor_id', $vendor)
+                                    ->where('region_id', $sites->site_region_id)
+                                    ->where('fsaq.site_type', '=', 'ROOFTOP')
+                                    ->where('fsaq.account_type', '=', 'BAU')
+                                    ->where('fsaq.solution_type', '=', 'MACRO')
+                                    ->get();
+
+                if(count($fsaq_regions) > 0){
+
+                    $fsaq_provinces = \DB::connection('mysql2')
+                                    ->table('fsaq')
+                                    ->select('vendor', \DB::raw('count(`fsaq_id`) as counter'))
+                                    ->groupBy('vendor')
+                                    ->where('vendor_id', $vendor)
+                                    ->where('region_id', $sites->site_region_id)
+                                    ->where('province_id', $sites->site_province_id)
+                                    ->whereNull('lgu_id')
+                                    ->where('fsaq.site_type', '=', 'ROOFTOP')
+                                    ->where('fsaq.account_type', '=', 'BAU')
+                                    ->where('fsaq.solution_type', '=', 'MACRO')
+                                ->get();
+                    
+                    if(count($fsaq_provinces) > 0){
+
+                        $line_items = \DB::connection('mysql2')
+                                        ->table('fsaq')
+                                        ->where('vendor_id', 9)                                
+                                        ->where('region_id', $sites->site_region_id)
+                                        ->where('province_id', $sites->site_province_id)
+                                        ->whereNull('lgu_id')
+                                        ->where('fsaq.site_type', '=', 'ROOFTOP')
+                                        ->where('fsaq.account_type', '=', 'BAU')
+                                        ->where('fsaq.solution_type', '=', 'MACRO')
                                         ->get();
 
-            return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
+                        // return dd($line_items);
+
+                        $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
+                        ->get();
+        
+                        return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
+                                                                
+                    } else {
+                     
+                        return response()->json(['error' => true, 'message' => "No FSAQ data in province: " . $sites->site_province_id . " lgu: " . $sites->site_lgu_id . " for vendor id: " . $vendor ]);
+                    
+                    }
+
+                } else {
+                    return response()->json(['error' => true, 'message' => "No FSAQ data in region: " . $sites->site_region_id . " for vendor id: " . $vendor ]);
+                }
+
+            }
+                                
+
+
 
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -3731,10 +3858,10 @@ class GlobeController extends Controller
 
             $what_modal = "components.create-pr-memo";
 
-            $vendors = Vendor::select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
-                                            ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
-                                            ->where("vendor_programs.programs", 1)
-                                            ->get();
+            $vendors = \DB::table("fsaq_vendors")
+                                ->select("fsaq_vendors.vendor_sec_reg_name", "fsaq_vendors.vendor_id", "fsaq_vendors.vendor_acronym")
+                                ->orderBy('vendor_sec_reg_name', 'ASC')
+                                ->get();
 
             // $sites = \DB::connection('mysql2') 
             //                     ->table("site")

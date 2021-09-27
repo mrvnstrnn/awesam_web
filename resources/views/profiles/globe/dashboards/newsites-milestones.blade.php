@@ -1176,7 +1176,7 @@
             });
 
             var whatModalHeader = $('#modal-milestone-submilestones').find('.modal-title').text();
-
+            
             if( whatModalHeader == 'PR Created Distribution'){
                 whatData = PR_Created_Distribution;
             } 
@@ -1197,6 +1197,10 @@
             } 
 
 
+            
+            if (typeof whatData === 'undefined') {
+               // variable is undefined
+            } else {
             var data = google.visualization.arrayToDataTable(whatData);
 
             var options = {
@@ -1206,11 +1210,16 @@
                         position: 'left',
                         textStyle : { fontSize: 12}                            
                     },
-            };
+            };x`
 
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 
             chart.draw(data, options);
+
+            }
+
+
+
         }            
 
         $('.milestone-submilestones').on( 'click', function (e) {
