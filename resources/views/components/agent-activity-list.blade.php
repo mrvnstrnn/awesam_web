@@ -13,7 +13,7 @@
 //     ->get();
 
 $activities = \DB::connection('mysql2')
-    ->table('view_sites_activity_2')
+    ->table('view_sites_activity_3')
     // ->table('view_sites_activity')
     ->whereJsonContains('site_agent', [
         'user_id' => \Auth::id()
