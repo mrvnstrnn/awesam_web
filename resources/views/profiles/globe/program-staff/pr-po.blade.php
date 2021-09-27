@@ -14,7 +14,7 @@
     <x-pr-po-datatable ajaxdatatablesource="site-milestones" tableheader="PR Memo List" activitytype="pr memo approved"/>
 
 @endsection
-
+ 
 
 @section('modals')
 
