@@ -48,6 +48,11 @@
             ->where('sam_id', "=", $sam_id)
             ->get();
 
+        // $activities = \DB::connection('mysql2')
+        //                     ->table("timeline")
+        //                     ->join('stage_activities', 'stage_activities.activity_id', 'timeline.activity_id')
+        //                     ->where('timeline.sam_id', $sam_id)
+        //                     ->get();
         // dd($activities);
     @endphp
         <div id="accordion" class="accordion-wrapper mb-3">
@@ -95,7 +100,6 @@
                                     }
                                 }
                             }
-
                         @endphp
 
                         <li class="list-group-item activity_list_item" data-sam_id="{{ $sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">

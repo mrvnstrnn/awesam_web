@@ -15,19 +15,19 @@
 <div class="row file_lists">
     @php
         $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-    //     $datas = \DB::connection('mysql2')
-    //                     ->table('sub_activity_value')
-    //                     ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
-    //                     ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-    //                     ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-    //                     // ->where('sub_activity_value.status', 'pending')
-    //                     // ->groupBy('sub_activity_name')
-    //                     ->get();
-
-    //                     dd($datas->groupBy('sub_activity_name'));
-    // @endphp
+    @endphp
 
     @forelse ($datas as $data)
+        {{-- @if (is_null($data->files)) --}}
+            {{-- <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
+                <div class="dropzone dropzone_files" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
+                    <div class="dz-message">
+                        <i class="fa fa-plus fa-3x"></i>
+                        <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
+                    </div>
+                </div>
+            </div> --}}
+        {{-- @else --}}
         
         @if (!is_null($data->files))
             @php
