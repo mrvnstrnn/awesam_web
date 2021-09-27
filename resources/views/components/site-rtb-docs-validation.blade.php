@@ -25,7 +25,7 @@
     //                     ->get();
 
     //                     dd($datas->groupBy('sub_activity_name'));
-    // @endphp
+    @endphp
 
     @forelse ($datas as $data)
         
@@ -52,7 +52,7 @@
             @endphp
             
             @foreach ($uploaded_files as $item)
-                @if ($item->status == "denied")
+                {{-- @if ($item->status == "denied")
                     <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
                         <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                             <div class="dz-message">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                @else
+                @else --}}
                     @if($loop->first)
                         <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
                             <div class="child_div_{{ $data->sub_activity_id }}">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     @endif
-                @endif
+                {{-- @endif --}}
             @endforeach
         @endif
     @empty
