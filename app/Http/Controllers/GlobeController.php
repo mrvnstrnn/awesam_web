@@ -930,6 +930,7 @@ class GlobeController extends Controller
                 $sub_activities = SubActivity::select('requires_validation', 'requirements')
                                                 ->where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
                                                 ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                 ->first();
 
@@ -1514,14 +1515,20 @@ class GlobeController extends Controller
                 //                                 ->where('program_id', $request->input("program_id"))
                 //                                 ->get();
 
-                $sub_activitiess = SubActivity::where('sub_activity_id', $sub_activity_files->sub_activity_id)
-                                                ->where('program_id', $request->input("program_id"))
-                                                ->where('category', $request->input("site_category"))
-                                                ->first();
+                // $sub_activitiess = SubActivity::where('sub_activity_id', $sub_activity_files->sub_activity_id)
+                //                                 ->where('program_id', $request->input("program_id"))
+                //                                 ->where('category', $request->input("site_category"))
 
-                $sub_activities = SubActivity::where('activity_id', $sub_activitiess->activity_id)
+                //                                 ->where('requires_validation', 1)
+
+                //                                 ->first();
+
+                $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
                                                 ->where('category', $request->input("site_category"))
+
+                                                ->where('requires_validation', '1')
+                                                
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -1536,19 +1543,10 @@ class GlobeController extends Controller
                                                         ->where('sam_id', $request->input("sam_id"))
                                                         ->groupBy('sub_activity_id')->get();
 
-                $sub_activity_value_rejected = SubActivityValue::select('sub_activity_id')
-                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'pending')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->groupBy('sub_activity_id')->get();
-
                                                         // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
                 if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                } 
-                // else if ( count($array_sub_activity->all()) <= count($sub_activity_value_rejected) ) {
-                //     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "false", [$request->input("site_category")], [$request->input("activity_id")]);
-                // }
+                }
 
 
                 // $email_receiver = User::select('users.*')
@@ -1959,9 +1957,10 @@ class GlobeController extends Controller
             
             $sites = \DB::connection('mysql2') 
                     ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
                     ->where('program_id', $program_id)
-                    ->whereIn('activity_id', [7])
-                    // ->where('activity_id', [7])
+                    // ->whereIn('activity_id', [7])
+                    // ->where('profile_id', \Auth::user()->profile_id)
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
         }
