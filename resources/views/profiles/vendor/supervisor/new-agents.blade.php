@@ -31,7 +31,7 @@
 
         @foreach ($programs as $program)
             <li class="nav-item">
-                <a role="tab" class="nav-link agent {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
+                <a role="tab" class="nav-link newagent {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
                     <span>{{ $program->program }}</span>
                 </a>
             </li>
@@ -51,14 +51,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="agent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover assign-agent-site-table" data-href="{{ route('all.newagent', $program->program_id) }}" data-page="new-agent">
+                                    <table id="newagent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover assign-agent-site-table" data-href="{{ route('all.newagent', $program->program_id) }}" data-page="new-agent">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10%;">Photo</th>
                                                 <th>Firstname</th>
                                                 <th>Lastname</th>
                                                 <th>Email</th>
-                                                <th>Areas</th>
+                                                {{-- <th>Areas</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
