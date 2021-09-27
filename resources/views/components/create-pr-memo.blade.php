@@ -118,7 +118,7 @@
                                                 <label for="vendor">Vendor</label>
                                                 <select name="vendor" id="vendor" class="form-control">
                                                     @foreach ($vendors as $vendor)
-                                                        <option value="{{ $vendor->vendor_id }}">{{ $vendor->vendor_sec_reg_name }} ({{ $vendor->vendor_acronym }})</option>
+                                                        <option value="{{ $vendor->vendor_id }}">{{ ucfirst($vendor->vendor_sec_reg_name) }} ({{ $vendor->vendor_acronym }})</option>
                                                     @endforeach
                                                 </select>
                                                 <small class="text-danger vendor-error"></small>
@@ -170,6 +170,9 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-primary add_pr_po">Create PR Memo</button>
                                 <button type="submit" class="print_to_pdf d-none"></button>
+
+                                <button type="button" class="btn btn-shadow btn-sm btn-secondary fsaq_btns cancel_line_items d-none">Cancel</button> 
+                                <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items fsaq_btns d-none" data-sam_id="">Save line items</button>
                             </div>
                         </form>
                     </div> 
@@ -245,18 +248,17 @@
                                         
                                         if (element[i] != undefined) {
                                             if (element[i].amount != '-') {
-                                                // sum_fsa = Number(sum_fsa) + Number(element[i].amount.replaceAll(/\s/g,''));
-                                                sum_fsa += Number(element[i].amount);
+                                                sum_fsa += parseFloat(element[i].amount.replace(/,/g,''));
                                             }
                                         }
                                     }
 
                                     $(".table_financial_analysis table tbody").append("<tr class='tr"+element[0].sam_id+"'>" + 
-                                        "<td><strong>"+element[0].site_address+"</strong><br><small><strong>S/N:</strong> "+ element[0].serial_number +" | <strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
+                                        "<td><strong>"+element[0].site_name+"</strong><br><small><strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
                                         "<td>"+element[0].region_name+"</td>" +
                                         "<td>"+element[0].province_name+"</td>" +
-                                        "<td>"+sum_fsa.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+"</td>" +
-                                        "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"''><i class='fa fa-minus'></i></button></td>" +
+                                        "<td>"+sum_fsa.toLocaleString('en')+"</td>" +
+                                        "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'  data-site_name='"+element[0].site_name+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"' data-site_name='"+element[0].site_name+"'><i class='fa fa-minus'></i></button></td>" +
                                         "</tr>");
 
                                     $("select option.option"+element[0].sam_id).attr("disabled", "disabled");
@@ -407,20 +409,27 @@
             });
         });
 
+
         $(".table_financial_analysis").on("click", ".line_item_td", function (e){
             e.preventDefault();
 
             var sam_id = $(this).attr('data-sam_id');
+            var site_name = $(this).attr('data-site_name');
             
             var vendor = $("#vendor").val();
 
-            $("#craetePrPoModal .menu-header-title").text(sam_id);
-
+            $("#craetePrPoModal .menu-header-title").text('FSAQ Line Items');
+            $(".save_line_items").attr('data-sam_id', sam_id);
             $("#craetePrPoModal .line_items_area").removeClass("d-none");
             $("#craetePrPoModal .form_div").addClass("d-none");
 
             $(".line_items_area div").remove();
 
+            $(".add_pr_po").addClass("d-none");
+            $(".fsaq_btns").removeClass("d-none");
+
+            $(".line_items_area").html("Loading FSAQ Line Items...");
+            
             $.ajax({
                 url: "/get-line-items/" + sam_id + "/" +vendor,
                 method: "GET",
@@ -428,6 +437,16 @@
                     if (!resp.error) {
                         // console.log(resp.message);
                         if (typeof resp.message === 'object' && resp.message !== null) {
+
+                            $(".line_items_area").html("");
+
+                            $(".line_items_area").append(
+                                
+                                '<div><H2>' + site_name +'</H2></div>'
+                            );
+                            // $(".line_items_area").append(
+                            //     '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Cancel</button> <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items" data-sam_id="'+sam_id+'"">Save line items</button></div>'
+                            // );
                             $.each(resp.message, function(index, data) {
                                 $(".line_items_area").append(
                                     '<div class="mt-3"><label><b>'+index+'</b></label></div>'
@@ -437,12 +456,11 @@
                                     $(".line_items_area").append(
                                         '<div class="form-row">' +
                                             '<div class="col-6">' +
-                                        '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'"> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
-                                        '</label></div></div>' +
-
+                                                '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'"> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
+                                                '</label></div>' +
                                         '<div class="col-6">' +
                                             checkbox_data.amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +
-                                        '</div>' 
+                                        '</div></div>' 
                                     );
                                 });
                             });
@@ -452,9 +470,6 @@
                                 $("input[value='" + element.fsa_id + "']").prop('checked', true);
                             });
 
-                            $(".line_items_area").append(
-                                '<div><button type="button" class="btn btn-shadow btn-sm btn-secondary cancel_line_items">Cancel</button> <button type="button" class="btn btn-shadow btn-sm btn-primary save_line_items" data-sam_id="'+sam_id+'"">Save line items</button></div>'
-                            );
                         }
                     } else {
                         Swal.fire(
@@ -474,11 +489,13 @@
             });
         });
 
-        $(".line_items_area").on("click", ".save_line_items", function(e){
+        $(".save_line_items").on("click", function(e){
             e.preventDefault();
+
 
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
+            
 
             var sam_id = $(this).attr('data-sam_id');
             var inputElements = document.getElementsByName('line_item');
@@ -505,6 +522,9 @@
 
                         $("button.remove_td[data-sam_id='"+sam_id+"']").trigger("click");
 
+                        $(".add_pr_po").removeClass('d-none');
+                        $(".fsaq_btns").addClass("d-none");
+
                         Swal.fire(
                             'Success',
                             resp.message,
@@ -519,6 +539,9 @@
 
                         $(".save_line_items").removeAttr("disabled");
                         $(".save_line_items").text("Save line items");
+
+                        $("#craetePrPoModal .menu-header-title").text('Create PR Memo');
+
                     } else {
                         Swal.fire(
                             'Error',
@@ -547,6 +570,11 @@
         $("#craetePrPoModal").on("click", ".cancel_line_items", function(e){
             $("#craetePrPoModal .line_items_area").addClass("d-none");
             $("#craetePrPoModal .form_div").removeClass("d-none");
+
+            $(".add_pr_po").removeClass("d-none");
+            $(".fsaq_btns").addClass("d-none");
+
+            $("#craetePrPoModal .menu-header-title").text('Create PR Memo');
         });
         
         $(document).on("click", ".edit_form_pdf", function (e) {
