@@ -35,7 +35,7 @@
         }
 
         .dropzone {
-        
+
             min-height: 20px !important;
             border: 1px dashed #3f6ad8 !important;
             padding: unset !important;
@@ -52,11 +52,11 @@
         //     ->where('site_agent_id', "=", \Auth::id())
         //     ->where('activity_complete', "=", 'false')
         //     ->get();
-        
+
         // $site_status = \DB::connection('mysql2')
         //     ->table('site_milestone_status')
         //     ->where('site_agent_id', "=", \Auth::id())
-        //     ->orderBy('sam_id') 
+        //     ->orderBy('sam_id')
         //     ->get();
 
         // $activities = \DB::connection('mysql2')
@@ -87,7 +87,7 @@
                             </button>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <ul class="todo-list-wrapper list-group list-group-flush" id="agent_activity_list">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">
@@ -97,8 +97,8 @@
                                 <div></div>
                             </div>
                         </div>
-                    </div>                                        
-                </ul>                            
+                    </div>
+                </ul>
             </div>
         </div>
         <div class="col-lg-6">
@@ -115,7 +115,7 @@
                         <div class="btn-actions-pane-right actions-icon-btn">
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div id="agent_site_progress">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">
@@ -177,7 +177,7 @@
                             <textarea class="form-control"></textarea>
                         </div>
                     </div>
-                </form>                
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary modal_close"  data-dismiss="modal">Close</button>
@@ -186,8 +186,7 @@
             </div>
         </div>
     </div>
-    
-    
+
 @endsection
 
 
@@ -214,7 +213,7 @@ $(document).ready(() => {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (resp){
-            $('#agent_activity_list').html("");   
+            $('#agent_activity_list').html("");
             $('#agent_activity_list').html(resp);
         },
         error: function (resp){
@@ -222,25 +221,25 @@ $(document).ready(() => {
         }
     });
 
-    // $.ajax({
-    //     url: "/modal-view-site-component/" + sam_id + "/agent-progress",
-    //     method: "GET",
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     },
-    //     success: function (resp){
-    //         $('#agent_site_progress').html("");   
-    //         $('#agent_site_progress').html(resp);
-    //     },
-    //     error: function (resp){
-    //         toastr.error(resp.message, "Error");
-    //     }
-    // });
+    $.ajax({
+        url: "/modal-view-site-component/" + sam_id + "/agent-progress",
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (resp){
+            $('#agent_site_progress').html("");
+            $('#agent_site_progress').html(resp);
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
 
     $(document).on('click', '#show-admin-tasks', function(){
         $('#admin-task-modal').modal('show');
     });
-    
+
 
 });
 
@@ -256,7 +255,7 @@ $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
                    '</div>' +
                    '</div>';
 
-    $('#agent_activity_list').html(loading);   
+    $('#agent_activity_list').html(loading);
 
 
     var sam_id = $('#modal_sam_id').val();
@@ -268,18 +267,18 @@ $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (resp){
-            $('#agent_activity_list').html("");   
+            $('#agent_activity_list').html("");
             $('#agent_activity_list').html(resp);
         },
         error: function (resp){
             toastr.error(resp.message, "Error");
         }
     });
-})        
+})
 
 
 
-    var mode = "today";
+var mode = "today";
 
 
 $(document).find('.circle-progress').each(function(index, element){

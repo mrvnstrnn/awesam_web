@@ -1,12 +1,11 @@
 @php
     $site_status = \DB::connection('mysql2')
-        ->table('milestone_tracking_2')
-        ->select('site_name', 'progress', 'sam_id', 'site_category','activity_name')
-        ->where('site_agent_id', "=", \Auth::id())
-        ->where('activity_complete', "=", 'false')
-        ->where('profile_id', "=", '2')
-        ->get();  
-        
+        ->table('view_sites_activity_2')
+        ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
+        ->select('site_name', 'site_users.sam_id', 'site_category','activity_name')
+        ->where('agent_id', "=", \Auth::id())
+        ->get();
+
     // $site_status = \DB::connection('mysql2')
     //     ->table('view_sites_activity')
     //     ->select('site_name', 'progress', 'sam_id', 'site_category','activity_name')
@@ -23,7 +22,7 @@
         <div class="row">
         <div class="col ml-1" style="max-width: 55px; padding:0">
             <div class="circle-progress circle-progress-primary d-inline-block">
-                <small><span class="site_progress">{{ $site_->progress }}</span></small>
+                <small><span class="site_progress">.10</span></small>
             </div>
         </div>
         {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
@@ -33,13 +32,13 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: 14px;
-            font-weight: bold; 
+            font-weight: bold;
           ">{{ $site_->site_name }}</div>
             <div class="badge badge-dark" style="font-size: 9px !important;">{{ $site_->activity_name }}</div>
             <div>
             <small>{{ $site_->sam_id }} {{ $site_->site_category == "none" ? "" : $site_->site_category }}</small>
             </div>
-        </div>   
+        </div>
         </div>
     </div>
 @endforeach
