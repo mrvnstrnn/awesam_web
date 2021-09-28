@@ -61,14 +61,14 @@ class GlobeController extends Controller
     //         $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
     //         // $program = Program::where('program_id', $program_id)->first();
-            
+
     //         $dt = DataTables::of($stored_procs)
     //                     ->addColumn('checkbox', function($row) use($program_id) {
     //                         $checkbox = "<div class='custom-checkbox custom-control'>";
     //                         $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement' data-site_vendor_id='".$row->site_vendor_id."'>";
     //                         $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
     //                         $checkbox .= "</div>";
-    
+
     //                         return $checkbox;
     //                     })
     //                     ->addColumn('technology', function($row){
@@ -79,13 +79,13 @@ class GlobeController extends Controller
     //                             $technology = "";
     //                         }
     //                         // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-    //                         return "<div class='badge badge-success'>".$technology."</div>";                            
+    //                         return "<div class='badge badge-success'>".$technology."</div>";
     //                     });
     //                     // ->addColumn('pla_id', function($row){
     //                     //     return $row['site_fields'][0]['PLA_ID'];
-                            
+
     //                     // });
-            
+
     //         $dt->rawColumns(['checkbox', 'technology']);
     //         return $dt->make(true);
     //     } catch (\Throwable $th) {
@@ -106,7 +106,7 @@ class GlobeController extends Controller
 
 
     //             // DECLARE JSON FIELDS AND SKIP
-    //             $json_fields = array("site_fields", "stage_activities");            
+    //             $json_fields = array("site_fields", "stage_activities");
 
     //             foreach($new_endorsements[$i] as $xfield => $object){
     //                 if(in_array($xfield, $json_fields)===FALSE){
@@ -114,17 +114,17 @@ class GlobeController extends Controller
     //                 }
     //             }
 
-    //             // Process JSON FIELDS and add to JSON 
+    //             // Process JSON FIELDS and add to JSON
     //             $site_fields = json_decode($new_endorsements[$i]->site_fields, TRUE);
     //             $stage_activities = json_decode($new_endorsements[$i]->stage_activities ? $new_endorsements[$i]->stage_activities  : "", TRUE);
 
-    //             $json["site_fields"] = $site_fields;           
+    //             $json["site_fields"] = $site_fields;
     //             $json["stage_activities"] = $stage_activities;
 
     //             $json_output[] = $json;
 
     //         }
-            
+
     //         return $json_output;
 
 
@@ -141,7 +141,7 @@ class GlobeController extends Controller
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
-            
+
             if ($request->input('activity_name') == "Vendor Awarding" || $request->input('activity_name') == "Set Ariba PR Number to Sites") {
                 if ($request->input('activity_name') == "Vendor Awarding") {
                     $validate = Validator::make($request->all(), array(
@@ -199,7 +199,7 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
 
                 if (\Auth::user()->profile_id == 12) {
-                    for ($i=0; $i < count($samid); $i++) { 
+                    for ($i=0; $i < count($samid); $i++) {
                         Site::where('sam_id', $samid[$i])->update([
                             'program_endorsement_date' => Carbon::now()
                         ]);
@@ -243,7 +243,7 @@ class GlobeController extends Controller
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
-                
+
             } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation") {
 
                 $notification = "Successfully mark this site as completed.";
@@ -255,7 +255,7 @@ class GlobeController extends Controller
                 $site_category = $request->input('site_category');
 
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
-                
+
                 $notification = "Successfully set PR Number.";
                 $action = $request->input('data_action');
 
@@ -291,17 +291,17 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
             }
-            
-            // for ($i=0; $i < count($request->input('sam_id')); $i++) { 
+
+            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
 
             //     SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
 
                 // if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
-                    
+
                 //     if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
                 //         $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
                 //     } else {
-                //         $vendor = $vendor; 
+                //         $vendor = $vendor;
                 //     }
                 //     for ($k=0; $k < count($vendor); $k++) {
                 //         $email_receiver = User::select('users.*')
@@ -311,8 +311,8 @@ class GlobeController extends Controller
                 //                         ->where('user_details.vendor_id', $vendor[$k])
                 //                         ->where('user_programs.program_id', $request->input('data_program'))
                 //                         ->get();
-                        
-                //         for ($j=0; $j < count($email_receiver); $j++) { 
+
+                //         for ($j=0; $j < count($email_receiver); $j++) {
                 //             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
                 //         }
                 //     }
@@ -328,7 +328,7 @@ class GlobeController extends Controller
             //                             ->where('sam_id', $request->input('sam_id')[$i])
             //                             ->where('activity_complete', 'false')
             //                             ->get();
-    
+
             //     $get_activities = \DB::connection('mysql2')
             //                             ->table('stage_activities')
             //                             ->where('activity_id', $get_past_activities[0]->activity_id)
@@ -338,7 +338,7 @@ class GlobeController extends Controller
             //                             return response()->json(['error' => true, 'message' => $get_activities]);
 
             // }
-            
+
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             // return response()->json(['error' => true, 'message' => $asd]);
@@ -351,7 +351,7 @@ class GlobeController extends Controller
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
-            
+
 
             $get_past_activities = \DB::connection('mysql2')
                                     ->table('site_stage_tracking')
@@ -385,7 +385,7 @@ class GlobeController extends Controller
                                                 ->first();
 
                         $activity_name = $get_activitiess->activity_name;
-                        
+
                         $activity = $get_activitiess->activity_id;
 
                         SiteStageTracking::where('sam_id', $sam_id[$i])
@@ -437,7 +437,7 @@ class GlobeController extends Controller
                             'user_id' => \Auth::id()
                         ]);
                     }
-    
+
                     $array = array(
                         'activity_id' => $activity,
                         'activity_name' => $activity_name,
@@ -445,7 +445,7 @@ class GlobeController extends Controller
                         'category' => is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i],
                         'activity_created' => Carbon::now()->toDateString(),
                     );
-    
+
                     Site::where('sam_id', $sam_id[$i])
                     ->update([
                         'activities' => json_encode($array)
@@ -459,7 +459,7 @@ class GlobeController extends Controller
     {
         try {
             $stored_procs = $this->getWorkflow($program_id);
-            
+
             $dt = DataTables::of($stored_procs);
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -498,9 +498,9 @@ class GlobeController extends Controller
                                     $technology = "";
                                 }
                                 // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-                                return "<div class='badge badge-success'>".$technology."</div>";                            
+                                return "<div class='badge badge-success'>".$technology."</div>";
                             });
-            
+
             $dt->rawColumns(['photo', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -525,7 +525,7 @@ class GlobeController extends Controller
             $email_receiver->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true", $request->input('site_name')) );
 
             if(is_null($checkAgent)) {
-                
+
                 SiteAgent::create([
                     'agent_id' => $request->input('agent_id'),
                     'sam_id' => $request->input('sam_id'),
@@ -534,13 +534,13 @@ class GlobeController extends Controller
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
 
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
-                
+
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             } else {
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
-                
+
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
         } catch (\Throwable $th) {
@@ -549,7 +549,7 @@ class GlobeController extends Controller
     }
 
     public function vendor_assigned_sites($program_id, $mode)
-    {   
+    {
         if($mode == "vendor"){
             if((\Auth::user()->profile_id)==2){
                 $sites = \DB::connection('mysql2')->table('site')
@@ -564,7 +564,7 @@ class GlobeController extends Controller
                             ->where('program_id', "=", $program_id)
                             ->where('IS_id', "=", \Auth::user()->id)
                             ->get();
-            } 
+            }
         } else {
 
             $sites = \DB::connection('mysql2')->table('site')
@@ -602,7 +602,7 @@ class GlobeController extends Controller
                                     ->where('user_details.IS_id', \Auth::user()->id)
                                     ->where('user_programs.program_id', $program_id)
                                     ->get();
-                                                        
+
             $dt = DataTables::of($checkAgent)
                     ->addColumn('photo', function($row){
                         $photo = "<div class=avatar-icon-wrapper avatar-icon-sm'>";
@@ -616,7 +616,7 @@ class GlobeController extends Controller
                     ->addColumn('areas', function($row){
                         return $row->region. " | " .$row->province;
                     });
-            
+
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -637,7 +637,7 @@ class GlobeController extends Controller
                                     ->whereNull('users_areas.user_id')
                                     ->where('user_programs.program_id', $program_id)
                                     ->get();
-                                                        
+
             $dt = DataTables::of($checkAgent)
                     ->addColumn('photo', function($row){
                         $photo = "<div class=avatar-icon-wrapper avatar-icon-sm'>";
@@ -651,7 +651,7 @@ class GlobeController extends Controller
                     ->addColumn('areas', function($row){
                         return null;
                     });
-            
+
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -665,14 +665,14 @@ class GlobeController extends Controller
         try {
 
             if (is_null($user_id)) {
-                
+
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
                 $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
                                         ->where('users.profile_id', 2)
                                         ->get();
-                                                            
+
                 $dt = DataTables::of($checkAgent)
                                     ->addColumn('action', function($row){
                                         return '<button class="btn btn-sm btn-primary update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button>';
@@ -685,14 +685,14 @@ class GlobeController extends Controller
                                         ->where('users.profile_id', 2)
                                         ->where('user_details.IS_id', $user_id)
                                         ->get();
-                                                            
+
                 $dt = DataTables::of($checkAgent)
                                     ->addColumn('action', function($row){
                                         return '<button class="btn btn-sm btn-primary get_supervisor" data-user_id="'.$row->user_id.'" data-profile_id="'.$row->profile_id.'" data-is_id="'.$row->IS_id.'" data-name="'.$row->name.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button>';
                                     });
             }
 
-                
+
             $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -707,11 +707,11 @@ class GlobeController extends Controller
                                     ->where('user_details.IS_id', \Auth::id())
                                     ->where('users.profile_id', 3)
                                     ->get();
-                                                        
+
             $dt = DataTables::of($checkSupervisor)
                                 ->addColumn('number_agent', function($row){
                                     $agents = UserDetail::select('user_id')->where('IS_id', $row->user_id)->get();
-                                    return count($agents);                            
+                                    return count($agents);
                                 });
 
             return $dt->make(true);
@@ -729,7 +729,7 @@ class GlobeController extends Controller
                                     ->where('user_details.IS_id', $user_id)
                                     // ->where('users.profile_id', 3)
                                     ->get();
-            
+
             return response()->json(["error" => false, "message" => $getAgentOfSupervisor]);
         } catch (\Throwable $th) {
             return response()->json(["error" => true, "message" => $th->getMessage()]);
@@ -743,7 +743,7 @@ class GlobeController extends Controller
                                                 ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
                                                 ->where('user_details.user_id', \Auth::user()->id)
                                                 ->first();
-                                        
+
             if(!is_null($is_location)){
                 $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
             } else {
@@ -790,7 +790,7 @@ class GlobeController extends Controller
             $validate = Validator::make($request->all(), array(
                 'region' => 'required',
                 'province' => 'required',
-                'lgu' => $lgu_validator 
+                'lgu' => $lgu_validator
             ));
 
             if($validate->passes()){
@@ -807,7 +807,7 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
-    }    
+    }
 
     public function loi_template($sam_id = "", $sub_activity_id = "")
     {
@@ -826,10 +826,10 @@ class GlobeController extends Controller
                 $content .= "<p>Subject: <b>NOTICE TO PROCEED</b></p>";
                 $content .= "<p>Dear <b>Sir/Ma'am</b></p>";
                 $content .= "<p>We would like to seek for your approval to allow Globe Telecom, Inc., its employees, agents or representatives to commence with the enhancement of facilities, equipment and appurtenances located at Arandia Academy, Airport Village, Barangay Moonwalk, Paranque City.</p>";
-    
+
                 $content .= "<p>Kindly signify your confirmation by affixing your signature in the space provided below. Thank you</p>";
-    
-    
+
+
                 return response()->json(['error' => false, 'message' => $content]);
             } else {
                 return response()->json(['error' => false, 'message' => $sub_activity_files->value]);
@@ -885,25 +885,25 @@ class GlobeController extends Controller
             ));
 
             // return response()->json(['error' => true, 'message' => $request->all() ]);
-            
+
             if($validate->passes()){
                 if($request->hasFile('file')) {
-    
+
                     // Upload path
                     $destinationPath = 'files/';
-                
+
                     // Get file extension
                     $extension = $request->file('file')->getClientOriginalExtension();
-                    
-                    // Rename file 
+
+                    // Rename file
                     // $fileName = time().$request->file('file')->getClientOriginalName() .'.' . $extension;
                     $fileName = time().$request->file('file')->getClientOriginalName();
 
                     // Uploading file to given path
                     $request->file('file')->move($destinationPath, $fileName);
-                    
+
                     return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
-            
+
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
@@ -915,7 +915,7 @@ class GlobeController extends Controller
 
     public function upload_my_file(Request $request)
     {
-        try {            
+        try {
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
@@ -969,8 +969,8 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-                
-                
+
+
                 if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $stage_activities = \DB::connection('mysql2')
                                                 ->table('stage_activities')
@@ -982,7 +982,7 @@ class GlobeController extends Controller
                         $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                     }
                 }
-                
+
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
@@ -1056,9 +1056,9 @@ class GlobeController extends Controller
 
                 if (!is_null($request->input("file"))) {
                     $file = collect();
-                    for ($i=0; $i < count($request->input("file")); $i++) { 
+                    for ($i=0; $i < count($request->input("file")); $i++) {
                         $new_file = $this->rename_file($request->input("file")[$i], $request->input("sub_activity_name"), $request->input("sam_id"));
-        
+
                         \Storage::move( $request->input("file")[$i], $new_file );
 
                         $file->push($new_file);
@@ -1095,7 +1095,7 @@ class GlobeController extends Controller
     public function add_create_pr(Request $request)
     {
         try {
-            
+
             $validate = Validator::make($request->all(), array(
                 'pr_file' => 'required',
                 'reference_number' => 'required',
@@ -1118,14 +1118,14 @@ class GlobeController extends Controller
                 //                 ->where('user_details.vendor_id', $request->input('vendor'))
                 //                 ->where('user_programs.program_id', $request->input('data_program'))
                 //                 ->get();
-                
-                // for ($j=0; $j < count($email_receiver); $j++) { 
+
+                // for ($j=0; $j < count($email_receiver); $j++) {
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
                 // }
 
                 if (is_null($sub_activity)) {
                     $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
-    
+
                     \Storage::move( $request->input("pr_file"), $new_file );
 
                     $json = array(
@@ -1136,7 +1136,7 @@ class GlobeController extends Controller
                         "pr_date" => $request->input('pr_date'),
                         // "po_number" => $request->input('po_number'),
                     );
-    
+
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         // 'sub_activity_id' => $request->input("activity_id"),
@@ -1144,7 +1144,7 @@ class GlobeController extends Controller
                         'value' => json_encode($json),
                         'user_id' => \Auth::id(),
                         'status' => "pending",
-                    ]); 
+                    ]);
 
                     \DB::connection('mysql2')->table("site")
                                                 ->where("sam_id", $request->input("sam_id"))
@@ -1152,13 +1152,13 @@ class GlobeController extends Controller
                                                     'site_vendor_id' => $request->input('vendor'),
                                                     'site_pr' => $request->input('reference_number'),
                                                 ]);
-    
+
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
-    
+
                     return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
                 } else {
-                    
+
                     $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
 
                     return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
@@ -1180,12 +1180,12 @@ class GlobeController extends Controller
     //         ));
 
     //         if ($validate->passes()) {
-                
+
     //             $jtss_schedule_data = SubActivityValue::where('sam_id', $request->input('sam_id'))
     //                                                         ->where('type', $request->input('activity_name'))
     //                                                         ->first();
-                                                            
-    
+
+
     //             SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
     //             if (is_null($jtss_schedule_data)) {
@@ -1201,13 +1201,13 @@ class GlobeController extends Controller
     //                     'value' => json_encode($request->all()),
     //                     'user_id' => \Auth::id(),
     //                     'status' => "pending",
-    //                 ]); 
+    //                 ]);
 
     //                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
     //                 return response()->json(['error' => false, 'message' => $message_info ]);
     //             } else {
-                    
+
     //                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
     //                 return response()->json(['error' => false, 'message' => $message_info ]);
@@ -1244,8 +1244,8 @@ class GlobeController extends Controller
             //                 ->where('user_details.vendor_id', $request->input('vendor'))
             //                 ->where('user_programs.program_id', $request->input('data_program'))
             //                 ->get();
-            
-            // for ($j=0; $j < count($email_receiver); $j++) { 
+
+            // for ($j=0; $j < count($email_receiver); $j++) {
             //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_action')) );
             // }
 
@@ -1295,51 +1295,51 @@ class GlobeController extends Controller
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['site_name'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('lessor', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['lessor'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('address', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['address'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('latitude', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['latitude'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('longitude', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['longitude'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ;
             return $dt->make(true);
@@ -1348,7 +1348,7 @@ class GlobeController extends Controller
             throw $th;
         }
     }
-    
+
     public function set_approve_site (Request $request)
     {
 
@@ -1370,8 +1370,8 @@ class GlobeController extends Controller
             //                 ->where('user_details.vendor_id', $request->input('vendor_id'))
             //                 ->where('user_programs.program_id', $request->input('program_id'))
             //                 ->get();
-            
-            // for ($j=0; $j < count($email_receiver); $j++) { 
+
+            // for ($j=0; $j < count($email_receiver); $j++) {
             //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
             // }
 
@@ -1379,7 +1379,7 @@ class GlobeController extends Controller
             // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
             $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-            
+
             if ($request->input('activity_name') == 'Set Approved Site') {
                 return response()->json(['error' => false, 'message' => "Successfully set a approved site."]);
             } else if ($request->input('activity_name') != 'Vendor Awarding') {
@@ -1408,51 +1408,51 @@ class GlobeController extends Controller
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['site_name'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('lessor', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['lessor'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('address', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['address'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('latitude', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['latitude'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('longitude', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['longitude'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ;
             return $dt->make(true);
@@ -1464,7 +1464,7 @@ class GlobeController extends Controller
 
     public function get_datatable_columns($program_id, $table_name, $profile_id)
     {
-        
+
         $cols = \DB::connection('mysql2')
                     ->table("table_fields")
                     ->where('program_id', $program_id)
@@ -1484,7 +1484,7 @@ class GlobeController extends Controller
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
-            
+
     }
 
     // public function doc_validation_approvals($id, $action)
@@ -1495,7 +1495,7 @@ class GlobeController extends Controller
             if ($request->input('action') == "rejected") {
                 $required = "required";
             }
-            
+
             $validate = Validator::make($request->all(), array(
                 'reason' => $required
             ));
@@ -1528,7 +1528,7 @@ class GlobeController extends Controller
                                                 ->where('category', $request->input("site_category"))
 
                                                 ->where('requires_validation', '1')
-                                                
+
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -1555,10 +1555,10 @@ class GlobeController extends Controller
                 //                 ->where('user_details.vendor_id', $request->input('site_vendor_id'))
                 //                 ->where('user_programs.program_id', $request->input('program_id'))
                 //                 ->get();
-                            
+
                 // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                // for ($j=0; $j < count($email_receiver); $j++) { 
+                // for ($j=0; $j < count($email_receiver); $j++) {
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "document_approval", $request->input('action'), "", $request->input('filename'), $request->input('reason')) );
                 // }
 
@@ -1585,12 +1585,12 @@ class GlobeController extends Controller
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
-            
+
     }
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
-        
+
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
             ->table("view_sites_per_program")
@@ -1602,13 +1602,15 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
             // ->table("site_milestone")
-            ->table("milestone_tracking_2")
+            ->table("view_sites_activity_2")
+            ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
             ->where('program_id', $program_id)
+            ->where('agent_id', \Auth::id())
             // ->where('activity_complete', 'false')
             // ->where("site_agent_id", \Auth::id())
-            ->whereJsonContains("site_agent", [
-                'user_id' => \Auth::id()
-            ])
+            // ->whereJsonContains("site_agent", [
+            //     'user_id' => \Auth::id()
+            // ])
             ->get();
 
             // return \Auth::user()->profile_id;
@@ -1616,14 +1618,14 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine_completed'){
 
-            $last_act = \DB::connection('mysql2') 
+            $last_act = \DB::connection('mysql2')
                                         ->table("stage_activities")
                                         ->select('activity_id')
                                         ->where('program_id', $program_id)
                                         ->orderBy('activity_id', 'desc')
                                         ->first();
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                                 ->table("site")
                                 ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                                 ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
@@ -1633,7 +1635,7 @@ class GlobeController extends Controller
                                 ->where('site.program_id', $program_id)
                                 ->where('activities->activity_id', $last_act->activity_id)
                                 ->get();
-                            
+
         }
 
         elseif($activity_type == 'is'){
@@ -1665,7 +1667,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'set site value'){
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                     ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
@@ -1678,7 +1680,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'rtb declaration'){
 
-            // $sites = \DB::connection('mysql2') 
+            // $sites = \DB::connection('mysql2')
             //         ->table("milestone_tracking")
             //         ->distinct()
             //         ->where('program_id', $program_id)
@@ -1687,7 +1689,7 @@ class GlobeController extends Controller
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                         ->table("view_sites_per_program")
                         ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
                         ->where('view_sites_per_program.program_id', $program_id)
@@ -1700,14 +1702,14 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site approval'){
 
-                // $sites = \DB::connection('mysql2') 
+                // $sites = \DB::connection('mysql2')
                 //                 ->table("milestone_tracking")
                 //                 ->where('program_id', $program_id)
                 //                 ->whereIn('activity_type', ['doc approval', 'site approval'])
                 //                 ->where('profile_id', \Auth::user()->profile_id)
                 //                 ->where('activity_complete', 'false')
                 //                 ->get();
-                $sites = \DB::connection('mysql2') 
+                $sites = \DB::connection('mysql2')
                                 ->table("view_sites_per_program")
                                 ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
                                 ->where('view_sites_per_program.program_id', $program_id)
@@ -1718,7 +1720,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'vendor awarding'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                             // ->table("view_pr_memo")
                             ->table("view_pr_memo_v2")
                             ->where('status', '!=', 'denied')
@@ -1727,7 +1729,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr issuance'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                             ->table("view_pr_memo")
                             ->where('status', '!=', 'denied')
                             ->whereIn('activity_id', [5])
@@ -1749,11 +1751,11 @@ class GlobeController extends Controller
                             } else if (\Auth::user()->profile_id == 10) {
                                 $sites->where('activity_id', 4)->get();
                             }
-                            
+
         }
 
         elseif($activity_type == 'pr memo pending approval'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                             ->table("view_pr_memo")
                             ->where('status', '!=', 'denied');
 
@@ -1763,7 +1765,7 @@ class GlobeController extends Controller
                                     ->get();
                             } else if (\Auth::user()->profile_id == 9) {
                                 $sites->whereIn('activity_id', [4])
-                                        ->whereIn('profile_id', [8, 10])    
+                                        ->whereIn('profile_id', [8, 10])
                                         ->get();
                             } else if (\Auth::user()->profile_id == 8) {
                                 $sites->whereIn('activity_id', [3,4])
@@ -1773,7 +1775,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr memo approved'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                             ->table("view_pr_memo_v2");
                             // ->whereIn('profile_id', [8, 9, 10]);
 
@@ -1802,9 +1804,9 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'new clp'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                                 ->table("view_sites_per_program")
-                                ->where('program_id', $program_id)                                
+                                ->where('program_id', $program_id)
                                 ->whereIn('activity_id', [2])
                                 // ->where('profile_id', \Auth::user()->profile_id)
                                 ->get();
@@ -1812,7 +1814,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'site hunting validation'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                                 ->table("view_site_hunting")
                                 ->get();
 
@@ -1831,9 +1833,9 @@ class GlobeController extends Controller
                             // ->get();
 
         }
-            
+
         elseif($activity_type == 'schedule jtss'){
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                                 ->table("site")
                                 ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                                 ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
@@ -1853,13 +1855,13 @@ class GlobeController extends Controller
         elseif($activity_type == 'jtss'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("site")                    
+                    ->table("site")
                     ->where('program_id', $program_id)
                     ->whereJsonContains('activities->activity_id', '12')
                     // ->orwhereJsonContains('activities->activity_id', '22')
                     ->whereJsonContains('activities->profile_id', '8')
 
-                    ->get();    
+                    ->get();
 
                     // dd($sites);
 
@@ -1877,7 +1879,7 @@ class GlobeController extends Controller
                     ->where('site.program_id', $program_id)
                     ->where('activities->activity_id', '14')
                     ->where('activities->profile_id', '8')
-                    ->get();    
+                    ->get();
 
                     // dd($sites);
 
@@ -1886,13 +1888,13 @@ class GlobeController extends Controller
         elseif($activity_type == 'site-hunting'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("site")                    
+                    ->table("site")
                     ->where('program_id', $program_id)
                     ->whereJsonContains('activities->activity_id', '11')
                     // ->orwhereJsonContains('activities->activity_id', '22')
                     ->whereJsonContains('activities->profile_id', '8')
 
-                    ->get();    
+                    ->get();
 
                     // dd($sites);
 
@@ -1909,26 +1911,26 @@ class GlobeController extends Controller
                     ->where('count', '>', 0)
                     ->get();
 
-                    // SELECT * 
+                    // SELECT *
 
                     // FROM sub_activity_value
                     //     left join sub_activity
                     //     on sub_activity_value.sub_activity_id = sub_activity.sub_activity_id
-                        
+
                     // where action = 'doc upload'
 
         }
 
-        
+
         elseif($activity_type == 'new endorsements globe'){
 
-            // $sites = \DB::connection('mysql2') 
+            // $sites = \DB::connection('mysql2')
             //         ->table("view_sites_activity")
             //         ->whereIn('activity_id', [7])
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
@@ -1939,7 +1941,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'new endorsements apmo'){
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id')
                     ->where(function($q) {
@@ -1955,8 +1957,8 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'new endorsements vendor'){
-            
-            $sites = \DB::connection('mysql2') 
+
+            $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
                     ->where('program_id', $program_id)
@@ -1967,8 +1969,8 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'unassigned sites'){
-            
-            $sites = \DB::connection('mysql2') 
+
+            $sites = \DB::connection('mysql2')
                 ->table("view_sites_activity")
                 ->where('program_id', $program_id)
                 // ->whereIn('activity_id', [8])
@@ -2024,7 +2026,7 @@ class GlobeController extends Controller
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
-            
+
     }
 
     public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
@@ -2086,7 +2088,7 @@ class GlobeController extends Controller
                 'activity_id' => $activity_id,
             ])
             ->render();
-            
+
         }
         elseif($sub_activity == 'LESSOR ENGAGEMENT'){
 
@@ -2101,7 +2103,7 @@ class GlobeController extends Controller
                 'activity_id' => $activity_id,
             ])
             ->render();
-            
+
         }
         // elseif($sub_activity == 'Set Approved Site'){
 
@@ -2116,7 +2118,7 @@ class GlobeController extends Controller
         //         'activity_id' => $activity_id,
         //     ])
         //     ->render();
-            
+
         // }
         elseif($sub_activity == 'Set Site Category'){
 
@@ -2131,7 +2133,7 @@ class GlobeController extends Controller
                 'activity_id' => $activity_id,
             ])
             ->render();
-            
+
         }
         elseif($sub_activity == 'Schedule Advanced Site Hunting'){
 
@@ -2146,7 +2148,7 @@ class GlobeController extends Controller
                 'activity_id' => $activity_id,
             ])
             ->render();
-            
+
         }
         else {
 
@@ -2168,53 +2170,53 @@ class GlobeController extends Controller
     public function modal_view_site_components($sam_id, $component)
     {
         try{
-            
+
             if($component == 'site-status'){
 
-                $what_modal = "components.site-status";           
+                $what_modal = "components.site-status";
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
                             'site_name' => "test",
-                        ])        
+                        ])
                         ->render();
-     
-            } 
+
+            }
             elseif($component == 'agent-activities'){
 
                 $what_modal = "components.agent-activity-list";
                 return \View::make($what_modal)
                         ->render();
-          
-            } 
+
+            }
             elseif($component == 'agent-progress'){
 
-                $what_modal = "components.site-progress";      
+                $what_modal = "components.site-progress";
                 return \View::make($what_modal)
                         ->render();
-          
-            } 
+
+            }
             elseif($component == 'tab-content-activities'){
 
-                $what_modal = "components.site-activities";      
+                $what_modal = "components.site-activities";
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
                             'site_name' => "test",
                         ])
                         ->render();
-          
-            } 
+
+            }
             elseif($component == 'tab-content-files'){
 
-                $what_modal = "components.site-files";      
+                $what_modal = "components.site-files";
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
                         ])
                         ->render();
-          
-            } 
+
+            }
             elseif($component == 'site-modal-site_fields'){
 
                 // $sites = \DB::connection('mysql2')
@@ -2233,19 +2235,19 @@ class GlobeController extends Controller
                 ->get();
 
                 // dd($sites[0]->site_fields);
-                
 
-                $what_modal = "components.site-fields";      
+
+                $what_modal = "components.site-fields";
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
                             'sitefields' => json_decode($sites[0]->site_fields),
                         ])
                         ->render();
-          
-            } 
 
-        
+            }
+
+
 
 
         } catch (\Throwable $th) {
@@ -2273,7 +2275,7 @@ class GlobeController extends Controller
 
 
     public function get_all_docs(Request $request)
-    {   
+    {
         // return "test";
         $documents = array("RTB Docs Validation", "RTB Docs Approval", "PAC Approval");
         $doc_preview_main_activities = array("Document Validation");
@@ -2319,14 +2321,14 @@ class GlobeController extends Controller
                                     // ->where('sub_activity_value.status', "pending")
                                     ->where('sub_activity_value.type', "create_pr")
                                     ->first();
-                        
+
             $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', 'create_pr')
                                         // ->orderBy('date_created', 'desc')
                                         ->first();
-                                        
+
             if($request['vendor_mode']){
-                
+
                 $what_modal = "components.modal-vendor-activity";
 
                 return \View::make($what_modal)
@@ -2353,8 +2355,8 @@ class GlobeController extends Controller
                         'site_name' => count($site) < 1 ? "" : $site[0]->site_name
                     ])
                     ->render();
-                } 
-                
+                }
+
                 else if ($request->input('activity') == 'SSDS RAM Validation') {
                     $what_modal = "components.s-s-d-s-ram-ranking";
 
@@ -2381,7 +2383,7 @@ class GlobeController extends Controller
                         'site_name' => count($site) < 1 ? "" : $site[0]->site_name
                     ])
                     ->render();
-                } 
+                }
                 else if ($request->input('activity') == "Approved SSDS / NTP Validation") {
 
                     $data = SubActivityValue::where('sam_id', $request['sam_id'])
@@ -2403,7 +2405,7 @@ class GlobeController extends Controller
                     ])
                     ->render();
 
-                } 
+                }
                 else {
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
@@ -2418,7 +2420,7 @@ class GlobeController extends Controller
                     ])
                     ->render();
                 }
-    
+
             }
 
 
@@ -2463,7 +2465,7 @@ class GlobeController extends Controller
         //         return response()->json(['error' => true, 'message' => $th->getMessage()]);
         //     }
 
-        
+
 
         // }
 
@@ -2497,7 +2499,7 @@ class GlobeController extends Controller
 
 
         // }
-        
+
         // else {
 
         //     if((in_array($request['activity'], $documents) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false)){
@@ -2509,9 +2511,9 @@ class GlobeController extends Controller
         //                     ->where('sam_id', '=', $request['sam_id'])
         //                     ->where('activity_complete', "=", 'false')
         //                     ->get();
-    
+
         //             $site_fields = json_decode($site[0]->site_fields);
-    
+
         //             return \View::make('components.modal-document-preview')
         //                 ->with([
         //                     'site' => $site,
@@ -2519,48 +2521,48 @@ class GlobeController extends Controller
         //                     'site_fields' => $site_fields,
         //                     'main_activity' => $request['main_activity']
         //                 ])
-    
+
         //                 // ->with(['file_list' => $data,  'mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
         //                 ->render();
-    
+
         //             // return response()->json(['error' => false, 'message' => $data ]);
-    
+
         //         } catch (\Throwable $th) {
         //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         //         }
         //     }
-    
+
         //     elseif(in_array($request['activity'], $rtb) && in_array(\Auth::user()->profile_id, $vendor_profiles) == false){
-    
+
         //         try{
-    
+
         //             return \View::make('components.modal-site-rtb')
         //                     ->with(['mode'=>$request['mode'],  'activity'=>$request['activity'],  'site'=>$request['site']])
         //                     ->render();
-    
-    
+
+
         //         } catch (\Throwable $th) {
         //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         //         }
-    
-    
-        //     } 
-            
+
+
+        //     }
+
         //     else {
 
 
         //         // VIEW SITE MAKER
         //         try{
-    
+
         //             $site = \DB::connection('mysql2')
         //             ->table('site_milestone')
         //             ->distinct()
         //             ->where('activity_complete', "=", 'false')
         //             ->where('sam_id', "=", $request['sam_id'])
         //             ->get();
-    
+
         //             $site_fields = json_decode($site[0]->site_fields);
-    
+
         //             return \View::make('components.modal-view-site')
         //                     ->with([
         //                         'site' => $site,
@@ -2570,21 +2572,21 @@ class GlobeController extends Controller
 
         //                     ])
         //                     ->render();
-    
-    
+
+
         //         } catch (\Throwable $th) {
         //             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         //         }
-    
+
         //     }
-    
+
 
         // }
 
 
     }
 
-    public function get_site_issues ($issue_id, $what_table) 
+    public function get_site_issues ($issue_id, $what_table)
     {
         try {
 
@@ -2622,7 +2624,7 @@ class GlobeController extends Controller
                                 'approver_id' => \Auth::id(),
                             ]);
 
-            
+
             return response()->json(['error' => false, 'message' => "Successfully resolve an issue." ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -2660,7 +2662,7 @@ class GlobeController extends Controller
         try {
             // return response()->json(['error' => true, 'message' => $request->all() ]);
 
-            
+
 
             $validate = Validator::make($request->all(), array(
                 'issue_type' => 'required',
@@ -2682,7 +2684,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
 
-            
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -2710,7 +2712,7 @@ class GlobeController extends Controller
             //     foreach ($agents as $agent) {
             //         $array_id->push($agent->id);
             //     }
-                
+
             //     $data = Issue::join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
             //                     ->join('users', 'users.id', 'site_issue.user_id')
             //                     ->whereIn('site_issue.user_id', $array_id->all())
@@ -2738,7 +2740,7 @@ class GlobeController extends Controller
             $data = IssueType::join('site_issue', 'site_issue.issue_type_id', 'issue_type.issue_type_id')
                             ->where('site_issue.issue_id', $issue_id)
                             ->first();
-                            
+
             return response()->json(['error' => false, 'message' => $data ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -2803,10 +2805,10 @@ class GlobeController extends Controller
                 //             ->where('user_details.vendor_id', $request->input('site_vendor_id'))
                 //             ->where('user_programs.program_id', $request->input('program_id'))
                 //             ->get();
-                        
+
                 // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                // for ($j=0; $j < count($email_receiver); $j++) { 
+                // for ($j=0; $j < count($email_receiver); $j++) {
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
                 // }
 
@@ -2819,21 +2821,21 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'status' => "pending",
                         'type' => "rtb_declaration",
-                    ]); 
+                    ]);
 
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
 
-                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 } else {
-                    
+
                     // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
 
-                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]); 
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -2850,7 +2852,7 @@ class GlobeController extends Controller
             if ($request->input('action') == "false" ) {
                 $required = "required";
             }
-            
+
             $validate = \Validator::make($request->all(), array(
                 'remarks' => $required,
             ));
@@ -2872,16 +2874,16 @@ class GlobeController extends Controller
                 //         ->where('user_details.vendor_id', $request->input('site_vendor_id'))
                 //         ->where('user_programs.program_id', $request->input('program_id'))
                 //         ->get();
-                        
+
                 // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                // for ($j=0; $j < count($email_receiver); $j++) { 
+                // for ($j=0; $j < count($email_receiver); $j++) {
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
                 // }
 
                 $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
-                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]); 
+                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
@@ -2918,23 +2920,23 @@ class GlobeController extends Controller
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return isset($json['lessor_remarks']) ? $json['lessor_remarks'] : $json['file'];
                                         // return $json['lessor'];
                                         // return $json['lessor_remarks'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('method', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return isset($json['lessor_method']) ? "" : "";
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 });
             return $dt->make(true);
 
@@ -2973,21 +2975,21 @@ class GlobeController extends Controller
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['lessor_remarks'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 })
                                 ->addColumn('method', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
-                                        
+
                                         return $json['lessor_method'];
                                     } else {
-                                        return $row->value;  
-                                    }                      
+                                        return $row->value;
+                                    }
                                 });
             return $dt->make(true);
 
@@ -3014,12 +3016,12 @@ class GlobeController extends Controller
                     'user_id' => \Auth::id(),
                     'status' => $request->input('lessor_approval'),
                     'type' => 'lessor_engagement',
-                ]); 
+                ]);
 
                 if ($request->input('lessor_approval') == "approved") {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
                 }
-                
+
 
                 // $email_receiver = User::select('users.*')
                 //                 ->join('user_details', 'users.id', 'user_details.user_id')
@@ -3027,10 +3029,10 @@ class GlobeController extends Controller
                 //                 ->where('user_details.vendor_id', $request->input('site_vendor_id'))
                 //                 ->where('user_programs.program_id', $request->input('program_id'))
                 //                 ->get();
-                            
+
                 // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                // for ($j=0; $j < count($email_receiver); $j++) { 
+                // for ($j=0; $j < count($email_receiver); $j++) {
                 //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "lessor_approval", "", $request->input('site_name')) );
                 // }
 
@@ -3055,7 +3057,7 @@ class GlobeController extends Controller
                                         ->where('user_details.IS_id', \Auth::user()->id)
                                         ->where('user_programs.program_id', $program_id)
                                         ->get();
-            
+
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
@@ -3072,7 +3074,7 @@ class GlobeController extends Controller
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_programs.program_id', $program_id)
                                         ->get();
-            
+
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
@@ -3093,7 +3095,7 @@ class GlobeController extends Controller
 
                                     if ($sub_activity_id == 75) {
                                         $json = json_decode($row->value, true);
-    
+
                                         return $json['file'];
                                     } else {
                                         return $row;
@@ -3140,12 +3142,12 @@ class GlobeController extends Controller
             //                     ->where('user_details.vendor_id', $vendor)
             //                     ->where('user_programs.program_id', $request->input('data_program'))
             //                     ->get();
-                
-            //     for ($j=0; $j < count($email_receiver); $j++) { 
+
+            //     for ($j=0; $j < count($email_receiver); $j++) {
             //         $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true") );
             //     }
             // }
-            
+
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
 
@@ -3173,7 +3175,7 @@ class GlobeController extends Controller
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
-        
+
             SiteStageTracking::create([
                 'sam_id' => $request->input('sam_id'),
                 'activity_id' => $activities->next_activity,
@@ -3217,13 +3219,13 @@ class GlobeController extends Controller
     public function update_user_data(Request $request)
     {
         try {
-            
+
             // return response()->json(['error' => true, 'message' => $request->all()]);
 
             UserProgram::where('user_id', $request->input('user_id'))
-                                                ->delete();  
+                                                ->delete();
 
-            for ($i=0; $i < count($request->input('program')); $i++) { 
+            for ($i=0; $i < count($request->input('program')); $i++) {
                 UserProgram::create([
                     'user_id' => $request->input('user_id'),
                     'program_id' => $request->input('program')[$i],
@@ -3255,7 +3257,7 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-    
+
     public function change_supervisor($user_id, $is_id)
     {
         try {
@@ -3279,7 +3281,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($issue_remakrs);
-            
+
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
@@ -3343,7 +3345,7 @@ class GlobeController extends Controller
                     'user_id' => \Auth::id(),
                     'type' => "substep",
                     'status' => "approved",
-                ]); 
+                ]);
 
                 return response()->json([ 'error' => false, 'message' => "Successfully saved." ]);
             } else {
@@ -3354,7 +3356,7 @@ class GlobeController extends Controller
         }
     }
 
-    
+
     ///////////////////////////////////////////////////
     //                                               //
     //                PR / PO Module                 //
@@ -3370,7 +3372,7 @@ class GlobeController extends Controller
 
             $sites_collect = collect();
             $sites_fsa = collect();
-            for ($i=0; $i < count($sam_id); $i++) { 
+            for ($i=0; $i < count($sam_id); $i++) {
                 $sites_data = \DB::connection('mysql2')
                             ->table('site')
                             ->where('sam_id', $sam_id[$i])
@@ -3387,7 +3389,7 @@ class GlobeController extends Controller
                                 ->where('solution_type', "MACRO")
                                 ->get();
 
-                // Works up to LGU 
+                // Works up to LGU
                 if(count($fsa_data)>0){
 
                 } else {
@@ -3403,7 +3405,7 @@ class GlobeController extends Controller
                         ->where('solution_type', "MACRO")
                         ->get();
 
-                    // Works up to province 
+                    // Works up to province
                     if(count($fsa_data)>0){
 
                     } else {
@@ -3424,7 +3426,7 @@ class GlobeController extends Controller
                         } else {
 
                         }
-                    } 
+                    }
 
                 }
 
@@ -3469,7 +3471,7 @@ class GlobeController extends Controller
                             ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                             ->where('site_line_items.status', '!=', 'denied')
                             ->where('site_line_items.sam_id', '=', $sam_id[$i])
-                            ->get();                
+                            ->get();
 
                 if (count($pricings) > 1) {
                     foreach ($pricings as $pricing) {
@@ -3487,7 +3489,7 @@ class GlobeController extends Controller
 
 
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
-            
+
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
@@ -3527,7 +3529,7 @@ class GlobeController extends Controller
 
             $line_items = \DB::connection('mysql2')
                                 ->table('fsaq')
-                                ->where('vendor_id', $vendor)                                
+                                ->where('vendor_id', $vendor)
                                 ->where('region_id', $sites->site_region_id)
                                 ->where('province_id', $sites->site_province_id)
                                 ->where('lgu_id', $sites->site_lgu_id)
@@ -3571,12 +3573,12 @@ class GlobeController extends Controller
                                     ->where('fsaq.account_type', '=', 'BAU')
                                     ->where('fsaq.solution_type', '=', 'MACRO')
                                 ->get();
-                    
+
                     if(count($fsaq_provinces) > 0){
 
                         $line_items = \DB::connection('mysql2')
                                         ->table('fsaq')
-                                        ->where('vendor_id', 9)                                
+                                        ->where('vendor_id', 9)
                                         ->where('region_id', $sites->site_region_id)
                                         ->where('province_id', $sites->site_province_id)
                                         ->whereNull('lgu_id')
@@ -3589,13 +3591,13 @@ class GlobeController extends Controller
 
                         $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
                         ->get();
-        
+
                         return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
-                                                                
+
                     } else {
-                     
+
                         return response()->json(['error' => true, 'message' => "No FSAQ data in province: " . $sites->site_province_id . " lgu: " . $sites->site_lgu_id . " for vendor id: " . $vendor ]);
-                    
+
                     }
 
                 } else {
@@ -3603,7 +3605,7 @@ class GlobeController extends Controller
                 }
 
             }
-                                
+
 
 
 
@@ -3727,7 +3729,7 @@ class GlobeController extends Controller
                     'status' => "pending",
                 ]);
 
-                for ($i=0; $i < count($request->input("sam_id")); $i++) { 
+                for ($i=0; $i < count($request->input("sam_id")); $i++) {
 
                     $array_data = array(
                         'budget_source' => $request->input("budget_source"),
@@ -3800,7 +3802,7 @@ class GlobeController extends Controller
                                                 ->where('program_id', 1)
                                                 ->where('category', $request->input("site_category"))
                                                 ->first();
-        
+
                     $get_activitiess = \DB::connection('mysql2')
                                                 ->table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id')
@@ -3825,7 +3827,7 @@ class GlobeController extends Controller
                             'user_id' => \Auth::id()
                         ]);
                     }
-                        
+
                     $array = array(
                         'activity_id' => $activities->next_activity,
                         'activity_name' => $get_activitiess->activity_name,
@@ -3833,7 +3835,7 @@ class GlobeController extends Controller
                         'category' => $request->input("site_category"),
                         'activity_created' => Carbon::now()->toDateString(),
                     );
-    
+
                     Site::where('sam_id', $request->input("sam_id")[$i])
                     ->update([
                         'activities' => json_encode($array)
@@ -3842,7 +3844,7 @@ class GlobeController extends Controller
                 }
 
                 // $this->move_site($samid_collect->all(), 1, "true", $sitecategory_collect->all(), $activity_id_collect->all());
-                
+
                 return response()->json([ 'error' => false, 'message' => "Successfully added PR Memo.", "file_name" => $file_name ]);
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
@@ -3863,7 +3865,7 @@ class GlobeController extends Controller
                                 ->orderBy('vendor_sec_reg_name', 'ASC')
                                 ->get();
 
-            // $sites = \DB::connection('mysql2') 
+            // $sites = \DB::connection('mysql2')
             //                     ->table("site")
             //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
             //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
@@ -3877,9 +3879,9 @@ class GlobeController extends Controller
             //                     ->orderBy('search_ring', 'asc')
             //                     ->get();
 
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                                 ->table("view_sites_per_program")
-                                ->where('program_id', 1)                                
+                                ->where('program_id', 1)
                                 ->where('activity_id', 2)
                                 ->orderBy('site_name')
                                 ->get();
@@ -3903,7 +3905,7 @@ class GlobeController extends Controller
                             ->table('new_sites')
                             ->whereIn('sam_id', $request->input("sam_id"))
                             ->get();
-                            
+
             $view = \View::make('components.create-pr-po-pdf')
                 ->with([
                     'budget_source' => $request->input("budget_source"),
@@ -3951,7 +3953,7 @@ class GlobeController extends Controller
                     'type' => $request->input("type"),
                     'status' => "denied",
                 ]);
-                
+
                 return response()->json(['error' => false, 'message' => "Successfully rejected site." ]);
             } else {
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
@@ -3969,7 +3971,7 @@ class GlobeController extends Controller
             $validate = \Validator::make($request->all(), array(
                 'remarks' => $required
             ));
-            
+
             if ($validate->passes()) {
                 $sites = PrMemoSite::where('pr_memo_id', $request->input('pr_memo'))->get();
                 $sam_id = collect();
@@ -3985,7 +3987,7 @@ class GlobeController extends Controller
                     $sam_id->push($site->sam_id);
                     if ($request->input("activity_name") == "NAM PR Memo Approval") {
                         $activity_id->push('4');
-                        
+
                         // SubActivityValue::where('sam_id', $site->sam_id)
                         //                 ->where('type', "recommend_pr")
                         //                 ->update([
@@ -4049,7 +4051,7 @@ class GlobeController extends Controller
             $validate = \Validator::make($request->all(), array(
                 'po_number' => 'required'
             ));
-            
+
             if ($validate->passes()) {
 
                 // $pr_memo = PrMemoSite::select('pr_memo_id')->where('sam_id', $request->input('sam_id'))->first();
@@ -4062,7 +4064,7 @@ class GlobeController extends Controller
                 $activityid_collect = collect();
 
                 // foreach ($sites as $site) {
-                for ($i=0; $i < count($samid_collect); $i++) { 
+                for ($i=0; $i < count($samid_collect); $i++) {
                     SiteEndorsementEvent::dispatch($samid_collect[$i]);
 
                     \DB::connection('mysql2')->table("site")
@@ -4082,7 +4084,7 @@ class GlobeController extends Controller
                 $activity_id = $activityid_collect->all();
                 $program_id = 1;
 
-                
+
                 $this->move_site($sam_id, $program_id, "true", $site_category, $activity_id);
 
                 return response()->json(['error' => false, 'message' => "Successfully awarded a site." ]);
@@ -4126,7 +4128,7 @@ class GlobeController extends Controller
                         'type' => "remarks_file",
                         'status' => "pending",
                     ]);
-    
+
                     return response()->json(['error' => false, 'message' => "Successfully added remarks." ]);
                 } else {
 
@@ -4138,7 +4140,7 @@ class GlobeController extends Controller
                         'type' => "remarks_file",
                         'status' => "pending",
                     ]);
-    
+
                     return response()->json(['error' => false, 'message' => "Successfully updated remarks." ]);
                 }
 
@@ -4149,7 +4151,7 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
-    
+
     public function get_remarks_file ($id, $sam_id)
     {
         try {
@@ -4183,10 +4185,10 @@ class GlobeController extends Controller
                                         ->orderby('activity_id', 'desc')
                                         ->take(1)
                                         ->get();
-    
+
                 SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
                                     ->update(['activity_complete' => 'true']);
-    
+
                 SiteStageTracking::create([
                     'sam_id' => $request->input('sam_id')[$i],
                     'activity_id' => $activity[0]->activity_id,
@@ -4204,7 +4206,7 @@ class GlobeController extends Controller
     public function get_coloc_filter($site_type, $program, $technology)
     {
         try {
-            $sites = \DB::connection('mysql2') 
+            $sites = \DB::connection('mysql2')
                     ->table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', 3)
