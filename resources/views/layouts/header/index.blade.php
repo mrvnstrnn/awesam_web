@@ -1,7 +1,9 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <a href="{{ url('/') }}">
-            <div class="app-logo"></div>
+            <div class="app-logo">
+                <img src="{{ asset('images/awesam_small.png') }}" alt="">
+            </div>
         </a>
         <div class="header__pane ml-auto">
             <div>
