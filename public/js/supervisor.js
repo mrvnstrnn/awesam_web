@@ -51,6 +51,41 @@ $(document).ready(() => {
                 { data: "areas" },
             ],
         });
+
+        $('#newagent-'+program_lists[0]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#newagent-'+program_lists[0]+'-table').attr('data-href'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-id', data.id);
+                if($('#newagent-'+program_lists[0]+'-table').attr('data-page') == "new-agent"){
+                    $(row).addClass('modalAssigAgentnSite');
+                    $(row).attr('data-program', program_lists[0]);
+                    $(row).attr('style', "cursor: pointer");
+                }
+            },
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "photo" },
+                { data: "firstname" },
+                { data: "lastname" },
+                { data: "email" },
+                // { data: "areas" },
+            ],
+        });
     }
 
     $(".nav-link.agent").on("click", function(){
@@ -88,6 +123,46 @@ $(document).ready(() => {
                     { data: "lastname" },
                     { data: "email" },
                     { data: "areas" },
+                ],
+            });
+        }
+    });
+
+    $(".nav-link.newagent").on("click", function(){
+        if ( ! $.fn.DataTable.isDataTable('#newagent-'+$(this).attr("data-program")+'-table') ) {
+            var data_program = $(this).attr("data-program");
+            $('#newagent-'+data_program+'-table').DataTable({
+                processing: true,
+                serverSide: true,
+                // pageLength: 3,
+                ajax: {
+                    url: $('#newagent-'+data_program+'-table').attr('data-href'),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-id', data.id);
+                    if($('#newagent-'+data_program+'-table').attr('data-page') == "new-agent"){
+                        $(row).addClass('modalAssigAgentnSite');
+                        $(row).attr('data-program', data_program);
+                    }
+                    $(row).attr('style', "cursor: pointer");
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "photo" },
+                    { data: "firstname" },
+                    { data: "lastname" },
+                    { data: "email" },
+                    // { data: "areas" },
                 ],
             });
         }

@@ -1603,11 +1603,12 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
             // ->table("site_milestone")
             ->table("milestone_tracking_2")
-            
-            ->distinct()
             ->where('program_id', $program_id)
-            ->where('activity_complete', 'false')
-            ->where("site_agent_id", \Auth::id())
+            // ->where('activity_complete', 'false')
+            // ->where("site_agent_id", \Auth::id())
+            ->whereJsonContains("site_agent", [
+                'user_id' => \Auth::id()
+            ])
             ->get();
 
             // return \Auth::user()->profile_id;
