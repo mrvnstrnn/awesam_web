@@ -2384,7 +2384,7 @@ class GlobeController extends Controller
                     ])
                     ->render();
                 }
-                else if ($request->input('activity') == "Approved SSDS / NTP Validation") {
+                else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
 
                     $data = SubActivityValue::where('sam_id', $request['sam_id'])
                                                 ->where('status', 'approved')
