@@ -14,45 +14,49 @@
 </div>
 <div class="row file_lists">
     @php
-        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-    //     $datas = \DB::connection('mysql2')
-    //                     ->table('sub_activity_value')
-    //                     ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
-    //                     ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-    //                     ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-    //                     // ->where('sub_activity_value.status', 'pending')
-    //                     // ->groupBy('sub_activity_name')
-    //                     ->get();
+        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+        $datas = \DB::connection('mysql2')
+                        ->table('sub_activity_value')
+                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
+                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                        ->where('sub_activity.action', 'doc upload')
+                        // ->groupBy('sub_activity_name')
+                        ->get();
 
-    //                     dd($datas->groupBy('sub_activity_name'));
+        $keys_datas = $datas->groupBy('sub_activity_name')->keys();
     @endphp
 
-    @forelse ($datas as $data)
+    @for ($i = 0; $i < count($keys_datas); $i++)
         
-        @if (!is_null($data->files))
-            @php
-                $uploaded_files = json_decode($data->files);
+        {{-- {{ dd ($datas->groupBy('sub_activity_name')['INSTALLATION PLAN'][0]); }} --}}
+    @endfor
 
-                if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "pdf") {
+    @forelse ($datas->groupBy('sub_activity_name') as $data)
+        @if (!is_null($data[0]->value))
+            @php
+                // $uploaded_files = json_decode($data->files);
+
+                if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
                     $extension = "fa-file-pdf";
-                } else if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
                     $extension = "fa-file-image";
                 } else {
                     $extension = "fa-file";
                 }
 
                 $icon_color = "";
-                foreach($uploaded_files as $approved){
-                    if($approved->status == "approved"){
+                // foreach($uploaded_files as $approved){
+                    if($data[0]->status == "approved"){
                         $icon_color = "success";
                     } else {
                         $icon_color = "secondary";
                     }
-                }
+                // }
             @endphp
             
-            @foreach ($uploaded_files as $item)
-                {{-- @if ($item->status == "denied")
+            {{-- @foreach ($uploaded_files as $item)
+                @if ($item->status == "denied")
                     <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
                         <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
                             <div class="dz-message">
@@ -62,13 +66,13 @@
                         </div>
                     </div>
                 @else --}}
-                    @if($loop->first)
-                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
-                            <div class="child_div_{{ $data->sub_activity_id }}">
+                    {{-- @if($loop->first) --}}
+                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                            <div class="child_div_{{ $data[0]->sub_activity_id }}">
                                 <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                                     <div>
                                     <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                    <p><small>{{ $data->sub_activity_name }}</small></p>
+                                    <p><small>{{ $data[0]->sub_activity_name }}</small></p>
                                     </div>
                                 </div>
                                 @if($icon_color == "success")   
@@ -76,9 +80,9 @@
                                 @endif
                             </div>
                         </div>
-                    @endif
-                {{-- @endif --}}
-            @endforeach
+                    {{-- @endif --}}
+                {{-- @endif
+            @endforeach --}}
         @endif
     @empty
         <div class="col-12 text-center">
