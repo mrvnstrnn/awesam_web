@@ -1709,13 +1709,22 @@ class GlobeController extends Controller
                 //                 ->where('profile_id', \Auth::user()->profile_id)
                 //                 ->where('activity_complete', 'false')
                 //                 ->get();
+                // $sites = \DB::connection('mysql2')
+                //                 ->table("view_sites_per_program")
+                //                 ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                //                 ->where('view_sites_per_program.program_id', $program_id)
+                //                 ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
+                //                 ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                //                 // ->whereIn('view_sites_per_program.activity_id', [16])
+                //                 ->get();
+
                 $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
-                                ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                                ->where('view_sites_per_program.program_id', $program_id)
-                                ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
-                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                // ->whereIn('view_sites_per_program.activity_id', [16])
+                                ->table("view_sites_activity")
+                                // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                                // ->where('view_sites_per_program.program_id', $program_id)
+                                // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
+                                ->where('view_sites_activity.profile_id', \Auth::user()->profile_id)
+                                ->whereIn('view_sites_activity.activity_id', [16, 18, 20, 29, 31])
                                 ->get();
         }
 
@@ -1747,9 +1756,11 @@ class GlobeController extends Controller
                                 ->get();
                             } else if (\Auth::user()->profile_id == 9) {
                                 $sites->where('activity_id', 3)
+                                        ->where('status', '!=', 'denied')
                                         ->get();
                             } else if (\Auth::user()->profile_id == 10) {
-                                $sites->where('activity_id', 4)->get();
+                                $sites->where('activity_id', 4)
+                                ->where('status', '!=', 'denied')->get();
                             }
 
         }
@@ -1796,7 +1807,7 @@ class GlobeController extends Controller
                                 $sites->where(function($q) {
                                         $q
                                             ->where('activity_id', '>', '4')
-                                            ->where('activity_id', '<', '7')
+                                            // ->where('activity_id', '<', '7')
                                             ->orWhere('activity_id', -1);
                                         })
                                         ->get();

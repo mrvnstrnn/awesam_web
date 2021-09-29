@@ -1210,7 +1210,7 @@
                         position: 'left',
                         textStyle : { fontSize: 12}                            
                     },
-            };x`
+            };
 
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 
