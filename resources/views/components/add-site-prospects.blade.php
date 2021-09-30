@@ -2,9 +2,6 @@
     <div class="col-6">
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>
     </div>
-    {{-- <div class="col-6 align-right  text-right">
-        <button class="add_site_button btn btn-outline btn-outline-primary btn-sm mb-3">Add Site</button>
-    </div> --}}
 </div>
 <div class="row pt-4">
     <div class="col-12 col-md-6">
@@ -12,7 +9,7 @@
     </div>
     <div class="col-12 col-md-6 align-right  text-right">
         <button class="add_site_button btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Add Site</button>
-        <button class="float-right btn-sm btn-shadow btn btn-primary complete_button_act {{ count($check_if_added) > 0 ? '' : 'd-none' }}">SUBMIT TO AEPM</button>
+        <button class="add_site_button float-right btn-sm btn-shadow btn btn-primary complete_button_act {{ count($check_if_added) > 0 ? '' : 'd-none' }}">Submit to AEPM</button>
     </div>
 </div>
 
@@ -68,12 +65,53 @@
                 </div>
             </div>
             <div class="position-relative row form-group">
-                <label for="address" class="col-sm-4 col-form-label">Address</label>
+                <label for="address" class="col-sm-4 col-form-label">Street Address</label>
                 <div class="col-sm-8">
                     <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
                     <small class="text-danger address-errors"></small>
                 </div>
             </div>
+            <div class="position-relative row form-group">
+                <label for="region" class="col-sm-4 col-form-label">Region</label>
+                <div class="col-sm-8">
+                    @php
+                        $regions = \DB::table('location_regions')->get();
+                    @endphp
+                    <select class="form-control" id="region" name="region">
+                        <option value="">Select Region</option>
+                        @for ($regions as $region)
+                        <option value="{{ $region->region_id }}">{{ $region-> }}</option>
+                        @endfor
+                    </select>
+                    <small class="text-danger region-errors"></small>
+
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="province" class="col-sm-4 col-form-label">Province</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="province" name="province">
+                        <option value="">Select Site Type</option>
+                        <option value="greenfield">Greenfield</option>
+                        <option value="rooftop">Rooftop</option>
+                    </select>
+                    <small class="text-danger province-errors"></small>
+
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="lgu" name="lgu">
+                        <option value="">Select Site Type</option>
+                        <option value="greenfield">Greenfield</option>
+                        <option value="rooftop">Rooftop</option>
+                    </select>
+                    <small class="text-danger lgu-errors"></small>
+
+                </div>
+            </div>
+
             <div class="position-relative row form-group">
                 <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
                 <div class="col-sm-4">
@@ -312,7 +350,7 @@
                 <label for="tap_to_neighbor" class="col-sm-4 col-form-label">Tap to Neighbor</label>
                 <div class="col-sm-8">
                     <select class="form-control" id="tap_to_neighbor" name="tap_to_neighbor">
-                        <option value="">Tap to Lessor?</option>
+                        <option value="">Tap to Neighbor?</option>
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
