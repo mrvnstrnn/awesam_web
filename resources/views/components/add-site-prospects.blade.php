@@ -372,11 +372,21 @@
             </div>
             <div class="position-relative row form-group">
                 <label for="localcoop" class="col-sm-4 col-form-label">Local COOP</label>
+            @php
+                $localcoops = \DB::connection('mysql2')->table('local_coop')->orderBy('coop_name')->get();
+            @endphp
+
                 <div class="col-sm-8">
                     <select class="form-control" id="localcoop" name="localcoop">
                         <option value="">Local COOP?</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <optgroup label="Not LocalCOOP">
+                            <option value="no">No</option>
+                        </optgroup>
+                        <optgroup label="Local COOPs">
+                            @foreach($localcoops as $localcoop)
+                            <option value="no">{{ $localcoop->coop_full_name }} ({{ $localcoop->coop_name }})</option>
+                            @endforeach
+                        </optgroup>
                     </select>
                     <small class="text-danger localcoop-errors"></small>
                 </div>
