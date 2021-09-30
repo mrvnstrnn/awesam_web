@@ -1,17 +1,19 @@
 @php
-$activities = \DB::connection('mysql2')
-    ->table('milestone_tracking')
-    ->where('site_agent_id', "=", \Auth::id())
-    ->where('profile_id', "=", 2)
-    ->get();
-
 // $activities = \DB::connection('mysql2')
 //     ->table('view_sites_activity')
-//     ->whereJsonContains('site_agent', [
-//         'user_id' => \Auth::id()
-//     ])
-//     ->where('profile_id', 2)
+//     ->where('site_agent_id', "=", \Auth::id())
+//     ->where('profile_id', "=", 2)
 //     ->get();
+
+$activities = \DB::connection('mysql2')
+->table('view_sites_activity_2')
+        ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
+        ->select('site_name', 'site_users.sam_id', 'site_category','activity_name')
+        ->where('agent_id', "=", \Auth::id())
+        ->get();
+
+dd($activities);
+
 @endphp
 
 @foreach($activities as $activity)
@@ -20,13 +22,13 @@ $activities = \DB::connection('mysql2')
 if($activity->activity_complete == 'true'){
     $activity_color = 'success';
     $activity_badge = "done";
-} 
+}
 else {
 
     if($activity->end_date <=  Carbon::today()){
         $activity_color = 'danger';
         $activity_badge = "delayed";
-    } 
+    }
     else {
 
         if($activity->start_date >  Carbon::today()){
@@ -34,7 +36,7 @@ else {
             $activity_color = 'secondary';
             $activity_badge = "Upcoming";
 
-        } 
+        }
         else {
 
             $activity_color = 'warning';
@@ -61,7 +63,7 @@ else {
                     $sched = json_decode($activity_schedule[0]->value);
                     $sched = getdate(strtotime($sched->site_schedule));
 
-                }    
+                }
             @endphp
             @if($activity->activity_name == "Advanced Site Hunting")
                 <div class="text-center">
@@ -76,7 +78,7 @@ else {
             <div class="">
                 {{ $activity->activity_name }}
                 {{-- @if ($activity->activity_complete == 'false')
-                <div class="badge badge-primary ml-0">Active</div>                                                                
+                <div class="badge badge-primary ml-0">Active</div>
                 @endif --}}
             </div>
             <div class="" style="  width: 400px;
@@ -93,7 +95,7 @@ else {
             </div>
             <div class="mt-1">
                 <i class="lnr-calendar-full"></i>
-                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>                
+                <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
                 <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
             </div>
         </div>

@@ -137,6 +137,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
+
             // return response()->json(['error' => true, 'message' => $request->all() ]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
@@ -288,6 +289,8 @@ class GlobeController extends Controller
                 $vendor = $request->input('site_vendor_id');
                 $action = $request->input('data_complete');
                 $activity_id = $request->input('activity_id');
+                $site_category = $request->input('site_category');
+
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
             }
@@ -338,6 +341,7 @@ class GlobeController extends Controller
             //                             return response()->json(['error' => true, 'message' => $get_activities]);
 
             // }
+
 
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
@@ -1040,6 +1044,202 @@ class GlobeController extends Controller
         }
     }
 
+
+    public function add_site_candidates (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'lessor' => 'required',
+                'contact_number' => 'required',
+                'address' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
+                'distance_from_nominal_point' => 'required',
+                'site_type' => 'required',
+                'building_no_of_floors' => 'required',
+                'area_size' => 'required',
+                'lease_rate' => 'required',
+                'property_use' => 'required',
+                'right_of_way_access' => 'required',
+                'certificate_of_title' => 'required',
+                'tax_declaration' => 'required',
+                'tax_clearance' => 'required',
+                'mortgaged' => 'required',
+                'tower_structure' => 'required',
+                'tower_height' => 'required',
+                'swat_design' => 'required',
+                'with_neighbors' => 'required',
+                'with_history_of_opposition' => 'required',
+                'with_hoa_restriction' => 'required',
+                'with_brgy_restriction' => 'required',
+                'tap_to_lessor' => 'required',
+                'tap_to_neighbor' => 'required',
+                'distance_to_tapping_point' => 'required',
+                'meralco' => 'required',
+                'localcoop' => 'required',
+                'genset_availability' => 'required',
+                'distance_to_nearby_transmission_line' => 'required',
+                'distance_from_creek_river' => 'required',
+                'distance_from_national_road' => 'required',
+                'demolition_of_existing_structure' => 'required',
+
+            ));
+
+            if ($validate->passes()) {
+
+                // if (!is_null($request->input("file"))) {
+                //     $file = collect();
+                //     for ($i=0; $i < count($request->input("file")); $i++) {
+                //         $new_file = $this->rename_file($request->input("file")[$i], $request->input("sub_activity_name"), $request->input("sam_id"));
+
+                //         \Storage::move( $request->input("file")[$i], $new_file );
+
+                //         $file->push($new_file);
+                //     }
+                // }
+
+                $json = array(
+                    'lessor' => $request->input('longitude'),
+                    'contact_number' => $request->input('contact_number'),
+                    'address' => $request->input('address'),
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
+                    'distance_from_nominal_point' => $request->input('longitude'),
+                    'site_type' => $request->input('site_type'),
+                    'building_no_of_floors' => $request->input('building_no_of_floors'),
+                    'area_size' => $request->input('area_size'),
+                    'lease_rate' => $request->input('lease_rate'),
+                    'property_use' => $request->input('property_use'),
+                    'right_of_way_access' => $request->input('right_of_way_access'),
+                    'certificate_of_title' => $request->input('certificate_of_title'),
+                    'tax_declaration' => $request->input('tax_declaration'),
+                    'tax_clearance' => $request->input('tax_clearance'),
+                    'mortgaged' => $request->input('mortgaged'),
+                    'tower_structure' => $request->input('tower_structure'),
+                    'tower_height' => $request->input('tower_height'),
+                    'swat_design' => $request->input('swat_design'),
+                    'with_neighbors' => $request->input('with_neighbors'),
+                    'with_history_of_opposition' => $request->input('with_history_of_opposition'),
+                    'with_hoa_restriction' => $request->input('with_hoa_restriction'),
+                    'with_brgy_restriction' => $request->input('with_brgy_restriction'),
+                    'tap_to_lessor' => $request->input('tap_to_lessor'),
+                    'tap_to_neighbor' => $request->input('tap_to_neighbor'),
+                    'distance_to_tapping_point' => $request->input('distance_to_tapping_point'),
+                    'meralco' => $request->input('meralco'),
+                    'localcoop' => $request->input('localcoop'),
+                    'genset_availability' => $request->input('genset_availability'),
+                    'distance_to_nearby_transmission_line' => $request->input('distance_to_nearby_transmission_line'),
+                    'distance_from_creek_river' => $request->input('distance_from_creek_river'),
+                    'distance_from_national_road' => $request->input('distance_from_national_road'),
+                    'demolition_of_existing_structure' => $request->input('demolition_of_existing_structure'),
+
+                );
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'type' => $request->input("type"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($json),
+                    'user_id' => \Auth::id(),
+                    'status' => "pending",
+                ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully Added Site Candidate." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_my_uploade_file(Request $request)
+    {
+        try {
+            $sub_activity_files = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                                        ->where('sub_activity_id', $request->input('sub_activity_id'))
+                                                        ->where('user_id', \Auth::id())
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            return response()->json(['error' => false, 'message' => $sub_activity_files]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_my_uploaded_site ($sub_activity_id, $sam_id)
+    {
+        try {
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
+                                                        // ->where('type', "jtss_add_site")
+                                                        ->where('user_id', \Auth::id())
+                                                        ->where('type', "advanced_site_hunting")
+                                                        // ->where('type', "jtss_add_site")
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                                // ->addColumn('sitename', function($row){
+                                //     json_decode($row->value);
+                                //     if (json_last_error() == JSON_ERROR_NONE){
+                                //         $json = json_decode($row->value, true);
+
+                                //         return $json['site_name'];
+                                //     } else {
+                                //         return $row->value;
+                                //     }
+                                // })
+                                ->addColumn('lessor', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['lessor'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('address', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['address'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('latitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['latitude'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('longitude', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['longitude'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ;
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+
     public function add_ssds (Request $request)
     {
         try {
@@ -1263,91 +1463,6 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_my_uploade_file(Request $request)
-    {
-        try {
-            $sub_activity_files = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                                        ->where('sub_activity_id', $request->input('sub_activity_id'))
-                                                        ->where('user_id', \Auth::id())
-                                                        ->orderBy('date_created', 'desc')
-                                                        ->get();
-
-            return response()->json(['error' => false, 'message' => $sub_activity_files]);
-        } catch (\Throwable $th) {
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function get_my_uploaded_site ($sub_activity_id, $sam_id)
-    {
-        try {
-            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
-                                                        // ->where('sub_activity_id', $sub_activity_id)
-                                                        ->where('type', "jtss_add_site")
-                                                        ->where('user_id', \Auth::id())
-                                                        ->where('type', "advanced_site_hunting")
-                                                        // ->where('type', "jtss_add_site")
-                                                        ->orderBy('date_created', 'desc')
-                                                        ->get();
-
-            $dt = DataTables::of($sub_activity_files)
-                                ->addColumn('sitename', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['site_name'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
-                                ->addColumn('lessor', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['lessor'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
-                                ->addColumn('address', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['address'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
-                                ->addColumn('latitude', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['latitude'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
-                                ->addColumn('longitude', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['longitude'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
-                                ;
-            return $dt->make(true);
-
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 
     public function set_approve_site (Request $request)
     {
@@ -1404,16 +1519,16 @@ class GlobeController extends Controller
                                                         ->get();
 
             $dt = DataTables::of($sub_activity_files)
-                                ->addColumn('sitename', function($row){
-                                    json_decode($row->value);
-                                    if (json_last_error() == JSON_ERROR_NONE){
-                                        $json = json_decode($row->value, true);
+                                // ->addColumn('sitename', function($row){
+                                //     json_decode($row->value);
+                                //     if (json_last_error() == JSON_ERROR_NONE){
+                                //         $json = json_decode($row->value, true);
 
-                                        return $json['site_name'];
-                                    } else {
-                                        return $row->value;
-                                    }
-                                })
+                                //         return $json['site_name'];
+                                //     } else {
+                                //         return $row->value;
+                                //     }
+                                // })
                                 ->addColumn('lessor', function($row){
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
@@ -2116,21 +2231,6 @@ class GlobeController extends Controller
             ->render();
 
         }
-        // elseif($sub_activity == 'Set Approved Site'){
-
-        //     $what_component = "components.subactivity-set-approved-site";
-        //     return \View::make($what_component)
-        //     ->with([
-        //         'sub_activity' => $sub_activity,
-        //         'sam_id' => $sam_id,
-        //         'sub_activity_id' => $sub_activity_id,
-        //         'program_id' => $program_id,
-        //         'site_category' => $site_category,
-        //         'activity_id' => $activity_id,
-        //     ])
-        //     ->render();
-
-        // }
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
@@ -2157,6 +2257,26 @@ class GlobeController extends Controller
                 'program_id' => $program_id,
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
+        elseif($sub_activity == 'Add Site Candidates'){
+
+            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+                                                    ->where('type', 'jtss_add_site')
+                                                    ->get();
+
+            $what_component = "components.add-site-prospects";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'check_if_added' => $jtss_add_site,
             ])
             ->render();
 
