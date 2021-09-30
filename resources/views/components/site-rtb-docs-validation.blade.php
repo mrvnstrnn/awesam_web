@@ -55,13 +55,20 @@
 
                 $icon_color = "";
                 // foreach($uploaded_files as $approved){
-                    if($data[0]->status == "approved"){
+                    if ( in_array( 'approved', $status_collect->all() ) ) {
                         $icon_color = "success";
-                    } else if($data[0]->status == "denied"){
-                        $icon_color = "danger";
-                    } else {
+                    } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
                         $icon_color = "secondary";
+                    } else {
+                        $icon_color = "danger";
                     }
+                    // if($data[0]->status == "approved"){
+                    //     $icon_color = "success";
+                    // } else if($data[0]->status == "denied"){
+                    //     $icon_color = "danger";
+                    // } else {
+                    //     $icon_color = "secondary";
+                    // }
                 // }
             @endphp
             
@@ -86,9 +93,9 @@
                                     </div>
                                 </div>
                                 @if($icon_color == "success")   
-                                <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
                                 @elseif($icon_color == "danger")   
-                                <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
                                 @endif
                             </div>
                         </div>
