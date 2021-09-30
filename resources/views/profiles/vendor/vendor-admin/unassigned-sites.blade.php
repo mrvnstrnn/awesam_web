@@ -1,6 +1,30 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+    .modal-dialog{
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        box-shadow: 0 5px 15px rgba(0,0,0,0);
+    }   
+    
+    .dropzone {
+        min-height: 20px !important;
+        border: 2px dashed #3f6ad8 !important;
+        border-radius: 10px;
+        padding: unset !important;
+    }
+
+    .ui-datepicker.ui-datepicker-inline {
+    width: 100% !important;
+    }
+    
+    .ui-datepicker table {
+        font-size: 1.3em;
+    }
+    
+</style>
 
     {{-- <x-assigned-sites mode="vendor"/> --}}
     <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Unassigned Sites" activitytype="unassigned sites"/>

@@ -22,7 +22,7 @@
         <div class="row">
         <div class="col ml-1" style="max-width: 55px; padding:0">
             <div class="circle-progress circle-progress-primary d-inline-block">
-                <small><span class="site_progress">.10</span></small>
+                <small><span class="site_progress">.50</span></small>
             </div>
         </div>
         {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
