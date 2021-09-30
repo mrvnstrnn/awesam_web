@@ -74,14 +74,14 @@
             <div class="position-relative row form-group">
                 <label for="region" class="col-sm-4 col-form-label">Region</label>
                 <div class="col-sm-8">
-                    @php
+                    {{-- @php
                         $regions = \DB::table('location_regions')->get();
-                    @endphp
+                    @endphp --}}
                     <select class="form-control" id="region" name="region">
                         <option value="">Select Region</option>
-                        @for ($regions as $region)
+                        {{-- @for ($regions as $region)
                         <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                        @endfor
+                        @endfor --}}
                     </select>
                     <small class="text-danger region-errors"></small>
 
