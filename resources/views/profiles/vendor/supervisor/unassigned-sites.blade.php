@@ -92,7 +92,7 @@
 <script>
     $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
-        if ($(this).attr("colspan") != 5) {
+        if ($(this).attr("colspan") != 4) {
             $(document).find('#modal-assign-sites').modal('show');
 
             $("#sam_id").val($(this).parent().attr('data-sam_id'));

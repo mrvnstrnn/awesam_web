@@ -285,7 +285,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getRtbApproved  ($sam_id)
     {
         $rtb_declaration = SubActivityValue::where('sam_id', $sam_id)
-                        ->where('type', 'rtb_declaration')
+                        ->select('sub_activity_value.date_approved', 'users.name')
+                        ->join('users', 'users.id', 'sub_activity_value.approver_id')
+                        ->where('sub_activity_value.type', 'rtb_declaration')
                         ->first();
 
         return $rtb_declaration;

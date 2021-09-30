@@ -10,7 +10,7 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements vendor"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements vendor accept"/>
 
 @endsection
 

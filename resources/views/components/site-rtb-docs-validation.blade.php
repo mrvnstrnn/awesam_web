@@ -21,17 +21,11 @@
                         ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                         ->where('sub_activity_value.sam_id', $site[0]->sam_id)
                         ->where('sub_activity.action', 'doc upload')
-                        // ->groupBy('sub_activity_name')
                         ->orderBy('sub_activity_value.sub_activity_id')
                         ->get();
 
         $keys_datas = $datas->groupBy('sub_activity_name')->keys();
     @endphp
-
-    @for ($i = 0; $i < count($keys_datas); $i++)
-        
-        {{-- {{ dd ($datas->groupBy('sub_activity_name')['INSTALLATION PLAN'][0]); }} --}}
-    @endfor
 
     @forelse ($datas->groupBy('sub_activity_name') as $data)
         @php $status_collect = collect(); @endphp
@@ -40,10 +34,8 @@
                 $status_collect->push( $data[$i]->status );
             @endphp
         @endfor
-        {{-- @if (!is_null($data[0]->value)) --}}
         @if ( count( $status_collect->all() ) > 0 )
             @php
-                // $uploaded_files = json_decode($data->files);
 
                 if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
                     $extension = "fa-file-pdf";
@@ -54,54 +46,32 @@
                 }
 
                 $icon_color = "";
-                // foreach($uploaded_files as $approved){
-                    if ( in_array( 'approved', $status_collect->all() ) ) {
-                        $icon_color = "success";
-                    } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
-                        $icon_color = "secondary";
-                    } else {
-                        $icon_color = "danger";
-                    }
-                    // if($data[0]->status == "approved"){
-                    //     $icon_color = "success";
-                    // } else if($data[0]->status == "denied"){
-                    //     $icon_color = "danger";
-                    // } else {
-                    //     $icon_color = "secondary";
-                    // }
-                // }
+                if ( in_array( 'approved', $status_collect->all() ) ) {
+                    $icon_color = "success";
+                } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                } else {
+                    $icon_color = "danger";
+                }
             @endphp
             
-            {{-- @foreach ($uploaded_files as $item)
-                @if ($item->status == "denied")
-                    <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                        <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
-                            <div class="dz-message">
-                                <i class="fa fa-plus fa-3x"></i>
-                                <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
-                            </div>
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                <div class="child_div_{{ $data[0]->sub_activity_id }}">
+                    <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
+                        <div>
+                        <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                        <p><small>{{ $data[0]->sub_activity_name }}</small></p>
                         </div>
                     </div>
-                @else --}}
-                    {{-- @if($loop->first) --}}
-                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
-                            <div class="child_div_{{ $data[0]->sub_activity_id }}">
-                                <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
-                                    <div>
-                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                    <p><small>{{ $data[0]->sub_activity_name }}</small></p>
-                                    </div>
-                                </div>
-                                @if($icon_color == "success")   
-                                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                                @elseif($icon_color == "danger")   
-                                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                                @endif
-                            </div>
-                        </div>
-                    {{-- @endif --}}
-                {{-- @endif
-            @endforeach --}}
+                    @if($icon_color == "success")   
+                        <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @elseif($icon_color == "danger")   
+                        <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @endif
+                </div>
+            </div>
         @endif
     @empty
         <div class="col-12 text-center">

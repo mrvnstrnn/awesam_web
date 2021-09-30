@@ -14,52 +14,61 @@
 </div>
 <div class="row file_lists">
     @php
-        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+        $datas = \DB::connection('mysql2')
+                        ->table('sub_activity_value')
+                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
+                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                        ->where('sub_activity.action', 'doc upload')
+                        ->orderBy('sub_activity_value.sub_activity_id')
+                        ->get();
+
+        $keys_datas = $datas->groupBy('sub_activity_name')->keys();
     @endphp
 
-    @forelse ($datas as $data)
-        @if (is_null($data->files))
-            <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
-                    <div class="dz-message">
-                        <i class="fa fa-plus fa-3x"></i>
-                        <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
-                    </div>
-                </div>
-            </div>
-        @else
+    @forelse ($datas->groupBy('sub_activity_name') as $data)
+        @php $status_collect = collect(); @endphp
+        @for ($i = 0; $i < count($data); $i++)
             @php
-                $uploaded_files = json_decode($data->files);
+                $status_collect->push( $data[$i]->status );
+            @endphp
+        @endfor
+        @if ( count( $status_collect->all() ) > 0 )
+            @php
 
-                if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
                     $extension = "fa-file-pdf";
-                } else if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
                     $extension = "fa-file-image";
                 } else {
                     $extension = "fa-file";
                 }
 
                 $icon_color = "";
-                foreach($uploaded_files as $approved){
-                    if($approved->status == "approved"){
-                        $icon_color = "success";
-                    } else {
-                        $icon_color = "secondary";
-                    }
+                if ( in_array( 'approved', $status_collect->all() ) ) {
+                    $icon_color = "success";
+                } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                } else {
+                    $icon_color = "danger";
                 }
-
             @endphp
-            <div class="col-md-4 col-sm-4 view_file_site col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sam_id="{{ $site[0]->sam_id }}">
-                <div class="child_div_{{ $data->sub_activity_id }}">
+            
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                <div class="child_div_{{ $data[0]->sub_activity_id }}">
                     <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
                         <div>
                         <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                        {{-- <small>{{ $item->value }}</small> --}}
-                        <p><small>{{ $data->sub_activity_name }}</small></p>
+                        <p><small>{{ $data[0]->sub_activity_name }}</small></p>
                         </div>
                     </div>
-                     @if($icon_color == "success")   
-                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @if($icon_color == "success")   
+                        <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @elseif($icon_color == "danger")   
+                        <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
                     @endif
                 </div>
             </div>
@@ -70,13 +79,14 @@
         </div>
     @endforelse
 
-    <input type="hidden" name="hidden_sam_id" value="{{ $site[0]->sam_id }}">
+    <input type="hidden" name="hidden_filename" id="hidden_filename">
 </div>
 
 @if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
     <div class="row my-3">
         <div class="col-12">
-            <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span>
+            <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span><br>
+            <b>Approved By: </b><span>{{ \Auth::user()->getRtbApproved($site[0]->sam_id)->name }}</span>
         </div>
     </div>
 @endif

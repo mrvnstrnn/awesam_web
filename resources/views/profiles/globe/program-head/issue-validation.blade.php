@@ -33,9 +33,9 @@
                                 <div class="dropdown-menu-header-inner bg-dark">
                                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                     <div class="menu-header-content btn-pane-right">
-                                            <h5 class="menu-header-title">
-                                                Modal Title
-                                            </h5>
+                                        <h5 class="menu-header-title">
+                                            Issue Validation
+                                        </h5>
                                     </div>
                                 </div>
                             </div> 
@@ -96,10 +96,6 @@
                                 <button class="mt-1 btn btn-primary float-right resolve_issue" type="button">Resolve Issue</button>
                                 <button type="button" class="mt-1 btn btn-outline-danger mr-1 float-right" data-dismiss="modal">Close</button>
                             </div>
-                            {{-- <div class="modal-footer">
-                                <button class="mt-1 btn btn-primary float-right resolve_issue" type="button">Resolve Issue</button>
-                                <button type="button" class="mt-1 btn btn-outline-danger mr-1 float-right" data-dismiss="modal">Close</button>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
