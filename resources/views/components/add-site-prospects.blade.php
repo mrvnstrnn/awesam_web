@@ -75,26 +75,21 @@
                 <label for="region" class="col-sm-4 col-form-label">Region</label>
                 <div class="col-sm-8">
                     @php
-                        $regions = \DB::table('location_regions')->get();
+                        $regions = \DB::connection('mysql2')->table('location_regions')->get();
                     @endphp
-                    <select class="form-control" id="region" name="region">
+                    <select class="form-control" id="region" name="region" data-name="address">
                         <option value="">Select Region</option>
-                        @for ($regions as $region)
-                        <option value="{{ $region->region_id }}">{{ $region-> }}</option>
-                        @endfor
+                        @foreach ($regions as $region)
+                        <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
+                        @endforeach
                     </select>
                     <small class="text-danger region-errors"></small>
-
                 </div>
             </div>
             <div class="position-relative row form-group">
                 <label for="province" class="col-sm-4 col-form-label">Province</label>
                 <div class="col-sm-8">
-                    <select class="form-control" id="province" name="province">
-                        <option value="">Select Site Type</option>
-                        <option value="greenfield">Greenfield</option>
-                        <option value="rooftop">Rooftop</option>
-                    </select>
+                    <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
                     <small class="text-danger province-errors"></small>
 
                 </div>
@@ -102,11 +97,7 @@
             <div class="position-relative row form-group">
                 <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
                 <div class="col-sm-8">
-                    <select class="form-control" id="lgu" name="lgu">
-                        <option value="">Select Site Type</option>
-                        <option value="greenfield">Greenfield</option>
-                        <option value="rooftop">Rooftop</option>
-                    </select>
+                    <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
                     <small class="text-danger lgu-errors"></small>
 
                 </div>
@@ -503,44 +494,75 @@
         }
     })
 
-    // if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
-    //     Dropzone.autoDiscover = false;
-    //     $(".dropzone_files_activities_ssds").dropzone({
-    //         addRemoveLinks: true,
-    //         // maxFiles: 1,
-    //         paramName: "file",
-    //         url: "/upload-file",
-    //         // removedfile: function(file) {
-    //         //     file.previewElement.remove();
-    //         //     $(".ssds_form input#"+file.upload.uuid).remove();
-    //         // },
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         success: function (file, resp) {
-    //             if (!resp.error){
-    //                 var file_name = resp.file;
+    $("select[data-name=address]").on('change', function(){
 
-    //                 $(".ssds_form").append(
-    //                     '<input value="'+file_name+'" name="file[]" id="'+file.upload.uuid+'" type="hidden">'
-    //                 );
-    //             } else {
-    //                 Swal.fire(
-    //                     'Error',
-    //                     resp.message,
-    //                     'error'
-    //                 )
-    //             }
-    //         },
-    //         error: function (file, resp) {
-    //             Swal.fire(
-    //                 'Error',
-    //                 resp,
-    //                 'error'
-    //             )
-    //         }
-    //     });
-    // }
+        var id = $(this).attr('id');
+        var val = $(this).val();
+
+        if(id == 'province') {
+            if (val == '') {
+                $("#lgu option").remove();
+                $("#lgu").attr('disabled', 'disabled');
+                return;
+            }
+        } else if (id == 'region') {
+            if (val == '') {
+                $("#province option").remove();
+                $("#lgu option").remove();
+
+                $("#province").attr('disabled', 'disabled');
+                $("#lgu").attr('disabled', 'disabled');
+                return;
+            }
+        } else {
+            return;
+        }
+
+        $.ajax({
+            url:  '/address',
+            method: 'POST',
+            data: {
+                id : id,
+                val : val
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(resp) {
+                if(!resp.error){
+                    if(resp.new_id) {
+                        $("#"+resp.new_id+ " option").remove();
+                        $("#"+resp.new_id).removeAttr('disabled');
+
+                        if(id == 'region'){
+                            $("#"+resp.new_id).append('<option value="">Please select province</option>');
+                            resp.message.forEach(element => {
+                                $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
+                            });
+                        } else if (id == 'province'){
+                            $("#"+resp.new_id).append('<option value="">Please select city</option>');
+                            resp.message.forEach(element => {
+                                $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
+                            });
+                        }
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+    });
 
     $("#btn_save_ssds").on("click", function() {
         $(this).attr("disabled", "disabled");
