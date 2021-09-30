@@ -264,9 +264,9 @@ $activities = \DB::connection('mysql2')
                             <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
                         </div>
                     </div>
-                @else
+                {{-- @else
                     <i class="pe-7s-note2 pe-2x"></i>
-                @endif
+                @endif --}}
             </div>
         </li>
     @endif
