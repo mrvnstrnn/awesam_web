@@ -1,9 +1,12 @@
 @php
     $site_status = \DB::connection('mysql2')
-        ->table('view_sites_activity_2')
-        ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
-        ->select('site_name', 'site_users.sam_id', 'site_category','activity_name')
-        ->where('agent_id', "=", \Auth::id())
+        ->table('view_sites_activity_progress')
+        // ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
+        ->select('site_name', 'sam_id', 'site_category','activity_name', 'progress')
+        // ->where('agent_id', "=", \Auth::id())
+        ->whereJsonContains('site_agent', [
+            'user_id' => \Auth::id()
+        ])
         ->get();
 
     // $site_status = \DB::connection('mysql2')
@@ -22,7 +25,7 @@
         <div class="row">
         <div class="col ml-1" style="max-width: 55px; padding:0">
             <div class="circle-progress circle-progress-primary d-inline-block">
-                <small><span class="site_progress">.50</span></small>
+                <small><span class="site_progress">{{ $site_->progress }}</span></small>
             </div>
         </div>
         {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
