@@ -236,7 +236,18 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
-            } else if ($request->input('activity_name') == "Vendor Awarding") {
+            } 
+            // else if ($request->input('activity_name') == "Add Site Candidates") {
+
+            //     $notification = "RTB Docs successfully approved";
+            //     $action = $request->input('data_complete');
+            //     $site_category = $request->input('site_category');
+            //     $activity_id = $request->input('activity_id');
+            //     $program_id = $request->input('program_id');
+            //     $samid = $request->input('sam_id');
+
+            // } 
+            else if ($request->input('activity_name') == "Vendor Awarding") {
 
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
@@ -245,7 +256,7 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
-            } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation") {
+            } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation" || $request->input('activity_name') == "Add Site Candidates") {
 
                 $notification = "Successfully mark this site as completed.";
                 // $vendor = $request->input('vendor');

@@ -577,7 +577,7 @@
         var activity_id = ["{{ $activity_id }}"];
         var program_id = "{{ $program_id }}";
 
-        alert("{{ $site_category }}")
+        // alert("{{ $sub_activity }}")
 
         $.ajax({
             url: "/accept-reject-endorsement",

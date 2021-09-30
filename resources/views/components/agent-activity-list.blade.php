@@ -69,6 +69,7 @@ $activities = \DB::connection('mysql2')
                         ->where('program_id', $activities[$i]->program_id)
                         ->where('category', $activities[$i]->site_category)
                         ->where('requirements', 'required')
+                        ->where('action', 'doc upload')
                         ->groupBy('sub_activity_id')
                         ->get();
 
@@ -157,7 +158,7 @@ $activities = \DB::connection('mysql2')
                     </div>
                 </li>
             @endif
-        @else
+        {{-- @else
             <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
                 <div class="todo-indicator bg-{{ $activity_color }}"></div>
                 <div class="widget-content p-0">
@@ -210,7 +211,7 @@ $activities = \DB::connection('mysql2')
                         @endif
                     </div>
                 </div>
-            </li>
+            </li> --}}
         @endif
     @else
         <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
