@@ -959,6 +959,7 @@ class GlobeController extends Controller
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
                                                 ->where('category', $request->input("site_category"))
+                                                ->where('requirements', 'required')
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -1679,7 +1680,7 @@ class GlobeController extends Controller
 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
             } else {
-                return response()->json(['error' => true, 'message' => $validate->errors()->all() ]);
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
 
         } catch (\Throwable $th) {
@@ -2059,8 +2060,11 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id)
-                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->where('program_id', $program_id);
+                    if ($program_id == 3) {
+                        $sites->where('activity_id', 5);
+                    }
+                    $sites->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 
         }
@@ -2087,11 +2091,17 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
-                    ->where('program_id', $program_id)
-                    ->whereIn('activity_id', [7])
-                    // ->where('profile_id', \Auth::user()->profile_id)
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+                    ->where('program_id', $program_id);
+
+                    if ($program_id == 1) {
+                        $sites->where('activity_id', 7);
+                    } else {
+                        $sites->where('activity_id', 5);
+                    }
+
+                    $sites->where('profile_id', \Auth::user()->profile_id)
+                            ->get();
+                    
         }
 
         elseif($activity_type == 'unassigned sites'){

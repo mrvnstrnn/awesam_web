@@ -22,6 +22,7 @@
                         ->where('sub_activity_value.sam_id', $site[0]->sam_id)
                         ->where('sub_activity.action', 'doc upload')
                         // ->groupBy('sub_activity_name')
+                        ->orderBy('sub_activity_value.sub_activity_id')
                         ->get();
 
         $keys_datas = $datas->groupBy('sub_activity_name')->keys();
@@ -33,7 +34,14 @@
     @endfor
 
     @forelse ($datas->groupBy('sub_activity_name') as $data)
-        @if (!is_null($data[0]->value))
+        @php $status_collect = collect(); @endphp
+        @for ($i = 0; $i < count($data); $i++)
+            @php
+                $status_collect->push( $data[$i]->status );
+            @endphp
+        @endfor
+        {{-- @if (!is_null($data[0]->value)) --}}
+        @if ( count( $status_collect->all() ) > 0 )
             @php
                 // $uploaded_files = json_decode($data->files);
 
@@ -49,6 +57,8 @@
                 // foreach($uploaded_files as $approved){
                     if($data[0]->status == "approved"){
                         $icon_color = "success";
+                    } else if($data[0]->status == "denied"){
+                        $icon_color = "danger";
                     } else {
                         $icon_color = "secondary";
                     }
@@ -77,6 +87,8 @@
                                 </div>
                                 @if($icon_color == "success")   
                                 <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                @elseif($icon_color == "danger")   
+                                <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
                                 @endif
                             </div>
                         </div>
@@ -94,12 +106,12 @@
 </div>
 
 <div class="row confirmation_message pt-2 pb-5 d-none">
-    <div class="col-12 text-center">
+    <div class="col-12">
         <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
         <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
 
         <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
-        {{-- <small class="text_area_reason-error text-danger"></small> --}}
+        <small class="reason-error text-danger"></small><br>
         
         <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
         <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
@@ -110,89 +122,86 @@
 
 <script>  
 
-    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
-        Dropzone.autoDiscover = false;
-        $(".dropzone_files").dropzone({
-            addRemoveLinks: true,
-            maxFiles: 1,
-            // maxFilesize: 1,
-            paramName: "file",
-            url: "/upload-file",
-            init: function() {
-                this.on("maxfilesexceeded", function(file){
-                    this.removeFile(file);
-                });
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (file, resp) {
-                if (!resp.error){
-                    var sam_id = this.element.attributes[1].value;
-                    var sub_activity_id = this.element.attributes[2].value;
-                    var sub_activity_name = this.element.attributes[3].value;
-                    var file_name = resp.file;
+    // if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
+    //     Dropzone.autoDiscover = false;
+    //     $(".dropzone_files").dropzone({
+    //         addRemoveLinks: true,
+    //         maxFiles: 1,
+    //         paramName: "file",
+    //         url: "/upload-file",
+    //         init: function() {
+    //             this.on("maxfilesexceeded", function(file){
+    //                 this.removeFile(file);
+    //             });
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function (file, resp) {
+    //             if (!resp.error){
+    //                 var sam_id = this.element.attributes[1].value;
+    //                 var sub_activity_id = this.element.attributes[2].value;
+    //                 var sub_activity_name = this.element.attributes[3].value;
+    //                 var file_name = resp.file;
 
-                    $.ajax({
-                        url: "/upload-my-file",
-                        method: "POST",
-                        data: {
-                            sam_id : sam_id,
-                            sub_activity_id : sub_activity_id,
-                            file_name : file_name,
-                            sub_activity_name : sub_activity_name
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (resp) {
-                            if (!resp.error){
+    //                 $.ajax({
+    //                     url: "/upload-my-file",
+    //                     method: "POST",
+    //                     data: {
+    //                         sam_id : sam_id,
+    //                         sub_activity_id : sub_activity_id,
+    //                         file_name : file_name,
+    //                         sub_activity_name : sub_activity_name
+    //                     },
+    //                     headers: {
+    //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                     },
+    //                     success: function (resp) {
+    //                         if (!resp.error){
 
-                                var ext = file_name.split('.').pop();
+    //                             var ext = file_name.split('.').pop();
 
-                                var class_name = "";
+    //                             var class_name = "";
 
-                                if (ext == "pdf") {
-                                    class_name = "fa-file-pdf";
-                                } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
-                                    class_name = "fa-file-image";
-                                } else {
-                                    class_name = "fa-file";
-                                }
+    //                             if (ext == "pdf") {
+    //                                 class_name = "fa-file-pdf";
+    //                             } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
+    //                                 class_name = "fa-file-image";
+    //                             } else {
+    //                                 class_name = "fa-file";
+    //                             }
 
-                                $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
+    //                             $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
 
-                                $(".dropzone_div_"+sub_activity_id).append(
-                                    '<div class="child_div_'+sub_activity_id+'">' +
-                                        '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
-                                            '<div>' +
-                                                '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
-                                                '<p><small>'+sub_activity_name+'</small></p>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>'
-                                );
+    //                             $(".dropzone_div_"+sub_activity_id).append(
+    //                                 '<div class="child_div_'+sub_activity_id+'">' +
+    //                                     '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
+    //                                         '<div>' +
+    //                                             '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
+    //                                             '<p><small>'+sub_activity_name+'</small></p>' +
+    //                                         '</div>' +
+    //                                     '</div>' +
+    //                                 '</div>'
+    //                             );
                                 
-                                // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
-                                
-                                toastr.success(resp.message, "Success");
-                            } else {
-                                toastr.error(resp.message, "Error");
-                            }
-                        },
-                        error: function (file, resp) {
-                            toastr.error(resp.message, "Error");
-                        }
-                    });
-                } else {
-                    toastr.error(resp.message, "Error");
-                }
-            },
-            error: function (file, resp) {
-                toastr.error(resp.message, "Error");
-            }
-        });
-    }
+    //                             toastr.success(resp.message, "Success");
+    //                         } else {
+    //                             toastr.error(resp.message, "Error");
+    //                         }
+    //                     },
+    //                     error: function (file, resp) {
+    //                         toastr.error(resp.message, "Error");
+    //                     }
+    //                 });
+    //             } else {
+    //                 toastr.error(resp.message, "Error");
+    //             }
+    //         },
+    //         error: function (file, resp) {
+    //             toastr.error(resp.message, "Error");
+    //         }
+    //     });
+    // }
     
     $(".view_file").on("click", function (e){
 
@@ -406,6 +415,8 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
+        $(".confirmation_message small").text("");
+
         $.ajax({
             url: "/doc-validation-approval",
             method: "POST",
@@ -441,16 +452,28 @@
                         $(".child_div_"+sub_activity_id).append(
                             '<i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i><br>'
                         );
+                    } else {
+                        $(".child_div_"+sub_activity_id).append(
+                            '<i class="fa fa-times-circle fa-lg text-danger" style="position: absolute; top:10px; right: 20px"></i><br>'
+                        );
                     }
                     
                     $(".file_lists").removeClass("d-none");
                     $(".confirmation_message").addClass("d-none");
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".confirmation_message ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                    
                     $(".approve_reject_doc_btns_final").removeAttr("disabled");
                     $(".approve_reject_doc_btns_final").text("Confirm");
                 }
