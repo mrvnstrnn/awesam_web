@@ -80,7 +80,7 @@
                     <select class="form-control" id="region" name="region">
                         <option value="">Select Region</option>
                         @for ($regions as $region)
-                        <option value="{{ $region->region_id }}">{{ $region-> }}</option>
+                        <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
                         @endfor
                     </select>
                     <small class="text-danger region-errors"></small>
