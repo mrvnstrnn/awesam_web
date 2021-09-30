@@ -20,6 +20,7 @@ $activities = \DB::connection('mysql2')
                     ])
                     ->where('profile_id', 2)
                     ->get();
+
 @endphp
 
 {{-- @foreach($activities as $activity) --}}
@@ -32,13 +33,13 @@ $activities = \DB::connection('mysql2')
             if($activities[$i]->activity_complete == 'true'){
                 $activity_color = 'success';
                 $activity_badge = "done";
-            } 
+            }
             else {
 
                 if($activities[$i]->end_date <=  Carbon::today()){
                     $activity_color = 'danger';
                     $activity_badge = "delayed";
-                } 
+                }
                 else {
 
                     if($activities[$i]->start_date >  Carbon::today()){
@@ -46,7 +47,7 @@ $activities = \DB::connection('mysql2')
                         $activity_color = 'secondary';
                         $activity_badge = "Upcoming";
 
-                    } 
+                    }
                     else {
 
                         $activity_color = 'warning';
@@ -109,7 +110,7 @@ $activities = \DB::connection('mysql2')
                                         $sched = json_decode($activity_schedule[0]->value);
                                         $sched = getdate(strtotime($sched->site_schedule));
 
-                                    }    
+                                    }
                                 @endphp
                                 @if($activities[$i]->activity_name == "Advanced Site Hunting")
                                     <div class="text-center">
@@ -124,7 +125,7 @@ $activities = \DB::connection('mysql2')
                                 <div class="">
                                     {{ $activities[$i]->activity_name }}
                                     {{-- @if ($activities[$i]->activity_complete == 'false')
-                                    <div class="badge badge-primary ml-0">Active</div>                                                                
+                                    <div class="badge badge-primary ml-0">Active</div>
                                     @endif --}}
                                 </div>
                                 <div class="" style="  width: 400px;
@@ -141,7 +142,7 @@ $activities = \DB::connection('mysql2')
                                 </div>
                                 <div class="mt-1">
                                     <i class="lnr-calendar-full"></i>
-                                    <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>                
+                                    <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
                                     <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
                                 </div>
                             </div>
@@ -172,7 +173,7 @@ $activities = \DB::connection('mysql2')
                                     $sched = json_decode($activity_schedule[0]->value);
                                     $sched = getdate(strtotime($sched->site_schedule));
 
-                                }    
+                                }
                             @endphp
                             @if($activities[$i]->activity_name == "Advanced Site Hunting")
                                 <div class="text-center">
@@ -201,7 +202,7 @@ $activities = \DB::connection('mysql2')
                             </div>
                             <div class="mt-1">
                                 <i class="lnr-calendar-full"></i>
-                                <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>                
+                                <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
                                 <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
                             </div>
                         </div>
@@ -227,7 +228,7 @@ $activities = \DB::connection('mysql2')
                                 $sched = json_decode($activity_schedule[0]->value);
                                 $sched = getdate(strtotime($sched->site_schedule));
 
-                            }    
+                            }
                         @endphp
                         @if($activities[$i]->activity_name == "Advanced Site Hunting")
                             <div class="text-center">
@@ -242,7 +243,7 @@ $activities = \DB::connection('mysql2')
                         <div class="">
                             {{ $activities[$i]->activity_name }}
                             {{-- @if ($activities[$i]->activity_complete == 'false')
-                            <div class="badge badge-primary ml-0">Active</div>                                                                
+                            <div class="badge badge-primary ml-0">Active</div>
                             @endif --}}
                         </div>
                         <div class="" style="  width: 400px;
@@ -259,18 +260,13 @@ $activities = \DB::connection('mysql2')
                         </div>
                         <div class="mt-1">
                             <i class="lnr-calendar-full"></i>
-                            <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>                
+                            <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
                             <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
                         </div>
                     </div>
-                    @if(in_array($activities[$i]->profile_id, array("2", "3")))
-                    {{-- <div class="widget-content-right">
-                        <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $activities[$i]->sam_id }}' data-site='{{ $activities[$i]->site_name}}' data-activity='{{ $activities[$i]->activity_name}}' data-main_activity='{{ $activities[$i]->activity_name}}' data-activity_id='{{ $activities[$i]->activity_id}}'>
-                            <i class="fa fa-angle-double-right fa-lg"></i>
-                        </button>
-                    </div> --}}
-                    @endif
-                </div>
+                @else
+                    <i class="pe-7s-note2 pe-2x"></i>
+                @endif
             </div>
         </li>
     @endif

@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/getVendorList/{program_status}', [VendorController::class, 'vendor_list'])->name('vendor.list');
 
     Route::post('/terminateVendor', [VendorController::class, 'terminate_vendor'])->name('terminate.vendor');
-    
+
     Route::get('/info-vendor/{vendor_id}', [VendorController::class, 'info_vendor'])->name('info.vendor');
 
     Route::get('/site-vendor/{vendor_id}', [UserController::class, 'site_vendor'])->name('site.vendor');
@@ -78,25 +78,25 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/get-towerco', [TowerCoController::class, 'get_towerco'])->name('get_towerco');
-    
+
     Route::get('/get-towerco-all/{actor}', [TowerCoController::class, 'get_towerco_all'])->name('get_towerco_all');
-    
+
     Route::get('/get-towerco-multi/{actor}', [TowerCoController::class, 'get_towerco_multi'])->name('get_towerco_multi');
-    
+
     Route::get('/get-towerco-logs/{serial}', [TowerCoController::class, 'get_towerco_logs'])->name('get_towerco_logs');
-    
+
     Route::get('/get-towerco/{serial_number}/{actor}', [TowerCoController::class, 'get_towerco_serial'])->name('get_towerco_serial');
-    
+
     Route::post('/save-towerco', [TowerCoController::class, 'save_towerco_serial'])->name('save_towerco_serial');
-    
+
     Route::post('/save-towerco-multi', [TowerCoController::class, 'save_towerco_multi'])->name('save_towerco_multi');
 
     Route::post('/upload-my-file-towerco', [TowerCoController::class, 'upload_my_file_towerco']);
 
     Route::get('/get-my-towerco-file/{serial_number}/{type}', [TowerCoController::class, 'get_my_towerco_file']);
-    
+
     Route::get('/get-towerco/export', [TowerCoController::class, 'TowerCoExport'])->name('TowerCoExport');
-    
+
     Route::get('/get-towerco-filter/{towerco}/{region}/{tssr_status}/{milestone_status}/{actor}', [TowerCoController::class, 'filter_towerco'])->name('filter_towerco');
 
 });
@@ -115,7 +115,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
     Route::post('/update-coop-details', [LocalCoopController::class, 'update_coop_details'])->name('update_coop_details');
     Route::get('/localcoop-details-approval', [LocalCoopController::class, 'localcoop_details_approval'])->name('localcoop_details_approval');
-    
+
     Route::get('/localcoop-details/{coop}', [LocalCoopController::class, 'get_localcoop_details'])->name('get_localcoop_details');
     Route::get('/approve-change-details/{id}/{status}', [LocalCoopController::class, 'approve_change_details'])->name('approve-change-details');
 
@@ -134,7 +134,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/localcoop-issues', [LocalCoopController::class, 'get_coop_issues']);
 
     Route::get('/localcoop-get-issue-list/{issue_type}', [LocalCoopController::class, 'get_coop_issue_list']);
-        
+
 
 });
 //******************* END OF LocalCOOP *******************//
@@ -177,7 +177,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
 
-    
+
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');
     Route::post('/update-profile', [ProfileController::class, 'update_profile'])->name('update.profile');
@@ -189,13 +189,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/addupdate-permission', [ProfileController::class, 'addupdate_permission'])->name('addupdate.permission');
     Route::post('/delete-permission', [ProfileController::class, 'deletePermission'])->name('delete.permission');
 
-    
+
     Route::post('/accept-reject-endorsement', [GlobeController::class, 'acceptRejectEndorsement'])->name('accept-reject.endorsement');
-    
+
     Route::get('/forverification', [UserController::class, 'forverification_list'])->name('all.forverification');
     Route::get('/for-pending-onboarding', [UserController::class, 'forpendingonboarding_list'])->name('all.forpendingonboarding');
 
-    
+
     Route::get('/workflow-data-proc/{program_id}', [GlobeController::class, 'getDataWorkflow'])->name('all.getDataWorkflow');
 
     Route::get('/unassigend-sites-data/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'unassignedSites'])->name('all.unassignedSites');
@@ -207,7 +207,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
 
     Route::get('/get-region', [GlobeController::class, 'get_region'])->name('get.region');
-    
+
     Route::get('/get-location/{location_id}/{location_type}', [GlobeController::class, 'get_location'])->name('get.location');
 
     Route::post('/assign-agent-site', [GlobeController::class, 'assign_agent_site'])->name('assign.agent_site');
@@ -216,7 +216,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/assigned-sites/columns', [GlobeController::class, 'agent_assigned_sites_columns'])->name('agent_assigned_sites.columns');
 
     Route::get('/assigned-sites/{sam_id}', [UserController::class, 'view_assigned_site'])->name('view_assigned_site');
-    
+
 
     Route::get('/table/request/{request_status}', [VendorController::class, 'getMyRequest'])->name('get.requestDate');
     Route::post('/requests/add', [VendorController::class, 'add_agent_request'])->name('add_agent_request');
@@ -225,7 +225,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/vendor-agents/{user_id?}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
-    
+
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
     Route::get('/get-agent', [ProfileController::class, 'get_agent']);
 
@@ -279,14 +279,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-my-uploaded-file', [GlobeController::class, 'get_my_uploade_file']);
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
-    
+
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
 
     Route::get('/get-uploaded-files/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_uploaded_files']);
-    
+
     Route::get('/get-my-uploaded-file-data/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_my_uploade_file_data']);
 
-    
+
     Route::post('/doc-validation-approval', [GlobeController::class, 'doc_validation_approvals']);
 
     Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
@@ -307,12 +307,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-my-calendar', [UserController::class, 'my_calendar']);
     Route::get('/get-my-calendar-activities', [UserController::class, 'my_calendar_activities']);
 
-    
+
 
     //RTB Declaration
     Route::post('/declare-rtb', [GlobeController::class, 'declare_rtb']);
     Route::post('/approve-reject-rtb', [GlobeController::class, 'approve_reject_rtb']);
-    
+
     // Lessor Engagement
     Route::post('/add-engagement', [GlobeController::class, 'save_engagement']);
     Route::get('/get-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_engagement']);
@@ -325,6 +325,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // PR Memo
     Route::post('/get-pr-memo', [GlobeController::class, 'get_PRMemo']);
+
+
+    Route::post('/add-site-candidates', [GlobeController::class, 'add_site_candidates']);
 
 
     // SSDS
@@ -355,7 +358,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-user-data/{user_id}/{vendor_id}/{is_id}', [GlobeController::class, 'get_user_data']);
     Route::post('/update-user-data', [GlobeController::class, 'update_user_data']);
 
-    
+
     Route::get('/change-supervisor/{user_id}/{is_id}', [GlobeController::class, 'change_supervisor']);
 
     //Issue Management
@@ -373,13 +376,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-create-pr-memo', [GlobeController::class, 'get_create_pr_memo']);
     Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
     Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);
-    
+
     Route::get('/remove-fiancial-analysis/{sam_id}', [GlobeController::class, 'remove_fiancial_analysis']);
     Route::get('/remove-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'remove_fiancial_analysis']);
 
     Route::get('/get-line-items/{sam_id}/{vendor}', [GlobeController::class, 'get_line_items']);
     Route::post('/save-line-items', [GlobeController::class, 'save_line_items']);
-    
+
     Route::post('/print-to-pdf-pr-po', [GlobeController::class, 'print_to_pdf_pr_po']);
 
     Route::get('/export/line-items/{sam_id}', [GlobeController::class, 'export_line_items']);
@@ -408,8 +411,8 @@ Route::get('/invitation-link/{token}/{invitation_code}', [InviteController::clas
 
 Route::view('/team', 'team');
 
-//ROUTE TO SLUG 
-//USERCONTROLLER WILL TAKE OVER THE ROUTING 
+//ROUTE TO SLUG
+//USERCONTROLLER WILL TAKE OVER THE ROUTING
 
 Route::get('/{slug}', [UserController::class, 'show'])
     ->where('slug', '.*')
