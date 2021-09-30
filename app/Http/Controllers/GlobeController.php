@@ -236,7 +236,7 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
-            } 
+            }
             // else if ($request->input('activity_name') == "Add Site Candidates") {
 
             //     $notification = "RTB Docs successfully approved";
@@ -246,7 +246,7 @@ class GlobeController extends Controller
             //     $program_id = $request->input('program_id');
             //     $samid = $request->input('sam_id');
 
-            // } 
+            // }
             else if ($request->input('activity_name') == "Vendor Awarding") {
 
                 $notification = "Successfully awarded.";
@@ -1064,6 +1064,9 @@ class GlobeController extends Controller
                 'lessor' => 'required',
                 'contact_number' => 'required',
                 'address' => 'required',
+                'region' => 'required',
+                'province' => 'required',
+                'lgu' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
                 'distance_from_nominal_point' => 'required',
@@ -1114,6 +1117,9 @@ class GlobeController extends Controller
                     'lessor' => $request->input('longitude'),
                     'contact_number' => $request->input('contact_number'),
                     'address' => $request->input('address'),
+                    'region' => $request->input('region'),
+                    'province' => $request->input('province'),
+                    'lgu' => $request->input('lgu'),
                     'latitude' => $request->input('latitude'),
                     'longitude' => $request->input('longitude'),
                     'distance_from_nominal_point' => $request->input('longitude'),
@@ -2112,7 +2118,7 @@ class GlobeController extends Controller
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
-                    
+
         }
 
         elseif($activity_type == 'unassigned sites'){
