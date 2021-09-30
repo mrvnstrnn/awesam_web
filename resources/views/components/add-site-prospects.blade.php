@@ -74,16 +74,6 @@
             <div class="position-relative row form-group">
                 <label for="region" class="col-sm-4 col-form-label">Region</label>
                 <div class="col-sm-8">
-<<<<<<< HEAD
-                    {{-- @php
-                        $regions = \DB::table('location_regions')->get();
-                    @endphp --}}
-                    <select class="form-control" id="region" name="region">
-                        <option value="">Select Region</option>
-                        {{-- @for ($regions as $region)
-                        <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                        @endfor --}}
-=======
                     @php
                         $regions = \DB::connection('mysql2')->table('location_regions')->get();
                     @endphp
@@ -92,7 +82,6 @@
                         @foreach ($regions as $region)
                         <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
                         @endforeach
->>>>>>> 02b461e979b8b4b65098fc84bbffe4547c3b20f4
                     </select>
                     <small class="text-danger region-errors"></small>
                 </div>
