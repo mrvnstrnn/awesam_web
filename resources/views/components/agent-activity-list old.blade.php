@@ -12,7 +12,7 @@ $activities = \DB::connection('mysql2')
         ->where('agent_id', "=", \Auth::id())
         ->get();
 
-dd($activities);
+// dd($activities);
 
 @endphp
 
