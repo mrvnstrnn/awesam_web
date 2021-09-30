@@ -2125,10 +2125,15 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                 ->table("view_sites_activity")
-                ->where('program_id', $program_id)
-                // ->whereIn('activity_id', [8])
-                ->where('profile_id', \Auth::user()->profile_id)
-                ->get();
+                ->where('program_id', $program_id);
+                if ($program_id == 1) {
+                    $sites->where('activity_id', 8);
+                }
+                //  else if ($program_id == 1) {
+                //     $sites->where('activity_id', 6);
+                // }
+                $sites->where('profile_id', \Auth::user()->profile_id)
+                            ->get();
 
         } else if ($activity_type == 'all-site-issues') {
             // $sites = \DB::connection('mysql2')
