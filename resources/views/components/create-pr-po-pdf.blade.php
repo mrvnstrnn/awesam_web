@@ -12,9 +12,9 @@
 
                 body {
                     font-family: Arial, Helvetica, sans-serif;
-                    background-image: url('globe-logo.png');
+                    /* background-image: url('globe-logo.png');
                     background-size: 100px 50px;
-                    opacity: .15;
+                    opacity: .15; */
                 },
                 
                 textarea {

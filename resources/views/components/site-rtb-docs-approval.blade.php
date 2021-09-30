@@ -41,7 +41,7 @@
                     if($approved->status == "approved"){
                         $icon_color = "success";
                     } else {
-                        $icon_color = "secondary";
+                        $icon_color = "danger";
                     }
                 }
 
@@ -57,6 +57,8 @@
                     </div>
                      @if($icon_color == "success")   
                     <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @else
+                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
                     @endif
                 </div>
             </div>
