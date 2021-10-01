@@ -371,4 +371,9 @@ class User extends Authenticatable implements MustVerifyEmail
         
         return count($sites);
     }
+
+    // public function view_vendor_agent($type)
+    // {
+    //     return \DB::connection('mysql2')->table('view_vendor_agent')->where('TYPE', $type)->first();
+    // }
 }
