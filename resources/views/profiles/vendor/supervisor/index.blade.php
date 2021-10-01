@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <H1>Good Afternoon <strong>{{ \Auth::user()->firstname }}</strong> </H1>
+    <H1>Good Afternoon <strong>{{ ucfirst(\Auth::user()->firstname) }}</strong> </H1>
     <hr>
     <h3>Sites</h3>
     <div class="row">
