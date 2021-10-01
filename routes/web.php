@@ -397,6 +397,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/get-coloc-filter/{site_type}/{program}/{technology}', [GlobeController::class, 'get_coloc_filter']);
 
+    Route::get('/get-program-fields/{sam_id}/{program}', [GlobeController::class, 'get_program_fields']);
+
 
 
 

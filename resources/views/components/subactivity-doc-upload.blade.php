@@ -25,8 +25,9 @@
                 <p><small class="sub_activity_name">Drag and Drop files here</small></p>
             </div>
         </div>                                            
-        <div class="file_viewer d-none">
+        <div class="file_viewer pb-3 d-none">
             <div class="file"></div>
+            <div class="reason_rejected"></div>
             <div class="button">
                 <button class="my-3 btn btn-secondary btn-shadow btn-sm back_to_upload">Back to upload</button> <button class="my-3 btn btn-primary btn-shadow btn-sm add_remarks">Add remarks</button> 
             </div>
@@ -122,6 +123,17 @@
             $('.file_viewer .file').html('');
             $('.file_viewer .file').html(htmltoload);
 
+            if ( $(this).parent().attr("data-status") == "denied"){
+                $(".reason_rejected .rejected_p").text( $(this).attr("data-reason") );
+                $(".reason_rejected").append(
+                    '<b>Reason: </b> <span>' + $(this).parent().attr("data-reason") + "</span>"
+                );
+
+            } else {
+                $(".reason_rejected b").remove();
+                $(".reason_rejected span").remove();
+            }
+
             $('.file_viewer').removeClass("d-none");
             $('.dropzone').addClass("d-none");
         });
@@ -164,7 +176,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/get-my-uploaded-file-data/"+"{{ $sub_activity_id }}"+"/"+$(".ajax_content_box").attr("data-sam_id"),
+                    url: "/get-uploaded-files/"+"{{ $sub_activity_id }}"+"/"+$(".ajax_content_box").attr("data-sam_id"),
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -176,6 +188,8 @@
                 'createdRow': function( row, data, dataIndex ) {
                     $(row).attr('data-value', data.value);
                     $(row).attr('data-sam_id', data.sam_id);
+                    $(row).attr('data-status', data.status);
+                    $(row).attr('data-reason', data.reason);
                     $(row).attr('data-id', data.id);
                     $(row).attr('style', 'cursor: pointer');
                 },
@@ -195,7 +209,6 @@
             $(".dropzone_files_activities").dropzone({
                 addRemoveLinks: true,
                 maxFiles: 1,
-                // maxFilesize: 1,
                 paramName: "file",
                 url: "/upload-file",
                 init: function() {
@@ -208,7 +221,6 @@
                 },
                 success: function (file, resp) {
                     if (!resp.error){
-                        // $("#action_doc_upload").addClass("d-none");
                         this.removeFile(file);
                         var sam_id = "{{ $sam_id }}";
                         var sub_activity_id = "{{ $sub_activity_id }}";
@@ -217,8 +229,6 @@
                         var site_category = "{{ $site_category }}";
                         var activity_id = "{{ $activity_id }}";
                         var program_id = "{{ $program_id }}";
-
-                        // var sub_activity_name = $(this).attr("data-sub_activity_name");
 
                         $.ajax({
                             url: "/upload-my-file",
@@ -245,7 +255,6 @@
                                             resp.message,
                                             'success'
                                         )
-                                        // $(".btn_switch_back_to_actions").trigger("click");
 
                                         $(".mark_complete_area").removeClass("d-none");
 

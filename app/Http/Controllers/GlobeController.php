@@ -1856,9 +1856,14 @@ class GlobeController extends Controller
                                 // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
                                 // ->where('view_sites_per_program.program_id', $program_id)
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
-                                ->where('view_sites_activity.profile_id', \Auth::user()->profile_id)
-                                ->whereIn('view_sites_activity.activity_id', [16, 18, 20, 29, 31])
-                                ->get();
+                                ->where('view_sites_activity.profile_id', \Auth::user()->profile_id);
+                                if ( $program_id == 1 ) {
+                                    $sites->whereIn('view_sites_activity.activity_id', [16, 18, 20, 29, 31])
+                                    ->get();
+                                } else if ( $program_id == 3 ) {
+                                    $sites->whereIn('view_sites_activity.activity_id', [13, 18, 19, 22, 23])
+                                    ->get();
+                                }
         }
 
         elseif($activity_type == 'vendor awarding'){
@@ -2078,7 +2083,7 @@ class GlobeController extends Controller
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id);
-                    if ($program_id == 3) {
+                    if ($program_id == 3 && \Auth::user()->profile_id == 1) {
                         $sites->where('activity_id', 5);
                     }
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -2095,7 +2100,6 @@ class GlobeController extends Controller
                         $q->whereNull('activity_id')
                           ->orWhere('activity_id', 1);
                     })
-                    // ->whereNull('activity_id')
                     ->whereNull('profile_id')
                     ->where('program_id', $program_id)
                     // ->take(4000)
@@ -2112,8 +2116,26 @@ class GlobeController extends Controller
 
                     if ($program_id == 1) {
                         $sites->where('activity_id', 7);
-                    } else {
-                        $sites->where('activity_id', 5);
+                    } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
+                        $sites->where('activity_id', 7);
+                    }
+
+                    $sites->where('profile_id', \Auth::user()->profile_id)
+                            ->get();
+
+        }
+
+        elseif($activity_type == 'new endorsements vendor accept'){
+
+            $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
+                    ->where('program_id', $program_id);
+
+                    if ($program_id == 1) {
+                        $sites->where('activity_id', 7);
+                    } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
+                        $sites->where('activity_id', 6);
                     }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -2125,28 +2147,37 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                 ->table("view_sites_activity")
-                ->where('program_id', $program_id)
-                // ->whereIn('activity_id', [8])
-                ->where('profile_id', \Auth::user()->profile_id)
-                ->get();
+                ->where('program_id', $program_id);
+                if ($program_id == 1) {
+                    $sites->where('activity_id', 8);
+                } else if ($program_id == 3 && \Auth::user()->profile_id == 1) {
+                    $sites->where('activity_id', 6);
+                } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
+                    $sites->where('activity_id', 7);
+                }
+                $sites->where('profile_id', \Auth::user()->profile_id)
+                            ->get();
 
         } else if ($activity_type == 'all-site-issues') {
-            // $sites = \DB::connection('mysql2')
-            //     ->table("site")
-            //     ->leftjoin('site_issue', 'site.sam_id', 'issue.sam_id')
-            //     ->where('site.program_id', $program_id)
-            //     ->get();
-
             $sites = \DB::connection('mysql2')
-                ->table("site_issue")
-                ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
-                ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
-                ->where('site.program_id', $program_id)
-                // ->where('site_issue.issue_status', 'active')
-                ->whereNull('site_issue.date_resolve')
-                ->get();
+                            ->table("site_issue")
+                            ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
+                            ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+                            ->where('site.program_id', $program_id)
+                            ->whereNull('site_issue.date_resolve');
+                            if (\Auth::user()->profile_id == 2) {
+                                $sites->where('site_issue.user_id', \Auth::id());
+                            } else if (\Auth::user()->profile_id == 3) {
+                                $getAgentOfSupervisor = UserDetail::select('users.id')
+                                                            ->join('users', 'user_details.user_id', 'users.id')
+                                                            ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                                                            ->where('user_details.IS_id', \Auth::id())
+                                                            ->get()
+                                                            ->pluck('id');
 
-                // dd($sites);
+                                $sites->whereIn('site_issue.user_id', $getAgentOfSupervisor);
+                            }
+                            $sites->get();
         }
 
         else {
@@ -3249,15 +3280,9 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids)
-                                ->addColumn('value', function($row) use ($sub_activity_id) {
-
-                                    if ($sub_activity_id == 75) {
-                                        $json = json_decode($row->value, true);
-
-                                        return $json['file'];
-                                    } else {
-                                        return $row;
-                                    }
+                                ->addColumn('value', function($row) {
+                                    $json = json_decode($row->value, true);
+                                    return $row->value;
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -3275,9 +3300,7 @@ class GlobeController extends Controller
 
             $dt = DataTables::of($sub_activity_ids)
                                 ->addColumn('value', function($row) {
-                                    $json = json_decode($row->value, true);
-
-                                    return $json['file'];
+                                    return $row->value;
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -4364,13 +4387,12 @@ class GlobeController extends Controller
     public function get_coloc_filter($site_type, $program, $technology)
     {
         try {
+
             $sites = \DB::connection('mysql2')
-                    ->table("milestone_tracking_2")
-                    ->distinct()
-                    ->where('program_id', 3)
-                    ->where('activity_type', 'endorsement')
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->where('activity_complete', 'false');
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program)
+                    ->where('profile_id', \Auth::user()->profile_id);
 
             if($site_type != '-'){
                 $sites = $sites->whereJsonContains("site_fields", [
@@ -4395,6 +4417,23 @@ class GlobeController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function get_program_fields ($sam_id, $program)
+    {
+        try {
+            if ($program == 3) {
+                $table = 'program_coloc';
+            }
+            $datas = \DB::connection('mysql2')
+                            ->table($table)
+                            ->where('sam_id', $sam_id)
+                            ->get();
+
+            return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 
