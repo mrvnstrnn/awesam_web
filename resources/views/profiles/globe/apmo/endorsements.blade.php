@@ -78,43 +78,96 @@
 
             allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
 
-            // $("..content-data .position-relative.form-group").remove();
-            $(".card-body .position-relative.form-group").remove();
-            $(".main-card.mb-3.card .modal-footer").remove();
+            var what_table = $(this).closest('tr').attr('data-what_table');
+            var program_id = $(this).closest('tr').attr('data-program_id');
 
-            if (json_parse.site_fields != null) {
-                var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+            $.ajax({
+                url: '/get-program-fields/' + json_parse.sam_id + '/' + $(this).closest('tr').attr('data-program_id'),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if(!resp.error){
 
-                for (let i = 0; i < new_json.length; i++) {
-                    // if(allowed_keys.includes(new_json[i].field_name.toUpperCase())){
-                        field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
-                        $("#viewInfoModal  .card-body").append(
-                            '<div class="position-relative form-group col-md-6">' +
-                                '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
-                                '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+                        $(".card-body .position-relative.form-group").remove();
+                        $(".main-card.mb-3.card .modal-footer").remove();
+
+                        $.each(resp.message[0], function(index, data) {
+                            field_name = index.charAt(0).toUpperCase() + index.slice(1);
+                            $("#viewInfoModal .card-body").append(
+                                '<div class="position-relative form-group col-md-6">' +
+                                    '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+                                    '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
+                                '</div>'
+                            );
+                        });
+
+                        $("#viewInfoModal .main-card.mb-3.card").append(
+                            '<div class="modal-footer">' +
+                                '<button type="button" class="btn btn-primary btn-sm btn-accept-endorsement btn-shadow" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
                             '</div>'
                         );
-                    // }
+
+                        $(".modal-title").text(json_parse.site_name);
+                        $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+                        $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
+                        $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
+                        $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
+                        $(".btn-accept-endorsement").attr('data-what_table', what_table);
+                        $(".btn-accept-endorsement").attr('data-program_id', program_id);
+
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function(resp){
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
                 }
-            } else {
-                $("#viewInfoModal .card-body").append(
-                    '<div class="position-relative form-group"><h1>No fields available.</h1></div>'
-                );
-            }
+            });
 
-            $("#viewInfoModal .main-card.mb-3.card").append(
-                '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-primary btn-sm btn-accept-endorsement btn-shadow" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
-                '</div>'
-            );
+            // $(".card-body .position-relative.form-group").remove();
+            // $(".main-card.mb-3.card .modal-footer").remove();
 
-            $(".modal-title").text(json_parse.site_name);
-            $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
-            $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
-            $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
-            $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
-            $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
-            $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+            // if (json_parse.site_fields != null) {
+            //     var new_json = JSON.parse(json_parse.site_fields.replace(/&quot;/g,'"'));
+
+            //     for (let i = 0; i < new_json.length; i++) {
+            //         field_name = new_json[i].field_name.charAt(0).toUpperCase() + new_json[i].field_name.slice(1);
+            //         $("#viewInfoModal  .card-body").append(
+            //             '<div class="position-relative form-group col-md-6">' +
+            //                 '<label for="' + new_json[i].field_name.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+            //                 '<input class="form-control"  value="'+new_json[i].value+'" name="' + new_json[i].field_name.toLowerCase() + '"  id="'+new_json[i].field_name.toLowerCase()+'" >' +
+            //             '</div>'
+            //         );
+            //     }
+            // } else {
+            //     $("#viewInfoModal .card-body").append(
+            //         '<div class="position-relative form-group"><h1>No fields available.</h1></div>'
+            //     );
+            // }
+
+            // $("#viewInfoModal .main-card.mb-3.card").append(
+            //     '<div class="modal-footer">' +
+            //         '<button type="button" class="btn btn-primary btn-sm btn-accept-endorsement btn-shadow" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+            //     '</div>'
+            // );
+
+            // $(".modal-title").text(json_parse.site_name);
+            // $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
+            // $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
+            // $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
+            // $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
+            // $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
+            // $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
         } );
 
         $(document).on("click", ".checkAll", function(e){

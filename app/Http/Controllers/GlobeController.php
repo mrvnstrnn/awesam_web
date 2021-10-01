@@ -2100,7 +2100,6 @@ class GlobeController extends Controller
                         $q->whereNull('activity_id')
                           ->orWhere('activity_id', 1);
                     })
-                    // ->whereNull('activity_id')
                     ->whereNull('profile_id')
                     ->where('program_id', $program_id)
                     // ->take(4000)
@@ -2160,22 +2159,25 @@ class GlobeController extends Controller
                             ->get();
 
         } else if ($activity_type == 'all-site-issues') {
-            // $sites = \DB::connection('mysql2')
-            //     ->table("site")
-            //     ->leftjoin('site_issue', 'site.sam_id', 'issue.sam_id')
-            //     ->where('site.program_id', $program_id)
-            //     ->get();
-
             $sites = \DB::connection('mysql2')
-                ->table("site_issue")
-                ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
-                ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
-                ->where('site.program_id', $program_id)
-                // ->where('site_issue.issue_status', 'active')
-                ->whereNull('site_issue.date_resolve')
-                ->get();
+                            ->table("site_issue")
+                            ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
+                            ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
+                            ->where('site.program_id', $program_id)
+                            ->whereNull('site_issue.date_resolve');
+                            if (\Auth::user()->profile_id == 2) {
+                                $sites->where('site_issue.user_id', \Auth::id());
+                            } else if (\Auth::user()->profile_id == 3) {
+                                $getAgentOfSupervisor = UserDetail::select('users.id')
+                                                            ->join('users', 'user_details.user_id', 'users.id')
+                                                            ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                                                            ->where('user_details.IS_id', \Auth::id())
+                                                            ->get()
+                                                            ->pluck('id');
 
-                // dd($sites);
+                                $sites->whereIn('site_issue.user_id', $getAgentOfSupervisor);
+                            }
+                            $sites->get();
         }
 
         else {
@@ -4415,6 +4417,23 @@ class GlobeController extends Controller
             return $dt->make(true);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function get_program_fields ($sam_id, $program)
+    {
+        try {
+            if ($program == 3) {
+                $table = 'program_coloc';
+            }
+            $datas = \DB::connection('mysql2')
+                            ->table($table)
+                            ->where('sam_id', $sam_id)
+                            ->get();
+
+            return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 
