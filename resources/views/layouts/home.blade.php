@@ -122,9 +122,9 @@
                         $Hour = date('G');
                         if ( $Hour >= 5 && $Hour <= 11 ) {
                             $greeting = "Good Morning";
-                        } else if ( $Hour >= 12 && $Hour <= 18 ) {
+                        } else if ( $Hour >= 12 && $Hour <= 17 ) {
                             $greeting = "Good Afternoon";
-                        } else if ( $Hour >= 19 || $Hour <= 4 ) {
+                        } else if ( $Hour >= 18 || $Hour <= 4 ) {
                             $greeting = "Good Evening";
                         }
                         ?>
