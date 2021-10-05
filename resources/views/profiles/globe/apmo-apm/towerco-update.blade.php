@@ -2,16 +2,17 @@
 
 @section('content')
 
-    <x-tower-co-table actor="TOWERCO" />     
+    <x-tower-co-table actor="APMO-APM" />  
 
 @endsection
 
 
 @section('modals')
 
-    <x-tower-co-modal actor="TOWERCO" />
-    <x-tower-co-multi-modal actor="TOWERCO" />
-    <x-tower-co-export-modal actor="TOWERCO" />
+    <x-tower-co-modal actor="APMO-APM" />
+    <x-tower-co-multi-modal actor="APMO-APM" />
+    <x-tower-co-export-modal actor="APMO-APM" />
+
 
 @endsection
 
@@ -20,7 +21,7 @@
 
     <script>
         //////////////////////////////////////
-        var actor = 'towerco';
+        var actor = 'apmo-apm';
         //////////////////////////////////////
     </script>
 

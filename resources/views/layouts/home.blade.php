@@ -117,8 +117,22 @@
                     <div class="app-main__inner">
 
                         {{-- INNER TITLE --}}
-                        <!-- @include('layouts.inner.title') -->
-
+                        <?php
+                        date_default_timezone_set('Asia/Manila');
+                        $Hour = date('G');
+                        if ( $Hour >= 5 && $Hour <= 11 ) {
+                            $greeting = "Good Morning";
+                        } else if ( $Hour >= 12 && $Hour <= 18 ) {
+                            $greeting = "Good Afternoon";
+                        } else if ( $Hour >= 19 || $Hour <= 4 ) {
+                            $greeting = "Good Evening";
+                        }
+                        ?>
+                        
+                        
+                            <H1>{{ $greeting }} <strong>{{ ucwords(\Auth::user()->firstname) }}</strong> </H1>
+                            <hr>
+                        
                         {{-- MAIN CONTENT --}}
                         @yield('content')
 
