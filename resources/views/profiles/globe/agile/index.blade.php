@@ -33,29 +33,29 @@
   @endforeach
 </ul>
 <div class="tab-content">
-  @foreach ($programs as $program)
-    @if ($loop->first)
-        @php
-            $active_show = "active show";
-        @endphp
-    @else
-        @php
-            $active_show = "";
-        @endphp
-    @endif
-
-    <div class="tab-pane tabs-animation fade {{ $active_show }}" id="tab-content-{{ $program->program_id  }}" role="tabpanel">      
-        @if($program->program_id == 6)
-
-            <x-towerco-dashboard />
-
-        @if($program->program_id == 7)
-
-            <x-localcoop-dashboard />
-        
+    @foreach ($programs as $program)
+        @if ($loop->first)
+            @php
+                $active_show = "active show";
+            @endphp
+        @else
+            @php
+                $active_show = "";
+            @endphp
         @endif
-      </div>
-  @endforeach    
+
+        <div class="tab-pane tabs-animation fade {{ $active_show }}" id="tab-content-{{ $program->program_id  }}" role="tabpanel">      
+            @if($program->program_id == 6)
+
+                <x-towerco-dashboard />
+
+            @elseif($program->program_id == 7)
+
+                <x-localcoop-dashboard />
+            
+            @endif
+        </div>
+    @endforeach    
 </div>
 
 
