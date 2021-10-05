@@ -4,8 +4,11 @@
         $('li').on('click','a', function(e){
             e.preventDefault();
 
-            if($(this).attr('href')==''){
-                location.reload();
+            if($(this).attr('href')=='/'){
+                window.location.replace('/');
+            }
+            else if($(this).attr('href')==' /local-coops '){
+                window.location.replace('/local-coops');
             }
 
             else if($(this).attr('href')==' /add-issue '){

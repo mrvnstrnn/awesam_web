@@ -1,15 +1,15 @@
-@extends('layouts.home')
+@extends('layouts.main')
 
 @section('content')
 
-    {{-- <x-milestone-datatable ajaxdatatablesource="localcoop" tableheader="Local Cooperatives" activitytype="all"/> --}}
+    <x-milestone-datatable ajaxdatatablesource="localcoop" tableheader="Local Cooperatives" activitytype="all"/>
 
 @endsection
 
 
 @section('modals')
 
-    @include('layouts.localcoop')
+@include('layouts.localcoop')
 
 @endsection
 
