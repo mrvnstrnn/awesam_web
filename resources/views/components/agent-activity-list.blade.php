@@ -19,6 +19,7 @@ $activities = \DB::connection('mysql2')
                         'user_id' => \Auth::id()
                     ])
                     ->where('profile_id', 2)
+                    ->distinct()
                     ->get();
 
 @endphp
