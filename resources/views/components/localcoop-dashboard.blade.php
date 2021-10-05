@@ -81,7 +81,7 @@
 </div>
 <div class="divider"></div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <H3>Engagements Added</H3>
         <div class="card mb-3">
             <div class="card-body">
@@ -96,15 +96,12 @@
             </div>
         </div>
     </div>
-</div>
-<div class="divider"></div>
-<div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <H3>Contacts Added</H3>
         <div class="card mb-3">
             <div class="card-body">
                 <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.20; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>
-                <div id="contacts" style="width: 100%; height: 300px;"></div>
+                <div id="contact_type" style="width: 100%; height: 473px;"></div>
             </div>
         </div>
     </div>
@@ -141,6 +138,7 @@
   var engaged = [['Type of Engagement', 'Counter', { role: 'style' }, { role: 'annotation' }]];
   var not_engaged = [['Type of Engagement', 'Counter', { role: 'style' }, { role: 'annotation' }]];
 
+  var contact_type = [['Contact Type', 'Counter', { role: 'style' }, { role: 'annotation' }]];
 
   @php
     $ms = DB::table('view_local_coop_nature_of_issues')
@@ -195,7 +193,33 @@
       $ctr++;
 
     }
+
+    $ms = DB::table('view_local_coop_engagement_types')
+        ->where('result_of_engagement', 'Not Engaged')
+        ->get();
+
+    $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF');
+    $ctr = 0;
+    foreach($ms as $m){
+
+        echo "not_engaged.push(['" . $m->{'engagement_type'}  . "', " . $m->counter  . ", 'stroke-color: #443403; stroke-width: 1; fill-color: " . $colors[$ctr] . "', '" . $m->{'engagement_type'}  . " - " . $m->counter  . "']);";    
+      $ctr++;
+
+    }
     
+
+    $ms = DB::table('view_local_coop_contact_types')
+        ->get();
+
+    $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF');
+    $ctr = 0;
+    foreach($ms as $m){
+
+        echo "contact_type.push(['" . $m->{'contact_type'}  . "', " . $m->counter  . ", 'stroke-color: #443403; stroke-width: 1; fill-color: " . $colors[$ctr] . "', '" . $m->{'contact_type'}  . " - " . $m->counter  . "']);";    
+      $ctr++;
+
+    }
+
   @endphp
 
 
@@ -297,9 +321,32 @@
     };
 
     
-    var chart = new google.visualization.BarChart(document.getElementById('not_engaged'));
+    var chart = new google.visualization.BarChart(document.getElementById('contact_type'));
     chart.draw(data, options);
     
+
+    var data = google.visualization.arrayToDataTable(contact_type );
+
+    var options = {
+      title: 'Contact Types',
+      chartArea: {width: '100%', height: '85%', top: 40},
+      
+      backgroundColor: { fill:'transparent' },
+
+      bar: {groupWidth: "80%"},
+      legend: { position: "none" },
+      hAxis: {
+        minValue: 0
+      },
+      vAxis: {
+        textPosition: 'none',
+      },
+      is3D: true
+    };
+
+    
+    var chart = new google.visualization.BarChart(document.getElementById('contact_type'));
+    chart.draw(data, options);
 
 
   }
