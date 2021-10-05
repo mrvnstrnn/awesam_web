@@ -1,12 +1,13 @@
 @php
     $site_status = \DB::connection('mysql2')
         ->table('view_sites_activity_progress')
-        // ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
-        ->select('site_name', 'sam_id', 'site_category','activity_name', 'progress')
-        // ->where('agent_id', "=", \Auth::id())
-        ->whereJsonContains('site_agent', [
-            'user_id' => \Auth::id()
-        ])
+        ->select('site_name', 'sam_id', 'site_category','activity_name', 'progress', 'agent_id')
+        // ->whereJsonContains('site_agent', [
+        //     'user_id' => \Auth::id()
+        // ])
+        ->where('agent_id', \Auth::id())
+        ->distinct()
+        ->orderBy('sam_id', 'asc')
         ->get();
 
     // $site_status = \DB::connection('mysql2')
@@ -62,9 +63,17 @@
             fill: { gradient: ["#ff1e41"] },
             })
             .on("circle-animation-progress", function (event, progress, stepValue) {
+
+            if ( stepValue.toFixed(2).substr(2) == 00) {
+                percent = 100;
+            } else {
+                percent = stepValue.toFixed(2).substr(2);
+            }
+            
             $(this)
                 .find("small")
-                .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+                // .html("<span>" + stepValue.toFixed(2).substr(2) + "%<span>");
+                .html("<span>" + percent + "%<span>");
             });
 
     }

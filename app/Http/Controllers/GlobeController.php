@@ -1726,9 +1726,9 @@ class GlobeController extends Controller
 
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
-            ->table("view_sites_per_program")
-            ->where('program_id', $program_id)
-            ->get();
+                            ->table("view_sites_per_program")
+                            ->where('program_id', $program_id)
+                            ->get();
         }
 
         elseif($activity_type == 'mine'){
@@ -1772,16 +1772,20 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'is'){
-
+            
+            $getAgentOfSupervisor = UserDetail::select('users.id')
+                                                ->join('users', 'user_details.user_id', 'users.id')
+                                                ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                                                ->where('user_details.IS_id', \Auth::id())
+                                                ->get()
+                                                ->pluck('id');
+            
             $sites = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("milestone_tracking_2")
-            ->distinct()
-            ->where('program_id', $program_id)
-            ->where('activity_complete', 'false')
-            ->where("site_IS_id", \Auth::id())
-            ->where("profile_id", "2")
-            ->get();
+                        ->table("view_sites_activity_2")
+                        ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
+                        ->where('program_id', $program_id)
+                        ->whereIn('agent_id', $getAgentOfSupervisor)
+                        ->get();
 
         }
 
@@ -1829,6 +1833,7 @@ class GlobeController extends Controller
                         ->whereIn('stage_activities.activity_type', ['rtb declaration'])
                         ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
                         // ->whereIn('view_sites_per_program.activity_id', [16])
+                        ->distinct()
                         ->get();
 
         }
@@ -2085,6 +2090,10 @@ class GlobeController extends Controller
                     ->where('program_id', $program_id);
                     if ($program_id == 3 && \Auth::user()->profile_id == 1) {
                         $sites->where('activity_id', 5);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 2);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
+                        $sites->where('activity_id', 3);
                     }
                     $sites->where('profile_id', \Auth::user()->profile_id)
                     ->get();
@@ -2136,6 +2145,8 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 7);
                     } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 6);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
+                        $sites->where('activity_id', 5);
                     }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -2154,6 +2165,8 @@ class GlobeController extends Controller
                     $sites->where('activity_id', 6);
                 } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
                     $sites->where('activity_id', 7);
+                } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
+                    $sites->where('activity_id', 6);
                 }
                 $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
@@ -4425,6 +4438,8 @@ class GlobeController extends Controller
         try {
             if ($program == 3) {
                 $table = 'program_coloc';
+            } else if ($program == 4) {
+                $table = 'program_ibs';
             }
             $datas = \DB::connection('mysql2')
                             ->table($table)
