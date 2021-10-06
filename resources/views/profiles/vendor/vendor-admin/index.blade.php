@@ -2,6 +2,6 @@
 
 @section('content')
 
-home
+<x-home-dashboard />  
 
 @endsection

@@ -1,14 +1,20 @@
-@extends('layouts.main')
+@extends('layouts.home')
 
 @section('content')
 
-    @include('profiles.dar_content')
+    <x-home-dashboard />  
 
 @endsection
 
+@section('modals')
+
+@endsection
+
+
+
 @section("js_script")
 
-
-    @include('profiles.dar_js')
+<!-- PR PO Counter -->
+<script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>  
 
 @endsection
