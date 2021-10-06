@@ -1,8 +1,8 @@
-@extends('layouts.main')
+@extends('layouts.home')
 
 @section('content')
 
-    <x-milestone-datatable ajaxdatatablesource="localcoop" tableheader="Local Cooperatives" activitytype="all"/>
+    <x-home-dashboard />
 
 @endsection
 
@@ -18,7 +18,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 18;
+    var profile_id = 24;
     var table_to_load = 'local_coop';
     //////////////////////////////////////
 </script>

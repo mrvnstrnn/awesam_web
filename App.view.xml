@@ -1,4 +1,4 @@
-<mvc:View
+<!-- <mvc:View
 	controllerName="Quickstart.App"
 	displayBlock="true"
 	xmlns:mvc="sap.ui.core.mvc"
@@ -37,4 +37,4 @@
 			</l:BlockLayout>
 		</Page>
 	</App>
-</mvc:View>
+</mvc:View> -->

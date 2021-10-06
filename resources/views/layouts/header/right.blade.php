@@ -61,7 +61,8 @@
                             @else
                                 <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                             @endif --}}
-                            {{-- <i class="fa fa-angle-down ml-2 opacity-8"></i> --}}
+                            <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="42">
+                            <i class="fa fa-angle-down ml-2 opacity-8"></i>
                         </a>
 
                         {{-- HEADER OVERLAY : USER MENU --}}
@@ -102,10 +103,10 @@
     }
 </style>
 
-<script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap" data-sap-ui-xx-bindingSyntax="complex" data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_bluecrystal">
-</script>
+{{-- <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap" data-sap-ui-xx-bindingSyntax="complex" data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_bluecrystal">
+</script> --}}
 
-<script>
+{{-- <script>
 
     function generateAvatar(name){
 
@@ -144,4 +145,4 @@
         icon: { path: "/name", formatter: generateAvatar },
     }).setModel(model).placeAt("avatar2");
 
-</script>
+</script> --}}
