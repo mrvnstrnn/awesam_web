@@ -114,63 +114,72 @@
         </div>
     </div>
 </div>
-<h3>My Team</h3>
-<div class="container">
-    <div class="row" style="margin-top: 30px;">
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle offline" src="images/avatars/6.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
-            </div>
-        </div>
-        <div class="col mb-5" style="text-align: center;">
-            <div>
-                <img class="rounded-circle" src="images/avatars/8.jpg" alt="" width="70">
-            </div>
-            <div style="text-align: center;">
-                <small>Test</small>
+<div class="divider"></div>
+<div class="container"> 
+    <div class="row" style="margin-left:-30px; margin-right: -30px;">
+        <div class="col-12">
+            <h3>My Team</h3>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle offline" src="images/avatars/6.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                        <div class="col mb-2" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle" src="images/avatars/8.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <small>Test</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
