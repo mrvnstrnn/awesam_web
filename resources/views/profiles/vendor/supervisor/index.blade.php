@@ -122,7 +122,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col mb-2" style="text-align: center;">
+                        <div class="col mb-2 mt-1" style="text-align: center;">
                             <div>
                                 <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
                             </div>
@@ -130,7 +130,7 @@
                                 <small>Test</small>
                             </div>
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
+                        <div class="col mb-2 mt-1" style="text-align: center;">
                             <div>
                                 <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
                             </div>
@@ -138,7 +138,7 @@
                                 <small>Test</small>
                             </div>
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
+                        <div class="col mb-2 mt-1" style="text-align: center;">
                             <div>
                                 <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
                             </div>
@@ -146,7 +146,7 @@
                                 <small>Test</small>
                             </div>
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
+                        <div class="col mb-2 mt-1" style="text-align: center;">
                             <div>
                                 <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
                             </div>
@@ -154,7 +154,7 @@
                                 <small>Test</small>
                             </div>
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
+                        <div class="col mb-2 mt-1" style="text-align: center;">
                             <div>
                                 <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
                             </div>
