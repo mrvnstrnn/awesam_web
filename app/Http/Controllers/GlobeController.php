@@ -2147,6 +2147,8 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 6);
                     } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 5);
+                    } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
+                        $sites->where('activity_id', 4);
                     }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -2167,6 +2169,8 @@ class GlobeController extends Controller
                     $sites->where('activity_id', 7);
                 } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
                     $sites->where('activity_id', 6);
+                } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
+                    $sites->where('activity_id', 5);
                 }
                 $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
@@ -4440,6 +4444,8 @@ class GlobeController extends Controller
                 $table = 'program_coloc';
             } else if ($program == 4) {
                 $table = 'program_ibs';
+            } else if ($program == 2) {
+                $table = 'program_ftth';
             }
             $datas = \DB::connection('mysql2')
                             ->table($table)

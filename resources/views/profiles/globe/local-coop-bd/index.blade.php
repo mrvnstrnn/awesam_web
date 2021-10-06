@@ -49,7 +49,7 @@
 
             <x-towerco-dashboard />
 
-        @if($program->program_id == 7)
+        @elseif($program->program_id == 7)
 
             <x-localcoop-dashboard />
         
