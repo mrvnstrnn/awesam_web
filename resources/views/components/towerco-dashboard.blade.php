@@ -164,12 +164,16 @@
         </div>
     </div>  
 </div>
-<div class="card mb-3">
-    <div class="card-body">
-        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.20; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.20; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>
 
-        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        </div>
     </div>
+  </div>
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">

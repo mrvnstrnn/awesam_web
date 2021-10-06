@@ -10,9 +10,6 @@
 @endsection
 
 @section('content')
-
-<H1>Good Afternoon <strong>{{ ucfirst(\Auth::user()->firstname) }}</strong> </H1>
-<hr>
 <h3>Sites</h3>
 <div class="row" style="margin-top: 20px;">
     <div class="col-md-6 col-lg-3">
