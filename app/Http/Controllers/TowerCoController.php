@@ -118,7 +118,7 @@ class TowerCoController extends Controller
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'RAM')
                     ->get();
         }
         elseif($who == 'sts'){
@@ -132,7 +132,7 @@ class TowerCoController extends Controller
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'STS')
                     ->get();
         }
         elseif($who == 'agile'){
@@ -147,7 +147,7 @@ class TowerCoController extends Controller
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'AGILE')
                     ->get();
         }
         elseif($who == 'aepm'){
@@ -162,7 +162,7 @@ class TowerCoController extends Controller
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'AEPM')
                     ->get();
         }
         elseif($who == 'apmo-apm'){
@@ -177,7 +177,7 @@ class TowerCoController extends Controller
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'APMO-APM')
                     ->get();
         }
         
@@ -231,20 +231,20 @@ class TowerCoController extends Controller
 
                                 // foreach($allowed_field->selection as $option){
 
-                                    for ($i=0; $i < count($array_fields); $i++) { 
-                                        if ($array_fields[$i] != "''") {
-                                            if($array_fields[$i] == $value){
-                                                $actor .= '
-                                                    <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
-                                                ';
-                                            }
-                                            else {
-                                                $actor .= '
-                                                    <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
-                                                ';
-                                            }
+                                for ($i=0; $i < count($array_fields); $i++) { 
+                                    if ($array_fields[$i] != "''") {
+                                        if($array_fields[$i] == $value){
+                                            $actor .= '
+                                                <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                            ';
+                                        }
+                                        else {
+                                            $actor .= '
+                                                <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                            ';
                                         }
                                     }
+                                }
 
                                 $actor .= '
                                     </select>
@@ -369,23 +369,30 @@ class TowerCoController extends Controller
                         <input type="number" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
                         ';
                     }
-                    elseif($allowed_field->field_type == 'select'){
+                    elseif($allowed_field->field_type == 'selection'){
                         $actor .= '
                             <select class="form-control" name="' . $allowed_field['field'] . '" data-old="'. $value .'" >
                                 <option value=""></option>
                         ';
 
-                        foreach($allowed_field->selection as $option){
+                        $output = str_replace(array('[',']'), '', $allowed_field->selection );
 
-                            if($option == $value){
-                                $actor .= '
-                                    <option value="' . $option . '" selected>' . $option . '</option>
-                                ';
-                            }
-                            else {
-                                $actor .= '
-                                    <option value="' . $option . '">' . $option . '</option>
-                                ';
+                        $array_fields = explode(",", $output);
+
+                        // foreach($allowed_field->selection as $option){
+
+                        for ($i=0; $i < count($array_fields); $i++) { 
+                            if ($array_fields[$i] != "''") {
+                                if($array_fields[$i] == $value){
+                                    $actor .= '
+                                        <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                    ';
+                                }
+                                else {
+                                    $actor .= '
+                                        <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                    ';
+                                }
                             }
                         }
 
