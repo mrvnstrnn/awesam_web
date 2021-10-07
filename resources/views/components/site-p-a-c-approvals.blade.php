@@ -288,21 +288,33 @@
                 if(!resp.error){
                     $("#"+$(".ajax_content_box").attr("data-what_table")).DataTable().ajax.reload(function(){
                         $("#viewInfoModal").modal("hide");
-                        toastr.success(resp.message, 'Success');
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                         
                         $("#btn-"+data_complete).removeAttr("disabled");
                         $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
                         // $("#loaderModal").modal("hide");
                     });
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                     $("#btn-"+data_complete).removeAttr("disabled");
                     $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
                 }
             },
             error: function(resp){
                 // $("#loaderModal").modal("hide");
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
                 $("#btn-"+data_complete).removeAttr("disabled");
                 $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
             }
