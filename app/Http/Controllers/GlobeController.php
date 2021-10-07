@@ -3328,23 +3328,6 @@ class GlobeController extends Controller
     public function set_site_category(Request $request)
     {
         try {
-            // SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-            // if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
-            //     $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
-
-            //     $email_receiver = User::select('users.*')
-            //                     ->join('user_details', 'users.id', 'user_details.user_id')
-            //                     ->join('user_programs', 'user_programs.user_id', 'users.id')
-            //                     ->join('program', 'program.program_id', 'user_programs.program_id')
-            //                     ->where('user_details.vendor_id', $vendor)
-            //                     ->where('user_programs.program_id', $request->input('data_program'))
-            //                     ->get();
-
-            //     for ($j=0; $j < count($email_receiver); $j++) {
-            //         $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true") );
-            //     }
-            // }
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
@@ -3361,11 +3344,6 @@ class GlobeController extends Controller
                     ->where('program_id', $request->input('program_id'))
                     ->where('category', $get_category->site_category)
                     ->first();
-
-            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
-
-
-            // $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$get_category->site_category], [$request->input("activity_id")]);
 
             SiteStageTracking::where('sam_id', $request->input('sam_id'))
                                                 ->where('activity_complete', 'false')
