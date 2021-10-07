@@ -985,8 +985,6 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
-
-
                 if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $stage_activities = \DB::connection('mysql2')
                                                 ->table('stage_activities')
@@ -995,6 +993,7 @@ class GlobeController extends Controller
                                                 ->where('activity_id', $request->input('activity_id'))
                                                 ->where('category', $request->input("site_category"))
                                                 ->first();
+
                     if ($stage_activities->activity_type != 'doc upload') {
                         $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                     }
@@ -3231,14 +3230,14 @@ class GlobeController extends Controller
             // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             if ($validate->passes()) {
-                // SubActivityValue::create([
-                //     'sam_id' => $request->input("sam_id"),
-                //     'sub_activity_id' => !is_null($request->input("log")) ? null : $request->input("sub_activity_id"),
-                //     'value' => json_encode($request->all()),
-                //     'user_id' => \Auth::id(),
-                //     'status' => $request->input('lessor_approval'),
-                //     'type' => 'lessor_engagement',
-                // ]);
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => !is_null($request->input("log")) ? null : $request->input("sub_activity_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'status' => $request->input('lessor_approval'),
+                    'type' => 'lessor_engagement',
+                ]);
 
                 if ($request->input('lessor_approval') == "approved" && $request->input("sub_activity_id") != 213) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));

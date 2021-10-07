@@ -70,7 +70,7 @@ $activities = \DB::connection('mysql2')
                         ->where('program_id', $activities[$i]->program_id)
                         ->where('category', $activities[$i]->site_category)
                         ->where('requirements', 'required')
-                        ->whereIn('action', ['doc upload', 'lessor negotiation'])
+                        ->whereIn('action', ['doc upload', 'lessor negotiation'])   
                         ->groupBy('sub_activity_id')
                         ->get();
 
