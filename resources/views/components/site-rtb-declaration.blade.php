@@ -73,7 +73,7 @@
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
 
-            $("small").text("");
+            $("#declare_rtb_form small").text("");
 
             $.ajax({
                 url: "/declare-rtb",
