@@ -74,7 +74,7 @@
             var message = action == "false" ? "Reject" : "Approve RTB Declaration";
             var button_id = action == "false" ? "declaration_reject" : "declaration_approve";
             
-            $("small").text("");
+            $("form small").text("");
 
             $.ajax({
                 url: "/approve-reject-rtb",

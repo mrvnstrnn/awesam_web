@@ -123,14 +123,20 @@
             $('.file_viewer .file').html('');
             $('.file_viewer .file').html(htmltoload);
 
+            
+            $(".reason_rejected b").remove();
+            $(".reason_rejected h3").remove();
+            $(".reason_rejected span").remove();
+
             if ( $(this).parent().attr("data-status") == "denied"){
                 $(".reason_rejected .rejected_p").text( $(this).attr("data-reason") );
                 $(".reason_rejected").append(
-                    '<b>Reason: </b> <span>' + $(this).parent().attr("data-reason") + "</span>"
+                    '<h3><b>Rejected Reason: </b> <span>' + $(this).parent().attr("data-reason") + "</span></h"
                 );
 
             } else {
                 $(".reason_rejected b").remove();
+                $(".reason_rejected h3").remove();
                 $(".reason_rejected span").remove();
             }
 

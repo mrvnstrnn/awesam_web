@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="RTB Declaration" activitytype="site approval"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="RTB Declaration" activitytype="rtb declaration"/>
     
 @endsection
 

@@ -993,6 +993,7 @@ class GlobeController extends Controller
                                                 ->select('activity_type')
                                                 ->where('program_id', $request->input('program_id'))
                                                 ->where('activity_id', $request->input('activity_id'))
+                                                ->where('category', $request->input("site_category"))
                                                 ->first();
                     if ($stage_activities->activity_type != 'doc upload') {
                         $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
@@ -1752,11 +1753,11 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine_completed'){
 
             $last_act = \DB::connection('mysql2')
-                                        ->table("stage_activities")
-                                        ->select('activity_id')
-                                        ->where('program_id', $program_id)
-                                        ->orderBy('activity_id', 'desc')
-                                        ->first();
+                            ->table("stage_activities")
+                            ->select('activity_id')
+                            ->where('program_id', $program_id)
+                            ->orderBy('activity_id', 'desc')
+                            ->first();
 
             $sites = \DB::connection('mysql2')
                                 ->table("site")
@@ -1826,35 +1827,47 @@ class GlobeController extends Controller
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            $sites = \DB::connection('mysql2')
-                        ->table("view_sites_per_program")
-                        ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                        ->where('view_sites_per_program.program_id', $program_id)
-                        ->whereIn('stage_activities.activity_type', ['rtb declaration'])
-                        ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                        // ->whereIn('view_sites_per_program.activity_id', [16])
-                        ->distinct()
-                        ->get();
+            if (\Auth::user()->profile_id == 6) {
+
+                $sites = \DB::connection('mysql2')
+                                ->table("view_sites_per_program")
+                                // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                                ->leftJoin('stage_activities', function($join)
+                                {
+                                    $join->on('view_sites_per_program.activity_id', '=', 'stage_activities.activity_id');
+                                    $join->on('view_sites_per_program.site_category', '=', 'stage_activities.category');
+                                })
+                                ->where('view_sites_per_program.program_id', $program_id)
+                                ->whereIn('stage_activities.activity_type', ['rtb declaration'])
+                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                                // ->whereIn('view_sites_per_program.activity_id', [16])
+                                ->distinct()
+                                ->get();
+            } else {
+                if ($program_id == 2) {
+                    $sites = \DB::connection('mysql2')
+                                ->table("view_sites_per_program")
+                                ->where('view_sites_per_program.program_id', $program_id)
+                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                                ->whereIn('view_sites_per_program.activity_id', [13, 14])
+                                ->distinct()
+                                ->get();
+                } else {
+                    $sites = \DB::connection('mysql2')
+                                ->table("view_sites_per_program")
+                                ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+                                ->where('view_sites_per_program.program_id', $program_id)
+                                ->whereIn('stage_activities.activity_type', ['rtb declaration'])
+                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                                // ->whereIn('view_sites_per_program.activity_id', [16])
+                                ->distinct()
+                                ->get();
+                }
+            }
 
         }
 
         elseif($activity_type == 'site approval'){
-
-                // $sites = \DB::connection('mysql2')
-                //                 ->table("milestone_tracking")
-                //                 ->where('program_id', $program_id)
-                //                 ->whereIn('activity_type', ['doc approval', 'site approval'])
-                //                 ->where('profile_id', \Auth::user()->profile_id)
-                //                 ->where('activity_complete', 'false')
-                //                 ->get();
-                // $sites = \DB::connection('mysql2')
-                //                 ->table("view_sites_per_program")
-                //                 ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                //                 ->where('view_sites_per_program.program_id', $program_id)
-                //                 ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
-                //                 ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                //                 // ->whereIn('view_sites_per_program.activity_id', [16])
-                //                 ->get();
 
                 $sites = \DB::connection('mysql2')
                                 ->table("view_sites_activity")
@@ -1864,6 +1877,9 @@ class GlobeController extends Controller
                                 ->where('view_sites_activity.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
                                     $sites->whereIn('view_sites_activity.activity_id', [16, 18, 20, 29, 31])
+                                    ->get();
+                                } else if ( $program_id == 2 ) {
+                                    $sites->whereIn('view_sites_activity.activity_id', [17, 20])
                                     ->get();
                                 } else if ( $program_id == 3 ) {
                                     $sites->whereIn('view_sites_activity.activity_id', [13, 18, 19, 22, 23])
@@ -2058,7 +2074,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_doc_validation_2")
-                    ->select('sam_id', 'site_name', 'site_fields', 'count')
+                    ->select('sam_id', 'site_name', 'site_fields', 'count', 'site_category')
                     // ->distinct()
                     ->where('program_id', $program_id)
                     // ->where('activity_complete', 'false')
@@ -3215,17 +3231,50 @@ class GlobeController extends Controller
             // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             if ($validate->passes()) {
-                SubActivityValue::create([
-                    'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => !is_null($request->input("log")) ? null : $request->input("sub_activity_id"),
-                    'value' => json_encode($request->all()),
-                    'user_id' => \Auth::id(),
-                    'status' => $request->input('lessor_approval'),
-                    'type' => 'lessor_engagement',
-                ]);
+                // SubActivityValue::create([
+                //     'sam_id' => $request->input("sam_id"),
+                //     'sub_activity_id' => !is_null($request->input("log")) ? null : $request->input("sub_activity_id"),
+                //     'value' => json_encode($request->all()),
+                //     'user_id' => \Auth::id(),
+                //     'status' => $request->input('lessor_approval'),
+                //     'type' => 'lessor_engagement',
+                // ]);
 
-                if ($request->input('lessor_approval') == "approved") {
+                if ($request->input('lessor_approval') == "approved" && $request->input("sub_activity_id") != 213) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+                } else if ($request->input('lessor_approval') == "approved" &&  $request->input("sub_activity_id") == 213) {
+                    $datas = \DB::connection('mysql2')
+                                    ->table('sub_activity')
+                                    ->select('sub_activity_id')
+                                    ->where('activity_id', $request->input('activity_id')[0])
+                                    ->where('program_id', $request->input('program_id'))
+                                    ->where('category', $request->input('site_category')[0])
+                                    ->where('requirements', 'required')
+                                    ->whereIn('action', ['doc upload', 'lessor negotiation'])
+                                    ->groupBy('sub_activity_id')
+                                    ->get();
+
+                    $sub_activity_id_collect = collect();
+                    $sub_activity_values_collect = collect();
+
+                    foreach ($datas as $data) {
+                        $sub_activity_id_collect->push($data->sub_activity_id);
+                    }
+
+                    $sub_activity_values = \DB::connection('mysql2')
+                                                ->table('sub_activity_value')
+                                                ->where('sam_id', $request->input('sam_id'))
+                                                ->whereIn('sub_activity_id', $sub_activity_id_collect->all())
+                                                ->where('status', '!=', 'denied')
+                                                ->get();
+
+                    foreach ($sub_activity_values as $sub_activity_value) {
+                        $sub_activity_values_collect->push($sub_activity_value->status);
+                    }
+
+                    if ( count($datas) > 0 && count($datas) <= count($sub_activity_values) ) {
+                        $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+                    }
                 }
 
 
@@ -3347,7 +3396,7 @@ class GlobeController extends Controller
 
             SiteStageTracking::where('sam_id', $request->input('sam_id'))
                                                 ->where('activity_complete', 'false')
-                                                ->where('activity_id', $request->input("activity_id"))
+                                                ->where('activity_id', $request->input("activity_id")[0])
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
@@ -3364,6 +3413,27 @@ class GlobeController extends Controller
                                     ->update([
                                         'site_category' => $request->input('site_category'),
                                     ]);
+
+            $get_next_activities = \DB::connection('mysql2')
+                        ->table('stage_activities')
+                        ->select('activity_name', 'profile_id')
+                        ->where('activity_id', $activities->next_activity)
+                        ->where('program_id', $request->input('program_id'))
+                        ->where('category', $request->input('site_category'))
+                        ->first();
+                        
+            $array = array(
+                'activity_id' => $activities->next_activity,
+                'activity_name' => $get_next_activities->activity_name,
+                'profile_id' => $get_next_activities->profile_id,
+                'category' => $request->input('site_category'),
+                'activity_created' => Carbon::now()->toDateString(),
+            );
+
+            Site::where('sam_id', $request->input("sam_id"))
+                    ->update([
+                        'activities' => json_encode($array)
+                    ]);
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
         } catch (\Throwable $th) {
