@@ -343,4 +343,18 @@ class User extends Authenticatable implements MustVerifyEmail
         
         return count($sites);
     }
+
+    public function counter_vendor_agent_supervisor($type)
+    {
+        if ($type = "assigned sites") {
+            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[0]->counter;
+        } else if ($type = "sites with issues") {
+            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[1]->counter;
+        } else if ($type = "ongoing doc validation") {
+            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[2]->counter;
+        } else if ($type = "completed sites") {
+            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter;
+        }
+    }
+    
 }
