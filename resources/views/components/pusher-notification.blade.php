@@ -9,12 +9,27 @@
   
       var channel = pusher.subscribe('site-moved');
       channel.bind('App\\Notifications\\SiteMoved', function(data) {
-<<<<<<< HEAD
-        // alert(data.message);
-        alert("Notification received.");
-=======
-        alert(JSON.stringify(data));      
->>>>>>> 1a61a2e91c0976d17fafe0f7a8e99ab4941da307
+      {
+        if(data['message']['user_id'] == {{ \Auth::id() }}){
+            var notif = '<div class="vertical-timeline-item vertical-timeline-element">' +
+                            '<div>' +
+                                '<span class="vertical-timeline-element-icon bounce-in">' +
+                                    '<i class="badge badge-dot badge-dot-xl badge-success"> </i>' +
+                                '</span>' +
+                                '<div class="vertical-timeline-element-content bounce-in">' +
+                                    '<h4 class="timeline-title">' + data['message']['title'] + '</h4>' +
+                                    '<p><b>' + data['message']['body'] + '</b></p>' +
+                                    '<p><small></small></p>' +
+                                    '<span class="vertical-timeline-element-date"></span>' +
+                                '</div>' +
+                          '</div>' +
+                        '</div>';
+            
+            $(".notification_area").prepend(notif);
+
+            $('.counter_notif').html('<span>' + $('.vertical-timeline-item').length + '</span>');
+
+        }
       });
     </script>
     {{-- PUSHER NOTIFICATION --}}

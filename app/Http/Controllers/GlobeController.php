@@ -472,34 +472,74 @@ class GlobeController extends Controller
                     ->update([
                         'activities' => json_encode($array)
                     ]);
-
-                    // //////////////////////////// //
-                    //                              //   
-                    //     NOTIFICATION SYSTEM      //
-                    //                              //
-                    // //////////////////////////// //
-
-                    $userSchema = User::where("profile_id", 12)->get();
-            
-                    $notifData = [
-                        'title' => 'New Notification',	
-                        'body' => 'You received a notification.',
-                        'thanks' => 'Thank you',
-                        'goUrl' => url('/'),
-                    ];
-            
-                    Notification::send($userSchema, new SiteMoved($notifData));
-
-                    // ///////////////////////////// //
-                    //                               //   
-                    //   END NOTIFICATION SYSTEM     //
-                    //                               //
-                    // ///////////////////////////// //
-
-
                 }
             }
         }
+
+        // //////////////////////////// //
+        //                              //   
+        //     NOTIFICATION SYSTEM      //
+        //                              //
+        // //////////////////////////// //
+
+
+        $site_count = count($sam_id);
+        if($action == 'true'){
+            $action_id = 1;
+        } else {
+            $action_id = 0;
+        }
+
+        $notification_settings = \DB::table('notification_settings')
+                                    ->where('program_id', $program_id[0])
+                                    ->where('activity_id', $activity_id[0])
+                                    ->where('action', $action_id)
+                                    ->first();
+
+        $notification_receiver_profiles = \DB::connection('mysql2')
+                                    ->table('notification_receiver_profiles')
+                                    ->select('profile_id')
+                                    ->where('notification_settings_id', $notification_settings->notification_settings_id)
+                                    ->get();
+
+
+        $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
+
+
+        if($site_count > 1){
+            $title = $notification_settings->title_multi;
+            $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
+
+        } else {
+            $title = $notification_settings->title_single;
+            $body = $notification_settings->body_single;
+        }
+
+        $userSchema = User::whereIn("profile_id", $receiver_profiles)
+                            ->get();                            
+
+        foreach($userSchema as $user){
+
+            $notifData = [
+                'user_id' => $user->id,
+                'program_id' => $program_id,                
+                'site_count' => $site_count,
+                'action' => $action,
+                'activity_id' => $activity_id,
+                'title' => $title,	
+                'body' => $body,
+                'goUrl' => url('/'),
+            ];
+    
+            Notification::send($user, new SiteMoved($notifData));
+    
+        }
+
+        // ///////////////////////////// //
+        //                               //   
+        //   END NOTIFICATION SYSTEM     //
+        //                               //
+        // ///////////////////////////// //
 
 
 
