@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-
+use Pusher\Pusher;
 // use App\Models\User;
 
 class SiteMoved extends Notification implements ShouldBroadcast
@@ -21,7 +21,7 @@ class SiteMoved extends Notification implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(string $message)
+    public function __construct($message)
     {
         $this->message = $message;
     }
@@ -61,23 +61,38 @@ class SiteMoved extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            //
+            'message' => $this->message
         ];
     }
 
     public function toDatabase($notifiable)
     {
         return [
-            'name' => "test",
-            'body' => "test_body",
+            'message' => $this->message
         ];
     }
 
     public function toBroadcast($notifiable): BroadcastMessage
     {
+
+        $options = array(
+			'cluster' => 'ap1',
+			'encrypted' => true
+		);
+        $pusher = new Pusher(
+			'10d00ec4fed05fe27b51',
+			'b6dbcf5d7b2470bfdd2d',
+			'1279007', 
+			$options
+		);
+
+        $data['message'] = $this->message;
+        $pusher->trigger('site-moved', 'App\\Notifications\\SiteMoved', $data);
+
         return new BroadcastMessage([
-            'message' => "$this->message (User $notifiable->id)"
+            'message' => $this->message
         ]);
+
     }
 
 

@@ -431,7 +431,7 @@ class UserController extends Controller
                 $title_icon = $role[0]->icon;
             
             } else {
-                $title = "Not Found : " . $show;
+                $title = "Not Found : "  . $path[0] . "/" . $path[1] . " : " . $show;
                 $title_subheading  = "Link not available in your profile or still under construction";
                 $title_icon = 'home';
                 $view = 'profiles.' . $mode. '.' .$profile_for_view. '.index';
