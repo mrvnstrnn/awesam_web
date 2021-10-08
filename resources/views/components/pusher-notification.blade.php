@@ -11,25 +11,22 @@
       channel.bind('App\\Notifications\\SiteMoved', function(data) 
       
       {
-          // alert(JSON.stringify(data['message']));   
-          // alert(data->message->user_id);
-          if(data['message']['user_id'] == '15'){
-          var notif = '<div class="vertical-timeline-item vertical-timeline-element">' +
-                          '<div>' +
-                              '<span class="vertical-timeline-element-icon bounce-in">' +
-                                  '<i class="badge badge-dot badge-dot-xl badge-success"> </i>' +
-                              '</span>' +
-                              '<div class="vertical-timeline-element-content bounce-in">' +
-                                  '<h4 class="timeline-title">EST</h4>' +
-                                  '<p><b>TEST</b></p>' +
-                                  '<p><small></small></p>' +
-                                  '<span class="vertical-timeline-element-date"></span>' +
-                              '</div>' +
-                        '</div>' +
-                      '</div>';
-          
-          $(".notification_area").prepend(notif);
-
+        if(data['message']['user_id'] == '15'){
+            var notif = '<div class="vertical-timeline-item vertical-timeline-element">' +
+                            '<div>' +
+                                '<span class="vertical-timeline-element-icon bounce-in">' +
+                                    '<i class="badge badge-dot badge-dot-xl badge-success"> </i>' +
+                                '</span>' +
+                                '<div class="vertical-timeline-element-content bounce-in">' +
+                                    '<h4 class="timeline-title">' + data['message']['title'] + '</h4>' +
+                                    '<p><b>' + data['message']['body'] + '</b></p>' +
+                                    '<p><small></small></p>' +
+                                    '<span class="vertical-timeline-element-date"></span>' +
+                                '</div>' +
+                          '</div>' +
+                        '</div>';
+            
+            $(".notification_area").prepend(notif);
         }
 
       });
