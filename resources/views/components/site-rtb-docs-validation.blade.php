@@ -82,7 +82,7 @@
     <input type="hidden" name="hidden_filename" id="hidden_filename">
 </div>
 
-<div class="row confirmation_message pt-2 pb-5 d-none">
+<div class="row confirmation_message text-center pt-2 pb-5 d-none">
     <div class="col-12">
         <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
         <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
