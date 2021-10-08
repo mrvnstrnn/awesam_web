@@ -16,7 +16,7 @@
 <div id="notif-box">
     <div class="scroll-area-sm">
         <div class="scrollbar-container ps">
-            <div class="p-3 scroll-area-sm" id="notification_list">
+            <div class="p-3 scroll-area-sm">
                 <div class="vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column notification_area">
                     @foreach ( $notifications as $notification)
                         @if (is_array($notification->data))

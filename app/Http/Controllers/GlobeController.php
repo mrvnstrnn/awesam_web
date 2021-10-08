@@ -482,13 +482,20 @@ class GlobeController extends Controller
         //                              //
         // //////////////////////////// //
 
-        $userSchema = User::where("profile_id", 12)->get();
+
+        $whatProfiles = [12];
+        $notif_type = 1;
+
+        $userSchema = User::whereIn("profile_id", $whatProfiles)->get();
 
         foreach($userSchema as $user){
 
             $notifData = [
                 'user_id' => $user->id,
-                'notif_type' => 1,
+                'program_id' => $program_id,
+                'action' => $action,
+                'activity_id' => $activity_id,
+                'notif_type' => $notif_type,
                 'title' => 'New Notification',	
                 'body' => 'You received a notification.',
                 'thanks' => 'Thank you',
