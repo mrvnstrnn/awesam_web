@@ -381,13 +381,13 @@ class GlobeController extends Controller
             }
 
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
-                    $activities = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->select('next_activity', 'activity_name', 'return_activity')
-                                        ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
-                                        ->where('program_id', $program_id)
-                                        ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
-                                        ->first();
+                $activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('next_activity', 'activity_name', 'return_activity')
+                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
+                                ->where('program_id', $program_id)
+                                ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
+                                ->first();
 
                 if (!is_null($activities)) {
                     if ($action == "true") {
@@ -426,6 +426,8 @@ class GlobeController extends Controller
                                 'user_id' => \Auth::id()
                             ]);
                         }
+
+
                     } else {
 
                         $activity = $activities->return_activity;
@@ -537,7 +539,7 @@ class GlobeController extends Controller
 
             SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-            $email_receiver->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true", $request->input('site_name')) );
+            // $email_receiver->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true", $request->input('site_name')) );
 
             if(is_null($checkAgent)) {
 

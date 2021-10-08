@@ -9,6 +9,7 @@ use App\Http\Controllers\LocalCoopController;
 use App\Http\Controllers\TowerCoController;
 use App\Http\Controllers\NewSitesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -400,9 +401,22 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-program-fields/{sam_id}/{program}', [GlobeController::class, 'get_program_fields']);
 
 
-
-
 });
+    
+
+// PUSHER DEMO
+Route::get('/notification-tester', function () {
+    return view('notification-tester');
+});
+
+Route::get('send',[NotificationController::class, 'notification']);
+
+// Route::get('test', function () {
+//     event(new App\Events\StatusLiked('Guest'));
+//     return "Event has been sent!";
+// });
+
+
 
 //******************* END OF Multi Program *******************//
 
@@ -419,4 +433,7 @@ Route::view('/team', 'team');
 Route::get('/{slug}', [UserController::class, 'show'])
     ->where('slug', '.*')
     ->middleware(['auth', 'verified']);
+
+
+
 
