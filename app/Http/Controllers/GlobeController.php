@@ -488,6 +488,7 @@ class GlobeController extends Controller
 
             $notifData = [
                 'user_id' => $user->id,
+                'notif_type' => 1,
                 'title' => 'New Notification',	
                 'body' => 'You received a notification.',
                 'thanks' => 'Thank you',
