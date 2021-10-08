@@ -472,34 +472,37 @@ class GlobeController extends Controller
                     ->update([
                         'activities' => json_encode($array)
                     ]);
-
-                    // //////////////////////////// //
-                    //                              //   
-                    //     NOTIFICATION SYSTEM      //
-                    //                              //
-                    // //////////////////////////// //
-
-                    $userSchema = User::where("profile_id", 12)->get();
-            
-                    $notifData = [
-                        'title' => 'New Notification',	
-                        'body' => 'You received a notification.',
-                        'thanks' => 'Thank you',
-                        'goUrl' => url('/'),
-                    ];
-            
-                    Notification::send($userSchema, new SiteMoved($notifData));
-
-                    // ///////////////////////////// //
-                    //                               //   
-                    //   END NOTIFICATION SYSTEM     //
-                    //                               //
-                    // ///////////////////////////// //
-
-
                 }
             }
         }
+
+        // //////////////////////////// //
+        //                              //   
+        //     NOTIFICATION SYSTEM      //
+        //                              //
+        // //////////////////////////// //
+
+        $userSchema = User::where("profile_id", 12)->get();
+
+        foreach($userSchema as $user){
+
+            $notifData = [
+                'user_id' => $user->id,
+                'title' => 'New Notification',	
+                'body' => 'You received a notification.',
+                'thanks' => 'Thank you',
+                'goUrl' => url('/'),
+            ];
+    
+            Notification::send($user, new SiteMoved($notifData));
+    
+        }
+
+        // ///////////////////////////// //
+        //                               //   
+        //   END NOTIFICATION SYSTEM     //
+        //                               //
+        // ///////////////////////////// //
 
 
 

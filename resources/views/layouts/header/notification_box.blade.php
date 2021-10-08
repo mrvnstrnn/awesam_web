@@ -16,7 +16,7 @@
 <div id="notif-box">
     <div class="scroll-area-sm">
         <div class="scrollbar-container ps">
-            <div class="p-3 scroll-area-sm">
+            <div class="p-3 scroll-area-sm" id="notification_list">
                 <div class="vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column notification_area">
                     @foreach ( $notifications as $notification)
                         @if (is_array($notification->data))
@@ -26,8 +26,8 @@
                                         <i class="badge badge-dot badge-dot-xl badge-success"> </i>
                                     </span>
                                     <div class="vertical-timeline-element-content bounce-in">
-                                        <h4 class="timeline-title">{{ isset($notification->data['sam_id']) ? $notification->data['sam_id'] : "" }}</h4>
-                                        <p><b>{{ isset($notification->data['message']) ? $notification->data['message'] : "" }}</b></p>
+                                        <h4 class="timeline-title">{{ isset($notification->data['message']["title"]) ? $notification->data['message']["title"] : "" }}</h4>
+                                        <p><b>{{ isset($notification->data['message']["body"]) ? $notification->data['message']['body'] : "" }}</b></p>
                                         <p><small>{{ date('M d, Y', strtotime( $notification->created_at )) ." at ". date('H:i:s', strtotime( $notification->created_at )) }}</small></p>
                                         <span class="vertical-timeline-element-date"></span>
                                 
