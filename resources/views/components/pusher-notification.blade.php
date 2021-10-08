@@ -11,7 +11,7 @@
       channel.bind('App\\Notifications\\SiteMoved', function(data) 
       
       {
-        if(data['message']['user_id'] == 15){
+        if(data['message']['user_id'] == {{ \Auth::id() }}){
             var notif = '<div class="vertical-timeline-item vertical-timeline-element">' +
                             '<div>' +
                                 '<span class="vertical-timeline-element-icon bounce-in">' +
@@ -29,7 +29,7 @@
             $(".notification_area").prepend(notif);
 
             $('.counter_notif').html('<span>' + $('.vertical-timeline-item').length + '</span>');
-            
+
         }
 
       });
