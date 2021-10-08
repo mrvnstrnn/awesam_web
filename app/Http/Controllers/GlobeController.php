@@ -490,7 +490,8 @@ class GlobeController extends Controller
             $action_id = 0;
         }
 
-        $notification_settings = \DB::table('notification_settings')
+        $notification_settings = \DB::connection('mysql2')
+                                    ->table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
                                     ->where('action', $action_id)
