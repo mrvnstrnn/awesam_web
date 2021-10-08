@@ -5,29 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Pusher\Pusher;
+use App\Models\User;
 
-
+use Notification;
 use App\Notifications\SiteMoved;
 
 class NotificationController extends Controller
 {
+
     public function notification()
     {
-        $options = array(
-			'cluster' => 'ap1',
-			'encrypted' => true
-		);
-        $pusher = new Pusher(
-			'69e6d00a89f4405eece3',
-			'dbc91ec8ec9ca7fd8bd6',
-			'1209997', 
-			$options
-		);
+        $userSchema = User::first();
+  
+        $notifData = [
+            'title' => 'New Notification',	
+            'body' => 'You received a notification.',
+            'thanks' => 'Thank you',
+            'goUrl' => url('/'),
+        ];
+  
+        Notification::send($userSchema, new SiteMoved($notifData));
+ 
 
-        $data['message'] = '{"recipient" : "1"}';
-        $pusher->trigger('site-moved', 'App\\Notifications\\SiteMoved', $data);
-
+        dd('Task completed!');		
     }
-
 
 }

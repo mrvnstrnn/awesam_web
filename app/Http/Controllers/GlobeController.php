@@ -25,6 +25,11 @@ use App\Models\FsaLineItem;
 use App\Models\Site;
 use App\Models\SubActivity;
 
+use Notification;
+use App\Notifications\SiteMoved;
+use Pusher\Pusher;
+
+
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -36,7 +41,7 @@ use Illuminate\Support\Facades\Schema;
 use Validator;
 use PDF;
 use Carbon;
-use Illuminate\Support\Facades\Notification;
+// use Illuminate\Support\Facades\Notification;
 
 
 use App\Events\SiteEndorsementEvent;
@@ -467,9 +472,37 @@ class GlobeController extends Controller
                     ->update([
                         'activities' => json_encode($array)
                     ]);
+
+                    // //////////////////////////// //
+                    //                              //   
+                    //     NOTIFICATION SYSTEM      //
+                    //                              //
+                    // //////////////////////////// //
+
+                    $userSchema = User::where("profile_id", 12)->get();
+            
+                    $notifData = [
+                        'title' => 'New Notification',	
+                        'body' => 'You received a notification.',
+                        'thanks' => 'Thank you',
+                        'goUrl' => url('/'),
+                    ];
+            
+                    Notification::send($userSchema, new SiteMoved($notifData));
+
+                    // ///////////////////////////// //
+                    //                               //   
+                    //   END NOTIFICATION SYSTEM     //
+                    //                               //
+                    // ///////////////////////////// //
+
+
                 }
             }
         }
+
+
+
     }
 
     public function getDataWorkflow($program_id)

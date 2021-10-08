@@ -14,9 +14,9 @@ use App\Models\Site;
 |
 */
 
-Broadcast::channel('site-tracking.{user_id}', function ($site, $user_id) {
-    return $user->id === Site::findOrNew($orderId)->user_id;
-});
+// Broadcast::channel('site-tracking.{user_id}', function ($site, $user_id) {
+//     return $user->id === Site::findOrNew($orderId)->user_id;
+// });
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
