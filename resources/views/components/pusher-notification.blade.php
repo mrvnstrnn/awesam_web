@@ -9,7 +9,8 @@
   
       var channel = pusher.subscribe('site-moved');
       channel.bind('App\\Notifications\\SiteMoved', function(data) {
-        alert(data.message);
+        // alert(data.message);
+        alert("Notification received.");
       });
     </script>
     {{-- PUSHER NOTIFICATION --}}
