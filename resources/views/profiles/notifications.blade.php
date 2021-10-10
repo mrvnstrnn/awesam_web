@@ -106,6 +106,7 @@
         </div>
     </div>
     @endfor
+    <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
     <script>
         $(document).on("click", ".mark_as_read_unread", function (e) {
             e.preventDefault();
