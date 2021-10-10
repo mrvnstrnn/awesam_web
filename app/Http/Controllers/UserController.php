@@ -15,6 +15,7 @@ use App\Models\UserDetail;
 use App\Models\Vendor;
 use DataTables;
 use Carbon\Carbon;
+use Log;
 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -39,6 +40,7 @@ class UserController extends Controller
             
             return redirect('/');
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return abort(404, $th);
         }
     }
@@ -81,6 +83,7 @@ class UserController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -114,6 +117,7 @@ class UserController extends Controller
             // return response()->json(['error' => true, 'message' => $location ]);
             return response()->json(['error' => false, 'message' => $location, 'new_id' => $select ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -227,6 +231,7 @@ class UserController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -276,6 +281,7 @@ class UserController extends Controller
                 );
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -321,6 +327,7 @@ class UserController extends Controller
                 );
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -516,6 +523,7 @@ class UserController extends Controller
             // $dt->rawColumns(['status']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -541,6 +549,7 @@ class UserController extends Controller
             // $dt->rawColumns(['status']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -589,6 +598,7 @@ class UserController extends Controller
                 return redirect('/');
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -824,6 +834,7 @@ class UserController extends Controller
 
             return response()->json([ "error" => false, "message" => $timelines ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th->getMessage();
         }
 
@@ -851,6 +862,7 @@ class UserController extends Controller
 
             return response()->json([ "error" => false, "message" => $timelines ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th->getMessage();
         }
 
@@ -882,6 +894,7 @@ class UserController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -927,6 +940,7 @@ class UserController extends Controller
                 );
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -942,6 +956,7 @@ class UserController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully ".$action." notification." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }

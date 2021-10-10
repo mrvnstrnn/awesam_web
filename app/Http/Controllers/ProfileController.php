@@ -11,6 +11,7 @@ use App\Models\UserProgram;
 use App\Models\Permission;
 use App\Models\UserDetail;
 use App\Models\ProfilePermission;
+use Log;
 
 class ProfileController extends Controller
 {
@@ -61,6 +62,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => true, 'message' => 'No data found.' ]);
             }         
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -76,6 +78,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => true, 'message' => 'No data found.' ]);
             }         
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -110,6 +113,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -142,6 +146,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -157,6 +162,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => true, 'message' => 'No data found.' ]);
             }   
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -167,6 +173,7 @@ class ProfileController extends Controller
             $profiles = Profile::get();
             return response()->json(['error' => false, 'message' => $profiles ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -217,6 +224,7 @@ class ProfileController extends Controller
 
             
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -232,6 +240,7 @@ class ProfileController extends Controller
 
             return response()->json(['error' => false, 'message' => $supervisors ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -246,6 +255,7 @@ class ProfileController extends Controller
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }

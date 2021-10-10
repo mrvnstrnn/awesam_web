@@ -9,7 +9,7 @@ use App\Models\LocalCoop;
 
 use App\Models\User;
 use Validator;
-
+use Log;
 
 class LocalCoopController extends Controller
 {
@@ -364,6 +364,7 @@ class LocalCoopController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -392,6 +393,7 @@ class LocalCoopController extends Controller
             // $dt->rawColumns(['checkbox', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -434,6 +436,7 @@ class LocalCoopController extends Controller
             $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -447,6 +450,7 @@ class LocalCoopController extends Controller
             
             return response()->json(['error' => false, 'message' => $contact ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -470,6 +474,7 @@ class LocalCoopController extends Controller
             return response()->json(['error' => false, 'message' => "This was sent for approval of BD." ]);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -505,6 +510,7 @@ class LocalCoopController extends Controller
             
             return response()->json(['error' => false, 'message' => "Details have been " .$status ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }

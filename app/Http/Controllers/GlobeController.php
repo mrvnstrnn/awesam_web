@@ -423,6 +423,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($stored_procs);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -464,6 +465,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -504,6 +506,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -580,6 +583,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -615,6 +619,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -656,6 +661,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -676,6 +682,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -692,6 +699,7 @@ class GlobeController extends Controller
 
             return response()->json(["error" => false, "message" => $getAgentOfSupervisor]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(["error" => true, "message" => $th->getMessage()]);
         }
     }
@@ -711,6 +719,7 @@ class GlobeController extends Controller
             }
             return response()->json(['error' => false, 'message' => $region]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -727,6 +736,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $location]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -765,6 +775,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -795,6 +806,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => false, 'message' => $sub_activity_files->value]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -832,6 +844,7 @@ class GlobeController extends Controller
             return $pdf->stream();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             abort(403, $th->getMessage());
         }
     }
@@ -869,6 +882,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -949,6 +963,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1112,6 +1127,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1127,6 +1143,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $sub_activity_files]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1198,6 +1215,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -1251,6 +1269,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1330,6 +1349,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1422,6 +1442,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1467,6 +1488,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1536,6 +1558,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -1646,6 +1669,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2422,6 +2446,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2440,6 +2465,7 @@ class GlobeController extends Controller
             ->render();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2598,6 +2624,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
 
@@ -2780,6 +2807,7 @@ class GlobeController extends Controller
             // ])
             // ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2798,6 +2826,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully resolve an issue." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2814,6 +2843,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully " .$data_action. "."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2857,6 +2887,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2901,6 +2932,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -2914,6 +2946,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $data ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2928,6 +2961,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully cancelled issue." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2948,6 +2982,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3012,6 +3047,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3060,6 +3096,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3112,6 +3149,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3165,6 +3203,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3249,6 +3288,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3268,6 +3308,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3285,6 +3326,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3304,6 +3346,7 @@ class GlobeController extends Controller
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3322,6 +3365,7 @@ class GlobeController extends Controller
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3389,6 +3433,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3410,6 +3455,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3437,6 +3483,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully updated data." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3452,6 +3499,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'supervisor' => $supervisor ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3466,6 +3514,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully changed supervisor." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3482,6 +3531,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3505,6 +3555,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3524,6 +3575,7 @@ class GlobeController extends Controller
             ])
             ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3550,6 +3602,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3689,6 +3742,7 @@ class GlobeController extends Controller
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3698,6 +3752,7 @@ class GlobeController extends Controller
         try {
             FsaLineItem::where('sam_id', $sam_id)->delete();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3808,6 +3863,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3831,6 +3887,7 @@ class GlobeController extends Controller
             return response()->json([ 'error' => false, 'message' => "Successfully saved line items." ]);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4048,6 +4105,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4091,6 +4149,7 @@ class GlobeController extends Controller
             ])
             ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4132,6 +4191,7 @@ class GlobeController extends Controller
             return $pdf->stream();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             abort(403, $th->getMessage());
         }
     }
@@ -4157,6 +4217,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4239,6 +4300,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4292,6 +4354,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4346,6 +4409,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4362,6 +4426,7 @@ class GlobeController extends Controller
 
             return response()->json([ 'error' => false, 'message' => is_null($remarks_file) ? null : $remarks_file ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4397,6 +4462,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4433,6 +4499,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($sites);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -4454,6 +4521,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $datas]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
