@@ -578,7 +578,7 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        $("small.text-danger").text("");
+        $("form.ssds_form small").text("");
         $.ajax({
             url: "/add-site-candidates",
             method: "POST",
