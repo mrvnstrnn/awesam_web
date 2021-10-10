@@ -9,7 +9,6 @@
   
       var channel = pusher.subscribe('site-moved');
       channel.bind('App\\Notifications\\SiteMoved', function(data) {
-      {
         if(data['message']['user_id'] == {{ \Auth::id() }}){
             var notif = '<div class="vertical-timeline-item vertical-timeline-element">' +
                             '<div>' +

@@ -28,7 +28,7 @@ use App\Models\SubActivity;
 use Notification;
 use App\Notifications\SiteMoved;
 use Pusher\Pusher;
-
+use Log;
 
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
@@ -55,89 +55,6 @@ class GlobeController extends Controller
     {
         return \DB::connection('mysql2')->statement('call `clean_variables`()');
     }
-
-    // public function getDataNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
-    // {
-    //     try {
-    //         // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
-
-    //         $vendor = !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->vendor_id : 1 ;
-
-    //         $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
-
-    //         // $program = Program::where('program_id', $program_id)->first();
-
-    //         $dt = DataTables::of($stored_procs)
-    //                     ->addColumn('checkbox', function($row) use($program_id) {
-    //                         $checkbox = "<div class='custom-checkbox custom-control'>";
-    //                         $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement' data-site_vendor_id='".$row->site_vendor_id."'>";
-    //                         $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
-    //                         $checkbox .= "</div>";
-
-    //                         return $checkbox;
-    //                     })
-    //                     ->addColumn('technology', function($row){
-    //                         // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-    //                         if(isset($row->technology)){
-    //                             $technology = $row->technology;
-    //                         } else {
-    //                             $technology = "";
-    //                         }
-    //                         // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-    //                         return "<div class='badge badge-success'>".$technology."</div>";
-    //                     });
-    //                     // ->addColumn('pla_id', function($row){
-    //                     //     return $row['site_fields'][0]['PLA_ID'];
-
-    //                     // });
-
-    //         $dt->rawColumns(['checkbox', 'technology']);
-    //         return $dt->make(true);
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    // }
-
-    // public function getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
-    // {
-    //     try {
-
-    //         // a_pull_data(VENDOR_ID,  PROGRAM_ID, PROFILE_ID, STAGE_ID , WHAT_TO_LOAD, USER_ID)
-    //         $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
-
-    //         $json_output = [];
-
-    //         for($i=0; $i < count($new_endorsements); $i++ ){
-
-
-    //             // DECLARE JSON FIELDS AND SKIP
-    //             $json_fields = array("site_fields", "stage_activities");
-
-    //             foreach($new_endorsements[$i] as $xfield => $object){
-    //                 if(in_array($xfield, $json_fields)===FALSE){
-    //                     $json[$xfield] = $object;
-    //                 }
-    //             }
-
-    //             // Process JSON FIELDS and add to JSON
-    //             $site_fields = json_decode($new_endorsements[$i]->site_fields, TRUE);
-    //             $stage_activities = json_decode($new_endorsements[$i]->stage_activities ? $new_endorsements[$i]->stage_activities  : "", TRUE);
-
-    //             $json["site_fields"] = $site_fields;
-    //             $json["stage_activities"] = $stage_activities;
-
-    //             $json_output[] = $json;
-
-    //         }
-
-    //         return $json_output;
-
-
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-
-    // }
 
     public function acceptRejectEndorsement(Request $request)
     {
@@ -299,7 +216,6 @@ class GlobeController extends Controller
                 $activity_id = $activity_id_collect->all();
                 $program_id = 1;
 
-                // return response()->json(['error' => false, 'message' => $notification ]);
             } else {
                 $notification = "Success";
                 $vendor = $request->input('site_vendor_id');
@@ -311,59 +227,12 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
             }
 
-            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
-
-            //     SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
-
-                // if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
-
-                //     if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
-                //         $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
-                //     } else {
-                //         $vendor = $vendor;
-                //     }
-                //     for ($k=0; $k < count($vendor); $k++) {
-                //         $email_receiver = User::select('users.*')
-                //                         ->join('user_details', 'users.id', 'user_details.user_id')
-                //                         ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                         ->join('program', 'program.program_id', 'user_programs.program_id')
-                //                         ->where('user_details.vendor_id', $vendor[$k])
-                //                         ->where('user_programs.program_id', $request->input('data_program'))
-                //                         ->get();
-
-                //         for ($j=0; $j < count($email_receiver); $j++) {
-                //             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
-                //         }
-                //     }
-                // }
-
-                // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
-            // }
-
-            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
-            //     $get_past_activities = \DB::connection('mysql2')
-            //                             ->table('site_stage_tracking')
-            //                             ->where('sam_id', $request->input('sam_id')[$i])
-            //                             ->where('activity_complete', 'false')
-            //                             ->get();
-
-            //     $get_activities = \DB::connection('mysql2')
-            //                             ->table('stage_activities')
-            //                             ->where('activity_id', $get_past_activities[0]->activity_id)
-            //                             ->where('program_id', $program_id)
-            //                             ->where('category', $site_category[$i])
-            //                             ->get();
-            //                             return response()->json(['error' => true, 'message' => $get_activities]);
-
-            // }
-
-
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             // return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1826,24 +1695,29 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'mine_completed'){
-
-            $last_act = \DB::connection('mysql2')
-                            ->table("stage_activities")
-                            ->select('activity_id')
-                            ->where('program_id', $program_id)
-                            ->orderBy('activity_id', 'desc')
-                            ->first();
-
             $sites = \DB::connection('mysql2')
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                ->where('activities->activity_id', $last_act->activity_id)
-                                ->get();
+                            ->table("completed_sites")
+                            ->where('program_id', $program_id)
+                            ->distinct()
+                            ->get();
+                            
+            // $last_act = \DB::connection('mysql2')
+            //                 ->table("stage_activities")
+            //                 ->select('activity_id')
+            //                 ->where('program_id', $program_id)
+            //                 ->orderBy('activity_id', 'desc')
+            //                 ->first();
+
+            // $sites = \DB::connection('mysql2')
+            //                     ->table("site")
+            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                     ->where('site.program_id', $program_id)
+            //                     ->where('activities->activity_id', $last_act->activity_id)
+            //                     ->get();
 
         }
 
