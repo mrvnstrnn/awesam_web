@@ -164,6 +164,7 @@
         </div>
     </div>  
 </div>
+
 <div class="row">
   <div class="col-12">
     <div class="card mb-3">
@@ -192,10 +193,14 @@
       $ms =  \App\Models\TowerCoMilestoneTotal::get();
     }
 
-    $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF');
+    $colors = array('#FADA5E', '#F9A602', '#FFD300', '#D2B55B', '#C3B091', '#DAA520', '#FCF4A3', '#FCD12A', '#C49102', '#FFDDAF', '#FCF4A3');
 
     $ctr = 0;
     foreach($ms as $m){
+
+      if($ctr > count($colors)-1){
+        $ctr = 0;
+      }
 
       echo "milestones.push(['" . $m->{'MILESTONE STATUS'}  . "', " . $m->counter  . ", 'stroke-color: #443403; stroke-width: 1; fill-color: " . $colors[$ctr] . "', '" . $m->{'MILESTONE STATUS'}  . " - " . $m->counter  . "']);";    
       $ctr++;
