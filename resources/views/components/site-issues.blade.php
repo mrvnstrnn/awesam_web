@@ -42,7 +42,7 @@
                     <label for="start_date" class="mr-sm-2">Issue Started</label>
                 </div>
                 <div class="col-8">
-                    <input type="text" name="start_date" id="start_date" class="form-control flatpicker">
+                    <input type="text" name="start_date" id="start_date" class="form-control flatpicker" style="background-color: white !important;">
                     <small class="text-danger start_date-error"></small>
                 </div>
             </div>
