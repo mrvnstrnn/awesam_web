@@ -118,8 +118,8 @@
                     $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
                     $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
                     $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
-                    $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
-                    $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+                    $(".btn-accept-endorsement").attr('data-what_table', what_table);
+                    $(".btn-accept-endorsement").attr('data-program_id', program_id);
 
                 } else {
                     Swal.fire(

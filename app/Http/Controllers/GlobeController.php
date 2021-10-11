@@ -1913,7 +1913,7 @@ class GlobeController extends Controller
                                             ->whereIn('profile_id', [8, 10])
                                             ->get();
                                 } else if (\Auth::user()->profile_id == 8) {
-                                    $sites->whereIn('activity_id', [3,4])
+                                    $sites->whereIn('activity_id', [6])
                                             ->whereIn('profile_id', [9, 10])
                                             ->get();
                                 }
@@ -3838,7 +3838,7 @@ class GlobeController extends Controller
             $line_items = \DB::connection('mysql2')
                                 ->table('fsaq')
                                 ->where('vendor_id', $vendor)
-                                ->where('region_id', $sites->site_region_id)
+                                // ->where('region_id', $sites->site_region_id)
                                 ->where('province_id', $sites->site_province_id)
                                 ->where('lgu_id', $sites->site_lgu_id)
                                 ->where('fsaq.site_type', '=', 'ROOFTOP')
