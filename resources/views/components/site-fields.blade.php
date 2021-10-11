@@ -19,6 +19,7 @@
         @php
             $what = str_replace(' ', '_', $index);
         @endphp
+        @if (!is_null($site_field) || $site_field != '')
         <div class="form-row mb-2 pb-2 border-bottom">
             <div class="col-5">
                 <label for="{{ $what }}" class="mr-sm-2">{{ ucfirst( str_replace("_", " ", $what) ) }}</label>
@@ -27,5 +28,6 @@
                 <input name="{{ $what }}" id="{{ $what }}" type="text" value="{{ $site_field }}" class="form-control" readonly>
             </div>
         </div>
+        @endif
     @endforeach
 </form>

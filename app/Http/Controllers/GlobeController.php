@@ -2560,6 +2560,28 @@ class GlobeController extends Controller
                     ->render();
 
                 }
+                else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
+
+                    $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                                                // ->where('status', 'pending')
+                                                ->where('type', 'site_schedule')
+                                                ->first();
+
+                    $what_modal = "components.aepm-schedule-validation";
+
+                    return \View::make($what_modal)
+                    ->with([
+                        'sam_id' => $request['sam_id'],
+                        'site_name' => $site[0]->site_name,
+                        'program_id' => $site[0]->program_id,
+                        'site_category' => $site[0]->site_category,
+                        'activity_id' => $site[0]->activity_id,
+                        'data' => $data,
+                        'activity' => $request->input('activity')
+                    ])
+                    ->render();
+
+                }
                 else {
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
