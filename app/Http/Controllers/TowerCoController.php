@@ -18,9 +18,15 @@ class TowerCoController extends Controller
 {
     public function get_towerco()
     {
+
+        $user_detail = \Auth::user()->getUserDetail()->first();
+        $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+
+        return dd($vendor);
+
         $sites = \DB::connection('mysql2')
                     ->table("towerco")
-                    ->where('TOWERCO', 'CREI')
+                    ->where('TOWERCO', $vendor->vendor_acronym)
                     ->get();
 
         $dt = DataTables::of($sites);
@@ -32,29 +38,36 @@ class TowerCoController extends Controller
 
         switch($actor){
 
-            case 'APMO-APM': 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->get();
-                break;
+            // case 'APMO-APM': 
+            //     $sites = \DB::connection('mysql2')
+            //     ->table("towerco")
+            //     ->get();
+            //     break;
 
-            case 'AEPM': 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->get();
-                break;
+            // case 'AEPM': 
+            //     $sites = \DB::connection('mysql2')
+            //     ->table("towerco")
+            //     ->get();
+            //     break;
 
-            case 'STS': 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->get();
-                break;
+            // case 'STS': 
+            //     $sites = \DB::connection('mysql2')
+            //     ->table("towerco")
+            //     ->get();
+            //     break;
 
-            case 'RAM': 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->get();
-                break;
+            // case 'AGILE': 
+            //     $sites = \DB::connection('mysql2')
+            //     ->table("towerco")
+            //     ->select("Search Ring", "TOWERCO", "PROJECT TAG", "MILESTONE STATUS", "PROVINCE", "TOWN", "REGION", "TSSR STATUS", "OFF-GRID/GOOD GRID")
+            //     ->get();
+            //     break;
+
+            // case 'RAM': 
+            //     $sites = \DB::connection('mysql2')
+            //     ->table("towerco")
+            //     ->get();
+            //     break;
 
             case 'TOWERCO':
                 $user_detail = \Auth::user()->getUserDetail()->first();
@@ -69,18 +82,13 @@ class TowerCoController extends Controller
 
                     $sites->get();
                 break;
-
-            case 'AGILE': 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
-                ->get();
-                break;
                 
             default: 
-                // $sites = \DB::connection('mysql2')
-                // ->table("towerco")
-                // ->get();        
-        }
+                $sites = \DB::connection('mysql2')
+                ->table("towerco")
+                ->select("Search Ring", "TOWERCO", "PROJECT TAG", "MILESTONE STATUS", "PROVINCE", "TOWN", "REGION", "TSSR STATUS", "OFF-GRID/GOOD GRID", "Serial Number")
+                ->get();
+    }
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
