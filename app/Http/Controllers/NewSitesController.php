@@ -10,6 +10,7 @@ use App\Events\SiteEndorsementEvent;
 use App\Models\SubActivityValue;
 use App\Models\SiteStageTracking;
 use App\Models\Site;
+use Log;
 
 use Illuminate\Http\Request;
 
@@ -128,6 +129,7 @@ class NewSitesController extends Controller
             
             return response()->json(['error' => false, 'message' => "Successfully confirmed schedule."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -143,6 +145,7 @@ class NewSitesController extends Controller
     
             return response()->json(['error' => false, 'message' => $counters]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
 
@@ -328,6 +331,7 @@ class NewSitesController extends Controller
             
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -342,6 +346,7 @@ class NewSitesController extends Controller
                                                         
             return response()->json(['error' => false, 'message' => json_decode($data->value), 'sam_id' => $data->sam_id, 'id' => $data->id ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -446,6 +451,7 @@ class NewSitesController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }

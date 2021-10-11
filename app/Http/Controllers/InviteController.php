@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\Vendor;
 use App\Models\Invitation;
+use Log;
 
 class InviteController extends Controller
 {
@@ -118,6 +119,7 @@ class InviteController extends Controller
             }
             return response()->json(['error' => true, 'message' => $validate->errors() ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }

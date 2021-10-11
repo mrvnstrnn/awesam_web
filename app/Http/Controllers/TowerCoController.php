@@ -11,6 +11,7 @@ use App\Models\ToweCoFile;
 use App\Exports\TowerCoExport;
 
 use Maatwebsite\Excel\Facades\Excel;
+use Log;
 
 
 class TowerCoController extends Controller
@@ -430,6 +431,7 @@ class TowerCoController extends Controller
             $dt = DataTables::of($logs);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
         
@@ -460,6 +462,7 @@ class TowerCoController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
 
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
 
@@ -496,6 +499,7 @@ class TowerCoController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
 
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
 
@@ -582,6 +586,7 @@ class TowerCoController extends Controller
                     });
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -611,6 +616,7 @@ class TowerCoController extends Controller
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }

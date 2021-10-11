@@ -28,7 +28,7 @@ use App\Models\SubActivity;
 use Notification;
 use App\Notifications\SiteMoved;
 use Pusher\Pusher;
-
+use Log;
 
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
@@ -56,94 +56,9 @@ class GlobeController extends Controller
         return \DB::connection('mysql2')->statement('call `clean_variables`()');
     }
 
-    // public function getDataNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
-    // {
-    //     try {
-    //         // $stored_procs = $this->getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load);
-
-    //         $vendor = !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->vendor_id : 1 ;
-
-    //         $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
-
-    //         // $program = Program::where('program_id', $program_id)->first();
-
-    //         $dt = DataTables::of($stored_procs)
-    //                     ->addColumn('checkbox', function($row) use($program_id) {
-    //                         $checkbox = "<div class='custom-checkbox custom-control'>";
-    //                         $checkbox .= "<input type='checkbox' name='program".$program_id."' id='checkbox_".$row->sam_id."' value='".$row->sam_id."' class='custom-control-input checkbox-new-endorsement' data-site_vendor_id='".$row->site_vendor_id."'>";
-    //                         $checkbox .= "<label class='custom-control-label' for='checkbox_".$row->sam_id."'></label>";
-    //                         $checkbox .= "</div>";
-
-    //                         return $checkbox;
-    //                     })
-    //                     ->addColumn('technology', function($row){
-    //                         // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-    //                         if(isset($row->technology)){
-    //                             $technology = $row->technology;
-    //                         } else {
-    //                             $technology = "";
-    //                         }
-    //                         // $technology = array_key_exists('TECHNOLOGY', $row['site_fields'][0]) ? $row['site_fields'][0]['TECHNOLOGY'] : '';
-    //                         return "<div class='badge badge-success'>".$technology."</div>";
-    //                     });
-    //                     // ->addColumn('pla_id', function($row){
-    //                     //     return $row['site_fields'][0]['PLA_ID'];
-
-    //                     // });
-
-    //         $dt->rawColumns(['checkbox', 'technology']);
-    //         return $dt->make(true);
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    // }
-
-    // public function getNewEndorsement($profile_id, $program_id, $activity_id, $what_to_load)
-    // {
-    //     try {
-
-    //         // a_pull_data(VENDOR_ID,  PROGRAM_ID, PROFILE_ID, STAGE_ID , WHAT_TO_LOAD, USER_ID)
-    //         $new_endorsements = \DB::connection('mysql2')->select('call `a_pull_data`(1, ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
-
-    //         $json_output = [];
-
-    //         for($i=0; $i < count($new_endorsements); $i++ ){
-
-
-    //             // DECLARE JSON FIELDS AND SKIP
-    //             $json_fields = array("site_fields", "stage_activities");
-
-    //             foreach($new_endorsements[$i] as $xfield => $object){
-    //                 if(in_array($xfield, $json_fields)===FALSE){
-    //                     $json[$xfield] = $object;
-    //                 }
-    //             }
-
-    //             // Process JSON FIELDS and add to JSON
-    //             $site_fields = json_decode($new_endorsements[$i]->site_fields, TRUE);
-    //             $stage_activities = json_decode($new_endorsements[$i]->stage_activities ? $new_endorsements[$i]->stage_activities  : "", TRUE);
-
-    //             $json["site_fields"] = $site_fields;
-    //             $json["stage_activities"] = $stage_activities;
-
-    //             $json_output[] = $json;
-
-    //         }
-
-    //         return $json_output;
-
-
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-
-    // }
-
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-
-            // return response()->json(['error' => true, 'message' => $request->all() ]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -164,25 +79,12 @@ class GlobeController extends Controller
                                         ]);
                     }
 
-                // } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
-                //     $validate = Validator::make($request->all(), array(
-                //         'pr_number' => 'required',
-                //     ));
-                //     if (!$validate->passes()) {
-                //         return response()->json(['error' => true, 'message' => $validate->errors() ]);
-                //     }
                 } else {
                     $validate = Validator::make($request->all(), array(
                         'pr_number' => 'required',
                     ));
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
-                    // } else {
-                    //     \DB::connection('mysql2')->table("site")
-                    //                     ->where("sam_id", $request->input("sam_id"))
-                    //                     ->update([
-                    //                         'site_pr' => $request->input('pr_number'),
-                    //                     ]);
                     }
                 }
             }
@@ -198,7 +100,6 @@ class GlobeController extends Controller
                 $notification = "Successfully " .$message. " endorsement.";
                 $action = $request->input('data_complete');
                 $program_id = $request->input('data_program');
-                // $site_category = $request->input('site_category') == NULL ? ['none'] : $request->input('site_category');
                 $site_category = $request->input('site_category');
                 $activity_id = $request->input('activity_id');
 
@@ -224,7 +125,6 @@ class GlobeController extends Controller
 
             } else if ($request->input('activity_name') == "Approved SSDS / NTP Validation") {
 
-            // return response()->json(['error' => true, 'message' => $request->all() ]);
                 $notification = "Site successfully " . $message;
                 $action = $request->input('data_complete');
                 $site_category = $request->input('site_category');
@@ -242,16 +142,6 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
 
             }
-            // else if ($request->input('activity_name') == "Add Site Candidates") {
-
-            //     $notification = "RTB Docs successfully approved";
-            //     $action = $request->input('data_complete');
-            //     $site_category = $request->input('site_category');
-            //     $activity_id = $request->input('activity_id');
-            //     $program_id = $request->input('program_id');
-            //     $samid = $request->input('sam_id');
-
-            // }
             else if ($request->input('activity_name') == "Vendor Awarding") {
 
                 $notification = "Successfully awarded.";
@@ -264,7 +154,6 @@ class GlobeController extends Controller
             } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation" || $request->input('activity_name') == "Add Site Candidates") {
 
                 $notification = "Successfully mark this site as completed.";
-                // $vendor = $request->input('vendor');
                 $action = "true";
                 $activity_id = $request->input('activity_id');
                 $program_id = $request->input('program_id');
@@ -299,7 +188,6 @@ class GlobeController extends Controller
                 $activity_id = $activity_id_collect->all();
                 $program_id = 1;
 
-                // return response()->json(['error' => false, 'message' => $notification ]);
             } else {
                 $notification = "Success";
                 $vendor = $request->input('site_vendor_id');
@@ -311,59 +199,12 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
             }
 
-            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
-
-            //     SiteEndorsementEvent::dispatch($request->input('sam_id')[$i]);
-
-                // if (!is_null($vendor) || !is_null(\Auth::user()->getUserDetail()->first() )) {
-
-                //     if ( !is_null(\Auth::user()->getUserDetail()->first()) ) {
-                //         $vendor = [ \Auth::user()->getUserDetail()->first()->vendor_id ];
-                //     } else {
-                //         $vendor = $vendor;
-                //     }
-                //     for ($k=0; $k < count($vendor); $k++) {
-                //         $email_receiver = User::select('users.*')
-                //                         ->join('user_details', 'users.id', 'user_details.user_id')
-                //                         ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                         ->join('program', 'program.program_id', 'user_programs.program_id')
-                //                         ->where('user_details.vendor_id', $vendor[$k])
-                //                         ->where('user_programs.program_id', $request->input('data_program'))
-                //                         ->get();
-
-                //         for ($j=0; $j < count($email_receiver); $j++) {
-                //             $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id')[$i], $request->input('activity_name'), $action) );
-                //         }
-                //     }
-                // }
-
-                // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id')[$i].'", '.$profile_id.', '.$id.', "'.$action.'")');
-            // }
-
-            // for ($i=0; $i < count($request->input('sam_id')); $i++) {
-            //     $get_past_activities = \DB::connection('mysql2')
-            //                             ->table('site_stage_tracking')
-            //                             ->where('sam_id', $request->input('sam_id')[$i])
-            //                             ->where('activity_complete', 'false')
-            //                             ->get();
-
-            //     $get_activities = \DB::connection('mysql2')
-            //                             ->table('stage_activities')
-            //                             ->where('activity_id', $get_past_activities[0]->activity_id)
-            //                             ->where('program_id', $program_id)
-            //                             ->where('category', $site_category[$i])
-            //                             ->get();
-            //                             return response()->json(['error' => true, 'message' => $get_activities]);
-
-            // }
-
-
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
             // return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -497,43 +338,45 @@ class GlobeController extends Controller
                                     ->where('action', $action_id)
                                     ->first();
 
-        $notification_receiver_profiles = \DB::connection('mysql2')
-                                    ->table('notification_receiver_profiles')
-                                    ->select('profile_id')
-                                    ->where('notification_settings_id', $notification_settings->notification_settings_id)
-                                    ->get();
+        if (!is_null($notification_settings)) {
+            $notification_receiver_profiles = \DB::connection('mysql2')
+                        ->table('notification_receiver_profiles')
+                        ->select('profile_id')
+                        ->where('notification_settings_id', $notification_settings->notification_settings_id)
+                        ->get();
 
 
-        $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
+            $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
 
 
-        if($site_count > 1){
+            if($site_count > 1){
             $title = $notification_settings->title_multi;
             $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
 
-        } else {
+            } else {
             $title = $notification_settings->title_single;
             $body = $notification_settings->body_single;
-        }
+            }
 
-        $userSchema = User::whereIn("profile_id", $receiver_profiles)
-                            ->get();                            
+            $userSchema = User::whereIn("profile_id", $receiver_profiles)
+                ->get();                            
 
-        foreach($userSchema as $user){
+            foreach($userSchema as $user){
 
             $notifData = [
-                'user_id' => $user->id,
-                'program_id' => $program_id,                
-                'site_count' => $site_count,
-                'action' => $action,
-                'activity_id' => $activity_id,
-                'title' => $title,	
-                'body' => $body,
-                'goUrl' => url('/'),
+            'user_id' => $user->id,
+            'program_id' => $program_id,                
+            'site_count' => $site_count,
+            'action' => $action,
+            'activity_id' => $activity_id,
+            'title' => $title,	
+            'body' => $body,
+            'goUrl' => url('/'),
             ];
-    
+
             Notification::send($user, new SiteMoved($notifData));
-    
+
+            }   
         }
 
         // ///////////////////////////// //
@@ -554,6 +397,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($stored_procs);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -595,6 +439,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo', 'technology']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -635,6 +480,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -711,6 +557,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -746,6 +593,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['photo']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -787,6 +635,7 @@ class GlobeController extends Controller
             $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -807,6 +656,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -823,6 +673,7 @@ class GlobeController extends Controller
 
             return response()->json(["error" => false, "message" => $getAgentOfSupervisor]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(["error" => true, "message" => $th->getMessage()]);
         }
     }
@@ -842,6 +693,7 @@ class GlobeController extends Controller
             }
             return response()->json(['error' => false, 'message' => $region]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -858,6 +710,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $location]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -896,6 +749,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -926,6 +780,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => false, 'message' => $sub_activity_files->value]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -963,6 +818,7 @@ class GlobeController extends Controller
             return $pdf->stream();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             abort(403, $th->getMessage());
         }
     }
@@ -1000,6 +856,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1080,6 +937,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => "Please upload a file."]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1243,6 +1101,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1258,6 +1117,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $sub_activity_files]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1329,6 +1189,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -1382,6 +1243,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1461,6 +1323,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1531,21 +1394,6 @@ class GlobeController extends Controller
 
             SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-            // $email_receiver = User::select('users.*')
-            //                 ->join('user_details', 'users.id', 'user_details.user_id')
-            //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-            //                 ->join('program', 'program.program_id', 'user_programs.program_id')
-            //                 ->where('user_details.vendor_id', $request->input('vendor'))
-            //                 ->where('user_programs.program_id', $request->input('data_program'))
-            //                 ->get();
-
-            // for ($j=0; $j < count($email_receiver); $j++) {
-            //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), $request->input('data_action')) );
-            // }
-
-            // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input('data_action').'")');
-
             if ($request->input('activity_name') != 'Vendor Awarding') {
                 return response()->json(['error' => false, 'message' => "Successfully " .$data_action. " a PR."]);
             } else {
@@ -1553,6 +1401,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1572,21 +1421,6 @@ class GlobeController extends Controller
 
             SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-            // $email_receiver = User::select('users.*')
-            //                 ->join('user_details', 'users.id', 'user_details.user_id')
-            //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-            //                 ->join('program', 'program.program_id', 'user_programs.program_id')
-            //                 ->where('user_details.vendor_id', $request->input('vendor_id'))
-            //                 ->where('user_programs.program_id', $request->input('program_id'))
-            //                 ->get();
-
-            // for ($j=0; $j < count($email_receiver); $j++) {
-            //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
-            // }
-
-            // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-            // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-
             $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
 
             if ($request->input('activity_name') == 'Set Approved Site') {
@@ -1598,6 +1432,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1667,6 +1502,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -1777,6 +1613,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -1826,24 +1663,29 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'mine_completed'){
-
-            $last_act = \DB::connection('mysql2')
-                            ->table("stage_activities")
-                            ->select('activity_id')
-                            ->where('program_id', $program_id)
-                            ->orderBy('activity_id', 'desc')
-                            ->first();
-
             $sites = \DB::connection('mysql2')
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                ->where('activities->activity_id', $last_act->activity_id)
-                                ->get();
+                            ->table("completed_sites")
+                            ->where('program_id', $program_id)
+                            ->distinct()
+                            ->get();
+                            
+            // $last_act = \DB::connection('mysql2')
+            //                 ->table("stage_activities")
+            //                 ->select('activity_id')
+            //                 ->where('program_id', $program_id)
+            //                 ->orderBy('activity_id', 'desc')
+            //                 ->first();
+
+            // $sites = \DB::connection('mysql2')
+            //                     ->table("site")
+            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                     ->where('site.program_id', $program_id)
+            //                     ->where('activities->activity_id', $last_act->activity_id)
+            //                     ->get();
 
         }
 
@@ -2523,22 +2365,41 @@ class GlobeController extends Controller
                 // ->where('sam_id', $sam_id)
                 // ->where('activity_complete', 'false')
                 // ->get();
+                // $sites = \DB::connection('mysql2')
+                //             ->table("milestone_tracking_2")
+                //             ->select('site_fields')
+                //             ->distinct()
+                //             ->where('sam_id', $sam_id)
+                //             ->where('activity_complete', 'false')
+                //             ->get();
+
+                $programs = \DB::connection('mysql2')
+                                ->table('site')
+                                ->where('sam_id', $sam_id)
+                                ->first();
+
+                if ($programs->program_id == 3) {
+                    $table = 'program_coloc';
+                } else if ($programs->program_id == 4) {
+                    $table = 'program_ibs';
+                } else if ($programs->program_id == 2) {
+                    $table = 'program_ftth';
+                } else if ($programs->program_id == 1) {
+                    $table = 'program_newsites';
+                }
+
                 $sites = \DB::connection('mysql2')
-                ->table("milestone_tracking_2")
-                ->select('site_fields')
-                ->distinct()
-                ->where('sam_id', $sam_id)
-                ->where('activity_complete', 'false')
-                ->get();
-
-                // dd($sites[0]->site_fields);
-
+                            ->table($table)
+                            ->where('sam_id', $sam_id)
+                            ->get();
 
                 $what_modal = "components.site-fields";
+                
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
-                            'sitefields' => json_decode($sites[0]->site_fields),
+                            // 'sitefields' => json_decode($sites[0]->site_fields),
+                            'sitefields' => $sites,
                         ])
                         ->render();
 
@@ -2548,6 +2409,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2566,6 +2428,7 @@ class GlobeController extends Controller
             ->render();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2599,13 +2462,9 @@ class GlobeController extends Controller
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
-            // } else if($request['main_activity'] == "Program Sites" && $request['program_id'] == 1){
-            //     $mainactivity = "";
             } else {
                 $mainactivity = $request['main_activity'];
             }
-
-            // $rtbdeclaration = RTBDeclaration::where('sam_id', $request['sam_id'])->where('status', 'pending')->first();
 
             $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('status', "pending")
@@ -2621,7 +2480,6 @@ class GlobeController extends Controller
 
             $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('type', 'create_pr')
-                                        // ->orderBy('date_created', 'desc')
                                         ->first();
 
             if($request['vendor_mode']){
@@ -2635,7 +2493,6 @@ class GlobeController extends Controller
                     'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
                     'activity_id' => $request['activity_id'],
-                    // 'main_activity' => $request['main_activity'],
                     'main_activity' => $mainactivity,
                 ])
                 ->render();
@@ -2703,6 +2560,28 @@ class GlobeController extends Controller
                     ->render();
 
                 }
+                else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
+
+                    $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                                                // ->where('status', 'pending')
+                                                ->where('type', 'site_schedule')
+                                                ->first();
+
+                    $what_modal = "components.aepm-schedule-validation";
+
+                    return \View::make($what_modal)
+                    ->with([
+                        'sam_id' => $request['sam_id'],
+                        'site_name' => $site[0]->site_name,
+                        'program_id' => $site[0]->program_id,
+                        'site_category' => $site[0]->site_category,
+                        'activity_id' => $site[0]->activity_id,
+                        'data' => $data,
+                        'activity' => $request->input('activity')
+                    ])
+                    ->render();
+
+                }
                 else {
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
@@ -2724,6 +2603,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
 
@@ -2906,6 +2786,7 @@ class GlobeController extends Controller
             // ])
             // ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2924,6 +2805,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully resolve an issue." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2940,6 +2822,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully " .$data_action. "."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -2983,6 +2866,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3027,6 +2911,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3040,6 +2925,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $data ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3054,6 +2940,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully cancelled issue." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3074,6 +2961,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3138,6 +3026,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3186,6 +3075,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3238,6 +3128,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3291,6 +3182,7 @@ class GlobeController extends Controller
             return $dt->make(true);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3375,6 +3267,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3394,6 +3287,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3411,6 +3305,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3430,6 +3325,7 @@ class GlobeController extends Controller
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3448,6 +3344,7 @@ class GlobeController extends Controller
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3515,6 +3412,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3536,6 +3434,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3563,6 +3462,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully updated data." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3578,6 +3478,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'supervisor' => $supervisor ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3592,6 +3493,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "Successfully changed supervisor." ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3608,6 +3510,7 @@ class GlobeController extends Controller
 
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -3631,6 +3534,7 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3650,6 +3554,7 @@ class GlobeController extends Controller
             ])
             ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3676,6 +3581,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3815,6 +3721,7 @@ class GlobeController extends Controller
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3824,6 +3731,7 @@ class GlobeController extends Controller
         try {
             FsaLineItem::where('sam_id', $sam_id)->delete();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3934,6 +3842,7 @@ class GlobeController extends Controller
 
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -3957,6 +3866,7 @@ class GlobeController extends Controller
             return response()->json([ 'error' => false, 'message' => "Successfully saved line items." ]);
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4174,6 +4084,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4217,6 +4128,7 @@ class GlobeController extends Controller
             ])
             ->render();
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4258,6 +4170,7 @@ class GlobeController extends Controller
             return $pdf->stream();
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             abort(403, $th->getMessage());
         }
     }
@@ -4283,6 +4196,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4365,6 +4279,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4418,6 +4333,7 @@ class GlobeController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4472,6 +4388,7 @@ class GlobeController extends Controller
                 return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4488,6 +4405,7 @@ class GlobeController extends Controller
 
             return response()->json([ 'error' => false, 'message' => is_null($remarks_file) ? null : $remarks_file ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4523,6 +4441,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -4559,6 +4478,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($sites);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -4580,6 +4500,7 @@ class GlobeController extends Controller
 
             return response()->json(['error' => false, 'message' => $datas]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }

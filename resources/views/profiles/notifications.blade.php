@@ -32,11 +32,6 @@
             </a>
         </li>
     @endfor
-    {{-- <li class="nav-item">
-        <a role="tab" class="nav-link" id="tab-all" data-toggle="tab" href="#tab-content-all">
-            <span>All Notifications</span>
-        </a>
-    </li> --}}
 </ul>
 <div class="tab-content">
     @for ($i = 0; $i < count($notif_type); $i++)
@@ -63,13 +58,12 @@
                                 @if (count($notifications) > 0)
                                     <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--one-column">
                                         @foreach ( $notifications as $notification)
-                                        {{-- {{ $notification->id }} --}}
                                             @if (is_array($notification->data))
                                                 <div class="vertical-timeline-item dot-danger vertical-timeline-element">
                                                     <div><span class="vertical-timeline-element-icon bounce-in"></span>
                                                         <div class="vertical-timeline-element-content bounce-in">
-                                                            <h4 class="timeline-title">{{ isset($notification->data['sam_id']) ? $notification->data['sam_id'] : "" }}</h4>
-                                                            <p><b>{{ isset($notification->data['message']) ? $notification->data['message'] : "" }}</b></p>
+                                                            <h4 class="timeline-title">{{ isset($notification->data['message']['title']) ? $notification->data['message']['title'] : "" }}</h4>
+                                                            <p><b>{{ isset($notification->data['message']['body']) ? $notification->data['message']['body'] : "" }}</b></p>
                                                             <p><small>{{ date('M d, Y', strtotime( $notification->created_at )) ." at ". date('H:i:s', strtotime( $notification->created_at )) }}</small></p>
                                                             <span class="vertical-timeline-element-date"></span>
                                                     
@@ -112,6 +106,7 @@
         </div>
     </div>
     @endfor
+    <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
     <script>
         $(document).on("click", ".mark_as_read_unread", function (e) {
             e.preventDefault();

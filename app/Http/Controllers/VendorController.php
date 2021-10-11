@@ -10,6 +10,7 @@ use App\Models\UserDetail;
 use App\Models\VendorProgram;
 use App\Models\Request as RequestTable;
 use DataTables;
+use Log;
 
 use App\Mail\VendorMail;
 use Illuminate\Support\Facades\Mail;
@@ -47,6 +48,7 @@ class VendorController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -156,6 +158,7 @@ class VendorController extends Controller
             }
 
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json([ 'error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -168,6 +171,7 @@ class VendorController extends Controller
                                     ->get();
             return response()->json([ 'error' => false, 'message' => $vendors ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json([ 'error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -181,6 +185,7 @@ class VendorController extends Controller
 
             return response()->json([ 'error' => false, 'message' => $vendors ]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json([ 'error' => true, 'message' => $th->getMessage() ]);
         }
     }
@@ -223,6 +228,7 @@ class VendorController extends Controller
             $dt->rawColumns(['vendor_status', 'action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -255,6 +261,7 @@ class VendorController extends Controller
 
             return response()->json(['error' => false, 'message' => 'Successfully terminated a vendor.']);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -274,6 +281,7 @@ class VendorController extends Controller
             $dt->rawColumns(['request_type']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -289,6 +297,7 @@ class VendorController extends Controller
                                                     
             return response()->json(['error' => false, 'message' => $vendor, 'vendor_profiles' => $vendor_profiles]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -316,6 +325,7 @@ class VendorController extends Controller
             $dt->rawColumns(['checkbox', 'action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
     }
@@ -329,6 +339,7 @@ class VendorController extends Controller
                                 ->get();
             return response()->json(['error' => false, 'message' => $vendor]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -341,6 +352,7 @@ class VendorController extends Controller
                                         ->update(['site_vendor_id' => $request->input('vendor_id')]);
             return response()->json(['error' => false, 'message' => "Successfully transfer site."]);
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
@@ -376,6 +388,7 @@ class VendorController extends Controller
 
             
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         } 
     }
