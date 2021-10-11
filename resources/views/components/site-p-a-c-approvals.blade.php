@@ -48,18 +48,22 @@
                 $icon_color = "";
                 if ( in_array( 'approved', $status_collect->all() ) ) {
                     $icon_color = "success";
+                    $border = "border-success";
                 } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
                     $icon_color = "secondary";
+                    $border = "border-secondary";
                 } else if ( in_array( 'pending', $status_collect->all() ) ) {
                     $icon_color = "secondary";
+                    $border = "border-secondary";
                 } else {
                     $icon_color = "danger";
+                    $border = "border-danger";
                 }
             @endphp
             
             <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                 <div class="child_div_{{ $data[0]->sub_activity_id }}">
-                    <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
+                    <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                         <div>
                         <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
                         <p><small>{{ $data[0]->sub_activity_name }}</small></p>

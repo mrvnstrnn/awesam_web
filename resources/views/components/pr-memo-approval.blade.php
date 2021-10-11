@@ -381,7 +381,7 @@
                                         
                                         @if ($activity == "Set Ariba PR Number to Sites")
                                             @if (\Auth::user()->profile_id == 8)
-                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->generated_pr_memo }}" data-sam_id="" data-activity_name="{{ $activity }}">Set PR Number</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-success ml-1 d-none approve_reject_pr" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->generated_pr_memo }}" data-sam_id="" data-activity_name="{{ $activity }}" data-program_id="{{ $program_id }}">Set PR Number</button>
                                                 <button type="button" class="float-right btn btn-shadow btn-primary ml-1 form_details">PR Memo Details</button>
 
                                                 <a href="/files/pdf/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" class="float-right btn btn-shadow btn-danger ml-1">Download PR Memo</a>
@@ -389,19 +389,19 @@
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @if (\Auth::user()->profile_id == 8)
                                                 {{-- <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $samid }}" data-activity_name="{{ $activity }}">Award to vendor</button> --}}
-                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}">Award to vendor</button>
+                                                <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-3" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_data->pr_memo_id }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" data-program_id="{{ $program_id }}">Award to vendor</button>
                                             @endif
                                         @else
                                             {{-- @if (\Auth::user()->profile_id != 8) --}}
                                                 @if (\Auth::user()->profile_id == 10 && $activity == "NAM PR Memo Approval")
                                                     <button type="button" class="float-right btn btn-shadow btn-primary ml-1" data-toggle="modal" data-target="#recommendationModal">Approve PR Memo</button>
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr d-none my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}" data-program_id="{{ $program_id }}">Approve PR Memo</button>
                                                     
                                                     <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @elseif (\Auth::user()->profile_id == 9 && $activity == "RAM Head PR Memo Approval")
 
-                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}">Approve PR Memo</button>
+                                                    <button type="button" class="float-right btn btn-shadow btn-primary ml-1 approve_reject_pr my-0" id="approve_pr" data-data_action="true" data-id="{{ $pr_memo_number }}"  data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-activity_name="{{ $activity }}" data-program_id="{{ $program_id }}">Approve PR Memo</button>
 
                                                     <button type="button" class="float-right btn btn-shadow btn-danger ml-1 reject_pr">Reject PR Memo</button>
                                                 @endif
@@ -420,7 +420,7 @@
                                                     <small class="text-danger remarks-error"></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_number }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" type="button" data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}">Reject PR Memo</button>
+                                                    <button class="btn btn-primary btn-sm btn-shadow confirm_reject" id="reject_pr" data-data_action="false" data-id="{{ $pr_memo_number }}" data-sam_id="{{ $pr_sam_id }}" data-activity_name="{{ $activity }}" type="button" data-pr_memo="{{ $pr_memo_data->generated_pr_memo }}" data-program_id="{{ $program_id }}">Reject PR Memo</button>
                                                     
                                                     <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                                 </div>
@@ -485,6 +485,7 @@
         var id = $(this).attr('data-id');
         var pr_memo = $(this).attr('data-pr_memo');
         var pr_id = $(this).attr('data-id');
+        var program_id = $(this).attr('data-program_id');
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -509,7 +510,8 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 pr_number : pr_number,
-                pr_id : pr_id
+                pr_id : pr_id,
+                program_id : program_id
             }
         } else if (activity_name == "Vendor Awarding of Sites") {
             var url = "/vendor-awarding-sites";
@@ -526,7 +528,8 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 po_number : po_number,
-                pr_id : pr_id
+                pr_id : pr_id,
+                program_id : program_id
                 // vendor : vendor
             }
         } else {
@@ -542,11 +545,12 @@
                 remarks : remarks,
                 pr_memo : pr_memo,
                 recommendation_site : recommendation_site,
+                program_id : program_id
             }
         }
 
         $.ajax({
-        url: url,
+            url: url,
             data: data,
             type: 'POST',
             headers: {

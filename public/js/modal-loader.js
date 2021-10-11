@@ -44,8 +44,7 @@
     
                             $.unblockUI();
                             $('#viewInfoModal').modal('show');
-    
-    
+
                         },
                         complete: function(){
                             // $('#loader_modal').modal('hide');
