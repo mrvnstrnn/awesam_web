@@ -78,7 +78,7 @@
         e.preventDefault();
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
-        $("small").text("");
+        $("form.add_issue_form small").text("");
         $.ajax({
             url: "/add-issue",
             method: "POST",
