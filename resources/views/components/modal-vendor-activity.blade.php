@@ -94,7 +94,6 @@
                                                 ->where('category', $site[0]->site_category)
                                                 ->get();
 
-                                    // dd($site[0]->activity_id) ;
                                     // $sub_activities = json_decode($site[0]->sub_activity);
                                 @endphp
                                 <div id="actions_list" class="">
