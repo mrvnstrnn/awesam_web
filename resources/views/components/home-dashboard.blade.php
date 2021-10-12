@@ -45,6 +45,10 @@
   
               <x-towerco-dashboard />
   
+          @elseif($program->program_id == 1)
+
+            @include("profiles.globe.dashboards.newsites-milestones")
+
           @elseif($program->program_id == 7)
   
               <x-localcoop-dashboard />
