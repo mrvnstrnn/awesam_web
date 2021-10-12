@@ -103,9 +103,9 @@
                 </div>
             </form>
     
-            @if (\Auth::user()->profile_id == 2)
+            {{-- @if (\Auth::user()->profile_id == 2) --}}
             <button id="btn_add_remarks" class=" mb-3 btn btn-primary float-right" type="button">Add Update</button>
-            @endif
+            {{-- @endif --}}
             <button class=" mb-3 btn btn-secondary float-right btn_back_to_list mr-2" type="button">Back to issue list</button>
 
             <br><hr><br>
