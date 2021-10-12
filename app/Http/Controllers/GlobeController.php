@@ -2187,18 +2187,18 @@ class GlobeController extends Controller
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('site.program_id', $program_id)
                             ->whereNull('site_issue.date_resolve');
-                            if (\Auth::user()->profile_id == 2) {
-                                $sites->where('site_issue.user_id', \Auth::id());
-                            } else if (\Auth::user()->profile_id == 3) {
-                                $getAgentOfSupervisor = UserDetail::select('users.id')
-                                                            ->join('users', 'user_details.user_id', 'users.id')
-                                                            ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
-                                                            ->where('user_details.IS_id', \Auth::id())
-                                                            ->get()
-                                                            ->pluck('id');
+                            // if (\Auth::user()->profile_id == 2) {
+                            //     $sites->where('site_issue.user_id', \Auth::id());
+                            // } else if (\Auth::user()->profile_id == 3) {
+                            //     $getAgentOfSupervisor = UserDetail::select('users.id')
+                            //                                 ->join('users', 'user_details.user_id', 'users.id')
+                            //                                 ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                            //                                 ->where('user_details.IS_id', \Auth::id())
+                            //                                 ->get()
+                            //                                 ->pluck('id');
 
-                                $sites->whereIn('site_issue.user_id', $getAgentOfSupervisor);
-                            }
+                            //     $sites->whereIn('site_issue.user_id', $getAgentOfSupervisor);
+                            // }
                             $sites->get();
         }
 
