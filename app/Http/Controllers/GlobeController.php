@@ -1652,7 +1652,6 @@ class GlobeController extends Controller
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
-
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
                             ->table("view_sites_per_program")
@@ -1899,7 +1898,7 @@ class GlobeController extends Controller
                                             ->whereIn('profile_id', [8, 10])
                                             ->get();
                                 } else if (\Auth::user()->profile_id == 8) {
-                                    $sites->whereIn('activity_id', [3,4])
+                                    $sites->whereIn('activity_id', [3])
                                             ->whereIn('profile_id', [9, 10])
                                             ->get();
                                 }

@@ -7,11 +7,11 @@
             <span>Tasks</span>
         </a>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a role="tab" class="nav-link " id="tab-" data-toggle="tab" href="#tab-content-forecast">
             <span>Forecast</span>
         </a>
-    </li>
+    </li> --}}
 </ul>
 <div class="main-card mb-3 card">
     <div class="card-body">
