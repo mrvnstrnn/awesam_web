@@ -22,7 +22,8 @@
                                 <div class="card-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                                     
                                     <input type="hidden" class="form-control" name="site_category" id="site_category" value="none">
-                                    <input type="hidden" class="form-control" name="activity_id" id="activity_id" value="2">
+                                    <input type="hidden" class="form-control" name="activity_id" id="activity_id" value="{{ $program_id == 1 ? 2 : 5 }}">
+                                    <input type="hidden" class="form-control" name="program_id" id="program_id" value="{{ $program_id }}">
                                     <div class="form-row">
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
@@ -337,7 +338,7 @@
                             $(".input_hidden input#sam_id"+sam_id[i]).remove();
                         }
 
-                        $("#assigned-sites-new-sites-table").DataTable().ajax.reload(function(){
+                        $(".assigned-sites-table").DataTable().ajax.reload(function(){
 
                         
                             $(".pr_po_form #file_name").val(resp.file_name);
