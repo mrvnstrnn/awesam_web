@@ -1,15 +1,17 @@
 <div class="row">
-    <div class="col-lg-6">
-        <div id="datepicker" class=""></div>
+    @php
+        $json = json_decode($rtbdeclaration->value, true);
+    @endphp
+    <div class="col-lg-5 text-center m-auto">
+        {{-- <div id="datepicker" class=""></div> --}}
+        <h3 style="font-size: 56px; font-weight: 700;">{{ date('M', strtotime($json['rtb_declaration_date'] )) }}</h3>
+        <h1 style="font-size: 70px; font-weight: 900;">{{ date('d', strtotime($json['rtb_declaration_date'] )) }}</h1>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-7">
         <form>
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        @php
-                            $json = json_decode($rtbdeclaration->value, true);
-                        @endphp
                         <label for="rtb_declaration_date">Date Declaration</label>
                         <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" value="{{ date("m/d/Y", strtotime($json['rtb_declaration_date'] )) }}" class="form-control" readonly />
                     </div>        

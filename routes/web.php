@@ -374,7 +374,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Route::get('/get-fiancial-analysis/{sam_id}/{vendor}', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/get-fiancial-analysis', [GlobeController::class, 'get_fiancial_analysis']);
     Route::post('/add-pr-po', [GlobeController::class, 'add_pr_po']);
-    Route::post('/get-create-pr-memo', [GlobeController::class, 'get_create_pr_memo']);
+    Route::get('/get-create-pr-memo/{program_id}', [GlobeController::class, 'get_create_pr_memo']);
     Route::post('/approve-reject-pr-memo', [GlobeController::class, 'approve_reject_pr_memo']);
     Route::post('/vendor-awarding-sites', [GlobeController::class, 'vendor_awarding_sites']);
 

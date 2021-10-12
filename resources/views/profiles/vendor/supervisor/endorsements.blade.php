@@ -90,7 +90,7 @@
 
                     $.each(resp.message[0], function(index, data) {
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
-                        $("#viewInfoModal  .card-body .form_fields").append(
+                        $("#viewInfoModal .card-body .form_fields").append(
                             '<div class="position-relative form-group col-md-6">' +
                                 '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
                                 '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
@@ -118,8 +118,8 @@
                     $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
                     $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
                     $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
-                    $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
-                    $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
+                    $(".btn-accept-endorsement").attr('data-what_table', what_table);
+                    $(".btn-accept-endorsement").attr('data-program_id', program_id);
 
                 } else {
                     Swal.fire(

@@ -62,7 +62,7 @@
                 @endphp                
             @endif
             
-            <a role="tab" class="nav-link {{ $active }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}">
+            <a role="tab" class="nav-link {{ $active }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id }}">
                 <span>{{ $program->program }}</span>
             </a>
         </li>
@@ -82,8 +82,7 @@
                             {{ $tableheader }}
                         </h5>
                         @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
-                        <button class="btn btn-warning btn-shadow btn-sm btn_create_pr">Create PR Memo</button>
-
+                        <button class="btn btn-warning btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
                         @endif
                     </div>
                 </div>
