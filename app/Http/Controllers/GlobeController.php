@@ -1652,7 +1652,6 @@ class GlobeController extends Controller
 
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
-
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
                             ->table("view_sites_per_program")
@@ -1899,7 +1898,7 @@ class GlobeController extends Controller
                                             ->whereIn('profile_id', [8, 10])
                                             ->get();
                                 } else if (\Auth::user()->profile_id == 8) {
-                                    $sites->whereIn('activity_id', [3,4])
+                                    $sites->whereIn('activity_id', [3])
                                             ->whereIn('profile_id', [9, 10])
                                             ->get();
                                 }
@@ -2561,7 +2560,7 @@ class GlobeController extends Controller
             if($request['vendor_mode']){
 
                 $what_modal = "components.modal-vendor-activity";
-
+                
                 return \View::make($what_modal)
                 ->with([
                     'site' => $site,
@@ -3687,7 +3686,7 @@ class GlobeController extends Controller
                 $fsa_data = \DB::connection('mysql2')
                                 ->table('fsaq')
                                 ->where('vendor_id', $vendor)
-                                // ->where('region_id', $sites_data->site_region_id)
+                                ->where('region_id', $sites_data->site_region_id)
                                 ->where('province_id', $sites_data->site_province_id)
                                 ->where('lgu_id', $sites_data->site_lgu_id)
                                 ->where('site_type', "ROOFTOP")
@@ -3838,7 +3837,7 @@ class GlobeController extends Controller
             $line_items = \DB::connection('mysql2')
                                 ->table('fsaq')
                                 ->where('vendor_id', $vendor)
-                                // ->where('region_id', $sites->site_region_id)
+                                ->where('region_id', $sites->site_region_id)
                                 ->where('province_id', $sites->site_province_id)
                                 ->where('lgu_id', $sites->site_lgu_id)
                                 ->where('fsaq.site_type', '=', 'ROOFTOP')

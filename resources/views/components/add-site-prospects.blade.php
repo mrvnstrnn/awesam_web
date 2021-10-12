@@ -9,7 +9,7 @@
     </div>
     <div class="col-12 col-md-6 align-right  text-right">
         <button class="add_site_button btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Add Site</button>
-        <button class="add_site_button float-right btn-sm btn-shadow btn btn-primary complete_button_act {{ count($check_if_added) > 0 ? '' : 'd-none' }}">Submit to AEPM</button>
+        <button class="float-right btn-sm btn-shadow btn btn-primary complete_button_act {{ count($check_if_added) > 0 ? '' : 'd-none' }}">Submit to AEPM</button>
     </div>
 </div>
 
