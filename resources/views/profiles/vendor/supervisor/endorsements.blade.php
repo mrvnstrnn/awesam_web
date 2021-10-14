@@ -77,7 +77,7 @@
         var program_id = $(this).closest('tr').attr('data-program_id');
 
         $.ajax({
-            url: '/get-program-fields/' + json_parse.sam_id + '/' + $(this).closest('tr').attr('data-program_id'),
+            url: '/get-program-fields/' + json_parse.sam_id + '/' + program_id,
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
