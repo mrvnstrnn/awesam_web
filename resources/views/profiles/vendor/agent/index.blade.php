@@ -126,7 +126,7 @@
                                 <img src="/images/blue-star.png" width="40px">
                             </div>
                             <div class="star-box-type text-center" style="font-weight: bold; font-size: 14px !important;">
-                                100
+                                97
                             </div>
                             <div class="star-box-type text-center" style="font-size: 12px !important;">
                                 Daily Login
@@ -137,7 +137,7 @@
                                 <img src="/images/blue-star.png" width="40px">
                             </div>
                             <div class="star-box-type text-center" style="font-weight: bold; font-size: 14px !important;">
-                                100
+                                45
                             </div>
                             <div class="star-box-type text-center" style="font-size: 12px !important;">
                                 RTB Sites
@@ -148,7 +148,7 @@
                                 <img src="/images/blue-star.png" width="40px">
                             </div>
                             <div class="star-box-type text-center" style="font-weight: bold; font-size: 14px !important;">
-                                100
+                                65
                             </div>
                             <div class="star-box-type text-center" style="font-size: 12px !important;">
                                 Completed Sites
@@ -159,7 +159,7 @@
                                 <img src="/images/blue-star.png" width="40px">
                             </div>
                             <div class="star-box-type text-center" style="font-weight: bold; font-size: 14px !important;">
-                                100
+                                34
                             </div>
                             <div class="star-box-type text-center" style="font-size: 12px !important;">
                                 Sites w/ No Issue
@@ -170,7 +170,7 @@
                                 <img src="/images/blue-star.png" width="40px">
                             </div>
                             <div class="star-box-type text-center" style="font-weight: bold; font-size: 14px !important;">
-                                100
+                                77
                             </div>
                             <div class="star-box-type text-center" style="font-size: 12px !important;">
                                 Attendance

@@ -263,17 +263,18 @@ class NewSitesController extends Controller
     {
         try {
             $data = SubActivityValue::where('sam_id', $sam_id)
-                                                        ->where('type', 'jtss_add_site')
-                                                        ->get();
-
+                                            ->where('type', 'jtss_add_site')
+                                            ->get();
                                     
             $dt = DataTables::of($data)
                                 ->addColumn('site_name', function($row){
+                                    // dd($row->value);
                                     json_decode($row->value);
                                     if (json_last_error() == JSON_ERROR_NONE){
                                         $json = json_decode($row->value, true);
                                         
-                                        return $json['site_name'];
+                                        // return $json['site_name'];
+                                        return $json['address'];
                                     } else {
                                         return $row->value;  
                                     }                      
