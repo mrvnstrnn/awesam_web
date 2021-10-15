@@ -47,7 +47,7 @@
   
           @elseif($program->program_id == 1)
 
-            <x-newsites-dashbaord />
+            <x-newsites-dashboard />
 
           @elseif($program->program_id == 7)
   
