@@ -347,7 +347,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
                     ->get();
 
         }
@@ -355,7 +355,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'RAM')
+                    ->where('tower_fields_map_profile.edit_profile', 'RAM')
                     ->get();
         }
         elseif($who == 'sts'){
@@ -364,7 +364,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'STS')
+                    ->where('tower_fields_map_profile.edit_profile', 'STS')
                     ->get();
         }
         elseif($who == 'agile'){
@@ -373,7 +373,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'AGILE')
+                    ->where('tower_fields_map_profile.edit_profile', 'AGILE')
                     ->get(); 
         }
         elseif($who == 'aepm'){
@@ -382,7 +382,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'AEPM')
+                    ->where('tower_fields_map_profile.edit_profile', 'AEPM')
                     ->get();
         }
         elseif($who == 'apmo-apm'){
@@ -391,7 +391,7 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'AEPM-APM')
+                    ->where('tower_fields_map_profile.edit_profile', 'AEPM-APM')
                     ->get(); 
         }
 
