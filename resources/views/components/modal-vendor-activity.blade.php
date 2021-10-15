@@ -1,3 +1,7 @@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+
 <style>
     .modal-dialog{
         -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
@@ -33,7 +37,7 @@
     }
     
 </style>    
-    
+
     <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
     <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
     <input id="sub_activity_id" type="hidden" value="{{ $site[0]->activity_id }}">
@@ -230,8 +234,11 @@
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-    <script>
 
+    
+    
+
+    <script>
     $(document).ready(function(){
 
         $(".flatpicker").flatpickr(
@@ -320,6 +327,7 @@
 
         function ajax_action_box (active_sam_id, active_subactivity, sub_activity_id, program_id, site_category, activity_id) 
         {
+
             $.ajax({
                 url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id + "/" + site_category + "/" + activity_id,
                 method: "GET",
@@ -654,3 +662,8 @@
     });
 
     </script>
+
+
+
+
+

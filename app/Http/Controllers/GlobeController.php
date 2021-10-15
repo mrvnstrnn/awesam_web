@@ -1064,7 +1064,7 @@ class GlobeController extends Controller
                 // }
 
                 $json = array(
-                    'lessor' => $request->input('longitude'),
+                    'lessor' => $request->input('lessor'),
                     'contact_number' => $request->input('contact_number'),
                     'address' => $request->input('address'),
                     'region' => $request->input('region'),
@@ -1072,7 +1072,7 @@ class GlobeController extends Controller
                     'lgu' => $request->input('lgu'),
                     'latitude' => $request->input('latitude'),
                     'longitude' => $request->input('longitude'),
-                    'distance_from_nominal_point' => $request->input('longitude'),
+                    'distance_from_nominal_point' => $request->input('distance_from_nominal_point'),
                     'site_type' => $request->input('site_type'),
                     'building_no_of_floors' => $request->input('building_no_of_floors'),
                     'area_size' => $request->input('area_size'),
@@ -1463,6 +1463,8 @@ class GlobeController extends Controller
                                                         ->orderBy('date_created', 'desc')
                                                         ->get();
 
+                        
+
             $dt = DataTables::of($sub_activity_files)
                                 // ->addColumn('sitename', function($row){
                                 //     json_decode($row->value);
@@ -1510,6 +1512,16 @@ class GlobeController extends Controller
                                         $json = json_decode($row->value, true);
 
                                         return $json['longitude'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('distance', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['distance_from_nominal_point'] . " meters";
                                     } else {
                                         return $row->value;
                                     }
