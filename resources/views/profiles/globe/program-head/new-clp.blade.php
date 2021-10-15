@@ -238,6 +238,7 @@
 
 <!-- PR PO Counter -->
 <script type="text/javascript" src="/js/newsites_ajax_counter.js"></script> 
+<script type="text/javascript" src="{{ asset('/js/view_site_memo.js') }}"></script>
 
 <script>
 
