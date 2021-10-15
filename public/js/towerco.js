@@ -425,7 +425,7 @@ $(document).ready(() => {
 
     $(document).on('click', '.actor_update', function(){
         $.ajax({
-            url: '/save-towerco/',
+            url: '/save-towerco',
             method: 'POST',
             data: $('#form-towerco-actor').serialize(),
             headers: {
