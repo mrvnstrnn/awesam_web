@@ -445,6 +445,8 @@
                         $("#pr_memo_table").DataTable().ajax.reload(function () {
                             $(".back_to_table").trigger("click");
 
+                            $("#jtss_schedule").val("");
+
                             $(".confirm_schedule").removeClass("d-none");
                             $(".set_schedule").removeAttr("disabled");
                             $(".set_schedule").text("Set Schedule");

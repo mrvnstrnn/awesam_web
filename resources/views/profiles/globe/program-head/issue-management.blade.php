@@ -12,7 +12,11 @@
     </style>  
 
     {{-- <x-assigned-sites mode="vendor"/> --}}
+<<<<<<< HEAD
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all-site-issues"/>
+=======
     <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Management" activitytype="all-site-issues"/>
+>>>>>>> 97563fa57c47e2ea075f3bacd1cdeb3fbcdab678
     {{-- <x-issue-validation-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all"/> --}}
 
 @endsection
