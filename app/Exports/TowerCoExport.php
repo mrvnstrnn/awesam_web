@@ -78,12 +78,12 @@ class TowerCoExport implements FromCollection, WithHeadings
         //     "REMARKS"
         // );
 
-        // if (\Auth::user()->profile_id == 21) {
-        //     $user_detail = \Auth::user()->getUserDetail()->first();
-        //     $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
+        if (\Auth::user()->profile_id == 21) {
+            $user_detail = \Auth::user()->getUserDetail()->first();
+            $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
 
-        //     $towerco->where('TOWERCO', $vendor->vendor_acronym);
-        // }
+            return TowerCo::where('TOWERCO', $vendor->vendor_acronym)->get();
+        }
 
         return $towerco = TowerCo::get();
     }
