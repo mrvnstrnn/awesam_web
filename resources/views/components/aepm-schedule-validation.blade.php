@@ -47,6 +47,7 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
+                                                    <th>Distance</th>
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
@@ -355,6 +356,7 @@
                 { data: "address" },
                 { data: "latitude" },
                 { data: "longitude" },
+                { data: "distance" },
                 { data: "status" },
             ],
         });
