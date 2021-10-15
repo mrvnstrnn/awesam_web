@@ -17,34 +17,6 @@
 
 @section('modals')
 
-{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style="background-color: transparent; border: 0">
-            <div class="row justify-content-center">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="main-card mb-3 card ">
-
-                        <div class="dropdown-menu-header">
-                            <div class="dropdown-menu-header-inner bg-dark">
-                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                                <div class="menu-header-content btn-pane-right">
-                                    <h5 class="menu-header-title">
-                                        Endorsement
-                                    </h5>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 <div class="ajax_content_box"></div>
 
 @endsection
@@ -65,6 +37,7 @@
 <script type="text/javascript" src="/js/modal-loader.js"></script>  
 <!-- PR PO Counter -->
 <script type="text/javascript" src="/js/newsites_ajax_counter.js"></script> 
+<script type="text/javascript" src="{{ asset('/js/view_site_memo.js') }}"></script>
 <script>
     // $(document).ready(function() {
     //     $(".table_financial_analysis table").DataTable().ajax.reload();
