@@ -2383,7 +2383,8 @@ class GlobeController extends Controller
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
                 'check_if_added' => $jtss_add_site,
-                'site_np' => $site_np
+                'NP_latitude' => $site_np->NP_latitude,
+                'NP_longitude' => $site_np->NP_longitude
             ])
             ->render();
 

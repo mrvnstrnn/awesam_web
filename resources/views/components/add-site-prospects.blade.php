@@ -19,7 +19,7 @@
         <div id="map"></div>
     </div>
     <div class="col-md-12" id="map_message">
-        <div >Please set the site candidate's location in the map</div>
+        <div > Please set the site candidate's location in the map</div>
     </div>
 </div>
 <div class="row pt-3" id="ssds_table">
@@ -489,7 +489,8 @@
             <input type="hidden" name="sam_id" value="{{ $sam_id }}">
             <input type="hidden" name="sub_activity_id" value="{{ $sub_activity_id }}">
             <input type="hidden" name="sub_activity_name" value="{{ $sub_activity }}">
-            {{-- <input type="hidden" name="type" value="advanced_site_hunting"> --}}
+            <input type="hidden" id="NP_latitude" name="NP_latitude" value="{{ $NP_latitude }}">
+            <input type="hidden" id="NP_longitude" name="NP_longitude" value="{{ $NP_longitude }}">
             <input type="hidden" name="type" value="jtss_add_site">
             <input type="hidden" name="site_category" value="">
             <div class="position-relative row form-group ">
@@ -557,7 +558,14 @@ function Go_Add_Site_Details(){
 
 function initMap(markers) {
 
-    const nominal_point = { lat: 14.737627604489816, lng: 121.04398919630775 };
+    var NP_latitude = {!! json_encode($NP_latitude) !!};
+    var NP_longitude = {!! json_encode($NP_longitude) !!};
+
+    console.log(NP_latitude);
+    console.log(NP_longitude);
+
+
+    const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
 
     const map = new google.maps.Map(document.getElementById("map"), {
         center: nominal_point,
