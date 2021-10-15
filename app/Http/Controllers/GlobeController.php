@@ -2369,6 +2369,10 @@ class GlobeController extends Controller
                                                     ->where('type', 'jtss_add_site')
                                                     ->get();
 
+            $site_np = Site::select('NP_latitude', 'NP_longitude')
+                        ->where('sam_id', $sam_id)
+                        ->first();
+
             $what_component = "components.add-site-prospects";
             return \View::make($what_component)
             ->with([
@@ -2379,6 +2383,7 @@ class GlobeController extends Controller
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
                 'check_if_added' => $jtss_add_site,
+                'site_np' => $site_np
             ])
             ->render();
 
@@ -4791,6 +4796,16 @@ class GlobeController extends Controller
                         $json = json_decode($row->value, true);
 
                         return $json['longitude'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('distance', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['distance_from_nominal_point'] . " meters";
                     } else {
                         return $row->value;
                     }
