@@ -12,6 +12,7 @@ use App\Exports\TowerCoExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Log;
+use Validator;
 
 
 class TowerCoController extends Controller
@@ -31,6 +32,53 @@ class TowerCoController extends Controller
 
         $dt = DataTables::of($sites);
         return $dt->make(true);
+    }
+
+    public function rename_file($filename_data, $sub_activity_name, $sam_id, $site_category = null)
+    {
+        $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
+
+        $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
+
+        if (file_exists( public_path()."/files/".$file_name )) {
+
+            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+
+            $exploaded_name = explode("-", $withoutExt);
+
+            if ( is_numeric( end( $exploaded_name) ) ) {
+                $counter =  end( $exploaded_name) + "01";
+            } else {
+                $counter =  strtolower(str_replace(" ", "-", $sub_activity_name))."-01";
+            }
+
+            $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+            $cat = $site_category == 'none' ? "-" : "-".$site_category."-";
+
+            $new_file = $imploded_name .$cat. $counter . "." .$ext;
+
+            while (file_exists( public_path()."/files/". $new_file)) {
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  "01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            }
+
+            return $new_file = $new_file;
+
+        } else {
+            return $new_file = $file_name;
+        }
     }
 
     public function get_towerco_all($actor)
@@ -107,13 +155,13 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
                     ->get();
 
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+                    ->where('tower_fields_map_profile.view_profile', 'TOWERCO')
                     ->get();
 
         }
@@ -121,13 +169,13 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'RAM')
+                    ->where('tower_fields_map_profile.edit_profile', 'RAM')
                     ->get();
                     
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'RAM')
+                    ->where('tower_fields_map_profile.view_profile', 'RAM')
                     ->get();
         }
         elseif($who == 'sts'){
@@ -135,13 +183,13 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'STS')
+                    ->where('tower_fields_map_profile.edit_profile', 'STS')
                     ->get();
 
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'STS')
+                    ->where('tower_fields_map_profile.view_profile', 'STS')
                     ->get();
         }
         elseif($who == 'agile'){
@@ -149,14 +197,14 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'AGILE')
+                    ->where('tower_fields_map_profile.edit_profile', 'AGILE')
                     ->get();
 
                     
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'AGILE')
+                    ->where('tower_fields_map_profile.view_profile', 'AGILE')
                     ->get();
         }
         elseif($who == 'aepm'){
@@ -164,14 +212,14 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'AEPM')
+                    ->where('tower_fields_map_profile.edit_profile', 'AEPM')
                     ->get();
 
                     
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'AEPM')
+                    ->where('tower_fields_map_profile.view_profile', 'AEPM')
                     ->get();
         }
         elseif($who == 'apmo-apm'){
@@ -179,14 +227,14 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'APMO-APM')
+                    ->where('tower_fields_map_profile.edit_profile', 'APMO-APM')
                     ->get(); 
 
                     
             $detail_alloweds = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.edit_profile', 'APMO-APM')
+                    ->where('tower_fields_map_profile.view_profile', 'APMO-APM')
                     ->get();
         }
         
@@ -300,7 +348,7 @@ class TowerCoController extends Controller
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'TOWERCO')
-                    ->get(); 
+                    ->get();
 
         }
         elseif($who == 'ram'){
@@ -308,7 +356,7 @@ class TowerCoController extends Controller
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'RAM')
-                    ->get(); 
+                    ->get();
         }
         elseif($who == 'sts'){
 
@@ -317,7 +365,7 @@ class TowerCoController extends Controller
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'STS')
-                    ->get(); 
+                    ->get();
         }
         elseif($who == 'agile'){
 
@@ -326,7 +374,7 @@ class TowerCoController extends Controller
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'AGILE')
-                    ->get();   
+                    ->get(); 
         }
         elseif($who == 'aepm'){
 
@@ -335,7 +383,7 @@ class TowerCoController extends Controller
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'AEPM')
-                    ->get(); 
+                    ->get();
         }
         elseif($who == 'apmo-apm'){
 
@@ -343,8 +391,8 @@ class TowerCoController extends Controller
             $allowed_fields = \DB::connection('mysql2')
                     ->table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
-                    ->where('tower_fields_map_profile.view_profile', 'APMO-APM')
-                    ->get();  
+                    ->where('tower_fields_map_profile.view_profile', 'AEPM-APM')
+                    ->get(); 
         }
 
         $actor = '<form id="form-towerco-actor-multi">
@@ -354,67 +402,129 @@ class TowerCoController extends Controller
 
             $value='';
 
+            // foreach ($allowed_fields as $allowed_field){
+
+            //         $actor .= '
+            //             <div class="row border-bottom mb-1 pb-1">
+            //                 <div class="col-md-4">
+            //                     ' . $allowed_field['field'] . '
+            //                 </div>
+            //                 <div class="col-md-8">';
+
+            //         if($allowed_field->field_type == 'date'){
+            //             $actor .= '
+            //             <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '"  data-old="'. $value .'" class="form-control flatpicker">
+            //             ';
+            //         }
+            //         elseif($allowed_field->field_type == 'text'){
+            //             $actor .= '
+            //             <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+            //             ';
+            //         }
+            //         elseif($allowed_field->field_type == 'number'){
+            //             $actor .= '
+            //             <input type="number" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+            //             ';
+            //         }
+            //         elseif($allowed_field->field_type == 'selection'){
+            //             $actor .= '
+            //                 <select class="form-control" name="' . $allowed_field['field'] . '" data-old="'. $value .'" >
+            //                     <option value=""></option>
+            //             ';
+
+            //             $output = str_replace(array('[',']'), '', $allowed_field->selection );
+
+            //             $array_fields = explode(",", $output);
+
+            //             // foreach($allowed_field->selection as $option){
+
+            //             for ($i=0; $i < count($array_fields); $i++) { 
+            //                 if ($array_fields[$i] != "''") {
+            //                     if($array_fields[$i] == $value){
+            //                         $actor .= '
+            //                             <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
+            //                         ';
+            //                     }
+            //                     else {
+            //                         $actor .= '
+            //                             <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
+            //                         ';
+            //                     }
+            //                 }
+            //             }
+
+            //             $actor .= '
+            //                 </select>
+            //             ';                        
+            //         }
+            //         $actor .= '        
+            //                 </div>
+            //             </div>
+            //         ';
+
+            // }
+
             foreach ($allowed_fields as $allowed_field){
 
-                    $actor .= '
-                        <div class="row border-bottom mb-1 pb-1">
-                            <div class="col-md-4">
-                                ' . $allowed_field['field'] . '
-                            </div>
-                            <div class="col-md-8">';
-
-                    if($allowed_field->field_type == 'date'){
-                        $actor .= '
-                        <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '"  data-old="'. $value .'" class="form-control flatpicker">
-                        ';
-                    }
-                    elseif($allowed_field->field_type == 'text'){
-                        $actor .= '
-                        <input type="text" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
-                        ';
-                    }
-                    elseif($allowed_field->field_type == 'number'){
-                        $actor .= '
-                        <input type="number" name="'. $allowed_field['field'] . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
-                        ';
-                    }
-                    elseif($allowed_field->field_type == 'selection'){
-                        $actor .= '
-                            <select class="form-control" name="' . $allowed_field['field'] . '" data-old="'. $value .'" >
-                                <option value=""></option>
-                        ';
-
-                        $output = str_replace(array('[',']'), '', $allowed_field->selection );
-
-                        $array_fields = explode(",", $output);
-
-                        // foreach($allowed_field->selection as $option){
-
-                        for ($i=0; $i < count($array_fields); $i++) { 
-                            if ($array_fields[$i] != "''") {
-                                if($array_fields[$i] == $value){
-                                    $actor .= '
-                                        <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
-                                    ';
-                                }
-                                else {
-                                    $actor .= '
-                                        <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
-                                    ';
-                                }
-                            }
-                        }
-
-                        $actor .= '
-                            </select>
-                        ';                        
-                    }
-                    $actor .= '        
-                            </div>
+                $actor .= '
+                    <div class="row border-bottom mb-1 pb-1">
+                        <div class="col-md-4">
+                            ' . $allowed_field->towerco_fields . '
                         </div>
+                        <div class="col-md-8">';
+
+                if($allowed_field->field_type == 'date'){
+                    $actor .= '
+                    <input type="text" name="'. $allowed_field->towerco_fields . '" value="' . $value . '"  data-old="'. $value .'" class="form-control flatpicker">
+                    ';
+                }
+                elseif($allowed_field->field_type == 'text'){
+                    $actor .= '
+                    <input type="text" name="'. $allowed_field->towerco_fields . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+                    ';
+                }
+                elseif($allowed_field->field_type == 'number'){
+                    $actor .= '
+                    <input type="number" name="'. $allowed_field->towerco_fields . '" value="' . $value . '" data-old="'. $value .'" class="form-control">
+                    ';
+                }
+                elseif($allowed_field->field_type == 'selection'){
+                    $actor .= '
+                        <select class="form-control" name="' . $allowed_field->towerco_fields . '" data-old="'. $value .'" >
+                            <option value=""></option>
                     ';
 
-            }
+                    $output = str_replace(array('[',']'), '', $allowed_field->selection );
+
+                    $array_fields = explode(",", $output);
+
+                    // foreach($allowed_field->selection as $option){
+
+                    for ($i=0; $i < count($array_fields); $i++) { 
+                        if ($array_fields[$i] != "''") {
+                            if($array_fields[$i] == $value){
+                                $actor .= '
+                                    <option value="' . str_replace("'", '', $array_fields[$i]) . '" selected>' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                ';
+                            }
+                            else {
+                                $actor .= '
+                                    <option value="' . str_replace("'", '', $array_fields[$i]) . '">' . str_replace("'", '', $array_fields[$i]) . '</option>
+                                ';
+                            }
+                        }
+                    }
+
+                    $actor .= '
+                        </select>
+                    ';                        
+                }
+                $actor .= '        
+                        </div>
+                    </div>
+                ';
+
+        }
 
         $actor .="</form>";
 
@@ -457,6 +567,7 @@ class TowerCoController extends Controller
             unset($data['Serial Number']);
 
 
+            // return response()->json(['error' => true, 'message' => $request['Serial_Number']]);
             \DB::enableQueryLog(); // Enable query log
 
             \DB::table('towerco')
