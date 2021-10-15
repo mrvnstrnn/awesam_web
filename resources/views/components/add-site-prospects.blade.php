@@ -560,9 +560,12 @@ function initMap(markers) {
 
     var NP_latitude = {!! json_encode($NP_latitude) !!};
     var NP_longitude = {!! json_encode($NP_longitude) !!};
+    var site_region_id = {!! json_encode($site_region_id) !!};
+    var site_province_id = {!! json_encode($site_province_id) !!};
+    var site_lgu_id = {!! json_encode($site_lgu_id) !!};
 
-    console.log(NP_latitude);
-    console.log(NP_longitude);
+    $('#region').val(site_region_id);
+    $('#region').trigger("change");
 
 
     const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};

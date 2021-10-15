@@ -2369,7 +2369,7 @@ class GlobeController extends Controller
                                                     ->where('type', 'jtss_add_site')
                                                     ->get();
 
-            $site_np = Site::select('NP_latitude', 'NP_longitude')
+            $site_np = Site::select('NP_latitude', 'NP_longitude', 'site_region_id', 'site_province_id', 'site_lgu_id')
                         ->where('sam_id', $sam_id)
                         ->first();
 
@@ -2384,7 +2384,10 @@ class GlobeController extends Controller
                 'activity_id' => $activity_id,
                 'check_if_added' => $jtss_add_site,
                 'NP_latitude' => $site_np->NP_latitude,
-                'NP_longitude' => $site_np->NP_longitude
+                'NP_longitude' => $site_np->NP_longitude,
+                'site_region_id' => $site_np->site_region_id,
+                'site_province_id' => $site_np->site_province_id,
+                'site_lgu_id' => $site_np->site_lgu_id
             ])
             ->render();
 
