@@ -40,13 +40,6 @@
 <div class="row pt-3 d-none" id="ssds_form">
     <div class="col-md-12">
         <form class="ssds_form">
-            {{-- <div class="position-relative row form-group">
-                <label for="site_name" class="col-sm-4 col-form-label">Location</label>
-                <div class="col-sm-8">
-                    <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Location">
-                    <small class="text-danger site_name-errors"></small>
-                </div>
-            </div> --}}
             <div class="divider"></div>
             <H5>Property Details</H5>
 

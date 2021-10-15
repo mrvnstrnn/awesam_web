@@ -113,6 +113,16 @@ class GlobeController extends Controller
                     }
                 }
 
+            } else if ($request->input('activity_name') == "AEPM Validation and Scheduling") {
+
+                $notification = "Successfully confirmed jtss schedule.";
+                $action = $request->input('data_complete');
+                $program_id = $request->input('program_id');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+
+                $samid = $request->input('sam_id');
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation") {
 
                 $notification = "Site successfully " .$message;
@@ -250,7 +260,7 @@ class GlobeController extends Controller
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
-
+                                
                 if (!is_null($activities)) {
                     if ($action == "true") {
                         $get_activitiess = \DB::connection('mysql2')
@@ -2361,6 +2371,21 @@ class GlobeController extends Controller
             ->render();
 
         }
+        elseif($sub_activity == 'JTSS Sched Confirmation'){
+
+            $what_component = "components.subactivity-lessor-engagement";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
         else {
 
             $what_component = "components.subactivity-doc-upload";
@@ -2637,10 +2662,12 @@ class GlobeController extends Controller
                 }
                 else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
 
-                    $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                                                // ->where('status', 'pending')
-                                                ->where('type', 'site_schedule')
-                                                ->first();
+                    
+                    $datas = SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request['sam_id'])
+                                        ->where('type', 'jtss_add_site')
+                                        ->where('status', 'Scheduled')
+                                        ->get();
 
                     $what_modal = "components.aepm-schedule-validation";
 
@@ -2651,8 +2678,8 @@ class GlobeController extends Controller
                         'program_id' => $site[0]->program_id,
                         'site_category' => $site[0]->site_category,
                         'activity_id' => $site[0]->activity_id,
-                        'data' => $data,
-                        'activity' => $request->input('activity')
+                        'activity' => $request->input('activity'),
+                        'count' => count($datas)
                     ])
                     ->render();
 
@@ -4612,6 +4639,238 @@ class GlobeController extends Controller
                             ->get();
 
             return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_site_memo ($value)
+    {
+        try {
+
+            if ($value == 'PR Memo Creation') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '2')
+                            ->get();
+            } else if ($value == 'RAM Head Approval') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '3')
+                            ->get();
+            } else if ($value == 'NAM Approval') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '4')
+                            ->get();
+            } else if ($value == 'Arriba PR No Issuance') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '5')
+                            ->get();
+            } else if ($value == 'Vendor Awarding') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '6')
+                            ->get();
+            } else if ($value == 'Completed') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->whereJsonContains('site.activities->activity_id', '7')
+                            ->get();
+            } else if ($value == 'Total Sites') {
+                $sites = \DB::connection('mysql2')
+                            ->table('site')
+                            ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
+                            ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
+                            ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
+                            ->join('location_lgus', 'location_lgus.lgu_id', 'site.site_lgu_id')
+                            ->where('site.program_id', 1)
+                            ->get();
+            }
+
+            $what_modal = "components.view-pr-memo-site";
+            
+            return \View::make($what_modal)
+            ->with([
+                'value' => $value,
+                'sites' => $sites,
+            ])
+            ->render();
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_site_candidate ($sam_id)
+    {
+        try {
+            $datas = SubActivityValue::where('sam_id', $sam_id)
+                                                ->where('type', 'jtss_add_site')
+                                                ->get();
+
+            $dt = DataTables::of($datas)
+                ->addColumn('lessor', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['lessor'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('address', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['address'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('latitude', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['latitude'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('longitude', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['longitude'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('status', function($row){
+                    if ($row->status == 'pending') {
+                        return '<span class="badge badge-secondary">No schedule yet</span>';
+                    } else {
+                        return '<span class="badge badge-success">Scheduled</span>';
+                    }
+                });
+                                
+            $dt->rawColumns(['status']);
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+    public function set_schedule(Request $request)
+    {
+        try {
+
+            $validate = Validator::make($request->all(), array(
+                'jtss_schedule' => 'required',
+            ));
+
+            if (!$validate->passes()) {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            } else {
+                $sub_activity_value = SubActivityValue::where('id', $request->get('id'))->first();
+
+                SubActivityValue::where('id', $request->get('id'))
+                                ->update([
+                                    'status' => 'Scheduled'
+                                ]);
+
+                $new_json = json_decode($sub_activity_value->value, true);
+                
+                $json = [
+                    "id" => $sub_activity_value->id,
+                    "jtss_schedule" => $request->get('jtss_schedule'),
+                    "lessor" => $new_json['lessor'],
+                    "contact_number" => $new_json['contact_number'],
+                    "address" => $new_json['address'],
+                    "region" => $new_json['region'],
+                    "province" => $new_json['province'],
+                    "lgu" => $new_json['lgu'],
+                    "latitude" => $new_json['latitude'],
+                    "longitude" => $new_json['longitude'],
+                    "distance_from_nominal_point" => $new_json['distance_from_nominal_point'],
+                    "site_type" => $new_json['site_type'],
+                    "building_no_of_floors" => $new_json['building_no_of_floors'],
+                    "area_size" => $new_json['area_size'],
+                    "lease_rate" => $new_json['lease_rate'],
+                    "property_use" => $new_json['property_use'],
+                    "right_of_way_access" => $new_json['right_of_way_access'],
+                    "certificate_of_title" => $new_json['certificate_of_title'],
+                    "tax_declaration" => $new_json['tax_declaration'],
+                    "tax_clearance" => $new_json['tax_clearance'],
+                    "mortgaged" => $new_json['mortgaged'],
+                    "tower_structure" => $new_json['tower_structure'],
+                    "tower_height" => $new_json['tower_height'],
+                    "swat_design" => $new_json['swat_design'],
+                    "with_neighbors" => $new_json['with_neighbors'],
+                    "with_history_of_opposition" => $new_json['with_history_of_opposition'],
+                    "with_hoa_restriction" => $new_json['with_hoa_restriction'],
+                    "with_brgy_restriction" => $new_json['with_brgy_restriction'],
+                    "tap_to_lessor" => $new_json['tap_to_lessor'],
+                    "tap_to_neighbor" => $new_json['tap_to_neighbor'],
+                    "distance_to_tapping_point" => $new_json['distance_to_tapping_point'],
+                    "meralco" => $new_json['meralco'],
+                    "localcoop" => $new_json['localcoop'],
+                    "genset_availability" => $new_json['genset_availability'],
+                    "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
+                    "distance_from_creek_river" => $new_json['distance_from_creek_river'],
+                    "distance_from_national_road" => $new_json['distance_from_national_road'],
+                    "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
+                ];
+                
+                SubActivityValue::create([
+                    'type' => 'jtss_schedule_site',
+                    'sam_id' => $sub_activity_value->sam_id,
+                    'value' => json_encode($json),
+                    'status' => 'pending',
+                    'user_id' => \Auth::id()
+                ]);
+
+                return response()->json(['error' => false, 'message' => 'Successfully added a schedule to ' .$new_json['lessor'] ]);
+            }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
