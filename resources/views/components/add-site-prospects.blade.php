@@ -555,7 +555,6 @@ function Go_Add_Site_Details(){
 }
 
 
-
 function initMap(markers) {
 
     var NP_latitude = {!! json_encode($NP_latitude) !!};
@@ -698,11 +697,6 @@ function initMap(markers) {
 
 
 }
-
-
-
-
-
 
 </script>
 
