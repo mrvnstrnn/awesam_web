@@ -16,17 +16,33 @@ class TowerCoExport implements FromCollection, WithHeadings
     public function collection()
     {
 
+        // $allowed_fields = \DB::connection('mysql2')
+        //             ->table("tower_fields_map")
+        //             ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
+        //             // ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
+        //             ->get();
+
+        //             $select_collect = collect();
+
+        //             foreach ($allowed_fields as $allowed_field) {
+        //                 $select_collect->push($allowed_field->towerco_fields);
+        //             }
+
+        //             $towerco = TowerCo::select(
+        //                 $select_collect->all()
+        //             );
+
         $towerco = TowerCo::select(
             "Serial Number", 
             "Search Ring",
             "REGION",
             "TOWERCO",
-            "DATE ENDORSED BY RAM",
+            // "DATE ENDORSED BY RAM",
             "MLA COMPLETION DATE",
             "DATE ACCEPTED BY TOWERCO",
-            "SITE ACQUIRED FORECAST",
-            "SITE DATE ACQUIRED",
-            "ESTIMATED RFI DATE",
+            // "SITE ACQUIRED FORECAST",
+            // "SITE DATE ACQUIRED",
+            // "ESTIMATED RFI DATE",
             "PROJECT TAG",
             "MILESTONE STATUS",
             "PROVINCE",
@@ -38,7 +54,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "FOC/ MW TAGGING",
             "Wind Speed",
             "OFF-GRID/GOOD GRID",
-            "BATCH",
+            // "BATCH",
             "Tower Co TSSR Submission Date to GT",
             "TSSR STATUS",
             "TSSR APPROVED DATE",
@@ -46,7 +62,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "CW START DATE",
             "CW COMPLETED DATE",
             "RFI DATE SUBMITTED",
-            "RFI DATE APPROVED (TEMPO POWER)",
+            // "RFI DATE APPROVED (TEMPO POWER)",
             "RFI DATE APPROVED (PERMANENT POWER)",
             "PRIO",
             "LOT SIZE (sq-m)",
@@ -56,13 +72,12 @@ class TowerCoExport implements FromCollection, WithHeadings
             "LEASE AMOUNT",
             "LEASE ESCALATION",
             "LEASE TERM",
-            "BASE LEASE FEE",
-            "ESCALATION",
-            "COMMENCEMENT",
+            // "BASE LEASE FEE",
+            // "ESCALATION",
+            // "COMMENCEMENT",
             "REMARKS"
         );
 
-        
         if (\Auth::user()->profile_id == 21) {
             $user_detail = \Auth::user()->getUserDetail()->first();
             $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
@@ -80,12 +95,12 @@ class TowerCoExport implements FromCollection, WithHeadings
             "Search Ring",
             "REGION",
             "TOWERCO",
-            "DATE ENDORSED BY RAM",
+            // "DATE ENDORSED BY RAM",
             "MLA COMPLETION DATE",
             "DATE ACCEPTED BY TOWERCO",
-            "SITE ACQUIRED FORECAST",
-            "SITE DATE ACQUIRED",
-            "ESTIMATED RFI DATE",
+            // "SITE ACQUIRED FORECAST",
+            // "SITE DATE ACQUIRED",
+            // "ESTIMATED RFI DATE",
             "PROJECT TAG",
             "MILESTONE STATUS",
             "PROVINCE",
@@ -97,7 +112,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "FOC/ MW TAGGING",
             "Wind Speed",
             "OFF-GRID/GOOD GRID",
-            "BATCH",
+            // "BATCH",
             "Tower Co TSSR Submission Date to GT",
             "TSSR STATUS",
             "TSSR APPROVED DATE",
@@ -105,7 +120,7 @@ class TowerCoExport implements FromCollection, WithHeadings
             "CW START DATE",
             "CW COMPLETED DATE",
             "RFI DATE SUBMITTED",
-            "RFI DATE APPROVED (TEMPO POWER)",
+            // "RFI DATE APPROVED (TEMPO POWER)",
             "RFI DATE APPROVED (PERMANENT POWER)",
             "PRIO",
             "LOT SIZE (sq-m)",
@@ -115,9 +130,9 @@ class TowerCoExport implements FromCollection, WithHeadings
             "LEASE AMOUNT",
             "LEASE ESCALATION",
             "LEASE TERM",
-            "BASE LEASE FEE",
-            "ESCALATION",
-            "COMMENCEMENT",
+            // "BASE LEASE FEE",
+            // "ESCALATION",
+            // "COMMENCEMENT",
             "REMARKS"
         ];
     }

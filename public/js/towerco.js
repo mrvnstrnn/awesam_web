@@ -424,6 +424,9 @@ $(document).ready(() => {
     });
 
     $(document).on('click', '.actor_update', function(){
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
         $.ajax({
             url: '/save-towerco',
             method: 'POST',
@@ -439,6 +442,8 @@ $(document).ready(() => {
                 
                 $("#towerco-table").DataTable().ajax.reload();
 
+                $(".actor_update").removeAttr("disabled");
+                $(".actor_update").text("Update");
 
             }
         });
