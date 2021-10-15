@@ -13,8 +13,8 @@
 //     ->get();
 
 $activities = \DB::connection('mysql2')
-                    ->table('view_sites_activity_3')
-                    ->select('sam_id', 'site_name', 'site_address', 'site_category', 'activity_id', 'activity_name', 'start_date', 'end_date', 'program_id', 'profile_id')
+                    ->table('view_sites_activity_2')
+                    ->select('sam_id', 'site_name', 'site_address', 'site_category', 'activity_id', 'activity_name', 'start_date', 'end_date', 'program_id', 'profile_id', 'activity_complete')
                     ->whereJsonContains('site_agent', [
                         'user_id' => \Auth::id()
                     ])

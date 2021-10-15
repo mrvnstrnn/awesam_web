@@ -39,7 +39,7 @@
                          },
               
                         success: function (resp){
-                            $('.ajax_content_box').html("");   
+                            $('.ajax_content_box').html("");
                             $('.ajax_content_box').html(resp);
     
                             $.unblockUI();

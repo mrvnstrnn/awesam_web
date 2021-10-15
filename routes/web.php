@@ -401,6 +401,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-program-fields/{sam_id}/{program}', [GlobeController::class, 'get_program_fields']);
 
 
+    // View PR Memo Sites
+    Route::get('/get-site-memo/{value}', [GlobeController::class, 'get_site_memo']);
+
+    // AEPM
+    Route::post('/set-schedule', [GlobeController::class, 'set_schedule']);
+    Route::get('/get-site-candidate/{sam_id}', [GlobeController::class, 'get_site_candidate']);
+
 });
     
 

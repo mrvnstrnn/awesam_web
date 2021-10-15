@@ -153,55 +153,55 @@
                         {{-- NEW SITES PR/PO COUNTER  --}}
                         @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("New CLP", "PR Memo for Approval", "PR Issuance", "Vendor Awarding")))
                             <div class="row mb-3 pb-3 text-center border-bottom">
-                                <div class="col-md-7 col-12">
+                                <div class="col-md-5 col-12">
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title pr_memo_creation_count">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">PR Memo Creation</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="PR Memo Creation">PR Memo Creation</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title ram_head_approval_count">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">RAM Head Approval</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="RAM Head Approval">RAM Head Approval</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-4 col-xs-4 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title nam_approval_count">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">NAM Approval</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="NAM Approval">NAM Approval</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-5 col-12">
+                                <div class="col-md-7 col-12">
                                     <div class="row">
-                                        <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title arriba_pr_no_issuance_number">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Arriba PR # Issuance</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Arriba PR No Issuance">Arriba PR # Issuance</h6>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title vendor_awarding_count">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Vendor Awarding</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Vendor Awarding">Vendor Awarding</h6>
                                             </div>
                                         </div>
-                                        {{-- <div class="col-md-3 col-sm-3 col-12 mt-2">
+                                        <div class="col-md-3 col-sm-3 col-12 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title completed_count">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Completed</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Completed">Completed</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-sm-3 col-12 mt-2">
                                             <div>
                                                 <h1 class="menu-header-title total_sites">0</h1>
-                                                <h6 class="menu-header-subtitle" style="font-size: 12px;">Total Sites</h6>
+                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Total Sites">Total Sites</h6>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -291,9 +291,3 @@
 
     </div>
 </div>
-
-<script>
-
-
-</script>
-
