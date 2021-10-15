@@ -111,6 +111,7 @@ $(document).ready(() => {
 
     $('.update-button').on('click', function(e){
 
+
         var table = $('#towerco-table').DataTable();
         
         e.preventDefault();
