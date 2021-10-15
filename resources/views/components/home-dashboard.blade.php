@@ -47,7 +47,7 @@
   
           @elseif($program->program_id == 1)
 
-            @include("profiles.globe.dashboards.newsites-milestones")
+            <x-newsites-dashbaord />
 
           @elseif($program->program_id == 7)
   
