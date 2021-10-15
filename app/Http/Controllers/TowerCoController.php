@@ -568,9 +568,9 @@ class TowerCoController extends Controller
 
 
             // return response()->json(['error' => true, 'message' => $request['Serial_Number']]);
-            \DB::enableQueryLog(); // Enable query log
+            \DB::connection('mysql2')->enableQueryLog(); // Enable query log
 
-            \DB::table('towerco')
+            \DB::connection('mysql2')->table('towerco')
                 ->where('Serial Number', $request['Serial_Number'])
                 ->update(array_filter($data));
 
@@ -599,9 +599,9 @@ class TowerCoController extends Controller
             unset($data['Serial Number']);
 
 
-            \DB::enableQueryLog(); // Enable query log
+            \DB::connection('mysql2')->enableQueryLog(); // Enable query log
 
-            \DB::table('towerco')
+            \DB::connection('mysql2')->table('towerco')
                 ->whereIn('Serial Number', $request['Serial_Number'])
                 ->update(array_filter($data));
 
