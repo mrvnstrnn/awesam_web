@@ -207,7 +207,7 @@
                             </div>
 
                         {{-- NEW SITES  JTSS  COUNTER  --}}
-                        @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("Site Hunting", "JTSS Schedule", "SSDS")))
+                        @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("Site Hunting", "Joint Technical Site Survey", "SSDS")))
                             <div class="row mb-3 pb-3 text-center border-bottom">
                                 <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
                                     <div>
