@@ -750,7 +750,7 @@
 
         $(".cancel_reject").on("click", function (e) {
             $(".aepm_table_div").removeClass("d-none");
-            $(".addClass").removeClass("d-none");
+            $(".form_data").removeClass("d-none");
             $(".button_area").removeClass("d-none");
             $(".reject_remarks").addClass("d-none");
         });

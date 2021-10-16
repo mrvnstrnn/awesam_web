@@ -173,10 +173,15 @@ class GlobeController extends Controller
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     }
 
-                    // $data = 
+                    $data = SubActivityValue::where('type', 'jtss_add_site')
+                                            ->where('sam_id', $request->input('sam_id'))
+                                            ->update([
+                                                'status' => 'pending',
+                                            ]);
 
                     SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('status', 'pending')
+                                        ->where('sam_id', $request->input('sam_id'))
                                         ->update([
                                             'reason' => $request->input('remarks'),
                                             'approver_id' => \Auth::id(),
@@ -4811,7 +4816,8 @@ class GlobeController extends Controller
             $datas = SubActivityValue::where('sam_id', $sam_id);
 
             if ($status == "jtss_schedule_site") {
-                $datas->where('type', 'jtss_schedule_site');
+                $datas->where('type', 'jtss_schedule_site')
+                        ->where('status', 'pending');
             } else if ( $status == 'rejected_schedule' ) {
                 $datas->where('type', 'jtss_schedule_site')
                         ->where('status', 'rejected');
@@ -4883,7 +4889,7 @@ class GlobeController extends Controller
                     }
                 });
 
-                if ($status == "jtss_schedule_site") {
+                if ($status == "jtss_schedule_site" || $status == "rejected_schedule") {
                     $dt->addColumn('schedule', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
@@ -5005,6 +5011,7 @@ class GlobeController extends Controller
         try {
             $datas = SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('value->id', $id)
+                                        ->where('status', 'pending')
                                         ->first();
 
             if ( is_null($datas) ) {

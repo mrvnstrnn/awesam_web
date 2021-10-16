@@ -543,7 +543,7 @@
                                                                             {{-- <th>Latitude</th>
                                                                             <th>Longitude</th> --}}
                                                                             <th>Distance</th>
-                                                                            <th>Status</th>
+                                                                            <th>Schedule</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -698,21 +698,6 @@
             }
         });
 
-        $(".show_details").on("click", function (){
-            // $(".form_div").removeClass("d-none");
-            // $(".set_schedule_form").addClass("d-none");
-        });
-
-        $(".hide_details").on("click", function (){
-            // $(".form_div").addClass("d-none");
-            // $(".set_schedule_form").removeClass("d-none");
-        });
-
-        $(".back_to_table").on("click", function (){
-            // $(".form_data").addClass("d-none");
-            // $(".aepm_table_div").removeClass("d-none");
-        });
-
         $(".set_schedule").on("click", function (e){
             e.preventDefault();
             var id = $(this).attr('data-id');
@@ -747,6 +732,8 @@
                                 resp.message,
                                 'success'
                             )
+
+                            $(".form_data").removeClass("d-none");
 
                             $(".confirm_schedule").removeClass("d-none");
                             $(".set_schedule").removeAttr("disabled");
