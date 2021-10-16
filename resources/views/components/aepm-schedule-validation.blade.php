@@ -598,9 +598,6 @@
 
             }
 
-
-
-// <<<<<<< HEAD
             $(".set_schedule").attr("data-id", id);
 
             $.ajax({
@@ -615,6 +612,10 @@
                         } else {
                             $("#jtss_schedule").val("");
                         }
+
+                        $.each(json, function(index, data) {
+                            $("#"+index).val(data);
+                        });
                     } else {
                         Swal.fire(
                             'Error',
@@ -632,8 +633,6 @@
                     )
                 },
             });
-// =======
-// >>>>>>> d0fafb79b696ba54a85d414812b576183a968106
         });
 
         $(".show_details").on("click", function (){
