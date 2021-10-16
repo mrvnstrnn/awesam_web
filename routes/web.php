@@ -406,7 +406,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // AEPM
     Route::post('/set-schedule', [GlobeController::class, 'set_schedule']);
-    Route::get('/get-site-candidate/{sam_id}', [GlobeController::class, 'get_site_candidate']);
+    Route::get('/get-site-candidate/{sam_id}/{status}', [GlobeController::class, 'get_site_candidate']);
     Route::get('/get-jtss-schedule/{id}', [GlobeController::class, 'get_jtss_schedule']);
 
 });

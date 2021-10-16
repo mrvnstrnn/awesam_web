@@ -23,22 +23,13 @@
                                 </div>
                             </div>
                         </div> 
-                        @php
-                            $sites = \DB::connection('mysql2')
-                                                ->table("view_newsites_jtss_schedule_requests_candidate_list")
-                                                ->where("sam_id", $sam_id)
-                                                ->get();
-                        @endphp
 
-                        <input type="hidden" id="markers" value="{{ $sites->toJson() }}" />
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
                                     <H5 id="active_action">{{ $activity }}</H5>
                                 </div>
                             </div>
-
-
 
                             <div class="row pb-3 border-bottom">
                                 <div class="col-12">
@@ -62,7 +53,6 @@
                                             </thead>
                                         </table>
                                     </div>
-
                                     <div class="form_data d-none">
                                         <div class="row form_div border-bottom pt-3 pb-2">
                                             <div class="col-12">
@@ -77,6 +67,11 @@
                                                             <span>Details</span>
                                                         </a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-c-2" data-toggle="tab" href="#tab-animated-2" aria-selected="false">
+                                                            <span>History</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
@@ -85,29 +80,18 @@
                                                             <div class="col-12">
                                                                 <div id="datepicker"></div>
                                                             </div>
-
-                                                            {{-- <div class="col-md-6 col-12">
-                                                                <form class="set_schedule_form">
-                                                                    <div class="form-row">
-                                                                        <label for="jtts_schedule">JTSS Schedule</label>
-                                                                    </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <form class="set_schedule_form form-inline">
                                                                     <div class="position-relative form-group">
-                                                                        <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule" readonly>
+                                                                        <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule">
                                                                         <small class="text-danger jtss_schedule-error"></small>
                                                                     </div>
+                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
                                                                 </form>
-                                                                <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
-                                                            </div> --}}
+                                                            </div>
                                                         </div>
-                                                        {{-- <div class="position-relative row form-group  pt-3">
-                                                            <form class="set_schedule_form form-inline">
-                                                                <div class="position-relative form-group">
-                                                                    <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule">
-                                                                    <small class="text-danger jtss_schedule-error"></small>
-                                                                </div>
-                                                                <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
-                                                            </form>
-                                                        </div> --}}
                                                     </div>
                                                     <div class="tab-pane" id="tab-animated-1" role="tabpanel">
                                                         <form class="ssds_form pt-3">
@@ -547,6 +531,25 @@
                                                             </div>            
                                                         </form>               
                                                     </div>
+                                                    <div class="tab-pane" id="tab-animated-2" role="tabpanel">
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <table class="table table-hover table-inverse" id="aepm_rejected_table">
+                                                                    <thead class="thead-inverse">
+                                                                        <tr>
+                                                                            <th>Lessor</th>
+                                                                            {{-- <th>Address</th> --}}
+                                                                            {{-- <th>Latitude</th>
+                                                                            <th>Longitude</th> --}}
+                                                                            <th>Distance</th>
+                                                                            <th>Status</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>                                                
                                             </div>
                                         </div>
@@ -565,17 +568,12 @@
 <script>
     $(document).ready(function() {
 
-        $("#datepicker").fullCalendar({
-          header: {
-            left: "prev,next today",
-            center: "title",
-            right: "month,agendaWeek,listMonth",
-          },
-          themeSystem: "bootstrap4",
-          bootstrapFontAwesome: true,
-          defaultDate: new Date(),
-          navLinks: true,
-          displayEventTime: false,
+        $("#datepicker").datepicker({
+            minDate : 0
+        });
+        $("#datepicker").on("change",function(){
+            var selected = $(this).val();
+            $("#jtss_schedule").val(selected);
         });
 
         $('#aepm_table').DataTable({
@@ -584,7 +582,7 @@
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}",
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/pending",
                 type: 'GET'
             },
             dataSrc: function(json){
@@ -605,14 +603,42 @@
             ],
         });
 
+        $("#tab-c-2").on("click", function (e) {
+            e.preventDefault();
 
-        $(".flatpicker").flatpickr();
+            if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
 
-        $("input[name=jtss_schedule]").flatpickr(
-            { 
-            minDate: new Date()
+                $('#aepm_rejected_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    select: true,
+                    order: [ 1, "asc" ],
+                    ajax: {
+                        url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected",
+                        type: 'GET'
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    'createdRow': function( row, data, dataIndex ) {
+                        $(row).attr('data-id', data.id);
+                        $(row).addClass('add_schedule');
+                        $(row).attr('style', 'cursor: pointer;');
+                    },
+                    columns: [
+                        { data: "lessor" },
+                        // { data: "address" },
+                        // { data: "latitude" },
+                        // { data: "longitude" },
+                        { data: "distance", className: "text-center" },
+                        { data: "status", className: "text-right" },
+                    ],
+                });
+
+            } else {
+                $('#aepm_rejected_table').DataTable().ajax.reload();
             }
-        );
+        });
 
         $("#aepm_table").on("click", "tr", function(e){
             e.preventDefault();
@@ -629,16 +655,11 @@
             }
 
             if($('#aepm_table tbody tr.selected').length > 0){
-    
                 var id = $(this).attr('data-id');
                 $(".set_schedule").attr("data-id", id);
-
                 $(".form_data").removeClass("d-none");
-
             } else {
-
                 $(".form_data").addClass("d-none");
-
             }
 
             $(".set_schedule").attr("data-id", id);
@@ -648,9 +669,8 @@
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
-                        if (resp.message != null) {
                             var json = JSON.parse(resp.message.value);
-                        
+                        if (resp.message != null) {
                             $("#jtss_schedule").val(json.jtss_schedule);
                         } else {
                             $("#jtss_schedule").val("");

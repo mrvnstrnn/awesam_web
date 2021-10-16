@@ -161,6 +161,17 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
+            }
+            else if ($request->input('activity_name') == "JTSS Sched Confirmation") {
+
+                $notification = "Successfully " .$message. " schedule.";
+                $vendor = $request->input('vendor');
+                $action = $request->input('data_complete');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+                $site_category = $request->input('site_category');
+
             } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation" || $request->input('activity_name') == "Add Site Candidates") {
 
                 $notification = "Successfully mark this site as completed.";
@@ -497,13 +508,13 @@ class GlobeController extends Controller
 
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
 
-                return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
+                return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
             } else {
 
                 // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
 
-                return response()->json(['error' => false, 'message' => "Successfuly assigned agent."]);
+                return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -2394,7 +2405,7 @@ class GlobeController extends Controller
         }
         elseif($sub_activity == 'JTSS Sched Confirmation'){
 
-            $what_component = "components.subactivity-lessor-engagement";
+            $what_component = "components.jtss-sched-confirmation";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -4773,12 +4784,24 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_site_candidate ($sam_id)
+    public function get_site_candidate ($sam_id, $status)
     {
         try {
-            $datas = SubActivityValue::where('sam_id', $sam_id)
-                                                ->where('type', 'jtss_add_site')
-                                                ->get();
+            $datas = SubActivityValue::where('sam_id', $sam_id);
+
+            if ($status = "jtss_schedule_site") {
+                $datas->where('type', 'jtss_schedule_site');
+            } else if ( $status == 'rejected_schedule' ) {
+                $datas->where('type', 'jtss_schedule_site')
+                        ->where('status', 'rejected');
+            } else if ( $status == 'rejected' ) {
+                $datas->where('type', 'jtss_add_site')
+                        ->where('status', $status);
+            } else {
+                $datas->where('type', 'jtss_add_site');
+            }
+            
+            $datas->get();
 
             $dt = DataTables::of($datas)
                 ->addColumn('lessor', function($row){
@@ -4838,6 +4861,19 @@ class GlobeController extends Controller
                         return '<span class="badge badge-success">Scheduled</span>';
                     }
                 });
+
+                if ($status = "jtss_schedule_site") {
+                    $dt->addColumn('schedule', function($row){
+                        json_decode($row->value);
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+    
+                            return $json['jtss_schedule'] . "";
+                        } else {
+                            return $row->value;
+                        }
+                    });
+                }
                                 
             $dt->rawColumns(['status']);
             return $dt->make(true);
@@ -4949,6 +4985,12 @@ class GlobeController extends Controller
             $datas = SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('value->id', $id)
                                         ->first();
+
+            if ( is_null($datas) ) {
+
+                $datas = SubActivityValue::where('id', $id)
+                                            ->first();
+            }
 
             return response()->json(['error' => false, 'message' => $datas]);
         } catch (\Throwable $th) {

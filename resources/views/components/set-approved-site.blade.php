@@ -239,20 +239,11 @@ $("#btn_approve_ssds").on("click", function () {
     var vendor_id = $("#modal_site_vendor_id").val();
     var program_id = $("#modal_program_id").val();
     var activity_name = $(".ajax_content_box").attr("data-activity");
-    // var sam_id = $(".ajax_content_box").attr("data-sam_id");
 
     var activity_id = "{{ $activity_id }}";
     var sam_id = "{{ $sam_id }}";
     var site_category = "{{ $site_category }}";
     var sub_activity = "{{ $sub_activity }}";
-
-    // 'sub_activity' => $sub_activity,
-    // 'sam_id' => $sam_id,
-    // 'sub_activity_id' => $sub_activity_id,
-    // 'program_id' => $program_id,
-    // 'site_category' => $site_category,
-    // 'activity_id' => $activity_id,
-    // 'check_if_added' => $jtss_add_site,
 
     $.ajax({
         url: "/set-approve-site",
@@ -261,7 +252,6 @@ $("#btn_approve_ssds").on("click", function () {
             id : id,
             vendor_id : vendor_id,
             program_id : program_id,
-            // activity_name : activity_name,
             activity_name : sub_activity,
             sam_id : sam_id,
             activity_id : activity_id,
