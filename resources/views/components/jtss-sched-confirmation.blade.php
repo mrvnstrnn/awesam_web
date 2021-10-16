@@ -504,13 +504,32 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row reject_remarks d-none">
+                <div class="col-12">
+                    <p class="message_p">Are you sure you want to reject this schedule <b></b>?</p>
+                    <form class="reject_form">
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                            <small class="text-danger remarks-error"></small>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm btn-shadow approve_reject_sched" id="reject_btn" data-action="false" type="button">Reject</button>
+                            
+                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="row">
+    <div class="row button_area">
         <div class="col-12">
-            <button class="btn btn-sm btn-shadow btn-primary pull-right approve_reject_sched" id="approve_btn" data-action="true">Approve</button>
-            <button class="btn btn-sm btn-shadow btn-danger mr-1 pull-right approve_reject_sched" id="reject_btn" data-action="false">Reject</button>
+            <button class="btn btn-sm btn-shadow btn-primary pull-right approve_reject_sched" id="approve_btn" data-action="true" type="button">Approve</button>
+            <button class="btn btn-sm btn-shadow btn-danger mr-1 pull-right approve_reject_sched_confirm" id="reject_btn" data-action="false" type="button">Reject</button>
         </div>
     </div>
 </div>
@@ -648,31 +667,44 @@
 
             var data_action = $(this).attr("data-action");
 
-            if (data_action == "true") {
-                var btn_text = "Approve";
-                var id = "#approve_btn";
-            } else {
-                var btn_text = "Reject";
-                var id = "#reject_btn";
-            }
-
             var activity_id = ["{{ $activity_id }}"];
             var sam_id = ["{{ $sam_id }}"];
             var site_category = ["{{ $site_category }}"];
             var sub_activity = "{{ $sub_activity }}";
             var program_id = "{{ $program_id }}";
 
-            $.ajax({
-                url: "/accept-reject-endorsement",
-                method: "POST",
-                data: {
+            if (data_action == "true") {
+                var btn_text = "Approve";
+                var id = "#approve_btn";
+
+                var data = {
+                    program_id : program_id,
+                    activity_name : sub_activity,
+                    sam_id : sam_id,
+                    activity_id : activity_id,
+                    site_category : site_category,
+                    data_complete : data_action
+                }
+            } else {
+                var btn_text = "Confirm";
+                var id = "#reject_btn";
+                var remarks = $("#remarks").val();
+
+                var data = {
                     program_id : program_id,
                     activity_name : sub_activity,
                     sam_id : sam_id,
                     activity_id : activity_id,
                     site_category : site_category,
                     data_complete : data_action,
-                },
+                    remarks : remarks,
+                }
+            }
+
+            $.ajax({
+                url: "/accept-reject-endorsement",
+                method: "POST",
+                data: data,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -707,6 +739,20 @@
                     $(id).text(btn_text);
                 }
             });
+        });
+
+        $(".approve_reject_sched_confirm").on("click", function (e) {
+            $(".aepm_table_div").addClass("d-none");
+            $(".form_data").addClass("d-none");
+            $(".button_area").addClass("d-none");
+            $(".reject_remarks").removeClass("d-none");
+        });
+
+        $(".cancel_reject").on("click", function (e) {
+            $(".aepm_table_div").removeClass("d-none");
+            $(".addClass").removeClass("d-none");
+            $(".button_area").removeClass("d-none");
+            $(".reject_remarks").addClass("d-none");
         });
     });
 </script>

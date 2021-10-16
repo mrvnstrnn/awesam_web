@@ -164,6 +164,25 @@ class GlobeController extends Controller
             }
             else if ($request->input('activity_name') == "JTSS Sched Confirmation") {
 
+                if ($request->input('data_complete') == "false") {
+                    $validate = Validator::make($request->all(), array(
+                        'remarks' => 'required',
+                    ));
+    
+                    if (!$validate->passes()) {
+                        return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    }
+
+                    SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('status', 'pending')
+                                        ->update([
+                                            'reason' => $request->input('remarks'),
+                                            'approver_id' => \Auth::id(),
+                                            'status' => 'rejected',
+                                            'date_approved' => Carbon::now()->toDate(),
+                                        ]);
+                }
+
                 $notification = "Successfully " .$message. " schedule.";
                 $vendor = $request->input('vendor');
                 $action = $request->input('data_complete');
