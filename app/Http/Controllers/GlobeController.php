@@ -4833,7 +4833,7 @@ class GlobeController extends Controller
                 })
                 ->addColumn('status', function($row){
                     if ($row->status == 'pending') {
-                        return '<span class="badge badge-secondary">No schedule yet</span>';
+                        return '<span class="badge badge-secondary">Not Yet Scheduled</span>';
                     } else {
                         return '<span class="badge badge-success">Scheduled</span>';
                     }
