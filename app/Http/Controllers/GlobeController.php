@@ -173,6 +173,8 @@ class GlobeController extends Controller
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     }
 
+                    // $data = 
+
                     SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('status', 'pending')
                                         ->update([
