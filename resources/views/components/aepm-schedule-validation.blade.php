@@ -39,8 +39,8 @@
 
                             <div class="row p-3">
                                 <div class="col-12">
-                                    <div class="table-responsive pr_memo_table_div">
-                                        <table class="table table-hover table-inverse" id="pr_memo_table">
+                                    <div class="table-responsive aepm_table_div">
+                                        <table class="table table-hover table-inverse" id="aepm_table">
                                             <thead class="thead-inverse">
                                                 <tr>
                                                     <th>Lessor</th>
@@ -53,7 +53,6 @@
                                             </thead>
                                         </table>
                                     </div>
-
                                     <div class="form_data d-none">
                                         <div class="row form_div border-bottom pt-3 pb-2">
                                             <div class="col-12">
@@ -71,7 +70,7 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                                                        <div class="position-relative row form-group  pt-3">
+                                                        {{-- <div class="position-relative row form-group  pt-3">
                                                             <form class="set_schedule_form form-inline">
                                                                 <div class="position-relative form-group">
                                                                     <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule">
@@ -79,10 +78,10 @@
                                                                 </div>
                                                                 <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
                                                             </form>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                     <div class="tab-pane" id="tab-animated-1" role="tabpanel">
-                                                        <form class="ssds_form">
+                                                        <form class="ssds_form pt-3">
                                                             <div id="accordion" class="accordion-wrapper mb-3">
                                                                 <div class="card">
                                                                     <div id="headingOne" class="card-header">
@@ -536,7 +535,8 @@
 
 <script>
     $(document).ready(function() {
-        $('#pr_memo_table').DataTable({
+
+        $('#aepm_table').DataTable({
             processing: true,
             serverSide: true,
             select: true,
@@ -558,10 +558,11 @@
                 // { data: "address" },
                 // { data: "latitude" },
                 // { data: "longitude" },
-                { data: "distance" },
-                { data: "status" },
+                { data: "distance", className: "text-center" },
+                { data: "status", className: "text-right" },
             ],
         });
+
 
         $(".flatpicker").flatpickr();
 
@@ -571,21 +572,21 @@
             }
         );
 
-        $("#pr_memo_table").on("click", "tr", function(e){
+        $("#aepm_table").on("click", "tr", function(e){
             e.preventDefault();
-            // $(".pr_memo_table_div").addClass("d-none");
+            // $(".aepm_table_div").addClass("d-none");
 
             // $(".form_data").removeClass("d-none");
 
 
             if($(this).hasClass('selected') != true){
-                $("#pr_memo_table tbody tr").removeClass('selected');
+                $("#aepm_table tbody tr").removeClass('selected');
                 $(this).addClass('selected');
             } else {
                 $(this).removeClass('selected');
             }
 
-            if($('#pr_memo_table tbody tr.selected').length > 0){
+            if($('#aepm_table tbody tr.selected').length > 0){
     
                 var id = $(this).attr('data-id');
                 $(".set_schedule").attr("data-id", id);
@@ -647,7 +648,7 @@
 
         $(".back_to_table").on("click", function (){
             // $(".form_data").addClass("d-none");
-            // $(".pr_memo_table_div").removeClass("d-none");
+            // $(".aepm_table_div").removeClass("d-none");
         });
 
         $(".set_schedule").on("click", function (e){
@@ -674,7 +675,7 @@
                 success: function (resp) {
                     if (!resp.error) {
 
-                        $("#pr_memo_table").DataTable().ajax.reload(function () {
+                        $("#aepm_table").DataTable().ajax.reload(function () {
                             $(".back_to_table").trigger("click");
 
                             $("#jtss_schedule").val("");
