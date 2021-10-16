@@ -72,12 +72,11 @@
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
                                                         <hr>
                                                         <div class="row">
-                                                            <div class="col-md-6 col-12">
-                                                                <label for="datepicker">Please select a date</label>
+                                                            <div class="col-12">
                                                                 <div id="datepicker"></div>
                                                             </div>
 
-                                                            <div class="col-md-6 col-12">
+                                                            {{-- <div class="col-md-6 col-12">
                                                                 <form class="set_schedule_form">
                                                                     <div class="form-row">
                                                                         <label for="jtts_schedule">JTSS Schedule</label>
@@ -88,7 +87,7 @@
                                                                     </div>
                                                                 </form>
                                                                 <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                         {{-- <div class="position-relative row form-group  pt-3">
                                                             <form class="set_schedule_form form-inline">
@@ -556,12 +555,17 @@
 <script>
     $(document).ready(function() {
 
-        $("#datepicker").datepicker({
-            minDate : 0
-        });
-        $("#datepicker").on("change",function(){
-            var selected = $(this).val();
-            $("#jtss_schedule").val(selected);
+        $("#datepicker").fullCalendar({
+          header: {
+            left: "prev,next today",
+            center: "title",
+            right: "month,agendaWeek,listMonth",
+          },
+          themeSystem: "bootstrap4",
+          bootstrapFontAwesome: true,
+          defaultDate: new Date(),
+          navLinks: true,
+          displayEventTime: false,
         });
 
         $('#aepm_table').DataTable({
