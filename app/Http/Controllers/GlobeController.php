@@ -2006,21 +2006,21 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'schedule jtss'){
+            // $sites = \DB::connection('mysql2')
+            //                     ->table("site")
+            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
+            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
+            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
+            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
+            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
+            //                     ->where('site.program_id', $program_id)
+            //                     ->where('activities->activity_id', '11')
+            //                     ->where('activities->profile_id', '26')
+            //                     ->get();
+
             $sites = \DB::connection('mysql2')
-                                ->table("site")
-                                ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                ->where('site.program_id', $program_id)
-                                ->where('activities->activity_id', '11')
-                                ->where('activities->profile_id', '26')
-
-                            // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
-                            // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
-                            ->get();
-
+                                ->table("view_newsites_jtss_schedule_requests")
+                                ->get();
         }
 
         elseif($activity_type == 'jtss'){
@@ -2587,23 +2587,14 @@ class GlobeController extends Controller
                 $mainactivity = $request['main_activity'];
             }
 
-            $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                        ->where('status', "pending")
-                                        ->where('type', "rtb_declaration")
-                                        ->first();
 
-            $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
-                                    ->join('users', 'users.id', 'sub_activity_value.user_id')
-                                    ->where('sub_activity_value.sam_id', $request->input('sam_id'))
-                                    // ->where('sub_activity_value.status', "pending")
-                                    ->where('sub_activity_value.type', "create_pr")
-                                    ->first();
-
-            $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                        ->where('type', 'create_pr')
-                                        ->first();
 
             if($request['vendor_mode']){
+
+                $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                ->where('status', "pending")
+                ->where('type', "rtb_declaration")
+                ->first();
 
                 $what_modal = "components.modal-vendor-activity";
                 
@@ -2619,7 +2610,13 @@ class GlobeController extends Controller
                 ->render();
 
             } else {
+
                 if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
+
+                    $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                    ->where('type', 'create_pr')
+                    ->first();
+
                     $what_modal = "components.pr-memo-approval";
 
                     return \View::make($what_modal)
@@ -2659,6 +2656,7 @@ class GlobeController extends Controller
                     ])
                     ->render();
                 }
+
                 else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
 
                     $data = SubActivityValue::where('sam_id', $request['sam_id'])
@@ -2681,9 +2679,9 @@ class GlobeController extends Controller
                     ->render();
 
                 }
+
                 else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
 
-                    
                     $datas = SubActivityValue::select('sam_id')
                                         ->where('sam_id', $request['sam_id'])
                                         ->where('type', 'jtss_add_site')
@@ -2705,7 +2703,26 @@ class GlobeController extends Controller
                     ->render();
 
                 }
+
                 else {
+
+                    $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                    ->where('type', 'create_pr')
+                    ->first();
+
+                    $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
+                    ->join('users', 'users.id', 'sub_activity_value.user_id')
+                    ->where('sub_activity_value.sam_id', $request->input('sam_id'))
+                    // ->where('sub_activity_value.status', "pending")
+                    ->where('sub_activity_value.type', "create_pr")
+                    ->first();
+
+
+                    $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                    ->where('status', "pending")
+                    ->where('type', "rtb_declaration")
+                    ->first();
+
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
                     ->with([
@@ -4809,7 +4826,7 @@ class GlobeController extends Controller
                     if (json_last_error() == JSON_ERROR_NONE){
                         $json = json_decode($row->value, true);
 
-                        return $json['distance_from_nominal_point'] . " meters";
+                        return $json['distance_from_nominal_point'] . "";
                     } else {
                         return $row->value;
                     }

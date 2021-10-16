@@ -500,7 +500,6 @@
                 </div>
             </div>
         </form>
-
     </div>
 </div>
 
@@ -553,7 +552,6 @@ function Go_Add_Site_Details(){
     $( "#lessor" ).focus();
 
 }
-
 
 
 function initMap(markers) {
@@ -698,11 +696,6 @@ function initMap(markers) {
 
 
 }
-
-
-
-
-
 
 </script>
 
