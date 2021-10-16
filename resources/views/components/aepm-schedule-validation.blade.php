@@ -70,6 +70,22 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-12">
+                                                                <div id="datepicker"></div>
+                                                            </div>
+
+                                                            <div class="col-md-6 col-12">
+                                                                <div id="datepicker"></div>
+                                                                <form class="set_schedule_form form-inline">
+                                                                    <div class="position-relative form-group">
+                                                                        <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule">
+                                                                        <small class="text-danger jtss_schedule-error"></small>
+                                                                    </div>
+                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
                                                         {{-- <div class="position-relative row form-group  pt-3">
                                                             <form class="set_schedule_form form-inline">
                                                                 <div class="position-relative form-group">
@@ -535,6 +551,14 @@
 
 <script>
     $(document).ready(function() {
+
+        $("#datepicker").datepicker({
+            minDate : 0
+        });
+        $("#datepicker").on("change",function(){
+            var selected = $(this).val();
+            $("#jtss_schedule").val(selected);
+        });
 
         $('#aepm_table').DataTable({
             processing: true,
