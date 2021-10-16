@@ -206,6 +206,17 @@
 
         return map;
     }
+    
+    function pinSymbol(color) {
+        return {
+            path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
+            fillColor: color,
+            fillOpacity: 1,
+            strokeColor: '#000',
+            strokeWeight: 2,
+            scale: 1
+        };
+    }
 
 </script>
 
@@ -240,12 +251,13 @@
 
         $.each(markers, function (key, marker) {
 
-            nominal_point =  { lat: parseFloat(marker.NP_latitude), lng: parseFloat(marker.NP_longitude)};
 
+            nominal_point = new google.maps.LatLng(parseFloat(marker.NP_latitude),  parseFloat(marker.NP_longitude))
 
-            var marker = new google.maps.Marker({
+            var mark = new google.maps.Marker({
                 position: nominal_point, 
-                label: labels[key++ % labels.length],
+                icon: pinSymbol('red'),
+                label: labels[key++],
                 map: map
             });
 
@@ -263,27 +275,27 @@
 
             if(markers[key-1].sam_region_name == "NCR"){
                 request_NCR_total = request_NCR_total + 1;
-                boundsNCR.extend(marker.position);
+                boundsNCR.extend(mark.position);
             }
             else if(markers[key-1].sam_region_name == "NLZ"){
                 request_NLZ_total = request_NLZ_total + 1;
-                boundsNLZ.extend(marker.position);
+                boundsNLZ.extend(mark.position);
             }
             else if(markers[key-1].sam_region_name == "SLZ"){
                 request_SLZ_total = request_SLZ_total + 1;
-                boundsSLZ.extend(marker.position);
+                boundsSLZ.extend(mark.position);
             }
             else if(markers[key-1].sam_region_name == "VIS"){
                 request_VIS_total = request_VIS_total + 1;
-                boundsVIS.extend(marker.position);
+                boundsVIS.extend(mark.position);
             }
             else if(markers[key-1].sam_region_name == "MIN"){
                 request_MIN_total = request_MIN_total + 1;
-                boundsMIN.extend(marker.position);
+                boundsMIN.extend(mark.position);
             }
 
 
-            google.maps.event.addListener(marker, 'click', (function(marker) {
+            google.maps.event.addListener(mark, 'click', (function(mark) {
                 return function() {
 
                     infowindow.close();
@@ -326,12 +338,12 @@
                         "</div>"
                     );
 
-                    infowindow.open(map, marker);
+                    infowindow.open(map, mark);
                 }
-            })(marker, key));
+            })(mark, key));
 
 
-            bounds.extend(marker.position);
+            bounds.extend(mark.position);
 
 
         });
