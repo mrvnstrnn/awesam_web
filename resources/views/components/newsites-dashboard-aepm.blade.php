@@ -1,23 +1,4 @@
 <div class="row">
-    <div class="col-lg-9 col-md-12 col-sm-12">
-        <div class="main-card mb-3 card">
-            <div class="dropdown-menu-header py-3 bg-warning"   style=" background-image: url('/images/modal-background.jpeg'); background-size:150%;">
-                <div class="row px-4">
-                    <div class="menu-header-content btn-pane-right">
-                        <h6 class="menu-header-title text-dark">
-                            <i class="header-icon pe-7s-graph1 pe-lg mr-1"></i>
-                            JTSS Schedule Requests
-                        </h6>
-                    </div>
-                    <div class="btn-actions-pane-right actions-icon-btn">
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div id="map"></div>
-            </div>
-        </div>
-    </div>
     <div class="col-lg-3 col-md-12 col-sm-12">
         <div class="main-card mb-3 card">
             <div class="dropdown-menu-header py-3 bg-warning"   style=" background-image: url('/images/modal-background.jpeg'); background-size:150%;">
@@ -140,6 +121,25 @@
                 </div>
             </div>
         </div>    
+    </div>
+    <div class="col-lg-9 col-md-12 col-sm-12">
+        <div class="main-card mb-3 card">
+            <div class="dropdown-menu-header py-3 bg-warning"   style=" background-image: url('/images/modal-background.jpeg'); background-size:150%;">
+                <div class="row px-4">
+                    <div class="menu-header-content btn-pane-right">
+                        <h6 class="menu-header-title text-dark">
+                            <i class="header-icon pe-7s-graph1 pe-lg mr-1"></i>
+                            JTSS Schedule Requests
+                        </h6>
+                    </div>
+                    <div class="btn-actions-pane-right actions-icon-btn">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="map"></div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
