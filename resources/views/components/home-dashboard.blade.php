@@ -47,12 +47,8 @@
   
           @elseif($program->program_id == 1)
 
-                @if(\Auth::user()->profile_id = 26)
-                    <x-newsites-dashboard-aepm />
-                @else
-                    <x-newsites-dashboard-globe />
-                @endif
-                
+            <x-newsites-dashboard />
+
           @elseif($program->program_id == 7)
   
               <x-localcoop-dashboard />
