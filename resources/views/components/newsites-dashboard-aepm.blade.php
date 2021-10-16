@@ -162,7 +162,7 @@
     /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      height: 660px;
+      height: 690px;
     }
 
     /* Optional: Makes the sample page fill the window. */
@@ -200,7 +200,7 @@
 
         const map = new google.maps.Map(document.getElementById("map"), {
             center: nominal_point,
-            zoom: 5.9,
+            zoom: 7,
             mapTypeId: "roadmap",
         });
 
@@ -240,11 +240,26 @@
 
         $.each(markers, function (key, marker) {
 
+            nominal_point =  { lat: parseFloat(marker.NP_latitude), lng: parseFloat(marker.NP_longitude)};
+
+
             var marker = new google.maps.Marker({
-                position: { lat: parseFloat(marker.NP_latitude), lng: parseFloat(marker.NP_longitude)}, 
+                position: nominal_point, 
                 label: labels[key++ % labels.length],
                 map: map
             });
+
+            var nominal_point_circle = new google.maps.Circle({
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 1.5,
+                fillColor: "#FF0000",
+                fillOpacity: 0.1,
+                map,
+                center: nominal_point,
+                radius: 300,
+            });
+
 
             if(markers[key-1].sam_region_name == "NCR"){
                 request_NCR_total = request_NCR_total + 1;
@@ -263,7 +278,7 @@
                 boundsVIS.extend(marker.position);
             }
             else if(markers[key-1].sam_region_name == "MIN"){
-                request_NCR_total = request_MIN_total + 1;
+                request_MIN_total = request_MIN_total + 1;
                 boundsMIN.extend(marker.position);
             }
 
@@ -316,12 +331,24 @@
             })(marker, key));
 
 
-
             bounds.extend(marker.position);
 
 
         });
 
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+                zoomChangeBoundsListener = 
+                    google.maps.event.addListener(map, 'bounds_changed', function(event) {
+                        if (this.getZoom() > 15 && this.initialZoom == true) {
+                            // Change max/min zoom here
+                            this.setZoom(17);
+                            this.initialZoom = false;
+                        }
+                    // google.maps.event.removeListener(zoomChangeBoundsListener);
+                });
+        });
+
+        map.initialZoom = true;
         map.fitBounds(bounds);
 
         $("#request_NCR").text(request_NCR_total);
@@ -335,21 +362,27 @@
             infowindow.close();
 
             if($(this).attr("data-region")=="NCR" && $('#request_NCR').text() != '0'){
+                map.initialZoom = true;
                 map.fitBounds(boundsNCR);                
             }
             else if($(this).attr("data-region")=="NLZ" && $('#request_NLZ').text() != '0'){
+                map.initialZoom = true;
                 map.fitBounds(boundsNLZ);                
             }
             else if($(this).attr("data-region")=="SLZ" && $('#request_SLZ').text() != '0'){
+                map.initialZoom = true;
                 map.fitBounds(boundsSLZ);                
             }
             else if($(this).attr("data-region")=="VIS" && $('#request_VIS').text() != '0'){
+                map.initialZoom = true;
                 map.fitBounds(boundsVIS);                
             }
             else if($(this).attr("data-region")=="MIN" && $('#request_MIN').text() != '0'){
+                map.initialZoom = true;
                 map.fitBounds(boundsMIN);                
             } 
             else {
+                map.initialZoom = true;
                 map.fitBounds(bounds);                
             }
 
