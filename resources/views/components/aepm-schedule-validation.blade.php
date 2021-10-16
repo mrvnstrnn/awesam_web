@@ -70,6 +70,26 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-12">
+                                                                <label for="datepicker">Please select a date</label>
+                                                                <div id="datepicker"></div>
+                                                            </div>
+
+                                                            <div class="col-md-6 col-12">
+                                                                <form class="set_schedule_form">
+                                                                    <div class="form-row">
+                                                                        <label for="jtts_schedule">JTSS Schedule</label>
+                                                                    </div>
+                                                                    <div class="position-relative form-group">
+                                                                        <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule" readonly>
+                                                                        <small class="text-danger jtss_schedule-error"></small>
+                                                                    </div>
+                                                                </form>
+                                                                <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
+                                                            </div>
+                                                        </div>
                                                         {{-- <div class="position-relative row form-group  pt-3">
                                                             <form class="set_schedule_form form-inline">
                                                                 <div class="position-relative form-group">
@@ -536,6 +556,14 @@
 <script>
     $(document).ready(function() {
 
+        $("#datepicker").datepicker({
+            minDate : 0
+        });
+        $("#datepicker").on("change",function(){
+            var selected = $(this).val();
+            $("#jtss_schedule").val(selected);
+        });
+
         $('#aepm_table').DataTable({
             processing: true,
             serverSide: true,
@@ -599,8 +627,41 @@
 
             }
 
+            $(".set_schedule").attr("data-id", id);
 
+            $.ajax({
+                url: "/get-jtss-schedule/" + id,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        if (resp.message != null) {
+                            var json = JSON.parse(resp.message.value);
+                        
+                            $("#jtss_schedule").val(json.jtss_schedule);
+                        } else {
+                            $("#jtss_schedule").val("");
+                        }
 
+                        $.each(json, function(index, data) {
+                            $("#"+index).val(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
         });
 
         $(".show_details").on("click", function (){
@@ -646,6 +707,12 @@
                             $(".back_to_table").trigger("click");
 
                             $("#jtss_schedule").val("");
+
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
 
                             $(".confirm_schedule").removeClass("d-none");
                             $(".set_schedule").removeAttr("disabled");
