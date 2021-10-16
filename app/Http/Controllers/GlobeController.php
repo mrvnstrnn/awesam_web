@@ -4891,17 +4891,49 @@ class GlobeController extends Controller
                     "distance_from_national_road" => $new_json['distance_from_national_road'],
                     "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
                 ];
-                
-                SubActivityValue::create([
-                    'type' => 'jtss_schedule_site',
-                    'sam_id' => $sub_activity_value->sam_id,
-                    'value' => json_encode($json),
-                    'status' => 'pending',
-                    'user_id' => \Auth::id()
-                ]);
 
-                return response()->json(['error' => false, 'message' => 'Successfully added a schedule to ' .$new_json['lessor'] ]);
+                $check_if_added = SubActivityValue::where('type', 'jtss_schedule_site')
+                                                        ->where('value->id', $request->get('id'))
+                                                        ->get();
+        
+                if ( count($check_if_added) < 1) {
+                    SubActivityValue::create([
+                        'type' => 'jtss_schedule_site',
+                        'sam_id' => $sub_activity_value->sam_id,
+                        'value' => json_encode($json),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id()
+                    ]);
+    
+                    return response()->json(['error' => false, 'message' => 'Successfully added a schedule to ' .$new_json['lessor'] ]);
+                } else {
+                    SubActivityValue::where('type', 'jtss_schedule_site')
+                                    ->where('value->id', $request->get('id'))
+                                    ->update([
+                                        'type' => 'jtss_schedule_site',
+                                        'sam_id' => $sub_activity_value->sam_id,
+                                        'value' => json_encode($json),
+                                        'status' => 'pending',
+                                        'user_id' => \Auth::id()
+                                    ]);
+
+                    return response()->json(['error' => false, 'message' => 'Successfully updated a schedule to ' .$new_json['lessor'] ]);
+                }                        
             }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_jtss_schedule($id)
+    {
+        try {
+            $datas = SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('value->id', $id)
+                                        ->first();
+
+            return response()->json(['error' => false, 'message' => $datas]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

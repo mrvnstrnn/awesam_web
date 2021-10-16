@@ -380,29 +380,35 @@
 
             $(".set_schedule").attr("data-id", id);
 
-            // $.ajax({
-            //     url: "",
-            //     method: "GET",
-            //     success: function (resp) {
-            //         if (!resp.error) {
-
-            //         } else {
-            //             Swal.fire(
-            //                 'Error',
-            //                 resp.message,
-            //                 'error'
-            //             )
-            //         }
-            //     },
-            //     error: function (resp) {
+            $.ajax({
+                url: "/get-jtss-schedule/" + id,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        if (resp.message != null) {
+                            var json = JSON.parse(resp.message.value);
+                        
+                            $("#jtss_schedule").val(json.jtss_schedule);
+                        } else {
+                            $("#jtss_schedule").val("");
+                        }
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
                     
-            //         Swal.fire(
-            //             'Error',
-            //             resp,
-            //             'error'
-            //         )
-            //     },
-            // });
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
         });
 
         $(".show_details").on("click", function (){
@@ -448,6 +454,12 @@
                             $(".back_to_table").trigger("click");
 
                             $("#jtss_schedule").val("");
+
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
 
                             $(".confirm_schedule").removeClass("d-none");
                             $(".set_schedule").removeAttr("disabled");
