@@ -85,7 +85,7 @@
                                                             <div class="col-12">
                                                                 <form class="set_schedule_form form-inline">
                                                                     <div class="position-relative form-group">
-                                                                        <input type="date" class="flatpicker form-control" name="jtss_schedule" id="jtss_schedule">
+                                                                        <input type="input" class="form-control" name="jtss_schedule" id="jtss_schedule" readonly>
                                                                         <small class="text-danger jtss_schedule-error"></small>
                                                                     </div>
                                                                     <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
@@ -603,43 +603,6 @@
             ],
         });
 
-        $("#tab-c-2").on("click", function (e) {
-            e.preventDefault();
-
-            if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
-
-                $('#aepm_rejected_table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    select: true,
-                    order: [ 1, "asc" ],
-                    ajax: {
-                        url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected",
-                        type: 'GET'
-                    },
-                    dataSrc: function(json){
-                        return json.data;
-                    },
-                    'createdRow': function( row, data, dataIndex ) {
-                        $(row).attr('data-id', data.id);
-                        $(row).addClass('add_schedule');
-                        $(row).attr('style', 'cursor: pointer;');
-                    },
-                    columns: [
-                        { data: "lessor" },
-                        // { data: "address" },
-                        // { data: "latitude" },
-                        // { data: "longitude" },
-                        { data: "distance", className: "text-center" },
-                        { data: "status", className: "text-right" },
-                    ],
-                });
-
-            } else {
-                $('#aepm_rejected_table').DataTable().ajax.reload();
-            }
-        });
-
         $("#aepm_table").on("click", "tr", function(e){
             e.preventDefault();
             // $(".aepm_table_div").addClass("d-none");
@@ -696,6 +659,43 @@
                     )
                 },
             });
+        });
+
+        $("#tab-c-2").on("click", function (e) {
+            e.preventDefault();
+
+            if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
+
+                $('#aepm_rejected_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    select: true,
+                    order: [ 1, "asc" ],
+                    ajax: {
+                        url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected_schedule",
+                        type: 'GET'
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    'createdRow': function( row, data, dataIndex ) {
+                        $(row).attr('data-id', data.id);
+                        $(row).addClass('add_schedule');
+                        $(row).attr('style', 'cursor: pointer;');
+                    },
+                    columns: [
+                        { data: "lessor" },
+                        // { data: "address" },
+                        // { data: "latitude" },
+                        // { data: "longitude" },
+                        { data: "distance", className: "text-center" },
+                        { data: "schedule" },
+                    ],
+                });
+
+            } else {
+                $('#aepm_rejected_table').DataTable().ajax.reload();
+            }
         });
 
         $(".show_details").on("click", function (){

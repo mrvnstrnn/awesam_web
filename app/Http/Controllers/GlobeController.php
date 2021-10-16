@@ -4789,7 +4789,7 @@ class GlobeController extends Controller
         try {
             $datas = SubActivityValue::where('sam_id', $sam_id);
 
-            if ($status = "jtss_schedule_site") {
+            if ($status == "jtss_schedule_site") {
                 $datas->where('type', 'jtss_schedule_site');
             } else if ( $status == 'rejected_schedule' ) {
                 $datas->where('type', 'jtss_schedule_site')
@@ -4862,7 +4862,7 @@ class GlobeController extends Controller
                     }
                 });
 
-                if ($status = "jtss_schedule_site") {
+                if ($status == "jtss_schedule_site") {
                     $dt->addColumn('schedule', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
