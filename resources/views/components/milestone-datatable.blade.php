@@ -215,23 +215,28 @@
                                         <h6 class="menu-header-subtitle" style="font-size: 12px;">Pre-SSDS Pending</h6>
                                     </div>
                                 </div>
-
                                 <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
                                     <div>
-                                        <h1 class="menu-header-title">0 - 0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Advanced Site Hunting</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0 - 0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Joint Technical Site Survey</h6>
+                                        <h1 class="menu-header-title">0</h1>
+                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Site Hunting Scheduling</h6>
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
                                     <div>
                                         <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">SSDS</h6>
+                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Advanced Site Hunting</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                        <h1 class="menu-header-title">0</h1>
+                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">JTSS Scheduling</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
+                                    <div>
+                                        <h1 class="menu-header-title">0</h1>
+                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Joint Technical Site Survey</h6>
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
