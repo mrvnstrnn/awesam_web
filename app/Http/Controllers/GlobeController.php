@@ -123,6 +123,64 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
+                $sub_activity_values = SubActivityValue::where('sam_id', $request->input('sam_id')[0])
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->where('status', 'pending')
+                                                        ->get();
+                
+                foreach ($sub_activity_values as $sub_activity_value) {
+                    $new_json = json_decode($sub_activity_value->value, true);
+                    
+                    $json = [
+                        "id" => $sub_activity_value->id,
+                        "jtss_schedule" => "Not included",
+                        "lessor" => $new_json['lessor'],
+                        "contact_number" => $new_json['contact_number'],
+                        "address" => $new_json['address'],
+                        "region" => $new_json['region'],
+                        "province" => $new_json['province'],
+                        "lgu" => $new_json['lgu'],
+                        "latitude" => $new_json['latitude'],
+                        "longitude" => $new_json['longitude'],
+                        "distance_from_nominal_point" => $new_json['distance_from_nominal_point'],
+                        "site_type" => $new_json['site_type'],
+                        "building_no_of_floors" => $new_json['building_no_of_floors'],
+                        "area_size" => $new_json['area_size'],
+                        "lease_rate" => $new_json['lease_rate'],
+                        "property_use" => $new_json['property_use'],
+                        "right_of_way_access" => $new_json['right_of_way_access'],
+                        "certificate_of_title" => $new_json['certificate_of_title'],
+                        "tax_declaration" => $new_json['tax_declaration'],
+                        "tax_clearance" => $new_json['tax_clearance'],
+                        "mortgaged" => $new_json['mortgaged'],
+                        "tower_structure" => $new_json['tower_structure'],
+                        "tower_height" => $new_json['tower_height'],
+                        "swat_design" => $new_json['swat_design'],
+                        "with_neighbors" => $new_json['with_neighbors'],
+                        "with_history_of_opposition" => $new_json['with_history_of_opposition'],
+                        "with_hoa_restriction" => $new_json['with_hoa_restriction'],
+                        "with_brgy_restriction" => $new_json['with_brgy_restriction'],
+                        "tap_to_lessor" => $new_json['tap_to_lessor'],
+                        "tap_to_neighbor" => $new_json['tap_to_neighbor'],
+                        "distance_to_tapping_point" => $new_json['distance_to_tapping_point'],
+                        "meralco" => $new_json['meralco'],
+                        "localcoop" => $new_json['localcoop'],
+                        "genset_availability" => $new_json['genset_availability'],
+                        "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
+                        "distance_from_creek_river" => $new_json['distance_from_creek_river'],
+                        "distance_from_national_road" => $new_json['distance_from_national_road'],
+                        "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
+                    ];
+
+                    SubActivityValue::create([
+                        'type' => 'jtss_schedule_site',
+                        'sam_id' => $request->input('sam_id')[0],
+                        'value' => json_encode($json),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id()
+                    ]);
+                }
+
             } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation") {
 
                 $notification = "Site successfully " .$message;
@@ -1721,19 +1779,11 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine'){
 
             $sites = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("view_sites_activity_2")
-            ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
-            ->where('program_id', $program_id)
-            ->where('agent_id', \Auth::id())
-            // ->where('activity_complete', 'false')
-            // ->where("site_agent_id", \Auth::id())
-            // ->whereJsonContains("site_agent", [
-            //     'user_id' => \Auth::id()
-            // ])
+            ->table("view_sites_activity_3")
+            ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
+            ->where('view_sites_activity_3.program_id', $program_id)
+            ->where('site_users.agent_id', \Auth::id())
             ->get();
-
-            // return \Auth::user()->profile_id;
         }
 
         elseif($activity_type == 'mine_completed'){
@@ -4889,7 +4939,7 @@ class GlobeController extends Controller
                     }
                 });
 
-                if ($status == "jtss_schedule_site" || $status == "rejected_schedule") {
+                if ($status == "jtss_schedule_site") {
                     $dt->addColumn('schedule', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
@@ -4899,6 +4949,23 @@ class GlobeController extends Controller
                         } else {
                             return $row->value;
                         }
+                    });
+                } else if ($status == "rejected_schedule") {
+                    $dt->addColumn('schedule', function($row){
+                        json_decode($row->value);
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+    
+                            return $json['jtss_schedule'] . "";
+                        } else {
+                            return $row->value;
+                        }
+                    })
+                    ->addColumn('reason', function($row){
+                        return $row->reason;
+                    })
+                    ->addColumn('status', function($row){
+                        return ucfirst($row->status);
                     });
                 }
                                 
@@ -4922,72 +4989,67 @@ class GlobeController extends Controller
             if (!$validate->passes()) {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             } else {
-                $sub_activity_value = SubActivityValue::where('id', $request->get('id'))->first();
+                if ($request->get('data_value') == 'all') {
 
-                SubActivityValue::where('id', $request->get('id'))
-                                ->update([
-                                    'status' => 'Scheduled'
-                                ]);
+                    $sub_activity_values = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                                                ->where('type', 'jtss_add_site')
+                                                                ->get();
 
-                $new_json = json_decode($sub_activity_value->value, true);
-                
-                $json = [
-                    "id" => $sub_activity_value->id,
-                    "jtss_schedule" => $request->get('jtss_schedule'),
-                    "lessor" => $new_json['lessor'],
-                    "contact_number" => $new_json['contact_number'],
-                    "address" => $new_json['address'],
-                    "region" => $new_json['region'],
-                    "province" => $new_json['province'],
-                    "lgu" => $new_json['lgu'],
-                    "latitude" => $new_json['latitude'],
-                    "longitude" => $new_json['longitude'],
-                    "distance_from_nominal_point" => $new_json['distance_from_nominal_point'],
-                    "site_type" => $new_json['site_type'],
-                    "building_no_of_floors" => $new_json['building_no_of_floors'],
-                    "area_size" => $new_json['area_size'],
-                    "lease_rate" => $new_json['lease_rate'],
-                    "property_use" => $new_json['property_use'],
-                    "right_of_way_access" => $new_json['right_of_way_access'],
-                    "certificate_of_title" => $new_json['certificate_of_title'],
-                    "tax_declaration" => $new_json['tax_declaration'],
-                    "tax_clearance" => $new_json['tax_clearance'],
-                    "mortgaged" => $new_json['mortgaged'],
-                    "tower_structure" => $new_json['tower_structure'],
-                    "tower_height" => $new_json['tower_height'],
-                    "swat_design" => $new_json['swat_design'],
-                    "with_neighbors" => $new_json['with_neighbors'],
-                    "with_history_of_opposition" => $new_json['with_history_of_opposition'],
-                    "with_hoa_restriction" => $new_json['with_hoa_restriction'],
-                    "with_brgy_restriction" => $new_json['with_brgy_restriction'],
-                    "tap_to_lessor" => $new_json['tap_to_lessor'],
-                    "tap_to_neighbor" => $new_json['tap_to_neighbor'],
-                    "distance_to_tapping_point" => $new_json['distance_to_tapping_point'],
-                    "meralco" => $new_json['meralco'],
-                    "localcoop" => $new_json['localcoop'],
-                    "genset_availability" => $new_json['genset_availability'],
-                    "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
-                    "distance_from_creek_river" => $new_json['distance_from_creek_river'],
-                    "distance_from_national_road" => $new_json['distance_from_national_road'],
-                    "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
-                ];
-
-                $check_if_added = SubActivityValue::where('type', 'jtss_schedule_site')
-                                                        ->where('value->id', $request->get('id'))
+                    foreach ($sub_activity_values as $sub_activity_value) {
+                        $check_if_added = SubActivityValue::where('value->id', $sub_activity_value->id)
+                                                        ->where('type', 'jtss_schedule_site')
                                                         ->get();
-        
-                if ( count($check_if_added) < 1) {
-                    SubActivityValue::create([
-                        'type' => 'jtss_schedule_site',
-                        'sam_id' => $sub_activity_value->sam_id,
-                        'value' => json_encode($json),
-                        'status' => 'pending',
-                        'user_id' => \Auth::id()
-                    ]);
-    
-                    return response()->json(['error' => false, 'message' => 'Successfully added a schedule to ' .$new_json['lessor'] ]);
-                } else {
-                    SubActivityValue::where('type', 'jtss_schedule_site')
+                                                        
+                        SubActivityValue::where('id', $sub_activity_value->id)
+                            ->update([
+                                'status' => 'Scheduled'
+                            ]);
+
+                        $new_json = json_decode($sub_activity_value->value, true);
+
+                        $json = [
+                            "id" => $sub_activity_value->id,
+                            "jtss_schedule" => $request->get('jtss_schedule'),
+                            "lessor" => $new_json['lessor'],
+                            "contact_number" => $new_json['contact_number'],
+                            "address" => $new_json['address'],
+                            "region" => $new_json['region'],
+                            "province" => $new_json['province'],
+                            "lgu" => $new_json['lgu'],
+                            "latitude" => $new_json['latitude'],
+                            "longitude" => $new_json['longitude'],
+                            "distance_from_nominal_point" => $new_json['distance_from_nominal_point'],
+                            "site_type" => $new_json['site_type'],
+                            "building_no_of_floors" => $new_json['building_no_of_floors'],
+                            "area_size" => $new_json['area_size'],
+                            "lease_rate" => $new_json['lease_rate'],
+                            "property_use" => $new_json['property_use'],
+                            "right_of_way_access" => $new_json['right_of_way_access'],
+                            "certificate_of_title" => $new_json['certificate_of_title'],
+                            "tax_declaration" => $new_json['tax_declaration'],
+                            "tax_clearance" => $new_json['tax_clearance'],
+                            "mortgaged" => $new_json['mortgaged'],
+                            "tower_structure" => $new_json['tower_structure'],
+                            "tower_height" => $new_json['tower_height'],
+                            "swat_design" => $new_json['swat_design'],
+                            "with_neighbors" => $new_json['with_neighbors'],
+                            "with_history_of_opposition" => $new_json['with_history_of_opposition'],
+                            "with_hoa_restriction" => $new_json['with_hoa_restriction'],
+                            "with_brgy_restriction" => $new_json['with_brgy_restriction'],
+                            "tap_to_lessor" => $new_json['tap_to_lessor'],
+                            "tap_to_neighbor" => $new_json['tap_to_neighbor'],
+                            "distance_to_tapping_point" => $new_json['distance_to_tapping_point'],
+                            "meralco" => $new_json['meralco'],
+                            "localcoop" => $new_json['localcoop'],
+                            "genset_availability" => $new_json['genset_availability'],
+                            "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
+                            "distance_from_creek_river" => $new_json['distance_from_creek_river'],
+                            "distance_from_national_road" => $new_json['distance_from_national_road'],
+                            "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
+                        ];
+
+                        if ( count($check_if_added) < 1 ) {
+                            SubActivityValue::where('type', 'jtss_schedule_site')
                                     ->where('value->id', $request->get('id'))
                                     ->update([
                                         'type' => 'jtss_schedule_site',
@@ -4996,9 +5058,100 @@ class GlobeController extends Controller
                                         'status' => 'pending',
                                         'user_id' => \Auth::id()
                                     ]);
+                        } else {
+                            SubActivityValue::create([
+                                'type' => 'jtss_schedule_site',
+                                'sam_id' => $sub_activity_value->sam_id,
+                                'value' => json_encode($json),
+                                'status' => 'pending',
+                                'user_id' => \Auth::id()
+                            ]);
+                        }
+                    }
 
                     return response()->json(['error' => false, 'message' => 'Successfully updated a schedule to ' .$new_json['lessor'] ]);
-                }                        
+
+                    
+                } else {
+                    $sub_activity_value = SubActivityValue::where('id', $request->get('id'))->first();
+    
+                    SubActivityValue::where('id', $request->get('id'))
+                                    ->update([
+                                        'status' => 'Scheduled'
+                                    ]);
+    
+                    $new_json = json_decode($sub_activity_value->value, true);
+                    
+                    $json = [
+                        "id" => $sub_activity_value->id,
+                        "jtss_schedule" => $request->get('jtss_schedule'),
+                        "lessor" => $new_json['lessor'],
+                        "contact_number" => $new_json['contact_number'],
+                        "address" => $new_json['address'],
+                        "region" => $new_json['region'],
+                        "province" => $new_json['province'],
+                        "lgu" => $new_json['lgu'],
+                        "latitude" => $new_json['latitude'],
+                        "longitude" => $new_json['longitude'],
+                        "distance_from_nominal_point" => $new_json['distance_from_nominal_point'],
+                        "site_type" => $new_json['site_type'],
+                        "building_no_of_floors" => $new_json['building_no_of_floors'],
+                        "area_size" => $new_json['area_size'],
+                        "lease_rate" => $new_json['lease_rate'],
+                        "property_use" => $new_json['property_use'],
+                        "right_of_way_access" => $new_json['right_of_way_access'],
+                        "certificate_of_title" => $new_json['certificate_of_title'],
+                        "tax_declaration" => $new_json['tax_declaration'],
+                        "tax_clearance" => $new_json['tax_clearance'],
+                        "mortgaged" => $new_json['mortgaged'],
+                        "tower_structure" => $new_json['tower_structure'],
+                        "tower_height" => $new_json['tower_height'],
+                        "swat_design" => $new_json['swat_design'],
+                        "with_neighbors" => $new_json['with_neighbors'],
+                        "with_history_of_opposition" => $new_json['with_history_of_opposition'],
+                        "with_hoa_restriction" => $new_json['with_hoa_restriction'],
+                        "with_brgy_restriction" => $new_json['with_brgy_restriction'],
+                        "tap_to_lessor" => $new_json['tap_to_lessor'],
+                        "tap_to_neighbor" => $new_json['tap_to_neighbor'],
+                        "distance_to_tapping_point" => $new_json['distance_to_tapping_point'],
+                        "meralco" => $new_json['meralco'],
+                        "localcoop" => $new_json['localcoop'],
+                        "genset_availability" => $new_json['genset_availability'],
+                        "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
+                        "distance_from_creek_river" => $new_json['distance_from_creek_river'],
+                        "distance_from_national_road" => $new_json['distance_from_national_road'],
+                        "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
+                    ];
+    
+                    $check_if_added = SubActivityValue::where('type', 'jtss_schedule_site')
+                                                            ->where('value->id', $request->get('id'))
+                                                            ->where('status', 'pending')
+                                                            ->get();
+            
+                    if ( count($check_if_added) < 1 ) {
+                        SubActivityValue::create([
+                            'type' => 'jtss_schedule_site',
+                            'sam_id' => $sub_activity_value->sam_id,
+                            'value' => json_encode($json),
+                            'status' => 'pending',
+                            'user_id' => \Auth::id()
+                        ]);
+        
+                        return response()->json(['error' => false, 'message' => 'Successfully added a schedule to ' .$new_json['lessor'] ]);
+                    } else {
+                        SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('value->id', $request->get('id'))
+                                        ->update([
+                                            'type' => 'jtss_schedule_site',
+                                            'sam_id' => $sub_activity_value->sam_id,
+                                            'value' => json_encode($json),
+                                            'status' => 'pending',
+                                            'user_id' => \Auth::id()
+                                        ]);
+    
+                        return response()->json(['error' => false, 'message' => 'Successfully updated a schedule to ' .$new_json['lessor'] ]);
+                    } 
+                }                       
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
