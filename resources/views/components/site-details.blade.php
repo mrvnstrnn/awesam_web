@@ -1,5 +1,16 @@
+@php
+    
+    $np = \DB::table('site')->where('sam_id', $site[0]->sam_id)->select('NP_latitude', 'NP_longitude')->get();
+
+    if($np[0]->NP_latitude != '' || $np[0]->NP_longitude != ''){
+        $query = $np[0]->NP_latitude . ',' . $np[0]->NP_longitude;
+    } else {
+        $query = str_replace("#","", $site[0]->site_address);
+    }
+
+@endphp
 <iframe width="100%" height="300" style="border:0" loading="lazy" allowfullscreen
-src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&q={{ str_replace("#","", $site[0]->site_address) }}">
+src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&q={{ $query }}">
 </iframe>
     <div id="accordion" class="accordion-wrapper mt-3">
     <div class="card">
