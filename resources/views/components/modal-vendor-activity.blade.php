@@ -60,35 +60,36 @@
                                                     <span class="mr-3 badge badge-secondary"><small class="site_category">{{ $site[0]->site_category }}</small></span>
                                                 @endif
                                             </h5>
+                                            <div class="mb-0 mt-2">
+                                                @php
+    
+                                                    // dd($site);
+                                                    if ( isset($site[0]->end_date) ){
+                                                        if($site[0]->end_date > now()){
+                                                            $badge_color = "success";
+                                                        } else {
+                                                            $badge_color = "danger";
+                                                        }
+                                                    } else {
+                                                        $badge_color = "danger";
+                                                    }
+    
+                                                @endphp
+    
+                                                @if($main_activity == "")
+                                                    <span class="ml-1 badge badge-dark text-sm mb-0 p-2">{{ isset($site[0]->stage_name) ? $site[0]->stage_name : "" }}</span>
+                                                    <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
+                                                @else
+                                                    <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
+                                                @endif
+                                            </div>                                            
+    
                                         </div>
                                     </div>
                                 </div>
                             </div> 
 
                             <div class="card-body">
-                                        <div class="mb-4">
-                                            @php
-
-                                                // dd($site);
-                                                if ( isset($site[0]->end_date) ){
-                                                    if($site[0]->end_date > now()){
-                                                        $badge_color = "success";
-                                                    } else {
-                                                        $badge_color = "danger";
-                                                    }
-                                                } else {
-                                                    $badge_color = "danger";
-                                                }
-
-                                            @endphp
-
-                                            @if($main_activity == "")
-                                                <span class="ml-1 badge badge-dark text-sm mb-0 p-2">{{ isset($site[0]->stage_name) ? $site[0]->stage_name : "" }}</span>
-                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span>
-                                            @else
-                                                <span class="badge badge-{{ $badge_color }} text-sm mb-0 p-2">{{ $main_activity }}</span>
-                                            @endif
-                                        </div>                                            
                                 @php
 
                                         $sub_activities = \DB::connection('mysql2')
@@ -243,7 +244,7 @@
 
         $(".flatpicker").flatpickr(
         {
-            minDate: "tommorow"
+            minDate: "today"
         }
     );
 

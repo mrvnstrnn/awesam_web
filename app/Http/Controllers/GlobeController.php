@@ -2219,13 +2219,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'new endorsements apmo'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id')
-                    ->where(function($q) {
-                        $q->whereNull('activity_id')
-                          ->orWhere('activity_id', 1);
-                    })
-                    ->whereNull('profile_id')
+                    ->table("view_APMO_New_Endorsements")
                     ->where('program_id', $program_id)
                     // ->take(4000)
                     ->get();
@@ -5204,6 +5198,23 @@ class GlobeController extends Controller
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    public function get_agent_activity_timeline()
+    {
+        try {
+
+            $timeline = \DB::table('view_assigned_sites_with_timeline')
+                    ->where('agent_id', \Auth::user()->id)
+                    ->get();
+
+            return response()->json(['error' => false, 'message' => $timeline]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+        
     }
 
 }
