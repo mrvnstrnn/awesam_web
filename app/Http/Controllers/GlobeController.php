@@ -340,6 +340,20 @@ class GlobeController extends Controller
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
+            if (count($get_past_activities) < 1) {
+                SiteStageTracking::create([
+                    'sam_id' => $sam_id[$i],
+                    'activity_id' => 1,
+                    'activity_complete' => 'false',
+                    'user_id' => \Auth::id()
+                ]);
+
+                $get_past_activities = \DB::connection('mysql2')
+                                    ->table('site_stage_tracking')
+                                    ->where('sam_id', $sam_id[$i])
+                                    ->where('activity_complete', 'false')
+                                    ->get();
+            }
 
             $past_activities = collect();
 
@@ -347,11 +361,11 @@ class GlobeController extends Controller
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
 
-            // if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
+            if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
-                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == 'undefined' ? 1 : $activity_id[$i])
+                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
@@ -372,7 +386,7 @@ class GlobeController extends Controller
 
                         SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
-                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == 'undefined' ? 1 : $activity_id[$i])
+                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
@@ -435,7 +449,7 @@ class GlobeController extends Controller
                         'activities' => json_encode($array)
                     ]);
                 }
-            // }
+            }
         }
 
         // //////////////////////////// //
