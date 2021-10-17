@@ -1722,8 +1722,8 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
             // ->table("site_milestone")
-            ->table("view_sites_activity_3")
-            ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
+            ->table("view_assigned_sites")
+            // ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
             ->where('program_id', $program_id)
             ->where('agent_id', \Auth::id())
             // ->where('activity_complete', 'false')
