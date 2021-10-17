@@ -14,6 +14,7 @@
 <div class="row p-0">
     <div class="col-12">
         <div class="table-responsive aepm_table_div p-3">
+            <H4>Site Candidates</H4>
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
@@ -266,7 +267,6 @@
                                                 <small class="text-danger tax_clearance-errors"></small>
                                             </div>
                                         </div>
-                                        <hr>
                                         <div class="position-relative row form-group">
                                             <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
                                             <div class="col-sm-8">
