@@ -5038,8 +5038,8 @@ class GlobeController extends Controller
                     foreach ($sub_activity_values as $sub_activity_value) {
                         $check_if_added = SubActivityValue::where('value->id', $sub_activity_value->id)
                                                         ->where('type', 'jtss_schedule_site')
-                                                        ->get();
-                                                        
+                                                        ->first();
+
                         SubActivityValue::where('id', $sub_activity_value->id)
                             ->update([
                                 'status' => 'Scheduled'
@@ -5088,9 +5088,11 @@ class GlobeController extends Controller
                             "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
                         ];
 
-                        if ( count($check_if_added) < 1 ) {
+                        // return response()->json(['error' => true, 'message' => is_null($check_if_added) ]);
+
+                        if ( !is_null($check_if_added) ) {
                             SubActivityValue::where('type', 'jtss_schedule_site')
-                                    ->where('value->id', $request->get('id'))
+                                    ->where('value->id', $sub_activity_value->id)
                                     ->update([
                                         'type' => 'jtss_schedule_site',
                                         'sam_id' => $sub_activity_value->sam_id,
@@ -5109,7 +5111,7 @@ class GlobeController extends Controller
                         }
                     }
 
-                    return response()->json(['error' => false, 'message' => 'Successfully updated a schedule to ' .$new_json['lessor'] ]);
+                    return response()->json(['error' => false, 'message' => 'Successfully updated a schedule' ]);
 
                     
                 } else {
