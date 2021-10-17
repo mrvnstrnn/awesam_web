@@ -2483,6 +2483,12 @@ class GlobeController extends Controller
         }
         elseif($sub_activity == 'JTSS Sched Confirmation'){
 
+            $np = \DB::table('site')
+                ->where('sam_id', $sam_id)
+                ->select('NP_latitude', 'NP_longitude')
+                ->get();
+
+
             $what_component = "components.jtss-sched-confirmation";
             return \View::make($what_component)
             ->with([

@@ -16,10 +16,13 @@
         <div class="table-responsive aepm_table_div pt-4">
             <H3>Site Candidates</H3>
             <hr>
+            <div id="map"></div>
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Lessor</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
                         <th>Distance</th>
                         <th>Schedule</th>
                 </thead>
@@ -551,8 +554,7 @@
                                         </div>
                                         <hr>
                                         <h4>Proximity Checklist</h4>
-                                        <hr>
-                                        <h5>Existing Site</h5>
+                                        <h5 class='pt-3'>Existing Site</h5>
                                         <div class="position-relative row form-group">
                                             <label for="with_existing_globe_neighboring_site" class="col-sm-4 col-form-label">With existing globe neighboring site</label>
                                             <div class="col-sm-8">
@@ -880,8 +882,170 @@
     </div>
 </div>
 
+
+@php
+
+    $NP = \DB::table('site')
+        ->where('sam_id', $sam_id)
+        ->select('NP_latitude', 'NP_longitude')
+        ->get();
+    
+@endphp
+
+{{-- GOOGLE MAPS --}}
+
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 300px;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+</style>
+
+<script>
+
+    function initMap(markers) {
+
+        var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
+        var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+
+        const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: nominal_point,
+            zoom: 16,
+            mapTypeId: "roadmap",
+        });
+
+        var mk1 = new google.maps.Marker({position: nominal_point, map: map});
+
+        var pinColor = "ffff00";
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+        var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+            new google.maps.Size(40, 37),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(12, 35));
+
+
+        var candidateinfowindow = new google.maps.InfoWindow({});
+
+
+        $.each(markers, function(k, v){
+
+            latlng = new google.maps.LatLng(v.latitude, v.longitude);
+
+            candidate = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: pinImage,
+                shadow: pinShadow
+
+            });
+
+
+            candidate.addListener("click", () => {
+                // Close the current InfoWindow.
+                candidateinfowindow.close();
+
+                latlng2 = new google.maps.LatLng(this.latitude, this.longitude);
+
+                // Create a new InfoWindow.
+                candidateinfowindow = new google.maps.InfoWindow({
+                    position: latlng2
+                });
+
+                candidateinfowindow.setContent("<div style='font-size: 20px; font-weight: bold;'>" + this.lessor + "<hr></div>"+
+                '<div class="pt-2">Latitude: ' + this.latitude  + '</div>' +
+                '<div class="pt-2">Longitude: ' + this.longitude  + '</div>' +
+                '<div class="pt-2">Distance: ' + this.distance  + '</div>'
+                );
+
+                candidateinfowindow.open(map);
+
+            });
+                    
+
+
+
+        });
+
+
+        const nominal_point_circle = new google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 1.5,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+            map,
+            center: nominal_point,
+            radius: 300,
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+        });
+
+        infoWindow.open(map);
+
+        // Configure the click listener.
+        // nominal_point_circle.addListener("click", (mapsMouseEvent) => {
+        //     // Close the current InfoWindow.
+        //     infoWindow.close();
+        //     // Create a new InfoWindow.
+        //     infoWindow = new google.maps.InfoWindow({
+        //     position: mapsMouseEvent.latLng,
+        //     });
+
+        //     if($('#ssds_table').hasClass('d-none')==false){
+
+        //     } else {
+
+        //         let table = $('#dtTable').DataTable();
+
+        //         if ( ! table.data().any() ) {
+        //             rowCount = 1;
+        //         } else {
+        //             var rowCount = $('#dtTable tbody tr ').length + 1;
+
+
+        //         }            
+
+        //         var gps = mapsMouseEvent.latLng.toJSON() ;
+        //         var distance = haversine_distance(mk1, gps);
+
+
+        //         infoWindow.setContent("<div style='font-size: 20px; font-weight: bold;'>Site Candidate " + (rowCount) + "<hr></div>" +
+        //         '<div class="pt-2">Latitude: ' + gps['lat']  + '</div>' +
+        //         '<div class="pt-2">Longitude: ' + gps['lat']  + '</div>' +
+        //         '<div class="pt-2">Distance: ' + distance  + ' meters</div>' +
+        //         '<div class="pt-2 "><hr><button onclick="Go_Add_Site_Details()" class="btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Set Details</button></div>'
+        //         );
+
+        //         $('#latitude').val(gps['lat']);
+        //         $('#longitude').val(gps['lng']);
+        //         $('#distance_from_nominal_point').val(distance);
+
+        //         infoWindow.open(map);
+
+        //     }
+        // });
+    }
+
+</script>
+
 <script>
     $(document).ready(function() {
+
 
         $(".btn_switch_back_to_actions").on("click", function(){
             $("#actions_box").addClass('d-none');
@@ -909,11 +1073,15 @@
             columns: [
                 { data: "lessor" },
                 // { data: "address" },
-                // { data: "latitude" },
-                // { data: "longitude" },
+                { data: "latitude" },
+                { data: "longitude" },
                 { data: "distance", className: "text-center" },
                 { data: "schedule" },
             ],
+            "initComplete": function( settings, json){
+                initMap(json.data);
+            }
+
         });
 
         $(".btn_switch_back_to_candidates").on("click", function(e){
