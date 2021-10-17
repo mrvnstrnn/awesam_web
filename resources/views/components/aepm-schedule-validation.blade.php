@@ -40,13 +40,14 @@
                             <div class="row p-3">
                                 <div class="col-12">
                                     <div class="table-responsive aepm_table_div">
+                                        <div id="map"></div>
                                         <table class="table table-hover table-inverse" id="aepm_table">
                                             <thead class="thead-inverse">
                                                 <tr>
                                                     <th>Lessor</th>
                                                     {{-- <th>Address</th> --}}
-                                                    {{-- <th>Latitude</th>
-                                                    <th>Longitude</th> --}}
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
                                                     <th>Distance</th>
                                                     <th>Status</th>
                                                 </tr>
@@ -75,18 +76,21 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                                                        <hr>
                                                         <div class="row">
-                                                            <div class="col-12">
-                                                                <div id="datepicker"></div>
+                                                            <div class="col-6">
+                                                                <div id="datepicker" style="width:100% !important;"></div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row mt-3">
-                                                            <div class="col-12">
+                                                            <div class="col-6">
                                                                 <form class="set_schedule_form">
                                                                     <div class="position-relative form-group">
+                                                                        <label for="jtss_schedule" class="col-sm-12 col-form-label">JTSS Date</label>
                                                                         <input type="input" class="form-control" name="jtss_schedule" id="jtss_schedule" readonly>
                                                                         <small class="text-danger jtss_schedule-error"></small>
+                                                                    </div>
+                                                                    <div class="position-relative form-group">
+                                                                        <label for="remarks" class="">Remarks</label>
+                                                                        <textarea name="remarks" id="remarks" class="form-control"></textarea>                                                                        
+                                                                        <small class="text-danger remarks-error"></small>
                                                                     </div>
                                                                     <button class="btn btn-sm btn-shadow btn-success set_schedule pull-right" id="single_btn" data-value="single" type="button">Set Schedule</button>
                                                                     <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right mr-1" id="all_btn" data-value="all" type="button">Set Schedule to all</button>
@@ -556,7 +560,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -564,6 +567,133 @@
         </div>
     </div>
 </div>
+
+@php
+
+    $NP = \DB::table('site')
+        ->where('sam_id', $sam_id)
+        ->select('NP_latitude', 'NP_longitude')
+        ->get();
+    
+@endphp
+
+
+{{-- GOOGLE MAPS --}}
+
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 300px;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .ui-datepicker,
+    .ui-datepicker-calendar {
+    width: 100%;
+    }
+    .ui-datepicker,
+    .ui-datepicker-calendar {
+        min-height: 220px;
+    }
+</style>
+
+<script>
+
+    function initMap(markers) {
+
+        var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
+        var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+
+        const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: nominal_point,
+            zoom: 16,
+            mapTypeId: "roadmap",
+        });
+
+        var mk1 = new google.maps.Marker({position: nominal_point, map: map});
+
+        var pinColor = "ffff00";
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+        var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+            new google.maps.Size(40, 37),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(12, 35));
+
+
+        var candidateinfowindow = new google.maps.InfoWindow({});
+
+
+        $.each(markers, function(k, v){
+
+            latlng = new google.maps.LatLng(v.latitude, v.longitude);
+
+            candidate = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: pinImage,
+                shadow: pinShadow
+
+            });
+
+
+            candidate.addListener("click", () => {
+                // Close the current InfoWindow.
+                candidateinfowindow.close();
+
+                latlng2 = new google.maps.LatLng(this.latitude, this.longitude);
+
+                // Create a new InfoWindow.
+                candidateinfowindow = new google.maps.InfoWindow({
+                    position: latlng2
+                });
+
+                candidateinfowindow.setContent("<div style='font-size: 20px; font-weight: bold;'>" + this.lessor + "<hr></div>"+
+                '<div class="pt-2">Latitude: ' + this.latitude  + '</div>' +
+                '<div class="pt-2">Longitude: ' + this.longitude  + '</div>' +
+                '<div class="pt-2">Distance: ' + this.distance  + '</div>'
+                );
+
+                candidateinfowindow.open(map);
+
+            });
+                    
+
+
+
+        });
+
+        const nominal_point_circle = new google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 1.5,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+            map,
+            center: nominal_point,
+            radius: 300,
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+        });
+
+        infoWindow.open(map);
+
+    }
+
+</script>
+
 
 <script>
     $(document).ready(function() {
@@ -596,11 +726,14 @@
             columns: [
                 { data: "lessor" },
                 // { data: "address" },
-                // { data: "latitude" },
-                // { data: "longitude" },
+                { data: "latitude" },
+                { data: "longitude" },
                 { data: "distance", className: "text-center" },
                 { data: "status", className: "text-right" },
             ],
+            "initComplete": function( settings, json){
+                initMap(json.data);
+            }
         });
 
         $("#aepm_table").on("click", "tr", function(e){
@@ -627,38 +760,38 @@
 
             $(".set_schedule").attr("data-id", id);
 
-            $.ajax({
-                url: "/get-jtss-schedule/" + id,
-                method: "GET",
-                success: function (resp) {
-                    if (!resp.error) {
-                            var json = JSON.parse(resp.message.value);
-                        if (resp.message != null) {
-                            $("#jtss_schedule").val(json.jtss_schedule);
-                        } else {
-                            $("#jtss_schedule").val("");
-                        }
+            // $.ajax({
+            //     url: "/get-jtss-schedule/" + id,
+            //     method: "GET",
+            //     success: function (resp) {
+            //         if (!resp.error) {
+            //                 var json = JSON.parse(resp.message.value);
+            //             if (resp.message != null) {
+            //                 $("#jtss_schedule").val(json.jtss_schedule);
+            //             } else {
+            //                 $("#jtss_schedule").val("");
+            //             }
 
-                        $.each(json, function(index, data) {
-                            $("#"+index).val(data);
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                    }
-                },
-                error: function (resp) {
+            //             $.each(json, function(index, data) {
+            //                 $("#"+index).val(data);
+            //             });
+            //         } else {
+            //             Swal.fire(
+            //                 'Error',
+            //                 resp.message,
+            //                 'error'
+            //             )
+            //         }
+            //     },
+            //     error: function (resp) {
                     
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                },
-            });
+            //         Swal.fire(
+            //             'Error',
+            //             resp,
+            //             'error'
+            //         )
+            //     },
+            // });
         });
 
         $("#tab-c-2").on("click", function (e) {

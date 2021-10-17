@@ -981,7 +981,6 @@
 
         });
 
-
         const nominal_point_circle = new google.maps.Circle({
             strokeColor: "#FF0000",
             strokeOpacity: 0.8,
@@ -998,48 +997,6 @@
 
         infoWindow.open(map);
 
-        // Configure the click listener.
-        // nominal_point_circle.addListener("click", (mapsMouseEvent) => {
-        //     // Close the current InfoWindow.
-        //     infoWindow.close();
-        //     // Create a new InfoWindow.
-        //     infoWindow = new google.maps.InfoWindow({
-        //     position: mapsMouseEvent.latLng,
-        //     });
-
-        //     if($('#ssds_table').hasClass('d-none')==false){
-
-        //     } else {
-
-        //         let table = $('#dtTable').DataTable();
-
-        //         if ( ! table.data().any() ) {
-        //             rowCount = 1;
-        //         } else {
-        //             var rowCount = $('#dtTable tbody tr ').length + 1;
-
-
-        //         }            
-
-        //         var gps = mapsMouseEvent.latLng.toJSON() ;
-        //         var distance = haversine_distance(mk1, gps);
-
-
-        //         infoWindow.setContent("<div style='font-size: 20px; font-weight: bold;'>Site Candidate " + (rowCount) + "<hr></div>" +
-        //         '<div class="pt-2">Latitude: ' + gps['lat']  + '</div>' +
-        //         '<div class="pt-2">Longitude: ' + gps['lat']  + '</div>' +
-        //         '<div class="pt-2">Distance: ' + distance  + ' meters</div>' +
-        //         '<div class="pt-2 "><hr><button onclick="Go_Add_Site_Details()" class="btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Set Details</button></div>'
-        //         );
-
-        //         $('#latitude').val(gps['lat']);
-        //         $('#longitude').val(gps['lng']);
-        //         $('#distance_from_nominal_point').val(distance);
-
-        //         infoWindow.open(map);
-
-        //     }
-        // });
     }
 
 </script>
