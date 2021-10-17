@@ -81,14 +81,15 @@
                                                                 <div id="datepicker"></div>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="row mt-3">
                                                             <div class="col-12">
-                                                                <form class="set_schedule_form form-inline">
+                                                                <form class="set_schedule_form">
                                                                     <div class="position-relative form-group">
                                                                         <input type="input" class="form-control" name="jtss_schedule" id="jtss_schedule" readonly>
                                                                         <small class="text-danger jtss_schedule-error"></small>
                                                                     </div>
-                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" type="button">Set Schedule</button>
+                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" id="single_btn" data-value="single" type="button">Set Schedule</button>
+                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" id="all_btn" data-value="all" type="button">Set Schedule to all</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -539,11 +540,9 @@
                                                                     <thead class="thead-inverse">
                                                                         <tr>
                                                                             <th>Lessor</th>
-                                                                            {{-- <th>Address</th> --}}
-                                                                            {{-- <th>Latitude</th>
-                                                                            <th>Longitude</th> --}}
-                                                                            <th>Distance</th>
                                                                             <th>Schedule</th>
+                                                                            <th>Reason</th>
+                                                                            <th>Status</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -685,11 +684,9 @@
                     },
                     columns: [
                         { data: "lessor" },
-                        // { data: "address" },
-                        // { data: "latitude" },
-                        // { data: "longitude" },
-                        { data: "distance", className: "text-center" },
                         { data: "schedule" },
+                        { data: "reason" },
+                        { data: "status" },
                     ],
                 });
 
@@ -702,9 +699,19 @@
             e.preventDefault();
             var id = $(this).attr('data-id');
             var jtss_schedule = $("#jtss_schedule").val();
+            var data_value = $(this).attr('data-value');
+            var sam_id = "{{ $sam_id }}";
 
             $(".set_schedule_form small").text("");
             $(".set_schedule_form input").removeClass("is-invalid");
+
+            if (data_value == "all") {
+                var btn_text = "Set Schedule to all";
+                var btn_id = "#all_btn";
+            } else {
+                var btn_text = "Set Schedule";
+                var btn_id = "#single_btn";
+            }
 
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
@@ -715,6 +722,8 @@
                 data: {
                     jtss_schedule : jtss_schedule,
                     id : id,
+                    data_value : data_value,
+                    sam_id : sam_id,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -733,11 +742,11 @@
                                 'success'
                             )
 
-                            $(".form_data").removeClass("d-none");
+                            $(".form_data").addClass("d-none");
 
                             $(".confirm_schedule").removeClass("d-none");
-                            $(".set_schedule").removeAttr("disabled");
-                            $(".set_schedule").text("Set Schedule");
+                            $(btn_id).removeAttr("disabled");
+                            $(btn_id).text(btn_text);
                         });
 
                     } else {
@@ -754,8 +763,8 @@
                             )
                         }
 
-                        $(".set_schedule").removeAttr("disabled");
-                        $(".set_schedule").text("Set Schedule");
+                        $(btn_id).removeAttr("disabled");
+                        $(btn_id).text(btn_text);
                     }
                 },
                 error: function (resp) {
@@ -765,8 +774,8 @@
                         resp,
                         'error'
                     )
-                    $(".set_schedule").removeAttr("disabled");
-                    $(".set_schedule").text("Set Schedule");
+                    $(btn_id).removeAttr("disabled");
+                    $(btn_id).text(btn_text);
                 },
             });
         });
