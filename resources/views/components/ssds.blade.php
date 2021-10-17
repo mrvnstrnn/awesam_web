@@ -14,7 +14,8 @@
 <div class="row p-0">
     <div class="col-12">
         <div class="table-responsive aepm_table_div p-3">
-            <H4>Site Candidates</H4>
+            <H3>Site Candidates</H3>
+            <hr>
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
