@@ -34,6 +34,11 @@
                     <form class="ssds_form pt-3">
                         <H3>Site Selection Deliberation Sheet</H3>
                         <hr>
+                        <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
+                        <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
+                        <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
+                        <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
+                        <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
                         <div class="position-relative row form-group">
                             <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
                             <div class="col-sm-8">
@@ -229,6 +234,13 @@
                                                 <small class="text-danger advance_rental-errors"></small>
                                             </div>
                                         </div>
+                                        <div class="position-relative row form-group">
+                                            <label for="deposit" class="col-sm-4 col-form-label">Deposit</label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control" id="deposit" name="deposit" placeholder="Deposit">
+                                                <small class="text-danger deposit-errors"></small>
+                                            </div>
+                                        </div>
                                         <hr>
                                         <h4>Property Document Availability</h4>
                                         <div class="position-relative row form-group">
@@ -326,7 +338,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="site_aquisition_remarks" class="col-sm-4 col-form-label">Remarks</label>
                                             <div class="col-sm-8">
-                                                <textarea name="site_aquisition_remarks" id="site_aquisition_remarks" cols="30" rows="10"></textarea>
+                                                <textarea name="site_aquisition_remarks" class="form-control" id="site_aquisition_remarks" cols="30" rows="10"></textarea>
                                                 <small class="text-danger site_aquisition_remarks-errors"></small>
                                             </div>
                                         </div>
@@ -536,7 +548,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="engineering_remarks" class="col-sm-4 col-form-label">Comments / Remarks / Landmarks</label>
                                             <div class="col-sm-8">
-                                                <textarea name="engineering_remarks" id="engineering_remarks" cols="30" rows="10"></textarea>
+                                                <textarea name="engineering_remarks" class="form-control" id="engineering_remarks" cols="30" rows="10"></textarea>
                                                 <small class="text-danger engineering_remarks-errors"></small>
                                             </div>
                                         </div>
@@ -729,7 +741,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="transmission_remarks" class="col-sm-4 col-form-label">Comments / Remarks</label>
                                             <div class="col-sm-8">
-                                                <textarea name="transmission_remarks" id="transmission_remarks" cols="30" rows="10"></textarea>
+                                                <textarea name="transmission_remarks" class="form-control" id="transmission_remarks" cols="30" rows="10"></textarea>
                                                 <small class="text-danger transmission_remarks-errors"></small>
                                             </div>
                                         </div>
@@ -863,7 +875,8 @@
                                 </div>
                             </div>
                         </div>            
-                    </form>                                          
+                    </form>
+                    <button class="btn btn-sm btn-shadow btn-primary submit_ssds">Submit SSDS</button>                                      
                 </div>
             </div>
         </div>
@@ -1040,6 +1053,133 @@
             $("#actions_list").removeClass('d-none');
         });
 
+        $(".submit_ssds").on("click", function (e) {
+            e.preventDefault();
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $(".ssds_form small").text("");
+            $.ajax({
+                url: '/submit-ssds',
+                method: 'POST',
+                data: $(".ssds_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".ssds_form")[0].reset();
+
+                        $(".btn_switch_back_to_candidates").trigger("click");
+                        $(".submit_ssds").removeAttr("disabled");
+                        $(".submit_ssds").text("Submit SSDS");
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".ssds_form ." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".submit_ssds").removeAttr("disabled");
+                        $(".submit_ssds").text("Submit SSDS");
+                    }
+                },
+                error: function (resp) {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                    $(".submit_ssds").removeAttr("disabled");
+                    $(".submit_ssds").text("Submit SSDS");
+                }
+            });
+        });
+
+        $("select[data-name=address]").on('change', function(){
+
+            var id = $(this).attr('id');
+            var val = $(this).val();
+
+            if(id == 'province') {
+                if (val == '') {
+                    $("#lgu option").remove();
+                    $("#lgu").attr('disabled', 'disabled');
+                    return;
+                }
+            } else if (id == 'region') {
+                if (val == '') {
+                    $("#province option").remove();
+                    $("#lgu option").remove();
+
+                    $("#province").attr('disabled', 'disabled');
+                    $("#lgu").attr('disabled', 'disabled');
+                    return;
+                }
+            } else {
+                return;
+            }
+
+                $.ajax({
+                    url:  '/address',
+                    method: 'POST',
+                    data: {
+                        id : id,
+                        val : val
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(resp) {
+                        if(!resp.error){
+                            if(resp.new_id) {
+                                $("#"+resp.new_id+ " option").remove();
+                                $("#"+resp.new_id).removeAttr('disabled');
+
+                                if(id == 'region'){
+                                    $("#"+resp.new_id).append('<option value="">Please select province</option>');
+                                    resp.message.forEach(element => {
+                                        $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
+                                    });
+                                } else if (id == 'province'){
+                                    $("#"+resp.new_id).append('<option value="">Please select city</option>');
+                                    resp.message.forEach(element => {
+                                        $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
+                                    });
+                                }
+                            }
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function(resp) {
+                        Swal.fire(
+                            'Error',
+                            resp,
+                            'error'
+                        )
+                    }
+                });
+            });     
 
         $('#aepm_table').DataTable({
             processing: true,
@@ -1122,7 +1262,7 @@
                         }
 
                         $.each(json, function(index, data) {
-                            $("#"+index).val(data);
+                            $("#"+index).val(data).trigger("change");
                         });
                     } else {
                         Swal.fire(
@@ -1141,42 +1281,6 @@
                     )
                 },
             });
-        });
-
-        $("#tab-c-2").on("click", function (e) {
-            e.preventDefault();
-
-            if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
-
-                $('#aepm_rejected_table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    select: true,
-                    order: [ 1, "asc" ],
-                    ajax: {
-                        url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected_schedule",
-                        type: 'GET'
-                    },
-                    dataSrc: function(json){
-                        return json.data;
-                    },
-                    'createdRow': function( row, data, dataIndex ) {
-                        $(row).attr('data-id', data.id);
-                        $(row).addClass('add_schedule');
-                        $(row).attr('style', 'cursor: pointer;');
-                    },
-                    columns: [
-                        { data: "lessor" },
-                        { data: "schedule" },
-                        { data: "reason" },
-                        { data: "status" },
-                        { data: "date_approved" },
-                    ],
-                });
-
-            } else {
-                $('#aepm_rejected_table').DataTable().ajax.reload();
-            }
         });
     });
 </script>
