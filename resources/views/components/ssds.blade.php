@@ -342,10 +342,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="remarks" class="col-sm-4 col-form-label">Remarks</label>
+                                                    <label for="site_remarks" class="col-sm-4 col-form-label">Remarks</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Remarks">
-                                                        <small class="text-danger remarks-errors"></small>
+                                                        <input type="text" class="form-control" id="site_remarks" name="site_remarks" placeholder="Remarks">
+                                                        <small class="text-danger site_remarks-errors"></small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -517,6 +517,113 @@
                                                         <small class="text-danger site_category-errors"></small>
                                                     </div>
                                                 </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="fsr_option" class="col-sm-4 col-form-label">FSR Option</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" id="fsr_option" name="fsr_option">
+                                                            <option value="">FSR Option</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="equipment" class="col-sm-4 col-form-label">Equipment</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" id="equipment" name="equipment">
+                                                            <option value="">Equipment</option>
+                                                            <option value="indoor">Indoor</option>
+                                                            <option value="outdoor">Outdoor</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="elevation" class="col-sm-4 col-form-label">Elevation</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="elevation" name="elevation" placeholder="Elevation">
+                                                        <small class="text-danger elevation-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="configuration" class="col-sm-4 col-form-label">Configuration</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="configuration" name="configuration" placeholder="Configuration">
+                                                        <small class="text-danger configuration-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="engineering_remarks" class="col-sm-4 col-form-label">Comments / Remarks / Landmarks</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea name="engineering_remarks" id="engineering_remarks" cols="30" rows="10"></textarea>
+                                                        <small class="text-danger configuration-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <h3>Proximity Checklist</h3>
+                                                <h2>Existing Site</h2>
+                                                <div class="position-relative row form-group">
+                                                    <label for="with_existing_globe_neighboring_site" class="col-sm-4 col-form-label">With existing globe neighboring site</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" id="with_existing_globe_neighboring_site" name="with_existing_globe_neighboring_site">
+                                                            <option value="">With existing globe neighboring site</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="exisitng_site_name_phase_no" class="col-sm-4 col-form-label">Site Name / Phase No.</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="exisitng_site_name_phase_no" name="exisitng_site_name_phase_no" placeholder="Site Name / Phase No.">
+                                                        <small class="text-danger exisitng_site_name_phase_no-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="existing_site_address" class="col-sm-4 col-form-label">Site Address</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="existing_site_address" name="existing_site_address" placeholder="Site Address">
+                                                        <small class="text-danger existing_site_address-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="existing_approx_distance" class="col-sm-4 col-form-label">Approx Distance to the proposed site</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="existing_approx_distance" name="existing_approx_distance" placeholder="Approx Distance to the proposed site">
+                                                        <small class="text-danger existing_approx_distance-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <h2>Future Site</h2>
+                                                <div class="position-relative row form-group">
+                                                    <label for="with_future_globe_site" class="col-sm-4 col-form-label">With Future Globe Site</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" id="with_future_globe_site" name="with_future_globe_site">
+                                                            <option value="">With Future Globe Site</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="future_site_name_phase_no" class="col-sm-4 col-form-label">Site Name / Phase No.</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="future_site_name_phase_no" name="future_site_name_phase_no" placeholder="Site Name / Phase No.">
+                                                        <small class="text-danger future_site_name_phase_no-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="future_site_address" class="col-sm-4 col-form-label">Site Address</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="future_site_address" name="future_site_address" placeholder="Site Address">
+                                                        <small class="text-danger future_site_address-errors"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="future_approx_distance" class="col-sm-4 col-form-label">Approx Distance to the proposed site</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="future_approx_distance" name="future_approx_distance" placeholder="Approx Distance to the proposed site">
+                                                        <small class="text-danger future_approx_distance-errors"></small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -524,7 +631,7 @@
                                         <div id="headingFour" class="card-header">
                                             <button type="button" data-toggle="collapse" data-target="#collapseOne4" aria-expanded="true" aria-controls="collapseFour" class="text-left m-0 p-0 btn btn-link btn-block">
                                                 <h5 class="m-0 p-0">
-                                                    Social Acceptability
+                                                    Transmission Network Engineering
                                                 </h5>
                                             </button>
                                         </div>
