@@ -347,7 +347,7 @@ class GlobeController extends Controller
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
 
-            if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
+            // if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
@@ -435,7 +435,7 @@ class GlobeController extends Controller
                         'activities' => json_encode($array)
                     ]);
                 }
-            }
+            // }
         }
 
         // //////////////////////////// //
