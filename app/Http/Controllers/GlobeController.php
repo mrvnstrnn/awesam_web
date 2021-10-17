@@ -351,7 +351,7 @@ class GlobeController extends Controller
                 $activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
-                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
+                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == 'undefined' ? 1 : $activity_id[$i])
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
@@ -372,7 +372,7 @@ class GlobeController extends Controller
 
                         SiteStageTracking::where('sam_id', $sam_id[$i])
                                                 ->where('activity_complete', 'false')
-                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" ? 1 : $activity_id[$i])
+                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == 'undefined' ? 1 : $activity_id[$i])
                                                 ->update([
                                                     'activity_complete' => "true"
                                                 ]);
