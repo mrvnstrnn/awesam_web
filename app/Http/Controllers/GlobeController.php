@@ -584,16 +584,8 @@ class GlobeController extends Controller
         try {
             $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
-            $user = User::find($request->input('agent_id'));
-
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
-
-            $email_receiver = User::find($request->input('agent_id'));
-
-            SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-            // $email_receiver->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "true", $request->input('site_name')) );
 
             if(is_null($checkAgent)) {
 
@@ -602,14 +594,10 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
-
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
             } else {
-
-                // \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.$profile_id.', '.$id.', "true")');
                 $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
