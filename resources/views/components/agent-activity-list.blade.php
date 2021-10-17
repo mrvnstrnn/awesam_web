@@ -366,7 +366,7 @@ $activities = \DB::connection('mysql2')
 
                 $('#from-to-' + this.sam_id).html(
                     '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
-                    '<div>Started: ' + this.activity_created + '</div>' +
+                    '<div>Actual Start: ' + this.activity_created + '</div>' +
                     '<div>Aging: ' + dayTxt + '</div>'
                 );
 
