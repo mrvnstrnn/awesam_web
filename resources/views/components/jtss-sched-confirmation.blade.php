@@ -495,6 +495,7 @@
                                                     <th>Schedule</th>
                                                     <th>Reason</th>
                                                     <th>Status</th>
+                                                    <th>Date Rejected</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -596,6 +597,7 @@
                         { data: "schedule" },
                         { data: "reason" },
                         { data: "status" },
+                        { data: "date_approved" },
                     ],
                 });
 
