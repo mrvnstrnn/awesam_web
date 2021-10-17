@@ -12,36 +12,15 @@
 //     ->where('profile_id', "=", 2)
 //     ->get();
 
-// $activities = \DB::connection('mysql2')
-//                     ->table('view_sites_activity_2')
-//                     ->select(
-//                         'sam_id', 
-//                         'site_name', 
-//                         'site_address', 
-//                         'site_category', 
-//                         'activity_id', 
-//                         'activity_name', 
-//                         'start_date', 
-//                         'end_date', 
-//                         'program_id', 
-//                         'profile_id', 
-//                         'activity_complete'
-//                     )
-//                     ->whereJsonContains('site_agent', [
-//                         'user_id' => \Auth::id()
-//                     ])
-//                     ->where('profile_id', 2)
-//                     ->distinct()
-//                     ->get();
-
 $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
-                    ->where('agent_id', \Auth::id())
-                    ->where('activity_profile_id', 2)
+                    ->table('view_sites_activity_2')
+                    ->select('sam_id', 'site_name', 'site_address', 'site_category', 'activity_id', 'activity_name', 'start_date', 'end_date', 'program_id', 'profile_id', 'activity_complete')
+                    ->whereJsonContains('site_agent', [
+                        'user_id' => \Auth::id()
+                    ])
+                    ->where('profile_id', 2)
+                    ->distinct()
                     ->get();
-
-
-
 
 @endphp
 
@@ -50,10 +29,6 @@ $activities = \DB::connection('mysql2')
 @for ($i = 0; $i < count($activities); $i++)
 
     @php
-    $activity_color = 'dark';
-    @endphp
-
-    {{-- @php
         if (isset($activities[$i]->activity_complete)) {
 
             if($activities[$i]->activity_complete == 'true'){
@@ -117,9 +92,9 @@ $activities = \DB::connection('mysql2')
             $sub_activity_values_collect->push($sub_activity_value->status);
         }
 
-    @endphp --}}
+    @endphp
 
-    {{-- @if ( count($datas) > 0 && count($datas) <= count($sub_activity_values) )
+    @if ( count($datas) > 0 && count($datas) <= count($sub_activity_values) )
         @if ( in_array( 'denied', $sub_activity_values_collect->all()) )
             @if ( !in_array( 'pending', $sub_activity_values_collect->all()) )
                 <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
@@ -151,6 +126,9 @@ $activities = \DB::connection('mysql2')
                             <div class="widget-content-left ml-2">
                                 <div class="">
                                     {{ $activities[$i]->activity_name }}
+                                    {{-- @if ($activities[$i]->activity_complete == 'false')
+                                    <div class="badge badge-primary ml-0">Active</div>
+                                    @endif --}}
                                 </div>
                                 <div class="" style="  width: 400px;
                                 white-space: nowrap;
@@ -171,6 +149,11 @@ $activities = \DB::connection('mysql2')
                                 </div>
                             </div>
                             @if(in_array($activities[$i]->profile_id, array("2", "3")))
+                            {{-- <div class="widget-content-right">
+                                <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $activities[$i]->sam_id }}' data-site='{{ $activities[$i]->site_name}}' data-activity='{{ $activities[$i]->activity_name}}' data-main_activity='{{ $activities[$i]->activity_name}}' data-activity_id='{{ $activities[$i]->activity_id}}'>
+                                    <i class="fa fa-angle-double-right fa-lg"></i>
+                                </button>
+                            </div> --}}
                             @endif
                         </div>
                     </div>
@@ -231,9 +214,9 @@ $activities = \DB::connection('mysql2')
                 </div>
             </li>
         @endif
-    @else --}}
-        <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}" style="cursor: pointer;">
-            <div id="to-do-indicator-{{ $activities[$i]->sam_id }}" class="todo-indicator bg-{{ $activity_color }}"></div>
+    @else
+        <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
+            <div class="todo-indicator bg-{{ $activity_color }}"></div>
             <div class="widget-content p-0">
                 <div class="widget-content-wrapper">
                     <div class="widget-content-left mr-3 ml-2">
@@ -261,139 +244,63 @@ $activities = \DB::connection('mysql2')
                     <div class="widget-content-left ml-2">
                         <div class="">
                             {{ $activities[$i]->activity_name }}
+                            {{-- @if ($activities[$i]->activity_complete == 'false')
+                            <div class="badge badge-primary ml-0">Active</div>
+                            @endif --}}
                         </div>
                         <div class="" style="  width: 400px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        font-size: 16px;
+                        font-size: 14px;
                         font-weight: bold;
                     ">
                             {{ $activities[$i]->site_name }}
                         </div>
-                        {{-- <div class="mt-1">
+                        <div class="" style="font-size: 12px;">
+                            <i class="m-0 p-0">{{ $activities[$i]->sam_id }}</i>
+                        </div>
+                        <div class="mt-1">
                             <i class="lnr-calendar-full"></i>
                             <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
                             <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
-                        </div> --}}
-                        <div class="mt-1" style="font-size: 12px;">
-                            SAM ID: {{ $activities[$i]->sam_id }}
                         </div>
-                        <div class="mt-2 row pl-3">
-
-                            <div class="" style="font-size: 12px;" id="from-to-{{ $activities[$i]->sam_id }}">
-                                Loading...
-                            </div>
-                            <div id="from-to-badge-{{ $activities[$i]->sam_id }}" class=" badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important; max-height:20px;" ></div>
-
-                        </div>
-
                     </div>
+                {{-- @else
+                    <i class="pe-7s-note2 pe-2x"></i>
+                @endif --}}
             </div>
         </li>
-    {{-- @endif --}}
+    @endif
 
 @endfor
 
 <script src="js/modal-loader.js"></script>
 
 <script>
-// $('.activity_list_item').each(function(index, element){
+    $('.activity_list_item').each(function(index, element){
+
+start_date = new Date($(element).attr('data-start_date'));
+end_date = new Date($(element).attr('data-end_date'));
+date_today = new Date();
+
+var firstday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay()));
+var lastday_week = new Date(date_today.setDate(date_today.getDate() - date_today.getDay() + 6));
+
+// console.log(lastday_week);
+
+if($(element).attr('data-profile_id') != "2"){
+        // $(element).addClass('d-none');
+}
 
 
+if($(element).attr('data-activity_complete') == "true"){
+        // $(element).addClass('d-none');
+}
 
-// if($(element).attr('data-profile_id') != "2"){
-// }
+if($(element).attr('data-activity_complete') == ""){
+        // $(element).addClass('d-none');
+}
 
-
-// if($(element).attr('data-activity_complete') == "true"){
-// }
-
-// if($(element).attr('data-activity_complete') == ""){
-// }
-
-// });
-</script>
-
-<script>
-    $.ajax({
-        url: "/get-agent-activity-timeline",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
-
-            console.log(resp.message);
-            
-
-            $.each(resp.message, function(){
-
-                start_date = new Date(this.start_date);
-                end_date = new Date(this.end_date);
-                date_today = new Date();
-
-                var what_color = "dark";
-                var what_badge = "Upcoming";
-
-                if(start_date < date_today){
-                    what_color = "danger";
-                    what_badge = "Delayed";
-                } 
-                else if(start_date >= date_today || end_date >= date_today){
-                    what_color = "success";
-                    what_badge = "Om Schedule";
-                } 
-                else {
-                    what_color = "warning";
-                    what_badge = "Upcoming";
-                }
-
-
-                var m = moment(this.activity_created);  // or whatever start date you have
-                var today = moment().startOf('day');
-
-                var days = Math.round(moment.duration(today - m).asDays());
-
-                if(days == 0){
-                    dayTxt = 'Today';
-                } 
-                else if(days == 1) {
-                    dayTxt = days + ' Day';
-                } else {
-                    dayTxt = days + ' Days';
-                }
-
-                $('#from-to-' + this.sam_id).html(
-                    '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
-                    '<div>Actual Start: ' + this.activity_created + '</div>' +
-                    '<div>Aging: ' + dayTxt + '</div>'
-                );
-
-                $('#from-to-badge-' + this.sam_id).text(what_badge);
-                $('#from-to-badge-' + this.sam_id).text(what_badge).removeClass('badge-dark');
-                $('#from-to-badge-' + this.sam_id).text(what_badge).addClass('badge-' + what_color);
-
-                $('#to-do-indicator-' + this.sam_id).removeClass('bg-dark');
-                $('#to-do-indicator-' + this.sam_id).addClass('bg-' + what_color);
-
-                // if(this.activity_duration_days > 1) {
-                //     dayTxt = ' Days'
-                // } else {
-                //     dayTxt = ' Day'
-                // }
-
-                // $('#duration-' + this.sam_id).text(this.activity_duration_days + dayTxt);
-
-                $('#started-' + this.sam_id).text(this.activity_created + ' | Aging: ');
-            })
-        
-
-        },
-        complete: function(){
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });    
+});
 </script>
