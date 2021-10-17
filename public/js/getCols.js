@@ -1,3 +1,15 @@
+function parseDate(str) {
+    var mdy = str.split('/');
+    return new Date(mdy[2], mdy[0]-1, mdy[1]);
+}
+
+function datediff(first, second) {
+    // Take the difference between the dates and divide by milliseconds per day.
+    // Round to nearest whole number to deal with DST.
+    return Math.round((second-first)/(1000*60*60*24));
+}
+
+
 function getCols(active_program, active_table, active_profile){
 
     var cols = [];
@@ -100,6 +112,26 @@ function getCols(active_program, active_table, active_profile){
                                                 if( e.field_name === field['search_field'] ) 
                                                 return e; 
                                             });
+                                            return results.length < 1 ? "" : results[0]['value'];
+                                        } else {
+                                            return "";
+                                        }
+                                    
+                                    }
+                                }
+                            );
+                            break;
+
+                        case "activity_created":
+
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    searchable: true,
+                                    regex: true,
+                                    render : function(data){
+                                        if (data != null) {
                                             return results.length < 1 ? "" : results[0]['value'];
                                         } else {
                                             return "";
