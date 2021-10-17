@@ -1,18 +1,19 @@
 <div class="row border-bottom">
     <div class="col-12">
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
+        <button class="btn_switch_back_to_candidates d-none btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Candidates</button>                                            
     </div>
 </div>
 
-<div class="row pt-4">
+{{-- <div class="row pt-4">
     <div class="col-md-12">
         <H5 id="active_action">{{ $sub_activity }}</H5>
     </div>
 </div>
-
-<div class="row p-3">
+ --}}
+<div class="row p-0">
     <div class="col-12">
-        <div class="table-responsive aepm_table_div">
+        <div class="table-responsive aepm_table_div p-3">
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
@@ -26,8 +27,145 @@
             <div class="row form_div border-bottom pt-3 pb-2">
                 <div class="col-12">
                     <form class="ssds_form pt-3">
+                        <H3>Site Selection Deliberation Sheet</H3>
+                        <hr>
+                        <div class="position-relative row form-group">
+                            <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Name of Owner">
+                                <small class="text-danger lessor-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="contact_number" class="col-sm-4 col-form-label">Contact Number</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number">
+                                <small class="text-danger contact_number-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="address" class="col-sm-4 col-form-label">Street Address</label>
+                            <div class="col-sm-8">
+                                <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
+                                <small class="text-danger address-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="region" class="col-sm-4 col-form-label">Region</label>
+                            <div class="col-sm-8">
+                                @php
+                                    $regions = \DB::connection('mysql2')->table('location_regions')->get();
+                                @endphp
+                                <select class="form-control" id="region" name="region" data-name="address">
+                                    <option value="">Select Region</option>
+                                    @foreach ($regions as $region)
+                                    <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="text-danger region-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="province" class="col-sm-4 col-form-label">Province</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
+                                <small class="text-danger province-errors"></small>
+            
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
+                                <small class="text-danger lgu-errors"></small>
+            
+                            </div>
+                        </div>
+            
+                        <div class="position-relative row form-group">
+                            <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude" readonly>
+                                <small class="text-danger latitude-errors"></small>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="longitude" name="longitude" placeholder="Longitude" readonly>
+                                <small class="text-danger longitude-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="distance_from_nominal_point" class="col-sm-4 col-form-label">Distance from Nominal Point</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="distance_from_nominal_point" name="distance_from_nominal_point" placeholder="Distance from Nominal Point" readonly>
+                                <small class="text-danger distance_from_nominal_point-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="site_type" class="col-sm-4 col-form-label">Site Type</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="site_type" name="site_type">
+                                    <option value="">Select Site Type</option>
+                                    <option value="greenfield">Greenfield</option>
+                                    <option value="rooftop">Rooftop</option>
+                                </select>
+                                <small class="text-danger site_type-errors"></small>
+            
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="building_no_of_floors" class="col-sm-4 col-form-label">Building (No. of floors)</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="building_no_of_floors" name="building_no_of_floors" placeholder="Building (No. of floors)">
+                                <small class="text-danger building_no_of_floors-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="area_size" class="col-sm-4 col-form-label">Area Size</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="area_size" name="area_size" placeholder="Area Size">
+                                <small class="text-danger area_size-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="lease_rate" class="col-sm-4 col-form-label">Lease Rate</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="lease_rate" name="lease_rate">
+                                    <option value="">Select Lease Rate</option>
+                                    <option value="7,000 - 15,000">7,000 - 15,000</option>
+                                    <option value="16,000 - 24,999">16,000 - 24,999</option>
+                                    <option value="25,000 and above">25,000 and above</option>
+                                </select>
+                                <small class="text-danger lease_rate-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="property_use" name="property_use">
+                                    <option value="">Property Use</option>
+                                    <option value="Private">Private</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Agricultural">Agricultural</option>
+                                    <option value="Industrial">Industrial</option>
+                                </select>
+                                <small class="text-danger property_use-errors"></small>
+                            </div>
+                        </div>
+                        <div class="position-relative row form-group">
+                            <label for="right_of_way_access" class="col-sm-4 col-form-label">Right of Way Access</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="right_of_way_access" name="right_of_way_access">
+                                    <option value="">Right of Way Access</option>
+                                    <option value="24/7">Available 24/7</option>
+                                    <option value="limited">Limited</option>
+                                </select>
+                                <small class="text-danger right_of_way_access-errors"></small>
+                            </div>
+                        </div>
+
                         <div id="accordion" class="accordion-wrapper mb-3">
-                            <div class="card">
+                            {{-- <div class="card">
                                 <div id="headingOne" class="card-header">
                                     <button type="button" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
                                         <h5 class="m-0 p-0">Property Details</h5>
@@ -35,144 +173,10 @@
                                 </div>
                                 <div data-parent="#accordion" id="collapseOne1" aria-labelledby="headingOne" class="collapse" style="">
                                     <div class="card-body">
-                                        <div class="position-relative row form-group">
-                                            <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Name of Owner">
-                                                <small class="text-danger lessor-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="contact_number" class="col-sm-4 col-form-label">Contact Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number">
-                                                <small class="text-danger contact_number-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="address" class="col-sm-4 col-form-label">Street Address</label>
-                                            <div class="col-sm-8">
-                                                <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
-                                                <small class="text-danger address-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="region" class="col-sm-4 col-form-label">Region</label>
-                                            <div class="col-sm-8">
-                                                @php
-                                                    $regions = \DB::connection('mysql2')->table('location_regions')->get();
-                                                @endphp
-                                                <select class="form-control" id="region" name="region" data-name="address">
-                                                    <option value="">Select Region</option>
-                                                    @foreach ($regions as $region)
-                                                    <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <small class="text-danger region-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="province" class="col-sm-4 col-form-label">Province</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
-                                                <small class="text-danger province-errors"></small>
-                            
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
-                                                <small class="text-danger lgu-errors"></small>
-                            
-                                            </div>
-                                        </div>
-                            
-                                        <div class="position-relative row form-group">
-                                            <label for="latitude" class="col-sm-4 col-form-label">Coordinates</label>
-                                            <div class="col-sm-4">
-                                                <input type="number" class="form-control" id="latitude" name="latitude" placeholder="Latitude" readonly>
-                                                <small class="text-danger latitude-errors"></small>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="number" class="form-control" id="longitude" name="longitude" placeholder="Longitude" readonly>
-                                                <small class="text-danger longitude-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="distance_from_nominal_point" class="col-sm-4 col-form-label">Distance from Nominal Point</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="distance_from_nominal_point" name="distance_from_nominal_point" placeholder="Distance from Nominal Point" readonly>
-                                                <small class="text-danger distance_from_nominal_point-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="site_type" class="col-sm-4 col-form-label">Site Type</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" id="site_type" name="site_type">
-                                                    <option value="">Select Site Type</option>
-                                                    <option value="greenfield">Greenfield</option>
-                                                    <option value="rooftop">Rooftop</option>
-                                                </select>
-                                                <small class="text-danger site_type-errors"></small>
-                            
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="building_no_of_floors" class="col-sm-4 col-form-label">Building (No. of floors)</label>
-                                            <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="building_no_of_floors" name="building_no_of_floors" placeholder="Building (No. of floors)">
-                                                <small class="text-danger building_no_of_floors-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="area_size" class="col-sm-4 col-form-label">Area Size</label>
-                                            <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="area_size" name="area_size" placeholder="Area Size">
-                                                <small class="text-danger area_size-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="lease_rate" class="col-sm-4 col-form-label">Lease Rate</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" id="lease_rate" name="lease_rate">
-                                                    <option value="">Select Lease Rate</option>
-                                                    <option value="7,000 - 15,000">7,000 - 15,000</option>
-                                                    <option value="16,000 - 24,999">16,000 - 24,999</option>
-                                                    <option value="25,000 and above">25,000 and above</option>
-                                                </select>
-                                                <small class="text-danger lease_rate-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" id="property_use" name="property_use">
-                                                    <option value="">Property Use</option>
-                                                    <option value="Private">Private</option>
-                                                    <option value="Commercial">Commercial</option>
-                                                    <option value="Government">Government</option>
-                                                    <option value="Agricultural">Agricultural</option>
-                                                    <option value="Industrial">Industrial</option>
-                                                </select>
-                                                <small class="text-danger property_use-errors"></small>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="right_of_way_access" class="col-sm-4 col-form-label">Right of Way Access</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control" id="right_of_way_access" name="right_of_way_access">
-                                                    <option value="">Right of Way Access</option>
-                                                    <option value="24/7">Available 24/7</option>
-                                                    <option value="limited">Limited</option>
-                                                </select>
-                                                <small class="text-danger right_of_way_access-errors"></small>
-                                            </div>
-                                        </div>
                             
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="card">
                                 <div id="headingTwo" class="b-radius-0 card-header">
                                     <button type="button" data-toggle="collapse" data-target="#collapseOne2" aria-expanded="false" aria-controls="collapseTwo" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
@@ -210,7 +214,7 @@
                                                 <small class="text-danger type_of_property-errors"></small>
                                             </div>
                                         </div>
-                                        <h3>Lease Details</h3>
+                                        <h4>Lease Details</h4>
                                         <div class="position-relative row form-group">
                                             <label for="lease_term" class="col-sm-4 col-form-label">Lease Term</label>
                                             <div class="col-sm-8">
@@ -233,7 +237,7 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <h3>Property Document Availability</h3>
+                                        <h4>Property Document Availability</h4>
                                         <div class="position-relative row form-group">
                                             <label for="tct" class="col-sm-4 col-form-label">TCT</label>
                                             <div class="col-sm-8">
@@ -271,7 +275,7 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <h3>Social Acceptability</h3>
+                                        <h4>Social Acceptability</h4>
                                         <div class="position-relative row form-group">
                                             <label for="hoa_will_issue_consent" class="col-sm-4 col-form-label">HOA will issue consent</label>
                                             <div class="col-sm-8">
@@ -354,7 +358,7 @@
                                                 <small class="text-danger rank_antenna-errors"></small>
                                             </div>
                                         </div>
-                                        <h3>Sector 1</h3>
+                                        <h4>Sector 1</h4>
                                         <div class="position-relative row form-group">
                                             <label for="antenna_height_s1" class="col-sm-4 col-form-label">Antenna Height</label>
                                             <div class="col-sm-8">
@@ -376,7 +380,7 @@
                                                 <small class="text-danger antenna_type_s1-errors"></small>
                                             </div>
                                         </div>   
-                                        <h3>Sector 2</h3>
+                                        <h4>Sector 2</h4>
                                         <div class="position-relative row form-group">
                                             <label for="antenna_height_s2" class="col-sm-4 col-form-label">Antenna Height</label>
                                             <div class="col-sm-8">
@@ -398,7 +402,7 @@
                                                 <small class="text-danger antenna_type_s2-errors"></small>
                                             </div>
                                         </div>  
-                                        <h3>Sector 3</h3>
+                                        <h4>Sector 3</h4>
                                         <div class="position-relative row form-group">
                                             <label for="antenna_height_s3" class="col-sm-4 col-form-label">Antenna Height</label>
                                             <div class="col-sm-8">
@@ -420,7 +424,7 @@
                                                 <small class="text-danger antenna_type_s3-errors"></small>
                                             </div>
                                         </div>   
-                                        <h3>Sector 4</h3>
+                                        <h4>Sector 4</h4>
                                         <div class="position-relative row form-group">
                                             <label for="antenna_height_s4" class="col-sm-4 col-form-label">Antenna Height</label>
                                             <div class="col-sm-8">
@@ -443,7 +447,7 @@
                                             </div>
                                         </div>        
                                         <hr>
-                                        <h3>Target Coverage</h3>
+                                        <h4>Target Coverage</h4>
                                         <div class="position-relative row form-group">
                                             <label for="target_coverage_s1" class="col-sm-4 col-form-label">Target Coverage S1</label>
                                             <div class="col-sm-8">
@@ -473,7 +477,7 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <h3>Existing Coverage</h3>
+                                        <h4>Existing Coverage</h4>
                                         <div class="position-relative row form-group">
                                             <label for="cell_id_sc_code" class="col-sm-4 col-form-label">Cell ID / SC Code</label>
                                             <div class="col-sm-8">
@@ -545,7 +549,7 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <h3>Proximity Checklist</h3>
+                                        <h4>Proximity Checklist</h4>
                                         <h4>Existing Site</h4>
                                         <div class="position-relative row form-group">
                                             <label for="with_existing_globe_neighboring_site" class="col-sm-4 col-form-label">With existing globe neighboring site</label>
@@ -623,7 +627,7 @@
                                 </div>
                                 <div data-parent="#accordion" id="collapseOne4" class="collapse" style="">
                                     <div class="card-body">
-                                        <h3>Site A</h3>
+                                        <h4>Site A</h4>
                                         <div class="position-relative row form-group">
                                             <label for="site_a_acl" class="col-sm-4 col-form-label">ACL</label>
                                             <div class="col-sm-8">
@@ -652,7 +656,7 @@
                                                 <small class="text-danger site_a_microwave_type_capacity-errors"></small>
                                             </div>
                                         </div>
-                                        <h3>Site B (Preferred Link Up)</h3>
+                                        <h4>Site B (Preferred Link Up)</h4>
                                         <div class="position-relative row form-group">
                                             <label for="site_b_acl" class="col-sm-4 col-form-label">ACL</label>
                                             <div class="col-sm-8">
@@ -681,7 +685,7 @@
                                                 <small class="text-danger site_b_microwave_type_capacity-errors"></small>
                                             </div>
                                         </div>
-                                        <h3>Site C (Other Possible Link Up)</h3>
+                                        <h4>Site C (Other Possible Link Up)</h4>
                                         <div class="position-relative row form-group">
                                             <label for="site_c_acl" class="col-sm-4 col-form-label">ACL</label>
                                             <div class="col-sm-8">
@@ -866,7 +870,7 @@
                                 </div>
                             </div>
                         </div>            
-                    </form                                               
+                    </form>                                          
                 </div>
             </div>
         </div>
@@ -909,6 +913,17 @@
             ],
         });
 
+        $(".btn_switch_back_to_candidates").on("click", function(e){
+            e.preventDefault();
+
+            $(".btn_switch_back_to_actions").removeClass("d-none");
+            $(".btn_switch_back_to_candidates").addClass("d-none");
+
+            $(".form_data").addClass("d-none");
+            $(".aepm_table_div").removeClass("d-none");
+
+        });
+
         $("#aepm_table").on("click", "tr", function(e){
             e.preventDefault();
 
@@ -923,6 +938,12 @@
                 var id = $(this).attr('data-id');
                 $(".set_schedule").attr("data-id", id);
                 $(".form_data").removeClass("d-none");
+                $(".aepm_table_div").addClass("d-none");
+
+                $(".btn_switch_back_to_actions").addClass("d-none");
+                $(".btn_switch_back_to_candidates").removeClass("d-none");
+                
+                
             } else {
                 $(".form_data").addClass("d-none");
             }
