@@ -4951,7 +4951,7 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return $json['jtss_schedule'] . "";
+                            return date('M d, Y', strtotime($json['jtss_schedule']));
                         } else {
                             return $row->value;
                         }
@@ -4962,7 +4962,7 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return $json['jtss_schedule'] . "";
+                            return date('M d, Y', strtotime($json['jtss_schedule']));
                         } else {
                             return $row->value;
                         }
@@ -4972,6 +4972,9 @@ class GlobeController extends Controller
                     })
                     ->addColumn('status', function($row){
                         return ucfirst($row->status);
+                    })
+                    ->addColumn('date_approved', function($row){
+                        return date('M d, Y ', strtotime($row->date_approved)). ' at ' .date('h:m:a', strtotime($row->date_approved));
                     });
                 }
                                 
