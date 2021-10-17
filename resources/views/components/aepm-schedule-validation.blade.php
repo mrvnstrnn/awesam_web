@@ -33,6 +33,11 @@
 
                             <div class="row pb-3 border-bottom">
                                 <div class="col-12">
+                                    @php
+                                        if($count > 0){
+                                            $control = ''
+                                        }
+                                    @endphp
                                     <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right {{ $count > 0 ? "" : "d-none" }}">JTSS Sched Confirmed</button>
                                 </div>
                             </div>
