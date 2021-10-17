@@ -1779,10 +1779,16 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine'){
 
             $sites = \DB::connection('mysql2')
-            ->table("view_sites_activity_3")
-            ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
-            ->where('view_sites_activity_3.program_id', $program_id)
-            ->where('site_users.agent_id', \Auth::id())
+            // ->table("site_milestone")
+            ->table("view_assigned_sites")
+            // ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
+            ->where('program_id', $program_id)
+            ->where('agent_id', \Auth::id())
+            // ->where('activity_complete', 'false')
+            // ->where("site_agent_id", \Auth::id())
+            // ->whereJsonContains("site_agent", [
+            //     'user_id' => \Auth::id()
+            // ])
             ->get();
         }
 

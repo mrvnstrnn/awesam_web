@@ -76,7 +76,7 @@
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
-                                                        "Advanced Site Hunting",
+                                                        // "Advanced Site Hunting",
                                                         "Schedule JTSS",
                                                         "Schedule JTSS",
                                                         "RAM Validation of  Advanced Site Hunting  Documents",
