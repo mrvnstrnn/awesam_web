@@ -2500,6 +2500,21 @@ class GlobeController extends Controller
             ->render();
 
         }
+        elseif($sub_activity == 'Joint Technical Site Survey'){
+
+            $what_component = "components.ssds";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
         else {
 
             $what_component = "components.subactivity-doc-upload";
@@ -4951,7 +4966,8 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return date('M d, Y', strtotime($json['jtss_schedule']));
+                            // return date('M d, Y', strtotime($json['jtss_schedule']));
+                            return $json['jtss_schedule'];
                         } else {
                             return $row->value;
                         }
@@ -4962,7 +4978,8 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return date('M d, Y', strtotime($json['jtss_schedule']));
+                            // return date('M d, Y', strtotime($json['jtss_schedule']));
+                            return $json['jtss_schedule'];
                         } else {
                             return $row->value;
                         }
