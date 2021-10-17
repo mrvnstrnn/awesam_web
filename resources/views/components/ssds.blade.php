@@ -129,18 +129,6 @@
                             </div>
                         </div>
                         <div class="position-relative row form-group">
-                            <label for="lease_rate" class="col-sm-4 col-form-label">Lease Rate</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="lease_rate" name="lease_rate">
-                                    <option value="">Select Lease Rate</option>
-                                    <option value="7,000 - 15,000">7,000 - 15,000</option>
-                                    <option value="16,000 - 24,999">16,000 - 24,999</option>
-                                    <option value="25,000 and above">25,000 and above</option>
-                                </select>
-                                <small class="text-danger lease_rate-errors"></small>
-                            </div>
-                        </div>
-                        <div class="position-relative row form-group">
                             <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
                             <div class="col-sm-8">
                                 <select class="form-control" id="property_use" name="property_use">
@@ -220,21 +208,21 @@
                                         <div class="position-relative row form-group">
                                             <label for="lease_term" class="col-sm-4 col-form-label">Lease Term</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="lease_term" name="lease_term" placeholder="Lease Term">
+                                                <input type="number" class="form-control" id="lease_term" name="lease_term" placeholder="Lease Term">
                                                 <small class="text-danger lease_term-errors"></small>
                                             </div>
                                         </div>
                                         <div class="position-relative row form-group">
                                             <label for="lease_rate" class="col-sm-4 col-form-label">Lease Rate</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="lease_rate" name="lease_rate" placeholder="Lease Rate">
+                                                <input type="number" class="form-control" id="lease_rate" name="lease_rate" placeholder="Lease Rate">
                                                 <small class="text-danger lease_rate-errors"></small>
                                             </div>
                                         </div>  
                                         <div class="position-relative row form-group">
                                             <label for="advance_rental" class="col-sm-4 col-form-label">Advance Rental</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="advance_rental" name="advance_rental" placeholder="Advance Rental">
+                                                <input type="number" class="form-control" id="advance_rental" name="advance_rental" placeholder="Advance Rental">
                                                 <small class="text-danger advance_rental-errors"></small>
                                             </div>
                                         </div>
