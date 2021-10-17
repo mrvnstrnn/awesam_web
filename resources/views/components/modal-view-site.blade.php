@@ -76,6 +76,7 @@
                                                         "RAM Head PR Approval",
                                                         "NAM PR Approval",
                                                         "Vendor Awarding",
+
                                                         // "Advanced Site Hunting",
                                                         "Schedule JTSS",
                                                         "Schedule JTSS",
@@ -119,7 +120,11 @@
                                                         "Issue Validation",
                                                     );
 
-                                    if(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
+                                    if( $main_activity != ""){
+                                        $show_view = "site_details_view";
+                                        $site_action_view = 'd-none';
+                                    }
+                                    elseif(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
                                         $show_view = "site_action_view";
                                         $site_details_view = 'd-none';
                                     }

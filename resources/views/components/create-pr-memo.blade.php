@@ -236,7 +236,7 @@
                                 $("#financial_analysis").val(null).trigger("change"); 
                                 Swal.fire(
                                     'Error',
-                                    'No available data.',
+                                    'No available FSAQ data.',
                                     'error'
                                 )
                             } else {

@@ -170,10 +170,16 @@
             // $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
         } );
 
+
+
         $(document).on("click", ".checkAll", function(e){
             e.preventDefault();
-            
+
+
             var val = $(this).val();
+
+            $(this).prop('checked', true);
+
             var atLeastOneIsChecked = $('input[name='+val+']:checkbox:checked').length > 0;
             
             if (!atLeastOneIsChecked) {

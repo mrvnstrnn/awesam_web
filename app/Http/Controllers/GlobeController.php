@@ -2727,131 +2727,149 @@ class GlobeController extends Controller
 
             } else {
 
-                if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
-
-                    $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                    ->where('type', 'create_pr')
-                    ->first();
-
-                    $what_modal = "components.pr-memo-approval";
-
-                    return \View::make($what_modal)
-                    ->with([
-                        'pr_memo' => $pr_memo,
-                        'activity' => $request->input('activity'),
-                        'samid' => $request['sam_id'],
-                        'site_name' => count($site) < 1 ? "" : $site[0]->site_name
-                    ])
-                    ->render();
-                }
-
-                else if ($request->input('activity') == 'SSDS RAM Validation') {
-                    $what_modal = "components.s-s-d-s-ram-ranking";
-
-                    $jtss_sites = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input('sam_id'))
-                                                        ->where('type', 'jtss_add_site')
-                                                        ->get();
-
-                    $jtss_sites_json = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input('sam_id'))
-                                                        ->where('type', 'jtss_add_site')
-                                                        ->where('value->rank_number', '!=', 'null')
-                                                        ->get();
-
-                    return \View::make($what_modal)
-                    ->with([
-                        'jtss_sites' => $jtss_sites,
-                        'jtss_sites_json' => $jtss_sites_json,
-                        'activity_id' => $site[0]->activity_id,
-                        'site_category' => $site[0]->site_category,
-                        'activity' => $request->input('activity'),
-                        'sam_id' => $request->input('sam_id'),
-                        'program_id' => $request->input('program_id'),
-                        'site_name' => count($site) < 1 ? "" : $site[0]->site_name
-                    ])
-                    ->render();
-                }
-
-                else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
-
-                    $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                                                ->where('status', 'approved')
-                                                ->where('type', 'jtss_add_site')
-                                                ->first();
-
-                    $what_modal = "components.site-approved-ssds-ntp-validation";
-
-                    return \View::make($what_modal)
-                    ->with([
-                        'sam_id' => $request['sam_id'],
-                        'site_name' => $site[0]->site_name,
-                        'program_id' => $site[0]->program_id,
-                        'site_category' => $site[0]->site_category,
-                        'activity_id' => $site[0]->activity_id,
-                        'data' => $data,
-                        'activity' => $request->input('activity')
-                    ])
-                    ->render();
-
-                }
-
-                else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
-
-                    $datas = SubActivityValue::select('sam_id')
-                                        ->where('sam_id', $request['sam_id'])
-                                        ->where('type', 'jtss_add_site')
-                                        ->where('status', 'Scheduled')
-                                        ->get();
-
-                    $what_modal = "components.aepm-schedule-validation";
-
-                    return \View::make($what_modal)
-                    ->with([
-                        'sam_id' => $request['sam_id'],
-                        'site_name' => $site[0]->site_name,
-                        'program_id' => $site[0]->program_id,
-                        'site_category' => $site[0]->site_category,
-                        'activity_id' => $site[0]->activity_id,
-                        'activity' => $request->input('activity'),
-                        'count' => count($datas)
-                    ])
-                    ->render();
-
-                }
-
-                else {
-
-                    $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                    ->where('type', 'create_pr')
-                    ->first();
-
-                    $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
-                    ->join('users', 'users.id', 'sub_activity_value.user_id')
-                    ->where('sub_activity_value.sam_id', $request->input('sam_id'))
-                    // ->where('sub_activity_value.status', "pending")
-                    ->where('sub_activity_value.type', "create_pr")
-                    ->first();
-
-
-                    $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                    ->where('status', "pending")
-                    ->where('type', "rtb_declaration")
-                    ->first();
+                if($mainactivity != "") {
 
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
                     ->with([
                         'site' => $site,
-                        'pr' => $pr,
-                        'pr_memo' => $pr_memo,
                         'sam_id' => $request['sam_id'],
-                        'site_fields' => $site_fields,
-                        'rtbdeclaration' => $rtbdeclaration,
                         'main_activity' => $mainactivity,
                     ])
                     ->render();
+
+
+                } else {
+
+                    if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
+
+                        $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                        ->where('type', 'create_pr')
+                        ->first();
+    
+                        $what_modal = "components.pr-memo-approval";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'pr_memo' => $pr_memo,
+                            'activity' => $request->input('activity'),
+                            'samid' => $request['sam_id'],
+                            'site_name' => count($site) < 1 ? "" : $site[0]->site_name
+                        ])
+                        ->render();
+                    }
+    
+                    else if ($request->input('activity') == 'SSDS RAM Validation') {
+                        $what_modal = "components.s-s-d-s-ram-ranking";
+    
+                        $jtss_sites = SubActivityValue::select('sam_id')
+                                                            ->where('sam_id', $request->input('sam_id'))
+                                                            ->where('type', 'jtss_add_site')
+                                                            ->get();
+    
+                        $jtss_sites_json = SubActivityValue::select('sam_id')
+                                                            ->where('sam_id', $request->input('sam_id'))
+                                                            ->where('type', 'jtss_add_site')
+                                                            ->where('value->rank_number', '!=', 'null')
+                                                            ->get();
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'jtss_sites' => $jtss_sites,
+                            'jtss_sites_json' => $jtss_sites_json,
+                            'activity_id' => $site[0]->activity_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity' => $request->input('activity'),
+                            'sam_id' => $request->input('sam_id'),
+                            'program_id' => $request->input('program_id'),
+                            'site_name' => count($site) < 1 ? "" : $site[0]->site_name
+                        ])
+                        ->render();
+                    }
+    
+                    else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
+    
+                        $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                                                    ->where('status', 'approved')
+                                                    ->where('type', 'jtss_add_site')
+                                                    ->first();
+    
+                        $what_modal = "components.site-approved-ssds-ntp-validation";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'data' => $data,
+                            'activity' => $request->input('activity')
+                        ])
+                        ->render();
+    
+                    }
+    
+                    else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
+    
+                        $datas = SubActivityValue::select('sam_id')
+                                            ->where('sam_id', $request['sam_id'])
+                                            ->where('type', 'jtss_add_site')
+                                            ->where('status', 'Scheduled')
+                                            ->get();
+    
+                        $what_modal = "components.aepm-schedule-validation";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'activity' => $request->input('activity'),
+                            'count' => count($datas)
+                        ])
+                        ->render();
+    
+                    }
+    
+                    else {
+    
+                        $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                        ->where('type', 'create_pr')
+                        ->first();
+    
+                        $pr = SubActivityValue::select('users.name', 'sub_activity_value.*')
+                        ->join('users', 'users.id', 'sub_activity_value.user_id')
+                        ->where('sub_activity_value.sam_id', $request->input('sam_id'))
+                        // ->where('sub_activity_value.status', "pending")
+                        ->where('sub_activity_value.type', "create_pr")
+                        ->first();
+    
+    
+                        $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                        ->where('status', "pending")
+                        ->where('type', "rtb_declaration")
+                        ->first();
+    
+                        $what_modal = "components.modal-view-site";
+                        return \View::make($what_modal)
+                        ->with([
+                            'site' => $site,
+                            'pr' => $pr,
+                            'pr_memo' => $pr_memo,
+                            'sam_id' => $request['sam_id'],
+                            'site_fields' => $site_fields,
+                            'rtbdeclaration' => $rtbdeclaration,
+                            'main_activity' => $mainactivity,
+                        ])
+                        ->render();
+                    }                    
+
                 }
+
+
 
             }
 
