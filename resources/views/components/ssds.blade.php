@@ -13,7 +13,7 @@
  --}}
 <div class="row p-0">
     <div class="col-12">
-        <div class="table-responsive aepm_table_div p-3">
+        <div class="table-responsive aepm_table_div pt-4">
             <H3>Site Candidates</H3>
             <hr>
             <table class="table table-hover table-inverse" id="aepm_table">
@@ -551,7 +551,8 @@
                                         </div>
                                         <hr>
                                         <h4>Proximity Checklist</h4>
-                                        <h4>Existing Site</h4>
+                                        <hr>
+                                        <h5>Existing Site</h5>
                                         <div class="position-relative row form-group">
                                             <label for="with_existing_globe_neighboring_site" class="col-sm-4 col-form-label">With existing globe neighboring site</label>
                                             <div class="col-sm-8">
@@ -583,7 +584,8 @@
                                                 <small class="text-danger existing_approx_distance-errors"></small>
                                             </div>
                                         </div>
-                                        <h4>Future Site</h4>
+
+                                        <h5>Future Site</h5>
                                         <div class="position-relative row form-group">
                                             <label for="with_future_globe_site" class="col-sm-4 col-form-label">With Future Globe Site</label>
                                             <div class="col-sm-8">
