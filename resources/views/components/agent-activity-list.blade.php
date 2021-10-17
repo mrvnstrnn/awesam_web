@@ -236,9 +236,11 @@ $activities = \DB::connection('mysql2')
             <div id="to-do-indicator-{{ $activities[$i]->sam_id }}" class="todo-indicator bg-{{ $activity_color }}"></div>
             <div class="widget-content p-0">
                 <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-3 ml-2">
-                        @php
-                            if($activities[$i]->activity_name == "Advanced Site Hunting"){
+                    <div class="widget-content-left mr-2 ml-2">
+                        @if($activities[$i]->activity_name == "Advanced Site Hunting")
+
+                            @php
+
                                 $activity_schedule = \DB::table('sub_activity_value')
                                                     ->where('sam_id', $activities[$i]->sam_id)
                                                     ->where('type', 'site_schedule')
@@ -247,12 +249,31 @@ $activities = \DB::connection('mysql2')
                                 $sched = json_decode($activity_schedule[0]->value);
                                 $sched = getdate(strtotime($sched->site_schedule));
 
-                            }
-                        @endphp
-                        @if($activities[$i]->activity_name == "Advanced Site Hunting")
+                            @endphp
+
                             <div class="text-center">
                                 <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
                                 <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
+                                <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["year"], 0, 4)) }}</div>
+                            </div>
+
+                        @elseif($activities[$i]->activity_name == "Joint Technical Site Survey")
+
+                            @php
+
+                                $activity_schedule = \DB::table('view_jtss_start_end_dates')
+                                                    ->where('sam_id', $activities[$i]->sam_id)
+                                                    ->first();
+
+                                // $sched = json_decode($activity_schedule[0]);
+                                $sched = getdate(strtotime($activity_schedule->jtss_schedule_start));
+
+                            @endphp
+
+                            <div class="text-center">
+                                <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
+                                <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
+                                <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["year"], 0, 4)) }}</div>
                             </div>
                         @else
                             <i class="pe-7s-note2 pe-2x"></i>
@@ -366,7 +387,7 @@ $activities = \DB::connection('mysql2')
 
                 $('#from-to-' + this.sam_id).html(
                     '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
-                    '<div>Actual Start: ' + this.activity_created + '</div>' +
+                    '<div>Started: ' + this.activity_created + '</div>' +
                     '<div>Aging: ' + dayTxt + '</div>'
                 );
 
