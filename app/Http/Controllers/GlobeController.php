@@ -5189,5 +5189,22 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_agent_activity_timeline()
+    {
+        try {
+
+            $timeline = \DB::table('view_assigned_sites_with_timeline')
+                    ->where('agent_id', \Auth::user()->id)
+                    ->get();
+
+            return response()->json(['error' => false, 'message' => $timeline]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+        
+    }
+
 }
 
