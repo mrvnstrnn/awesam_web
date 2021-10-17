@@ -4951,7 +4951,8 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return date('M d, Y', strtotime($json['jtss_schedule']));
+                            // return date('M d, Y', strtotime($json['jtss_schedule']));
+                            return $json['jtss_schedule'];
                         } else {
                             return $row->value;
                         }
@@ -4962,7 +4963,8 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            return date('M d, Y', strtotime($json['jtss_schedule']));
+                            // return date('M d, Y', strtotime($json['jtss_schedule']));
+                            return $json['jtss_schedule'];
                         } else {
                             return $row->value;
                         }

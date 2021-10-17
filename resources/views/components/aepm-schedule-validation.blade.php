@@ -88,8 +88,8 @@
                                                                         <input type="input" class="form-control" name="jtss_schedule" id="jtss_schedule" readonly>
                                                                         <small class="text-danger jtss_schedule-error"></small>
                                                                     </div>
-                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" id="single_btn" data-value="single" type="button">Set Schedule</button>
-                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right" id="all_btn" data-value="all" type="button">Set Schedule to all</button>
+                                                                    <button class="btn btn-sm btn-shadow btn-success set_schedule pull-right" id="single_btn" data-value="single" type="button">Set Schedule</button>
+                                                                    <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right mr-1" id="all_btn" data-value="all" type="button">Set Schedule to all</button>
                                                                 </form>
                                                             </div>
                                                         </div>
