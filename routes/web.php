@@ -226,6 +226,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/vendor-agents/{user_id?}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
+    Route::get('/vendor-employees', [GlobeController::class, 'vendor_employees'])->name('vendor_employees');
 
     Route::get('/get-supervisor', [ProfileController::class, 'get_supervisor']);
     Route::get('/get-agent', [ProfileController::class, 'get_agent']);
