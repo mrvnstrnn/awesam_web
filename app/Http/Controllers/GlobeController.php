@@ -5245,5 +5245,45 @@ class GlobeController extends Controller
         
     }
 
+    public function submit_ssds (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                '*' => 'required',
+            ));
+
+            if ($validate->passes()) {
+                $check_if_added = SubActivityValue::where('type', 'jtss_ssds')
+                                                        ->where('sam_id', $request->get('sam_id'))
+                                                        ->where('value->id', $request->get('id'))
+                                                        ->where('status', 'pending')
+                                                        ->get();
+            
+                    if ( count($check_if_added) < 1 ) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->get('sam_id'),
+                            'sub_activity_id' => $request->get('sub_activity_id'),
+                            'type' => 'jtss_ssds',
+                            'status' => 'pending',
+                            'user_id' => \Auth::id(),
+                            'value' => json_encode($request->all())
+                        ]);
+                    } else {
+                        SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('value->id', $request->get('id'))
+                                        ->update([
+                                            'value' => json_encode($request->all())
+                                        ]);
+                    }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
 }
 
