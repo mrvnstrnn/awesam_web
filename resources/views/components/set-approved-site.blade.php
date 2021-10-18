@@ -6,7 +6,7 @@
 
 <div class="row pt-4">
     <div class="col-md-12">
-        <H5 id="active_action">Set Approved Site</H5>
+        <H5 id="active_action">{{ $sub_activity }}</H5>
     </div>
 </div>
 
@@ -31,11 +31,6 @@
         <form class="ssds_form">
             <H3>Site Selection Deliberation Sheet</H3>
             <hr>
-            <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
-            <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
-            <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
-            <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
-            <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
             <input type="hidden" name="id" id="id">
             <div class="position-relative row form-group">
                 <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
@@ -1054,9 +1049,7 @@ $("#btn_approve_ssds").on("click", function () {
     $(this).text("Processing...");
 
     var id = $("#hidden_id").val();
-    var vendor_id = $("#modal_site_vendor_id").val();
-    var program_id = $("#modal_program_id").val();
-    var activity_name = $(".ajax_content_box").attr("data-activity");
+    var program_id = "{{ $program_id }}";
 
     var activity_id = "{{ $activity_id }}";
     var sam_id = "{{ $sam_id }}";
