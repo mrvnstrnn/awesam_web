@@ -737,7 +737,10 @@ class GlobeController extends Controller
 
                 $dt = DataTables::of($checkAgent)
                                     ->addColumn('action', function($row){
-                                        return '<button class="btn btn-sm btn-primary update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button>';
+                                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button> ';
+                                        $btn .= '<button class="btn btn-sm btn-shadow btn-danger" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable"><i class="fa fa-times"></i></button>';
+
+                                        return $btn;
                                     });
             } else {
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
@@ -776,6 +779,27 @@ class GlobeController extends Controller
                                     $agents = UserDetail::select('user_id')->where('IS_id', $row->user_id)->get();
                                     return count($agents);
                                 });
+
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+    public function vendor_employees()
+    {
+        try {
+            $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                    ->where('user_details.IS_id', \Auth::id())
+                                    ->where('users.profile_id', 1)
+                                    ->get();
+
+            $dt = DataTables::of($checkSupervisor)
+                            ->addColumn('number_agent', function($row){
+                                $agents = UserDetail::select('user_id')->where('IS_id', $row->user_id)->get();
+                                return count($agents);
+                            });
 
             return $dt->make(true);
         } catch (\Throwable $th) {
