@@ -5253,14 +5253,29 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                SubActivityValue::create([
-                    'sam_id' => $request->get('sam_id'),
-                    'sub_activity_id' => $request->get('sub_activity_id'),
-                    'type' => 'jtss_ssds',
-                    'status' => 'pending',
-                    'user_id' => \Auth::id(),
-                    'value' => json_encode($request->all())
-                ]);
+                $check_if_added = SubActivityValue::where('type', 'jtss_ssds')
+                                                        ->where('sam_id', $request->get('sam_id'))
+                                                        ->where('value->id', $request->get('id'))
+                                                        ->where('status', 'pending')
+                                                        ->get();
+            
+                    if ( count($check_if_added) < 1 ) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->get('sam_id'),
+                            'sub_activity_id' => $request->get('sub_activity_id'),
+                            'type' => 'jtss_ssds',
+                            'status' => 'pending',
+                            'user_id' => \Auth::id(),
+                            'value' => json_encode($request->all())
+                        ]);
+                    } else {
+                        SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('value->id', $request->get('id'))
+                                        ->update([
+                                            'value' => json_encode($request->all())
+                                        ]);
+                    }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }

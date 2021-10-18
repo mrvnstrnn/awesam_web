@@ -39,6 +39,7 @@
                         <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
                         <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
                         <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
+                        <input type="hidden" name="id" id="id">
                         <div class="position-relative row form-group">
                             <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
                             <div class="col-sm-8">
