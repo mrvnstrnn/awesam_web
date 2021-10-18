@@ -4957,6 +4957,10 @@ class GlobeController extends Controller
             } else if ( $status == 'rejected' ) {
                 $datas->where('type', 'jtss_add_site')
                         ->where('status', $status);
+            } else if ( $status == 'jtss_ssds' ) {
+                $datas->where('type', 'jtss_ssds')
+                        ->where('type', $status)
+                        ->where('status', 'pending');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }

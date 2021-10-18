@@ -25,6 +25,7 @@
                         <th>Longitude</th>
                         <th>Distance</th>
                         <th>Schedule</th>
+                    </tr>
                 </thead>
             </table>
         </div>
