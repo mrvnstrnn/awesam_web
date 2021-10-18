@@ -5,12 +5,12 @@
     <div class="card-header-tab card-header">
         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
         <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-        List of employees
+        Employee Offboarding
         </div>      
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('vendor_agents') }}">
+            <table id="employee-agents-table" class="align-middle mb-0 table table-borderless table-striped table-hover" data-href="{{ route('vendor_employees') }}">
                 <thead>
                     <tr>
                         <th>User ID</th>

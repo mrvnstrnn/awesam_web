@@ -787,12 +787,12 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_employee()
+    public function vendor_employees()
     {
         try {
             $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
                                     ->where('user_details.IS_id', \Auth::id())
-                                    // ->where('users.profile_id', 3)
+                                    ->where('users.profile_id', 1)
                                     ->get();
 
             $dt = DataTables::of($checkSupervisor)
