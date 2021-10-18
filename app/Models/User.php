@@ -118,7 +118,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getUserProfile()
     {
-        return Profile::find(\Auth::user()->profile_id);
+        if (is_null(\Auth::user()->profile_id)) {
+            return Profile::find(2);
+        } else {
+            return Profile::find(\Auth::user()->profile_id);
+        }
     }
 
     public function getUserDetail()

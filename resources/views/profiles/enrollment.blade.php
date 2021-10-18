@@ -186,16 +186,24 @@
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="designation">Designation</label>
-                                                        @if (\Auth::user()->getUserProfile()->mode == "vendor")
+                                                        @if (\Auth::user()->getUserProfile() != null)
+                                                            @if (\Auth::user()->getUserProfile()->mode == "vendor")
+                                                                <select name="designation" id="designation"  class="form-control" required>
+                                                                    <option  disabled selected>Designation</option>
+                                                                    <option value="2">Agent</option>
+                                                                    <option value="3">Supervisor</option>
+                                                                </select>
+                                                            @else
+                                                                <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
+                                                                <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->profile_id }}">
+                                                                <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->getUserProfile()->mode }}">
+                                                            @endif
+                                                        @else
                                                             <select name="designation" id="designation"  class="form-control" required>
                                                                 <option  disabled selected>Designation</option>
                                                                 <option value="2">Agent</option>
                                                                 <option value="3">Supervisor</option>
                                                             </select>
-                                                        @else
-                                                            <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
-                                                            <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->profile_id }}">
-                                                            <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->getUserProfile()->mode }}">
                                                         @endif
                                                         <small class="designation-error text-danger"></small>
                                                     </div>
@@ -325,7 +333,8 @@
                                             <div class="results-title">You can now submit your details for validation!</div>
                                             <div class="mt-3 mb-3"></div>
                                             <div class="text-center">
-                                                <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">{{ \Auth::user()->getUserProfile()->mode == "vendor" ? "Request Validation" : "Finish Onboarding" }}</button>
+                                                {{-- <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">{{ \Auth::user()->getUserProfile()->mode == "vendor" ? "Request Validation" : "Finish Onboarding" }}</button> --}}
+                                                <button id="finish-btn" type="button" class="btn-shadow btn-wide btn btn-success btn-lg" data-href="{{ route('finish.onboarding') }}">Finish Onboarding</button>
                                             </div>
                                         </div>                                        
                                     </div>
@@ -339,7 +348,7 @@
                                 <input type="hidden" name="hidden_region" id="hidden_region">
                                 <input type="hidden" name="hidden_province" id="hidden_province">
                                 <input type="hidden" name="hidden_lgu" id="hidden_lgu">
-                                <input type="hidden" id="hidden_mode" hidden_mode="mode" >
+                                <input type="hidden" id="hidden_mode" name="hidden_mode" >
                             </form>
                         </div>
                     </div>
@@ -446,7 +455,11 @@
         },
         error: function (file, resp) {
             $("input[name=capture_image]").val("");
-            toastr.error(resp, "Error");
+            Swal.fire(
+                'Error',
+                resp,
+                'error'
+            )
         }
     });
             
@@ -521,24 +534,27 @@
                     //     'success'
                     // )
 
-                    toastr.success(resp.message, "Success");
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
 
                     $("#firsttimeModal").modal("hide");
 
                     $(".update_password").removeAttr("disabled");
                     $(".update_password").text("Update");
                 } else {
-                    // Swal.fire(
-                    //     'Success',
-                    //     resp.message,
-                    //     'success'
-                    // )
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
                     } else {
-                        toastr.error(resp.message, "Error");
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
 
 
@@ -554,7 +570,11 @@
                 //     'error'
                 // )
 
-                toastr.error(resp, "Error");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
 
                 $(".update_password").removeAttr("disabled");
                 $(".update_password").text("Update");
@@ -587,11 +607,11 @@
 
                     $(".results-title").text($("#mode").val());
 
-                    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "globe") {
-                        location.reload(); 
-                    } else {
-                        toastr.success(resp.message, 'Success');
-                    }
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
 
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
@@ -609,7 +629,11 @@
                         $("#step-3").addClass('d-none');
                         $("#step-4").addClass('d-none');
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
 
                         $(".step-1-li").addClass('active');
                         $(".step-2-li").removeClass('done');
@@ -624,7 +648,11 @@
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

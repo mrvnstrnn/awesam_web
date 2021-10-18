@@ -31,9 +31,13 @@ $(document).ready(() => {
             success: function (resp) {
                 if(!resp.error) {
                     $("#invitation_form")[0].reset();
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                     $("#invite_btn").removeAttr("disabled");
-                    $("#invite_btn").text('Invite');
+                    $("#invite_btn").text('Send Invitation');
                 } else {
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {
@@ -41,17 +45,25 @@ $(document).ready(() => {
                             $("#" + index + "-error").text(data);
                         });
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                     $("#invite_btn").removeAttr("disabled");
-                    $("#invite_btn").text('Invite');
+                    $("#invite_btn").text('Send Invitation');
                 }
             },
 
             error: function (resp) {
                 $("#invite_btn").removeAttr("disabled");
-                $("#invite_btn").text('Invite');
-                toastr.error(resp.message, 'Error');
+                $("#invite_btn").text('Send Invitation');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -152,11 +164,19 @@ $(document).ready(() => {
                         }
                     }
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });
@@ -187,19 +207,31 @@ $(document).ready(() => {
 
                     $(".results-title").text($("#mode").val());
 
-                    toastr.success(resp.message, 'Success');
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
                     } else {
-                        toastr.error(resp.message, 'Error');
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
                     }
                 }
             },
             error: function(resp) {
-                toastr.error(resp.message, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

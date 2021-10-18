@@ -5250,6 +5250,26 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_ssds_schedule($id)
+    {
+        try {
+            $datas = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('value->id', $id)
+                                        ->where('status', 'pending')
+                                        ->first();
+
+            if ( is_null($datas) ) {
+                $datas = SubActivityValue::where('id', $id)
+                                            ->first();
+            }
+
+            return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function get_agent_activity_timeline()
     {
         try {
@@ -5265,6 +5285,46 @@ class GlobeController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
         
+    }
+
+    public function submit_ssds (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                '*' => 'required',
+            ));
+
+            if ($validate->passes()) {
+                $check_if_added = SubActivityValue::where('type', 'jtss_ssds')
+                                                        ->where('sam_id', $request->get('sam_id'))
+                                                        ->where('value->id', $request->get('id'))
+                                                        ->where('status', 'pending')
+                                                        ->get();
+            
+                    if ( count($check_if_added) < 1 ) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->get('sam_id'),
+                            'sub_activity_id' => $request->get('sub_activity_id'),
+                            'type' => 'jtss_ssds',
+                            'status' => 'pending',
+                            'user_id' => \Auth::id(),
+                            'value' => json_encode($request->all())
+                        ]);
+                    } else {
+                        SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('value->id', $request->get('id'))
+                                        ->update([
+                                            'value' => json_encode($request->all())
+                                        ]);
+                    }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
     }
 
 }

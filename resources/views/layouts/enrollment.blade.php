@@ -134,8 +134,9 @@
 
     {{-- <script type="text/javascript" src="/vendors/fullcalendar/dist/fullcalendar.js"></script> --}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- custome.js -->
     {{-- <script type="text/javascript" src="/js/charts/apex-charts.js"></script>
