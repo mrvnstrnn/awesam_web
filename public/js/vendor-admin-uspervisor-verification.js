@@ -23,10 +23,11 @@ $(document).ready(() => {
             { data: "lastname" },
             { data: "email" },
             { data: "number_agent" },
+            { data: "action", className: "text-right" },
         ],
     });
 
-    $('#employee-agents-table tbody').on('click', 'tr', function () {
+    $('#employee-agents-table tbody').on('click', 'tr td:first-child', function () {
         $("#modal-employee-verification").modal("show");
 
         $(".content-data table").remove();
@@ -183,6 +184,16 @@ $(document).ready(() => {
         $(".supervisor-data").addClass("d-none");
         $(".content-data").removeClass("d-none");
         $("#modal-employee-verification .modal-title").text("Agent");
+    });
+
+    $(document).on("click", ".disable_btn", function (){
+        $("b.user_name_disable").text($(this).attr("data-name"));
+        $("#disable_employee_modal").modal("show");
+    });
+
+    $(document).on("click", ".offboard_btn", function (){
+        $("b.user_name_offboard").text($(this).attr("data-name"));
+        $("#offboard_employee_modal").modal("show");
     });
 
 
