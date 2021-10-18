@@ -5228,6 +5228,26 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_ssds_schedule($id)
+    {
+        try {
+            $datas = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('value->id', $id)
+                                        ->where('status', 'pending')
+                                        ->first();
+
+            if ( is_null($datas) ) {
+                $datas = SubActivityValue::where('id', $id)
+                                            ->first();
+            }
+
+            return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function get_agent_activity_timeline()
     {
         try {

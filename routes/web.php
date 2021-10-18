@@ -412,6 +412,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/get-site-candidate/{sam_id}/{status}', [GlobeController::class, 'get_site_candidate']);
     Route::get('/get-jtss-schedule/{id}', [GlobeController::class, 'get_jtss_schedule']);
     Route::post('/submit-ssds', [GlobeController::class, 'submit_ssds']);
+    Route::get('/get-ssds-schedule/{id}', [GlobeController::class, 'get_ssds_schedule']);
 
     // AGENT
     Route::get('/get-agent-activity-timeline', [GlobeController::class, 'get_agent_activity_timeline']);

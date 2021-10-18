@@ -1208,11 +1208,12 @@
             $(".set_schedule").attr("data-id", id);
 
             $.ajax({
-                url: "/get-jtss-schedule/" + id,
+                url: "/get-ssds-data/" + id,
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
-                            var json = JSON.parse(resp.message.value);
+                        console.log(resp.message);
+                        var json = JSON.parse(resp.message.value);
                         if (resp.message != null) {
                             $("#jtss_schedule").val(json.jtss_schedule);
                         } else {
