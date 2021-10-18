@@ -88,7 +88,7 @@ $(document).ready(() => {
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
-            { data: "action" },
+            { data: "action", className: "text-right" },
             // { data: "number_agent" },
         ],
     });
@@ -343,6 +343,17 @@ $(document).ready(() => {
                 toastr.error(resp, "Error");
             }
         });
+    });
+
+    
+    $(document).on("click", ".disable_btn", function (){
+        $("b.user_name_disable").text($(this).attr("data-name"));
+        $("#disable_employee_modal").modal("show");
+    });
+
+    $(document).on("click", ".offboard_btn", function (){
+        $("b.user_name_offboard").text($(this).attr("data-name"));
+        $("#offboard_employee_modal").modal("show");
     });
 
 });

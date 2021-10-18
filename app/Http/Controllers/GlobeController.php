@@ -737,8 +737,9 @@ class GlobeController extends Controller
 
                 $dt = DataTables::of($checkAgent)
                                     ->addColumn('action', function($row){
-                                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update"><i class="fa fa-edit"></i></button> ';
-                                        $btn .= '<button class="btn btn-sm btn-shadow btn-danger" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable"><i class="fa fa-times"></i></button>';
+                                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update">Edit</button> ';
+                                        $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
+                                        $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
 
                                         return $btn;
                                     });
@@ -778,7 +779,15 @@ class GlobeController extends Controller
                                 ->addColumn('number_agent', function($row){
                                     $agents = UserDetail::select('user_id')->where('IS_id', $row->user_id)->get();
                                     return count($agents);
+                                })
+                                ->addColumn('action', function($row){
+                                    $btn = '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
+                                    $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
+
+                                    return $btn;
                                 });
+
+            $dt->rawColumns(['action']);
 
             return $dt->make(true);
         } catch (\Throwable $th) {
