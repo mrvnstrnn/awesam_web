@@ -256,7 +256,7 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
                 $site_category = $request->input('site_category');
 
-            } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation" || $request->input('activity_name') == "Add Site Candidates") {
+            } else if ($request->input('activity_name') == "SSDS" || $request->input('activity_name') == "SSDS RAM Validation" || $request->input('activity_name') == "Add Site Candidates" || $request->input('activity_name') == "Joint Technical Site Survey") {
 
                 $notification = "Successfully mark this site as completed.";
                 $action = "true";
@@ -2533,6 +2533,14 @@ class GlobeController extends Controller
         }
         elseif($sub_activity == 'Joint Technical Site Survey'){
 
+            $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $sam_id)
+                                        ->get();
+
+            $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('sam_id', $sam_id)
+                                        ->get();
+
             $what_component = "components.ssds";
             return \View::make($what_component)
             ->with([
@@ -2542,6 +2550,7 @@ class GlobeController extends Controller
                 'program_id' => $program_id,
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
+                'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
             ])
             ->render();
 
@@ -4970,6 +4979,10 @@ class GlobeController extends Controller
             } else if ( $status == 'rejected' ) {
                 $datas->where('type', 'jtss_add_site')
                         ->where('status', $status);
+            } else if ( $status == 'jtss_ssds' ) {
+                $datas->where('type', 'jtss_ssds')
+                        ->where('type', $status)
+                        ->where('status', 'pending');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }
@@ -5271,7 +5284,6 @@ class GlobeController extends Controller
                                         ->first();
 
             if ( is_null($datas) ) {
-
                 $datas = SubActivityValue::where('id', $id)
                                             ->first();
             }
@@ -5291,12 +5303,16 @@ class GlobeController extends Controller
                                         ->where('status', 'pending')
                                         ->first();
 
+            $is_null = 'no';
+            
             if ( is_null($datas) ) {
                 $datas = SubActivityValue::where('id', $id)
                                             ->first();
+
+                $is_null = 'yes';
             }
 
-            return response()->json(['error' => false, 'message' => $datas]);
+            return response()->json(['error' => false, 'message' => $datas, 'is_null' => $is_null]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -5333,24 +5349,36 @@ class GlobeController extends Controller
                                                         ->where('value->id', $request->get('id'))
                                                         ->where('status', 'pending')
                                                         ->get();
-            
-                    if ( count($check_if_added) < 1 ) {
-                        SubActivityValue::create([
-                            'sam_id' => $request->get('sam_id'),
-                            'sub_activity_id' => $request->get('sub_activity_id'),
-                            'type' => 'jtss_ssds',
-                            'status' => 'pending',
-                            'user_id' => \Auth::id(),
-                            'value' => json_encode($request->all())
-                        ]);
-                    } else {
-                        SubActivityValue::where('type', 'jtss_ssds')
+
+                if ( count($check_if_added) < 1 ) {
+                    SubActivityValue::create([
+                        'sam_id' => $request->get('sam_id'),
+                        'sub_activity_id' => $request->get('sub_activity_id'),
+                        'type' => 'jtss_ssds',
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'value' => json_encode($request->all())
+                    ]);
+                } else {
+                    SubActivityValue::where('type', 'jtss_ssds')
+                                    ->where('sam_id', $request->get('sam_id'))
+                                    ->where('value->id', $request->get('id'))
+                                    ->update([
+                                        'value' => json_encode($request->all())
+                                    ]);
+                }
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('sam_id'))
-                                        ->where('value->id', $request->get('id'))
-                                        ->update([
-                                            'value' => json_encode($request->all())
-                                        ]);
-                    }
+                                        ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->get();
+
+                $is_match = count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match";
+
+                return response()->json(['error' => false, 'message' => "Successfully submitted a ssds.", 'is_match' => $is_match ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }

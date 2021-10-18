@@ -25,6 +25,7 @@
                         <th>Longitude</th>
                         <th>Distance</th>
                         <th>Schedule</th>
+                    </tr>
                 </thead>
             </table>
         </div>
@@ -196,20 +197,14 @@
                                         <div class="position-relative row form-group">
                                             <label for="type_of_property" class="col-sm-4 col-form-label">Type of Property</label>
                                             <div class="col-sm-8">
-                                                <div class="row">
-                                                    <div class="col-md-4 col-12">
-                                                        <input type="radio" class="form-check-input" name="type_of_property" id="type_of_property_1" value="Open Lot">
-                                                        Open Lot
-                                                    </div>
-                                                    <div class="col-md-4 col-12">
-                                                        <input type="radio" class="form-check-input" name="type_of_property" id="type_of_property_2" value="Building">
-                                                        Building
-                                                    </div>
-                                                    <div class="col-md-4 col-12">
-                                                        <input type="radio" class="form-check-input" name="type_of_property" id="type_of_property_3" value="Co Location to Existing Structure">
-                                                        Co Location to Existing Structure
-                                                    </div>
-                                                </div>
+                                                <select class="form-control" id="type_of_property" name="type_of_property">
+                                                    <option value="">Type of Property</option>
+                                                    <option value="Open Lot">Open Lot</option>
+                                                    <option value="Building">Building</option>
+                                                    <option value="Co Location to Existing Structure">Government</option>
+                                                    <option value="Agricultural">Agricultural</option>
+                                                    <option value="Industrial">Industrial</option>
+                                                </select>
                                                 <small class="text-danger type_of_property-errors"></small>
                                             </div>
                                         </div>
@@ -272,13 +267,13 @@
                                                 <small class="text-danger tax_clearance-errors"></small>
                                             </div>
                                         </div>
-                                        <div class="position-relative row form-group">
+                                        {{-- <div class="position-relative row form-group">
                                             <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="property_use" name="property_use" placeholder="Property Use">
                                                 <small class="text-danger property_use-errors"></small>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <hr>
                                         <h4>Social Acceptability</h4>
                                         <div class="position-relative row form-group">
@@ -329,13 +324,13 @@
                                                 <small class="text-danger restriction_on_the_use_of_property-errors"></small>
                                             </div>
                                         </div>
-                                        <div class="position-relative row form-group">
+                                        {{-- <div class="position-relative row form-group">
                                             <label for="right_of_way_access" class="col-sm-4 col-form-label">Right of way access</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="right_of_way_access" name="right_of_way_access" placeholder="Right of way access">
                                                 <small class="text-danger right_of_way_access-errors"></small>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="position-relative row form-group">
                                             <label for="site_aquisition_remarks" class="col-sm-4 col-form-label">Remarks</label>
                                             <div class="col-sm-8">
@@ -884,6 +879,12 @@
     </div>
 </div>
 
+<div class="row pt-3">
+    <div class="col-12">
+        <button class="btn btn-sm btn-shadow btn-primary mark_as_complete {{ $is_match == 'match' ? "" : "d-none" }}">Mark as Complete</button>
+    </div>
+</div>
+
 
 @php
 
@@ -1033,6 +1034,10 @@
                             'success'
                         )
 
+                        if (resp.is_match == 'match') {
+                            $(".mark_as_complete").removeClass("d-none");
+                        }
+
                         $(".ssds_form")[0].reset();
 
                         $(".btn_switch_back_to_candidates").trigger("click");
@@ -1093,50 +1098,50 @@
                 return;
             }
 
-                $.ajax({
-                    url:  '/address',
-                    method: 'POST',
-                    data: {
-                        id : id,
-                        val : val
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(resp) {
-                        if(!resp.error){
-                            if(resp.new_id) {
-                                $("#"+resp.new_id+ " option").remove();
-                                $("#"+resp.new_id).removeAttr('disabled');
+            $.ajax({
+                url:  '/address',
+                method: 'POST',
+                data: {
+                    id : id,
+                    val : val
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp) {
+                    if(!resp.error){
+                        if(resp.new_id) {
+                            $("#"+resp.new_id+ " option").remove();
+                            $("#"+resp.new_id).removeAttr('disabled');
 
-                                if(id == 'region'){
-                                    $("#"+resp.new_id).append('<option value="">Please select province</option>');
-                                    resp.message.forEach(element => {
-                                        $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
-                                    });
-                                } else if (id == 'province'){
-                                    $("#"+resp.new_id).append('<option value="">Please select city</option>');
-                                    resp.message.forEach(element => {
-                                        $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
-                                    });
-                                }
+                            if(id == 'region'){
+                                $("#"+resp.new_id).append('<option value="">Please select province</option>');
+                                resp.message.forEach(element => {
+                                    $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
+                                });
+                            } else if (id == 'province'){
+                                $("#"+resp.new_id).append('<option value="">Please select city</option>');
+                                resp.message.forEach(element => {
+                                    $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
+                                });
                             }
-                        } else {
-                            Swal.fire(
-                                'Error',
-                                resp.message,
-                                'error'
-                            )
                         }
-                    },
-                    error: function(resp) {
+                    } else {
                         Swal.fire(
                             'Error',
-                            resp,
+                            resp.message,
                             'error'
                         )
                     }
-                });
+                },
+                error: function(resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
             });     
 
         $('#aepm_table').DataTable({
@@ -1152,7 +1157,8 @@
                 return json.data;
             },
             'createdRow': function( row, data, dataIndex ) {
-                $(row).attr('data-id', data.id);
+                // $(row).attr('data-id', data.id);
+                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
                 $(row).addClass('add_schedule');
                 $(row).attr('style', 'cursor: pointer;');
             },
@@ -1184,6 +1190,8 @@
         $("#aepm_table").on("click", "tr", function(e){
             e.preventDefault();
 
+            $('.ssds_form')[0].reset();
+
             if($(this).hasClass('selected') != true){
                 $("#aepm_table tbody tr").removeClass('selected');
                 $(this).addClass('selected');
@@ -1191,8 +1199,9 @@
                 $(this).removeClass('selected');
             }
 
+            var id = $(this).attr('data-id');
+
             if($('#aepm_table tbody tr.selected').length > 0){
-                var id = $(this).attr('data-id');
                 $(".set_schedule").attr("data-id", id);
                 $(".form_data").removeClass("d-none");
                 $(".aepm_table_div").addClass("d-none");
@@ -1208,11 +1217,10 @@
             $(".set_schedule").attr("data-id", id);
 
             $.ajax({
-                url: "/get-ssds-data/" + id,
+                url: "/get-ssds-schedule/" + id,
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
-                        console.log(resp.message);
                         var json = JSON.parse(resp.message.value);
                         if (resp.message != null) {
                             $("#jtss_schedule").val(json.jtss_schedule);
@@ -1220,8 +1228,12 @@
                             $("#jtss_schedule").val("");
                         }
 
+                        if (resp.is_null == 'yes') {
+                            $("#id").val(resp.message.id);
+                        }
+
                         $.each(json, function(index, data) {
-                            $("#"+index).val(data).trigger("change");
+                            $("#"+index).val(data);
                         });
                     } else {
                         Swal.fire(
@@ -1240,6 +1252,65 @@
                     )
                 },
             });
+        });
+
+        $(".mark_as_complete").on("click", function() {
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            var sam_id = ["{{ $sam_id }}"];
+            var sub_activity_id = "{{ $sub_activity_id }}";
+            var activity_name = "{{ $sub_activity }}";
+            var site_category = ["{{ $site_category }}"];
+            var activity_id = ["{{ $activity_id }}"];
+            var program_id = "{{ $program_id }}";
+
+            $.ajax({
+                url: "/accept-reject-endorsement",
+                method: "POST",
+                data: {
+                    sam_id : sam_id,
+                    sub_activity_id : sub_activity_id,
+                    activity_name : activity_name,
+                    site_category : site_category,
+                    activity_id : activity_id,
+                    program_id : program_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+                        $(".mark_as_complete").removeAttr("disabled");
+                        $(".mark_as_complete").text("Mark as Complete");
+
+                        $("#viewInfoModal").modal("hide");
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                        $(".mark_as_complete").removeAttr("disabled");
+                        $(".mark_as_complete").text("Mark as Complete");
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                    $(".mark_as_complete").removeAttr("disabled");
+                    $(".mark_as_complete").text("Mark as Complete");
+                }
+            });
+
         });
     });
 </script>
