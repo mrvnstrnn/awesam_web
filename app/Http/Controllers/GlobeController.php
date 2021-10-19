@@ -5197,8 +5197,8 @@ class GlobeController extends Controller
                                                                 ->get();
 
                     foreach ($sub_activity_values as $sub_activity_value) {
-                        $check_if_added = SubActivityValue::where('value->id', $sub_activity_value->id)
-                                                        ->where('type', 'jtss_schedule_site')
+                        $check_if_added = SubActivityValue::where('type', 'jtss_schedule_site')
+                                                        ->where('value->id', $sub_activity_value->id)
                                                         ->first();
 
                         SubActivityValue::where('id', $sub_activity_value->id)
