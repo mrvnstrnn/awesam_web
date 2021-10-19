@@ -50,7 +50,6 @@
                             </div> 
 
                             <div class="card-body">
-
                                 @php
                                     $site_details_view ="";
                                     $site_action_view = "";
@@ -110,7 +109,9 @@
 
                                                         "Advanced Site Hunting Validation",
 
-                                                        "Approved MOC/NTP RAM Validation"
+                                                        "Approved MOC/NTP RAM Validation",
+
+                                                        "eLAS Approved"
 
                                                     );  
                                     
@@ -119,22 +120,27 @@
                                                         "Issue Validation",
                                                     );
 
-                                    if( $main_activity != ""){
-                                        $show_view = "site_details_view";
-                                        $site_action_view = 'd-none';
-                                    }
-                                    elseif(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
+                                    if(in_array($main_activity, $forced_actions)){
                                         $show_view = "site_action_view";
                                         $site_details_view = 'd-none';
-                                    }
-                                    else {
-                                        if(in_array($main_activity, $forced_actions)){
-                                            $show_view = "site_action_view";
-                                            $site_details_view = 'd-none';
-                                        } 
-                                        else {
+                                    } else {
+                                        if( $main_activity != ""){
                                             $show_view = "site_details_view";
                                             $site_action_view = 'd-none';
+                                        }
+                                        elseif(in_array($site[0]->activity_name, $globe_actions) && $main_activity == ""){
+                                            $show_view = "site_action_view";
+                                            $site_details_view = 'd-none';
+                                        }
+                                        else {
+                                            if(in_array($main_activity, $forced_actions)){
+                                                $show_view = "site_action_view";
+                                                $site_details_view = 'd-none';
+                                            } 
+                                            else {
+                                                $show_view = "site_details_view";
+                                                $site_action_view = 'd-none';
+                                            }
                                         }
                                     }
 
@@ -201,7 +207,8 @@
                                                 $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == "" ||
 
                                                 $site[0]->activity_name == "Approved SSDS / NTP Validation" && $main_activity == "" ||
-                                                $site[0]->activity_name == "Approved MOC/NTP RAM Validation"
+                                                $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
+                                                $site[0]->activity_name == "eLAS Approved"
                                             
                                                 
                                             )
@@ -272,7 +279,6 @@
                                                 <x-s-s-d-s-ram-ranking :samid="$sam_id" :site="$site" /> --}}
 
                                             @else
-
                                                 @if($main_activity == "Document Validation" || $site[0]->activity_name == "RAM Documents Validation" || $site[0]->activity_name == "Draft Contract Approval" || $site[0]->activity_name == "Lease Package" || $site[0]->activity_name == "RAM Validation of  Advanced Site Hunting  Documents" || $site[0]->activity_name == "Advanced Site Hunting Validation")
 
                                                     <x-site-rtb-docs-validation  :site="$site" />

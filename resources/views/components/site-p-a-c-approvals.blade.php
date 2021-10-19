@@ -86,6 +86,25 @@
     <input type="hidden" name="hidden_filename" id="hidden_filename">
 </div>
 
+<div class="row reject_remarks d-none">
+    <div class="col-12">
+        <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
+        <form class="reject_form">
+            <input type="hidden" name="type" id="type" value="reject_site">
+            <div class="form-group">
+                <label for="remarks">Remarks:</label>
+                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                <small class="text-danger remarks-error"></small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-sm btn-shadow btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}" type="button">Confirm</button>
+                
+                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
     <div class="row my-3">
         <div class="col-12">
@@ -95,10 +114,10 @@
     </div>
 @endif
 
-<div class="row mb-3 border-top pt-3">
+<div class="row mb-3 border-top pt-3 button_area_div">
     <div class="col-12 align-right">                                            
         <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
+        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
     </div>
 </div>
 
@@ -246,6 +265,18 @@
         $('.file_preview').addClass('d-none');
     });
 
+    $(".btn-accept-endorsement-confirmation").on("click", function (){
+        $('.reject_remarks').removeClass('d-none');
+        $('.button_area_div').addClass('d-none');
+        $('.file_lists').addClass('d-none');
+    });
+
+    $(".cancel_reject").on("click", function (){
+        $('.reject_remarks').addClass('d-none');
+        $('.button_area_div').removeClass('d-none');
+        $('.file_lists').removeClass('d-none');
+    });
+
 
     $(".dropzone_files").on("click", function (){
         $("input[name=hidden_sub_activity_name]").val($(this).attr("data-sub_activity_name"));
@@ -273,9 +304,11 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        $.ajax({
-            url: '/accept-reject-endorsement',
-            data: {
+        if (data_complete == "false") {
+            var type = $("#type").val();
+            var remarks = $("#remarks").val();
+
+            data = {
                 sam_id : sam_id,
                 data_complete : data_complete,
                 activity_name : activity_name,
@@ -283,7 +316,24 @@
                 program_id : program_id,
                 site_category : site_category,
                 activity_id : activity_id,
-            },
+                type : type,
+                remarks : remarks,
+            }
+        } else {
+            data = {
+                sam_id : sam_id,
+                data_complete : data_complete,
+                activity_name : activity_name,
+                site_vendor_id : site_vendor_id,
+                program_id : program_id,
+                site_category : site_category,
+                activity_id : activity_id,
+            }
+        }
+
+        $.ajax({
+            url: '/accept-reject-endorsement',
+            data: data,
             type: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -303,11 +353,17 @@
                         // $("#loaderModal").modal("hide");
                     });
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".reject_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
                     $("#btn-"+data_complete).removeAttr("disabled");
                     $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
                 }

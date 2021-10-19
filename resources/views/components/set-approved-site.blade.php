@@ -1048,7 +1048,7 @@ $("#btn_approve_ssds").on("click", function () {
     $(this).attr("disabled", "disabled");
     $(this).text("Processing...");
 
-    var id = $("#hidden_id").val();
+    var id = $("#id").val();
     var program_id = "{{ $program_id }}";
 
     var activity_id = "{{ $activity_id }}";
@@ -1061,7 +1061,6 @@ $("#btn_approve_ssds").on("click", function () {
         method: "POST",
         data: {
             id : id,
-            vendor_id : vendor_id,
             program_id : program_id,
             activity_name : sub_activity,
             sam_id : sam_id,
