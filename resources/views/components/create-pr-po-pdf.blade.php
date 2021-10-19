@@ -203,6 +203,7 @@
                                     <th style="width: 40%">Search Ring Name</th>
                                     <th style="width: 15%">Region</th>
                                     <th style="width: 15%">Province</th>
+                                    <th style="width: 15%">City</th>
                                     <th style="width: 15%">GROSS AMOUNT PHP  (VAT EXCULUSIVE)</th>
                                 </tr>
                             </thead>

@@ -4167,16 +4167,6 @@ class GlobeController extends Controller
                             ->where('sam_id', $sam_id)
                             ->first();
 
-            // $line_items = \DB::connection('mysql2')
-            //                 ->table('fsa_table')
-            //                 ->where('vendor_id', $vendor)
-            //                 ->where('region', $sites->region)
-            //                 ->where('province', $sites->province)
-            //                 ->where('province', $sites->town_city)
-            //                 ->get();
-
-
-
 
             $line_items = \DB::connection('mysql2')
                                 ->table('fsaq')
