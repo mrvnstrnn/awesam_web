@@ -2368,6 +2368,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
+                    
                     ->where('program_id', $program_id);
 
                     if ($program_id == 1) {

@@ -88,11 +88,17 @@
                     $(".card-body .position-relative.form-group").remove();
                     $(".main-card.mb-3.card .modal-footer").remove();
 
+
                     $.each(resp.message[0], function(index, data) {
+
+                        console.log(data);
+
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
-                        $("#viewInfoModal .card-body .form_fields").append(
-                            '<div class="position-relative form-group col-md-6">' +
-                                '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+                        $("#viewInfoModal .card-body").append(
+                            '<div class="position-relative form-group col-md-4" style="text-transform: uppercase;">' +
+                                '<label for="' + index.toUpperCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+                            '</div>'+
+                            '<div class="position-relative form-group col-md-8">' +
                                 '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
                             '</div>'
                         );
