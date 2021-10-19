@@ -38,7 +38,7 @@ class InviteController extends Controller
             }
 
             $validate = Validator::make($request->all(), array(
-                'email' => ['required', $unique],
+                'email' => ['required', $unique, 'email'],
                 'firstname' => 'required | max:255',
                 'lastname' => 'required | max:255',
             ));
@@ -48,19 +48,21 @@ class InviteController extends Controller
             if($validate->passes()){
                 $name = $request->input('firstname') . ' ' . $request->input('lastname');
 
-                if(filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
-                    if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($request->input('email'), '@'), 1)){
-                        return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1)." or you can ignore inputting domain email." ]);
-                    } else {
-                        $email = $request->input('email');
-                    }
-                } else {
-                    $email = $request->input('email')."@".substr(strstr(\Auth::user()->email, '@'), 1);
+                // if(filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+                //     if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($request->input('email'), '@'), 1)){
+                //         return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1)." or you can ignore inputting domain email." ]);
+                //     } else {
+                //         $email = $request->input('email');
+                //     }
+                // } else {
+                //     $email = $request->input('email')."@".substr(strstr(\Auth::user()->email, '@'), 1);
                     
-                    if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($email, '@'), 1)){
-                        return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1) ]);
-                    }
-                }
+                //     if(substr(strstr(\Auth::user()->email, '@'), 1) != substr(strstr($email, '@'), 1)){
+                //         return response()->json(['error' => true, 'message' => "Allowed email is @".substr(strstr(\Auth::user()->email, '@'), 1) ]);
+                //     }
+                // }
+
+                $email = $request->input('email');
 
                 if(\Auth::user()->getUserProfile()->profile == 'GT Admin') {
                     $url = url('/login');

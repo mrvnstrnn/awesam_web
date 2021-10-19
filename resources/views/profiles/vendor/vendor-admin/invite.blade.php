@@ -52,11 +52,11 @@
                                     </div> --}}
 
                                     <label for="email" class="">Email</label>
-                                    <div class="position-relative form-group input-group">
+                                    <div class="position-relative form-group">
                                         <input name="email" id="email" placeholder="johndoe@gmail.com" type="text" class="form-control">
-                                        <div class="input-group-append">
+                                        {{-- <div class="input-group-append">
                                             <span class="input-group-text">{{ "@".substr(strstr(\Auth::user()->email, '@'), 1) }}</span>
-                                        </div>
+                                        </div> --}}
                                         <small id="email-error" class="text-danger"></small>
                                     </div>
 
