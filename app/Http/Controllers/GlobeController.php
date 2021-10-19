@@ -1624,8 +1624,8 @@ class GlobeController extends Controller
     {
 
         try {
-            SubActivityValue::where('value->id', $request->get('id'))
-                            ->where('type', 'jtss_ssds')
+            SubActivityValue::where('type', 'jtss_ssds')
+                            ->where('value->id', $request->get('id'))
                             ->update([
                                 'status' => "approved",
                                 'approver_id' => \Auth::id(),
