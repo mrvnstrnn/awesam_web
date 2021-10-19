@@ -10,6 +10,7 @@ use App\Http\Controllers\TowerCoController;
 use App\Http\Controllers\NewSitesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TrainingController;
 
 
 /*
@@ -418,6 +419,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // AGENT
     Route::get('/get-agent-activity-timeline', [GlobeController::class, 'get_agent_activity_timeline']);
 
+
+    // TRAINING
+
+    Route::get('/training/{id}', [TrainingController::class, 'index']);
 
 });
     
