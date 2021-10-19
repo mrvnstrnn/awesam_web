@@ -181,7 +181,7 @@
                             <div class="position-relative row form-group">
                                 <label for="site_rank" class="col-sm-4 col-form-label">Rank</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="site_rank" name="site_rank" placeholder="Rank"> readonly
+                                    <input type="text" class="form-control" id="site_rank" name="site_rank" placeholder="Rank" readonly> 
                                     <small class="text-danger site_rank-errors"></small>
                                 </div>
                             </div>
