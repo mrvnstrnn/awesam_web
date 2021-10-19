@@ -2280,12 +2280,12 @@ class GlobeController extends Controller
         elseif($activity_type == 'doc validation'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_doc_validation_2")
-                    ->select('sam_id', 'site_name', 'site_fields', 'count', 'site_category')
+                    ->table("view_doc_validation")
+                    ->select('sam_id', 'site_name', 'site_fields', 'docs', 'site_category')
                     // ->distinct()
                     ->where('program_id', $program_id)
                     // ->where('activity_complete', 'false')
-                    ->where('count', '>', 0)
+                    ->where('docs', '>', 0)
                     ->get();
 
                     // SELECT *
