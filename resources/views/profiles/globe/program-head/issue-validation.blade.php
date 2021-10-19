@@ -77,7 +77,7 @@
                                                 <label for="issue_details" class="mr-sm-2">Issue Details</label>
                                             </div>
                                             <div class="col-8">
-                                                <textarea name="issue_details" id="issue_details" cols="30" rows="10" class="form-control"></textarea>
+                                                <textarea name="issue_details" id="issue_details" cols="30" rows="5" class="form-control"></textarea>
                                                 <small class="text-danger issue_details-error"></small>
                                             </div>
                                         </div>
