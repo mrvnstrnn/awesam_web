@@ -81,84 +81,82 @@
                 </div>        
                 @endforeach
             </div>
+            
             <div class="divider"></div>
 
+            <div class="row" style="margin-left:-30px; margin-right: -30px;">
+                <div class="col-12">
+                    <h3 class="mb-3">Teams</h3>
+                    @php
+                        $supervisors_per_program = \DB::table('view_supervisors_per_vendor_per_program')
+                                            ->where('program_id', $program->program_id)
+                                            ->where('vendor_id', 1)
+                                            ->get();
 
-            <div class="container"> 
-                <div class="row" style="margin-left:-30px; margin-right: -30px;">
-                    <div class="col-12">
-                        <h3 class="mb-3">Teams</h3>
-                        @php
-                            $supervisors_per_program = \DB::table('view_supervisors_per_vendor_per_program')
-                                                ->where('program_id', $program->program_id)
-                                                ->where('vendor_id', 1)
-                                                ->get();
-
-                        @endphp
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
-                                        <div>
-                                            <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
-                                        </div>
-                                        <div style="text-align: center;">
-                                            <div><small>TEST SUPERVISOR</small></div>
-                                            <div><small>Supervisor</small></div>
-                                        </div>
+                    @endphp
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
+                                    <div>
+                                        <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
                                     </div>
-                                    <div class="col-9 mb-2 mt-1" style="text-align: center;">
-                                        <div class="row">
-                                            <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                <div>
-                                                    <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
-                                                </div>
-                                                <div style="text-align: center;">
-                                                    <small>Test</small>
-                                                </div>
+                                    <div style="text-align: center;">
+                                        <div><small>TEST SUPERVISOR</small></div>
+                                        <div><small>Supervisor</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-9 mb-2 mt-1" style="text-align: center;">
+                                    <div class="row">
+                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                            <div>
+                                                <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
                                             </div>
-                                            <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                <div>
-                                                    <img class="rounded-circle" src="images/avatars/3.jpg" alt="" width="70">
-                                                </div>
-                                                <div style="text-align: center;">
-                                                    <small>Test</small>
-                                                </div>
+                                            <div style="text-align: center;">
+                                                <small>Test</small>
                                             </div>
-                                            <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                <div>
-                                                    <img class="rounded-circle" src="images/avatars/4.jpg" alt="" width="70">
-                                                </div>
-                                                <div style="text-align: center;">
-                                                    <small>Test</small>
-                                                </div>
-                                            </div>
-                                            <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                <div>
-                                                    <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
-                                                </div>
-                                                <div style="text-align: center;">
-                                                    <small>Test</small>
-                                                </div>
-                                            </div>
-                                            <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                <div>
-                                                    <img class="rounded-circle" src="images/avatars/6.jpg" alt="" width="70">
-                                                </div>
-                                                <div style="text-align: center;">
-                                                    <small>Test</small>
-                                                </div>
-                                            </div>
-
                                         </div>
+                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                            <div>
+                                                <img class="rounded-circle" src="images/avatars/3.jpg" alt="" width="70">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <small>Test</small>
+                                            </div>
+                                        </div>
+                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                            <div>
+                                                <img class="rounded-circle" src="images/avatars/4.jpg" alt="" width="70">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <small>Test</small>
+                                            </div>
+                                        </div>
+                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                            <div>
+                                                <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <small>Test</small>
+                                            </div>
+                                        </div>
+                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                            <div>
+                                                <img class="rounded-circle" src="images/avatars/6.jpg" alt="" width="70">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <small>Test</small>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                    
             </div>
+                    
 
         @else
           @if($program->program_id == 6)
