@@ -81,10 +81,10 @@
                 </div>        
                 @endforeach
             </div>
-            
+
             <div class="divider"></div>
 
-            <div class="row" style="margin-left:-30px; margin-right: -30px;">
+            <div class="row" style="margin-top: 20px;">
                 <div class="col-12">
                     <h3 class="mb-3">Teams</h3>
                     @php
