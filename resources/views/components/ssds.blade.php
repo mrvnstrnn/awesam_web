@@ -872,7 +872,7 @@
                             </div>
                         </div>            
                     </form>
-                    <button class="btn btn-sm btn-shadow btn-primary submit_ssds">Submit SSDS</button>                                      
+                    <button class="btn btn-sm btn-shadow btn-success submit_ssds pull-right">Submit SSDS</button>                                      
                 </div>
             </div>
         </div>
