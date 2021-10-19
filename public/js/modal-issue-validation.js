@@ -12,6 +12,7 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
             if (!resp.error) {
                 $("#viewIssueModal .menu-header-title").text(site);
                 $(".update_issue_form input[name=hidden_issue_id]").val(resp.site.issue_id);
+                $(".remarks_issue_form #site_issue_id").val(resp.site.issue_id);
                 $(".update_issue_form input[name=issue]").val(resp.site.issue);
                 $(".update_issue_form input[name=start_date]").val(resp.site.start_date);
                 $(".update_issue_form input[name=issue_type]").val(resp.site.issue_type);

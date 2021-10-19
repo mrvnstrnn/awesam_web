@@ -89,6 +89,54 @@
                                             </div>
                                         </div> --}}
                                     </form>
+                                    <button class="btn btn-shadow btn-sm btn-primary pull-right add_update" type="button">Add Update</button>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </div>
+
+                                <div class="add_remarks_issue_form d-none">
+                                    <form class="mb-2 remarks_issue_form">
+                                        <input type="hidden" name="site_issue_id" id="site_issue_id">
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="status" class="mr-sm-2">Status</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="active">Active</option>
+                                                    <option value="resolved">Resolved</option>
+                                                    <option value="cancelled">Cancel</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="remarks" class="mr-sm-2">Remarks</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <textarea type="text" class="form-control" name="remarks" id="remarks"></textarea>
+                                                <small class="text-danger remarks-errors"></small>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="date_engage" class="mr-sm-2">Date of Update</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input type="date" class="form-control" name="date_engage" id="date_engage">
+                                                <small class="text-danger date_engage-errors"></small>
+                                            </div>
+                                        </div>
+                        
+                                        {{-- @if (\Auth::user()->profile_id == 2) --}}
+                                        <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
+                                        {{-- @endif --}}
+                                        <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
+                                    </form>
+                        
+                                    <br><hr><br>
                                 </div>
                                 <hr>
                                 <div class="table_div"></div>
@@ -110,7 +158,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 10;
+    var profile_id = 2;
     var table_to_load = 'issue_validation';
     var main_activity = "Issue Validation";
     //////////////////////////////////////
@@ -120,5 +168,86 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>
 
 <script type="text/javascript" src="/js/modal-issue-validation.js"></script>  
+
+<script>
+
+    $(document).ready(function () {
+        $(document).on("click", ".add_update", function(){
+            $(".add_remarks_issue_form").removeClass("d-none");
+            $(".issue_details_div").addClass("d-none");
+        });
+
+        $(document).on("click", ".btn_cancel_remarks", function(){
+            $(".add_remarks_issue_form").addClass("d-none");
+            $(".issue_details_div").removeClass("d-none");
+        });
+
+        $(".add_btn_remarks_submit").on("click", function(){
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            var site_issue_id = $("#site_issue_id").val();
+
+            $(".add_remarks_issue_form small").text();
+
+            $.ajax({
+                url: "/add-remarks",
+                method: "POST",
+                data: $(".remarks_issue_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if (!resp.error) {
+                        $("#table_issue_child_"+site_issue_id).DataTable().ajax.reload(function(){
+                            $(".remarks_issue_form")[0].reset();
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            $(".add_btn_remarks_submit").removeAttr("disabled");
+                            $(".add_btn_remarks_submit").text("Add Update");
+
+                            $(".btn_cancel_remarks").trigger("click");
+                        });
+
+                        $(".my_table_issue").DataTable().ajax.reload();
+                        
+                    } else {
+                        
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                console.log(index);
+                                $(".add_remarks_issue_form ." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".add_btn_remarks_submit").removeAttr("disabled");
+                        $(".add_btn_remarks_submit").text("Add Update");
+                    }
+                },
+                error: function(resp){
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'success'
+                    )
+
+                    $(".add_btn_remarks_submit").removeAttr("disabled");
+                    $(".add_btn_remarks_submit").text("Add Update");
+                }
+            });
+        });
+    })
+</script>
 
 @endsection

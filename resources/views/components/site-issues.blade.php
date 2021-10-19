@@ -147,9 +147,9 @@
                     </div>
                 </div>
 
-                @if (\Auth::user()->profile_id == 2)
+                {{-- @if (\Auth::user()->profile_id == 2) --}}
                 <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
-                @endif
+                {{-- @endif --}}
                 <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
             </form>
 
