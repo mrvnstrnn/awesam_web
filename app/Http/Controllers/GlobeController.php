@@ -191,6 +191,63 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
+            } else if ($request->input('activity_name') == "elas_approved") {
+
+                $notification = "Site successfully " .$message;
+                $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+
+                $samid = $request->input('sam_id');
+
+                if ($action == "false") {
+                    $validate = Validator::make($request->all(), array(
+                        'remarks' => 'required',
+                    ));
+    
+                    if (!$validate->passes()) {
+                        return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    } else {
+
+                        $activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('return_activity')
+                                ->where('activity_id', $activity_id[0])
+                                ->where('program_id', $program_id)
+                                ->where('category', $site_category[0])
+                                ->first();
+
+                        $sub_activities = \DB::connection('mysql2')
+                                                ->table('sub_activity')
+                                                ->select('sub_activity_id')
+                                                ->where('program_id', $program_id)
+                                                ->where('category', $site_category[0])
+                                                ->where('activity_id', $activities->return_activity)
+                                                ->where('requirements', 'required')
+                                                ->where('requires_validation', '1')
+                                                ->get()
+                                                ->pluck('sub_activity_id');
+
+                        SubActivityValue::whereIn('sub_activity_id', $sub_activities->all())
+                                            ->where('status', 'approved')
+                                            ->update([
+                                                'approver_id' => \Auth::id(),
+                                                'status' => 'rejected',
+                                                'reason' => $request->input('remarks'),
+                                                'date_approved' => Carbon::now()->toDate(),
+                                            ]);
+                                            
+                        SubActivityValue::create([
+                            'sam_id' => $samid[0],
+                            'value' => $request->input('remarks'),
+                            'type' => $request->input('type'),
+                            'status' => 'rejected',
+                            'user_id' => \Auth::id(),
+                        ]);
+                    }
+                }
+
             } else if ($request->input('activity_name') == "Approved SSDS / NTP Validation") {
 
                 $notification = "Site successfully " . $message;
@@ -1567,16 +1624,19 @@ class GlobeController extends Controller
     {
 
         try {
-
-            return response()->json(['error' => true, 'message' => $request->all()]);
-            SubActivityValue::where('id', $request->input('id'))
+            SubActivityValue::where('value->id', $request->get('id'))
+                            ->where('type', 'jtss_ssds')
                             ->update([
                                 'status' => "approved",
                                 'approver_id' => \Auth::id(),
                                 'date_approved' => Carbon::now()->toDate(),
                             ]);
-
-            SiteEndorsementEvent::dispatch($request->input('sam_id'));
+                            
+            // Site::where('sam_id', $request->input('sam_id'))
+            //         ->update([
+            //             ''
+            //         ]);
+            // SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
             $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
 
@@ -1715,7 +1775,8 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                SubActivityValue::where('id', $request->input('id'))->update([
+                SubActivityValue::where('id', $request->input('id'))
+                ->update([
                     'status' => $request->input('action') == "rejected" ? "denied" : "approved",
                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                     'approver_id' => \Auth::id(),
@@ -1740,9 +1801,7 @@ class GlobeController extends Controller
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
                                                 ->where('category', $request->input("site_category"))
-
                                                 ->where('requires_validation', '1')
-
                                                 ->get();
 
                 $array_sub_activity = collect();
@@ -1755,9 +1814,9 @@ class GlobeController extends Controller
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
                                                         ->where('status', 'approved')
                                                         ->where('sam_id', $request->input("sam_id"))
-                                                        ->groupBy('sub_activity_id')->get();
-
-                                                        // return response()->json(['error' => true, 'message' => $sub_activity_value ]);
+                                                        ->groupBy('sub_activity_id')
+                                                        ->get();
+                                                        
                 if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
@@ -2761,7 +2820,7 @@ class GlobeController extends Controller
             } else {
 
                 if($mainactivity != "") {
-
+                    
                     $what_modal = "components.modal-view-site";
                     return \View::make($what_modal)
                     ->with([
@@ -2894,7 +2953,7 @@ class GlobeController extends Controller
                     }
     
                     else {
-    
+                        
                         $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
                         ->where('type', 'create_pr')
                         ->first();
