@@ -79,7 +79,6 @@
 
                                                         // "Advanced Site Hunting",
                                                         "Schedule JTSS",
-                                                        "Schedule JTSS",
                                                         "RAM Validation of  Advanced Site Hunting  Documents",
                                                         "RAM Documents Validation",
                                                         "STS RTB Declaration",

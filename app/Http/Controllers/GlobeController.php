@@ -2155,12 +2155,8 @@ class GlobeController extends Controller
         elseif($activity_type == 'jtss'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("site")
+                    ->table("view_jtss_aepm")
                     ->where('program_id', $program_id)
-                    ->whereJsonContains('activities->activity_id', '12')
-                    // ->orwhereJsonContains('activities->activity_id', '22')
-                    ->whereJsonContains('activities->profile_id', '8')
-
                     ->get();
 
                     // dd($sites);
@@ -2865,7 +2861,33 @@ class GlobeController extends Controller
                             'site_category' => $site[0]->site_category,
                             'activity_id' => $site[0]->activity_id,
                             'activity' => $request->input('activity'),
-                            'count' => count($datas)
+                            'count' => count($datas),
+                            'mode' => 'editor'
+                        ])
+                        ->render();
+    
+                    }
+    
+                    else if ($request->input('activity') == "Joint Technical Site Survey" && \Auth::user()->profile_id == 26) {
+    
+                        $datas = SubActivityValue::select('sam_id')
+                                            ->where('sam_id', $request['sam_id'])
+                                            ->where('type', 'jtss_add_site')
+                                            ->where('status', 'Scheduled')
+                                            ->get();
+    
+                        $what_modal = "components.aepm-schedule-validation";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'activity' => $request->input('activity'),
+                            'count' => count($datas),
+                            'mode' => 'viwer'
                         ])
                         ->render();
     
