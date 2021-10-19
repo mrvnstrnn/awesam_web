@@ -1568,6 +1568,7 @@ class GlobeController extends Controller
 
         try {
 
+            return response()->json(['error' => true, 'message' => $request->all()]);
             SubActivityValue::where('id', $request->input('id'))
                             ->update([
                                 'status' => "approved",

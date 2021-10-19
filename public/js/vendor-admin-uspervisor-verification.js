@@ -27,12 +27,12 @@ $(document).ready(() => {
         ],
     });
 
-    $('#employee-agents-table tbody').on('click', 'tr td:first-child', function () {
+    $('#employee-agents-table tbody').on('click', 'tr td:not(:last-child)', function () {
         $("#modal-employee-verification").modal("show");
 
         $(".content-data table").remove();
 
-        var data_id = $(this).attr("data-id");
+        var data_id = $(this).parent().attr("data-id");
 
         $(".change_supervisor").attr("data-is_id", data_id);
 
