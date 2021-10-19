@@ -215,7 +215,7 @@
                                     $array_amount = collect(); 
                                 @endphp
                                 <tr>
-                                    {{-- <td>{{ $site[0]->site_name }}</td> --}}
+                                    <td>{{ $site[0]->site_name }}</td>
                                     <td>{{ $site[0]->site_address }}</td>
                                     <td>{{ $site[0]->region_name }}</td>
                                     <td>{{ $site[0]->province_name }}</td>
