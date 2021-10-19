@@ -675,7 +675,7 @@ function initMap(markers) {
 
             infoWindow.setContent("<div style='font-size: 20px; font-weight: bold;'>Site Candidate " + (rowCount) + "<hr></div>" +
             '<div class="pt-2">Latitude: ' + gps['lat']  + '</div>' +
-            '<div class="pt-2">Longitude: ' + gps['lat']  + '</div>' +
+            '<div class="pt-2">Longitude: ' + gps['lng']  + '</div>' +
             '<div class="pt-2">Distance: ' + distance  + ' meters</div>' +
             '<div class="pt-2 "><hr><button onclick="Go_Add_Site_Details()" class="btn btn-outline btn-dark btn-sm mb-3 btn-shadow mr-1">Set Details</button></div>'
             );
