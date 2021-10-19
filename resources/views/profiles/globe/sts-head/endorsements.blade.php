@@ -50,7 +50,7 @@
                                             <small class="text-danger remarks-error"></small>
                                         </div>
                                         <div class="form-group">
-                                            <button class="btn btn-primary btn-sm btn-shadow confirm_reject">Confirm</button>
+                                            <button class="btn btn-primary btn-sm btn-shadow confirm_reject" type="button">Confirm</button>
                                             
                                             <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                         </div>
