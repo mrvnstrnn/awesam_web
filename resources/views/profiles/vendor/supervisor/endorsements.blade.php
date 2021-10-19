@@ -36,6 +36,27 @@
                         </div> 
 
                         <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                            <div class="row form_fields"></div>
+
+                            <div class="row reject_remarks d-none">
+                                <div class="col-12">
+                                    <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
+                                    <form class="reject_form">
+                                        <input type="hidden" name="sam_id" id="sam_id">
+                                        <input type="hidden" name="type" id="type" value="reject_site">
+                                        <div class="form-group">
+                                            <label for="remarks">Remarks:</label>
+                                            <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                                            <small class="text-danger remarks-error"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-sm btn-shadow confirm_reject" type="button">Confirm</button>
+                                            
+                                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
 
                         </div>
                     </div> 
@@ -102,7 +123,9 @@
                         $("#viewInfoModal .main-card.mb-3.card").append(
                             '<div class="modal-footer">' +
                                 '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
-                                '<button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
+                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-accept-endorsement btn-sm d-none" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
+
+                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-sm btn-reject" data-complete="false" id="btn-accept-endorsement-false">Reject Site</button>' +
                             '</div>'
                         );
                     } else {
@@ -114,6 +137,7 @@
                     }
 
                     $(".modal-title").text(json_parse.site_name);
+                    $(".btn-reject").attr('data-sam_id', json_parse.sam_id);
                     $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
                     $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
                     $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
@@ -139,6 +163,24 @@
         });
 
     } );
+
+    $(document).on("click", ".btn-reject", function(e){
+        e.preventDefault();
+
+        $(".reject_form #sam_id").val($(this).attr("data-sam_id"));
+        $(".message_p b").text($(this).attr("data-sam_id"));
+        $(".form_fields").addClass("d-none");
+        $(".modal-footer").addClass("d-none");
+        $(".reject_remarks").removeClass("d-none");
+    });
+
+    $(document).on("click", ".cancel_reject", function(e){
+        e.preventDefault();
+        
+        $(".form_fields").removeClass("d-none");
+        $(".modal-footer").removeClass("d-none");
+        $(".reject_remarks").addClass("d-none");
+    });
 
     $(document).on("click", ".checkAll", function(e){
         e.preventDefault();
@@ -302,6 +344,66 @@
             }
         });
 
+    });
+
+    $(document).on("click", ".confirm_reject", function(e){
+        e.preventDefault();
+
+        
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $(".reject_form small").text("");
+        $.ajax({
+            url: "/reject-site",
+            method: "POST",
+            data: $(".reject_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+
+                    $('button[data-complete="false"]').trigger("click");
+
+                    $(".cancel_reject").trigger("click");
+                    $(".reject_form")[0].reset();
+
+                    console.log(resp.message);
+
+                    $(".confirm_reject").removeAttr("disabled");
+                    $(".confirm_reject").text("Confirm");
+                    // Swal.fire(
+                    //     'Success',
+                    //     resp.message,
+                    //     'succes'
+                    // )
+                } else { 
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $("." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                    $(".confirm_reject").removeAttr("disabled");
+                    $(".confirm_reject").text("Confirm");
+                }
+            }, 
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+                $(".confirm_reject").removeAttr("disabled");
+                $(".confirm_reject").text("Confirm");
+            }, 
+        })
     });
 
 </script>
