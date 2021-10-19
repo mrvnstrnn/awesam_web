@@ -530,8 +530,8 @@
 
     <div class="row button_area">
         <div class="col-12">
-            <button class="btn btn-sm btn-shadow btn-primary pull-right approve_reject_sched" id="approve_btn" data-action="true" type="button">Approve</button>
-            <button class="btn btn-sm btn-shadow btn-danger mr-1 pull-right approve_reject_sched_confirm" id="reject_btn" data-action="false" type="button">Reject</button>
+            <button class="btn btn-sm btn-shadow btn-primary pull-right approve_reject_sched" id="approve_btn" data-action="true" type="button">Accept Schedule</button>
+            <button class="btn btn-sm btn-shadow btn-danger mr-1 pull-right approve_reject_sched_confirm" id="reject_btn" data-action="false" type="button">Request Another Schedule</button>
         </div>
     </div>
 </div>

@@ -112,7 +112,6 @@
 
                     $.each(resp.message[0], function(index, data) {
 
-                        console.log(data);
 
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
                         $("#viewInfoModal .card-body").append(
