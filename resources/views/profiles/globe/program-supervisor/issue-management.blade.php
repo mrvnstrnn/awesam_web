@@ -125,7 +125,7 @@
                                                 <label for="date_engage" class="mr-sm-2">Date of Update</label>
                                             </div>
                                             <div class="col-8">
-                                                <input type="date" class="form-control" name="date_engage" id="date_engage">
+                                                <input type="text" class="form-control" name="date_engage" id="date_engage" readonly>
                                                 <small class="text-danger date_engage-errors"></small>
                                             </div>
                                         </div>
@@ -173,6 +173,15 @@
 
     $(document).ready(function () {
         $(document).on("click", ".add_update", function(){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            $("#date_engage").val(today);
+
             $(".add_remarks_issue_form").removeClass("d-none");
             $(".issue_details_div").addClass("d-none");
         });
