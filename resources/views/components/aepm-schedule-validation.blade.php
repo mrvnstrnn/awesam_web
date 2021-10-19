@@ -35,10 +35,12 @@
                                 <div class="col-12">
                                     @php
                                         if($count > 0){
-                                            $control = ''
+                                            $control = '';
+                                        } else {
+                                            $control = 'd-none';
                                         }
                                     @endphp
-                                    <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right {{ $count > 0 ? "" : "d-none" }}">JTSS Sched Confirmed</button>
+                                    <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right {{ $control }}">JTSS Sched Confirmed</button>
                                 </div>
                             </div>
 

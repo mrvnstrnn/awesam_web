@@ -1,7 +1,7 @@
-@extends('layouts.main')
+@extends('layouts.home')
 
 @section('content')
 
-<x-home-dashboard />  
+    <x-home-dashboard />  
 
 @endsection
