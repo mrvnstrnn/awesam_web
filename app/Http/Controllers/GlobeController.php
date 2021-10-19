@@ -1969,7 +1969,23 @@ class GlobeController extends Controller
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            if (\Auth::user()->profile_id == 6) {
+            if ($program_id == 1 && \Auth::user()->profile_id == 6) {
+                $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id)
+                    ->where('activity_id', 20)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+            } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
+                $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id)
+                    ->where('activity_id', 21)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+            } else if (\Auth::user()->profile_id == 6) {
 
                 $sites = \DB::connection('mysql2')
                                 ->table("view_sites_per_program")
@@ -2301,6 +2317,10 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 3);
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 8) {
                         $sites->where('activity_id', 4);
+                    } else if ($program_id == 1 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 1);
+                    } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
+                        $sites->where('activity_id', 1);
                     }
                     $sites->where('profile_id', \Auth::user()->profile_id)
                     ->get();
