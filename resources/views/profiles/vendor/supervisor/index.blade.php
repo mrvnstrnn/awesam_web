@@ -94,7 +94,7 @@
 
                         <div class="widget-chart-flex">
                             <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Sites w/ Issues
+                                Site Issues
                             </div>
                         </div>
                         <div class="widget-numbers">
