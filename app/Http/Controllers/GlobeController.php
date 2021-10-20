@@ -894,15 +894,27 @@ class GlobeController extends Controller
     public function get_region()
     {
         try {
-            $is_location = \DB::connection('mysql2')->table('user_details')
-                                                ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
-                                                ->where('user_details.user_id', \Auth::user()->id)
-                                                ->first();
+            $is_location = \DB::connection('mysql2')
+                                ->table('user_details')
+                                ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
+                                ->where('user_details.user_id', \Auth::user()->id)
+                                ->first();
 
             if(!is_null($is_location)){
-                $region = \DB::connection('mysql2')->table('location_regions')->where('region_name', $is_location->region)->get();
+                $region = \DB::connection('mysql2')
+                                ->table('location_regions')
+                                ->where('region_name', $is_location->region)
+                                ->get();
+                
+                if (count($region) < 1) {
+                    $region = \DB::connection('mysql2')
+                                    ->table('location_regions')
+                                    ->get();
+                }
             } else {
-                $region = \DB::connection('mysql2')->table('location_regions')->get();
+                $region = \DB::connection('mysql2')
+                                ->table('location_regions')
+                                ->get();
             }
             return response()->json(['error' => false, 'message' => $region]);
         } catch (\Throwable $th) {
@@ -934,32 +946,41 @@ class GlobeController extends Controller
             $provinces = collect();
             $lgus = collect();
 
-            $region = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('region')));
-
-            $province = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('province')));
-
-            $lgus = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
-
-
-            $lgu_validator = in_array('all', $province) ? '' : 'required';
-            $lgu = in_array('all', $province) ? ['all'] : $lgus;
-
             $validate = Validator::make($request->all(), array(
                 'region' => 'required',
-                'province' => 'required',
-                'lgu' => $lgu_validator
+                'province' => 'required'
             ));
 
-            if($validate->passes()){
-                UsersArea::create([
-                    'user_id' => $request->input('user_id'),
-                    'region' => $region,
-                    'province' => in_array('all', $province) ? '%' : implode(", ", $province),
-                    'lgu' => in_array('all', $lgu) ? '%' : implode(", ", $lgu),
-                ]);
-                return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
-            } else {
+            if (!$validate->passes()) {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            } else {
+                $region = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('region')));
+    
+                $province = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('province')));
+    
+                $lgus = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
+    
+    
+                $lgu_validator = in_array('all', $province) ? '' : 'required';
+                $lgu = in_array('all', $province) ? ['all'] : $lgus;
+    
+                $validate = Validator::make($request->all(), array(
+                    'region' => 'required',
+                    'province' => 'required',
+                    'lgu' => $lgu_validator
+                ));
+    
+                if($validate->passes()){
+                    UsersArea::create([
+                        'user_id' => $request->input('user_id'),
+                        'region' => $region,
+                        'province' => in_array('all', $province) ? '%' : implode(", ", $province),
+                        'lgu' => in_array('all', $lgu) ? '%' : implode(", ", $lgu),
+                    ]);
+                    return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
+                } else {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                }
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
