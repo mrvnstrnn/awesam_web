@@ -39,6 +39,8 @@
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMVeNu3CcBsCnM&v=weekly"></script>
+    
+
 
         <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -278,6 +280,9 @@
     {{-- <script type="module" src="/js/echo.js"></script> --}}
 
     @include('components.pusher-notification')  
+
+    <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script>
+
 
     <script>
         $(document).on("click", ".mark_as_unread", function (e) {

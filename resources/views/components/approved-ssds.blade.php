@@ -21,10 +21,9 @@
                 <thead class="thead-inverse">
                     <tr>
                         <th>Lessor</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
                         <th>Distance</th>
-                        <th>Schedule</th>
+                        <th>Ranking</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
             </table>
@@ -872,25 +871,24 @@
                             </div>
                         </div>            
                     </form>
-                    <button class="btn btn-sm btn-shadow btn-success submit_ssds pull-right">Submit SSDS</button>                                      
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row pt-3">
+{{-- <div class="row pt-3">
     <div class="col-12 text-right">
         <button class="btn btn-sm btn-shadow  btn-primary mark_as_complete {{ $is_match == 'match' ? "" : "d-none" }}">Mark as Complete</button>
     </div>
-</div>
+</div> --}}
 
 
 @php
 
     $NP = \DB::table('site')
         ->where('sam_id', $sam_id)
-        ->select('NP_latitude', 'NP_longitude')
+        ->select('NP_latitude', 'NP_longitude', 'NP_radius')
         ->get();
     
 @endphp
@@ -1143,77 +1141,19 @@
                     )
                 }
             });
-            });     
+        });     
 
-        $('#aepm_table').DataTable({
-            processing: true,
-            serverSide: true,
-            select: true,
-            order: [ 1, "asc" ],
-            ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
-                type: 'GET'
-            },
-            dataSrc: function(json){
-                return json.data;
-            },
-            'createdRow': function( row, data, dataIndex ) {
-                // $(row).attr('data-id', data.id);
-                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
-                $(row).addClass('add_schedule');
-                $(row).attr('style', 'cursor: pointer;');
-            },
-            columns: [
-                { data: "lessor" },
-                // { data: "address" },
-                { data: "latitude" },
-                { data: "longitude" },
-                { data: "distance", className: "text-center" },
-                { data: "schedule" },
-            ],
-            "initComplete": function( settings, json){
-                initMap(json.data);
-            }
-
-        });
-
-        $(".btn_switch_back_to_candidates").on("click", function(e){
-            e.preventDefault();
-
-            $(".btn_switch_back_to_actions").removeClass("d-none");
-            $(".btn_switch_back_to_candidates").addClass("d-none");
-
-            $(".form_data").addClass("d-none");
-            $(".aepm_table_div").removeClass("d-none");
-
-        });
-
-        $("#aepm_table").on("click", "tr", function(e){
-            e.preventDefault();
+        function load_ssds(id){
 
             $('.ssds_form')[0].reset();
 
-            if($(this).hasClass('selected') != true){
-                $("#aepm_table tbody tr").removeClass('selected');
-                $(this).addClass('selected');
-            } else {
-                $(this).removeClass('selected');
-            }
+            $(".set_schedule").attr("data-id", id);
+            $(".form_data").removeClass("d-none");
+            $(".aepm_table_div").addClass("d-none");
 
-            var id = $(this).attr('data-id');
-
-            if($('#aepm_table tbody tr.selected').length > 0){
-                $(".set_schedule").attr("data-id", id);
-                $(".form_data").removeClass("d-none");
-                $(".aepm_table_div").addClass("d-none");
-
-                $(".btn_switch_back_to_actions").addClass("d-none");
-                $(".btn_switch_back_to_candidates").removeClass("d-none");
+            $(".btn_switch_back_to_actions").addClass("d-none");
+            $(".btn_switch_back_to_candidates").removeClass("d-none");
                 
-                
-            } else {
-                $(".form_data").addClass("d-none");
-            }
 
             $(".set_schedule").attr("data-id", id);
 
@@ -1253,65 +1193,152 @@
                     )
                 },
             });
+        }        
+
+        $('#aepm_table').DataTable({
+            processing: true,
+            serverSide: true,
+            select: true,
+            order: [ 1, "asc" ],
+            ajax: {
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
+                type: 'GET'
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                // $(row).attr('data-id', data.id);
+                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
+                $(row).addClass('add_schedule');
+                $(row).attr('style', 'cursor: pointer;');
+            },
+            columns: [
+                { data: "lessor" },
+                // { data: "address" },
+                { data: "distance", className: "text-center" },
+                { data: "schedule" },
+                { data: "distance", className: "text-right", render: function(row){
+
+                    toggle_button = '<div>' +
+                                    '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
+                                        'style="width: 100px; height: 23px;"><input type="checkbox" checked="" data-toggle="toggle" data-onstyle="success">' +
+                                        '<div class="toggle-group">' +
+                                            '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
+                                            '<label for="" class="btn btn-light toggle-off">No</label>' +
+                                            '<span class="toggle-handle btn btn-light"></span><' +
+                                        '/div>' + 
+                                    '</div>' +
+                                    '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">SSDS Details</button>'  +
+                                    '</div>';                    
+                    return toggle_button;
+                }},
+            ],
+            rowCallback: function ( row, data ) {
+                // Set the checked state of the checkbox in the table
+
+                    var xdata = data;
+                    $('.toggle', row).on( 'click', function(row, xdata){
+
+                        if($(this).hasClass('btn-success')){ 
+                            
+                            $(this).addClass('off');
+                            $(this).addClass('btn-light');
+                            $(this).removeClass('btn-success');
+                            $(this).data('NO');
+
+                        } else {
+                            $(this).addClass('btn-success');
+                            $(this).removeClass('btn-light');
+                            $(this).removeClass('off');
+                            $(this).data('YES');
+                        }
+                    });
+
+                    $('.ssds-details', row).on( 'click', function(row, xdata){
+                        load_ssds(data.id);
+                    });
+            },
+
+
+            "initComplete": function( settings, json){
+                initMap(json.data);
+            }
+
         });
 
-        $(".mark_as_complete").on("click", function() {
-            $(this).attr("disabled", "disabled");
-            $(this).text("Processing...");
+        $(".btn_switch_back_to_candidates").on("click", function(e){
+            e.preventDefault();
 
-            var sam_id = ["{{ $sam_id }}"];
-            var sub_activity_id = "{{ $sub_activity_id }}";
-            var activity_name = "{{ $sub_activity }}";
-            var site_category = ["{{ $site_category }}"];
-            var activity_id = ["{{ $activity_id }}"];
-            var program_id = "{{ $program_id }}";
+            $(".btn_switch_back_to_actions").removeClass("d-none");
+            $(".btn_switch_back_to_candidates").addClass("d-none");
 
-            $.ajax({
-                url: "/accept-reject-endorsement",
-                method: "POST",
-                data: {
-                    sam_id : sam_id,
-                    sub_activity_id : sub_activity_id,
-                    activity_name : activity_name,
-                    site_category : site_category,
-                    activity_id : activity_id,
-                    program_id : program_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp) {
-                    if (!resp.error){
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
-                        $(".mark_as_complete").removeAttr("disabled");
-                        $(".mark_as_complete").text("Mark as Complete");
-
-                        $("#viewInfoModal").modal("hide");
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                        $(".mark_as_complete").removeAttr("disabled");
-                        $(".mark_as_complete").text("Mark as Complete");
-                    }
-                },
-                error: function (resp) {
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-                }
-            });
+            $(".form_data").addClass("d-none");
+            $(".aepm_table_div").removeClass("d-none");
 
         });
+
+        
+
+
+
+        // $(".mark_as_complete").on("click", function() {
+        //     $(this).attr("disabled", "disabled");
+        //     $(this).text("Processing...");
+
+        //     var sam_id = ["{{ $sam_id }}"];
+        //     var sub_activity_id = "{{ $sub_activity_id }}";
+        //     var activity_name = "{{ $sub_activity }}";
+        //     var site_category = ["{{ $site_category }}"];
+        //     var activity_id = ["{{ $activity_id }}"];
+        //     var program_id = "{{ $program_id }}";
+
+        //     $.ajax({
+        //         url: "/accept-reject-endorsement",
+        //         method: "POST",
+        //         data: {
+        //             sam_id : sam_id,
+        //             sub_activity_id : sub_activity_id,
+        //             activity_name : activity_name,
+        //             site_category : site_category,
+        //             activity_id : activity_id,
+        //             program_id : program_id,
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success: function (resp) {
+        //             if (!resp.error){
+        //                 Swal.fire(
+        //                     'Success',
+        //                     resp.message,
+        //                     'success'
+        //                 )
+        //                 $(".mark_as_complete").removeAttr("disabled");
+        //                 $(".mark_as_complete").text("Mark as Complete");
+
+        //                 $("#viewInfoModal").modal("hide");
+        //             } else {
+        //                 Swal.fire(
+        //                     'Error',
+        //                     resp.message,
+        //                     'error'
+        //                 )
+        //                 $(".mark_as_complete").removeAttr("disabled");
+        //                 $(".mark_as_complete").text("Mark as Complete");
+        //             }
+        //         },
+        //         error: function (resp) {
+        //             Swal.fire(
+        //                 'Error',
+        //                 resp,
+        //                 'error'
+        //             )
+        //             $(".mark_as_complete").removeAttr("disabled");
+        //             $(".mark_as_complete").text("Mark as Complete");
+        //         }
+        //     });
+
+        // });
     });
 </script>

@@ -38,6 +38,7 @@ $activities = \DB::connection('mysql2')
                     ->table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', 2)
+                    ->orderBy('activity_id', 'ASC')
                     ->get();
 
 
@@ -337,84 +338,77 @@ $activities = \DB::connection('mysql2')
 </script>
 
 <script>
-    $.ajax({
-        url: "/get-agent-activity-timeline",
-        method: "GET",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (resp){
+    // $.ajax({
+    //     url: "/get-agent-activity-timeline",
+    //     method: "GET",
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     },
+    //     success: function (resp){
 
-            console.log(resp.message);
+    //         console.log(resp.message);
             
 
-            $.each(resp.message, function(){
+    //         $.each(resp.message, function(){
 
-                start_date = new Date(this.start_date);
-                end_date = new Date(this.end_date);
-                date_today = new Date();
+    //             start_date = new Date(this.start_date);
+    //             end_date = new Date(this.end_date);
+    //             date_today = new Date();
 
-                var what_color = "dark";
-                var what_badge = "Upcoming";
+    //             var what_color = "dark";
+    //             var what_badge = "Upcoming";
 
-                if(start_date < date_today){
-                    what_color = "danger";
-                    what_badge = "Delayed";
-                } 
-                else if(start_date >= date_today || end_date >= date_today){
-                    what_color = "success";
-                    what_badge = "On Schedule";
-                } 
-                else {
-                    what_color = "warning";
-                    what_badge = "Upcoming";
-                }
+    //             if(start_date < date_today){
+    //                 what_color = "danger";
+    //                 what_badge = "Delayed";
+    //             } 
+    //             else if(start_date >= date_today || end_date >= date_today){
+    //                 what_color = "success";
+    //                 what_badge = "On Schedule";
+    //             } 
+    //             else {
+    //                 what_color = "warning";
+    //                 what_badge = "Upcoming";
+    //             }
 
 
-                var m = moment(this.activity_created);  // or whatever start date you have
-                var today = moment().startOf('day');
+    //             var m = moment(this.activity_created); 
+    //             var today = moment().startOf('day');
 
-                var days = Math.round(moment.duration(today - m).asDays());
+    //             var days = Math.round(moment.duration(today - m).asDays());
 
-                if(days == 0){
-                    dayTxt = 'Today';
-                } 
-                else if(days == 1) {
-                    dayTxt = days + ' Day';
-                } else {
-                    dayTxt = days + ' Days';
-                }
+    //             if(days == 0){
+    //                 dayTxt = 'Today';
+    //             } 
+    //             else if(days == 1) {
+    //                 dayTxt = days + ' Day';
+    //             } else {
+    //                 dayTxt = days + ' Days';
+    //             }
 
-                $('#from-to-' + this.sam_id).html(
-                    '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
-                    '<div>Started: ' + this.activity_created + '</div>' +
-                    '<div>Aging: ' + dayTxt + '</div>'
-                );
+    //             $('#from-to-' + this.sam_id).html(
+    //                 '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
+    //                 '<div>Started: ' + this.activity_created + '</div>' +
+    //                 '<div>Aging: ' + dayTxt + '</div>'
+    //             );
 
-                $('#from-to-badge-' + this.sam_id).text(what_badge);
-                $('#from-to-badge-' + this.sam_id).text(what_badge).removeClass('badge-dark');
-                $('#from-to-badge-' + this.sam_id).text(what_badge).addClass('badge-' + what_color);
+    //             $('#from-to-badge-' + this.sam_id).text(what_badge);
+    //             $('#from-to-badge-' + this.sam_id).text(what_badge).removeClass('badge-dark');
+    //             $('#from-to-badge-' + this.sam_id).text(what_badge).addClass('badge-' + what_color);
 
-                $('#to-do-indicator-' + this.sam_id).removeClass('bg-dark');
-                $('#to-do-indicator-' + this.sam_id).addClass('bg-' + what_color);
+    //             $('#to-do-indicator-' + this.sam_id).removeClass('bg-dark');
+    //             $('#to-do-indicator-' + this.sam_id).addClass('bg-' + what_color);
 
-                // if(this.activity_duration_days > 1) {
-                //     dayTxt = ' Days'
-                // } else {
-                //     dayTxt = ' Day'
-                // }
 
-                // $('#duration-' + this.sam_id).text(this.activity_duration_days + dayTxt);
-
-                $('#started-' + this.sam_id).text(this.activity_created + ' | Aging: ');
-            })
+    //             $('#started-' + this.sam_id).text(this.activity_created + ' | Aging: ');
+    //         })
         
 
-        },
-        complete: function(){
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });    
+    //     },
+    //     complete: function(){
+    //     },
+    //     error: function (resp){
+    //         toastr.error(resp.message, "Error");
+    //     }
+    // });    
 </script>

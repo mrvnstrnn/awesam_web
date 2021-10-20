@@ -2731,7 +2731,7 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $what_component = "components.ssds";
+            $what_component = "components.approved-ssds";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -2755,7 +2755,7 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $what_component = "components.ssds";
+            $what_component = "components.ssds-ntp";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
