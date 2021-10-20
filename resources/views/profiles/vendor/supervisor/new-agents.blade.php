@@ -101,6 +101,7 @@
                             </div>
                             <small class="text-danger" id="region-error"></small>
                         </div>
+                        <div class="divider"></div>
 
                         <div class="form-row">
                             <div class="form-group col-12">
@@ -109,6 +110,7 @@
                             </div>
                             <small class="text-danger" id="province-error"></small>
                         </div>
+                        <div class="divider"></div>
 
                         <div class="form-group">
                             <label for="lgu">LGU</label>
