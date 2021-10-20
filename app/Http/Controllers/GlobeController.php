@@ -1954,8 +1954,8 @@ class GlobeController extends Controller
                                                 ->pluck('id');
             
             $sites = \DB::connection('mysql2')
-                        ->table("view_sites_activity_2")
-                        ->join("site_users", "site_users.sam_id", "view_sites_activity_2.sam_id")
+                        ->table("view_sites_activity_3")
+                        ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
                         ->where('program_id', $program_id)
                         ->whereIn('agent_id', $getAgentOfSupervisor)
                         ->get();
