@@ -11,6 +11,8 @@ use App\Http\Controllers\NewSitesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\SignatureController;
+
 
 
 /*
@@ -423,6 +425,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // TRAINING
 
     Route::get('/training/{id}', [TrainingController::class, 'index']);
+
+
+    // SIGNATURE
+    Route::get('signature_pad', [SignatureController::class, 'index']);
+    Route::post('signature_pad', [SignatureController::class, 'store'])->name('signature_pad.store');
+         
 
 });
     

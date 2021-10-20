@@ -202,10 +202,14 @@
 
 {{-- <script src="js/modal-loader.js"></script> --}}
 
+
+
 <script>
 
 
 $(document).ready(() => {
+
+    
 
     var sam_id = $('#modal_sam_id').val();
 
