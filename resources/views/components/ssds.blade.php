@@ -33,7 +33,7 @@
             <div class="row form_div border-bottom pt-3 pb-2">
                 <div class="col-12">
                     <form class="ssds_form pt-3">
-                        <H3>Site Selection Deliberation Sheet</H3>
+                        <H3>SSDS Details</H3>
                         <hr>
                         <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
                         <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
