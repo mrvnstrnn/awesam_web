@@ -214,7 +214,7 @@
             Dropzone.autoDiscover = false;
             $(".dropzone_files_activities").dropzone({
                 addRemoveLinks: true,
-                maxFiles: 1,
+                // maxFiles: 1,
                 paramName: "file",
                 url: "/upload-file",
                 init: function() {

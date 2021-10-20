@@ -305,10 +305,12 @@ $(document).ready(() => {
         }
     }
 
-    $("#assign-agent-site-btn").on('click', function(e){
-        $("#assign-agent-site-btn").text("Assigning...");
-        $("#assign-agent-site-btn").attr("disabled", "disabled");
+    $(document).on('click', "#assign-agent-site-btn", function(e){
+        $(this).text("Assigning...");
+        $(this).attr("disabled", "disabled");
         var data_program = $(this).attr('data-program');
+
+        $("#assign-agent-site-form small").text("");
 
         $.ajax({
             url: $(this).attr('data-href'),
@@ -319,7 +321,7 @@ $(document).ready(() => {
             },
             success: function(resp){
                 if(!resp.error){
-                    $("#agent-"+data_program+"-table").DataTable().ajax.reload(function(){
+                    $("#newagent-"+data_program+"-table").DataTable().ajax.reload(function(){
                         $(".lgu_check div").remove();
                         $(".province_check div").remove();
                         $(".assign-agent-div select#region option").remove();
