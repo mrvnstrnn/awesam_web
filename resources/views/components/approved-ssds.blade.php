@@ -27,7 +27,64 @@
                     </tr>
                 </thead>
             </table>
-        </div>
+            <H3 class="mt-3">Survey Representative Signature</H3>
+            <hr>
+            <div class="row">
+                <div class="col-4">
+                    <H5>Aris Salvador</H5>
+                    <div>zfdsalvador@globe.com.ph</div>
+                    <div>Email Confirmation: SENT</div>
+                </div>
+                <div class="col-8">
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success  alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">×</button>  
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @endif
+                    <form method="POST" action="{{ route('signature_pad.store') }}">
+                        @csrf
+                        <div class="col-md-12">
+                            <label class="" for="">Signature: Aris Salvador</label>
+                            <br/>
+                            <div id="sig" class="sigbox"></div>
+                            <button id="clear" class="btn btn-danger">Clear Signature</button>
+                            <button class="btn btn-success">Save</button>
+                            <textarea id="signature" name="signed" style="display: none"></textarea>
+                        </div>
+                    </form>
+                </div>
+
+           </div>
+           <div class="divider"></div>
+           <div class="row">
+            <div class="col-4">
+                <H5>Aris Salvador</H5>
+                <div>zfdsalvador@globe.com.ph</div>
+                <div>Email Confirmation: SENT</div>
+            </div>
+            <div class="col-8">
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success  alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">×</button>  
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('signature_pad.store') }}">
+                    @csrf
+                    <div class="col-md-12">
+                        <label class="" for="">Signature: Aris Salvador</label>
+                        <br/>
+                        <div id="sig" class="sigbox"></div>
+                        <button id="clear" class="btn btn-danger">Clear Signature</button>
+                        <button class="btn btn-success">Save</button>
+                        <textarea id="signature" name="signed" style="display: none"></textarea>
+                    </div>
+                </form>
+            </div>
+
+       </div>
+    </div>
         <div class="form_data d-none">
             <div class="row form_div border-bottom pt-3 pb-2">
                 <div class="col-12">
@@ -892,6 +949,23 @@
         ->get();
     
 @endphp
+
+<link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
+<style>
+    .kbw-signature { width: 100%; height: 150px;}
+    #sig canvas{ width: 100% !important; height: auto;}
+</style>  
+
+
+<script type="text/javascript">
+    var sig = $('.sigbox').signature({syncField: '#signature', syncFormat: 'PNG'});
+    $('#clear').click(function(e) {
+        e.preventDefault();
+        sig.signature('clear');
+        $("#signature").val('');
+    });
+</script>
+
 
 {{-- GOOGLE MAPS --}}
 

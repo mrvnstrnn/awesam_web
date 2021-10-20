@@ -890,7 +890,7 @@
 
     $NP = \DB::table('site')
         ->where('sam_id', $sam_id)
-        ->select('NP_latitude', 'NP_longitude')
+        ->select('NP_latitude', 'NP_longitude', 'NP_radius')
         ->get();
     
 @endphp
@@ -993,7 +993,7 @@
             map,
             center: nominal_point,
             radius: parseInt(NP_radius),
-        });
+            });
 
         let infoWindow = new google.maps.InfoWindow({
         });

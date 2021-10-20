@@ -923,6 +923,7 @@
         ->get();
     
 @endphp
+
 <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
 <style>
     .kbw-signature { width: 100%; height: 150px;}
