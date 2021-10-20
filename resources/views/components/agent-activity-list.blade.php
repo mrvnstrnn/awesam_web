@@ -363,7 +363,7 @@ $activities = \DB::connection('mysql2')
                 } 
                 else if(start_date >= date_today || end_date >= date_today){
                     what_color = "success";
-                    what_badge = "Om Schedule";
+                    what_badge = "On Schedule";
                 } 
                 else {
                     what_color = "warning";
