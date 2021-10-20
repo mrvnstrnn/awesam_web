@@ -917,6 +917,7 @@
 
         var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
         var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+        var NP_radius = {!! json_encode($NP[0]->NP_radius) !!};
 
         const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
 
@@ -980,8 +981,6 @@
 
 
         });
-
-        var NP_radius = {!! json_encode($NP[0]->NP_radius) !!};
 
         const nominal_point_circle = new google.maps.Circle({
             strokeColor: "#FF0000",

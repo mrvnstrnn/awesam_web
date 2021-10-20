@@ -38,6 +38,7 @@ $activities = \DB::connection('mysql2')
                     ->table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', 2)
+                    ->orderBy('activity_id')
                     ->get();
 
 

@@ -919,6 +919,7 @@
 
         var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
         var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+        var NP_radius = {!! json_encode($NP[0]->NP_radius) !!};
 
         const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
 
@@ -991,7 +992,7 @@
             fillOpacity: 0.1,
             map,
             center: nominal_point,
-            radius: 300,
+            radius: parseInt(NP_radius),
         });
 
         let infoWindow = new google.maps.InfoWindow({
