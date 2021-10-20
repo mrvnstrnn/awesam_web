@@ -49,7 +49,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="main-card mb-3 card ">
 
-                            <div class="dropdown-menu-header">
+                            <div class="dropdown-menu-header" style="paddng:0px !important;">
                                 <div class="dropdown-menu-header-inner bg-dark">
                                     <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                     <div class="menu-header-content btn-pane-right">
@@ -92,11 +92,21 @@
                             <div class="card-body">
                                 @php
 
+                                        $activity = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->where("program_id", $site[0]->program_id)        
+                                                ->where("category", $site[0]->site_category)        
+                                                ->where("activity_id", $site[0]->activity_id)
+                                                ->get();
+
+                                        $subactivity_type = $activity[0]->subactivities_type;
+
                                         $sub_activities = \DB::connection('mysql2')
                                                 ->table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->where('category', $site[0]->site_category)
+                                                ->orderBy('sequential_step')
                                                 ->get();
 
                                     // $sub_activities = json_decode($site[0]->sub_activity);
@@ -104,120 +114,163 @@
                                 <div id="actions_list" class="">
                                     <div class="row">
                                         <div class="col-12">
+                                            @if($subactivity_type == "parallel")
+                                                <ul class="tabs-animated body-tabs-animated nav mb-4">
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link active" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
+                                                            <span>Activity Actions</span>
+                                                            <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
+                                                            <span>Engagement</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
+                                                        <div class="row border-bottom">
+                                                            <div class="col-12">
+                                                                <H5>Actions to Complete</H5>
+                                                            </div>
+                                                            {{-- <div class="col-4">
+                                                                <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
+                                                            </div> --}}
+                                                        </div>
+                                                        <div class="row p-2 pt-3 action_to_complete_parent">
+                                                            @foreach ($sub_activities as $sub_activity)
+                                                                @if($sub_activity->activity_id == $activity_id)
+                                                                    <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
+                                                                        data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
+                                                                        >
+                                                                        <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
+                                                                        
+                                                                        @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
+                                                                        <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                        @endif
+                                                                    </div>
+                                                                @endif                               
+                                                            @endforeach
+                                                            <div class="col-12 mt-5">
+                                                            <small>* Required actions are in bold letters</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
+                                                        <div id="action_lessor_engagement" class=''>
+                                                            <div class="row py-5 px-4" id="control_box_log">
+                                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Call">
+                                                                    <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
+                                                                    <div class="pt-3"><small>Call</small></div>
+                                                                </div>
+                                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Text">
+                                                                    <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
+                                                                    <div class="pt-3"><small>Text</small></div>
+                                                                </div>
+                                                                <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor_log" data-value="Email">
+                                                                    <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
+                                                                    <div class="pt-3"><small>Email</small></div>
+                                                                </div>
+                                                                <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Site Visit">
+                                                                    <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
+                                                                    <div class="pt-3"><small>Site Visit</small></div>
+                                                        
+                                                                </div>
+                                                            </div>
+                                                            <div class="row py-3 px-5 d-none" id="control_form_log">
+                                                                <div class="col-12 py-3">
+                                                                <form class="engagement_form">
+                                                                    <div class="position-relative row form-group">
+                                                                        <label for="lessor_method_log" class="col-sm-3 col-form-label">Method</label>
+                                                                        <div class="col-sm-9">
+                                                                            <input type="text" class="form-control" id="lessor_method_log" name="lessor_method_log" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="position-relative row form-group">
+                                                                        <label for="lessor_date_log" class="col-sm-3 col-form-label">Date</label>
+                                                                        <div class="col-sm-9">
+                                                                            <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control flatpicker">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="position-relative row form-group">
+                                                                        <label for="lessor_remarks_log" class="col-sm-3 col-form-label">Remarks</label>
+                                                                        <div class="col-sm-9">
+                                                                            <textarea name="lessor_remarks_log" id="lessor_remarks_log" class="form-control"></textarea>
+                                                                            <small class="text-danger lessor_remarks-errors"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="position-relative row form-group">
+                                                                        <label for="lessor_approval_log" class="col-sm-3 col-form-label">Approval</label>
+                                                                        <div class="col-sm-9">
+                                                                            <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
+                                                                                <option value="active">Approval not yet secured</option>
+                                                                                <option value="approved">Approval Secured</option>
+                                                                                <option value="denied">Rejected</option>
+                                                                            </select>
+                                                                            <small class="text-danger lessor_approval-errors"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="position-relative row form-group ">
+                                                                        <div class="col-sm-10 offset-sm-3">
+                                                                            <button class="btn btn-primary save_engagement_log" data-log="true" type="button">Save Engagement</button>
+                                                                            <button class="btn btn-secondary cancel_engagement_log" type="button">Back to Engagement</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                </div>
+                                                        
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12 table-responsive table_lessor_parent_log">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif($subactivity_type == "sequential")
                                             <ul class="tabs-animated body-tabs-animated nav mb-4">
                                                 <li class="nav-item">
                                                     <a role="tab" class="nav-link active" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
-                                                        <span>Activity</span>
+                                                        <span>Activity Steps</span>
                                                         <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                     </a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
-                                                        <span>Engagement</span>
-                                                    </a>
-                                                </li>
                                             </ul>
-        
                                             <div class="tab-content">
                                                 <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
                                                     <div class="row border-bottom">
-                                                        <div class="col-8">
-                                                            <H5>Actions to Complete</H5>
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
+                                                        <div class="col-12">
+                                                            <H5>Steps to Complete</H5>
                                                         </div>
                                                     </div>
-                                                    <div class="row p-2 pt-3 action_to_complete_parent">
+                                                    <div class="p-2 pt-3 action_to_complete_parent">
                                                         @foreach ($sub_activities as $sub_activity)
                                                             @if($sub_activity->activity_id == $activity_id)
-                                                                <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
-                                                                    data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
-                                                                    >
-                                                                    <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
-                                                                    
-                                                                    @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
-                                                                    <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
-                                                                    @endif
+                                                                <div class="row btn_switch_show_action pt-3 pb-3 border-bottom  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
+                                                                        <div class="col-2">
+                                                                            <h6>{{ $sub_activity->sequential_step }}</h6>                   
+                                                                        </div>
+                                                                        <div class="col-10">
+                                                                            <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}">
+                                                                            @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
+                                                                            <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                            @endif
+                                                                            {{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
+                                                                        </div>
                                                                 </div>
-                                                            @endif                               
+                                                            @endif
                                                         @endforeach
                                                         <div class="col-12 mt-5">
                                                         <small>* Required actions are in bold letters</small>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
-                                                    <div id="action_lessor_engagement" class=''>
-                                                        <div class="row py-5 px-4" id="control_box_log">
-                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Call">
-                                                                <i class="fa fa-phone fa-4x" aria-hidden="true" title=""></i>
-                                                                <div class="pt-3"><small>Call</small></div>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Text">
-                                                                <i class="fa fa-mobile fa-4x" aria-hidden="true" title=""></i>
-                                                                <div class="pt-3"><small>Text</small></div>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-6 my-3 text-center contact-lessor_log" data-value="Email">
-                                                                <i class="fa fa-envelope fa-4x" aria-hidden="true" title=""></i>
-                                                                <div class="pt-3"><small>Email</small></div>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Site Visit">
-                                                                <i class="fa fa-location-arrow fa-4x" aria-hidden="true" title=""></i>
-                                                                <div class="pt-3"><small>Site Visit</small></div>
-                                                    
-                                                            </div>
-                                                        </div>
-                                                        <div class="row py-3 px-5 d-none" id="control_form_log">
-                                                            <div class="col-12 py-3">
-                                                            <form class="engagement_form">
-                                                                <div class="position-relative row form-group">
-                                                                    <label for="lessor_method_log" class="col-sm-3 col-form-label">Method</label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="text" class="form-control" id="lessor_method_log" name="lessor_method_log" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="position-relative row form-group">
-                                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">Date</label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control flatpicker">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="position-relative row form-group">
-                                                                    <label for="lessor_remarks_log" class="col-sm-3 col-form-label">Remarks</label>
-                                                                    <div class="col-sm-9">
-                                                                        <textarea name="lessor_remarks_log" id="lessor_remarks_log" class="form-control"></textarea>
-                                                                        <small class="text-danger lessor_remarks-errors"></small>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="position-relative row form-group">
-                                                                    <label for="lessor_approval_log" class="col-sm-3 col-form-label">Approval</label>
-                                                                    <div class="col-sm-9">
-                                                                        <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
-                                                                            <option value="active">Approval not yet secured</option>
-                                                                            <option value="approved">Approval Secured</option>
-                                                                            <option value="denied">Rejected</option>
-                                                                        </select>
-                                                                        <small class="text-danger lessor_approval-errors"></small>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="position-relative row form-group ">
-                                                                    <div class="col-sm-10 offset-sm-3">
-                                                                        <button class="btn btn-primary save_engagement_log" data-log="true" type="button">Save Engagement</button>
-                                                                        <button class="btn btn-secondary cancel_engagement_log" type="button">Back to Engagement</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                            </div>
-                                                    
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12 table-responsive table_lessor_parent_log">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
+                                        @else
+                                                Incorrect Stage Activity Settings
+                                                {{ $subactivity_type }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

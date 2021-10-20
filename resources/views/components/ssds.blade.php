@@ -1,7 +1,7 @@
 <div class="row border-bottom">
     <div class="col-12">
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
-        <button class="btn_switch_back_to_candidates d-none btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Candidates</button>                                            
+        <button class="btn_switch_back_to_candidates d-none btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Options</button>                                            
     </div>
 </div>
 
@@ -14,7 +14,7 @@
 <div class="row p-0">
     <div class="col-12">
         <div class="table-responsive aepm_table_div pt-4">
-            <H3>Site Candidates</H3>
+            <H3>{{ $sub_activity }}</H3>
             <hr>
             <div id="map"></div>
             <table class="table table-hover table-inverse" id="aepm_table">
@@ -880,8 +880,8 @@
 </div>
 
 <div class="row pt-3">
-    <div class="col-12">
-        <button class="btn btn-sm btn-shadow btn-primary mark_as_complete {{ $is_match == 'match' ? "" : "d-none" }}">Mark as Complete</button>
+    <div class="col-12 text-right">
+        <button class="btn btn-sm btn-shadow  btn-primary mark_as_complete {{ $is_match == 'match' ? "" : "d-none" }}">Mark as Complete</button>
     </div>
 </div>
 
