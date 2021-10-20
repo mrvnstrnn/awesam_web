@@ -2391,7 +2391,10 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
+                    ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
+                    ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
+                    ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
                     
                     ->where('program_id', $program_id);
 
