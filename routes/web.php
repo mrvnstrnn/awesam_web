@@ -418,6 +418,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // AGENT
     Route::get('/get-agent-activity-timeline', [GlobeController::class, 'get_agent_activity_timeline']);
+    Route::get('/jtss-representative/{sam_id}', [GlobeController::class, 'jtss_representative']);
+    Route::post('/add-representative', [GlobeController::class, 'add_representative']);
+    Route::post('/done-adding-representative', [GlobeController::class, 'done_adding_representative']);
 
 
     // TRAINING

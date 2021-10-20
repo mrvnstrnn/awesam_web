@@ -30,6 +30,9 @@ use App\Notifications\SiteMoved;
 use Pusher\Pusher;
 use Log;
 
+use App\Mail\RepresentativeInvitation;
+use Illuminate\Support\Facades\Mail;
+
 // use App\Models\ToweCoFile;
 // use App\Exports\TowerCoExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -2591,6 +2594,31 @@ class GlobeController extends Controller
                 'program_id' => $program_id,
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
+        elseif($sub_activity == 'Set Survey Representatives'){
+
+            $datas = SubActivityValue::where('sam_id', $sam_id)
+                                        ->where('type', 'jtss_representative')
+                                        ->get();
+
+            $site = Site::select('site_name')
+                            ->where('sam_id', $sam_id)
+                            ->first();
+
+            $what_component = "components.set-survey-representatives";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'site_name' => $site->site_name,
+                'is_done' => count($datas) > 0 ? 'done' : 'not_done',
             ])
             ->render();
 
@@ -5558,6 +5586,121 @@ class GlobeController extends Controller
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function jtss_representative ($sam_id)
+    {
+        try {
+
+            $datas = SubActivityValue::where('sam_id', $sam_id)
+                                        ->where('type', 'jtss_representative')
+                                        ->get();
+
+            $dt = DataTables::of($datas)
+                ->addColumn('name', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['name'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('email', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['email'];
+                    } else {
+                        return $row->value;
+                    }
+                })
+                ->addColumn('designation', function($row){
+                    json_decode($row->value);
+                    if (json_last_error() == JSON_ERROR_NONE){
+                        $json = json_decode($row->value, true);
+
+                        return $json['designation'];
+                    } else {
+                        return $row->value;
+                    }
+                });
+                                
+            $dt->rawColumns(['status']);
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_representative (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'email' => [ 'required', 'email' ],
+                'name' => 'required',
+                'designation' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                $json = [
+                    'email' => $request->get('email'),
+                    'name' => $request->get('name'),
+                    'designation' => $request->get('designation'),
+                ];
+
+                SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'type' => 'jtss_representative',
+                    'value' => json_encode($json),
+                    'user_id' => \Auth::id(),
+                    'status' => 'pending'
+                ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully added a new representative." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function done_adding_representative (Request $request)
+    {
+        try {
+            $email_collect = collect();
+
+            $datas = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                        ->where('type', 'jtss_representative')
+                                        ->get();
+
+            $url = url('/');
+
+            foreach ($datas as $data) {
+                if (json_last_error() == JSON_ERROR_NONE){
+                    $json = json_decode($data->value, true);
+
+                    $email = $json['email'];
+                    $name = $json['name'];
+                } else {
+                    $email = $data->value;
+                    $name = $data->value;
+                }
+
+                Mail::to($email)->send(new RepresentativeInvitation( $request->get('site_name'), $name, $url ));
+            }
+            return response()->json(['error' => false, 'message' => "Successfully adding representatives."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
