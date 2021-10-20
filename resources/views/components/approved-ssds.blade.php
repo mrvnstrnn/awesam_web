@@ -23,7 +23,7 @@
                         <th>Lessor</th>
                         <th>Distance</th>
                         <th>Ranking</th>
-                        <th>Approved SSDS</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
             </table>
@@ -888,7 +888,7 @@
 
     $NP = \DB::table('site')
         ->where('sam_id', $sam_id)
-        ->select('NP_latitude', 'NP_longitude')
+        ->select('NP_latitude', 'NP_longitude', 'NP_radius')
         ->get();
     
 @endphp
@@ -917,6 +917,7 @@
 
         var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
         var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+        var NP_radius = {!! json_encode($NP[0]->NP_longitude) !!};
 
         const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
 
@@ -989,7 +990,7 @@
             fillOpacity: 0.1,
             map,
             center: nominal_point,
-            radius: 300,
+            radius: {!! json_encode($NP[0]->NP_radius) !!},
         });
 
         let infoWindow = new google.maps.InfoWindow({
@@ -1165,25 +1166,27 @@
                 // { data: "address" },
                 { data: "distance", className: "text-center" },
                 { data: "schedule" },
-                { data: "distance", className: "text-center", render: function(row){
+                { data: "distance", className: "text-right", render: function(row){
 
-                    toggle_button = '<div class="toggle btn btn-success" data-toggle="toggle" role="button" ' +
-                                        'style="width: 120px; height: 23px;"><input type="checkbox" checked="" data-toggle="toggle" data-onstyle="success">' +
+                    toggle_button = '<div>' +
+                                    '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
+                                        'style="width: 100px; height: 23px;"><input type="checkbox" checked="" data-toggle="toggle" data-onstyle="success">' +
                                         '<div class="toggle-group">' +
-                                            '<label for="" class="btn btn-success toggle-on">Yes</label>' +
+                                            '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
                                             '<label for="" class="btn btn-light toggle-off">No</label>' +
                                             '<span class="toggle-handle btn btn-light"></span><' +
                                         '/div>' + 
+                                    '</div>' +
+                                    '<button class="ml-2 mb-2 mt-2 btn btn-primary">Details</button>'  +
                                     '</div>';                    
                     return toggle_button;
                 }},
             ],
-            columnDefs: [
-                { width: 125, targets: 3 }
-            ],
             rowCallback: function ( row, data ) {
                 // Set the checked state of the checkbox in the table
-                    $('.toggle', row).on( 'click', function(){
+
+                    var xdata = data;
+                    $('.toggle', row).on( 'click', function(row, xdata){
 
                         if($(this).hasClass('btn-success')){ 
                             
@@ -1191,10 +1194,14 @@
                             $(this).addClass('btn-light');
                             $(this).removeClass('btn-success');
 
+                            console.log(xdata);
+                            $(this).data('NO');
+
                         } else {
                             $(this).addClass('btn-success');
                             $(this).removeClass('btn-light');
                             $(this).removeClass('off');
+                            $(this).data('YES');
                         }
                     });
             },
