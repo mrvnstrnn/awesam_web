@@ -5211,7 +5211,10 @@ class GlobeController extends Controller
             } else if ( $status == 'jtss_ssds' ) {
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', $status)
-                        ->where('status', 'pending');
+                        ->where('status', 'Done');
+            } else if ( $status == 'jtss_ssds_ranking' ) {
+                $datas->where('type', 'jtss_ssds')
+                        ->where('type', 'jtss_ssds');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }
@@ -5268,13 +5271,6 @@ class GlobeController extends Controller
                     } else {
                         return $row->value;
                     }
-                })
-                ->addColumn('status', function($row){
-                    if ($row->status == 'pending') {
-                        return '<span class="badge badge-secondary">Not Yet Scheduled</span>';
-                    } else {
-                        return '<span class="badge badge-success">Scheduled</span>';
-                    }
                 });
 
                 if ($status == "jtss_schedule_site") {
@@ -5287,6 +5283,23 @@ class GlobeController extends Controller
                             return $json['jtss_schedule'];
                         } else {
                             return $row->value;
+                        }
+                    })
+                    ->addColumn('status', function($row) use ($sam_id) {
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+    
+                            $datas = SubActivityValue::where('type', 'jtss_ssds')
+                                                    ->where('value->id', $json['id'])
+                                                    ->first();
+
+                            if ($datas->status == 'pending') {
+                                return '<span class="badge badge-secondary">Pending</span>';
+                            } else {
+                                return '<span class="badge badge-success">Done</span>';
+                            }
+                        } else {
+                            return $datas->status;
                         }
                     });
                 } else if ($status == "rejected_schedule") {
@@ -5320,6 +5333,31 @@ class GlobeController extends Controller
                         } else {
                             return $row->value;
                         }
+                    })
+                    ->addColumn('status', function($row){
+                        if ($row->status == 'pending') {
+                            return '<span class="badge badge-secondary">Pending</span>';
+                        } else {
+                            return '<span class="badge badge-success">Done</span>';
+                        }
+                    });
+                } else if ($status == "pending") {
+                    $dt->addColumn('status', function($row){
+                        if ($row->status == 'pending') {
+                            return '<span class="badge badge-secondary">Not Yet Scheduled</span>';
+                        } else {
+                            return '<span class="badge badge-success">Scheduled</span>';
+                        }
+                    });
+                } else if ($status == "jtss_ssds_ranking") {
+                    $dt->addColumn('rank', function($row){
+
+                        $datas = SubActivityValue::where('type', 'jtss_ranking')
+                                                    ->where('value->hidden_id', $row->id)
+                                                    ->first();
+                                                    
+                        $json = json_decode($datas->value, true);
+                        return isset($json['rank']) ? $json['rank'] : 'No rank yet.';
                     });
                 }
                                 
@@ -5540,19 +5578,39 @@ class GlobeController extends Controller
         try {
             $datas = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('value->id', $id)
-                                        ->where('status', 'pending')
+                                        ->where('status', 'Done')
                                         ->first();
-
-            $is_null = 'no';
             
             if ( is_null($datas) ) {
                 $datas = SubActivityValue::where('id', $id)
                                             ->first();
 
                 $is_null = 'yes';
+            } else {
+                $is_null = 'no';
             }
 
-            return response()->json(['error' => false, 'message' => $datas, 'is_null' => $is_null]);
+            $json_new = json_decode($datas->value);
+
+            $location_regions = \DB::connection('mysql2')
+                                        ->table('location_regions')
+                                        ->select('region_name')
+                                        ->where('region_id', $json_new->region)
+                                        ->first();
+
+            $location_provinces = \DB::connection('mysql2')
+                                        ->table('location_provinces')
+                                        ->select('province_name')
+                                        ->where('province_id', $json_new->province)
+                                        ->first();
+
+            $location_lgus = \DB::connection('mysql2')
+                                        ->table('location_lgus')
+                                        ->select('lgu_name')
+                                        ->where('lgu_id', $json_new->lgu)
+                                        ->first();
+
+            return response()->json(['error' => false, 'message' => $datas, 'is_null' => $is_null, 'location_regions' => $location_regions, 'location_provinces' => $location_provinces, 'location_lgus' => $location_lgus]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -5590,7 +5648,7 @@ class GlobeController extends Controller
                                                         ->where('status', 'pending')
                                                         ->get();
 
-                if ( count($check_if_added) < 1 ) {
+                if ( is_null($check_if_added) ) {
                     SubActivityValue::create([
                         'sam_id' => $request->get('sam_id'),
                         'sub_activity_id' => $request->get('sub_activity_id'),
@@ -5607,6 +5665,13 @@ class GlobeController extends Controller
                                         'value' => json_encode($request->all())
                                     ]);
                 }
+
+                SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('value->id', $request->get('id'))
+                                        ->update([
+                                            'status' => 'Done'
+                                        ]);
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('sam_id'))
@@ -5751,22 +5816,36 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                $datas = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('id', $request->get('hidden_id'))
+                $datas = SubActivityValue::where('type', 'jtss_ranking')
+                                        ->where('value->hidden_id', $request->get('hidden_id'))
                                         ->where('status', 'pending')
                                         ->first();
+                                       
+                if (is_null($datas)) {
+                    SubActivityValue::create([
+                        'sam_id' => $request->get('sam_id'),
+                        'sub_activity_id' => $request->get('sub_activity_id'),
+                        'type' => 'jtss_ranking',
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'status' => 'pending',
+                    ]);
+                } else {
+                    $json = json_decode($datas->value, true);
 
+                    if ($request->get('rank') == $json['rank']) {
+                        return response()->json(['error' => true, 'message' => 'Please select other rank, rank ' .$request->get('rank'). ' is already exist.']);
+                    } else {
+                        SubActivityValue::where('id', $datas->id)
+                                            ->update([
+                                                'value' => json_encode($request->all())
+                                            ]);
+
+                        return response()->json(['error' => false, 'message' => "Successfully updated a rank for this site." ]);
+                    }
+                }
                 
-
-                $json = [
-                    'email' => $request->get('email'),
-                    'name' => $request->get('name'),
-                    'designation' => $request->get('designation'),
-                ];
-
-                return response()->json(['error' => true, 'message' => $datas->value ]);
-                
-                return response()->json(['error' => false, 'message' => "Successfully added a new representative." ]);
+                return response()->json(['error' => false, 'message' => "Successfully ranked a site." ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
