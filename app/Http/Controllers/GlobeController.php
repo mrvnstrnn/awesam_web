@@ -5294,13 +5294,17 @@ class GlobeController extends Controller
                                                     ->where('value->id', $json['id'])
                                                     ->first();
 
-                            if ($datas->status == 'pending') {
-                                return '<span class="badge badge-secondary">Pending</span>';
+                            if (!is_null($datas)) {
+                                if ($datas->status == 'pending') {
+                                    return '<span class="badge badge-secondary">Pending</span>';
+                                } else {
+                                    return '<span class="badge badge-success">Done</span>';
+                                }
                             } else {
-                                return '<span class="badge badge-success">Done</span>';
+                                return '<span class="badge badge-secondary">Pending</span>';
                             }
                         } else {
-                            return $datas->status;
+                            return $row->status;
                         }
                     });
                 } else if ($status == "rejected_schedule") {
@@ -5357,9 +5361,12 @@ class GlobeController extends Controller
                                                     ->where('type', 'jtss_ranking')
                                                     ->where('value->hidden_id', $row->id)
                                                     ->first();
-                                                    
-                        $json = json_decode($datas->value, true);
-                        return isset($json['rank']) ? $json['rank'] : 'No rank yet.';
+                        if (!is_null($datas)) {
+                            $json = json_decode($datas->value, true);
+                            return isset($json['rank']) ? $json['rank'] : 'No rank yet.';
+                        } else {
+                            return 'No rank yet.';
+                        }                 
                     });
                 }
                                 
@@ -5648,7 +5655,7 @@ class GlobeController extends Controller
                                                         ->where('sam_id', $request->get('sam_id'))
                                                         ->where('value->id', $request->get('id'))
                                                         ->where('status', 'pending')
-                                                        ->get();
+                                                        ->first();
 
                 if ( is_null($check_if_added) ) {
                     SubActivityValue::create([

@@ -177,14 +177,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="type_of_property" class="col-sm-4 col-form-label">Type of Property</label>
                                             <div class="col-sm-8">
-                                                <select class="form-control" id="type_of_property" name="type_of_property">
-                                                    <option value="">Type of Property</option>
-                                                    <option value="Open Lot">Open Lot</option>
-                                                    <option value="Building">Building</option>
-                                                    <option value="Co Location to Existing Structure">Government</option>
-                                                    <option value="Agricultural">Agricultural</option>
-                                                    <option value="Industrial">Industrial</option>
-                                                </select>
+                                                <input type="text" class="form-control" id="type_of_property" name="type_of_property" readonly>
                                                 <small class="text-danger type_of_property-errors"></small>
                                             </div>
                                         </div>
@@ -1009,23 +1002,24 @@
                 },
                 success: function (resp){
                     if (!resp.error) {
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
 
-                        if (resp.is_match == 'match') {
-                            $(".mark_as_complete").removeClass("d-none");
-                        }
+                        $('#aepm_table').DataTable().ajax.reload(function(){
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
 
-                        $(".ssds_form")[0].reset();
+                            if (resp.is_match == 'match') {
+                                $(".mark_as_complete").removeClass("d-none");
+                            }
 
-                        $(".btn_switch_back_to_candidates").trigger("click");
-                        $(".submit_ssds").removeAttr("disabled");
-                        $(".submit_ssds").text("Submit SSDS");
+                            $(".ssds_form")[0].reset();
 
-                        $('#aepm_table').DataTable().ajax.reload();
+                            $(".btn_switch_back_to_candidates").trigger("click");
+                            $(".submit_ssds").removeAttr("disabled");
+                            $(".submit_ssds").text("Submit SSDS");
+                        });
 
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
