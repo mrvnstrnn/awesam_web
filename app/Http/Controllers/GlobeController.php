@@ -2770,6 +2770,30 @@ class GlobeController extends Controller
             ->render();
 
         }
+        elseif($sub_activity == 'Lessor Data'){
+
+            $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('sam_id', $sam_id)
+                                        ->get();
+
+            $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                        ->where('sam_id', $sam_id)
+                                        ->get();
+
+            $what_component = "components.lessor-data";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+            ])
+            ->render();
+
+        }
         else {
 
             $what_component = "components.subactivity-doc-upload";
