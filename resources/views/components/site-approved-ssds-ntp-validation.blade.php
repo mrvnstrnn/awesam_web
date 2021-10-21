@@ -54,78 +54,8 @@
                             <div class="row pt-3" id="ssds_form">
                                 <div class="col-md-12">
                                     @php
-                                        $json = json_decode($data->value);
+                                        // $json = json_decode($data->value);
                                     @endphp
-                                    <form class="ssds_form">
-                                        <input type="hidden" name="hidden_id" id="hidden_id">
-                                        <div class="position-relative row form-group">
-                                            <label for="site_name" class="col-sm-4 col-form-label">Site Name</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="site_name" name="site_name" class="form-control" placeholder="Site Name" value="{{ $json->site_name }}" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="lessor" class="col-sm-4 col-form-label">Lessor</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Lessor" value="{{ $json->lessor }}" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="address" class="col-sm-4 col-form-label">Address</label>
-                                            <div class="col-sm-8">
-                                                <textarea name="address" id="address" class="form-control" placeholder="Address" readonly>{{ $json->address }}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="position-relative row form-group">
-                                            <label for="latitude" class="col-sm-4 col-form-label">Location</label>
-                                            <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" value="{{ $json->latitude }}" readonly>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude" value="{{ $json->longitude }}" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="divider"></div>
-
-                                        <div class="position-relative row form-group file_lists">
-                                            <div class="col-12">
-                                                <label for="lessor_remarks" class="col-sm-12 col-form-label">SSDS Form & Property Documents</label>
-    
-                                                <div class="row">
-                                                    @for ($i = 0; $i < count($json->file); $i++)
-                                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2" data-file_name="{{ $json->file[$i] }}" style="cursor: pointer;" data-value="">
-                                                            <div class="child_div_">
-                                                                <div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;">
-                                                                    <div>
-                                                                    <i class="fa fa-file fa-3x text-dark"></i><br>
-                                                                    <p><small>{{ $json->file[$i] }}</small></p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endfor
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-12 file_view_div d-none">
-                                                <div class="file_viewer">
-            
-                                                </div>
-        
-                                                <button class="btn float-right btn-secondary mr-1" id="btn_back_ssds" type="button">Back to form</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="position-relative mt-3 row form-group">
-                                            <div class="col-sm-12">
-                                                <button class="btn float-right btn-primary btn-shadow approve_reject_site" data-id="{{ $data->id }}" id="btn_approve_site" data-action="true" type="button">Approve Site</button>
-                                                <button class="btn float-right btn-danger btn-shadow mr-1 approve_reject_site" data-id="{{ $data->id }}" id="btn_reject_site" data-action="false" type="button">Reject Site</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

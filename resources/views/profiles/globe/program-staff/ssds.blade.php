@@ -19,7 +19,7 @@
     //////////////////////////////////////
     var profile_id = 8;
     var table_to_load = 'ssds';
-    var main_activity = 'SSDS';
+    var main_activity = '';
  
     //////////////////////////////////////
 

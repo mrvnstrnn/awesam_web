@@ -418,6 +418,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/submit-ssds', [GlobeController::class, 'submit_ssds']);
     Route::get('/get-ssds-schedule/{id}', [GlobeController::class, 'get_ssds_schedule']);
 
+    Route::get('/get-sub-activity-value/{id}', [GlobeController::class, 'get_sub_activity_value']);
+
+
     // AGENT
     Route::get('/get-agent-activity-timeline', [GlobeController::class, 'get_agent_activity_timeline']);
     Route::get('/jtss-representative/{sam_id}', [GlobeController::class, 'jtss_representative']);
