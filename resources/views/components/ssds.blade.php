@@ -65,9 +65,6 @@
                         <div class="position-relative row form-group">
                             <label for="region" class="col-sm-4 col-form-label">Region</label>
                             <div class="col-sm-8">
-                                @php
-                                    $regions = \DB::connection('mysql2')->table('location_regions')->get();
-                                @endphp
                                 <input type="text" class="form-control" id="region_new" name="region_new"readonly>
                                 <input type="hidden" class="form-control" id="region" name="region">
                                 <small class="text-danger region-errors"></small>

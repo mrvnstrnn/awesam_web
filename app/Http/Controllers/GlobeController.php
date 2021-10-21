@@ -5188,6 +5188,9 @@ class GlobeController extends Controller
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', $status)
                         ->where('status', 'Done');
+            } else if ( $status == 'jtss_ssds_ranking' ) {
+                $datas->where('type', 'jtss_ssds')
+                        ->where('type', 'jtss_ssds');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }
@@ -5321,6 +5324,16 @@ class GlobeController extends Controller
                         } else {
                             return '<span class="badge badge-success">Scheduled</span>';
                         }
+                    });
+                } else if ($status == "jtss_ssds_ranking") {
+                    $dt->addColumn('rank', function($row){
+
+                        $datas = SubActivityValue::where('type', 'jtss_ranking')
+                                                    ->where('value->hidden_id', $row->id)
+                                                    ->first();
+                                                    
+                        $json = json_decode($datas->value, true);
+                        return isset($json['rank']) ? $json['rank'] : 'No rank yet.';
                     });
                 }
                                 
@@ -5779,14 +5792,36 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                $datas = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('id', $request->get('hidden_id'))
+                $datas = SubActivityValue::where('type', 'jtss_ranking')
+                                        ->where('value->hidden_id', $request->get('hidden_id'))
                                         ->where('status', 'pending')
                                         ->first();
+                                       
+                if (is_null($datas)) {
+                    SubActivityValue::create([
+                        'sam_id' => $request->get('sam_id'),
+                        'sub_activity_id' => $request->get('sub_activity_id'),
+                        'type' => 'jtss_ranking',
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'status' => 'pending',
+                    ]);
+                } else {
+                    $json = json_decode($datas->value, true);
 
-                return response()->json(['error' => true, 'message' => $datas->value ]);
+                    if ($request->get('rank') == $json['rank']) {
+                        return response()->json(['error' => true, 'message' => 'Please select other rank, rank ' .$request->get('rank'). ' is already exist.']);
+                    } else {
+                        SubActivityValue::where('id', $datas->id)
+                                            ->update([
+                                                'value' => json_encode($request->all())
+                                            ]);
+
+                        return response()->json(['error' => false, 'message' => "Successfully updated a rank for this site." ]);
+                    }
+                }
                 
-                return response()->json(['error' => false, 'message' => "Successfully added a new representative." ]);
+                return response()->json(['error' => false, 'message' => "Successfully ranked a site." ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             }
