@@ -5,6 +5,7 @@
         // ->whereJsonContains('site_agent', [
         //     'user_id' => \Auth::id()
         // ])
+        ->where('progress','<', 1)
         ->where('agent_id', \Auth::id())
         ->distinct()
         ->orderBy('sam_id', 'asc')
