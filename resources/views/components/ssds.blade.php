@@ -484,10 +484,10 @@
                                             </div>
                                         </div>
                                         <div class="position-relative row form-group">
-                                            <label for="site_category" class="col-sm-4 col-form-label">Site Category</label>
+                                            <label for="site_categorys" class="col-sm-4 col-form-label">Site Category</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="site_category" name="site_category" placeholder="Site Category">
-                                                <small class="text-danger site_category-errors"></small>
+                                                <input type="text" class="form-control" id="site_categorys" name="site_categorys" placeholder="Site Category">
+                                                <small class="text-danger site_categorys-errors"></small>
                                             </div>
                                         </div>
                                         <div class="position-relative row form-group">
@@ -1027,6 +1027,9 @@
                         $(".btn_switch_back_to_candidates").trigger("click");
                         $(".submit_ssds").removeAttr("disabled");
                         $(".submit_ssds").text("Submit SSDS");
+
+                        $('#aepm_table').DataTable().ajax.reload();
+
                     } else {
                         if (typeof resp.message === 'object' && resp.message !== null) {
                             $.each(resp.message, function(index, data) {
@@ -1082,7 +1085,7 @@
                 { data: "latitude" },
                 { data: "longitude" },
                 { data: "distance", className: "text-center" },
-                { data: "schedule" },
+                { data: "status" },
             ],
             "initComplete": function( settings, json){
                 initMap(json.data);
@@ -1099,21 +1102,23 @@
             $(".form_data").addClass("d-none");
             $(".aepm_table_div").removeClass("d-none");
 
+            $("#aepm_table tbody tr").removeClass('selected');
+
         });
 
-        $("#aepm_table").on("click", "tr", function(e){
+        $("#aepm_table").on("click", "tr td", function(e){
             e.preventDefault();
 
             $('.ssds_form')[0].reset();
 
-            if($(this).hasClass('selected') != true){
-                $("#aepm_table tbody tr").removeClass('selected');
-                $(this).addClass('selected');
+            if($(this).parent().hasClass('selected') != true){
+                $("#aepm_table tbody tr").parent().removeClass('selected');
+                $(this).parent().addClass('selected');
             } else {
-                $(this).removeClass('selected');
+                $(this).parent().removeClass('selected');
             }
 
-            var id = $(this).attr('data-id');
+            var id = $(this).parent().attr('data-id');
 
             if($('#aepm_table tbody tr.selected').length > 0){
                 $(".set_schedule").attr("data-id", id);
@@ -1172,63 +1177,63 @@
             });
         });
 
-        $(".mark_as_complete").on("click", function() {
-            $(this).attr("disabled", "disabled");
-            $(this).text("Processing...");
+        // $(".mark_as_complete").on("click", function() {
+        //     $(this).attr("disabled", "disabled");
+        //     $(this).text("Processing...");
 
-            var sam_id = ["{{ $sam_id }}"];
-            var sub_activity_id = "{{ $sub_activity_id }}";
-            var activity_name = "{{ $sub_activity }}";
-            var site_category = ["{{ $site_category }}"];
-            var activity_id = ["{{ $activity_id }}"];
-            var program_id = "{{ $program_id }}";
+        //     var sam_id = ["{{ $sam_id }}"];
+        //     var sub_activity_id = "{{ $sub_activity_id }}";
+        //     var activity_name = "{{ $sub_activity }}";
+        //     var site_category = ["{{ $site_category }}"];
+        //     var activity_id = ["{{ $activity_id }}"];
+        //     var program_id = "{{ $program_id }}";
 
-            $.ajax({
-                url: "/accept-reject-endorsement",
-                method: "POST",
-                data: {
-                    sam_id : sam_id,
-                    sub_activity_id : sub_activity_id,
-                    activity_name : activity_name,
-                    site_category : site_category,
-                    activity_id : activity_id,
-                    program_id : program_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp) {
-                    if (!resp.error){
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
-                        $(".mark_as_complete").removeAttr("disabled");
-                        $(".mark_as_complete").text("Mark as Complete");
+        //     $.ajax({
+        //         url: "/accept-reject-endorsement",
+        //         method: "POST",
+        //         data: {
+        //             sam_id : sam_id,
+        //             sub_activity_id : sub_activity_id,
+        //             activity_name : activity_name,
+        //             site_category : site_category,
+        //             activity_id : activity_id,
+        //             program_id : program_id,
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success: function (resp) {
+        //             if (!resp.error){
+        //                 Swal.fire(
+        //                     'Success',
+        //                     resp.message,
+        //                     'success'
+        //                 )
+        //                 $(".mark_as_complete").removeAttr("disabled");
+        //                 $(".mark_as_complete").text("Mark as Complete");
 
-                        $("#viewInfoModal").modal("hide");
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                        $(".mark_as_complete").removeAttr("disabled");
-                        $(".mark_as_complete").text("Mark as Complete");
-                    }
-                },
-                error: function (resp) {
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-                }
-            });
+        //                 $("#viewInfoModal").modal("hide");
+        //             } else {
+        //                 Swal.fire(
+        //                     'Error',
+        //                     resp.message,
+        //                     'error'
+        //                 )
+        //                 $(".mark_as_complete").removeAttr("disabled");
+        //                 $(".mark_as_complete").text("Mark as Complete");
+        //             }
+        //         },
+        //         error: function (resp) {
+        //             Swal.fire(
+        //                 'Error',
+        //                 resp,
+        //                 'error'
+        //             )
+        //             $(".mark_as_complete").removeAttr("disabled");
+        //             $(".mark_as_complete").text("Mark as Complete");
+        //         }
+        //     });
 
-        });
+        // });
     });
 </script>

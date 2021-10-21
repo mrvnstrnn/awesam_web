@@ -3,6 +3,19 @@
 
 
 <style>
+        .numberCircle {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+
+            background:white;
+            border: 2px solid #666;
+            color: #666;
+            text-align: center;
+
+            font: 20px Arial, sans-serif;
+        }
     .modal-dialog{
         -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
         -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
@@ -239,17 +252,20 @@
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
-                                                    <div class="row border-bottom">
+                                                    <div class="row">
                                                         <div class="col-12">
                                                             <H5>Steps to Complete</H5>
                                                         </div>
                                                     </div>
-                                                    <div class="p-2 pt-3 action_to_complete_parent">
+                                                    <div class="p-2 pt-0 action_to_complete_parent">
+                                                        @php
+                                                            $prev_step = 0;
+                                                        @endphp
                                                         @foreach ($sub_activities as $sub_activity)
                                                             @if($sub_activity->activity_id == $activity_id)
-                                                                <div class="row btn_switch_show_action pt-3 pb-3 border-bottom  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
-                                                                        <div class="col-2">
-                                                                            <h6>{{ $sub_activity->sequential_step }}</h6>                   
+                                                                @if($prev_step == $sub_activity->sequential_step)
+                                                                    <div class="row btn_switch_show_action pb-3  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
+                                                                        <div class="col-2">                                                                        
                                                                         </div>
                                                                         <div class="col-10">
                                                                             <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}">
@@ -258,7 +274,26 @@
                                                                             @endif
                                                                             {{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
                                                                         </div>
-                                                                </div>
+                                                                    </div>
+                                                                @else
+                                                                    <hr>
+                                                                    <div class="row btn_switch_show_action  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
+                                                                        <div class="col-2">                                                                        
+                                                                            <div class="numberCircle">{{ $sub_activity->sequential_step }}</div>                   
+                                                                        </div>
+                                                                        <div class="col-10">
+                                                                            <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}">
+                                                                            @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
+                                                                            <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                            @endif
+                                                                            {{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
+                                                                        </div>
+                                                                    </div>
+
+                                                                @endif
+                                                                @php
+                                                                    $prev_step = $sub_activity->sequential_step;
+                                                                @endphp
                                                             @endif
                                                         @endforeach
                                                         <div class="col-12 mt-5">
