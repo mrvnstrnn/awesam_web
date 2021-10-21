@@ -993,7 +993,7 @@
             map,
             center: nominal_point,
             radius: parseInt(NP_radius),
-        });
+            });
 
         let infoWindow = new google.maps.InfoWindow({
         });

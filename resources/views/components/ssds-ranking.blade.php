@@ -880,11 +880,11 @@
     </div>
 </div>
 
-<div class="row pt-3">
+{{-- <div class="row pt-3">
     <div class="col-12 text-right">
         <button class="btn btn-sm btn-shadow  btn-primary mark_as_complete {{ $is_match == 'match' ? "" : "d-none" }}">Mark as Complete</button>
     </div>
-</div>
+</div> --}}
 
 
 @php
