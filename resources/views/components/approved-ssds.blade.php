@@ -29,7 +29,7 @@
                 </thead>
             </table>
 
-            <H3 class="mt-3">Survey Representative's Signature</H3>
+            <H3 class="mt-5">Survey Representative's Signature</H3>
             @if ($message = Session::get('success'))
             <div class="alert alert-success  alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">×</button>  
@@ -38,83 +38,59 @@
             @endif
             <form method="POST" action="{{ route('signature_pad.store') }}">
                 @csrf
-                <div class="row pt-4 pb-3">
-                    <div class="col-6">Site Acquisition</div>
-                    <div class="col-6 text-right">
-                        <button id="clear4" class="clear btn btn-sm btn-danger">Clear</button>
-                        <button class="btn btn-sm btn-success">Save Signature</button>
+
+                <div id="signatures">
+                    <div class="row pt-4 pb-3">
+                        <div class="col-9"><h5>Site Acquisition</h5><small>Site Acquisition</small></div>
+                        <div class="col-3 text-right">
+                            <button id="clear4" class="clear btn btn-sm btn-danger">Clear</button>
+                        </div>
                     </div>
+                    <div id="sig4" class="sigbox" style=""></div>
+                    <textarea id="signature4" name="signed" style="display: none"></textarea>
+
+                    <hr>
+                    
+                    <div class="row pt-4 pb-3">
+                        <div class="col-9"><h5>Regional Performance Management</h5><small>Regional Performance Management</small></div>
+                        <div class="col-3 text-right">
+                            <button id="clear1" class="clear btn btn-sm btn-danger">Clear</button>
+                        </div>
+                    </div>
+                    <div id="sig1" class="sigbox" style=""></div>
+                    <textarea id="signature1" name="signed" style="display: none"></textarea>
+    
+                    <hr>
+
+                    <div class="row pt-4 pb-3">
+                        <div class="col-9"><h5>Transmission Network Engineering</h5><small>Transmission Network Engineering</small></div>
+                        <div class="col-3 text-right">
+                            <button id="clear2" class="clear btn btn-sm btn-danger">Clear</button>
+                        </div>
+                    </div>
+                    <div id="sig2" class="sigbox" style=""></div>
+                    <textarea id="signature2" name="signed" style="display: none"></textarea>
+
+                    <hr>
+
+                    <div class="row pt-4 pb-3">
+                        <div class="col-9"><H5>Access Facilities Engineering</h5><small>Access Facilities Engineering</small></div>
+                        <div class="col-3 text-right">
+                            <button id="clear3" class="clear btn btn-sm btn-danger">Clear</button>
+                        </div>
+                    </div>
+                    <div id="sig3" class="sigbox" style=""></div>
+                    <textarea id="signature3" name="signed" style="display: none"></textarea>
+
                 </div>
-                <div id="sig4" class="sigbox" style=""></div>
-                <textarea id="signature4" name="signed" style="display: none"></textarea>
             </form>
 
             <hr>
 
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success  alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert">×</button>  
-                <strong>{{ $message }}</strong>
+            <div class="text-right" style="margin:0px;">
+                <button id="submit_assds" class="btn btn-lg btn-primary">Submit Approved SSDS</button>
             </div>
-            @endif
-            <form method="POST" action="{{ route('signature_pad.store') }}">
-                @csrf
-                <div class="row pt-4 pb-3">
-                    <div class="col-6">Regional Performance Management</div>
-                    <div class="col-6 text-right">
-                        <button id="clear1" class="clear btn btn-sm btn-danger">Clear</button>
-                        <button class="btn btn-sm btn-success">Save Signature</button>
-                    </div>
-                </div>
-                <div id="sig1" class="sigbox" style=""></div>
-                <textarea id="signature1" name="signed" style="display: none"></textarea>
-            </form>
 
-            <hr>
-
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success  alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert">×</button>  
-                <strong>{{ $message }}</strong>
-            </div>
-            @endif
-            <form method="POST" action="{{ route('signature_pad.store') }}">
-                @csrf
-                <div class="row pt-4 pb-3">
-                    <div class="col-6">Transmission Network Engineering</div>
-                    <div class="col-6 text-right">
-                        <button id="clear2" class="clear btn btn-sm btn-danger">Clear</button>
-                        <button class="btn btn-sm btn-success">Save Signature</button>
-                    </div>
-                </div>
-                <div id="sig2" class="sigbox" style=""></div>
-                <textarea id="signature2" name="signed" style="display: none"></textarea>
-            </form>
-
-            <hr>
-
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success  alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert">×</button>  
-                <strong>{{ $message }}</strong>
-            </div>
-            @endif
-            <form method="POST" action="{{ route('signature_pad.store') }}">
-                @csrf
-                <div class="row pt-4 pb-3">
-                    <div class="col-6">Access Facilities Engineering</div>
-                    <div class="col-6 text-right">
-                        <button id="clear3" class="clear btn btn-sm btn-danger">Clear</button>
-                        <button class="btn btn-sm btn-success">Save Signature</button>
-                    </div>
-                </div>
-                <div id="sig3" class="sigbox" style=""></div>
-                <textarea id="signature3" name="signed" style="display: none"></textarea>
-            </form>
-            <hr>
-            <div class="text-right">
-                <button id="submit_assds" class="btn btn-lg btn-success">Submit Approved SSDS</button>
-            </div>
         </div>
         <div class="form_data d-none">
             <div class="row form_div border-bottom pt-3 pb-2">
@@ -983,7 +959,7 @@
 
 <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
 <style>
-    .kbw-signature { width: 100%; height: 150px;}
+    .kbw-signature { width: 100%; height: 150px; border: 1px solid black;}
     .sigbox canvas{ width: 100% !important; height: auto;}
 </style>  
 
