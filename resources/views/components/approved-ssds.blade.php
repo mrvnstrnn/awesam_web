@@ -29,91 +29,92 @@
                 </thead>
             </table>
 
-            <H3 class="mt-3">Survey Representative Signature</H3>
-            <div class="mb-3 card">
-                <div class="card-body">
-                    <ul class="tabs-animated-shadow nav-justified tabs-animated nav">
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link active" id="tab-c1-0" data-toggle="tab" href="#tab-animated1-0" aria-selected="true">
-                                <span class="nav-text">Tab 1</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-c1-1" data-toggle="tab" href="#tab-animated1-1" aria-selected="false">
-                                <span class="nav-text">Tab 2</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-c1-2" data-toggle="tab" href="#tab-animated1-2" aria-selected="false">
-                                <span class="nav-text">Tab 3</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab-animated1-0" role="tabpanel">
-                            @if ($message = Session::get('success'))
-                            <div class="alert alert-success  alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">×</button>  
-                                <strong>{{ $message }}</strong>
-                            </div>
-                            @endif
-                            <form method="POST" action="{{ route('signature_pad.store') }}">
-                                @csrf
-                                <div class="row pt-4 pb-3">
-                                    <div class="col-6">Please sign in the box below</div>
-                                    <div class="col-6 text-right">
-                                        <button id="clear" class="btn btn-sm btn-danger">Clear</button>
-                                        <button class="btn btn-sm btn-success">Save Signature</button>
-                                    </div>
-                                </div>
-                                <div id="sig1" class="sigbox" style="border: 2px solid black;"></div>
-                                <textarea id="signature" name="signed" style="display: none"></textarea>
-                            </form>                
-                        </div>
-                        <div class="tab-pane" id="tab-animated1-1" role="tabpanel">
-                            @if ($message = Session::get('success'))
-                            <div class="alert alert-success  alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">×</button>  
-                                <strong>{{ $message }}</strong>
-                            </div>
-                            @endif
-                            <form method="POST" action="{{ route('signature_pad.store') }}">
-                                @csrf
-                                <div class="row pt-4 pb-3">
-                                    <div class="col-6">Please sign in the box below</div>
-                                    <div class="col-6 text-right">
-                                        <button id="clear" class="btn btn-sm btn-danger">Clear</button>
-                                        <button class="btn btn-sm btn-success">Save Signature</button>
-                                    </div>
-                                </div>
-                                <div id="sig1" class="sigbox" style="border: 2px solid black;"></div>
-                                <textarea id="signature" name="signed" style="display: none"></textarea>
-                            </form>                
-                        </div>
-                        <div class="tab-pane" id="tab-animated1-2" role="tabpanel">
-                            @if ($message = Session::get('success'))
-                            <div class="alert alert-success  alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">×</button>  
-                                <strong>{{ $message }}</strong>
-                            </div>
-                            @endif
-                            <form method="POST" action="{{ route('signature_pad.store') }}">
-                                @csrf
-                                <div class="row pt-4 pb-3">
-                                    <div class="col-6">Please sign in the box below</div>
-                                    <div class="col-6 text-right">
-                                        <button id="clear" class="btn btn-sm btn-danger">Clear</button>
-                                        <button class="btn btn-sm btn-success">Save Signature</button>
-                                    </div>
-                                </div>
-                                <div id="sig1" class="sigbox" style="border: 2px solid black;"></div>
-                                <textarea id="signature" name="signed" style="display: none"></textarea>
-                            </form>                
-                        </div>
+            <H3 class="mt-3">Survey Representative's Signature</H3>
+            @if ($message = Session::get('success'))
+            <div class="alert alert-success  alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">×</button>  
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+            <form method="POST" action="{{ route('signature_pad.store') }}">
+                @csrf
+                <div class="row pt-4 pb-3">
+                    <div class="col-6">Site Acquisition</div>
+                    <div class="col-6 text-right">
+                        <button id="clear4" class="clear btn btn-sm btn-danger">Clear</button>
+                        <button class="btn btn-sm btn-success">Save Signature</button>
                     </div>
                 </div>
-            </div>            
+                <div id="sig4" class="sigbox" style=""></div>
+                <textarea id="signature4" name="signed" style="display: none"></textarea>
+            </form>
 
+            <hr>
+
+            @if ($message = Session::get('success'))
+            <div class="alert alert-success  alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">×</button>  
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+            <form method="POST" action="{{ route('signature_pad.store') }}">
+                @csrf
+                <div class="row pt-4 pb-3">
+                    <div class="col-6">Regional Performance Management</div>
+                    <div class="col-6 text-right">
+                        <button id="clear1" class="clear btn btn-sm btn-danger">Clear</button>
+                        <button class="btn btn-sm btn-success">Save Signature</button>
+                    </div>
+                </div>
+                <div id="sig1" class="sigbox" style=""></div>
+                <textarea id="signature1" name="signed" style="display: none"></textarea>
+            </form>
+
+            <hr>
+
+            @if ($message = Session::get('success'))
+            <div class="alert alert-success  alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">×</button>  
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+            <form method="POST" action="{{ route('signature_pad.store') }}">
+                @csrf
+                <div class="row pt-4 pb-3">
+                    <div class="col-6">Transmission Network Engineering</div>
+                    <div class="col-6 text-right">
+                        <button id="clear2" class="clear btn btn-sm btn-danger">Clear</button>
+                        <button class="btn btn-sm btn-success">Save Signature</button>
+                    </div>
+                </div>
+                <div id="sig2" class="sigbox" style=""></div>
+                <textarea id="signature2" name="signed" style="display: none"></textarea>
+            </form>
+
+            <hr>
+
+            @if ($message = Session::get('success'))
+            <div class="alert alert-success  alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">×</button>  
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+            <form method="POST" action="{{ route('signature_pad.store') }}">
+                @csrf
+                <div class="row pt-4 pb-3">
+                    <div class="col-6">Access Facilities Engineering</div>
+                    <div class="col-6 text-right">
+                        <button id="clear3" class="clear btn btn-sm btn-danger">Clear</button>
+                        <button class="btn btn-sm btn-success">Save Signature</button>
+                    </div>
+                </div>
+                <div id="sig3" class="sigbox" style=""></div>
+                <textarea id="signature3" name="signed" style="display: none"></textarea>
+            </form>
+            <hr>
+            <div class="text-right">
+                <button id="submit_assds" class="btn btn-lg btn-success">Submit Approved SSDS</button>
+            </div>
         </div>
         <div class="form_data d-none">
             <div class="row form_div border-bottom pt-3 pb-2">
@@ -982,18 +983,43 @@
 
 <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
 <style>
-    .kbw-signature { width: 100%; height: 200px;}
-    .sigbox canvas{ width: 100% !important; height: 200px;}
+    .kbw-signature { width: 100%; height: 150px;}
+    .sigbox canvas{ width: 100% !important; height: auto;}
 </style>  
 
 
 <script type="text/javascript">
-    var sig = $('.sigbox').signature({syncField: '#signature', syncFormat: 'PNG'});
-    $('#clear').click(function(e) {
+
+    var sig1 = $('#sig1').signature({syncField: '#signature1', syncFormat: 'PNG'});
+    var sig2 = $('#sig2').signature({syncField: '#signature2', syncFormat: 'PNG'});
+    var sig3 = $('#sig3').signature({syncField: '#signature3', syncFormat: 'PNG'});
+    var sig4 = $('#sig4').signature({syncField: '#signature4', syncFormat: 'PNG'});
+
+    $('#clear1').click(function(e) {
         e.preventDefault();
-        sig.signature('clear');
-        $("#signature").val('');
+        sig1.signature('clear');
+        $("#signature1").val('');
     });
+
+    $('#clear2').click(function(e) {
+        e.preventDefault();
+        sig2.signature('clear');
+        $("#signature2").val('');
+    });
+
+    $('#clear3').click(function(e) {
+        e.preventDefault();
+        sig3.signature('clear');
+        $("#signature3").val('');
+    });
+
+    $('#clear4').click(function(e) {
+        e.preventDefault();
+        sig4.signature('clear');
+        $("#signature4").val('');
+    });
+
+
 </script>
 
 
