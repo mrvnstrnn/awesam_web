@@ -36,7 +36,8 @@
                 <strong>{{ $message }}</strong>
             </div>
             @endif
-            <form method="POST" action="{{ route('signature_pad.store') }}">
+            <form class="signature_form">
+                {{-- <form method="POST" action="{{ route('signature_pad.store') }}"> --}}
                 @csrf
 
                 <div id="signatures">
@@ -47,7 +48,8 @@
                         </div>
                     </div>
                     <div id="sig4" class="sigbox" style=""></div>
-                    <textarea id="signature4" name="signed" style="display: none"></textarea>
+                    <textarea id="signature4" name="signature4" style="display: none"></textarea>
+                    <small class="signature4-errors text-danger"></small>
 
                     <hr>
                     
@@ -58,7 +60,8 @@
                         </div>
                     </div>
                     <div id="sig1" class="sigbox" style=""></div>
-                    <textarea id="signature1" name="signed" style="display: none"></textarea>
+                    <textarea id="signature1" name="signature1" style="display: none"></textarea>
+                    <small class="signature1-errors text-danger"></small>
     
                     <hr>
 
@@ -69,7 +72,8 @@
                         </div>
                     </div>
                     <div id="sig2" class="sigbox" style=""></div>
-                    <textarea id="signature2" name="signed" style="display: none"></textarea>
+                    <textarea id="signature2" name="signature2" style="display: none"></textarea>
+                    <small class="signature2-errors text-danger"></small>
 
                     <hr>
 
@@ -80,9 +84,12 @@
                         </div>
                     </div>
                     <div id="sig3" class="sigbox" style=""></div>
-                    <textarea id="signature3" name="signed" style="display: none"></textarea>
+                    <textarea id="signature3" name="signature3" style="display: none"></textarea>
+                    <small class="signature3-errors text-danger"></small>
 
                 </div>
+
+                <button class="btn btn-sm btn-shadow btn-primary submit_signature" type="button">Submit Signature</button>
             </form>
 
         </div>
@@ -367,7 +374,66 @@
                     )
                 },
             });
-        }        
+        }
+
+        $(".submit_signature").on("click", function (e){
+            e.preventDefault();
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $(".signature_form small").text("");
+
+            $.ajax({
+                url: "/signature-pad/post",
+                method: "POST",
+                data: $(".signature_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            $(".signature_form")[0].reset();
+
+                            // $(".btn_switch_back_to_candidates").trigger("click");
+                            $(".submit_signature").removeAttr("disabled");
+                            $(".submit_signature").text("Submit Signature");
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".signature_form ." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".submit_signature").removeAttr("disabled");
+                        $(".submit_signature").text("Submit Signature");
+                    }
+                },
+                error: function (resp) {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                    $(".submit_signature").removeAttr("disabled");
+                    $(".submit_signature").text("Submit Signature");
+                }
+            });
+        });
 
         $('#aepm_table').DataTable({
             processing: true,

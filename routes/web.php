@@ -433,8 +433,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     // SIGNATURE
-    Route::get('signature_pad', [SignatureController::class, 'index']);
-    Route::post('signature_pad', [SignatureController::class, 'store'])->name('signature_pad.store');
+    Route::get('/signature_pad', [SignatureController::class, 'index']);
+    Route::post('/signature-pad/post', [SignatureController::class, 'store'])->name('signature_pad.store');
          
 
 });
