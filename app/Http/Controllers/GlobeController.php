@@ -5265,7 +5265,8 @@ class GlobeController extends Controller
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
     
-                            $datas = SubActivityValue::where('type', 'jtss_ssds')
+                            $datas = SubActivityValue::select('status')
+                                                    ->where('type', 'jtss_ssds')
                                                     ->where('value->id', $json['id'])
                                                     ->first();
 
@@ -5328,7 +5329,8 @@ class GlobeController extends Controller
                 } else if ($status == "jtss_ssds_ranking") {
                     $dt->addColumn('rank', function($row){
 
-                        $datas = SubActivityValue::where('type', 'jtss_ranking')
+                        $datas = SubActivityValue::select('value')
+                                                    ->where('type', 'jtss_ranking')
                                                     ->where('value->hidden_id', $row->id)
                                                     ->first();
                                                     
