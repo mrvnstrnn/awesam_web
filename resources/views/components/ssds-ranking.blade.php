@@ -24,12 +24,13 @@
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>Distance</th>
-                        <th>Schedule</th>
+                        <th>Rank</th>
                     </tr>
                 </thead>
             </table>
         </div>
         <div class="form_data d-none">
+            
             <div class="row form_div border-bottom pt-3 pb-2">
                 <div class="col-12">
                     <form class="ssds_form pt-3">
@@ -1143,7 +1144,7 @@
                     )
                 }
             });
-            });     
+        });     
 
         $('#aepm_table').DataTable({
             processing: true,
@@ -1151,7 +1152,7 @@
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_ssds",
                 type: 'GET'
             },
             dataSrc: function(json){
@@ -1169,7 +1170,7 @@
                 { data: "latitude" },
                 { data: "longitude" },
                 { data: "distance", className: "text-center" },
-                { data: "schedule" },
+                { data: "rank" },
             ],
             "initComplete": function( settings, json){
                 initMap(json.data);

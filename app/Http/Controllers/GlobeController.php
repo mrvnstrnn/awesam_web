@@ -2707,7 +2707,7 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $what_component = "components.ssds";
+            $what_component = "components.ssds-ranking";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -5284,6 +5284,17 @@ class GlobeController extends Controller
                     })
                     ->addColumn('date_approved', function($row){
                         return date('M d, Y ', strtotime($row->date_approved)). ' at ' .date('h:m:a', strtotime($row->date_approved));
+                    });
+                } else if ($status == "jtss_ssds") {
+                    $dt->addColumn('rank', function($row){
+                        json_decode($row->value);
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+    
+                            return isset($json['rank']) ? $json['rank'] : "Not yet ranked." ;
+                        } else {
+                            return $row->value;
+                        }
                     });
                 }
                                 
