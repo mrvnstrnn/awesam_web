@@ -423,6 +423,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/jtss-representative/{sam_id}', [GlobeController::class, 'jtss_representative']);
     Route::post('/add-representative', [GlobeController::class, 'add_representative']);
     Route::post('/done-adding-representative', [GlobeController::class, 'done_adding_representative']);
+    Route::post('/submit-ranking', [GlobeController::class, 'submit_ranking']);
 
 
     // TRAINING

@@ -344,7 +344,7 @@
     $(document).on("click", ".btn-reject", function(e){
         e.preventDefault();
 
-        $("#sam_id").val($(this).attr("data-sam_id"));
+        $(".reject_form #sam_id").val($(this).attr("data-sam_id"));
         $(".message_p b").text($(this).attr("data-sam_id"));
         $(".form_fields").addClass("d-none");
         $(".modal-footer").addClass("d-none");

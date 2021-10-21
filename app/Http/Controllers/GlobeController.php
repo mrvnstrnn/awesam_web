@@ -2717,6 +2717,7 @@ class GlobeController extends Controller
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                'count_ssds' => count($jtss_ssds),
             ])
             ->render();
 
@@ -5712,6 +5713,39 @@ class GlobeController extends Controller
                 Mail::to($email)->send(new RepresentativeInvitation( $request->get('site_name'), $name, $url ));
             }
             return response()->json(['error' => false, 'message' => "Successfully adding representatives."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function submit_ranking (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'rank' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                $datas = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('id', $request->get('hidden_id'))
+                                        ->where('status', 'pending')
+                                        ->first();
+
+                
+
+                $json = [
+                    'email' => $request->get('email'),
+                    'name' => $request->get('name'),
+                    'designation' => $request->get('designation'),
+                ];
+
+                return response()->json(['error' => true, 'message' => $datas->value ]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully added a new representative." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
