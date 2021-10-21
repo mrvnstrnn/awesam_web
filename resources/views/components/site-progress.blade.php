@@ -5,6 +5,7 @@
         // ->whereJsonContains('site_agent', [
         //     'user_id' => \Auth::id()
         // ])
+        ->where('progress','<', 1)
         ->where('agent_id', \Auth::id())
         ->distinct()
         ->orderBy('sam_id', 'asc')
@@ -24,13 +25,13 @@
 @foreach ($site_status as $site_)
     <div class="pl-3 py-2 border-bottom mx-1 site_progress" data-sam_id="{{ $site_->sam_id }}" data-main_activity="assigned site" data-site="{{ $site_->site_name }}">
         <div class="row">
-        <div class="col ml-1" style="max-width: 55px; padding:0">
+        <div class="col-3 ml-1" style="max-width: 55px; padding:0">
             <div class="circle-progress circle-progress-primary d-inline-block">
                 <small><span class="site_progress">{{ $site_->progress }}</span></small>
             </div>
         </div>
         {{-- <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i> --}}
-        <div class="ml-0 col">
+        <div class="ml-0 col-9">
             <div class="" style="  width: 400px;
             white-space: nowrap;
             overflow: hidden;

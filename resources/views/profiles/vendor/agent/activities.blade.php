@@ -71,7 +71,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <div class="main-card mb-3 card">
+            <div class="main-card mb-3 card" style="overflow:hidden;">
                 <div class="dropdown-menu-header py-2 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                     <div class="row px-4">
                         <div class="menu-header-content btn-pane-right">
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="agent_site_progress">
+                <div id="agent_site_progress" style="overflow:hidden;">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">
                             <div class="ball-scale-multiple">

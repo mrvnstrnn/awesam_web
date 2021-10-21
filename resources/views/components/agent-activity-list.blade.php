@@ -301,8 +301,13 @@ $activities = \DB::connection('mysql2')
                         <div class="mt-1" style="font-size: 12px;">
                             SAM ID: {{ $activities[$i]->sam_id }}
                         </div>
+                        <div class="mt-1" style="font-size: 12px;">
+                            Start Date: {{ $activities[$i]->activity_created }}
+                        </div>
+                        <div class="mt-1" style="font-size: 12px;">
+                            Aging: {{ $activities[$i]->aging }}
+                        </div>
                         <div class="mt-2 row pl-3">
-
                             <div class="" style="font-size: 12px;" id="from-to-{{ $activities[$i]->sam_id }}">
                                 Loading...
                             </div>
