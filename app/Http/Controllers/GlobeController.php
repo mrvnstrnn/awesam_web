@@ -5914,7 +5914,7 @@ class GlobeController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), array(
-                'assds' => 'required'
+                // 'assds' => 'required'
             ));
 
             if ($validate->passes()) {
@@ -5933,7 +5933,7 @@ class GlobeController extends Controller
                         'status' => 'pending',
                     ]);
 
-                    return response()->json(['error' => false, 'message' => "Successfully setting Approved SSDS." ]);
+                    return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 } else {
 
                     SubActivityValue::where('id', $request->get('hidden_id'))
@@ -5941,7 +5941,7 @@ class GlobeController extends Controller
                                             'value' => json_encode($request->all())
                                         ]);
 
-                    return response()->json(['error' => false, 'message' => "Successfully setting Approved SSDS." ]);
+                    return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 }
                 
             } else {

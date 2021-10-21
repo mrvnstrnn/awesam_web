@@ -142,7 +142,7 @@
                     <div class="position-relative row form-group">
                         <label for="type_of_property" class="col-sm-4 col-form-label">Type of Property</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="type_of_property" name="type_of_property" readonly>
+                            <input type="text" class="form-control" id="type_of_property" name="type_of_property">
                             <small class="text-danger type_of_property-errors"></small>
                         </div>
                     </div>
