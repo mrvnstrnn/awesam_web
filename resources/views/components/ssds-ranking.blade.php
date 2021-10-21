@@ -21,10 +21,11 @@
                 <thead class="thead-inverse">
                     <tr>
                         <th>Lessor</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
+                        {{-- <th>Latitude</th>
+                        <th>Longitude</th> --}}
                         <th>Distance</th>
                         <th>Rank</th>
+                        <th>SSDS</th>
                     </tr>
                 </thead>
             </table>
@@ -1041,6 +1042,60 @@
 </script>
 
 <script>
+
+
+function load_ssds(id){
+
+$('.ssds_form')[0].reset();
+
+$(".set_schedule").attr("data-id", id);
+$(".form_data").removeClass("d-none");
+$(".aepm_table_div").addClass("d-none");
+
+$(".btn_switch_back_to_actions").addClass("d-none");
+$(".btn_switch_back_to_candidates").removeClass("d-none");
+    
+
+$(".set_schedule").attr("data-id", id);
+
+$.ajax({
+    url: "/get-ssds-schedule/" + id,
+    method: "GET",
+    success: function (resp) {
+        if (!resp.error) {
+            var json = JSON.parse(resp.message.value);
+            if (resp.message != null) {
+                $("#jtss_schedule").val(json.jtss_schedule);
+            } else {
+                $("#jtss_schedule").val("");
+            }
+
+            if (resp.is_null == 'yes') {
+                $("#id").val(resp.message.id);
+            }
+
+            $.each(json, function(index, data) {
+                $("#"+index).val(data);
+            });
+        } else {
+            Swal.fire(
+                'Error',
+                resp.message,
+                'error'
+            )
+        }
+    },
+    error: function (resp) {
+        
+        Swal.fire(
+            'Error',
+            resp,
+            'error'
+        )
+    },
+});
+}        
+
     $(document).ready(function() {
 
 
@@ -1202,14 +1257,44 @@
             columns: [
                 { data: "lessor" },
                 // { data: "address" },
-                { data: "latitude" },
-                { data: "longitude" },
+                // { data: "latitude" },
+                // { data: "longitude" },
                 { data: "distance", className: "text-center" },
-                { data: "rank" },
+                { data: "rank", className: "text-center", render: function(row){
+
+                    toggle_button = '<div>' +
+                                    '<select class="ranking_select btn btn-primary ml-2 mb-2 mt-2">' +
+                                        '<option value="0">Set Rank</option>' +
+                                        '<option value="1">Rank 1</option>' +
+                                        '<option value="2">Rank 2</option>' +
+                                    '</select>' +
+                                    '</div>';                    
+                    return toggle_button;
+                }},
+                { data: "rank", className: "text-right", render: function(row){
+
+                    toggle_button = '<div>' +
+                                    '<button class="ml-2 mb-2 mt-2 btn btn-secondary ssds-details">SSDS Details</button>'  +
+                                    '</div>';                    
+                    return toggle_button;
+                }},
             ],
             "initComplete": function( settings, json){
                 initMap(json.data);
-            }
+            },
+            rowCallback: function ( row, data ) {
+
+
+                    $( ".ranking_select", row).on('change',  function(data) {
+                        console.log($(this).val());
+                    });
+                    
+
+                    $('.ssds-details', row).on( 'click', function(row, xdata){
+                        load_ssds(data.id);
+                    });
+            },
+
 
         });
 
@@ -1282,74 +1367,74 @@
 
         });
 
-        $("#aepm_table").on("click", "tr", function(e){
-            e.preventDefault();
+        // $("#aepm_table").on("click", "tr", function(e){
+        //     e.preventDefault();
 
-            $('.ssds_form')[0].reset();
+        //     $('.ssds_form')[0].reset();
 
-            if($(this).hasClass('selected') != true){
-                $("#aepm_table tbody tr").removeClass('selected');
-                $(this).addClass('selected');
-            } else {
-                $(this).removeClass('selected');
-            }
+        //     if($(this).hasClass('selected') != true){
+        //         $("#aepm_table tbody tr").removeClass('selected');
+        //         $(this).addClass('selected');
+        //     } else {
+        //         $(this).removeClass('selected');
+        //     }
 
-            var id = $(this).attr('data-id');
+        //     var id = $(this).attr('data-id');
 
-            if($('#aepm_table tbody tr.selected').length > 0){
-                $(".set_schedule").attr("data-id", id);
-                $(".form_data").removeClass("d-none");
-                $(".aepm_table_div").addClass("d-none");
+        //     if($('#aepm_table tbody tr.selected').length > 0){
+        //         $(".set_schedule").attr("data-id", id);
+        //         $(".form_data").removeClass("d-none");
+        //         $(".aepm_table_div").addClass("d-none");
 
-                $(".btn_switch_back_to_actions").addClass("d-none");
-                $(".btn_switch_back_to_candidates").removeClass("d-none");
+        //         $(".btn_switch_back_to_actions").addClass("d-none");
+        //         $(".btn_switch_back_to_candidates").removeClass("d-none");
                 
                 
-            } else {
-                $(".form_data").addClass("d-none");
-            }
+        //     } else {
+        //         $(".form_data").addClass("d-none");
+        //     }
 
-            $(".set_schedule").attr("data-id", id);
+        //     $(".set_schedule").attr("data-id", id);
 
-            $.ajax({
-                url: "/get-ssds-schedule/" + id,
-                method: "GET",
-                success: function (resp) {
-                    if (!resp.error) {
-                        var json = JSON.parse(resp.message.value);
-                        if (resp.message != null) {
-                            $("#jtss_schedule").val(json.jtss_schedule);
-                        } else {
-                            $("#jtss_schedule").val("");
-                        }
+        //     $.ajax({
+        //         url: "/get-ssds-schedule/" + id,
+        //         method: "GET",
+        //         success: function (resp) {
+        //             if (!resp.error) {
+        //                 var json = JSON.parse(resp.message.value);
+        //                 if (resp.message != null) {
+        //                     $("#jtss_schedule").val(json.jtss_schedule);
+        //                 } else {
+        //                     $("#jtss_schedule").val("");
+        //                 }
 
-                        if (resp.is_null == 'yes') {
-                            $("#id").val(resp.message.id);
-                        }
+        //                 if (resp.is_null == 'yes') {
+        //                     $("#id").val(resp.message.id);
+        //                 }
 
-                        $("#hidden_id").val(resp.message.id);
+        //                 $("#hidden_id").val(resp.message.id);
 
-                        $.each(json, function(index, data) {
-                            $("#"+index).val(data);
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                    }
-                },
-                error: function (resp) {
+        //                 $.each(json, function(index, data) {
+        //                     $("#"+index).val(data);
+        //                 });
+        //             } else {
+        //                 Swal.fire(
+        //                     'Error',
+        //                     resp.message,
+        //                     'error'
+        //                 )
+        //             }
+        //         },
+        //         error: function (resp) {
                     
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                },
-            });
-        });
+        //             Swal.fire(
+        //                 'Error',
+        //                 resp,
+        //                 'error'
+        //             )
+        //         },
+        //     });
+        // });
 
         $(".mark_as_complete").on("click", function() {
             $(this).attr("disabled", "disabled");
