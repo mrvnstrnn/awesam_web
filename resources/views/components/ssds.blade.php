@@ -24,7 +24,7 @@
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>Distance</th>
-                        <th>Schedule</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
             </table>
@@ -44,21 +44,21 @@
                         <div class="position-relative row form-group">
                             <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Name of Owner">
+                                <input type="text" class="form-control" id="lessor" name="lessor" placeholder="Name of Owner"readonly>
                                 <small class="text-danger lessor-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="contact_number" class="col-sm-4 col-form-label">Contact Number</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number">
+                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number"readonly>
                                 <small class="text-danger contact_number-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="address" class="col-sm-4 col-form-label">Street Address</label>
                             <div class="col-sm-8">
-                                <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea>
+                                <textarea name="address" id="address" class="form-control" placeholder="Address"readonly></textarea>
                                 <small class="text-danger address-errors"></small>
                             </div>
                         </div>
@@ -68,19 +68,16 @@
                                 @php
                                     $regions = \DB::connection('mysql2')->table('location_regions')->get();
                                 @endphp
-                                <select class="form-control" id="region" name="region" data-name="address">
-                                    <option value="">Select Region</option>
-                                    @foreach ($regions as $region)
-                                    <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="region_new" name="region_new"readonly>
+                                <input type="hidden" class="form-control" id="region" name="region">
                                 <small class="text-danger region-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="province" class="col-sm-4 col-form-label">Province</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
+                                <input type="text" class="form-control" id="province_new" name="province_new"readonly>
+                                <input type="hidden" class="form-control" id="province" name="province">
                                 <small class="text-danger province-errors"></small>
             
                             </div>
@@ -88,7 +85,8 @@
                         <div class="position-relative row form-group">
                             <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
+                                <input type="text" class="form-control" id="lgu_new" name="lgu_new"readonly>
+                                <input type="hidden" class="form-control" id="lgu" name="lgu">
                                 <small class="text-danger lgu-errors"></small>
             
                             </div>
@@ -115,11 +113,7 @@
                         <div class="position-relative row form-group">
                             <label for="site_type" class="col-sm-4 col-form-label">Site Type</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="site_type" name="site_type">
-                                    <option value="">Select Site Type</option>
-                                    <option value="greenfield">Greenfield</option>
-                                    <option value="rooftop">Rooftop</option>
-                                </select>
+                                <input type="text" class="form-control" id="site_type" name="site_type" readonly>
                                 <small class="text-danger site_type-errors"></small>
             
                             </div>
@@ -127,39 +121,28 @@
                         <div class="position-relative row form-group">
                             <label for="building_no_of_floors" class="col-sm-4 col-form-label">Building (No. of floors)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="building_no_of_floors" name="building_no_of_floors" placeholder="Building (No. of floors)">
+                                <input type="number" class="form-control" id="building_no_of_floors" name="building_no_of_floors" placeholder="Building (No. of floors)" readonly>
                                 <small class="text-danger building_no_of_floors-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="area_size" class="col-sm-4 col-form-label">Area Size</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="area_size" name="area_size" placeholder="Area Size">
+                                <input type="number" class="form-control" id="area_size" name="area_size" placeholder="Area Size" readonly>
                                 <small class="text-danger area_size-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="property_use" class="col-sm-4 col-form-label">Property Use</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="property_use" name="property_use">
-                                    <option value="">Property Use</option>
-                                    <option value="Private">Private</option>
-                                    <option value="Commercial">Commercial</option>
-                                    <option value="Government">Government</option>
-                                    <option value="Agricultural">Agricultural</option>
-                                    <option value="Industrial">Industrial</option>
-                                </select>
+                                <input type="text" class="form-control" id="property_use" name="property_use" readonly>
                                 <small class="text-danger property_use-errors"></small>
                             </div>
                         </div>
                         <div class="position-relative row form-group">
                             <label for="right_of_way_access" class="col-sm-4 col-form-label">Right of Way Access</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="right_of_way_access" name="right_of_way_access">
-                                    <option value="">Right of Way Access</option>
-                                    <option value="24/7">Available 24/7</option>
-                                    <option value="limited">Limited</option>
-                                </select>
+                                <input type="text" class="form-control" id="right_of_way_access" name="right_of_way_access" readonly>
                                 <small class="text-danger right_of_way_access-errors"></small>
                             </div>
                         </div>
@@ -1073,77 +1056,7 @@
                     $(".submit_ssds").text("Submit SSDS");
                 }
             });
-        });
-
-        $("select[data-name=address]").on('change', function(){
-
-            var id = $(this).attr('id');
-            var val = $(this).val();
-
-            if(id == 'province') {
-                if (val == '') {
-                    $("#lgu option").remove();
-                    $("#lgu").attr('disabled', 'disabled');
-                    return;
-                }
-            } else if (id == 'region') {
-                if (val == '') {
-                    $("#province option").remove();
-                    $("#lgu option").remove();
-
-                    $("#province").attr('disabled', 'disabled');
-                    $("#lgu").attr('disabled', 'disabled');
-                    return;
-                }
-            } else {
-                return;
-            }
-
-            $.ajax({
-                url:  '/address',
-                method: 'POST',
-                data: {
-                    id : id,
-                    val : val
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(resp) {
-                    if(!resp.error){
-                        if(resp.new_id) {
-                            $("#"+resp.new_id+ " option").remove();
-                            $("#"+resp.new_id).removeAttr('disabled');
-
-                            if(id == 'region'){
-                                $("#"+resp.new_id).append('<option value="">Please select province</option>');
-                                resp.message.forEach(element => {
-                                    $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
-                                });
-                            } else if (id == 'province'){
-                                $("#"+resp.new_id).append('<option value="">Please select city</option>');
-                                resp.message.forEach(element => {
-                                    $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
-                                });
-                            }
-                        }
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                    }
-                },
-                error: function(resp) {
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                }
-            });
-            });     
+        }); 
 
         $('#aepm_table').DataTable({
             processing: true,
@@ -1236,6 +1149,10 @@
                         $.each(json, function(index, data) {
                             $("#"+index).val(data);
                         });
+
+                        $("#region_new").val(resp.location_regions.region_name);
+                        $("#province_new").val(resp.location_provinces.province_name);
+                        $("#lgu_new").val(resp.location_lgus.lgu_name);
                     } else {
                         Swal.fire(
                             'Error',

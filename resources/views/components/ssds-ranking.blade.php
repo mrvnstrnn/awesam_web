@@ -1284,7 +1284,6 @@ $.ajax({
             },
             rowCallback: function ( row, data ) {
 
-
                     $( ".ranking_select", row).on('change',  function(data) {
                         console.log($(this).val());
                     });

@@ -5528,7 +5528,27 @@ class GlobeController extends Controller
                 $is_null = 'yes';
             }
 
-            return response()->json(['error' => false, 'message' => $datas, 'is_null' => $is_null]);
+            $json_new = json_decode($datas->value);
+
+            $location_regions = \DB::connection('mysql2')
+                                        ->table('location_regions')
+                                        ->select('region_name')
+                                        ->where('region_id', $json_new->region)
+                                        ->first();
+
+            $location_provinces = \DB::connection('mysql2')
+                                        ->table('location_provinces')
+                                        ->select('province_name')
+                                        ->where('province_id', $json_new->province)
+                                        ->first();
+
+            $location_lgus = \DB::connection('mysql2')
+                                        ->table('location_lgus')
+                                        ->select('lgu_name')
+                                        ->where('lgu_id', $json_new->lgu)
+                                        ->first();
+
+            return response()->json(['error' => false, 'message' => $datas, 'is_null' => $is_null, 'location_regions' => $location_regions, 'location_provinces' => $location_provinces, 'location_lgus' => $location_lgus]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -5731,14 +5751,6 @@ class GlobeController extends Controller
                                         ->where('id', $request->get('hidden_id'))
                                         ->where('status', 'pending')
                                         ->first();
-
-                
-
-                $json = [
-                    'email' => $request->get('email'),
-                    'name' => $request->get('name'),
-                    'designation' => $request->get('designation'),
-                ];
 
                 return response()->json(['error' => true, 'message' => $datas->value ]);
                 
