@@ -23,7 +23,7 @@
                     <tr>
                         <th>Lessor</th>
                         <th>Distance</th>
-                        <th>Ranking</th>
+                        <th>ASSDS</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -85,16 +85,48 @@
                 </div>
             </form>
 
-            <hr>
-
-            <div class="text-right" style="margin:0px;">
-                <button id="submit_assds" class="btn btn-lg btn-primary">Submit Approved SSDS</button>
-            </div>
-
         </div>
         <div class="form_data d-none">
-            <div class="row form_div border-bottom pt-3 pb-2">
-                <div class="col-12">
+            <ul class="tabs-animated-shadow tabs-animated nav mt-2">
+                <li class="nav-item">
+                    <a role="tab" class="nav-link active" id="tab-c-0" data-toggle="tab" href="#tab-animated-0" aria-selected="true">
+                        <span>ASSDS</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a role="tab" class="nav-link" id="tab-c-1" data-toggle="tab" href="#tab-animated-1" aria-selected="false">
+                        <span>Details</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
+                    <form class="assds_form">
+                        <div class="form-group">
+                            <input type="hidden" name="hidden_id" id="hidden_id">
+                            <label>Set as ASSDS</label>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="assds" id="assds_yes" value="yes">
+                                    Yes
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="assds" id="assds_no" value="no">
+                                    No
+                              </label>
+                            </div>
+                            <small class="assds-errors text-danger"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-sm btn-shadow submit_assds">Set as ASSDS</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane" id="tab-animated-1" role="tabpanel">
                     @include('layouts.ssds-form')
                 </div>
             </div>
@@ -279,68 +311,6 @@
             $("#actions_list").removeClass('d-none');
         });
 
-        $(".submit_ssds").on("click", function (e) {
-            e.preventDefault();
-
-            $(this).attr("disabled", "disabled");
-            $(this).text("Processing...");
-
-            $(".ssds_form small").text("");
-            $.ajax({
-                url: '/submit-ssds',
-                method: 'POST',
-                data: $(".ssds_form").serialize(),
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp){
-                    if (!resp.error) {
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
-
-                        if (resp.is_match == 'match') {
-                            $(".mark_as_complete").removeClass("d-none");
-                        }
-
-                        $(".ssds_form")[0].reset();
-
-                        $(".btn_switch_back_to_candidates").trigger("click");
-                        $(".submit_ssds").removeAttr("disabled");
-                        $(".submit_ssds").text("Submit SSDS");
-                    } else {
-                        if (typeof resp.message === 'object' && resp.message !== null) {
-                            $.each(resp.message, function(index, data) {
-                                $(".ssds_form ." + index + "-errors").text(data);
-                            });
-                        } else {
-                            Swal.fire(
-                                'Error',
-                                resp.message,
-                                'error'
-                            )
-                        }
-
-                        $(".submit_ssds").removeAttr("disabled");
-                        $(".submit_ssds").text("Submit SSDS");
-                    }
-                },
-                error: function (resp) {
-                    
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-
-                    $(".submit_ssds").removeAttr("disabled");
-                    $(".submit_ssds").text("Submit SSDS");
-                }
-            });
-        });
-
         function load_ssds(id){
 
             $('.ssds_form')[0].reset();
@@ -375,6 +345,8 @@
                             $("#"+index).val(data);
                         });
 
+                        $("#hidden_id").val(resp.message.id);
+
                         $("#region_new").val(resp.location_regions.region_name);
                         $("#province_new").val(resp.location_provinces.province_name);
                         $("#lgu_new").val(resp.location_lgus.lgu_name);
@@ -403,7 +375,7 @@
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site_approved",
                 type: 'GET'
             },
             dataSrc: function(json){
@@ -419,18 +391,18 @@
                 { data: "lessor" },
                 // { data: "address" },
                 { data: "distance", className: "text-center" },
-                { data: "schedule" },
+                { data: "assds", className: "text-center" },
                 { data: "distance", className: "text-right", render: function(row){
 
                     toggle_button = '<div>' +
-                                    '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
-                                        'style="width: 100px; height: 23px;"><input type="checkbox" checked="" data-toggle="toggle" data-onstyle="success">' +
-                                        '<div class="toggle-group">' +
-                                            '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
-                                            '<label for="" class="btn btn-light toggle-off">No</label>' +
-                                            '<span class="toggle-handle btn btn-light"></span><' +
-                                        '/div>' + 
-                                    '</div>' +
+                                    // '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
+                                    //     'style="width: 100px; height: 23px;"><input type="checkbox" data-toggle="toggle" data-onstyle="success">' +
+                                    //     '<div class="toggle-group">' +
+                                    //         '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
+                                    //         '<label for="" class="btn btn-light toggle-off">No</label>' +
+                                    //         '<span class="toggle-handle btn btn-light"></span><' +
+                                    //     '/div>' + 
+                                    // '</div>' +
                                     '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">SSDS Details</button>'  +
                                     '</div>';                    
                     return toggle_button;
@@ -440,25 +412,25 @@
                 // Set the checked state of the checkbox in the table
 
                     var xdata = data;
-                    $('.toggle', row).on( 'click', function(row, xdata){
+                    // $('.toggle', row).on( 'click', function(row, xdata){
 
-                        if($(this).hasClass('btn-success')){ 
+                    //     if($(this).hasClass('btn-success')){ 
                             
-                            $(this).addClass('off');
-                            $(this).addClass('btn-light');
-                            $(this).removeClass('btn-success');
-                            $(this).data('NO');
+                    //         $(this).addClass('off');
+                    //         $(this).addClass('btn-light');
+                    //         $(this).removeClass('btn-success');
+                    //         $(this).data('NO');
 
-                        } else {
-                            $(this).addClass('btn-success');
-                            $(this).removeClass('btn-light');
-                            $(this).removeClass('off');
-                            $(this).data('YES');
-                        }
-                    });
+                    //     } else {
+                    //         $(this).addClass('btn-success');
+                    //         $(this).removeClass('btn-light');
+                    //         $(this).removeClass('off');
+                    //         $(this).data('YES');
+                    //     }
+                    // });
 
                     $('.ssds-details', row).on( 'click', function(row, xdata){
-                        load_ssds(data.id);
+                        load_ssds(JSON.parse(data.value.replace(/&quot;/g,'"')).id);
                     });
             },
 
@@ -480,67 +452,67 @@
 
         });
 
+        $(".submit_assds").on("click", function (e) {
+            e.preventDefault();
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $(".assds_form small").text("");
+
+            $.ajax({
+                url: '/submit-assds',
+                method: 'POST',
+                data: $('.assds_form, .ssds_form').serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    if (!resp.error) {
+                        $("#aepm_table").DataTable().ajax.reload(function () {
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            $(".assds_form")[0].reset();
+
+                            $(".btn_switch_back_to_candidates").trigger("click");
+                            $(".submit_assds").removeAttr("disabled");
+                            $(".submit_assds").text("Set as ASSDS");
+                        });
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".assds_form ." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".submit_assds").removeAttr("disabled");
+                        $(".submit_assds").text("Set as ASSDS");
+                    }
+                },
+                error: function (resp) {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                    $(".submit_assds").removeAttr("disabled");
+                    $(".submit_assds").text("Set as ASSDS");
+                }
+            });
+        });
+
         
-
-
-
-        // $(".mark_as_complete").on("click", function() {
-        //     $(this).attr("disabled", "disabled");
-        //     $(this).text("Processing...");
-
-        //     var sam_id = ["{{ $sam_id }}"];
-        //     var sub_activity_id = "{{ $sub_activity_id }}";
-        //     var activity_name = "{{ $sub_activity }}";
-        //     var site_category = ["{{ $site_category }}"];
-        //     var activity_id = ["{{ $activity_id }}"];
-        //     var program_id = "{{ $program_id }}";
-
-        //     $.ajax({
-        //         url: "/accept-reject-endorsement",
-        //         method: "POST",
-        //         data: {
-        //             sam_id : sam_id,
-        //             sub_activity_id : sub_activity_id,
-        //             activity_name : activity_name,
-        //             site_category : site_category,
-        //             activity_id : activity_id,
-        //             program_id : program_id,
-        //         },
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         success: function (resp) {
-        //             if (!resp.error){
-        //                 Swal.fire(
-        //                     'Success',
-        //                     resp.message,
-        //                     'success'
-        //                 )
-        //                 $(".mark_as_complete").removeAttr("disabled");
-        //                 $(".mark_as_complete").text("Mark as Complete");
-
-        //                 $("#viewInfoModal").modal("hide");
-        //             } else {
-        //                 Swal.fire(
-        //                     'Error',
-        //                     resp.message,
-        //                     'error'
-        //                 )
-        //                 $(".mark_as_complete").removeAttr("disabled");
-        //                 $(".mark_as_complete").text("Mark as Complete");
-        //             }
-        //         },
-        //         error: function (resp) {
-        //             Swal.fire(
-        //                 'Error',
-        //                 resp,
-        //                 'error'
-        //             )
-        //             $(".mark_as_complete").removeAttr("disabled");
-        //             $(".mark_as_complete").text("Mark as Complete");
-        //         }
-        //     });
-
-        // });
     });
 </script>

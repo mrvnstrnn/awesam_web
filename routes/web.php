@@ -424,6 +424,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/add-representative', [GlobeController::class, 'add_representative']);
     Route::post('/done-adding-representative', [GlobeController::class, 'done_adding_representative']);
     Route::post('/submit-ranking', [GlobeController::class, 'submit_ranking']);
+    Route::post('/submit-assds', [GlobeController::class, 'submit_assds']);
 
 
     // TRAINING
