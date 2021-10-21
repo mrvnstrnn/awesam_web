@@ -86,6 +86,7 @@
             <hr>
 
             <div class="text-right" style="margin:0px;">
+                <button id="submit_assds" class="btn btn-lg btn-secondary">SSDS NTP Not Applicable</button>
                 <button id="submit_assds" class="btn btn-lg btn-primary">Submit SSDS NTP</button>
             </div>
      
