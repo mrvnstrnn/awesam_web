@@ -2770,7 +2770,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'Lessor Data'){
+        elseif($sub_activity == 'Lease Details'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $sam_id)
@@ -2780,7 +2780,7 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->get();
 
-            $what_component = "components.lessor-data";
+            $what_component = "components.lease-details";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -5215,6 +5215,9 @@ class GlobeController extends Controller
             } else if ( $status == 'jtss_ssds_ranking' ) {
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', 'jtss_ssds');
+            } else if ( $status == 'assds_lease_rate' ) {
+                $datas->where('type', 'jtss_ssds')
+                        ->where('type', 'jtss_ssds');
             } else if ( $status == 'jtss_schedule_site_approved' ) {
                 $datas->where('type', 'jtss_ssds')
                         ->where('status', 'Done');
@@ -5648,6 +5651,27 @@ class GlobeController extends Controller
         }
     }
 
+
+    public function get_sub_activity_value($id)
+    {
+        try {
+            $datas = SubActivityValue::where('type', 'jtss_ssds')
+                                        ->where('value->id', $id)
+                                        ->first();
+
+            if ( is_null($datas) ) {
+                $datas = SubActivityValue::where('id', $id)
+                                            ->first();
+            }
+
+            return response()->json(['error' => false, 'message' => $datas]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+
     public function get_agent_activity_timeline()
     {
         try {
@@ -5890,7 +5914,7 @@ class GlobeController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), array(
-                'assds' => 'required'
+                // 'assds' => 'required'
             ));
 
             if ($validate->passes()) {
@@ -5909,7 +5933,7 @@ class GlobeController extends Controller
                         'status' => 'pending',
                     ]);
 
-                    return response()->json(['error' => false, 'message' => "Successfully setting Approved SSDS." ]);
+                    return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 } else {
 
                     SubActivityValue::where('id', $request->get('hidden_id'))
@@ -5917,7 +5941,7 @@ class GlobeController extends Controller
                                             'value' => json_encode($request->all())
                                         ]);
 
-                    return response()->json(['error' => false, 'message' => "Successfully setting Approved SSDS." ]);
+                    return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 }
                 
             } else {

@@ -23,7 +23,7 @@
                     <tr>
                         <th>Lessor</th>
                         <th>Distance</th>
-                        <th>ASSDS</th>
+                        <th>Approved SSDS</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -94,7 +94,9 @@
 
         </div>
         <div class="form_data d-none">
-            <ul class="tabs-animated-shadow tabs-animated nav mt-2">
+            @include('layouts.ssds-form')
+
+            {{-- <ul class="tabs-animated-shadow tabs-animated nav mt-2">
                 <li class="nav-item">
                     <a role="tab" class="nav-link active" id="tab-c-0" data-toggle="tab" href="#tab-animated-0" aria-selected="true">
                         <span>ASSDS</span>
@@ -134,9 +136,8 @@
                 </div>
 
                 <div class="tab-pane" id="tab-animated-1" role="tabpanel">
-                    @include('layouts.ssds-form')
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
@@ -310,6 +311,8 @@
 </script>
 
 <script>
+
+
     $(document).ready(function() {
 
 
@@ -320,11 +323,11 @@
 
         function load_ssds(id){
 
-            $('.ssds_form')[0].reset();
+            // $('.ssds_form')[0].reset();
 
-            $(".set_schedule").attr("data-id", id);
-            $(".form_data").removeClass("d-none");
-            $(".aepm_table_div").addClass("d-none");
+            // $(".set_schedule").attr("data-id", id);
+            // $(".form_data").removeClass("d-none");
+            // $(".aepm_table_div").addClass("d-none");
 
             $(".btn_switch_back_to_actions").addClass("d-none");
             $(".btn_switch_back_to_candidates").removeClass("d-none");
@@ -435,106 +438,22 @@
             });
         });
 
-        $('#aepm_table').DataTable({
-            processing: true,
-            serverSide: true,
-            select: true,
-            order: [ 1, "asc" ],
-            ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site_approved",
-                type: 'GET'
-            },
-            dataSrc: function(json){
-                return json.data;
-            },
-            'createdRow': function( row, data, dataIndex ) {
-                // $(row).attr('data-id', data.id);
-                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
-                $(row).addClass('add_schedule');
-                $(row).attr('style', 'cursor: pointer;');
-            },
-            columns: [
-                { data: "lessor" },
-                // { data: "address" },
-                { data: "distance", className: "text-center" },
-                { data: "assds", className: "text-center" },
-                { data: "distance", className: "text-right", render: function(row){
+        function ToggleASSDS(id, status, data){
 
-                    toggle_button = '<div>' +
-                                    // '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
-                                    //     'style="width: 100px; height: 23px;"><input type="checkbox" data-toggle="toggle" data-onstyle="success">' +
-                                    //     '<div class="toggle-group">' +
-                                    //         '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
-                                    //         '<label for="" class="btn btn-light toggle-off">No</label>' +
-                                    //         '<span class="toggle-handle btn btn-light"></span><' +
-                                    //     '/div>' + 
-                                    // '</div>' +
-                                    '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">SSDS Details</button>'  +
-                                    '</div>';                    
-                    return toggle_button;
-                }},
-            ],
-            rowCallback: function ( row, data ) {
-                // Set the checked state of the checkbox in the table
+            let oldJSON = JSON.parse(data.replace(/&quot;/g,'"'));
+            let newJSON = { ...oldJSON, hidden_id: id, assds: status}
 
-                    var xdata = data;
-                    // $('.toggle', row).on( 'click', function(row, xdata){
-
-                    //     if($(this).hasClass('btn-success')){ 
-                            
-                    //         $(this).addClass('off');
-                    //         $(this).addClass('btn-light');
-                    //         $(this).removeClass('btn-success');
-                    //         $(this).data('NO');
-
-                    //     } else {
-                    //         $(this).addClass('btn-success');
-                    //         $(this).removeClass('btn-light');
-                    //         $(this).removeClass('off');
-                    //         $(this).data('YES');
-                    //     }
-                    // });
-
-                    $('.ssds-details', row).on( 'click', function(row, xdata){
-                        load_ssds(JSON.parse(data.value.replace(/&quot;/g,'"')).id);
-                    });
-            },
-
-
-            "initComplete": function( settings, json){
-                initMap(json.data);
-            }
-
-        });
-
-        $(".btn_switch_back_to_candidates").on("click", function(e){
-            e.preventDefault();
-
-            $(".btn_switch_back_to_actions").removeClass("d-none");
-            $(".btn_switch_back_to_candidates").addClass("d-none");
-
-            $(".form_data").addClass("d-none");
-            $(".aepm_table_div").removeClass("d-none");
-
-        });
-
-        $(".submit_assds").on("click", function (e) {
-            e.preventDefault();
-
-            $(this).attr("disabled", "disabled");
-            $(this).text("Processing...");
-
-            $(".assds_form small").text("");
 
             $.ajax({
                 url: '/submit-assds',
-                method: 'POST',
-                data: $('.assds_form, .ssds_form').serialize(),
+                method: 'POST',                
+                data: newJSON,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (resp){
                     if (!resp.error) {
+                        console.log('loaded');
                         $("#aepm_table").DataTable().ajax.reload(function () {
                             Swal.fire(
                                 'Success',
@@ -542,7 +461,7 @@
                                 'success'
                             )
 
-                            $(".assds_form")[0].reset();
+                            // $(".assds_form")[0].reset();
 
                             $(".btn_switch_back_to_candidates").trigger("click");
                             $(".submit_assds").removeAttr("disabled");
@@ -577,7 +496,137 @@
                     $(".submit_assds").text("Set as ASSDS");
                 }
             });
+
+        }
+
+        $('#aepm_table').DataTable({
+            processing: true,
+            serverSide: true,
+            select: true,
+            order: [ 1, "asc" ],
+            ajax: {
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site_approved",
+                type: 'GET'
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                // $(row).attr('data-id', data.id);
+                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
+                $(row).addClass('add_schedule');
+                $(row).attr('style', 'cursor: pointer;');
+            },
+            columns: [
+                { data: "lessor" },
+                // { data: "address" },
+                { data: "distance", className: "text-center" },
+                { data: "assds", className: "text-right", render: function(row, data){
+
+                    var assds = row.replace(/<\/?[^>]+>/gi, '');
+                    if(assds=="Yes"){
+                        toggle_button = '<div class="toggle btn btn-success" data-toggle="toggle" role="button" ' +
+                                            'style="width: 100px; height: 23px;"><input type="checkbox" data-toggle="toggle" data-onstyle="success">' +
+                                            '<div class="toggle-group">' +
+                                                '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
+                                                '<label for="" class="btn btn-light toggle-off">No</label>' +
+                                                '<span class="toggle-handle btn btn-light"></span><' +
+                                            '/div>' + 
+                                        '</div>';
+
+                    } else {
+                        toggle_button = '<div class="toggle btn btn-light off" data-toggle="toggle" role="button" ' +
+                                            'style="width: 100px; height: 23px;"><input type="checkbox" data-toggle="toggle" data-onstyle="success">' +
+                                            '<div class="toggle-group">' +
+                                                '<label for="" class="btn btn-success toggle-on">ASSDS</label>' +
+                                                '<label for="" class="btn btn-light toggle-off">No</label>' +
+                                                '<span class="toggle-handle btn btn-light"></span><' +
+                                            '/div>' + 
+                                        '</div>';
+                    }
+                    action_button = '<div>' +
+                                        toggle_button +
+                                    '</div>';           
+
+                    return action_button;
+                }},
+
+                { data: "", className: "text-right", render: function(row, data){
+                    return '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">SSDS Details</button>';
+
+                }},
+                
+            ],
+            rowCallback: function ( row, data ) {
+                // Set the checked state of the checkbox in the table
+
+                    var value = JSON.parse(data.value.replace(/&quot;/g,'"'));
+
+                    var xdata = data;
+                    // console.log(value.assds);
+
+                    $('.toggle', row).on( 'click', function(row, data){
+
+                        if(value.assds == "yes"){
+
+                            $(this).addClass('off');
+                            $(this).addClass('btn-light');
+                            $(this).removeClass('btn-success');
+                            $(this).data('NO');
+
+                            ToggleASSDS(xdata.id, "no", xdata.value);
+
+                        } else {
+                            $(this).addClass('btn-success');
+                            $(this).removeClass('btn-light');
+                            $(this).removeClass('off');
+                            $(this).data('YES');
+
+                            ToggleASSDS(xdata.id, "yes", xdata.value);
+
+                        }
+                        // if($(this).hasClass('btn-success')){ 
+                            
+
+                        // } else {
+                        // }
+                    });
+
+
+                    $('.submit_assds_yes',row).on('click', function(row, data){  
+
+                        if($(this).attr("data-status")=="yes"){
+                            ToggleASSDS(xdata.id, "no", xdata.value);
+                            $(this).attr("data-status", "no");
+                        } else {
+                            ToggleASSDS(xdata.id, "yes", xdata.value);
+                            $(this).attr("data-status", "yes");
+                        }
+                    });
+
+                    $('.ssds-details', row).on( 'click', function(row, xdata){
+                        load_ssds(JSON.parse(data.value.replace(/&quot;/g,'"')).id);
+                    });
+            },
+
+
+            "initComplete": function( settings, json){
+                initMap(json.data);
+            }
+
         });
+
+        $(".btn_switch_back_to_candidates").on("click", function(e){
+            e.preventDefault();
+
+            $(".btn_switch_back_to_actions").removeClass("d-none");
+            $(".btn_switch_back_to_candidates").addClass("d-none");
+
+            $(".form_data").addClass("d-none");
+            $(".aepm_table_div").removeClass("d-none");
+
+        });
+
 
         
     });
