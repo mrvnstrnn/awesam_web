@@ -32,7 +32,7 @@ use App\Http\Controllers\SignatureController;
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-Route::get('/clean', [GlobeController::class, 'clean_table']);
+// Route::get('/clean', [GlobeController::class, 'clean_table']);
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 

@@ -325,6 +325,18 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
                 $site_category = $request->input('site_category');
 
+            } else if ($request->input('activity_name') == "mark_as_complete") {
+
+                $notification = "Successfully mark this site as completed.";
+                $action = "true";
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+                $site_category = $request->input('site_category');
+                
+                
+                // return response()->json(['error' => true, 'message' => $request->all()]);
+
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
 
                 $notification = "Successfully set PR Number.";
@@ -2067,7 +2079,7 @@ class GlobeController extends Controller
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_sites_activity.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_sites_activity.activity_id', [16, 18, 20, 29, 31])
+                                    $sites->whereIn('view_sites_activity.activity_id', [14, 16, 18, 20, 29, 31])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
                                     $sites->whereIn('view_sites_activity.activity_id', [17, 20, 14, 17])
@@ -3058,28 +3070,28 @@ class GlobeController extends Controller
                         ->render();
                     }
     
-                    else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
+                    // else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
     
-                        $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                                                    ->where('status', 'approved')
-                                                    ->where('type', 'jtss_add_site')
-                                                    ->first();
+                    //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                    //                                 ->where('status', 'approved')
+                    //                                 ->where('type', 'jtss_add_site')
+                    //                                 ->first();
     
-                        $what_modal = "components.site-approved-ssds-ntp-validation";
+                    //     $what_modal = "components.site-approved-ssds-ntp-validation";
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'sam_id' => $request['sam_id'],
-                            'site_name' => $site[0]->site_name,
-                            'program_id' => $site[0]->program_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity_id' => $site[0]->activity_id,
-                            'data' => $data,
-                            'activity' => $request->input('activity')
-                        ])
-                        ->render();
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'sam_id' => $request['sam_id'],
+                    //         'site_name' => $site[0]->site_name,
+                    //         'program_id' => $site[0]->program_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'data' => $data,
+                    //         'activity' => $request->input('activity')
+                    //     ])
+                    //     ->render();
     
-                    }
+                    // }
     
                     else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
     
