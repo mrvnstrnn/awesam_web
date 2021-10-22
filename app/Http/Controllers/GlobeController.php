@@ -6061,7 +6061,7 @@ class GlobeController extends Controller
     {
         try {
             $data = \DB::connection('mysql2')
-                        ->table('view_DAR_dashboard')->skip(0)->take(200)
+                        ->table('view_DAR_dashboard')->skip(0)->take(100)
                         ->get();
 
             $dt = DataTables::of($data);
