@@ -6065,6 +6065,7 @@ class GlobeController extends Controller
 
             $dt = DataTables::of($data);
             return $dt->make(true);
+
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;

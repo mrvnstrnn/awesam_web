@@ -1328,17 +1328,14 @@
                 },
             },
             
-            language: {
-                // "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
-                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
-            },
                         
             columns: [
-                { data: "date_created" },
-                { data: "date_created" },
-                { data: "date_created" },
-                { data: "date_created" },
-                { data: "date_created" },
+                { data: "value" },
+                { data: "value" },
+                { data: "value" },
+                { data: "value" },
+                { data: "value" },
+                { data: "value" }
             ],
         }); 
 
