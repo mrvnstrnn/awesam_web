@@ -37,349 +37,403 @@
     }
 
 </style>
-<div class="row">
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
 
-                        <div class="widget-chart-flex">
-                            <div class="widget-title  text-muted text-uppercase">
-                                CLP Uploaded
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <span class="opacity-10 text-secondary pr-2">
-                                <i class="fa fa-upload"></i>
-                            </span>
-                            <span>1</span>
-                        </div>
-                    </div>
-                    <div class=" opacity-10 m-0 bg-secondary py-2 milestone-sites">
 
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="mb-3 card">
+    <div class="tabs-lg-alternate card-header">
+        <ul class="nav nav-justified">
+            <li class="nav-item">
+                <a data-toggle="tab" href="#tab-eg9-0" class="nav-link active">
+                    <div class="widget-number">Milestones</div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a data-toggle="tab" href="#tab-eg9-1" class="nav-link">
+                    <div class="widget-number">Productivity</div>
+                </a>
+            </li>
+        </ul>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="PR Created Distribution" data-modal_ul="PR_Created_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-title opacity-5 text-muted text-uppercase">
-                            PR Created
-                        </div>
-                        <div class="widget-numbers">
-                            <span class="opacity-10 text-warning pr-2">
-                                <i class="fa fa-table"></i>
-                            </span>
-                            <span>11</span>
-                        </div>
-                    </div>
-                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
-                        <span class="text-dark pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-SSDS/NTP Distribution" data-modal_ul="Pre_SSDS_NTP_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                PO Approved
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-success pr-2">
-                                        <i class="fa fa-money-bill"></i>
-                                    </span>
-                                    <span>672</span>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-eg9-0" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title  text-muted text-uppercase">
+                                                CLP Uploaded
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <span class="opacity-10 text-secondary pr-2">
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                            <span>1</span>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-secondary py-2 milestone-sites">
+                
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-success py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-MOC/NTP Distribution" data-modal_ul="Pre_MOC_NTP_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-blue.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Approved SSDS / NTP
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <span class="opacity-10 text-info">
-                                <i class="fa fa-list-ol"></i>
-                            </span>
-                            <span>1363</span>
-                        </div>
-                    </div>
-                    <div class=" opacity-10 m-0 bg-info py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-BRGY Distribution" data-modal_ul="Pre_BRGY_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-primary.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Signed MOC/NTP
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <span class="opacity-10 text-primary pr-2">
-                                <i class="fa fa-thumbs-up"></i>
-                            </span>
-                            <span>91</span>
-                        </div>
-                    </div>
-                    <div class=" opacity-10 m-0 bg-primary py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones"data-modal_title="Pre-ARTB Distribution"  data-modal_ul="Pre_ARTB_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.10; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Brgy Permits Secured
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-warning pr-2">
-                                        <i class="fa fa-file-contract"></i>
-                                    </span>
-                                    <span>261</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="PR Created Distribution" data-modal_ul="PR_Created_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-title opacity-5 text-muted text-uppercase">
+                                            PR Created
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <span class="opacity-10 text-warning pr-2">
+                                                <i class="fa fa-table"></i>
+                                            </span>
+                                            <span>11</span>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
+                                        <span class="text-dark pl-4">+14 this week</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
-                        <span class="text-dark pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones"data-modal_title="Pre-RTB Distribution" data-modal_ul="Pre_RTB_Distribution">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-green-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Site ARTB'd
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-success pr-2">
-                                        <i class="fa fa-angle-double-right"></i>
-                                    </span>
-                                    <span>401</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-SSDS/NTP Distribution" data-modal_ul="Pre_SSDS_NTP_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                PO Approved
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-success pr-2">
+                                                        <i class="fa fa-money-bill"></i>
+                                                    </span>
+                                                    <span>672</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-success py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-success py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-blue-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Site RTB'd
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-info pr-2">
-                                        <i class="fa fa-wrench"></i>
-                                    </span>
-                                    <span>3634</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-MOC/NTP Distribution" data-modal_ul="Pre_MOC_NTP_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-blue.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Approved SSDS / NTP
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <span class="opacity-10 text-info">
+                                                <i class="fa fa-list-ol"></i>
+                                            </span>
+                                            <span>1363</span>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-info py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-info py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-primary-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Contract Signed
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <span class="opacity-10 text-primary pr-2">
-                                <i class="fa fa-pen-alt" aria-hidden="true"></i>            
-                            </span>
-                            <span>159</span>
-                        </div>
-                    </div>
-                    <div class=" opacity-10 m-0 bg-primary py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-orange-3.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-
-                        <div class="widget-chart-flex">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Lease Package Submitted
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-warning pr-2">
-                                        <i class="fa fa-gift"></i>
-                                    </span>
-                                    <span>471</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones" data-modal_title="Pre-BRGY Distribution" data-modal_ul="Pre_BRGY_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-primary.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Signed MOC/NTP
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <span class="opacity-10 text-primary pr-2">
+                                                <i class="fa fa-thumbs-up"></i>
+                                            </span>
+                                            <span>91</span>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-primary py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
-                        <span class="text-dark pl-4">+14 this week</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.10; height: 100%; width:100%; background-image: url('/images/milestone-red.jpeg');   background-repeat: no-repeat; background-size: 100%; z-index: 1"></div>
-
-                        <div class="widget-chart-flex" style="z-index: 100;">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Dropped
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-danger pr-2">
-                                        <i class="fa fa-angle-double-down"></i>
-                                    </span>
-                                    <span>1081</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones"data-modal_title="Pre-ARTB Distribution"  data-modal_ul="Pre_ARTB_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.10; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Brgy Permits Secured
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-warning pr-2">
+                                                        <i class="fa fa-file-contract"></i>
+                                                    </span>
+                                                    <span>261</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
+                                        <span class="text-dark pl-4">+14 this week</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-danger py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="mb-3 card">
-            <div class="widget-chart widget-chart2 text-left p-0">
-                <div class="widget-chat-wrapper-outer">
-                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
-                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-black.jpeg');   background-repeat: no-repeat; background-size: 100%; z-index: 1;"></div>
-
-                        <div class="widget-chart-flex" style="z-index:100;">
-                            <div class="widget-title opacity-5 text-muted text-uppercase">
-                                Total
-                            </div>
-                        </div>
-                        <div class="widget-numbers">
-                            <div class="widget-chart-flex">
-                                <div>
-                                    <span class="opacity-10 text-dark pr-2">
-                                        <i class="fa fa-location-arrow"></i>
-                                    </span>
-                                    <span>8145</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones"data-modal_title="Pre-RTB Distribution" data-modal_ul="Pre_RTB_Distribution">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-green-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Site ARTB'd
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-success pr-2">
+                                                        <i class="fa fa-angle-double-right"></i>
+                                                    </span>
+                                                    <span>401</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-success py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=" opacity-10 m-0 bg-dark py-2 milestone-sites">
-                        <span class="text-light pl-4">+14 this week</span>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-blue-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Site RTB'd
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-info pr-2">
+                                                        <i class="fa fa-wrench"></i>
+                                                    </span>
+                                                    <span>3634</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-info py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-primary-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Contract Signed
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <span class="opacity-10 text-primary pr-2">
+                                                <i class="fa fa-pen-alt" aria-hidden="true"></i>            
+                                            </span>
+                                            <span>159</span>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-primary py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.25; height: 100%; width:100%; background-image: url('/images/milestone-orange-3.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                
+                                        <div class="widget-chart-flex">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Lease Package Submitted
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-warning pr-2">
+                                                        <i class="fa fa-gift"></i>
+                                                    </span>
+                                                    <span>471</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-warning py-2 milestone-sites">
+                                        <span class="text-dark pl-4">+14 this week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.10; height: 100%; width:100%; background-image: url('/images/milestone-red.jpeg');   background-repeat: no-repeat; background-size: 100%; z-index: 1"></div>
+                
+                                        <div class="widget-chart-flex" style="z-index: 100;">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Dropped
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-danger pr-2">
+                                                        <i class="fa fa-angle-double-down"></i>
+                                                    </span>
+                                                    <span>1081</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-danger py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="mb-3 card">
+                            <div class="widget-chart widget-chart2 text-left p-0">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-content widget-chart-content-lg milestone-submilestones">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-black.jpeg');   background-repeat: no-repeat; background-size: 100%; z-index: 1;"></div>
+                
+                                        <div class="widget-chart-flex" style="z-index:100;">
+                                            <div class="widget-title opacity-5 text-muted text-uppercase">
+                                                Total
+                                            </div>
+                                        </div>
+                                        <div class="widget-numbers">
+                                            <div class="widget-chart-flex">
+                                                <div>
+                                                    <span class="opacity-10 text-dark pr-2">
+                                                        <i class="fa fa-location-arrow"></i>
+                                                    </span>
+                                                    <span>8145</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" opacity-10 m-0 bg-dark py-2 milestone-sites">
+                                        <span class="text-light pl-4">+14 this week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab-eg9-1" role="tabpanel">
+            <div class="card-body">
+                <style>
+                    .assigned-sites-table {
+                        cursor: pointer;
+                    }
+                
+                    table {
+                        width: 100% !important;
+                    }
+                </style> 
+                <table id="dar-table" class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Vendor</th>
+                            <th>Supervisor</th>
+                            <th>Agent</th>
+                            <th>Site</th>
+                            <th>Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table> 
             </div>
         </div>
     </div>
 </div>
+
+
+
 
 {{-- MODAL --}}
 @section('modals')
@@ -1253,5 +1307,42 @@
         });
     });
 </script>
+
+
+<script>
+        $("#dar-table").DataTable({
+            processing: true,
+            serverSide: false,
+            filter: true,
+            searching: true,
+            lengthChange: true,
+            responsive: true,
+            stateSave: true,
+            regex: true,
+            ajax: {
+                url: '/get-dar-dashboard',
+                type: 'GET',
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            
+            language: {
+                // "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Kinukuha ang datos</strong></div>",
+                "processing": "<div style='padding: 20px; background-color: black; color: white;'><strong>Loading...</strong></div>",
+            },
+                        
+            columns: [
+                { data: "date_created" },
+                { data: "date_created" },
+                { data: "date_created" },
+                { data: "date_created" },
+                { data: "date_created" },
+            ],
+        }); 
+
+</script>
+
 
 @endsection

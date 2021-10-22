@@ -6058,5 +6058,19 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_DAR_dashboard()
+    {
+        try {
+            $data = \DB::table('view_DAR_dashboard');
+
+            $dt = DataTables::of($data);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+
 }
 
