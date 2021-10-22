@@ -95,49 +95,6 @@
         </div>
         <div class="form_data d-none">
             @include('layouts.ssds-form')
-
-            {{-- <ul class="tabs-animated-shadow tabs-animated nav mt-2">
-                <li class="nav-item">
-                    <a role="tab" class="nav-link active" id="tab-c-0" data-toggle="tab" href="#tab-animated-0" aria-selected="true">
-                        <span>ASSDS</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-c-1" data-toggle="tab" href="#tab-animated-1" aria-selected="false">
-                        <span>Details</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                    <form class="assds_form">
-                        <div class="form-group">
-                            <input type="hidden" name="hidden_id" id="hidden_id">
-                            <label>Set as ASSDS</label>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="assds" id="assds_yes" value="yes">
-                                    Yes
-                              </label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="assds" id="assds_no" value="no">
-                                    No
-                              </label>
-                            </div>
-                            <small class="assds-errors text-danger"></small>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary btn-sm btn-shadow submit_assds">Set as ASSDS</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="tab-pane" id="tab-animated-1" role="tabpanel">
-                </div>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -331,6 +288,8 @@
 
             $(".btn_switch_back_to_actions").addClass("d-none");
             $(".btn_switch_back_to_candidates").removeClass("d-none");
+            $(".form_data").removeClass("d-none");
+            $(".aepm_table_div").addClass("d-none");
                 
 
             $(".set_schedule").attr("data-id", id);
