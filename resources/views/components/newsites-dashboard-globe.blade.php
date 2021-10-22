@@ -1330,12 +1330,12 @@
             
                         
             columns: [
-                { data: "value" },
-                { data: "value" },
-                { data: "value" },
-                { data: "value" },
-                { data: "value" },
-                { data: "value" }
+                { data: "date_created" },
+                { data: "vendor_acronym" },
+                { data: "firstname" },
+                { data: "lastname" },
+                { ata: "site_name" },
+                { data: "sub_activity_name" },
             ],
         }); 
 
