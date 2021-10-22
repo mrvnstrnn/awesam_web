@@ -1334,8 +1334,8 @@
                 { data: "vendor_acronym" },
                 { data: "firstname" },
                 { data: "lastname" },
+                { ata: "site_name" },
                 { data: "sub_activity_name" },
-                { data: "type" },
             ],
         }); 
 
