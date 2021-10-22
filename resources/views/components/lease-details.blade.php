@@ -169,7 +169,7 @@
                 </div>
                 <div class="position-relative row form-group text-right">
                     <div class="col border-top pt-2">
-                        <button class="ml-2  mt-2 btn btn-primary pull-right save_lease">Save Lease Details</button>
+                        <button class="ml-2  mt-2 btn btn-primary pull-right save_lease" type="button">Save Lease Details</button>
                     </div>
                 </div>
             </form>
