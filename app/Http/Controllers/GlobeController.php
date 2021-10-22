@@ -327,7 +327,6 @@ class GlobeController extends Controller
 
             } else if ($request->input('activity_name') == "mark_as_complete") {
 
-                return response()->json(['error' => true, 'message' => $request->all() ]);
                 $notification = "Successfully mark this site as completed.";
                 $action = "true";
                 $activity_id = $request->input('activity_id');
