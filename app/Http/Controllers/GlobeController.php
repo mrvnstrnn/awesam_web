@@ -337,6 +337,18 @@ class GlobeController extends Controller
                 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
 
+            } else if ($request->input('activity_name') == "Lease Details") {
+
+                $notification = "Successfully requested an approval to RAM.";
+                $action = "true";
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+                $site_category = $request->input('site_category');
+                
+                
+                // return response()->json(['error' => true, 'message' => $request->all()]);
+
             } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
 
                 $notification = "Successfully set PR Number.";

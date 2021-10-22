@@ -299,7 +299,69 @@ $(document).ready(function() {
             "initComplete": function( settings, json){
             }
 
-    });    
+    }); 
+
+    $(".submit_to_ram").on("click", function() {
+        $(".submit_to_ram").attr("disabled", "disabled");
+        $(".submit_to_ram").text("Processing...");
+
+        var sam_id = ["{{ $sam_id }}"];
+        var sub_activity_id = "{{ $sub_activity_id }}";
+        var activity_name = "{{ $sub_activity }}";
+        var site_category = ["{{ $site_category }}"];
+        var activity_id = ["{{ $activity_id }}"];
+        var program_id = "{{ $program_id }}";
+
+        $.ajax({
+            url: "/accept-reject-endorsement",
+            method: "POST",
+            data: {
+                sam_id : sam_id,
+                sub_activity_id : sub_activity_id,
+                activity_name : activity_name,
+                site_category : site_category,
+                activity_id : activity_id,
+                program_id : program_id,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
+                    $(".submit_to_ram").removeAttr("disabled");
+                    $(".submit_to_ram").text("Request Approval");
+
+                    $("#viewInfoModal").modal("hide");
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+
+                    $(".submit_to_ram").removeAttr("disabled");
+                    $(".submit_to_ram").text("Request Approval");
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".submit_to_ram").removeAttr("disabled");
+                $(".submit_to_ram").text("Request Approval");
+            }
+        });
+
+    });
 
 
 });
