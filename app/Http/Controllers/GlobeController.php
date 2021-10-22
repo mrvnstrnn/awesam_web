@@ -251,7 +251,7 @@ class GlobeController extends Controller
                     }
                 }
 
-            } else if ($request->input('activity_name') == "Approved SSDS / NTP Validation") {
+            } else if ($request->input('activity_name') == "Approved SSDS / SSDS NTP Validation") {
 
                 $notification = "Site successfully " . $message;
                 $action = $request->input('data_complete');
