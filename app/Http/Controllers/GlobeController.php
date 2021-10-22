@@ -251,7 +251,7 @@ class GlobeController extends Controller
                     }
                 }
 
-            } else if ($request->input('activity_name') == "Approved SSDS / NTP Validation") {
+            } else if ($request->input('activity_name') == "Approved SSDS / SSDS NTP Validation") {
 
                 $notification = "Site successfully " . $message;
                 $action = $request->input('data_complete');
@@ -2031,7 +2031,7 @@ class GlobeController extends Controller
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
-                    ->where('activity_id', 20)
+                    ->where('activity_id', 22)
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
             } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
@@ -2039,7 +2039,7 @@ class GlobeController extends Controller
                     ->table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
-                    ->where('activity_id', 21)
+                    ->where('activity_id', 23)
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
             } else if (\Auth::user()->profile_id == 6) {

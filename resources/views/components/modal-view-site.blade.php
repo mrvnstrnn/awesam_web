@@ -105,7 +105,7 @@
                                                         "NAM PR Memo Approval",
                                                         "Set Ariba PR Number to Sites",
                                                         "Vendor Awarding of Sites",
-                                                        "Approved SSDS / NTP Validation",
+                                                        "Approved SSDS / SSDS NTP Validation",
 
                                                         "Advanced Site Hunting Validation",
 
@@ -206,7 +206,7 @@
                                                 $site[0]->activity_name == "STS Head Draft Contract Legal Approval" && $main_activity == "" ||
                                                 $site[0]->activity_name == "Finalize Contract Approval" && $main_activity == "" ||
 
-                                                $site[0]->activity_name == "Approved SSDS / NTP Validation" && $main_activity == "" ||
+                                                $site[0]->activity_name == "Approved SSDS / SSDS NTP Validation" && $main_activity == "" ||
                                                 $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
                                                 $site[0]->activity_name == "eLAS Approved"
                                             
