@@ -189,7 +189,7 @@
 
                                             @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity)
 
-                                                <x-site-lease-contract-validation  :site="$site"/>
+                                                <x-site-lease-package-validation  :site="$site"/>
 
                                             @elseif(
 
