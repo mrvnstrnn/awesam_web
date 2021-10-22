@@ -5,7 +5,7 @@
         -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
         box-shadow: 0 5px 15px rgba(0,0,0,0);
     }   
-</style>
+</style>q
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">

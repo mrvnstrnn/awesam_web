@@ -187,9 +187,12 @@
 
                                                 <x-site-lease-contract-validation  :site="$site"/>
 
+
                                             @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity)
 
                                                 <x-site-lease-package-validation  :site="$site"/>
+
+                                                GO
 
                                             @elseif(
 
