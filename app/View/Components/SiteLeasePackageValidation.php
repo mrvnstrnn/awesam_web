@@ -11,9 +11,11 @@ class SiteLeasePackageValidation extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $site;
+
+    public function __construct($site)
     {
-        //
+        $this->site = $site;
     }
 
     /**
