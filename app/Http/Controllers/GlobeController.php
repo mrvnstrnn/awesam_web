@@ -3106,6 +3106,45 @@ class GlobeController extends Controller
     
                     }
     
+                    else if ($request->input('activity') == "Lease Contract Validation" && \Auth::user()->profile_id == 9) {
+    
+    
+                        $what_modal = "components.site-lease-contract-validation";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'sub_activity' => $request->input('activity'),
+                            'activity' => $request->input('activity')
+                        ])
+                        ->render();
+    
+                    }
+
+                    else if ($request->input('activity') == "Lease Package Validation" && \Auth::user()->profile_id == 9) {
+    
+    
+                        $what_modal = "components.site-lease-contract-validation";
+    
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'sub_activity' => $request->input('activity'),
+                            'activity' => $request->input('activity')
+                        ])
+                        ->render();
+    
+                    }
+
+
                     else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
     
                         $datas = SubActivityValue::select('sam_id')

@@ -106,6 +106,7 @@
                                                         "Set Ariba PR Number to Sites",
                                                         "Vendor Awarding of Sites",
                                                         "Approved SSDS / SSDS NTP Validation",
+                                                        "Lease Contract Validation",
 
                                                         "Advanced Site Hunting Validation",
 
@@ -179,6 +180,11 @@
                                             @elseif($site[0]->activity_name == "RTB Declaration" && $main_activity == "" || $site[0]->activity_name == "STS RTB Declaration" && $main_activity == "")
 
                                                 <x-site-rtb-declaration :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
+
+
+                                            @elseif($site[0]->activity_name == "Lease Contract Validation" && $main_activity == "" && $main_activity == "")
+
+                                                <x-site-lease-contract-validation  :site="$site"/>
 
                                             @elseif(
 
