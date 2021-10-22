@@ -1327,7 +1327,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             },
-            
                         
             columns: [
                 { data: "date_created" },
