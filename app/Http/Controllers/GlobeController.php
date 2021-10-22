@@ -3580,19 +3580,6 @@ class GlobeController extends Controller
                                         ->where('type', "rtb_declaration")
                                         ->first();
 
-                // $email_receiver = User::select('users.*')
-                //             ->join('user_details', 'users.id', 'user_details.user_id')
-                //             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //             ->where('user_details.vendor_id', $request->input('site_vendor_id'))
-                //             ->where('user_programs.program_id', $request->input('program_id'))
-                //             ->get();
-
-                // SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-                // for ($j=0; $j < count($email_receiver); $j++) {
-                //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
-                // }
-
                 if (is_null($rtb)){
 
                     SubActivityValue::create([
@@ -3604,18 +3591,13 @@ class GlobeController extends Controller
                         'type' => "rtb_declaration",
                     ]);
 
-                    // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
 
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 } else {
 
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
-
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
-
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+                    
                     return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 }
             } else {
