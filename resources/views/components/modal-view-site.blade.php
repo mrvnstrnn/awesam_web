@@ -107,6 +107,7 @@
                                                         "Vendor Awarding of Sites",
                                                         "Approved SSDS / SSDS NTP Validation",
                                                         "Lease Contract Validation",
+                                                        "Lease Package Validation",
 
                                                         "Advanced Site Hunting Validation",
 
@@ -183,6 +184,10 @@
 
 
                                             @elseif($site[0]->activity_name == "Lease Contract Validation" && $main_activity == "" && $main_activity == "")
+
+                                                <x-site-lease-contract-validation  :site="$site"/>
+
+                                            @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity == "" && $main_activity == "")
 
                                                 <x-site-lease-contract-validation  :site="$site"/>
 
