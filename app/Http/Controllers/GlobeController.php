@@ -6063,6 +6063,7 @@ class GlobeController extends Controller
             $data = \DB::connection('mysql2')
                         ->table('view_DAR_dashboard')->skip(0)->take(100)
                         ->where('program_id', 1)
+                        ->orderBy('date_created', 'desc')
                         ->get();
 
             $dt = DataTables::of($data);
