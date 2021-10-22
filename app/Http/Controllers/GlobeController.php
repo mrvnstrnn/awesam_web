@@ -5219,8 +5219,8 @@ class GlobeController extends Controller
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', 'jtss_ssds');
             } else if ( $status == 'jtss_schedule_site_approved' ) {
-                $datas->where('type', 'jtss_ssds')
-                        ->where('status', 'Done');
+                $datas->where('type', 'jtss_ranking')
+                        ->where('status', 'pending');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }
@@ -5330,6 +5330,33 @@ class GlobeController extends Controller
                             }
                         } else {
                             return $row->status;
+                        }
+                    })
+                    ->addColumn('rank', function($row) {
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+
+                            // return $json['assds'];
+                            if (isset($json['rank'])) {
+                                return $json['rank'];
+                            } else {
+                                return $json['rank'];
+                            }
+                        } else {
+                            return $json['rank'];
+                        }
+                    })
+                    ->addColumn('assds', function($row) use ($sam_id) {
+                        $datas = SubActivityValue::select('value')
+                                                    ->where('sam_id', $sam_id)
+                                                    ->where('type', 'jtss_approved')
+                                                    ->where('value->hidden_id', $row->id)
+                                                    ->first();
+
+                        if (is_null($datas)){
+                            return "no";
+                        } else {
+                            return "yes";
                         }
                     });
                 } else if ($status == "rejected_schedule") {
@@ -5918,16 +5945,16 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-                $datas = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('id', $request->get('hidden_id'))
-                                        ->where('status', 'Done')
+                $datas = SubActivityValue::where('type', 'jtss_approved')
+                                        ->where('value->hidden_id', $request->get('hidden_id'))
+                                        ->where('status', 'pending')
                                         ->first();
 
                 if (is_null($datas)) {
                     SubActivityValue::create([
                         'sam_id' => $request->get('sam_id'),
                         'sub_activity_id' => $request->get('sub_activity_id'),
-                        'type' => 'jtss_ssds',
+                        'type' => 'jtss_approved',
                         'value' => json_encode($request->all()),
                         'user_id' => \Auth::id(),
                         'status' => 'pending',
@@ -5936,10 +5963,20 @@ class GlobeController extends Controller
                     return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 } else {
 
-                    SubActivityValue::where('id', $request->get('hidden_id'))
-                                        ->update([
-                                            'value' => json_encode($request->all())
-                                        ]);
+                    if ($request->get('assds') == 'yes') {
+                        SubActivityValue::where('id', $datas->id)
+                                            ->update([
+                                                'value' => json_encode($request->all()),
+                                                'status' => 'pending'
+                                            ]);
+                    } else {
+                        SubActivityValue::where('id', $datas->id)
+                                            ->update([
+                                                'value' => json_encode($request->all()),
+                                                'status' => 'rejected'
+                                            ]);
+                    }
+
 
                     return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 }

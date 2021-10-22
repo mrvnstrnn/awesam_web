@@ -21,6 +21,7 @@
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
+                        <th>Rank</th>
                         <th>Lessor</th>
                         <th>Distance</th>
                         <th>Approved SSDS</th>
@@ -518,13 +519,13 @@
                 $(row).attr('style', 'cursor: pointer;');
             },
             columns: [
+                { data: "rank" },
                 { data: "lessor" },
-                // { data: "address" },
                 { data: "distance", className: "text-center" },
                 { data: "assds", className: "text-right", render: function(row, data){
 
                     var assds = row.replace(/<\/?[^>]+>/gi, '');
-                    if(assds=="Yes"){
+                    if(assds=="yes"){
                         toggle_button = '<div class="toggle btn btn-success" data-toggle="toggle" role="button" ' +
                                             'style="width: 100px; height: 23px;"><input type="checkbox" data-toggle="toggle" data-onstyle="success">' +
                                             '<div class="toggle-group">' +
