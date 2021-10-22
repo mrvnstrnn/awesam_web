@@ -2,7 +2,7 @@
     <H3>SSDS Details</H3>
     <hr>
     <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
-    <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
+    <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ isset($sub_activity_id) ? $sub_activity_id : '' }}">
     <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
     <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
     <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">

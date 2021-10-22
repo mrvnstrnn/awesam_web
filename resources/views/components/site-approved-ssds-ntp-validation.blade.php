@@ -1,64 +1,59 @@
-<style>
-    .modal-dialog{
-        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
-        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
-        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
-        box-shadow: 0 5px 15px rgba(0,0,0,0);
-    }   
-    
-    .dropzone {
-        min-height: 20px !important;
-        border: 2px dashed #3f6ad8 !important;
-        border-radius: 10px;
-        padding: unset !important;
-    }
-
-    .ui-datepicker.ui-datepicker-inline {
-       width: 100% !important;
-    }
-    
-    .ui-datepicker table {
-        font-size: 1.3em;
-    }
-    
-</style>  
-
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
-            <div class="row justify-content-center">
+            <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="main-card mb-3 card ">
+                    <div class="main-card mb-3 card">
 
                         <div class="dropdown-menu-header">
                             <div class="dropdown-menu-header-inner bg-dark">
                                 <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                                 <div class="menu-header-content btn-pane-right">
-                                        <h5 class="menu-header-title">
-                                            {{ $site_name }}
-                                            @if($site_category != 'none')
-                                                <span class="mr-3 badge badge-secondary"><small>{{ $site_category }}</small></span>
-                                            @endif
-                                        </h5>
+                                    <h5 class="menu-header-title">
+                                        {{ $site_name }}
+                                    </h5>
                                 </div>
                             </div>
                         </div> 
 
-                        <div class="card-body">
 
-                            <div class="row pt-4">
-                                <div class="col-md-12">
-                                    <H5 id="active_action">{{ $activity }}</H5>
+                        <div class="modal-body">
+                            <div class="row p-0">
+                                <div class="col-12">
+                                    <div class="table-responsive aepm_table_div pt-4">
+                                        <H3>{{ $sub_activity }}</H3>
+                                        <hr>
+                                        <div id="map"></div>
+                                        <table class="table table-hover table-inverse" id="aepm_table">
+                                            <thead class="thead-inverse">
+                                                <tr>
+                                                    <th>Rank</th>
+                                                    <th>Lessor</th>
+                                                    <th>Distance</th>
+                                                    <th>Approved SSDS</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="form_data d-none">
+                                        <div class="row border-bottom">
+                                            <div class="col-12">                                        
+                                                <button class="btn_switch_back_to_candidates btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Options</button>                                            
+                                            </div>
+                                        </div>
+                                        @include('layouts.ssds-form')
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row pt-3" id="ssds_form">
-                                <div class="col-md-12">
-                                    @php
-                                        // $json = json_decode($data->value);
-                                    @endphp
+
+                            <div class="row pt-3">
+                                <div class="col-12 text-right">
+                                    <button class="btn btn-sm btn-shadow  btn-primary mark_as_complete">Mark as Complete</button>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -66,91 +61,289 @@
     </div>
 </div>
 
+@php
+
+    $NP = \DB::table('site')
+        ->where('sam_id', $sam_id)
+        ->select('NP_latitude', 'NP_longitude', 'NP_radius')
+        ->get();
+    
+@endphp
+
+{{-- <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css"> --}}
+<style>
+    .kbw-signature { width: 100%; height: 150px; border: 1px solid black;}
+    .sigbox canvas{ width: 100% !important; height: auto;}
+
+</style>  
+
+{{-- GOOGLE MAPS --}}
+
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 300px;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .modal-dialog{
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        box-shadow: 0 5px 15px rgba(0,0,0,0);
+    } 
+</style>
+
 <script>
 
-$(document).ready(function(e){
+    function initMap(markers) {
 
-    $(document).on("click", ".view_file", function (e){
-        e.preventDefault();
-        
-        $(".file_lists").addClass("d-none");
+        var NP_latitude = {!! json_encode($NP[0]->NP_latitude) !!};
+        var NP_longitude = {!! json_encode($NP[0]->NP_longitude) !!};
+        var NP_radius = {!! json_encode($NP[0]->NP_radius) !!};
 
-        var extensions = ["pdf", "jpg", "png"];
+        const nominal_point = { lat: parseFloat(NP_latitude), lng: parseFloat(NP_longitude)};
 
-        var values = $(this).attr("data-file_name");
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: nominal_point,
+            zoom: 16,
+            mapTypeId: "roadmap",
+        });
 
-        if( extensions.includes(values.split('.').pop()) == true) {     
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
-        } else {
-            htmltoload = '<div class="text-center my-5"><a href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
-        }
+        var mk1 = new google.maps.Marker({position: nominal_point, map: map});
+
+        var pinColor = "ffff00";
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+        var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+            new google.maps.Size(40, 37),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(12, 35));
+
+
+        var candidateinfowindow = new google.maps.InfoWindow({});
+
+
+        $.each(markers, function(k, v){
+
+            latlng = new google.maps.LatLng(v.latitude, v.longitude);
+
+            candidate = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: pinImage,
+                shadow: pinShadow
+
+            });
+
+
+            candidate.addListener("click", () => {
+                // Close the current InfoWindow.
+                candidateinfowindow.close();
+
+                latlng2 = new google.maps.LatLng(this.latitude, this.longitude);
+
+                // Create a new InfoWindow.
+                candidateinfowindow = new google.maps.InfoWindow({
+                    position: latlng2
+                });
+
+                candidateinfowindow.setContent("<div style='font-size: 20px; font-weight: bold;'>" + this.lessor + "<hr></div>"+
+                '<div class="pt-2">Latitude: ' + this.latitude  + '</div>' +
+                '<div class="pt-2">Longitude: ' + this.longitude  + '</div>' +
+                '<div class="pt-2">Distance: ' + this.distance  + '</div>'
+                );
+
+                candidateinfowindow.open(map);
+
+            });
+                    
+
+
+
+        });
+
+        const nominal_point_circle = new google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 1.5,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+            map,
+            center: nominal_point,
+            radius: parseInt(NP_radius),
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+        });
+
+        infoWindow.open(map);
+
+    }
+
+</script>
+
+<script>
+
+
+    $(document).ready(function() {
+
+        function load_ssds(id){
+            $(".aepm_table_div").addClass("d-none");
+            $(".form_data").removeClass("d-none");
                 
-        $('.file_viewer').html('');
-        $('.file_viewer').html(htmltoload);
 
-        $('.file_view_div').removeClass("d-none");
-    });
+            $(".set_schedule").attr("data-id", id);
 
-    $('#btn_back_ssds').on("click", function(){
-        $('.file_view_div').addClass("d-none");
-        $('.file_lists').removeClass("d-none");
-    });
+            $.ajax({
+                url: "/get-ssds-schedule/" + id,
+                method: "GET",
+                success: function (resp) {
+                    if (!resp.error) {
+                        var json = JSON.parse(resp.message.value);
+                        if (resp.message != null) {
+                            $("#jtss_schedule").val(json.jtss_schedule);
+                        } else {
+                            $("#jtss_schedule").val("");
+                        }
 
-    $(".approve_reject_site").on("click", function (e) {
-        $(this).attr("disabled", "disabled");
-        $(this).text("Processing...");
+                        if (resp.is_null == 'yes') {
+                            $("#id").val(resp.message.id);
+                        }
 
-        var action = $(this).attr("data-action");
-        var btn_id = $(this).attr("id");
+                        $.each(json, function(index, data) {
+                            $("#"+index).val(data);
+                        });
 
-        // var id = $(this).attr("data-id");
+                        $("#hidden_id").val(resp.message.id);
 
-        var activity_name = "{{ $activity }}";
-        var activity_id = ["{{ $activity_id }}"];
-        var site_category = ["{{ $site_category }}"];
-        var program_id = "{{ $program_id }}";
-        var sam_id = ["{{ $sam_id }}"];
-
-        if (action == "false") {
-            var btn_text = "Reject Site";
-        } else {
-            var btn_text = "Approve Site";
-        }
-        
-        $.ajax({
-            url: "/accept-reject-endorsement",
-            method: "POST",
-            data: {
-                // id : id,
-                sam_id : sam_id,
-                site_category : site_category,
-                activity_id : activity_id,
-                activity_name : activity_name,
-                program_id : program_id,
-                data_complete : action,
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp) {
-                    if (!resp.error){
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
-                        $("#viewInfoModal").modal("hide");
-                        $("#"+btn_id).removeAttr("disabled");
-                        $("#"+btn_id).text(btn_text);
-
+                        $("#region_new").val(resp.location_regions.region_name);
+                        $("#province_new").val(resp.location_provinces.province_name);
+                        $("#lgu_new").val(resp.location_lgus.lgu_name);
                     } else {
                         Swal.fire(
                             'Error',
                             resp.message,
                             'error'
                         )
-                        $("#"+btn_id).removeAttr("disabled");
-                        $("#"+btn_id).text(btn_text);
+                    }
+                },
+                error: function (resp) {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
+        }
+
+        $('#aepm_table').DataTable({
+            processing: true,
+            serverSide: true,
+            select: true,
+            order: [ 1, "asc" ],
+            ajax: {
+                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_approved",
+                type: 'GET'
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                // $(row).attr('data-id', data.id);
+                $(row).attr('data-id', JSON.parse(data.value.replace(/&quot;/g,'"')).id );
+                $(row).addClass('add_schedule');
+                $(row).attr('style', 'cursor: pointer;');
+            },
+            columns: [
+                { data: "rank" },
+                { data: "lessor" },
+                { data: "distance", className: "text-center" },
+                { data: "assds", className: "text-right" },
+                { data: "", className: "text-right", render: function(row, data){
+                    return '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">SSDS Details</button>';
+
+                }},
+                
+            ],
+            rowCallback: function ( row, data ) {
+                // Set the checked state of the checkbox in the table
+                    $('.ssds-details', row).on( 'click', function(row, xdata){
+                        load_ssds(JSON.parse(data.value.replace(/&quot;/g,'"')).id);
+                    });
+            },
+
+
+            "initComplete": function( settings, json){
+                initMap(json.data);
+            }
+
+        });
+
+        $(".btn_switch_back_to_candidates").on("click", function(e){
+            e.preventDefault();
+
+            $(".form_data").addClass("d-none");
+            $(".aepm_table_div").removeClass("d-none");
+
+        });
+
+        $(".mark_as_complete").on("click", function() {
+            $(".mark_as_complete").attr("disabled", "disabled");
+            $(".mark_as_complete").text("Processing...");
+
+            var sam_id = ["{{ $sam_id }}"];
+            var activity_name = "mark_as_complete";
+            var site_category = ["{{ $site_category }}"];
+            var activity_id = ["{{ $activity_id }}"];
+            var program_id = "{{ $program_id }}";
+
+            $.ajax({
+                url: "/accept-reject-endorsement",
+                method: "POST",
+                data: {
+                    sam_id : sam_id,
+                    activity_name : activity_name,
+                    site_category : site_category,
+                    activity_id : activity_id,
+                    program_id : program_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".mark_as_complete").removeAttr("disabled");
+                        $(".mark_as_complete").text("Mark as Complete");
+
+                        $("#viewInfoModal").modal("hide");
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+
+                        $(".mark_as_complete").removeAttr("disabled");
+                        $(".mark_as_complete").text("Mark as Complete");
                     }
                 },
                 error: function (resp) {
@@ -159,12 +352,15 @@ $(document).ready(function(e){
                         resp,
                         'error'
                     )
-                    $("#"+btn_id).removeAttr("disabled");
-                    $("#"+btn_id).text(btn_text);
+
+                    $(".mark_as_complete").removeAttr("disabled");
+                    $(".mark_as_complete").text("Mark as Complete");
                 }
+            });
+
         });
+
+
+        
     });
-
-});
-
 </script>

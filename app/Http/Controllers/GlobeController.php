@@ -3082,28 +3082,29 @@ class GlobeController extends Controller
                         ->render();
                     }
     
-                    // else if ($request->input('activity') == "Approved SSDS / NTP Validation" && \Auth::user()->profile_id == 8) {
+                    else if ($request->input('activity') == "Approved SSDS / SSDS NTP Validation" && \Auth::user()->profile_id == 8) {
     
-                    //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                    //                                 ->where('status', 'approved')
-                    //                                 ->where('type', 'jtss_add_site')
-                    //                                 ->first();
+                        $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                                                    ->where('status', 'approved')
+                                                    ->where('type', 'jtss_add_site')
+                                                    ->first();
     
-                    //     $what_modal = "components.site-approved-ssds-ntp-validation";
+                        $what_modal = "components.site-approved-ssds-ntp-validation";
     
-                    //     return \View::make($what_modal)
-                    //     ->with([
-                    //         'sam_id' => $request['sam_id'],
-                    //         'site_name' => $site[0]->site_name,
-                    //         'program_id' => $site[0]->program_id,
-                    //         'site_category' => $site[0]->site_category,
-                    //         'activity_id' => $site[0]->activity_id,
-                    //         'data' => $data,
-                    //         'activity' => $request->input('activity')
-                    //     ])
-                    //     ->render();
+                        return \View::make($what_modal)
+                        ->with([
+                            'sam_id' => $request['sam_id'],
+                            'site_name' => $site[0]->site_name,
+                            'program_id' => $site[0]->program_id,
+                            'site_category' => $site[0]->site_category,
+                            'activity_id' => $site[0]->activity_id,
+                            'sub_activity' => $request->input('activity'),
+                            'data' => $data,
+                            'activity' => $request->input('activity')
+                        ])
+                        ->render();
     
-                    // }
+                    }
     
                     else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
     
@@ -5245,6 +5246,9 @@ class GlobeController extends Controller
             } else if ( $status == 'jtss_schedule_site_approved' ) {
                 $datas->where('type', 'jtss_ranking')
                         ->where('status', 'pending');
+            } else if ( $status == 'jtss_approved' ) {
+                $datas->where('type', 'jtss_approved')
+                        ->where('status', 'pending');
             } else {
                 $datas->where('type', 'jtss_add_site');
             }
@@ -5381,6 +5385,39 @@ class GlobeController extends Controller
                             return "no";
                         } else {
                             return "yes";
+                        }
+                    });
+                } else if ($status == "jtss_approved") {
+                    $dt->addColumn('assds', function($row) {
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+
+                            // return $json['assds'];
+                            if (isset($json['assds'])) {
+                                if ($json['assds'] == 'no') {
+                                    return '<span class="badge badge-secondary">No</span>';
+                                } else {
+                                    return '<span class="badge badge-success">Yes</span>';
+                                }
+                            } else {
+                                return '<span class="badge badge-secondary">No</span>';
+                            }
+                        } else {
+                            return $row->status;
+                        }
+                    })
+                    ->addColumn('rank', function($row) {
+                        if (json_last_error() == JSON_ERROR_NONE){
+                            $json = json_decode($row->value, true);
+
+                            // return $json['assds'];
+                            if (isset($json['rank'])) {
+                                return $json['rank'];
+                            } else {
+                                return $json['rank'];
+                            }
+                        } else {
+                            return $json['rank'];
                         }
                     });
                 } else if ($status == "rejected_schedule") {
