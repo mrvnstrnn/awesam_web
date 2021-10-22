@@ -1332,9 +1332,9 @@
             columns: [
                 { data: "date_created" },
                 { data: "vendor_acronym" },
-                { data: "firstname" },
-                { data: "lastname" },
-                { data: "site_name" },
+                { data: null, render: function(data, type, row){ return row.IS_firstname + " " + row.IS_lastname; } },
+                { data: null, render: function(data, type, row){ return row.firstname + " " + row.lastname; } },
+                { data: null, render: function(data, type, row){ return row.site_name + "<br><small>" + row.sam_id + "</small>"; } },
                 { data: "sub_activity_name" },
             ],
         }); 
