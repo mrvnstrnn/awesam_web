@@ -39,8 +39,7 @@
             @endif
             <form class="signature_form">
                 {{-- <form method="POST" action="{{ route('signature_pad.store') }}"> --}}
-                @csrf
-
+                <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
                 <div id="signatures">
                     <div class="row pt-4 pb-3">
                         <div class="col-9"><h5>Site Acquisition</h5><small>Site Acquisition</small></div>
@@ -405,7 +404,10 @@
 
                             $(".signature_form")[0].reset();
 
-                            // $(".btn_switch_back_to_candidates").trigger("click");
+                            $('#clear1').trigger("click");
+                            $('#clear2').trigger("click");
+                            $('#clear3').trigger("click");
+                            $('#clear4').trigger("click");
                             $(".submit_signature").removeAttr("disabled");
                             $(".submit_signature").text("Submit Signature");
                     } else {

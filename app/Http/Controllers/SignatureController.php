@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Log;
 use Validator;
+use App\Models\SubActivityValue;
 
 class SignatureController extends Controller
 {
@@ -24,6 +25,8 @@ class SignatureController extends Controller
 
             if ($validate->passes()) {
 
+                $signature_file = collect();
+
                 for ($i=1; $i < count($request->all()); $i++) { 
 
                     $folderPath = public_path('/images');
@@ -38,12 +41,31 @@ class SignatureController extends Controller
                     $image_base64 = base64_decode($image[1]);
                        
                     $file = $folderPath . uniqid() . '.'.$image_type_png;
+
+                    $signature_file->push($file);
                     file_put_contents($file, $image_base64);
                 }
 
-                // SubActivityValue::create([
-                //     'sam_id' => 
-                // ]);
+                $check_if_added = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                                    ->where('type', 'jtss_signature')
+                                                    ->first();
+                if (is_null($check_if_added)) {
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->get('sam_id'),
+                        'type' => 'jtss_signature',
+                        'value' => json_encode($signature_file->all()),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                    ]);
+
+                } else {
+                    SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                        ->where('type', 'jtss_signature')
+                                        ->update([
+                                            'value' => json_encode($signature_file->all())
+                                        ]);
+                }
     
                 
                 return response()->json(['error' => false, 'message' => 'Signature store successfully !!']);
