@@ -183,11 +183,11 @@
                                                 <x-site-rtb-declaration :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
 
 
-                                            @elseif($site[0]->activity_name == "Lease Contract Validation" && $main_activity)
+                                            @elseif($site[0]->activity_name == "Lease Contract Validation" && $main_activity == "")
 
                                                 <x-site-lease-contract-validation  :site="$site"/>
 
-                                            @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity)
+                                            @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity == "")
 
                                                 <x-site-lease-package-validation  :site="$site"/>
 
