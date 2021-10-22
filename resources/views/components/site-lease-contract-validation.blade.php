@@ -33,7 +33,7 @@
 
                             <div class="row pb-3 border-top pt-3">
                                 <div class="col-12">
-                                    <h1 class="text-center">UNDER CONSTRUCTION</h1>
+                                    <img src="{{ asset('images/construction.gif') }}" class="text-center">
                                     <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right ">Approve Lease Contract</button>
                                 </div>
                             </div>
