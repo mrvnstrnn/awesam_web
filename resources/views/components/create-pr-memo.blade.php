@@ -27,6 +27,20 @@
                                     <div class="form-row">
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
+                                                <label for="to">PR Date</label>
+                                                <input type="date" class="form-control" name="pr_date" id="pr_date">
+                                                <small class="text-danger to-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
+                                                <label for="po_date">PO Date</label>
+                                                <input type="date" class="form-control" name="po_date" id="po_date">
+                                                <small class="text-danger to-error"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-12">
+                                            <div class="form-group">
                                                 <label for="to">To</label>
                                                 <input type="text" class="form-control" name="to" id="to">
                                                 <small class="text-danger to-error"></small>
