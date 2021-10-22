@@ -6061,7 +6061,9 @@ class GlobeController extends Controller
     public function get_DAR_dashboard()
     {
         try {
-            $data = \DB::table('view_DAR_dashboard')->get();
+            $data = \DB::connection('mysql2')
+                        ->table('view_DAR_dashboard')
+                        ->get();
 
             $dt = DataTables::of($data);
             return $dt->make(true);
