@@ -6,12 +6,6 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0);
     }   
 </style>
-<div class="row">
-    <div class="col-md-12">
-        {{-- <H5 id="active_action">{{ $activity }}</H5> --}}
-    </div>
-</div>
-
 <div class="row pb-3 border-top pt-3">
     <div class="col-12">
         <img src="{{ asset('images/construction.gif') }}" class="text-center">
@@ -57,7 +51,6 @@
                             resp.message,
                             'success'
                         )
-                        
                         $(".confirm_schedule").removeAttr("disabled");
                         $(".confirm_schedule").text("JTSS Sched Confirmed");
 

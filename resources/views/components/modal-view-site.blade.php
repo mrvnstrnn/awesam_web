@@ -191,8 +191,6 @@
 
                                                 <x-site-lease-package-validation  :site="$site"/>
 
-                                                GO
-
                                             @elseif(
 
                                                 // COLOC APPROVALS 
