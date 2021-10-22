@@ -7,11 +7,17 @@
     }   
 </style>
 <div class="row pb-3 border-top pt-3">
+<<<<<<< HEAD
     <div class="col-12 text-center p-5">
         <H1>Under Construction</H1>
         
 
         <button class="btn btn-sm btn-shadow btn-primary confirm_schedule mt-5 ">Approve Lease Contract</button>
+=======
+    <div class="col-12">
+        <h1 class="text-center">UNDER CONSTRUCTION</h1>
+        <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right ">Approve Lease Packge</button>
+>>>>>>> ca49fd80e7fb6cc2fd5128274e33275e7ee5405c
     </div>
 </div>
 

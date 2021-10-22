@@ -1966,7 +1966,8 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                                 ->table("view_sites_per_program")
                                 ->where('program_id', $program_id)
-                                ->where('activity_name', "Completed")
+                                // ->where('activity_name', "Completed")
+                                ->where('activity_id', $last_act->activity_id)
                                 ->get();
 
         }
