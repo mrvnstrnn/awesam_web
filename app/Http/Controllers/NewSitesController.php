@@ -16,6 +16,25 @@ use Illuminate\Http\Request;
 
 class NewSitesController extends Controller
 {
+    public function get_site_by_activity_id($activity_id)
+    {
+        
+        try {
+            $data = \DB::table('view_site')
+                        ->where('program_id', 1)
+                        ->whereIn('activity_id', [  $activity_id ])
+                        ->get();
+
+            $dt = DataTables::of($data);
+     
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }   
+    }
+
+
     public function schedule_jtss(Request $request)
     {
         try {

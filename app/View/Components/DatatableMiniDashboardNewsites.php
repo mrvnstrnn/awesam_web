@@ -14,10 +14,14 @@ class DatatableMiniDashboardNewsites extends Component
 
     public $tableheader;
 
+    public $minidashboard;
+
     public function __construct($tableheader)
     {
 
         $this->tableheader = $tableheader;
+
+        $this->minidashboard = \DB::table('view_MiniDashboard_newsites');
 
     }
 
@@ -28,6 +32,7 @@ class DatatableMiniDashboardNewsites extends Component
      */
     public function render()
     {
-        return view('components.datatable-mini-dashboard-newsites');
+
+        return view('components.datatable-mini-dashboard-newsites', compact($this->minidashboard));
     }
 }

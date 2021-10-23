@@ -11,9 +11,12 @@ class AepmScheduleValidation extends Component
      *
      * @return void
      */
-    public function __construct()
+
+    public $site;
+
+    public function __construct($site)
     {
-        //
+        $this->site = $site;
     }
 
     /**
@@ -23,6 +26,7 @@ class AepmScheduleValidation extends Component
      */
     public function render()
     {
+
         return view('components.aepm-schedule-validation');
     }
 }

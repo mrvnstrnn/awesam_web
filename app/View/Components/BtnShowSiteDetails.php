@@ -4,19 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class SiteApprovedSsdsNtpValidation extends Component
+class BtnShowSiteDetails extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-
-    public $site;
-
-    public function __construct($site)
+    public function __construct()
     {
-        $this->site = $site;
+        //
     }
 
     /**
@@ -26,6 +23,6 @@ class SiteApprovedSsdsNtpValidation extends Component
      */
     public function render()
     {
-        return view('components.site-approved-ssds-ntp-validation');
+        return view('components.btn-show-site-details');
     }
 }

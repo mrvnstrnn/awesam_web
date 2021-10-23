@@ -118,7 +118,7 @@ class GlobeController extends Controller
 
             } else if ($request->input('activity_name') == "AEPM Validation and Scheduling") {
 
-                $notification = "Successfully confirmed jtss schedule.";
+                $notification = "JTSS Schedule Sent";
                 $action = $request->input('data_complete');
                 $program_id = $request->input('program_id');
                 $site_category = $request->input('site_category');
@@ -1917,7 +1917,7 @@ class GlobeController extends Controller
     {
         if($activity_type == 'all'){
             $sites = \DB::connection('mysql2')
-                            ->table("view_sites_per_program")
+                            ->table("view_site")
                             ->where('program_id', $program_id)
                             ->get();
         }
@@ -2030,7 +2030,7 @@ class GlobeController extends Controller
             if ($program_id == 1 && \Auth::user()->profile_id == 6) {
                 $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
                     ->where('activity_id', 22)
                     ->where('profile_id', \Auth::user()->profile_id)
@@ -2038,7 +2038,7 @@ class GlobeController extends Controller
             } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
                 $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
                     ->where('activity_id', 23)
                     ->where('profile_id', \Auth::user()->profile_id)
@@ -2333,7 +2333,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_doc_validation")
-                    ->select('sam_id', 'site_name', 'site_fields', 'docs', 'site_category')
+                    ->select('sam_id', 'site_name',  'docs', 'site_category')
                     // ->distinct()
                     ->where('program_id', $program_id)
                     // ->where('activity_complete', 'false')
@@ -2361,7 +2361,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id);
                     if ($program_id == 3 && \Auth::user()->profile_id == 1) {
                         $sites->where('activity_id', 5);
@@ -2399,7 +2399,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name')
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name')
                     ->where('program_id', $program_id);
 
                     if ($program_id == 1) {
@@ -2422,7 +2422,7 @@ class GlobeController extends Controller
                     ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
                     ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
                     ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
                     
                     ->where('program_id', $program_id);
 
@@ -2980,18 +2980,18 @@ class GlobeController extends Controller
         try {
             $site = \DB::connection('mysql2')
                     // ->table('site_milestone')
-                    ->table('view_sites_activity')
+                    ->table('view_site')
                     ->distinct()
                     ->where('sam_id', $request['sam_id'])
                     // ->where('activity_complete', "=", 'false')
                     // ->where('activity_id', $request['activity_id'])
                     ->get();
 
-            if ( count($site) < 1 ) {
-                $site_fields = "";
-            } else {
-                $site_fields = json_decode($site[0]->site_fields);
-            }
+            // if ( count($site) < 1 ) {
+            //     $site_fields = "";
+            // } else {
+            //     $site_fields = json_decode($site[0]->site_fields);
+            // }
 
             if($request['main_activity'] == "doc_validation"){
                 $mainactivity = "Document Validation";
@@ -3014,7 +3014,6 @@ class GlobeController extends Controller
                 ->with([
                     'site' => $site,
                     'sam_id' => $request['sam_id'],
-                    'site_fields' => $site_fields,
                     'rtbdeclaration' => $rtbdeclaration,
                     'activity_id' => $request['activity_id'],
                     'main_activity' => $mainactivity,
@@ -3055,57 +3054,57 @@ class GlobeController extends Controller
                         ->render();
                     }
     
-                    else if ($request->input('activity') == 'SSDS RAM Validation') {
-                        $what_modal = "components.s-s-d-s-ram-ranking";
+                    // else if ($request->input('activity') == 'SSDS RAM Validation') {
+                    //     $what_modal = "components.s-s-d-s-ram-ranking";
     
-                        $jtss_sites = SubActivityValue::select('sam_id')
-                                                            ->where('sam_id', $request->input('sam_id'))
-                                                            ->where('type', 'jtss_add_site')
-                                                            ->get();
+                    //     $jtss_sites = SubActivityValue::select('sam_id')
+                    //                                         ->where('sam_id', $request->input('sam_id'))
+                    //                                         ->where('type', 'jtss_add_site')
+                    //                                         ->get();
     
-                        $jtss_sites_json = SubActivityValue::select('sam_id')
-                                                            ->where('sam_id', $request->input('sam_id'))
-                                                            ->where('type', 'jtss_add_site')
-                                                            ->where('value->rank_number', '!=', 'null')
-                                                            ->get();
+                    //     $jtss_sites_json = SubActivityValue::select('sam_id')
+                    //                                         ->where('sam_id', $request->input('sam_id'))
+                    //                                         ->where('type', 'jtss_add_site')
+                    //                                         ->where('value->rank_number', '!=', 'null')
+                    //                                         ->get();
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'jtss_sites' => $jtss_sites,
-                            'jtss_sites_json' => $jtss_sites_json,
-                            'activity_id' => $site[0]->activity_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity' => $request->input('activity'),
-                            'sam_id' => $request->input('sam_id'),
-                            'program_id' => $request->input('program_id'),
-                            'site_name' => count($site) < 1 ? "" : $site[0]->site_name
-                        ])
-                        ->render();
-                    }
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'jtss_sites' => $jtss_sites,
+                    //         'jtss_sites_json' => $jtss_sites_json,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity' => $request->input('activity'),
+                    //         'sam_id' => $request->input('sam_id'),
+                    //         'program_id' => $request->input('program_id'),
+                    //         'site_name' => count($site) < 1 ? "" : $site[0]->site_name
+                    //     ])
+                    //     ->render();
+                    // }
     
-                    else if ($request->input('activity') == "Approved SSDS / SSDS NTP Validation" && \Auth::user()->profile_id == 8) {
+                    // else if ($request->input('activity') == "Approved SSDS / SSDS NTP Validation" && \Auth::user()->profile_id == 8) {
     
-                        $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                                                    ->where('status', 'approved')
-                                                    ->where('type', 'jtss_add_site')
-                                                    ->first();
+                    //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                    //                                 ->where('status', 'approved')
+                    //                                 ->where('type', 'jtss_add_site')
+                    //                                 ->first();
     
-                        $what_modal = "components.site-approved-ssds-ntp-validation";
+                    //     $what_modal = "components.site-approved-ssds-ntp-validation";
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'sam_id' => $request['sam_id'],
-                            'site_name' => $site[0]->site_name,
-                            'program_id' => $site[0]->program_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity_id' => $site[0]->activity_id,
-                            'sub_activity' => $request->input('activity'),
-                            'data' => $data,
-                            'activity' => $request->input('activity')
-                        ])
-                        ->render();
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'sam_id' => $request['sam_id'],
+                    //         'site_name' => $site[0]->site_name,
+                    //         'program_id' => $site[0]->program_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'sub_activity' => $request->input('activity'),
+                    //         'data' => $data,
+                    //         'activity' => $request->input('activity')
+                    //     ])
+                    //     ->render();
     
-                    }
+                    // }
     
                     else if ($request->input('activity') == "eLAS Approved" && \Auth::user()->profile_id == 8) {
     
@@ -3131,55 +3130,55 @@ class GlobeController extends Controller
     
                     }
     
-                    else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
+                    // else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
     
-                        $datas = SubActivityValue::select('sam_id')
-                                            ->where('sam_id', $request['sam_id'])
-                                            ->where('type', 'jtss_add_site')
-                                            ->where('status', 'Scheduled')
-                                            ->get();
+                    //     $datas = SubActivityValue::select('sam_id')
+                    //                         ->where('sam_id', $request['sam_id'])
+                    //                         ->where('type', 'jtss_add_site')
+                    //                         ->where('status', 'Scheduled')
+                    //                         ->get();
     
-                        $what_modal = "components.aepm-schedule-validation";
+                    //     $what_modal = "components.aepm-schedule-validation";
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'sam_id' => $request['sam_id'],
-                            'site_name' => $site[0]->site_name,
-                            'program_id' => $site[0]->program_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity_id' => $site[0]->activity_id,
-                            'activity' => $request->input('activity'),
-                            'count' => count($datas),
-                            'mode' => 'editor'
-                        ])
-                        ->render();
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'sam_id' => $request['sam_id'],
+                    //         'site_name' => $site[0]->site_name,
+                    //         'program_id' => $site[0]->program_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'activity' => $request->input('activity'),
+                    //         'count' => count($datas),
+                    //         'mode' => 'editor'
+                    //     ])
+                    //     ->render();
     
-                    }
+                    // }
     
-                    else if ($request->input('activity') == "Joint Technical Site Survey" && \Auth::user()->profile_id == 26) {
+                    // else if ($request->input('activity') == "Joint Technical Site Survey" && \Auth::user()->profile_id == 26) {
     
-                        $datas = SubActivityValue::select('sam_id')
-                                            ->where('sam_id', $request['sam_id'])
-                                            ->where('type', 'jtss_add_site')
-                                            ->where('status', 'Scheduled')
-                                            ->get();
+                    //     $datas = SubActivityValue::select('sam_id')
+                    //                         ->where('sam_id', $request['sam_id'])
+                    //                         ->where('type', 'jtss_add_site')
+                    //                         ->where('status', 'Scheduled')
+                    //                         ->get();
     
-                        $what_modal = "components.aepm-schedule-validation";
+                    //     $what_modal = "components.aepm-schedule-validation";
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'sam_id' => $request['sam_id'],
-                            'site_name' => $site[0]->site_name,
-                            'program_id' => $site[0]->program_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity_id' => $site[0]->activity_id,
-                            'activity' => $request->input('activity'),
-                            'count' => count($datas),
-                            'mode' => 'viwer'
-                        ])
-                        ->render();
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'sam_id' => $request['sam_id'],
+                    //         'site_name' => $site[0]->site_name,
+                    //         'program_id' => $site[0]->program_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'activity' => $request->input('activity'),
+                    //         'count' => count($datas),
+                    //         'mode' => 'viwer'
+                    //     ])
+                    //     ->render();
     
-                    }
+                    // }
     
                     else {
                         
@@ -3207,7 +3206,6 @@ class GlobeController extends Controller
                             'pr' => $pr,
                             'pr_memo' => $pr_memo,
                             'sam_id' => $request['sam_id'],
-                            'site_fields' => $site_fields,
                             'rtbdeclaration' => $rtbdeclaration,
                             'main_activity' => $mainactivity,
                         ])

@@ -48,7 +48,7 @@ function refresh_counters() {
             
             if(OPEN > 0){
                 $('a:contains("New CLP")').append(
-                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 9px; padding: 2px !important;">' + OPEN + '</span>'
+                    '<span class="sidebar_counter badge badge-pill badge-danger" style="font-size: 10px; margin-top:-10px; padding: 5px 2x !important;">' + OPEN + '</span>'
                 );    
             }
         

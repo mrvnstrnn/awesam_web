@@ -357,6 +357,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // NEWSITES PR-PO COUNTER
     Route::get('/newsites/get-pr-po-counter', [NewSitesController::class, 'get_pr_po_counter']);
 
+    Route::get('/newsites/get-site-by-activity-id/{activity_id}', [NewSitesController::class, 'get_site_by_activity_id']);
 
 
     //Site Category

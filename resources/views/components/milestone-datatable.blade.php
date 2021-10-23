@@ -72,19 +72,6 @@
                 <div class="tab-content">
                     @foreach ($programs as $program)
 
-                        @php
-                            $li_ctr++;
-
-                            if($program->program_id = 1){
-                                $MiniDashComponent = "datatable-mini-dashboard-newsites";
-                            }
-                            elseif($program->program_id = 3){
-                                $MiniDashComponent = "datatable-mini-dashboard-coloc";
-                            }
-
-                        @endphp     
-                    
-                        <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
 
                         
                         @if ($loop->first)
@@ -92,6 +79,26 @@
                         @else
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif
+
+                                @php
+                                    $li_ctr++;
+
+                                    if($program->program_id == 1){
+                                        $MiniDashComponent = "datatable-mini-dashboard-newsites";
+                                    }
+                                    elseif($program->program_id == 3){
+                                        $MiniDashComponent = "datatable-mini-dashboard-coloc";
+                                    }
+                                    else {
+                                        $MiniDashComponent = "";
+                                    }
+
+                                @endphp
+
+                                @if($MiniDashComponent != "")
+                                    <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
+                                @endif
+
                                 <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
                                     class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"
                                     data-href="/{{ $ajaxdatatablesource }}/{{ $program->program_id }}/{{ \Auth::user()->profile_id }}/{{ $activitytype }}"

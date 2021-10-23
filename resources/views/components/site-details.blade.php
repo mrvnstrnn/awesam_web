@@ -46,42 +46,9 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <label for="details_address" class="mr-sm-2">Address</label>
                         </div>
                         <div class="col-7">
-                            <textarea name="details_address" id="details_address" type="text" readonly class="form-control">{{ $site[0]->site_address }}</textarea>
+                            <textarea name="details_address" id="details_address" type="text" readonly class="form-control"></textarea>
                         </div>
                     </div>
-                    {{-- <div class="form-row mb-2 pb-2 border-bottom">
-                        <div class="col-5">
-                            <label for="details_latitude" class="mr-sm-2">Latitude</label>
-                        </div>
-                        <div class="col-7">
-                            <input name="details_latitude" id="details_latitude" type="text" value="{{ $site[0]->site_latitude }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-row mb-2 pb-2 border-bottom">
-                        <div class="col-5">
-                            <label for="details_longitude" class="mr-sm-2">Longitude</label>
-                        </div>
-                        <div class="col-7">
-                            <input name="details_longitude" id="details_longitude" type="text" value="{{ $site[0]->site_longitude }}" class="form-control">
-                        </div>
-                    </div> --}}
-                    <div class="form-row mb-2 pb-2 border-bottom">
-                        <div class="col-5">
-                            <label for="details_endorsement_date" class="mr-sm-2">Endorsement Date</label>
-                        </div>
-                        <div class="col-7">
-                            <input name="details_endorsement_date" id="details_endorsement_date" type="text" value="{{ $site[0]->site_endorsement_date }}" readonly class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-row mb-2">
-                        <div class="col-5">
-                            <label for="details_endorsement_acceptance_date" class="mr-sm-2">Endorsement Acceptance Date</label>
-                        </div>
-                        <div class="col-7">
-                            <input name="details_endorsement_acceptance_date" id="details_endorsement_acceptance_date" type="text" value="{{ $site[0]->site_endorsement_accepted_date }}" readonly class="form-control">
-                        </div>
-                    </div>
-
                 </form>                                                        
             </div>
         </div>

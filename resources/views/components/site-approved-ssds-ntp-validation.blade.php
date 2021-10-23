@@ -1,70 +1,43 @@
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style="background-color: transparent; border: 0">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="main-card mb-3 card">
+@php
+    // dd($site);
+@endphp
 
-                        <div class="dropdown-menu-header">
-                            <div class="dropdown-menu-header-inner bg-dark">
-                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                                <div class="menu-header-content btn-pane-right">
-                                    <h5 class="menu-header-title">
-                                        {{ $site_name }}
-                                    </h5>
-                                </div>
-                            </div>
-                        </div> 
-
-
-                        <div class="modal-body">
-                            <div class="row p-0">
-                                <div class="col-12">
-                                    <div class="table-responsive aepm_table_div pt-4">
-                                        <H3>{{ $sub_activity }}</H3>
-                                        <hr>
-                                        <div id="map"></div>
-                                        <table class="table table-hover table-inverse" id="aepm_table">
-                                            <thead class="thead-inverse">
-                                                <tr>
-                                                    <th>Rank</th>
-                                                    <th>Lessor</th>
-                                                    <th>Distance</th>
-                                                    <th>Approved SSDS</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class="form_data d-none">
-                                        <div class="row border-bottom">
-                                            <div class="col-12">                                        
-                                                <button class="btn_switch_back_to_candidates btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Options</button>                                            
-                                            </div>
-                                        </div>
-                                        @include('layouts.ssds-form')
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row pt-3">
-                                <div class="col-12 text-right">
-                                    <button class="btn btn-sm btn-shadow  btn-primary mark_as_complete">Mark as Complete</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
+<div class="row p-0">
+    <div class="col-12">
+        <div class="table-responsive aepm_table_div pt-2">
+            <div id="map"></div>
+            <table class="table table-hover table-inverse" id="aepm_table">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Lessor</th>
+                        <th>Distance</th>
+                        <th>Approved SSDS</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="form_data d-none">
+            <div class="row border-bottom">
+                <div class="col-12">                                        
+                    <button class="btn_switch_back_to_candidates btn btn-shadow btn-secondary btn-sm mb-3">Back to Site Options</button>                                            
                 </div>
             </div>
+            @include('layouts.ssds-form')
         </div>
     </div>
 </div>
 
+<div class="row mt-3 pb-3 pt-3 border-bottom border-top">
+    <div class="col-12 text-right">
+        <button class="btn btn-lg btn-shadow btn-primary mark_as_complete">Mark as Complete</button>
+    </div>
+</div>
 @php
 
     $NP = \DB::table('site')
-        ->where('sam_id', $sam_id)
+        ->where('sam_id', $site[0]->sam_id)
         ->select('NP_latitude', 'NP_longitude', 'NP_radius')
         ->get();
     
@@ -255,7 +228,7 @@
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_approved",
+                url: "/get-site-candidate/" + "{{ $site[0]->sam_id }}" + "/jtss_approved",
                 type: 'GET'
             },
             dataSrc: function(json){
@@ -304,11 +277,11 @@
             $(".mark_as_complete").attr("disabled", "disabled");
             $(".mark_as_complete").text("Processing...");
 
-            var sam_id = ["{{ $sam_id }}"];
+            var sam_id = ["{{ $site[0]->sam_id }}"];
             var activity_name = "mark_as_complete";
-            var site_category = ["{{ $site_category }}"];
-            var activity_id = ["{{ $activity_id }}"];
-            var program_id = "{{ $program_id }}";
+            var site_category = ["{{ $site[0]->site_category }}"];
+            var activity_id = ["{{ $site[0]->activity_id }}"];
+            var program_id = "{{ $site[0]->program_id }}";
 
             $.ajax({
                 url: "/accept-reject-endorsement",

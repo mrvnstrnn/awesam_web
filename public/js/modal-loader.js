@@ -15,9 +15,16 @@
                     var site = $(this).attr("data-site");
     
                     var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
-    
-                    loader = '<div class="p-2">Loading...</div>';
-                    $.blockUI({ message: loader });
+
+                    // loader = "<img src='/images/awesam_med.png' />";
+                    // $.blockUI({ 
+                    //     message: loader,  
+                    //     css: {
+                    //         backgroundColor: 'transparent',
+                    //         border: '0',
+                    //         width: '300px',
+                    //     }
+                    // });
     
                     $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
     

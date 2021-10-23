@@ -51,12 +51,12 @@
     
 </style>    
 
-    <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->site_vendor_id }}">
+    <input id="modal_vendor_id" type="hidden" value="{{ $site[0]->vendor_id }}">
     <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
     <input id="sub_activity_id" type="hidden" value="{{ $site[0]->activity_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -124,7 +124,7 @@
 
                                     // $sub_activities = json_decode($site[0]->sub_activity);
                                 @endphp
-                                <div id="actions_list" class="">
+                                <div id="actions_list" class="action_box">
                                     <div class="row">
                                         <div class="col-12">
                                             @if($subactivity_type == "parallel")
@@ -213,10 +213,11 @@
                                                                             <small class="text-danger lessor_remarks-errors"></small>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="position-relative row form-group">
+                                                                    <div class="position-relative row form-group d-none">
                                                                         <label for="lessor_approval_log" class="col-sm-3 col-form-label">Approval</label>
                                                                         <div class="col-sm-9">
                                                                             <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
+                                                                                <option value="engagement" selected>Approval not yet secured</option>
                                                                                 <option value="active">Approval not yet secured</option>
                                                                                 <option value="approved">Approval Secured</option>
                                                                                 <option value="denied">Rejected</option>
@@ -225,9 +226,10 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="position-relative row form-group ">
-                                                                        <div class="col-sm-10 offset-sm-3">
-                                                                            <button class="btn btn-primary save_engagement_log" data-log="true" type="button">Save Engagement</button>
+                                                                        <div class="col-sm-3"></div>
+                                                                        <div class="col-sm-9 offset-sm-3 text-right">
                                                                             <button class="btn btn-secondary cancel_engagement_log" type="button">Back to Engagement</button>
+                                                                            <button class="btn btn-primary save_engagement_log" data-log="true" type="button">Save Engagement</button>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -313,7 +315,10 @@
                                 <div id="actions_box" class="d-none">
 
                                 </div>
+                                <x-btn-show-site-details />
+    
                             </div>
+            
                         </div>
                     </div>                
                 </div>
@@ -534,7 +539,7 @@
         //     var lessor_method = $("#lessor_method").val();
         //     var lessor_approval = $("#lessor_approval").val();
         //     var lessor_remarks = $("#lessor_remarks").val();
-        //     var site_vendor_id = $("#modal_site_vendor_id").val();
+        //     var vendor_id = $("#modal_vendor_id").val();
         //     var program_id = $("#modal_program_id").val();
         //     var sam_id = $(".ajax_content_box").attr("data-sam_id");
         //     // var sub_activity_id = $(this).attr("data-sub_activity_id");
@@ -554,7 +559,7 @@
         //             sam_id : sam_id,
         //             sub_activity_id : sub_activity_id,
         //             site_name : site_name,
-        //             site_vendor_id : site_vendor_id,
+        //             vendor_id : vendor_id,
         //             program_id : program_id
         //         },
         //         headers: {
@@ -675,7 +680,7 @@
             var lessor_method = $("#lessor_method_log").val();
             var lessor_approval = $("#lessor_approval_log").val();
             var lessor_remarks = $("#lessor_remarks_log").val();
-            var site_vendor_id = $("#modal_site_vendor_id").val();
+            var vendor_id = $("#modal_vendor_id").val();
             var program_id = $("#modal_program_id").val();
             var sam_id = $(".ajax_content_box").attr("data-sam_id");
             var log = $(this).attr("data-log");
@@ -697,7 +702,7 @@
                     sam_id : sam_id,
                     sub_activity_id : sub_activity_id,
                     site_name : site_name,
-                    site_vendor_id : site_vendor_id,
+                    vendor_id : vendor_id,
                     program_id : program_id,
                     log : log,
                 },
