@@ -19,30 +19,10 @@
             $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
         } else {
             $programs = \Auth::user()->getUserProgram();
-
-
-            // if($route->uri != '/'){
-            //     $slug = $route->parameters['slug'];
-            //     $slugs = \Auth::user()->getAllNavigation()->where('slug', $slug)->get();
-
-            //     $prog = \DB::connection('mysql2')->table('profile_permissions')
-            //     ->select('program_id')
-            //     ->distinct()
-            //     ->where('permission_id', $slugs[0]->permission_id)
-            //     ->where('profile_id', \Auth::user()->profile_id)
-            //     ->get();
-            // } else {
-            // }
-
-
-            // $allowed_programs = array();
-
-            // foreach($prog as $pg){
-            //     array_push($allowed_programs, $pg->program_id);
-            // }
-
         }
+    
         $li_ctr = 0;
+
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
 
@@ -94,148 +74,17 @@
 
                         @php
                             $li_ctr++;
-                        @endphp
-        
-                        @if (\Auth::user()->profile_id == 6 && $program->program_id == 3)
-                                                   
-                            <button class="mb-3 btn btn-dark show-filters"><i class="fa fa-fw fa-lg" aria-hidden="true"></i> Filters</button>
 
-                            <div class="filter_text d-none">
-                                <label>Filtering: </label>
+                            if($program->program_id = 1){
+                                $MiniDashComponent = "datatable-mini-dashboard-newsites";
+                            }
+                            elseif($program->program_id = 3){
+                                $MiniDashComponent = "datatable-mini-dashboard-coloc";
+                            }
 
-                            </div>
-
-                            <div id="filters-box" class="d-none bg-light rounded border p-3 mb-3">
-                                <form id="coloc-filters-form">
-                                    <div class="row">
-                                        <div class="col-sm-4 col-md-4 col-12">
-                                            <div class="form-group">
-                                                <label>Site Type</label>
-                                                {{-- <input type="text" class="form-control" name="site_type" /> --}}
-                                                <select name="site_type" id="site_type" class="form-control">
-                                                    <option value="">-</option>
-                                                    <option value="GREENFIELD">GREENFIELD</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 col-md-4 col-12">
-                                            <div class="form-group">
-                                                <label>Program</label>
-                                                <select name="program" id="program" class="form-control">
-                                                    <option value="">-</option>
-                                                    <option value="ENABLER">ENABLER</option>
-                                                    <option value="WTTX">WTTX</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 col-md-4 col-12">
-                                            <div class="form-group">
-                                                <label>Technology</label>
-                                                <select name="technology" id="technology" class="form-control">
-                                                    <option value="">-</option>
-                                                    <option value="CARRIER UPGRADE">CARRIER UPGRADE</option>
-                                                    <option value="L21">L21</option>
-                                                    <option value="FE TO GE">FE TO GE</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <button type="button" class="pull-right btn btn-primary filter-records">Filter Records</button>
-                                        <button type="button" class="pull-right btn btn-success mr-1 clear-records">Clear Filter</button>
-                                        <button type="button" class="pull-right btn btn-secondary mr-1 close-filters">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        {{-- NEW SITES PR/PO COUNTER  --}}
-                        @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("New CLP", "PR Memo for Approval", "PR Issuance", "Vendor Awarding")))
-                            <div class="row mb-3 pb-3 text-center border-bottom">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col mt-2">
-                                            <div>
-                                                <h1 class="menu-header-title pr_memo_creation_count">0</h1>
-                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="PR Memo Creation">PR Memo Creation</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <div>
-                                                <h1 class="menu-header-title ram_head_approval_count">0</h1>
-                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="RAM Head Approval">RAM Head Approval</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <div>
-                                                <h1 class="menu-header-title nam_approval_count">0</h1>
-                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="NAM Approval">NAM Approval</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <div>
-                                                <h1 class="menu-header-title arriba_pr_no_issuance_number">0</h1>
-                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Arriba PR No Issuance">Arriba PR # Issuance</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <div>
-                                                <h1 class="menu-header-title vendor_awarding_count">0</h1>
-                                                <h6 class="menu-header-subtitle view_site_memo" style="font-size: 12px; cursor: pointer;" data-value="Vendor Awarding">Vendor Awarding</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        {{-- NEW SITES  JTSS  COUNTER  --}}
-                        @elseif ( in_array(\Auth::user()->profile_id, array(8, 9, 10)) && $program->program_id == 1 && in_array($tableheader, array("Site Hunting", "Joint Technical Site Survey", "SSDS")))
-                            <div class="row mb-3 pb-3 text-center border-bottom">
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Pre-SSDS Pending</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Site Hunting Scheduling</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Advanced Site Hunting</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">JTSS Scheduling</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Joint Technical Site Survey</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Approved SSDS</h6>
-                                    </div>
-                                </div>
-                                {{-- <div class="col-md-2 col-sm-4 col-xs-4 mt-2">
-                                    <div>
-                                        <h1 class="menu-header-title">0</h1>
-                                        <h6 class="menu-header-subtitle" style="font-size: 12px;">Total Sites</h6>
-                                    </div>
-                                </div> --}}
-                            </div>
-                        @endif
+                        @endphp     
+                    
+                        <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
 
                         
                         @if ($loop->first)

@@ -4,18 +4,21 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class SiteLeasePackageValidation extends Component
+class DatatableMiniDashboardNewsites extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public $site;
 
-    public function __construct($site)
+    public $tableheader;
+
+    public function __construct($tableheader)
     {
-        $this->site = $site;
+
+        $this->tableheader = $tableheader;
+
     }
 
     /**
@@ -25,6 +28,6 @@ class SiteLeasePackageValidation extends Component
      */
     public function render()
     {
-        return view('components.site-lease-package-validation');
+        return view('components.datatable-mini-dashboard-newsites');
     }
 }

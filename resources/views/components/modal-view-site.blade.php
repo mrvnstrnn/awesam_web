@@ -106,9 +106,6 @@
                                                         "Set Ariba PR Number to Sites",
                                                         "Vendor Awarding of Sites",
                                                         "Approved SSDS / SSDS NTP Validation",
-                                                        "Lease Contract Validation",
-                                                        "Lease Package Validation",
-
                                                         "Advanced Site Hunting Validation",
 
                                                         "Approved MOC/NTP RAM Validation",
@@ -182,15 +179,6 @@
 
                                                 <x-site-rtb-declaration :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
 
-
-                                            @elseif($site[0]->activity_name == "Lease Contract Validation" && $main_activity == "")
-
-                                                <x-site-lease-contract-validation  :site="$site"/>
-
-                                            @elseif($site[0]->activity_name == "Lease Package Validation" && $main_activity == "")
-
-                                                <x-site-lease-package-validation  :site="$site"/>
-
                                             @elseif(
 
                                                 // COLOC APPROVALS 
@@ -220,24 +208,10 @@
                                                 $site[0]->activity_name == "Approved SSDS / SSDS NTP Validation" && $main_activity == "" ||
                                                 $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
                                                 $site[0]->activity_name == "eLAS Approved"
-                                            
                                                 
                                             )
                                                 
                                                 <x-site-p-a-c-approvals :site="$site" :sitecategory="$site[0]->site_category" :activityid="$site[0]->activity_id" :samid="$site[0]->sam_id" />
-{{-- 
-                                            @elseif(
-
-                                                NEW SITES APPROVALS                                             
-                                                $site[0]->activity_name == "Create PR" && $main_activity == "" && \Auth::user()->profile_id == 8
-                                                $site[0]->activity_name == "RAM Head PR Approval" && $main_activity == ""  ||
-                                                $site[0]->activity_name == "NAM PR Approval" && $main_activity == ""  ||
-                                                $site[0]->activity_name == "Vendor Awarding" && $main_activity == ""
-
-                                            )   
-                                            
-                                                <x-site-create-pr :site="$site" :activity="$site[0]->activity_name" /> --}}
-
                                             
                                             @elseif(
 
@@ -269,9 +243,6 @@
 
                                                 <x-site-rtb-docs-approval :site="$site" />
 
-                                            {{-- @elseif($site[0]->activity_name == "Lessor Approval" && $main_activity == "")
-
-                                                <x-site-subactivity-lessor-engagement :site="$site" /> --}}
 
                                             @elseif($site[0]->activity_name == "RTB Docs Validation" && $main_activity == "")
 
@@ -284,10 +255,6 @@
                                             @elseif($main_activity == "Issue Validation")
 
                                                 <x-site-issue-validation :site="$site"/>
-
-                                            {{-- @elseif($site[0]->activity_name == "SSDS RAM Validation")
-
-                                                <x-s-s-d-s-ram-ranking :samid="$sam_id" :site="$site" /> --}}
 
                                             @else
                                                 @if($main_activity == "Document Validation" || $site[0]->activity_name == "RAM Documents Validation" || $site[0]->activity_name == "Draft Contract Approval" || $site[0]->activity_name == "Lease Package" || $site[0]->activity_name == "RAM Validation of  Advanced Site Hunting  Documents" || $site[0]->activity_name == "Advanced Site Hunting Validation")
@@ -307,21 +274,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- @php
-                                    if($main_activity == ""){
-                                        $details_show = "";
-                                    }
-                                    else {
-                                        $details_show = "d-none";
-                                    }
-                                    @endphp --}}
-
-                                    {{-- <div class="{{$site_action_view}}">
-                                        <x-site-detail-view :site="$site" :main_activity="$main_activity" :sitefields="$site[0]->site_fields" />
-                                    </div> --}}
 
                                     <div id="site_details_view" class="{{ $site_details_view }}">
-
 
                                         <div class="row">      
                                             <div class="col-12 text-center">
