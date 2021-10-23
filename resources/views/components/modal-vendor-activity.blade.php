@@ -56,7 +56,7 @@
     <input id="sub_activity_id" type="hidden" value="{{ $site[0]->activity_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="background-color: transparent; border: 0">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">

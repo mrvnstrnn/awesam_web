@@ -288,7 +288,6 @@
     <script>
 
         $(document).ajaxStart(function(){
-            $('.ui-dialog').css('z-index',9999);
             loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
             $.blockUI({ 
                 message: loader,  
@@ -296,8 +295,7 @@
                     backgroundColor: 'transparent', 
                     opacity: 1, 
                     border: '0',
-                    padding: '20px', 
-                    baseZ: 10000,
+                     
                 }
             });
         }).ajaxStop($.unblockUI);

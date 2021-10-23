@@ -1,16 +1,38 @@
 
 {{-- NEWSITES MINI DASHBOARD --}}
 
+@php
+$minidash = $minidashboard->get();
+@endphp
+
+
 @if(in_array(\Auth::user()->profile_id, array(8, 9, 10)))
-
-    @php
-        $minidash = $minidashboard->get();
-    @endphp
-
-
+    
     {{-- NEW SITES PR/PO COUNTER  --}}
     @if (in_array($tableheader, array("New CLP", "PR Memo for Approval", "PR Issuance", "Vendor Awarding")))
-        
+
+
+        <div class="row mb-3 pb-3 text-center border-bottom">
+            <div class="col-12">
+                <div class="row">
+                    @foreach ($minidash as $dash)
+                        @if($dash->category == 'PR / PO')
+                            <div class="col mt-2">
+                                <div class="minidash_site_list" data-site_count="{{ $dash->count}}" data-activity_ids="{{ $dash->activity_ids }}" data-activity_id_count="{{$dash->activity_id_count}}" data-category="{{ $dash->category }}" data-milestone="{{ $dash->milestone }}">
+                                    <h1 class="menu-header-title">{{ $dash->count }}</h1>
+                                    <h6 class="menu-header-subtitle" style="font-size: 12px; cursor: pointer;" data-value="">{{ $dash->milestone }}</h6>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- NEW SITES PR/PO COUNTER  --}}
+    @elseif (in_array($tableheader, array("PR Memo Pending Approval")) && \Auth::user()->profile_id == 8)
+
+
         <div class="row mb-3 pb-3 text-center border-bottom">
             <div class="col-12">
                 <div class="row">
@@ -30,6 +52,7 @@
 
     {{-- NEW SITES  JTSS  COUNTER  --}}
     @elseif (in_array($tableheader, array("Site Hunting", "Joint Technical Site Survey", "SSDS")))
+
         <div class="row mb-3 pb-3 text-center border-bottom">
             <div class="col-12">
                 <div class="row">
@@ -47,6 +70,7 @@
             </div>
         </div>
     @endif
+
 @endif
 
 <style>
