@@ -2,7 +2,9 @@
 
             e.preventDefault();
 
-            
+            loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
+            $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
+    
             $(".ajax_content_box").attr("data-what_table", $(this).attr('data-what_table'));
 
             if($(this).find("td").hasClass('dataTables_empty') == false){
@@ -74,9 +76,8 @@
                     var all = $(this).attr('data-site_all');
                     var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
 
-
-                    loader = '<div class="p-2">Loading...</div>';
-                    $.blockUI({ message: loader });
+                    // loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
+                    // $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
 
 
                     $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
