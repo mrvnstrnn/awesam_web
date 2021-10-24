@@ -345,7 +345,7 @@
                                                     </div>
 
                                                     <div class="my-3">
-                                                        <a href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
+                                                        <a href="/files/pdf/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}" target="_blank" class="btn btn-danger btn-shadow btn-sm"><i class="fas fa-lg fa-file-pdf mr-1"></i> Download PR Memo</a> <button type="button" class="btn btn-success btn-shadow btn-sm export_button"><i class="fas fa-lg fa-file-excel mr-1"></i> Download Line Items</button> 
                                                     </div>
                                                     
                                                 {{-- </form> --}}

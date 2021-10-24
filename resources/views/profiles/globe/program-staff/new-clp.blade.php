@@ -45,7 +45,7 @@
 
 <!-- PR PO Counter -->
 {{-- <script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>   --}}
-<script type="text/javascript" src="{{ asset('/js/view_site_memo.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ asset('/js/view_site_memo.js') }}"></script> --}}
 
 <script>
 
@@ -78,7 +78,7 @@
                         $(".btn_create_pr").text("Create PR Memo");
 
                         $(".ajax_content_box").html(resp);
-                        refresh_counters();
+                        // refresh_counters();
 
                         $("#craetePrPoModal").modal("show");
                     // } else {

@@ -114,7 +114,7 @@
 
 
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
-                        $("#viewInfoModal .card-body").append(
+                        $("#viewInfoModal .card-body .form_fields").append(
                             '<div class="position-relative form-group col-md-4" style="text-transform: uppercase;">' +
                                 '<label for="' + index.toUpperCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
                             '</div>'+
