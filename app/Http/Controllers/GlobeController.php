@@ -2086,22 +2086,22 @@ class GlobeController extends Controller
         elseif($activity_type == 'site approval'){
 
                 $sites = \DB::connection('mysql2')
-                                ->table("view_sites_activity")
+                                ->table("view_site")
                                 // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
                                 // ->where('view_sites_per_program.program_id', $program_id)
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
-                                ->where('view_sites_activity.profile_id', \Auth::user()->profile_id);
+                                ->where('view_site.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_sites_activity.activity_id', [14, 16, 18, 20, 25, 27])
+                                    $sites->whereIn('view_site.activity_id', [14, 16, 18, 20, 25, 27])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
-                                    $sites->whereIn('view_sites_activity.activity_id', [17, 20, 14, 17])
+                                    $sites->whereIn('view_site.activity_id', [17, 20, 14, 17])
                                     ->get();
                                 } else if ( $program_id == 3 ) {
-                                    $sites->whereIn('view_sites_activity.activity_id', [13, 18, 19, 22, 23])
+                                    $sites->whereIn('view_site.activity_id', [13, 18, 19, 22, 23])
                                     ->get();
                                 } else if ( $program_id == 5 ) {
-                                    $sites->whereIn('view_sites_activity.activity_id', [19, 24, 27, 30])
+                                    $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 }
         }
@@ -3106,29 +3106,29 @@ class GlobeController extends Controller
     
                     // }
     
-                    else if ($request->input('activity') == "eLAS Approved" && \Auth::user()->profile_id == 8) {
+                    // else if ($request->input('activity') == "eLAS Approved" && \Auth::user()->profile_id == 8) {
     
-                        $data = SubActivityValue::where('sam_id', $request['sam_id'])
-                                                    ->where('status', 'approved')
-                                                    ->where('type', 'jtss_add_site')
-                                                    ->first();
+                    //     $data = SubActivityValue::where('sam_id', $request['sam_id'])
+                    //                                 ->where('status', 'approved')
+                    //                                 ->where('type', 'jtss_add_site')
+                    //                                 ->first();
     
-                        $what_modal = "components.elas-approved";
+                    //     $what_modal = "components.elas-approved";
     
-                        return \View::make($what_modal)
-                        ->with([
-                            'sam_id' => $request['sam_id'],
-                            'site_name' => $site[0]->site_name,
-                            'program_id' => $site[0]->program_id,
-                            'site_category' => $site[0]->site_category,
-                            'activity_id' => $site[0]->activity_id,
-                            'sub_activity' => $request->input('activity'),
-                            'data' => $data,
-                            'activity' => $request->input('activity')
-                        ])
-                        ->render();
+                    //     return \View::make($what_modal)
+                    //     ->with([
+                    //         'sam_id' => $request['sam_id'],
+                    //         'site_name' => $site[0]->site_name,
+                    //         'program_id' => $site[0]->program_id,
+                    //         'site_category' => $site[0]->site_category,
+                    //         'activity_id' => $site[0]->activity_id,
+                    //         'sub_activity' => $request->input('activity'),
+                    //         'data' => $data,
+                    //         'activity' => $request->input('activity')
+                    //     ])
+                    //     ->render();
     
-                    }
+                    // }
     
                     // else if ($request->input('activity') == "AEPM Validation and Scheduling" && \Auth::user()->profile_id == 26) {
     

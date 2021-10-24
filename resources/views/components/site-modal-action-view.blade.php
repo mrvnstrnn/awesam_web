@@ -39,8 +39,7 @@
             $site[0]->activity_name == "Finalize Contract Approval" && $mainactivity == "" ||
 
             // $site[0]->activity_name == "Approved SSDS / SSDS NTP Validation" && $mainactivity == "" ||
-            $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
-            $site[0]->activity_name == "eLAS Approved"
+            $site[0]->activity_name == "Approved MOC/NTP RAM Validation"
             // $site[0]->activity_name == "Lease Contract Validation"
             
         )
@@ -76,6 +75,10 @@
         @elseif($site[0]->activity_name == "RTB Docs Approval" && $mainactivity == "")
 
             <x-site-rtb-docs-approval :site="$site" />
+
+        @elseif($site[0]->activity_name == "eLAS Approved")
+
+            <x-elas-approved  :site="$site"/>
 
 
         @elseif($site[0]->activity_name == "AEPM Validation and Scheduling"  && \Auth::user()->profile_id == 26)
@@ -113,13 +116,14 @@
         @endif
 
     </div>
-    <div class="row pt-3 border-top"> 
+    <x-btn-show-site-details />
+    {{-- <div class="row pt-3 border-top"> 
         <div class="col-12 text-center">
             <button class="btn-icon btn-pill btn btn-lg btn-focus" id="site_action_view_switch">
                 <i class="pe-7s-angle-down-circle pe-3x pe-va btn-icon-wrapper"></i>Show Site Details
             </button>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <script>
