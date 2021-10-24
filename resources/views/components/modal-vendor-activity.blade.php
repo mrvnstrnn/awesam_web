@@ -262,6 +262,7 @@
                                                     <div class="p-2 pt-0 action_to_complete_parent">
                                                         @php
                                                             $prev_step = 0;
+                                                            $ctr = 0;
                                                         @endphp
                                                         @foreach ($sub_activities as $sub_activity)
                                                             @if($sub_activity->activity_id == $activity_id)

@@ -9,7 +9,7 @@
     <div class="col-12">
         <H3 class="mt-3">{{ $sub_activity }}</H3>
         <hr>
-        <div class="aepm_table_div pt-4">
+        <div class="aepm_table_div pt-4 pb-3">
             <table class="table table-hover table-inverse" id="aepm_table">
                 <thead class="thead-inverse">
                     <tr>
@@ -22,7 +22,9 @@
                 </thead>
             </table>
             <hr>
-            <button class="ml-2  mt-2 btn btn-success pull-right submit_to_ram">Request Approval</button>
+            <div class="text-right">
+            <button class="ml-2  btn-lg btn btn-success submit_to_ram">Request Approval</button>
+            </div>
         </div>
         <div class="form_data d-none">
             <form class="ssds_form pt-3">
@@ -167,9 +169,9 @@
                         <small class="text-danger longitude-errors"></small>
                     </div>
                 </div>
-                <div class="position-relative row form-group text-right">
-                    <div class="col border-top pt-2">
-                        <button class="ml-2  mt-2 btn btn-primary pull-right save_lease" type="button">Save Lease Details</button>
+                <div class="position-relative row form-group ">
+                    <div class="col border-top pt-3 text-right">
+                        <button class="ml-2  mt-2 mb-2 btn btn-primary save_lease" type="button">Save Lease Details</button>
                     </div>
                 </div>
             </form>
