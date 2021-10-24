@@ -2092,7 +2092,7 @@ class GlobeController extends Controller
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_site.activity_id', [14, 16, 18, 20, 25, 27])
+                                    $sites->whereIn('view_site.activity_id', [16, 18, 20, 25, 27])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
                                     $sites->whereIn('view_site.activity_id', [17, 20, 14, 17])
