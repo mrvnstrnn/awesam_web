@@ -543,7 +543,7 @@ use App\Models\SubActivityValue;
                     $control = 'd-none';
                 }
             @endphp
-            <button class="btn btn-sm btn-shadow btn-primary confirm_schedule pull-right {{ $control }}">Send JTSS Schedule</button>
+            <button class="btn btn-lg btn-shadow btn-primary confirm_schedule pull-right {{ $control }}">Send JTSS Schedule</button>
         </div>
     </div>
 
