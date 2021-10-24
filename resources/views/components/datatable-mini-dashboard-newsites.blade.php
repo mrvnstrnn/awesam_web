@@ -167,7 +167,7 @@ $(document).ready(() => {
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 },
                 language: {
-                "processing": "<div style='background-color:white;padding: 20px 10px; border: 3px solid black; border-radius: 10px;'>Loading Data...</div>",
+                    "processing": "<img src='/images/awesam_loader.png' width='120px;' alt-text='Loading...'/>",
                 },
 
                 columns: [
