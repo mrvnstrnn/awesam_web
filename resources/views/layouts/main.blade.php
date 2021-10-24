@@ -287,18 +287,18 @@
 
     <script>
 
-        $(document).ajaxStart(function(){
-            loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
-            $.blockUI({ 
-                message: loader,  
-                css: {
-                    backgroundColor: 'transparent', 
-                    opacity: 1, 
-                    border: '0',
+        // $(document, '.viewInfoModal').ajaxStart(function(){
+        //     loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
+        //     $.blockUI({ 
+        //         message: loader,  
+        //         css: {
+        //             backgroundColor: 'transparent', 
+        //             opacity: 1, 
+        //             border: '0',
                      
-                }
-            });
-        }).ajaxStop($.unblockUI);
+        //         }
+        //     });
+        // }).ajaxStop($.unblockUI);
 
         $(document).on("click", ".mark_as_unread", function (e) {
             e.preventDefault();

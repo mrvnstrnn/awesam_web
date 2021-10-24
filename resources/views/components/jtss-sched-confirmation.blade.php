@@ -18,7 +18,7 @@
                     <thead class="thead-inverse">
                         <tr>
                             <th>Lessor</th>
-                            {{-- <th>Address</th> --}}
+                            <th>Address</th>
                             {{-- <th>Latitude</th>
                             <th>Longitude</th> --}}
                             <th>Distance</th>
@@ -509,17 +509,17 @@
 
             <div class="row reject_remarks d-none">
                 <div class="col-12">
-                    <p class="message_p">Are you sure you want to reject this schedule <b></b>?</p>
+                    <p class="message_p"><b>Are you sure you want to request for another schedule?</b></p>
                     <form class="reject_form">
                         <div class="form-group">
                             <label for="remarks">Remarks:</label>
                             <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
                             <small class="text-danger remarks-error"></small>
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-sm btn-shadow approve_reject_sched" id="reject_btn" data-action="false" type="button">Reject</button>
-                            
-                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                        <div class="form-group text-right">
+                            <p class="message_p"  style="font-color: red !important;"><b>Warning: You can only request for a new schedule twice.</b></p>
+                            <button class="btn btn-secondary btn-lg btn-shadow cancel_reject" type="button">Cancel</button>
+                            <button class="btn btn-danger btn-lg btn-shadow approve_reject_sched" id="reject_btn" data-action="false" type="button">Request</button>                            
                         </div>
                     </form>
                 </div>
@@ -528,10 +528,10 @@
         </div>
     </div>
 
-    <div class="row button_area">
-        <div class="col-12">
-            <button class="btn btn-sm btn-shadow btn-primary pull-right approve_reject_sched" id="approve_btn" data-action="true" type="button">Accept Schedule</button>
-            <button class="btn btn-sm btn-shadow btn-danger mr-1 pull-right approve_reject_sched_confirm" id="reject_btn" data-action="false" type="button">Request Another Schedule</button>
+    <div class="row button_area pb-3 pt-3 border-top">
+        <div class="col-12 text-right">
+            <button class="btn btn-lg btn-shadow btn-danger mr-1  approve_reject_sched_confirm" id="reject_btn" data-action="false" type="button">Request Another Schedule</button>
+            <button class="btn btn-lg btn-shadow btn-primary approve_reject_sched" id="approve_btn" data-action="true" type="button">Accept Schedule</button>
         </div>
     </div>
 </div>
@@ -562,11 +562,11 @@
             },
             columns: [
                 { data: "lessor" },
-                // { data: "address" },
+                { data: "address" },
                 // { data: "latitude" },
                 // { data: "longitude" },
-                { data: "distance", className: "text-center" },
-                { data: "schedule" },
+                { data: "distance", className: "text-center", render: function(data){ return data + " m"}  },
+                { data: "schedule", className: "text-right"  },
             ],
         });
 

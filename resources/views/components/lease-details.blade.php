@@ -171,7 +171,7 @@
                 </div>
                 <div class="position-relative row form-group ">
                     <div class="col border-top pt-3 text-right">
-                        <button class="ml-2  mt-2 mb-2 btn btn-primary save_lease" type="button">Save Lease Details</button>
+                        <button class="ml-2  mt-1 mb-1 btn-lg btn btn-primary save_lease" type="button">Save Lease Details</button>
                     </div>
                 </div>
             </form>
