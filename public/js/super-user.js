@@ -45,6 +45,8 @@ $(document).ready(() => {
                             return data;
                         }
                     },
+                    { data: 'profile_id', name: 'profile_id', className: 'text-center' },
+                    { data: 'profile_alias', name: 'profile', className: 'text-right', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.mode.toUpperCase() + " : " +  row.profile + "<small>"} },
                     { data: null, name: 'notifcation', 
                         render: function(data, type, row){
 
