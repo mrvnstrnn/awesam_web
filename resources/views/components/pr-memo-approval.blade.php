@@ -160,28 +160,31 @@
 
                                                     @endphp
                                                     @if($activity == 'Set Ariba PR Number to Sites' || $activity == 'Vendor Awarding of Sites')
-                                                    <div class="col-md-6 col-lg-6 col-12">
-                                                        <div class="form-group">
-                                                            <label for="to">PR Date</label>
-                                                            <input type="date" class="form-control" name="pr_date" id="pr_date">
-                                                            <small class="text-danger to-error"></small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 col-12">
-                                                        <div class="form-group">
-                                                            <label for="po_date">PO Date</label>
-                                                            <input type="date" class="form-control" name="po_date" id="po_date">
-                                                            <small class="text-danger to-error"></small>
-                                                        </div>
-                                                    </div>
                                                     <div class="form-row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="to">PR Date</label>
+                                                                <input type="date" name="pr_date" id="pr_date" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}>
+                                                                <small class="text-danger to-error"></small>
+                                                            </div>
+                                                        </div>
+                                                            <div class="col-md-6">
                                                             <div class="form-group pr_number_area">
                                                                 <label for="pr_number">PR #</label>
                                                                 <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
                                                                 <small class="pr_number-error text-danger"></small>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="divider"></div>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 col-lg-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="po_date">PO Date</label>
+                                                                <input type="date" name="po_date" id="po_date" autofocus class="form-control" {{ $po_enable }}>
+                                                                <small class="text-danger to-error"></small>
+                                                            </div>
+                                                        </div>    
                                                         <div class="col-md-6 col-12">
                                                             <div class="form-group">
                                                                 <label for="po_number">PO #</label>
