@@ -198,6 +198,7 @@
             width: '100%'
         });
 
+        // $(document).off().on("click", ".remove_td", function(e){
         $(document).on("click", ".remove_td", function(e){
 
             var sam_id = $(this).attr("data-id");

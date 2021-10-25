@@ -97,7 +97,6 @@ class GlobeController extends Controller
 
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
-
             if ($request->input('activity_name') == "endorse_site") {
 
                 $notification = "Successfully " .$message. " endorsement.";
@@ -115,6 +114,49 @@ class GlobeController extends Controller
                         ]);
                     }
                 }
+
+            } else if ($request->input('activity_name') == "submit_elas") {
+
+                $notification = "Successfully updated elas.";
+                $action = $request->input('data_complete');
+                $program_id = $request->input('program_id');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+
+                $samid = $request->input('sam_id');
+
+                $validate = Validator::make($request->all(), array(
+                    'elas_reference' => 'required',
+                    'elas_filing_date' => 'required',
+                ));
+
+                if ($validate->passes()) {
+                    $elas_approved_is_added = SubActivityValue::where('sam_id', $request->input('sam_id')[0])
+                                                                ->where('type', 'elas_approved')
+                                                                ->first();
+                    if ( is_null($elas_approved_is_added) ) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->input('sam_id')[0],
+                            'value' => json_encode($request->all()),
+                            'user_id' => \Auth::id(),
+                            'status' => 'pending',
+                            'type' => 'elas_approved'
+                        ]);
+                    } else {
+                        SubActivityValue::where('sam_id', $request->input('sam_id')[0])
+                                            ->where('type', 'elas_approved')
+                                            ->update([
+                                                'sam_id' => $request->input('sam_id')[0],
+                                                'value' => json_encode($request->all()),
+                                                'user_id' => \Auth::id(),
+                                                'status' => 'pending',
+                                                'type' => 'elas_approved'
+                                            ]);
+                    }
+                } else {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                }
+
 
             } else if ($request->input('activity_name') == "AEPM Validation and Scheduling") {
 
@@ -453,7 +495,7 @@ class GlobeController extends Controller
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
-                                
+                                     
                 if (!is_null($activities)) {
                     if ($action == "true") {
                         $get_activitiess = \DB::connection('mysql2')
