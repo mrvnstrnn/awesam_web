@@ -115,8 +115,7 @@
     </div>
 </div>
 <div class="divider"></div>
-<div class="container"> 
-    <div class="row" style="margin-left:-30px; margin-right: -30px;">
+<div class="row" style="">
         <div class="col-12">
             <h3>My Team</h3>
             <div class="card">
@@ -182,7 +181,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 @endsection

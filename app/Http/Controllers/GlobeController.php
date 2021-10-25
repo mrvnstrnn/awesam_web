@@ -97,8 +97,6 @@ class GlobeController extends Controller
 
             $message = $request->input('data_complete') == 'false' ? 'rejected' : 'accepted';
 
-            return response()->json(['error' => true, 'message' => $request->all() ]);
-
             if ($request->input('activity_name') == "endorse_site") {
 
                 $notification = "Successfully " .$message. " endorsement.";
