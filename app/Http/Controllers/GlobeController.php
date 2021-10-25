@@ -4217,11 +4217,11 @@ class GlobeController extends Controller
 
                 if (count($line_items) > 0) {
                     
-                    FsaLineItem::where('sam_id', $sam_id[$i])
-                                    ->where('status', '!=', 'denied')
-                                    ->update([
-                                        'is_include' => 1
-                                    ]);
+                    // FsaLineItem::where('sam_id', $sam_id[$i])
+                    //                 ->where('status', '!=', 'denied')
+                    //                 ->update([
+                    //                     'is_include' => 1
+                    //                 ]);
                 } else {
                 
                     $fsa_data = \DB::connection('mysql2')
