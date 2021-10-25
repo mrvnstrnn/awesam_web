@@ -46,15 +46,13 @@ $(document).ready(() => {
                         }
                     },
                     { data: 'profile_id', name: 'profile_id', className: 'text-center' },
-                    { data: 'profile_alias', name: 'profile', className: 'text-right', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.mode.toUpperCase() + " : " +  row.profile + "<small>"} },
+                    { data: 'profile_alias', name: 'profile', className: 'text-center', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.mode.toUpperCase() + " : " +  row.profile + "<small>"} },
                     { data: null, name: 'notifcation', 
                         render: function(data, type, row){
 
                             return row.title_single + "<div><small>" + row.body_single + "</small></div>"
                         }
                     },
-                    { data: 'profile_id', name: 'profile_id', className: 'text-center' },
-                    { data: 'profile_alias', name: 'profile', className: 'text-right', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.mode.toUpperCase() + " : " +  row.profile + "<small>"} },
                 ],
                 columnDefs: [ {
                     targets: [ 0 ],
