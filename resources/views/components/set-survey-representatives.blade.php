@@ -80,10 +80,10 @@
     </div>
 </div>
 
-<div class="row mt-3 complete_btn_area {{ $is_done == 'done' ? '' : 'd-none' }}">
+<div class="row mt-3 mb-3 complete_btn_area {{ $is_done == 'done' ? '' : 'd-none' }}">
     <div class="col-12">
         <div class="form-group">
-            <button type="button" class="btn btn-primary btn-sm btn-shadow pull-right done_adding_representative">Done Adding Representative</button>
+            <button type="button" class="btn btn-primary btn-lg btn-shadow pull-right done_adding_representative">Done Adding Representative</button>
         </div>
     </div>
 </div>

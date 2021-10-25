@@ -125,13 +125,6 @@
                                                 @foreach ($contacts as $contact)
                                                     <option value="{{ $contact->contact_type }}">{{ $contact->contact_type }}</option>
                                                 @endforeach 
-                                                {{-- <option value="">Select Contact Type</option>
-                                                <option value="Accounting">Accounting</option>
-                                                <option value="Area Engineer">Area Engineer</option>
-                                                <option value="Engineering">Engineering</option>
-                                                <option value="Exeutive Assistant to the GM">Exeutive Assistant to the GM</option>
-                                                <option value="General Manager">General Manager</option>
-                                                <option value="Secretary">Secretary</option> --}}
                                             </select>
                                             <small class="text-danger contact_type-error"></small>
                                         </div>
@@ -351,6 +344,18 @@
                                                 <label for="user_id">Staff</label>
                                                 <select class="form-control" name="user_id" id="user_id"></select>
                                                 <small class="user_id-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="nature_of_issue">Nature of Issue</label>
+                                                <input type="text" class="form-control" name="nature_of_issue" id="nature_of_issue" readonly>
+                                                <small class="nature_of_issue-error text-danger"></small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="issue">Issue</label>
+                                                <input type="text" class="form-control" name="issue" id="issue" readonly>
+                                                <small class="issue-error text-danger"></small>
                                             </div>
                                             
                                             <div class="form-group">

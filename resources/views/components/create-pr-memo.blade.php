@@ -118,6 +118,7 @@
                                             <div class="form-group">
                                                 <label for="vendor">Vendor</label>
                                                 <select name="vendor" id="vendor" class="form-control">
+                                                    <option value="">Select vendor</option>
                                                     @foreach ($vendors as $vendor)
                                                         <option value="{{ $vendor->vendor_id }}">{{ ucfirst($vendor->vendor_sec_reg_name) }} ({{ $vendor->vendor_acronym }})</option>
                                                     @endforeach
@@ -132,9 +133,9 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 <select name="financial_analysis[]" id="financial_analysis" class="form-control" multiple="multiple">
                                                     {{-- <option value="">Select site</option> --}}
-                                                    @foreach ($sites as $site)
+                                                    {{-- @foreach ($sites as $site)
                                                     <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->site_name }}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
 
                                                 <button type="button" class="my-3 btn btn-primary btn-shadow btn-sm pull-right add_new_site">Add</button>
@@ -410,7 +411,6 @@
             });
         });
 
-
         $(".table_financial_analysis").on("click", ".line_item_td", function (e){
             e.preventDefault();
 
@@ -454,10 +454,11 @@
                                 );
 
                                 $.each(data, function(i, checkbox_data) {
+                                    var is_checked = checkbox_data.is_include == 1 ? "checked" : "";
                                     $(".line_items_area").append(
                                         '<div class="form-row">' +
                                             '<div class="col-6">' +
-                                                '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'"> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
+                                                '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'" '+is_checked+'> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
                                                 '</label></div>' +
                                         '<div class="col-6">' +
                                             checkbox_data.amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +
@@ -467,9 +468,9 @@
                             });
 
 
-                            resp.site_items.forEach(element => {
-                                $("input[value='" + element.fsa_id + "']").prop('checked', true);
-                            });
+                            // resp.site_items.forEach(element => {
+                            //     $("input[value='" + element.fsa_id + "']").prop('checked', true);
+                            // });
 
                         }
                     } else {
@@ -583,6 +584,36 @@
 
             $(".file_view").addClass("d-none");
             $(".form_div").removeClass("d-none");
+        });
+
+        $("#vendor").on("change", function (e) {
+            var vendor_id = $(this).val();
+
+            if (vendor_id != "") {
+                $.ajax({
+                    url: "/get-new-clp-site/" + vendor_id,
+                    method: "GET",
+                    success: function (resp) {
+
+                        $(".remove_td").trigger("click");
+
+                        $("#financial_analysis option").remove();
+
+                        resp.message.forEach(element => {
+                            $("#financial_analysis").append(
+                                '<option value="'+ element.sam_id +'">' + element.site_name + '</option>'
+                            );
+                        });
+                    },
+                    error: function (resp) {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                });
+            }
         });
         
     });

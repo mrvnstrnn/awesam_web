@@ -373,10 +373,14 @@
 
                 var value_data = JSON.parse($(this).attr('data-value'));
 
+                // JSON.parse
+
+                var json_data = JSON.parse(value_data.value.replace(/&quot;/g,'"'));
+
                 $(".issue_form_view #coop").val(value_data.coop);
                 $(".issue_form_view #dependency").val(value_data.dependency);
                 $(".issue_form_view #nature_of_issue").val(value_data.nature_of_issue);
-                $(".issue_form_view #issue").val(value_data.issue);
+                $(".issue_form_view #issue").val(json_data.issue);
                 $(".issue_form_view #description").text(value_data.description);
                 $(".issue_form_view #issue_raised_by").val(value_data.issue_raised_by);
                 $(".issue_form_view #issue_raised_by_name").val(value_data.issue_raised_by_name);
@@ -475,6 +479,9 @@
 
             $(".add_history_title").text($(".issue_form_view #nature_of_issue").val());
             $(".add_history_desc").text($(".issue_form_view #issue").val());
+
+            $(".add_history_form #nature_of_issue").val($(".issue_form_view #nature_of_issue").val());
+            $(".add_history_form #issue").val($(".issue_form_view #issue").val());
 
         });
         
