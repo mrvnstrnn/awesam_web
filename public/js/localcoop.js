@@ -69,7 +69,7 @@
                         { 
                             data: "nature_of_issue", 
                             render: function ( data, type, row ) {
-                                return row['issue'] + '<br><small>' + data + '</small>';
+                                return row['natu_of_issue'] + '<br><small>' + data + '</small>';
                             } 
                         },
                         { data: "description" },

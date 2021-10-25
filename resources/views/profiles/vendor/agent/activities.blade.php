@@ -25,7 +25,7 @@
 
         .site_progress:hover {
             cursor: pointer;
-            color: blue;
+            /* color: blue; */
         }
 
         .show_subs_btn:hover {
