@@ -4216,7 +4216,12 @@ class GlobeController extends Controller
                                 ->get();
 
                 if (count($line_items) > 0) {
-
+                    
+                    FsaLineItem::where('sam_id', $sam_id[$i])
+                                    ->where('status', '!=', 'denied')
+                                    ->update([
+                                        'is_include' => 1
+                                    ]);
                 } else {
                 
                     $fsa_data = \DB::connection('mysql2')
@@ -4275,9 +4280,9 @@ class GlobeController extends Controller
 
                     // CLEANUP PENDING
                     if (count($fsa_line_items) > 0) {
-                    FsaLineItem::where('sam_id', $sam_id[$i])
-                                    ->where('status', 'pending')
-                                    ->delete();
+                        FsaLineItem::where('sam_id', $sam_id[$i])
+                                        ->where('status', 'pending')
+                                        ->delete();
                     }
 
                     foreach ($fsa_data as $fsa) {
@@ -4316,6 +4321,7 @@ class GlobeController extends Controller
                 $pricings = FsaLineItem::select('fsaq.amount')
                             ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                             ->where('site_line_items.status', '!=', 'denied')
+                            ->where('site_line_items.is_include', 1)
                             ->where('site_line_items.sam_id', '=', $sam_id[$i])
                             ->get();
 

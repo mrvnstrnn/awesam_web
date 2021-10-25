@@ -601,7 +601,7 @@
 
                         resp.message.forEach(element => {
                             $("#financial_analysis").append(
-                                '<option value="'+ element.sam_id +'">' + element.site_name + '</option>'
+                                '<option class="option'+ element.sam_id +'" value="'+ element.sam_id +'">' + element.site_name + '</option>'
                             );
                         });
                     },
