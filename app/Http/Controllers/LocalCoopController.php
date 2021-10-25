@@ -323,6 +323,7 @@ class LocalCoopController extends Controller
 
                 $array_update = array(
                     'dependency' => json_decode($coop_data->value)->dependency,
+                    'issue' => json_decode($coop_data->value)->issue,
                     'nature_of_issue' => json_decode($coop_data->value)->nature_of_issue,
                     'description' => json_decode($coop_data->value)->description,
                     'issue_raised_by' => json_decode($coop_data->value)->issue_raised_by,
