@@ -10,7 +10,7 @@
 
         @elseif($site[0]->activity_name == "RTB Declaration" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration" && $mainactivity == "")
 
-            <x-site-rtb-declaration :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
+            <x-site-rtb-declaration :activityid="$site[0]->activity_id" :samid="$site[0]->sam_id" :sitecategory="$site[0]->site_category" />
 
         @elseif(
 
