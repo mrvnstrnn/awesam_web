@@ -653,7 +653,7 @@ class GlobeController extends Controller
     public function getDataWorkflow($program_id)
     {
         try {
-            $stored_procs = \DB::table('view_stage_activities_workflow_with_notifications')
+            $stored_procs = \DB::table('view_stage_activities_workflow_with_notifs')
                             ->where('program_id', $program_id)
                             ->get();
 
