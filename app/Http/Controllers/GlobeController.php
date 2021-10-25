@@ -653,7 +653,9 @@ class GlobeController extends Controller
     public function getDataWorkflow($program_id)
     {
         try {
-            $stored_procs = $this->getWorkflow($program_id);
+            $stored_procs = \DB::table('view_stage_activities_workflow_with_notifs')
+                            ->where('program_id', $program_id)
+                            ->get();
 
             $dt = DataTables::of($stored_procs);
             return $dt->make(true);
@@ -6031,7 +6033,7 @@ class GlobeController extends Controller
 
                 Mail::to($email)->send(new RepresentativeInvitation( $request->get('site_name'), $name, $url ));
             }
-            return response()->json(['error' => false, 'message' => "Successfully adding representatives."]);
+            return response()->json(['error' => false, 'message' => "Successfully added representatives."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

@@ -53,16 +53,12 @@
                                     <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
                                             <tr>
+                                                <th>Category</th>
                                                 <th>Activity ID</th>
-                                                <th>Profile ID</th>
                                                 <th>Activity Name</th>
-                                                <th>Activity Type</th>
-                                                <th>Next Activity</th>
-                                                <th>Return Activity</th>
-                                                <th>Activity Duration</th>
-                                                <th>Activity Sequence</th>
-                                                <th>Stage ID</th>
-                                                <th>Program ID</th>
+                                                <th>Profile ID</th>
+                                                <th>Profile</th>
+                                                <th>Notification</th>
                                             </tr>
                                         </thead>
                                         <tbody>

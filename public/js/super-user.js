@@ -14,8 +14,15 @@ $(document).ready(() => {
         $(function() {
             $('#workflow-'+program_lists[i]+'-table').DataTable({
                 processing: true,
-                serverSide: true,
-                ajax: {
+                serverSide: false,
+                filter: true,
+                searching: true,
+                lengthChange: true,
+                responsive: true,
+                stateSave: true,
+                pageLength: 50,
+                regex: true,
+                    ajax: {
                     url: $('#workflow-'+program_lists[i]+'-table').attr('data-href'),
                     type: 'GET',
                     headers: {
@@ -31,18 +38,38 @@ $(document).ready(() => {
                 dataSrc: function(json){
                     return json.data;
                 },
+                // <th>Category</th>
+                // <th>Activity ID</th>
+                // <th>Activity Name</th>
+                // <th>Profile ID</th>
+                // <th>Profile</th>
+
                 columns: [
-                    { data: 'activity_id', name: 'activity_id' },
-                    { data: 'profile_id', name: 'profile_id' },
-                    { data: 'activity_name', name: 'activity_name' },
-                    { data: 'activity_type', name: 'activity_type' },
-                    { data: 'next_activity', name: 'next_activity' },
-                    { data: 'return_activity', name: 'return_activity' },
-                    { data: 'activity_duration_days', name: 'activity_duration_days' },
-                    { data: 'activity_sequence', name: 'activity_sequence' },
-                    { data: 'stage_id', name: 'stage_id' },
-                    { data: 'program_id', name: 'program_id' },
-                ]
+                    { data: 'category', name: 'category', className: 'text-center' },
+                    { data: 'activity_id', name: 'activity_id', className: 'text-center' },
+                    { data: 'activity_name', name: 'activity_name', 
+                        render: function(data, type, row){
+                            return data;
+                        }
+                    },
+                    { data: 'profile_id', name: 'profile_id', className: 'text-center' },
+                    { data: 'profile_alias', name: 'profile', className: 'text-left', 
+                        render: function(data, type, row){ 
+                            return "<strong>" + data + "</strong><br>" + "<small>" + row.mode + " : " +  row.profile + "<small>"
+                        } 
+                    },
+                    { data: null, name: 'notifcation', 
+                        render: function(data, type, row){
+
+                            return row.title_single + "<div><small>" + row.body_single + "</small></div>" + "<div><small>RECEIVER: " + row.receiver_profile_alias + "</small></div>"
+                        }
+                    },
+                ],
+                columnDefs: [ {
+                    targets: [ 0 ],
+                    orderData: [ 0, 1 ]
+                } ]
+        
             });
         });
     }
