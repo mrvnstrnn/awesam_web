@@ -589,6 +589,10 @@
         $("#vendor").on("change", function (e) {
             var vendor_id = $(this).val();
 
+            $("#financial_analysis").append(
+                '<option value="">Loading please wait...</option>'
+            );
+
             if (vendor_id != "") {
                 $.ajax({
                     url: "/get-new-clp-site/" + vendor_id,
@@ -599,11 +603,17 @@
 
                         $("#financial_analysis option").remove();
 
-                        resp.message.forEach(element => {
+                        if (resp.message.length < 1) {
                             $("#financial_analysis").append(
-                                '<option class="option'+ element.sam_id +'" value="'+ element.sam_id +'">' + element.site_name + '</option>'
+                                '<option value="">No sites available.</option>'
                             );
-                        });
+                        } else {
+                            resp.message.forEach(element => {
+                                $("#financial_analysis").append(
+                                    '<option class="option'+ element.sam_id +'" value="'+ element.sam_id +'">' + element.site_name + '</option>'
+                                );
+                            });
+                        }
                     },
                     error: function (resp) {
                         Swal.fire(
@@ -615,7 +625,6 @@
                 });
             }
         });
-        
     });
     
 
