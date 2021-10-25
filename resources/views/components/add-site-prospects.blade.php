@@ -553,11 +553,21 @@ function Go_Add_Site_Details(){
 
 }
 
+@php
+
+    $NP = \DB::table('site')
+        ->select('NP_latitude', 'NP_longitude', 'NP_radius')
+        ->where('sam_id', $sam_id)
+        ->get();
+    
+@endphp
+
 
 function initMap(markers) {
 
     var NP_latitude = {!! json_encode($NP_latitude) !!};
     var NP_longitude = {!! json_encode($NP_longitude) !!};
+    var NP_radius = {!! json_encode($NP[0]->NP_radius) !!};
     var site_region_id = {!! json_encode($site_region_id) !!};
     var site_province_id = {!! json_encode($site_province_id) !!};
     var site_lgu_id = {!! json_encode($site_lgu_id) !!};
@@ -638,7 +648,7 @@ function initMap(markers) {
         fillOpacity: 0.1,
         map,
         center: nominal_point,
-        radius: 300,
+        radius: parseInt(NP_radius),
     });
 
     let infoWindow = new google.maps.InfoWindow({

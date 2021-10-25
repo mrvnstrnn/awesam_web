@@ -31,18 +31,24 @@ $(document).ready(() => {
                 dataSrc: function(json){
                     return json.data;
                 },
+                // <th>Category</th>
+                // <th>Activity ID</th>
+                // <th>Activity Name</th>
+                // <th>Profile ID</th>
+                // <th>Profile</th>
+
                 columns: [
+                    { data: 'category', name: 'category' },
                     { data: 'activity_id', name: 'activity_id' },
-                    { data: 'profile_id', name: 'profile_id' },
                     { data: 'activity_name', name: 'activity_name' },
-                    { data: 'activity_type', name: 'activity_type' },
-                    { data: 'next_activity', name: 'next_activity' },
-                    { data: 'return_activity', name: 'return_activity' },
-                    { data: 'activity_duration_days', name: 'activity_duration_days' },
-                    { data: 'activity_sequence', name: 'activity_sequence' },
-                    { data: 'stage_id', name: 'stage_id' },
-                    { data: 'program_id', name: 'program_id' },
-                ]
+                    { data: 'profile_id', name: 'profile_id' },
+                    { data: 'profile', name: 'profile' },
+                ],
+                columnDefs: [ {
+                    targets: [ 0 ],
+                    orderData: [ 0, 1 ]
+                } ]
+        
             });
         });
     }
