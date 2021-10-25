@@ -1858,6 +1858,7 @@ class GlobeController extends Controller
     public function doc_validation_approvals(Request $request)
     {
         try {
+            
             $required = "";
             if ($request->input('action') == "rejected") {
                 $required = "required";
@@ -1908,8 +1909,8 @@ class GlobeController extends Controller
                                                         ->where('status', 'approved')
                                                         ->where('sam_id', $request->input("sam_id"))
                                                         ->groupBy('sub_activity_id')
-                                                        ->get();
-                                                        
+                                                        ->get();  
+
                 if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
@@ -2134,7 +2135,7 @@ class GlobeController extends Controller
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_site.activity_id', [16, 18, 20, 25, 27])
+                                    $sites->whereIn('view_site.activity_id', [16, 17, 26, 28])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
                                     $sites->whereIn('view_site.activity_id', [17, 20, 14, 17])

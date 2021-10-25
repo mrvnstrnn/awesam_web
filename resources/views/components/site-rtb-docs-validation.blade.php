@@ -309,7 +309,8 @@
         var site_vendor_id = $("#modal_site_vendor_id").val();
         var program_id = $("#modal_program_id").val();
 
-        var sam_id = $("#details_sam_id").val();
+        // var sam_id = $("#details_sam_id").val();
+        var sam_id = "{{ $site[0]->sam_id }}"
         var filename = $("#hidden_filename").val();
 
         $(this).attr("disabled", "disabled");

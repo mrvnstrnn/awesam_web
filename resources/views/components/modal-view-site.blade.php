@@ -140,7 +140,8 @@
                                                         "Approved SSDS / SSDS NTP Validation",
                                                         "Lease Contract Validation",
 
-                                                        "eLAS Approved"
+                                                        "eLAS Details",
+                                                        "eLAS Approval Details"
 
                                                     );  
                                     

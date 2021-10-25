@@ -76,9 +76,13 @@
 
             <x-site-rtb-docs-approval :site="$site" />
 
-        @elseif($site[0]->activity_name == "eLAS Approved")
+        @elseif($site[0]->activity_name == "eLAS Details")
 
             <x-elas-approved  :site="$site"/>
+
+        @elseif($site[0]->activity_name == "eLAS Approval Details")
+
+            <x-elas-approval-docs :site="$site"/>
 
 
         @elseif($site[0]->activity_name == "AEPM Validation and Scheduling"  && \Auth::user()->profile_id == 26)
