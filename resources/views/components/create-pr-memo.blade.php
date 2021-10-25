@@ -454,10 +454,11 @@
                                 );
 
                                 $.each(data, function(i, checkbox_data) {
+                                    var is_checked = checkbox_data.is_include == 1 ? "checked" : "";
                                     $(".line_items_area").append(
                                         '<div class="form-row">' +
                                             '<div class="col-6">' +
-                                                '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'"> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
+                                                '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'" '+is_checked+'> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
                                                 '</label></div>' +
                                         '<div class="col-6">' +
                                             checkbox_data.amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +
@@ -467,9 +468,9 @@
                             });
 
 
-                            resp.site_items.forEach(element => {
-                                $("input[value='" + element.fsa_id + "']").prop('checked', true);
-                            });
+                            // resp.site_items.forEach(element => {
+                            //     $("input[value='" + element.fsa_id + "']").prop('checked', true);
+                            // });
 
                         }
                     } else {
