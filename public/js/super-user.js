@@ -42,7 +42,7 @@ $(document).ready(() => {
                     { data: 'activity_id', name: 'activity_id' },
                     { data: 'activity_name', name: 'activity_name' },
                     { data: 'profile_id', name: 'profile_id' },
-                    { data: 'profile', name: 'profile' },
+                    { data: 'profile_alias', name: 'profile', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.profile + "<small>"} },
                 ],
                 columnDefs: [ {
                     targets: [ 0 ],
