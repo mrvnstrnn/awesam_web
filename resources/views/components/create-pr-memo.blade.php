@@ -184,15 +184,21 @@
     </div>
 </div>
 
+
+{{-- <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+
+
 <script>
 
     $(document).ready(function () {
+
         $('#financial_analysis').select2({
             width: '100%'
         });
-    // });
 
-        $(document).off().on("click", ".remove_td", function(e){
+        $(document).on("click", ".remove_td", function(e){
 
             var sam_id = $(this).attr("data-id");
 
@@ -450,17 +456,17 @@
                             // );
                             $.each(resp.message, function(index, data) {
                                 $(".line_items_area").append(
-                                    '<div class="mt-3"><label><b>'+index+'</b></label></div>'
+                                    '<div class="mt-3"><label><H5>'+index+'</H5></label></div>'
                                 );
 
                                 $.each(data, function(i, checkbox_data) {
                                     var is_checked = checkbox_data.is_include == 1 ? "checked" : "";
                                     $(".line_items_area").append(
-                                        '<div class="form-row">' +
-                                            '<div class="col-6">' +
+                                        '<div class="form-row border-bottom">' +
+                                            '<div class="col-9">' +
                                                 '<input type="checkbox" value="'+checkbox_data.fsaq_id+'" name="line_item" id="line_item'+checkbox_data.fsaq_id+'" '+is_checked+'> <label for="line_item'+checkbox_data.fsaq_id+'">' + checkbox_data.description +
                                                 '</label></div>' +
-                                        '<div class="col-6">' +
+                                        '<div class="col-3 text-right">' +
                                             checkbox_data.amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +
                                         '</div></div>' 
                                     );
@@ -625,7 +631,7 @@
                 });
             }
         });
+        
     });
-    
 
 </script>

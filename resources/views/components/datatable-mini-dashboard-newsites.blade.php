@@ -99,7 +99,7 @@ $minidash = $minidashboard->get();
                             </div>
                         </div> 
                         <div class="card-body">
-                            <table id="sites_table" class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table">
+                            <table id="sites_table" class="align-middle mb-0 table table-borderless table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Vendor</th>
