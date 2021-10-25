@@ -333,6 +333,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // PR Memo
     Route::post('/get-pr-memo', [GlobeController::class, 'get_PRMemo']);
+    Route::get('/get-new-clp-site/{vendor_id}', [GlobeController::class, 'get_new_clp_site']);
 
 
     Route::post('/add-site-candidates', [GlobeController::class, 'add_site_candidates']);

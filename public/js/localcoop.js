@@ -373,6 +373,10 @@
 
                 var value_data = JSON.parse($(this).attr('data-value'));
 
+                // JSON.parse
+
+                console.log( value_data );
+
                 $(".issue_form_view #coop").val(value_data.coop);
                 $(".issue_form_view #dependency").val(value_data.dependency);
                 $(".issue_form_view #nature_of_issue").val(value_data.nature_of_issue);

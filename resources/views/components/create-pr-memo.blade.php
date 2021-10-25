@@ -118,6 +118,7 @@
                                             <div class="form-group">
                                                 <label for="vendor">Vendor</label>
                                                 <select name="vendor" id="vendor" class="form-control">
+                                                    <option value="">Select vendor</option>
                                                     @foreach ($vendors as $vendor)
                                                         <option value="{{ $vendor->vendor_id }}">{{ ucfirst($vendor->vendor_sec_reg_name) }} ({{ $vendor->vendor_acronym }})</option>
                                                     @endforeach
@@ -132,9 +133,9 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 <select name="financial_analysis[]" id="financial_analysis" class="form-control" multiple="multiple">
                                                     {{-- <option value="">Select site</option> --}}
-                                                    @foreach ($sites as $site)
+                                                    {{-- @foreach ($sites as $site)
                                                     <option class="option{{ $site->sam_id }}" value="{{ $site->sam_id }}">{{ $site->site_name }}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
 
                                                 <button type="button" class="my-3 btn btn-primary btn-shadow btn-sm pull-right add_new_site">Add</button>
@@ -410,7 +411,6 @@
             });
         });
 
-
         $(".table_financial_analysis").on("click", ".line_item_td", function (e){
             e.preventDefault();
 
@@ -583,6 +583,36 @@
 
             $(".file_view").addClass("d-none");
             $(".form_div").removeClass("d-none");
+        });
+
+        $("#vendor").on("change", function (e) {
+            var vendor_id = $(this).val();
+
+            if (vendor_id != "") {
+                $.ajax({
+                    url: "/get-new-clp-site/" + vendor_id,
+                    method: "GET",
+                    success: function (resp) {
+
+                        $(".remove_td").trigger("click");
+
+                        $("#financial_analysis option").remove();
+
+                        resp.message.forEach(element => {
+                            $("#financial_analysis").append(
+                                '<option value="'+ element.sam_id +'">' + element.site_name + '</option>'
+                            );
+                        });
+                    },
+                    error: function (resp) {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                });
+            }
         });
         
     });
