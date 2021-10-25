@@ -38,11 +38,21 @@ $(document).ready(() => {
                 // <th>Profile</th>
 
                 columns: [
-                    { data: 'category', name: 'category' },
-                    { data: 'activity_id', name: 'activity_id' },
-                    { data: 'activity_name', name: 'activity_name' },
-                    { data: 'profile_id', name: 'profile_id' },
-                    { data: 'profile_alias', name: 'profile', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.profile + "<small>"} },
+                    { data: 'category', name: 'category', className: 'text-center' },
+                    { data: 'activity_id', name: 'activity_id', className: 'text-center' },
+                    { data: 'activity_name', name: 'activity_name', 
+                        render: function(data, type, row){
+                            return data;
+                        }
+                    },
+                    { data: null, name: 'notifcation', 
+                        render: function(data, type, row){
+
+                            return row.title_single + "<div><small>" + row.body_single + "</small></div>"
+                        }
+                    },
+                    { data: 'profile_id', name: 'profile_id', className: 'text-center' },
+                    { data: 'profile_alias', name: 'profile', className: 'text-right', render: function(data, type, row){ return "<strong>" + data + "</strong><br>" + "<small>" + row.mode.toUpperCase() + " : " +  row.profile + "<small>"} },
                 ],
                 columnDefs: [ {
                     targets: [ 0 ],

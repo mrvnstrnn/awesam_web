@@ -653,12 +653,8 @@ class GlobeController extends Controller
     public function getDataWorkflow($program_id)
     {
         try {
-            $stored_procs = \DB::table('stage_activities')
-                            ->leftJoin('profiles', 'stage_activities.profile_id', 'profiles.id')
+            $stored_procs = \DB::table('view_stage_activities_workflow_with_notifications')
                             ->where('program_id', $program_id)
-                            ->orderBy('program_id', 'asc')
-                            ->orderBy('category', 'asc')
-                            ->orderBy('activity_id', 'asc')
                             ->get();
 
             $dt = DataTables::of($stored_procs);

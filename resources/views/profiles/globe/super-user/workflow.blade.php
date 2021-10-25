@@ -56,6 +56,7 @@
                                                 <th>Category</th>
                                                 <th>Activity ID</th>
                                                 <th>Activity Name</th>
+                                                <th>Notification</th>
                                                 <th>Profile ID</th>
                                                 <th>Profile</th>
                                             </tr>
