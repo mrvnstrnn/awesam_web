@@ -76,7 +76,7 @@
             </div>        
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-issues" role="tabpanel">
-            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+            {{-- <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
                         <div></div>
@@ -84,8 +84,8 @@
                         <div></div>
                     </div>
                 </div>
-            </div>        
-            {{-- <x-site-issues :site="$site" /> --}}
+            </div>         --}}
+            <x-site-issues :site="$site" />
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
             {{-- <x-site-files :site="$site" /> --}}
@@ -100,7 +100,7 @@
             </div>        
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
-            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+            {{-- <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
                         <div></div>
@@ -108,8 +108,8 @@
                         <div></div>
                     </div>
                 </div>
-            </div>        
-            {{-- <x-site-chat  :site="$site" /> --}}
+            </div>         --}}
+            <x-site-chat  :site="$site" />
         </div>
 
         <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
@@ -148,52 +148,52 @@
             }
         });
 
-        // $.ajax({
-        //     url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
-        //     method: "GET",
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     success: function (resp){
-        //         $('#tab-content-activities').html("");   
-        //         $('#tab-content-activities').html(resp);
-        //     },
-        //     error: function (resp){
-        //         toastr.error(resp.message, "Error");
-        //     }
-        // });
+        $.ajax({
+            url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp){
+                $('#tab-content-activities').html("");   
+                $('#tab-content-activities').html(resp);
+            },
+            error: function (resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
 
         
-        // $.ajax({
-        //     url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
-        //     method: "GET",
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     success: function (resp){
-        //         $('#tab-content-files').html("");   
-        //         $('#tab-content-files').html(resp);
-        //     },
-        //     error: function (resp){
-        //         toastr.error(resp.message, "Error");
-        //     }
-        // });
+        $.ajax({
+            url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp){
+                $('#tab-content-files').html("");   
+                $('#tab-content-files').html(resp);
+            },
+            error: function (resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
 
-        // $.ajax({
-        //     url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
-        //     method: "GET",
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     success: function (resp){
-        //         console.log(resp);
-        //         $('#site-modal-site_fields').html("");   
-        //         $('#site-modal-site_fields').html(resp);
-        //     },
-        //     error: function (resp){
-        //         toastr.error(resp.message, "Error");
-        //     }
-        // });
+        $.ajax({
+            url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp){
+                console.log(resp);
+                $('#site-modal-site_fields').html("");   
+                $('#site-modal-site_fields').html(resp);
+            },
+            error: function (resp){
+                toastr.error(resp.message, "Error");
+            }
+        });
 
         $("#site_action_view_switch").on("click", function(){
             $("#site_action_view").addClass('d-none');

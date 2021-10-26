@@ -170,6 +170,10 @@
 
             <x-coloc-dashboard />
 
+          @elseif($program->program_id == 4)
+
+            <x-ibs-dashboard />
+
           @elseif($program->program_id == 7)
   
               <x-localcoop-dashboard />
