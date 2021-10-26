@@ -2405,25 +2405,36 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_doc_validation")
-                    ->select('sam_id', 'site_name',  'docs', 'site_category')
-                    // ->distinct()
-                    ->where('program_id', $program_id)
-                    // ->where('activity_complete', 'false')
-                    ->where('docs', '>', 0)
-                    ->get();
-
-                    // SELECT *
-
-                    // FROM sub_activity_value
-                    //     left join sub_activity
-                    //     on sub_activity_value.sub_activity_id = sub_activity.sub_activity_id
-
-                    // where action = 'doc upload'
+            $sites = \DB::connection('mysql2')->table("view_doc_validation")
+                ->where('program_id', $program_id)
+                ->whereNull('approver_id')
+                ->whereNull('approver_id2')
+                ->whereNull('approver_id3')
+                ->get();
 
         }
 
+        elseif($activity_type == 'doc validation 2'){
+
+            $sites = \DB::connection('mysql2')->table("view_doc_validation")
+                ->where('program_id', $program_id)
+                ->whereNotNull('approver_id')
+                ->whereNull('approver_id2')
+                ->whereNull('approver_id3')
+                ->get();                
+
+        }
+
+        elseif($activity_type == 'doc validation 3'){
+
+            $sites = \DB::connection('mysql2')->table("view_doc_validation")
+                ->where('program_id', $program_id)
+                ->whereNotNull('approver_id')
+                ->whereNotNull('approver_id2')
+                ->whereNull('approver_id3')
+                ->get();
+
+        }
 
         elseif($activity_type == 'new endorsements globe'){
 
