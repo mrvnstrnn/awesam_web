@@ -1906,12 +1906,41 @@ class GlobeController extends Controller
                     $array_sub_activity->push($sub_activity->sub_activity_id);
                 }
 
-                $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                $activities_check = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->where('activity_id', $request->input("activity_id"))
+                                        ->where('program_id', $request->input("program_id"))
+                                        ->where('category', $request->input("site_category"))
+                                        ->first();
+
+                if ( is_null($activities_check->approver_profile_id_2) ) {
+
+                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
                                                         ->where('status', 'approved')
                                                         ->where('sam_id', $request->input("sam_id"))
+                                                        ->whereNotNull('approver_id')
                                                         ->groupBy('sub_activity_id')
-                                                        ->get();  
+                                                        ->get();
+                } else if ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) {
+                    
+                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'approved')
+                                                        ->where('sam_id', $request->input("sam_id"))
+                                                        ->whereNotNull('approver_id2')
+                                                        ->groupBy('sub_activity_id')
+                                                        ->get();
+                } else if ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) {
+                    
+                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('status', 'approved')
+                                                        ->where('sam_id', $request->input("sam_id"))
+                                                        ->whereNotNull('approver_id3')
+                                                        ->groupBy('sub_activity_id')
+                                                        ->get();
+                }
 
                 if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
