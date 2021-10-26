@@ -16,6 +16,25 @@ use Illuminate\Http\Request;
 
 class NewSitesController extends Controller
 {
+    public function ibs_get_site_by_activity_id($activity_id)
+    {
+        
+        try {
+            $data = \DB::table('view_site')
+                        ->where('program_id', 4)
+                        ->whereIn('activity_id', [  $activity_id ])
+                        ->get();
+
+            $dt = DataTables::of($data);
+     
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }   
+    }
+
+
     public function get_site_by_activity_id($activity_id)
     {
         

@@ -360,6 +360,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/newsites/get-site-by-activity-id/{activity_id}', [NewSitesController::class, 'get_site_by_activity_id']);
 
+    Route::get('/ibs/get-site-by-activity-id/{activity_id}', [NewSitesController::class, 'ibs_get_site_by_activity_id']);
 
     //Site Category
     Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
