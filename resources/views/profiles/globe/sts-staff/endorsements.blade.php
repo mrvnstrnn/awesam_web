@@ -614,7 +614,6 @@
         table.ajax.url( '/get-coloc-filter/' + site_type + '/' + program + '/' + technology ).load();
     });
 
-    $
     $(document).on("click", ".filter_button", function (e) {
         e.preventDefault();
 
