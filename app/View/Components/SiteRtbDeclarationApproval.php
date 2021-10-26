@@ -30,6 +30,7 @@ class SiteRtbDeclarationApproval extends Component
         ->where('status', "pending")
         ->where('type', "rtb_declaration")
         ->first();
+        
 
         return view('components.site-rtb-declaration-approval', compact("rtbdeclaration"));
     }
