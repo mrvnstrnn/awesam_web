@@ -1,5 +1,11 @@
-@extends('errors::minimal')
+@extends('layouts.error')
 
-@section('title', __('Page Expired'))
-@section('code', '419')
-@section('message', __("<img src='/images/awesam_loader.png' width='120px;' alt-text='Loading...'/>"))
+@section('content')
+<div class="row">
+    <div class="col-12 py-5 text-center">
+        <h1>Page Expired</h1>
+        <div><img src='/images/awesam_loader.png' width='250px;' alt-text='Loading...'/></div>
+        <div>redirecting...</div>
+    </div>
+</div>
+@endsection

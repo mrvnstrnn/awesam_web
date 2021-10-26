@@ -1,4 +1,5 @@
 <div class="row">
+
     @php
         $json = json_decode($rtbdeclaration->value, true);
     @endphp
@@ -66,8 +67,8 @@
             var remarks = $("#remarks").val();
             var activity_name = "rtb_declation_approval";
 
-            var activity_id = ["{{ $activityid }}"];
-            var site_category = ["{{ $sitecategory }}"];
+            var activity_id = ["{{ $site[0]->activity_id }}"];
+            var site_category = ["{{ $site[0]->site_category }}"];
 
 
             $(this).attr("disabled", "disabled");

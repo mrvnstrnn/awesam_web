@@ -141,7 +141,10 @@
                                                         "Lease Contract Validation",
 
                                                         "eLAS Details",
-                                                        "eLAS Approval Details"
+                                                        "eLAS Approval Details",
+
+                                                        // 
+                                                        "Work Plan"
 
                                                     );  
                                     

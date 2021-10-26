@@ -4,9 +4,10 @@
                 
         {{-- <span class="badge badge-danger text-sm mb-0 p-2">{{ $site[0]->activity_name }}</span> --}}
 
-        @if($site[0]->activity_name == "RTB Declaration Approval" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $mainactivity == "" )
+        @if($site[0]->activity_name == "RTB Declaration Approval" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration Approval" && $mainactivity == "" )        
 
-            <x-site-rtb-declaration-approval :rtbdeclaration="$rtbdeclaration" :activityid="$site[0]->activity_id" :sitecategory="$site[0]->site_category" />
+            <x-site-rtb-declaration-approval :site="$site" />
+
 
         @elseif($site[0]->activity_name == "RTB Declaration" && $mainactivity == "" || $site[0]->activity_name == "STS RTB Declaration" && $mainactivity == "")
 

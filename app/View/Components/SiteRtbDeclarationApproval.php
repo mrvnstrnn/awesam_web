@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Models\SubActivityValue;
 
 class SiteRtbDeclarationApproval extends Component
 {
@@ -11,13 +12,11 @@ class SiteRtbDeclarationApproval extends Component
      *
      * @return void
      */
-    public $rtbdeclaration, $activityid, $sitecategory;
+    public $site;
 
-    public function __construct($rtbdeclaration, $activityid, $sitecategory)
+    public function __construct($site)
     {
-        $this->rtbdeclaration = $rtbdeclaration;
-        $this->activityid = $activityid;
-        $this->sitecategory = $sitecategory;
+        $this->site = $site;
     }
 
     /**
@@ -27,6 +26,11 @@ class SiteRtbDeclarationApproval extends Component
      */
     public function render()
     {
-        return view('components.site-rtb-declaration-approval');
+        $rtbdeclaration = SubActivityValue::where('sam_id', $this->site[0]->sam_id)
+        ->where('status', "pending")
+        ->where('type', "rtb_declaration")
+        ->first();
+
+        return view('components.site-rtb-declaration-approval', compact("rtbdeclaration"));
     }
 }

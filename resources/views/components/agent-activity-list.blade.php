@@ -1,38 +1,14 @@
+<style>
+    .siteName {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 16px;
+        font-weight: bold;        
+    }
+</style>
 @php
-// $activities = \DB::connection('mysql2')
-//     ->table('milestone_tracking')
-//     // ->select(
-//     //     'activity_complete',
-//     //     'end_date',
-//     //     'sam_id',
-//     //     'activity_name',
-//     //     'site_name',
-//     //     )
-//     ->where('site_agent_id', "=", \Auth::id())
-//     ->where('profile_id', "=", 2)
-//     ->get();
-
-// $activities = \DB::connection('mysql2')
-//                     ->table('view_sites_activity_2')
-//                     ->select(
-//                         'sam_id', 
-//                         'site_name', 
-//                         'site_address', 
-//                         'site_category', 
-//                         'activity_id', 
-//                         'activity_name', 
-//                         'start_date', 
-//                         'end_date', 
-//                         'program_id', 
-//                         'profile_id', 
-//                         'activity_complete'
-//                     )
-//                     ->whereJsonContains('site_agent', [
-//                         'user_id' => \Auth::id()
-//                     ])
-//                     ->where('profile_id', 2)
-//                     ->distinct()
-//                     ->get();
 
 $activities = \DB::connection('mysql2')
                     ->table('view_assigned_sites')
@@ -40,13 +16,8 @@ $activities = \DB::connection('mysql2')
                     ->where('activity_profile_id', 2)
                     ->orderBy('activity_id', 'ASC')
                     ->get();
-
-
-
-
 @endphp
 
-{{-- @foreach($activities as $activity) --}}
 
 @for ($i = 0; $i < count($activities); $i++)
 
@@ -54,190 +25,84 @@ $activities = \DB::connection('mysql2')
     $activity_color = 'dark';
     @endphp
 
-    {{-- @php
-        if (isset($activities[$i]->activity_complete)) {
+    <li class="list-group-item border-top activity_list_item">
+        {{-- <div id="to-do-indicator-{{ $activities[$i]->sam_id }}" class="todo-indicator bg-{{ $activity_color }}"></div>
+        <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+                <div class="widget-content-left mr-2 ml-2">
+                    @if($activities[$i]->activity_name == "Advanced Site Hunting")
 
-            if($activities[$i]->activity_complete == 'true'){
-                $activity_color = 'success';
-                $activity_badge = "done";
-            }
-            else {
+                        @php
 
-                if($activities[$i]->end_date <=  Carbon::today()){
-                    $activity_color = 'danger';
-                    $activity_badge = "delayed";
-                }
-                else {
+                            $activity_schedule = \DB::table('sub_activity_value')
+                                                ->where('sam_id', $activities[$i]->sam_id)
+                                                ->where('type', 'site_schedule')
+                                                ->get();
 
-                    if($activities[$i]->start_date >  Carbon::today()){
+                            $sched = json_decode($activity_schedule[0]->value);
+                            $sched = getdate(strtotime($sched->site_schedule));
 
-                        $activity_color = 'secondary';
-                        $activity_badge = "Upcoming";
+                        @endphp
 
-                    }
-                    else {
-
-                        $activity_color = 'warning';
-                        $activity_badge = "On Schedule";
-
-                    }
-                }
-            }
-        } else {
-            $activity_color = 'secondary';
-            $activity_badge = "Upcoming";
-        }
-
-        $datas = \DB::connection('mysql2')
-                        ->table('sub_activity')
-                        ->select('sub_activity_id')
-                        // ->join('sub_activity_value', 'sub_activity_value.sub_activity_id', 'sub_activity_id')
-                        ->where('activity_id', $activities[$i]->activity_id)
-                        ->where('program_id', $activities[$i]->program_id)
-                        ->where('category', $activities[$i]->site_category)
-                        ->where('requirements', 'required')
-                        ->whereIn('action', ['doc upload', 'lessor negotiation'])
-                        ->groupBy('sub_activity_id')
-                        ->get();
-
-        $sub_activity_id_collect = collect();
-        $sub_activity_values_collect = collect();
-
-        foreach ($datas as $data) {
-            $sub_activity_id_collect->push($data->sub_activity_id);
-        }
-
-        $sub_activity_values = \DB::connection('mysql2')
-                                    ->table('sub_activity_value')
-                                    ->where('sam_id', $activities[$i]->sam_id)
-                                    ->whereIn('sub_activity_id', $sub_activity_id_collect->all())
-                                    ->where('status', '!=', 'denied')
-                                    ->get();
-
-        foreach ($sub_activity_values as $sub_activity_value) {
-            $sub_activity_values_collect->push($sub_activity_value->status);
-        }
-
-    @endphp --}}
-
-    {{-- @if ( count($datas) > 0 && count($datas) <= count($sub_activity_values) )
-        @if ( in_array( 'denied', $sub_activity_values_collect->all()) )
-            @if ( !in_array( 'pending', $sub_activity_values_collect->all()) )
-                <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
-                    <div class="todo-indicator bg-{{ $activity_color }}"></div>
-                    <div class="widget-content p-0">
-                        <div class="widget-content-wrapper">
-                            <div class="widget-content-left mr-3 ml-2">
-                                @php
-                                    if($activities[$i]->activity_name == "Advanced Site Hunting"){
-                                        $activity_schedule = \DB::table('sub_activity_value')
-                                                            ->where('sam_id', $activities[$i]->sam_id)
-                                                            ->where('type', 'site_schedule')
-                                                            ->get();
-
-                                        $sched = json_decode($activity_schedule[0]->value);
-                                        $sched = getdate(strtotime($sched->site_schedule));
-
-                                    }
-                                @endphp
-                                @if($activities[$i]->activity_name == "Advanced Site Hunting")
-                                    <div class="text-center">
-                                        <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
-                                        <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
-                                    </div>
-                                @else
-                                    <i class="pe-7s-note2 pe-2x"></i>
-                                @endif
-                            </div>
-                            <div class="widget-content-left ml-2">
-                                <div class="">
-                                    {{ $activities[$i]->activity_name }}
-                                </div>
-                                <div class="" style="  width: 400px;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                font-size: 14px;
-                                font-weight: bold;
-                            ">
-                                    {{ $activities[$i]->site_name }}
-                                </div>
-                                <div class="" style="font-size: 12px;">
-                                    <i class="m-0 p-0">{{ $activities[$i]->sam_id }}</i>
-                                </div>
-                                <div class="mt-1">
-                                    <i class="lnr-calendar-full"></i>
-                                    <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
-                                    <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
-                                </div>
-                            </div>
-                            @if(in_array($activities[$i]->profile_id, array("2", "3")))
-                            @endif
+                        <div class="text-center">
+                            <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
+                            <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
+                            <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["year"], 0, 4)) }}</div>
                         </div>
-                    </div>
-                </li>
-            @endif
-        @elseif ( in_array( 'active', $sub_activity_values_collect->all()) )
-            <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->profile_id }}" style="cursor: pointer;">
-                <div class="todo-indicator bg-{{ $activity_color }}"></div>
-                <div class="widget-content p-0">
-                    <div class="widget-content-wrapper">
-                        <div class="widget-content-left mr-3 ml-2">
-                            @php
-                                if($activities[$i]->activity_name == "Advanced Site Hunting"){
-                                    $activity_schedule = \DB::table('sub_activity_value')
-                                                        ->where('sam_id', $activities[$i]->sam_id)
-                                                        ->where('type', 'site_schedule')
-                                                        ->get();
 
-                                    $sched = json_decode($activity_schedule[0]->value);
-                                    $sched = getdate(strtotime($sched->site_schedule));
+                    @elseif($activities[$i]->activity_name == "Joint Technical Site Survey")
 
-                                }
-                            @endphp
-                            @if($activities[$i]->activity_name == "Advanced Site Hunting")
-                                <div class="text-center">
-                                    <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
-                                    <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
-                                </div>
-                            @else
-                                <i class="pe-7s-note2 pe-2x"></i>
-                            @endif
+                        @php
+
+                            $activity_schedule = \DB::table('view_jtss_start_end_dates')
+                                                ->where('sam_id', $activities[$i]->sam_id)
+                                                ->first();
+
+                            // $sched = json_decode($activity_schedule[0]);
+                            $sched = getdate(strtotime($activity_schedule->jtss_schedule_start));
+
+                        @endphp
+
+                        <div class="text-center">
+                            <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["month"], 0, 3)) }}</div>
+                            <div class="m-0 p-0" style="font-size: 24px;">{{ strtoupper(substr($sched["mday"], 0, 3)) }}</div>
+                            <div class="m-0 p-0" style="font-size: 12px;">{{ strtoupper(substr($sched["year"], 0, 4)) }}</div>
                         </div>
-                        <div class="widget-content-left ml-2">
-                            <div class="">
-                                {{ $activities[$i]->activity_name }}
-                            </div>
-                            <div class="" style="  width: 400px;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            font-size: 14px;
-                            font-weight: bold;
-                        ">
-                                {{ $activities[$i]->site_name }}
-                            </div>
-                            <div class="" style="font-size: 12px;">
-                                <i class="m-0 p-0">{{ $activities[$i]->sam_id }}</i>
-                            </div>
-                            <div class="mt-1">
-                                <i class="lnr-calendar-full"></i>
-                                <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
-                                <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
-                            </div>
-                        </div>
-                        @if(in_array($activities[$i]->profile_id, array("2", "3")))
-                        @endif
-                    </div>
+                    @else
+                        <i class="pe-7s-note2 pe-2x"></i>
+                    @endif
                 </div>
-            </li>
-        @endif
-    @else --}}
-        <li class="list-group-item border-top activity_list_item show_activity_modal" data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}" style="cursor: pointer;">
-            <div id="to-do-indicator-{{ $activities[$i]->sam_id }}" class="todo-indicator bg-{{ $activity_color }}"></div>
+                <div class="widget-content-left ml-2">
+                    <div class="">
+                        {{ $activities[$i]->activity_name }}
+                    </div>
+                    <div class="siteName">
+                        {{ $activities[$i]->site_name }}
+                    </div>
+                    <div class="mt-1" style="font-size: 12px;">
+                        SAM ID: {{ $activities[$i]->sam_id }}
+                    </div>
+                    <div class="mt-1" style="font-size: 12px;">
+                        Start Date: {{ $activities[$i]->activity_created }}
+                    </div>
+                    <div class="mt-1" style="font-size: 12px;">
+                        Aging: {{ $activities[$i]->aging }}
+                    </div>
+                    <div class="mt-2 row pl-3">
+                        <div class="" style="font-size: 12px;" id="from-to-{{ $activities[$i]->sam_id }}">
+                            Loading...
+                        </div>
+                        <div id="from-to-badge-{{ $activities[$i]->sam_id }}" class=" badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important; max-height:20px;" ></div>
+                    </div>
+
+                </div>
+            </div>
+        </div> --}}
+
+        <div class="todo-indicator bg-success"></div>
             <div class="widget-content p-0">
                 <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-2 ml-2">
+                    <div class="widget-content-left pl-2 pr-2">
                         @if($activities[$i]->activity_name == "Advanced Site Hunting")
 
                             @php
@@ -280,17 +145,11 @@ $activities = \DB::connection('mysql2')
                             <i class="pe-7s-note2 pe-2x"></i>
                         @endif
                     </div>
-                    <div class="widget-content-left ml-2">
+                    <div class="widget-content-left  pl-2 show_activity_modal"  data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}" style="cursor: pointer;">
                         <div class="">
-                            {{ $activities[$i]->activity_name }}
+                            {{ $activities[$i]->activity_name }} <span class="ml-1 px-2 py-1 badge badge-secondary"><small>{{ $activities[$i]->site_category }}</small></span>
                         </div>
-                        <div class="" style="  width: 400px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        font-size: 16px;
-                        font-weight: bold;
-                    ">
+                        <div class="siteName">
                             {{ $activities[$i]->site_name }}
                         </div>
                         {{-- <div class="mt-1">
@@ -312,36 +171,28 @@ $activities = \DB::connection('mysql2')
                                 Loading...
                             </div>
                             <div id="from-to-badge-{{ $activities[$i]->sam_id }}" class=" badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important; max-height:20px;" ></div>
-
                         </div>
-
+    
                     </div>
+                    <div class="widget-content-right">
+                        <div class="d-inline-block dropdown">
+                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="border-0 btn-transition btn btn-link">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="position: absolute; transform: translate3d(-668px, 31px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
+                                <h6 tabindex="-1" class="dropdown-header">Activity Actions</h6>
+                                <div tabindex="-1" class="dropdown-divider"></div>
+                                <button type="button" tabindex="0" class="dropdown-item set_workplan_activity"   data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}">Set Work Plan</button>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
             </div>
-        </li>
-    {{-- @endif --}}
+    </li>
 
 @endfor
 
 <script src="js/modal-loader.js"></script>
-
-<script>
-// $('.activity_list_item').each(function(index, element){
-
-
-
-// if($(element).attr('data-profile_id') != "2"){
-// }
-
-
-// if($(element).attr('data-activity_complete') == "true"){
-// }
-
-// if($(element).attr('data-activity_complete') == ""){
-// }
-
-// });
-</script>
-
 <script>
     // $.ajax({
     //     url: "/get-agent-activity-timeline",

@@ -70,7 +70,7 @@
     @endphp
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-7">
             <div class="main-card mb-3 card" style="overflow:hidden;">
                 <div class="dropdown-menu-header py-2 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                     <div class="row px-4">
@@ -81,10 +81,9 @@
                             </h5>
                         </div>
                         <div class="btn-actions-pane-right actions-icon-btn">
-                            <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
-                                {{-- <i class="pe-7s-menu btn-icon-wrapper pe-2x font-weight-bold text-dark"></i> --}}
+                            {{-- <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
                                 <i class="fa fa-fw fa-lg" aria-hidden="true"></i>
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </div>
@@ -101,7 +100,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="main-card mb-3 card">
                 <div class="dropdown-menu-header py-2 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                     <div class="row px-4">
@@ -112,10 +111,9 @@
                             </h5>
                         </div>
                         <div class="btn-actions-pane-right actions-icon-btn">
-                            <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
-                                {{-- <i class="pe-7s-menu btn-icon-wrapper pe-2x font-weight-bold text-dark"></i> --}}
+                            {{-- <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
                                 <i class="fa fa-fw fa-lg" aria-hidden="true"></i>
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </div>
