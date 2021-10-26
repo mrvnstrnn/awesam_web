@@ -59,7 +59,7 @@
         $(".declare_rtb").on("click", function (e){
             e.preventDefault();
 
-            var sam_id = $("#details_sam_id").val();
+            var sam_id = "{{ $samid }}";
             var rtb_declaration_date = $("#rtb_declaration_date").val();
             var rtb_declaration = $("#rtb_declaration").val();
             var site_vendor_id = $("#modal_site_vendor_id").val();
