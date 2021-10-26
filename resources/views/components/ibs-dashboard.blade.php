@@ -233,7 +233,7 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="mb-3 card milestone_sites" data-activity_name="{{ $activity->activity_name}}" data-total="{{ $activity->counter}}" data-activity_id="{{ $activity->activity_id}}">
                                 <div class="p-3">
-                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-blue-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
                                     <div class="text-center" style="min-height: 40px;">
                                         <div class="text-muted text-uppercase" style="font-size:12px; overflow: hidden;">
                                             {{ $activity->activity_name}}
