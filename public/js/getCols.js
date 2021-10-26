@@ -22,6 +22,8 @@ function getCols(active_program, active_table, active_profile){
 
         success: function (resp) {
             if(resp.length > 0){
+
+                
                 
                 if(active_table=='new_endorsements_globe'){
                     
@@ -33,7 +35,7 @@ function getCols(active_program, active_table, active_profile){
                             orderable: false,
                             render: function(data){
                                 return "<input type='checkbox' name='program"+data.program_id+"' id='checkbox_"+data.sam_id+"' value='"+data.sam_id+"' class='form-control checkbox-new-endorsement' data-site_vendor_id='"+data.vendor_id+"' data-site_category='"+data.site_category+"' data-activity_id='"+data.activity_id+"' style='width:20px;' />";
-                            }
+                            }                            
                         }
                     );
 
@@ -55,14 +57,28 @@ function getCols(active_program, active_table, active_profile){
 
 
                                 return photo;
+                            },
+                            className: function(){
                             }
                         }
                     );
 
                 }
 
-                
+                var classVar = "";
                 resp.forEach(function(field){
+
+                    if(field['field_alignment'] != ''){
+                        if(field['field_alignment'] == 'right'){
+                            classVar =  'text-right';
+                        }
+                        else if(field['field_alignment'] == 'center'){
+                            classVar =  'text-center';
+                        }
+                    } else {
+                        classVar =  'text-left';
+                    }
+
                     
                     switch(field['source_field']){
 
@@ -150,6 +166,19 @@ function getCols(active_program, active_table, active_profile){
                                     name: field['field_name'],
                                     searchable: true,
                                     regex: true,
+                                    className: function(){
+                                        if(field['field_alignment'] != ''){
+                                            if(field['field_alignment'] == 'right'){
+                                                return 'text-right';
+                                            }
+                                            else if(field['field_alignment'] == 'center'){
+                                                return 'text-center';
+                                            }
+                                        } else {
+                                            return 'text-left';
+                                        }
+                                    }
+        
                                 }
                             );
                             break;
@@ -167,7 +196,9 @@ function getCols(active_program, active_table, active_profile){
                                         } else {
                                             return "";
                                         }
-                                    }
+                                    },
+                                    className: classVar
+        
                                 }
                             );
                             break;
@@ -179,7 +210,20 @@ function getCols(active_program, active_table, active_profile){
                                     name: field['field_name'],
                                     render : function(data){
                                         return data ? data : "";
+                                    },
+                                    className: function(){
+                                        if(field['field_alignment'] != ''){
+                                            if(field['field_alignment'] == 'right'){
+                                                return 'text-right';
+                                            }
+                                            else if(field['field_alignment'] == 'center'){
+                                                return 'text-center';
+                                            }
+                                        } else {
+                                            return 'text-left';
+                                        }
                                     }
+        
                                 }
                             );
                             break;
@@ -192,7 +236,9 @@ function getCols(active_program, active_table, active_profile){
                                     render : function(data){
                                         col = JSON.parse(data.replace(/&quot;/g,'"'));
                                         return col['activity_name'];
-                                    }
+                                    },
+                                    className: classVar
+        
                                 }
                             );
                             break;
@@ -205,7 +251,9 @@ function getCols(active_program, active_table, active_profile){
                                     render : function(data){
                                         // site_name = "</strong>" + data + '</strong>';
                                         return data ? data : "";
-                                    }
+                                    },
+                                    className: classVar
+
                                 }
                             );
                             // cols.push({data : field['source_field'], name: field['field_name']});
