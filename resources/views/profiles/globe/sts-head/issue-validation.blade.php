@@ -12,7 +12,7 @@
     </style>  
 
     {{-- <x-assigned-sites mode="vendor"/> --}}
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Management" activitytype="all-site-issues"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all-site-issues"/>
     {{-- <x-issue-validation-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all"/> --}}
 
 @endsection
@@ -89,6 +89,51 @@
                                             </div>
                                         </div> --}}
                                     </form>
+                                    <button class="btn btn-shadow btn-sm btn-primary add_update">Add Update</button>
+                                </div>
+
+                                <div class="add_remarks_issue_form d-none">
+                                    <form class="mb-2 remarks_issue_form">
+                                        <input type="hidden" name="site_issue_id" id="site_issue_id">
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="status" class="mr-sm-2">Status</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="active">Active</option>
+                                                    <option value="resolved">Resolved</option>
+                                                    <option value="cancelled">Cancel</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="remarks" class="mr-sm-2">Remarks</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <textarea type="text" class="form-control" name="remarks" id="remarks"></textarea>
+                                                <small class="text-danger remarks-errors"></small>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="date_engage" class="mr-sm-2">Date of Update</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input type="date" class="form-control" name="date_engage" id="date_engage">
+                                                <small class="text-danger date_engage-errors"></small>
+                                            </div>
+                                        </div>
+                        
+                                        {{-- @if (\Auth::user()->profile_id == 2) --}}
+                                        <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
+                                        {{-- @endif --}}
+                                        <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
+                                    </form>
+                        
+                                    <br><hr><br>
                                 </div>
                                 <hr>
                                 <div class="table_div"></div>
@@ -120,5 +165,17 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>
 
 <script type="text/javascript" src="/js/modal-issue-validation.js"></script>  
+
+<script>
+     $("#btn_add_remarks").on("click", function(){
+        $(".add_remarks_issue_form").removeClass("d-none");
+        $(".issue_details_div").addClass("d-none");
+    });
+
+    $(".btn_cancel_remarks").on("click", function(){
+        $(".add_remarks_issue_form").addClass("d-none");
+        $(".issue_details_div").removeClass("d-none");
+    });
+</script>
 
 @endsection
