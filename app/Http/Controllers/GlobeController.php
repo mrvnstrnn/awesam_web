@@ -158,6 +158,48 @@ class GlobeController extends Controller
                 }
 
 
+            } else if ($request->input('activity_name') == "submit_elas_approval") {
+
+                $notification = "Successfully submitted eLAS Approval.";
+                $action = $request->input('data_complete');
+                $program_id = $request->input('program_id');
+                $site_category = [$request->input('site_category')];
+                $activity_id = [$request->input('activity_id')];
+
+                $samid = [$request->input('sam_id')];
+
+                $validate = Validator::make($request->all(), array(
+                    'elas_approval_date' => 'required',
+                ));
+
+                if ($validate->passes()) {
+                    $elas_approved_is_added = SubActivityValue::where('sam_id', $request->input('sam_id')[0])
+                                                                ->where('type', 'submit_elas_approval')
+                                                                ->first();
+                    if ( is_null($elas_approved_is_added) ) {
+                        SubActivityValue::create([
+                            'sam_id' => $request->input('sam_id')[0],
+                            'value' => json_encode($request->all()),
+                            'user_id' => \Auth::id(),
+                            'status' => 'pending',
+                            'type' => 'elas_approved'
+                        ]);
+                    } else {
+                        SubActivityValue::where('sam_id', $request->input('sam_id')[0])
+                                            ->where('type', 'elas_approved')
+                                            ->update([
+                                                'sam_id' => $request->input('sam_id')[0],
+                                                'value' => json_encode($request->all()),
+                                                'user_id' => \Auth::id(),
+                                                'status' => 'pending',
+                                                'type' => 'elas_approved'
+                                            ]);
+                    }
+                } else {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                }
+
+
             } else if ($request->input('activity_name') == "AEPM Validation and Scheduling") {
 
                 $notification = "JTSS Schedule Sent";

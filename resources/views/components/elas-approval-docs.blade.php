@@ -15,6 +15,15 @@
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" name="sam_id" id="sam_id" value="{{ $site[0]->sam_id }}">
+            <input type="hidden" name="site_category" id="site_category" value="{{ $site[0]->site_category }}">
+            <input type="hidden" name="activity_id" id="activity_id" value="{{ $site[0]->activity_id }}">
+            <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">
+            <input type="hidden" name="data_complete" id="data_complete" value="true">
+            <input type="hidden" name="activity_name" id="activity_name" value="submit_elas_approval">
+
+            <div class="hidden_fields"></div>
             
             <div class="form-group col-12">
                 <button class="btn pt-4btn-lg btn-shadow btn-success submit_elas" type="button">Submit eLAS Approval</button>
@@ -33,6 +42,8 @@
     } 
 </style>
 
+<script src="/js/dropzone/dropzone.js"></script>
+
 <script>
     $(document).ready(function() {
 
@@ -42,10 +53,10 @@
             // maxFiles: 1,    
             paramName: "file",
             url: "/upload-file",
-            // removedfile: function(file) {
-            //     file.previewElement.remove();
-            //     $(".ssds_form input#"+file.upload.uuid).remove();
-            // },
+            removedfile: function(file) {
+                file.previewElement.remove();
+                $(".elas_form input#"+file.upload.uuid).remove();
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -53,8 +64,8 @@
                 if (!resp.error){
                     var file_name = resp.file;
 
-                    $(".ssds_form").append(
-                        '<input value="'+file_name+'" name="file[]" id="'+file.upload.uuid+'" type="hiddens">'
+                    $(".elas_form .hidden_fields").append(
+                        '<input value="'+file_name+'" name="file[]" id="'+file.upload.uuid+'" type="hidden">'
                     );
                 } else {
                     Swal.fire(
@@ -77,31 +88,29 @@
             $(".submit_elas").attr("disabled", "disabled");
             $(".submit_elas").text("Processing...");
 
-            var sam_id = ["{{ $site[0]->sam_id }}"];
-            var activity_name = "submit_elas";
-            var site_category = ["{{ $site[0]->site_category }}"];
-            var activity_id = ["{{ $site[0]->activity_id }}"];
-            var program_id = "{{ $site[0]->program_id }}";
+            // var activity_name = "submit_elas_approval";
+            // var site_category = ["{{ $site[0]->site_category }}"];
+            // var activity_id = ["{{ $site[0]->activity_id }}"];
+            // var program_id = "{{ $site[0]->program_id }}";
 
-            var data_complete = "true";
-            var elas_reference = $("#elas_reference").val();
-            var elas_filing_date = $("#elas_filing_date").val();
+            // var data_complete = "true";
+            // var elas_approval_date = $("#elas_approval_date").val();
 
             $(".elas_form small").text("");
 
             $.ajax({
                 url: "/accept-reject-endorsement",
                 method: "POST",
-                data: {
-                    sam_id : sam_id,
-                    activity_name : activity_name,
-                    data_complete : data_complete,
-                    site_category : site_category,
-                    activity_id : activity_id,
-                    program_id : program_id,
-                    elas_reference : elas_reference,
-                    elas_filing_date : elas_filing_date,
-                },
+                // data: {
+                //     sam_id : sam_id,
+                //     activity_name : activity_name,
+                //     data_complete : data_complete,
+                //     site_category : site_category,
+                //     activity_id : activity_id,
+                //     program_id : program_id,
+                //     elas_approval_date : elas_approval_date,
+                // },
+                data: $(".elas_form").serialize(),
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -115,6 +124,8 @@
 
                         $(".submit_elas").removeAttr("disabled");
                         $(".submit_elas").text("Submit eLAS Approval");
+
+                        $(".elas_form input").remove();
 
                         $("#viewInfoModal").modal("hide");
                     } else {
