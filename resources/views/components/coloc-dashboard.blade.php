@@ -411,7 +411,7 @@ xs<script>
             stateSave: true,
             regex: true,
             ajax: {
-                url: '/get-dar-dashboard',
+                url: '/get-dar-dashboard/3',
                 type: 'GET',
 
                 headers: {

@@ -6278,12 +6278,12 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_DAR_dashboard()
+    public function get_DAR_dashboard($program_id)
     {
         try {
             $data = \DB::connection('mysql2')
                         ->table('view_DAR_dashboard')->skip(0)->take(100)
-                        ->where('program_id', 1)
+                        ->where('program_id', $program_id)
                         ->orderBy('date_created', 'desc')
                         ->get();
 
