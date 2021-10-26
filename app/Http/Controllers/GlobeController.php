@@ -1841,6 +1841,8 @@ class GlobeController extends Controller
                     ->orderBy('field_sort', 'asc')
                     ->get();
 
+                    
+
         return $cols;
 
     }
@@ -1964,6 +1966,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                             ->table("view_site")
                             ->where('program_id', $program_id)
+                            ->whereNotNull('activity_name')
                             ->get();
         }
 
