@@ -319,7 +319,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="loading_div"></div>
+                                    <div class="row loading_div"></div>
                                     <div id="actions_box" class="d-none">
 
                                     </div>
