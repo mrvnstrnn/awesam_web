@@ -1914,7 +1914,7 @@ class GlobeController extends Controller
                                         ]);
                 }
 
-                if ( is_null($activities_check->approver_profile_id_2) && !is_null($sub_activity_value_check->approver_id) ) {
+                if ( !is_null($activities_check->approver_profile_id_1) && !is_null($sub_activity_value_check->approver_id) ) {
 
                     SubActivityValue::where('id', $request->input('id'))
                                     ->update([
@@ -1922,7 +1922,7 @@ class GlobeController extends Controller
                                     ]);
 
                 } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) &&
+                    ( !is_null($activities_check->approver_profile_id_1) && is_null($activities_check->approver_profile_id_2) ) &&
                     ( !is_null($sub_activity_value_check->approver_id) && !is_null($sub_activity_value_check->approver_id2) )
                     ) {
 
@@ -1932,7 +1932,7 @@ class GlobeController extends Controller
                                     ]);
 
                 } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) &&
+                    ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) &&
                     ( !is_null($sub_activity_value_check->approver_id2) && !is_null($sub_activity_value_check->approver_id3) )
                     ) {
 
@@ -1942,7 +1942,7 @@ class GlobeController extends Controller
                                     ]);
                             
                 } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_4) ) &&
+                    ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) &&
                     ( !is_null($sub_activity_value_check->approver_id3) && !is_null($sub_activity_value_check->approver_id4) )
                     ) {
 
