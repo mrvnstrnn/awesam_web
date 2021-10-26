@@ -1871,28 +1871,88 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
+                
+                $activities_check = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->where('activity_id', $request->input("activity_id"))
+                                        ->where('program_id', $request->input("program_id"))
+                                        ->where('category', $request->input("site_category"))
+                                        ->first();
+
+                $sub_activity_value_check = SubActivityValue::where('id', $request->input('id'))->first();
+                                        
                 SubActivityValue::where('id', $request->input('id'))
-                ->update([
-                    'status' => $request->input('action') == "rejected" ? "denied" : "approved",
-                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                    'approver_id' => \Auth::id(),
-                    'date_approved' => Carbon::now()->toDate(),
-                ]);
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                ]);
+
+                if ( is_null($sub_activity_value_check->approver_id) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'approver_id' => \Auth::id(),
+                                        'date_approved' => Carbon::now()->toDate(),
+                                    ]);
+                } else if ( !is_null($sub_activity_value_check->approver_id) && is_null($sub_activity_value_check->approver_id2) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'approver_id2' => \Auth::id(),
+                                        'date_approved2' => Carbon::now()->toDate(),
+                                    ]);
+                } else if ( !is_null($sub_activity_value_check->approver_id2) && is_null($sub_activity_value_check->approver_id3) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                        ->update([
+                                            'approver_id3' => \Auth::id(),
+                                            'date_approved3' => Carbon::now()->toDate(),
+                                        ]);
+                }  else if ( !is_null($sub_activity_value_check->approver_id3) && is_null($sub_activity_value_check->approver_id4) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                        ->update([
+                                            'approver_id4' => \Auth::id(),
+                                            'date_approved4' => Carbon::now()->toDate(),
+                                        ]);
+                }
+
+                if ( is_null($activities_check->approver_profile_id_2) && !is_null($sub_activity_value_check->approver_id) ) {
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+
+                } else if ( 
+                    ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) &&
+                    ( !is_null($sub_activity_value_check->approver_id) && !is_null($sub_activity_value_check->approver_id2) )
+                    ) {
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+
+                } else if ( 
+                    ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) &&
+                    ( !is_null($sub_activity_value_check->approver_id2) && !is_null($sub_activity_value_check->approver_id3) )
+                    ) {
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+                            
+                } else if ( 
+                    ( !is_null($activities_check->approver_profile_id_4) ) &&
+                    ( !is_null($sub_activity_value_check->approver_id3) && !is_null($sub_activity_value_check->approver_id4) )
+                    ) {
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+                            
+                }
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
                 $user = User::find($sub_activity_files->user_id);
-
-                // $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
-                //                                 ->where('program_id', $request->input("program_id"))
-                //                                 ->get();
-
-                // $sub_activitiess = SubActivity::where('sub_activity_id', $sub_activity_files->sub_activity_id)
-                //                                 ->where('program_id', $request->input("program_id"))
-                //                                 ->where('category', $request->input("site_category"))
-
-                //                                 ->where('requires_validation', 1)
-
-                //                                 ->first();
 
                 $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
@@ -1905,13 +1965,6 @@ class GlobeController extends Controller
                 foreach ($sub_activities as $sub_activity) {
                     $array_sub_activity->push($sub_activity->sub_activity_id);
                 }
-
-                $activities_check = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->where('activity_id', $request->input("activity_id"))
-                                        ->where('program_id', $request->input("program_id"))
-                                        ->where('category', $request->input("site_category"))
-                                        ->first();
 
                 if ( is_null($activities_check->approver_profile_id_2) ) {
 
