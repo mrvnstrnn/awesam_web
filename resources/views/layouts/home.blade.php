@@ -146,10 +146,15 @@
                             $greeting = "Good Evening";
                         }
                         ?>
-                        
-                        
-                            <H1>{{ $greeting }} <strong>{{ ucwords(\Auth::user()->firstname) }}</strong> </H1>
-                            <hr>
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div>
+                                        <H1>{{ $greeting }} <strong>{{ ucwords(\Auth::user()->firstname) }}</strong> </H1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         {{-- MAIN CONTENT --}}
                         @yield('content')
