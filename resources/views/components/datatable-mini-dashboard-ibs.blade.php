@@ -6,7 +6,7 @@
         <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark active">BAU</button>
         <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">REFARM</button>
         <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">RETROFIT</button>
-        <button class="mr-0 btn-icon btn-pill btn btn-sm btn-outline-success pull-right">
+        <button class="export_datatable mr-0 btn-icon btn-pill btn btn-sm btn-outline-success pull-right">
             <i class="fa fa-fw fa-lg" aria-hidden="true" title="export-to-excel-o"></i>
             Export
         </button>

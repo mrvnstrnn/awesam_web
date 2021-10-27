@@ -2293,6 +2293,7 @@ class GlobeController extends Controller
                     ->where('activity_id', 23)
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
+
             } else if (\Auth::user()->profile_id == 6) {
 
                 $sites = \DB::connection('mysql2')
@@ -2316,6 +2317,15 @@ class GlobeController extends Controller
                                 ->where('view_sites_per_program.program_id', $program_id)
                                 ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
                                 ->whereIn('view_sites_per_program.activity_id', [13, 14, 10, 11])
+                                ->distinct()
+                                ->get();
+                }                            
+                elseif ($program_id == 4) {
+                    $sites = \DB::connection('mysql2')
+                                ->table("view_sites_per_program")
+                                ->where('view_sites_per_program.program_id', $program_id)
+                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+                                ->whereIn('view_sites_per_program.activity_id', [14])
                                 ->distinct()
                                 ->get();
                 } else {
@@ -2351,8 +2361,18 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [13, 18, 19, 22, 23])
                                     ->get();
                                 } else if ( $program_id == 4 ) {
-                                    $sites->whereIn('view_site.activity_id', [8, 10, 12, 14, 16, 18, 20])
-                                    ->get();
+                                    if(\Auth::user()->profile_id == 8){
+
+                                        $sites->whereIn('view_site.activity_id', [8, 11, 16, 19, 22, 25])
+                                        ->get();
+
+                                    }
+                                    elseif(\Auth::user()->profile_id == 10){
+
+                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26])
+                                        ->get();
+
+                                    }
                                 } else if ( $program_id == 5 ) {
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();

@@ -149,7 +149,9 @@
 
 
 
-                                                        "Approval MS Lead"
+                                                        "Approval MS Lead",
+                                                        "Approval IBS Lead"
+
 
                                                     );  
                                     
@@ -193,9 +195,7 @@
 
                                         $dynamicComponent = "site-modal-details-view";
 
-                                    }
-
-                                
+                                    }                                
 
                                 @endphp
 
