@@ -19,7 +19,7 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                         </div>
                         <div class="widget-content-left">
                             <div class="widget-heading">{{ ucwords(Auth::user()->name) }}</div>
-                            <div class="widget-subheading">{{ is_null(\Auth::user()->profile_id) ? "" : ucwords(Auth::user()->getUserProfile()->profile) }}</div>
+                            <div class="widget-subheading">{{ is_null(\Auth::user()->profile_id) ? "" : ucwords(Auth::user()->user_position) }}</div>
                         </div>
                         <div class="widget-content-right mr-2">
                             <button class="btn-pill btn-shadow btn-shine btn btn-focus"

@@ -1,7 +1,7 @@
 {{-- PROFILE MENU --}}
 
 <ul class="vertical-nav-menu">
-    <li class="app-sidebar__heading">{{ $profile }}</li>
+    <li class="app-sidebar__heading">{{ Auth::user()->user_position }}</li>
     
     <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
         <a class="{{ $active_slug == "" ? 'mm-active' : '' }}" href="/">
