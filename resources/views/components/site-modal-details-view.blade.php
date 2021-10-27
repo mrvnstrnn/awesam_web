@@ -1,9 +1,10 @@
 
 
 <div id="site_details_view" class="">
+
     <div class="row">      
         <div class="col-12 text-center">
-            <button class="btn-icon btn-pill btn btn-lg btn-focus d-none" id="site_details_view_switch">
+            <button class="btn-icon btn-pill btn btn-med btn-focus d-none" id="site_details_view_switch">
                 <i class="pe-7s-angle-up-circle pe-2x btn-icon-wrapper"></i>
                 @if($mainactivity == "")
                     {{ $site[0]->activity_name }}

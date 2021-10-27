@@ -1,8 +1,8 @@
 
 {{-- COLOC MINI DASHBOARD --}}
 
-@if (\Auth::user()->profile_id == 6)
-                                                   
+@if (\Auth::user()->profile_id == 6 && $tableheader =="New Endorsements")
+
     <button class="mb-3 btn btn-dark show-filters"><i class="fa fa-fw fa-lg" aria-hidden="true"></i> Filters</button>
 
     <div class="filter_text d-none">

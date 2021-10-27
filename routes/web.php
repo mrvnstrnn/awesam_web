@@ -442,7 +442,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/signature_pad', [SignatureController::class, 'index']);
     Route::post('/signature-pad/post', [SignatureController::class, 'store'])->name('signature_pad.store');
          
-    Route::get('/get-dar-dashboard', [GlobeController::class, 'get_DAR_dashboard']);
+    Route::get('/get-dar-dashboard/{program_id}', [GlobeController::class, 'get_DAR_dashboard']);
 
 });
     
