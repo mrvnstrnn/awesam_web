@@ -1247,6 +1247,7 @@ class GlobeController extends Controller
                     'sub_activity_id' => $request->input("sub_activity_id"),
                     'value' => $new_file,
                     'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
                     'status' => $file_status,
                 ]);
 
