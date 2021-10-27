@@ -41,9 +41,20 @@
 
             // $site[0]->activity_name == "Approved SSDS / SSDS NTP Validation" && $mainactivity == "" ||
             $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
-            $site[0]->activity_name == "Approval MS Lead"
-            // $site[0]->activity_name == "Lease Contract Validation"
+
+            $site[0]->activity_name == "LOI & IP Approval MS Lead" ||
+            $site[0]->activity_name == "RTB Docs Approval MS Lead" ||
+            $site[0]->activity_name == "Precon Docs Approval MS Lead" ||
+            $site[0]->activity_name == "Postcon Docs Approval MS Lead" ||
+            $site[0]->activity_name == "Contract Approval MS Lead" ||
+            $site[0]->activity_name == "Lease Package Approval MS Lead" ||
             
+            $site[0]->activity_name == "LOI & IP Approval IBS Lead" ||
+            $site[0]->activity_name == "RTB Docs Approval IBS Lead" ||
+            $site[0]->activity_name == "Precon Docs Approval IBS Lead" ||
+            $site[0]->activity_name == "Postcon Docs Approval IBS Lead" ||
+            $site[0]->activity_name == "Contract Approval IBS Lead" ||
+            $site[0]->activity_name == "Lease Package Approval IBS Lead"
         )
             
             <x-site-p-a-c-approvals :site="$site" :sitecategory="$site[0]->site_category" :activityid="$site[0]->activity_id" :samid="$site[0]->sam_id" />

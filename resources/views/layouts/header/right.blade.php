@@ -74,7 +74,7 @@
                 {{-- HEADER : USER DETAILS --}}
                 <div class="widget-content-left  ml-3 header-user-info">
                     <div class="widget-heading"> {{ ucwords(Auth::user()->name) }}</div>
-                    <div class="widget-subheading"> {{ ucwords(Auth::user()->getUserProfile()->profile) }}</div>
+                    <div class="widget-subheading"> {{ ucwords(Auth::user()->user_position) }}</div>
                 </div>
 
                 {{-- <div class="header-btn-lg">

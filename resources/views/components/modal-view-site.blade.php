@@ -146,11 +146,20 @@
                                                         // 
                                                         "Work Plan",
 
+                                                        "LOI & IP Approval IBS Lead",
+                                                        "RTB Docs Approval IBS Lead",
+                                                        "Precon Docs Approval IBS Lead",
+                                                        "Postcon Docs Approval IBS Lead",
+                                                        "Contract Approval IBS Lead",
+                                                        "Lease Package Approval IBS Lead",
 
+                                                        "LOI & IP Approval MS Lead",
+                                                        "RTB Docs Approval MS Lead",
+                                                        "Precon Docs Approval MS Lead",
+                                                        "Postcon Docs Approval MS Lead",
+                                                        "Contract Approval MS Lead",
+                                                        "Lease Package Approval MS Lead"
 
-
-                                                        "Approval MS Lead",
-                                                        "Approval IBS Lead"
 
 
                                                     );  
