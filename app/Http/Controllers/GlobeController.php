@@ -268,8 +268,8 @@ class GlobeController extends Controller
                     ]);
                 }
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation") {
-
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead") {
+                
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
                 $site_category = $request->input('site_category');
@@ -277,6 +277,43 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
 
                 $samid = $request->input('sam_id');
+
+                if ($request->input('data_complete') == 'false') {
+
+                    $activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('return_activity')
+                                        ->where('activity_id', $activity_id[0])
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[0])
+                                        ->first();
+
+                    $sub_activities = \DB::connection('mysql2')
+                                            ->table('sub_activity')
+                                            ->select('sub_activity_id')
+                                            ->where('activity_id', $activities->return_activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[0])
+                                            ->where('requires_validation', 1)
+                                            ->get()
+                                            ->pluck('sub_activity_id');
+
+                    if (\Auth::user()->profile_id == 8) {
+                        $column_var = 'reviewer_id';
+                        $column_var2 = 'reviewer_approved';
+                    } else {
+                        $column_var = 'reviewer_id_2';
+                        $column_var2 = 'reviewer_approved_2';
+                    }
+
+                    SubActivityValue::whereIn('sub_activity_id', $sub_activities)
+                                        ->update([
+                                            'status' => 'rejected',
+                                            'reason' => $request->input('text_area_reason'),
+                                            $column_var => \Auth::id(),
+                                            $column_var2 => Carbon::now()->toDate(),
+                                        ]);
+                }
 
             } else if ($request->input('activity_name') == "elas_approved") {
 
@@ -353,8 +390,7 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
-            }
-            else if ($request->input('activity_name') == "Vendor Awarding") {
+            } else if ($request->input('activity_name') == "Vendor Awarding") {
 
                 $notification = "Successfully awarded.";
                 $vendor = $request->input('vendor');
@@ -363,8 +399,7 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
-            }
-            else if ($request->input('activity_name') == "JTSS Sched Confirmation") {
+            } else if ($request->input('activity_name') == "JTSS Sched Confirmation") {
 
                 if ($request->input('data_complete') == "false") {
                     $validate = Validator::make($request->all(), array(
@@ -2044,19 +2079,61 @@ class GlobeController extends Controller
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                 }
 
+                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
 
-                // $email_receiver = User::select('users.*')
-                //                 ->join('user_details', 'users.id', 'user_details.user_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->where('user_details.vendor_id', $request->input('site_vendor_id'))
-                //                 ->where('user_programs.program_id', $request->input('program_id'))
-                //                 ->get();
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
-                // SiteEndorsementEvent::dispatch($request->input('sam_id'));
+    public function doc_validation_approval_reviewer(Request $request)
+    {
+        try {
+            
+            $required = "";
+            if ($request->input('action') == "rejected") {
+                $required = "required";
+            }
 
-                // for ($j=0; $j < count($email_receiver); $j++) {
-                //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "document_approval", $request->input('action'), "", $request->input('filename'), $request->input('reason')) );
-                // }
+            $validate = Validator::make($request->all(), array(
+                'reason' => $required
+            ));
+
+            if ($validate->passes()) {
+                
+                $activities_check = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->where('activity_id', $request->input("activity_id"))
+                                        ->where('program_id', $request->input("program_id"))
+                                        ->where('category', $request->input("site_category"))
+                                        ->first();
+
+                $sub_activity_value_check = SubActivityValue::where('id', $request->input('id'))->first();
+                                        
+                SubActivityValue::where('id', $request->input('id'))
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                ]);
+
+                if ( is_null($sub_activity_value_check->reviewer_id) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'reviewer_id' => \Auth::id(),
+                                        'reviewer_approved' => Carbon::now()->toDate(),
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+                } else if ( !is_null($sub_activity_value_check->reviewer_id) && is_null($sub_activity_value_check->reviewer_id_2) ) {
+                    SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'reviewer_id_2' => \Auth::id(),
+                                        'reviewer_approved_2' => Carbon::now()->toDate(),
+                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                                    ]);
+                }
 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
             } else {
@@ -2272,6 +2349,9 @@ class GlobeController extends Controller
                                     ->get();
                                 } else if ( $program_id == 3 ) {
                                     $sites->whereIn('view_site.activity_id', [13, 18, 19, 22, 23])
+                                    ->get();
+                                } else if ( $program_id == 4 ) {
+                                    $sites->whereIn('view_site.activity_id', [8, 10, 12, 14, 16, 18, 20])
                                     ->get();
                                 } else if ( $program_id == 5 ) {
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])

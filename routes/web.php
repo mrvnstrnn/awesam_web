@@ -296,6 +296,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     Route::post('/doc-validation-approval', [GlobeController::class, 'doc_validation_approvals']);
+    Route::post('/doc-validation-approval-reviewer', [GlobeController::class, 'doc_validation_approval_reviewer']);
 
     Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
 

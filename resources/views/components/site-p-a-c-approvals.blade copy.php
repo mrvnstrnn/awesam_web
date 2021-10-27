@@ -128,7 +128,7 @@
 @endif
 
 <div class="row mb-3 border-top pt-3 button_area_div">
-    <div class="col-12 align-right">                            
+    <div class="col-12 align-right">                                            
         <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
         <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
     </div>
@@ -161,7 +161,7 @@
         var sub_activity_id = $(this).attr('data-sub_activity_id');
         var id = values[0].id;
 
-        if ($(this).attr("data-status") != "rejected"){
+        if ($(this).attr("data-status") == "rejected"){
             $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
@@ -431,9 +431,12 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
+        var site_vendor_id = $("#modal_site_vendor_id").val();
+        var program_id = $("#modal_program_id").val();
+
         // var sam_id = $("#details_sam_id").val();
         var sam_id = "{{ $site[0]->sam_id }}"
-        var program_id = "{{ $site[0]->program_id }}"
+        var filename = $("#hidden_filename").val();
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -441,13 +444,15 @@
         $(".confirmation_message small").text("");
 
         $.ajax({
-            url: "/doc-validation-approval-reviewer",
+            url: "/doc-validation-approval",
             method: "POST",
             data: {
                 action : data_action,
                 id : data_id,
                 reason : text_area_reason,
                 sam_id : sam_id,
+                filename : filename,
+                site_vendor_id : site_vendor_id,
                 program_id : program_id,
                 activity_id : activity_id,
                 site_category : site_category,
@@ -461,8 +466,6 @@
                     $(".approve_reject_doc_btns_final").text("Confirm");
 
                     $(".dropzone_div_"+sub_activity_id).attr("data-status", data_action);
-
-                    $(".button_area_div").addClass("d-none");
 
                     Swal.fire(
                         'Success',

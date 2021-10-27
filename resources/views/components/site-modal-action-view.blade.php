@@ -40,7 +40,8 @@
             $site[0]->activity_name == "Finalize Contract Approval" && $mainactivity == "" ||
 
             // $site[0]->activity_name == "Approved SSDS / SSDS NTP Validation" && $mainactivity == "" ||
-            $site[0]->activity_name == "Approved MOC/NTP RAM Validation"
+            $site[0]->activity_name == "Approved MOC/NTP RAM Validation" ||
+            $site[0]->activity_name == "Approval MS Lead"
             // $site[0]->activity_name == "Lease Contract Validation"
             
         )
