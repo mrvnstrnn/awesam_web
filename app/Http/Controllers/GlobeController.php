@@ -2749,9 +2749,9 @@ class GlobeController extends Controller
         } else if ($activity_type == 'all-site-issues') {
             $sites = \DB::connection('mysql2')
                             ->table("site_issue")
-                            ->leftjoin('site', 'site.sam_id', 'site_issue.sam_id')
+                            ->leftjoin('view_site', 'view_site.sam_id', 'view_site.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
-                            ->where('site.program_id', $program_id)
+                            ->where('view_site.program_id', $program_id)
                             ->whereNull('site_issue.date_resolve');
                             // if (\Auth::user()->profile_id == 2) {
                             //     $sites->where('site_issue.user_id', \Auth::id());
