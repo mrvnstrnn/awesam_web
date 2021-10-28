@@ -3740,6 +3740,7 @@ class GlobeController extends Controller
         }
     }
 
+
     public function add_issue(Request $request)
     {
         try {

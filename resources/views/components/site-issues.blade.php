@@ -92,6 +92,14 @@
                         <input type="text" class="form-control" name="issue" id="issue" disabled>
                     </div>
                 </div>
+                <div class="form-row mb-1">
+                    <div class="col-4">
+                        <label for="issue_callout" class="mr-sm-2">Issue</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" name="issue_callout" id="issue_callout" disabled>
+                    </div>
+                </div>
     
                 <div class="form-row mb-1">
                     <div class="col-4">

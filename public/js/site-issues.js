@@ -50,6 +50,34 @@
         $('#issue_table').addClass('d-none');
     });
 
+    $("#issue").on("change", function (){
+        if($(this).val() != ""){
+            $("select[name=issue_callout] option").remove();
+            $.ajax({
+                url: "/get-issue/"+$(this).val(),
+                method: "GET",
+                success: function (resp){
+                    if(!resp.error){
+
+                        $("select[name=issue_callout]").append(
+                            '<option value="">Please select issue.</option>'
+                        );
+
+                        resp.message.forEach(element => {
+                            $("select[name=issue_callout]").append(
+                                '<option value="'+element.issue_type_id+'">'+element.issue+'</option>'
+                            );
+                        });
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
+        }    });
+
     $("#issue_type").on("change", function (){
         if($(this).val() != ""){
             $("select[name=issue] option").remove();
