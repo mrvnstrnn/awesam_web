@@ -36,6 +36,15 @@
                     <small class="text-danger issue-error"></small>
                 </div>
             </div>
+            <div class="form-row mb-1">
+                <div class="col-4">
+                    <label for="issue_callout" class="mr-sm-2">Final Issue / Callout</label>
+                </div>
+                <div class="col-8">
+                    <select name="issue_callout" id="issue_callout" class="form-control"></select>
+                    <small class="text-danger issue-error"></small>
+                </div>
+            </div>
 
             <div class="form-row mb-1">
                 <div class="col-4">
