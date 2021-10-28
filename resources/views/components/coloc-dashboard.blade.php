@@ -142,7 +142,7 @@
         </div>
     </div>
 </div> --}}
-<div class="row">
+{{-- <div class="row">
     @php
         $sites = \DB::connection('mysql2')
                             ->table("view_newsites_jtss_schedule_requests")
@@ -152,7 +152,7 @@
     @endphp
 
     <input type="hidden" id="markers" value="{{ $sites->toJson() }}" />
-</div>
+</div> --}}
 
 
 <style type="text/css">

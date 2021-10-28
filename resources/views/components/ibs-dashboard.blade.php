@@ -212,11 +212,11 @@
                     <div class="widget-number">Milestones</div>
                 </a>
             </li>
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a data-toggle="tab" href="#tab-eg9-1" class="nav-link">
                     <div class="widget-number">Productivity</div>
                 </a>
-            </li> --}}
+            </li>
         </ul>
     </div>
     <div class="tab-content">
@@ -254,7 +254,7 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="tab-pane" id="tab-eg9-1" role="tabpanel">
+        <div class="tab-pane" id="tab-eg9-1" role="tabpanel">
             <div class="card-body">
                 <style>
                     .assigned-sites-table {
@@ -280,7 +280,8 @@
                     </tbody>
                 </table> 
             </div>
-        </div> --}}
+        </div>
+        
     </div>
 </div>
 
