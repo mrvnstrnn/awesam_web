@@ -79,6 +79,35 @@
         }
     });
 
+    $("#issue").on("change", function (){
+        if($(this).val() != ""){
+            $("select[name=issue_callout] option").remove();
+            $.ajax({
+                url: "/get-issue-callouts/"+$(this).val(),
+                method: "GET",
+                success: function (resp){
+                    if(!resp.error){
+
+                        $("select[name=issue_callout]").append(
+                            '<option value="">Please select callouts.</option>'
+                        );
+
+                        resp.message.forEach(element => {
+                            $("select[name=issue_callout]").append(
+                                '<option value="'+element.issue_type_id+'">'+element.issue_callout+'</option>'
+                            );
+                        });
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
+        }
+    });
+
     $(".add_issue").on("click", function (e){
         e.preventDefault();
         $(this).attr("disabled", "disabled");

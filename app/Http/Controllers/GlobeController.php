@@ -268,7 +268,7 @@ class GlobeController extends Controller
                     ]);
                 }
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ibs_lead" || $request->input('activity_name') == "precon_docs_approval_ms_lead" || $request->input('activity_name') == "precon_docs_approval_ibs_lead" || $request->input('activity_name') == "postcon_docs_approval_ms_lead" || $request->input('activity_name') == "postcon_docs_approval_ibs_lead") {
                 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
@@ -3731,6 +3731,16 @@ class GlobeController extends Controller
     }
 
     public function get_issue($issue_name)
+    {
+        try {
+            $issue_type = IssueType::where('issue_type', $issue_name)->get();
+            return response()->json(['error' => false, 'message' => $issue_type ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_issue_callouts($issue_name)
     {
         try {
             $issue_type = IssueType::where('issue_type', $issue_name)->get();
