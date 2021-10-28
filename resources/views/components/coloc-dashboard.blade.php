@@ -204,80 +204,80 @@
 </style>
 
 
-<div class="mb-3 card">
-    <div class="tabs-lg-alternate card-header">
-        <ul class="nav nav-justified">
-            <li class="nav-item">
-                <a data-toggle="tab" href="#tab-eg9-0" class="nav-link active">
-                    <div class="widget-number">Milestones</div>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="tab" href="#tab-eg9-1" class="nav-link">
-                    <div class="widget-number">Productivity</div>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab-eg9-0" role="tabpanel">
-            <div class="card-body">
-                <div class="row">
-                    
-                    @php
-                        $activities = \DB::table('view_COLOC_dashboard_temp')
-                                            ->get();
-                    @endphp           
+    <div class="mb-3 card">
+        <div class="tabs-lg-alternate card-header">
+            <ul class="nav nav-justified">
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#tab-eg9-0" class="nav-link active">
+                        <div class="widget-number">Milestones</div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#tab-eg9-1" class="nav-link">
+                        <div class="widget-number">Productivity</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-eg9-0" role="tabpanel">
+                <div class="card-body">
+                    <div class="row">
+                        
+                        @php
+                            $activities = \DB::table('view_COLOC_dashboard_temp')
+                                                ->get();
+                        @endphp           
 
-                    @foreach ($activities as $activity)                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="mb-3 card milestone_sites" data-activity_name="{{ $activity->activity_name}}" data-total="{{ $activity->counter}}" data-activity_id="{{ $activity->activity_id}}">
-                                <div class="p-3">
-                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-blue-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
-                                    <div class="text-center" style="min-height: 40px;">
-                                        <div class="text-muted text-uppercase" style="font-size:12px; overflow: hidden;">
-                                            {{ $activity->activity_name}}
+                        @foreach ($activities as $activity)                        
+                            <div class="col-md-6 col-lg-3">
+                                <div class="mb-3 card milestone_sites" data-activity_name="{{ $activity->activity_name}}" data-total="{{ $activity->counter}}" data-activity_id="{{ $activity->activity_id}}">
+                                    <div class="p-3">
+                                        <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.15; height: 100%; width:100%; background-image: url('/images/milestone-blue-2.jpeg');   background-repeat: no-repeat; background-size: 100%;"></div>
+                                        <div class="text-center" style="min-height: 40px;">
+                                            <div class="text-muted text-uppercase" style="font-size:12px; overflow: hidden;">
+                                                {{ $activity->activity_name}}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center" style="font-weight: bolder; font-size: 40px;">
-                                        {{ $activity->counter}}
+                                        <div class="text-center" style="font-weight: bolder; font-size: 40px;">
+                                            {{ $activity->counter}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab-eg9-1" role="tabpanel">
+                <div class="card-body">
+                    <style>
+                        .assigned-sites-table {
+                            cursor: pointer;
+                        }
+                    
+                        table {
+                            width: 100% !important;
+                        }
+                    </style> 
+                    <table id="dar-table" class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Vendor</th>
+                                <th>Supervisor</th>
+                                <th>Agent</th>
+                                <th>Site</th>
+                                <th>Activity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table> 
                 </div>
             </div>
         </div>
-        <div class="tab-pane" id="tab-eg9-1" role="tabpanel">
-            <div class="card-body">
-                <style>
-                    .assigned-sites-table {
-                        cursor: pointer;
-                    }
-                
-                    table {
-                        width: 100% !important;
-                    }
-                </style> 
-                <table id="dar-table" class="align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Vendor</th>
-                            <th>Supervisor</th>
-                            <th>Agent</th>
-                            <th>Site</th>
-                            <th>Activity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table> 
-            </div>
-        </div>
     </div>
-</div>
 
 
 
