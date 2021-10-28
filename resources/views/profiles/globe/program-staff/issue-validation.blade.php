@@ -93,58 +93,29 @@
                                     </form>
                                     <div class="row">
                                         <div class="col-12 text-right border-top pt-3 mt-3">
-                                            <button class="btn btn-shadow btn-lg btn-primary pull-right add_update">Accept Issue</button>
-                                            <button class="btn btn-shadow btn-lg mr-2 btn-danger pull-right add_update">Reject Issue</button>
+                                            <button class="btn btn-shadow btn-lg btn-primary pull-right accept_issue" type="button">Accept Issue</button>
+                                            <button class="btn btn-shadow btn-lg mr-2 btn-danger pull-right reject_issue" type="button">Reject Issue</button>
                                         </div>
                                     </div>
                                 </div>
 
-                                {{-- <div class="add_remarks_issue_form d-none">
-                                    <form class="mb-2 remarks_issue_form">
-                                        <input type="hidden" name="site_issue_id" id="site_issue_id">
-                                        <div class="form-row mb-1">
-                                            <div class="col-4">
-                                                <label for="status" class="mr-sm-2">Status</label>
+                                <div class="row reject_remarks d-none">
+                                    <div class="col-12">
+                                        <p class="message_p">Are you sure you want to reject this issue?</p>
+                                        <form class="reject_form">
+                                            <div class="form-group">
+                                                <label for="remarks">Remarks:</label>
+                                                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                                                <small class="text-danger remarks-error"></small>
                                             </div>
-                                            <div class="col-8">
-                                                <select name="status" id="status" class="form-control">
-                                                    <option value="active">Active</option>
-                                                    <option value="resolved">Resolved</option>
-                                                    <option value="cancelled">Cancel</option>
-                                                </select>
+                                            <div class="form-group">
+                                                <button class="btn btn-primary btn-sm btn-shadow confirm_reject" type="button">Confirm</button>
+                                                
+                                                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
                                             </div>
-                                        </div>
-                                        <div class="form-row mb-1">
-                                            <div class="col-4">
-                                                <label for="remarks" class="mr-sm-2">Remarks</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <textarea type="text" class="form-control" name="remarks" id="remarks"></textarea>
-                                                <small class="text-danger remarks-errors"></small>
-                                            </div>
-                                        </div>
-                            
-                                        <div class="form-row mb-1">
-                                            <div class="col-4">
-                                                <label for="date_engage" class="mr-sm-2">Date of Update</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <input type="date" class="form-control" name="date_engage" id="date_engage">
-                                                <small class="text-danger date_engage-errors"></small>
-                                            </div>
-                                        </div>
-                        
-                                        <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
-                                        <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
-                                    </form>
-                        
-                                    <br><hr><br>
+                                        </form>
+                                    </div>
                                 </div>
-                                <hr>
-                                <div class="table_div"></div>
-
-                                <button class="mt-1 btn btn-primary float-right resolve_issue" type="button">Resolve Issue</button>
-                                <button type="button" class="mt-1 btn btn-outline-danger mr-1 float-right" data-dismiss="modal">Close</button> --}}
                             </div>
                         </div>
                     </div>
@@ -172,15 +143,49 @@
 <script type="text/javascript" src="/js/modal-issue-validation.js"></script>  
 
 <script>
-     $("#btn_add_remarks").on("click", function(){
-        $(".add_remarks_issue_form").removeClass("d-none");
-        $(".issue_details_div").addClass("d-none");
-    });
 
-    $(".btn_cancel_remarks").on("click", function(){
-        $(".add_remarks_issue_form").addClass("d-none");
-        $(".issue_details_div").removeClass("d-none");
+    $(document).ready(function () {
+        $("#btn_add_remarks").on("click", function(){
+            $(".add_remarks_issue_form").removeClass("d-none");
+            $(".issue_details_div").addClass("d-none");
+        });
+
+        $(".btn_cancel_remarks").on("click", function(){
+            $(".add_remarks_issue_form").addClass("d-none");
+            $(".issue_details_div").removeClass("d-none");
+        });
+
+        $(".accept_issue").on("click", function(){
+            Swal.fire(
+                'Success',
+                "Successfully accepted issue.",
+                'success'
+            )
+
+            $("#viewIssueModal").modal("hide");
+        });
+
+        $(".reject_issue").on("click", function(){
+            $(".issue_details_div").addClass("d-none");
+            $(".reject_remarks").removeClass("d-none");
+        });
+
+        $(".cancel_reject").on("click", function(){
+            $(".issue_details_div").removeClass("d-none");
+            $(".reject_remarks").addClass("d-none");
+        });
+
+        $(".confirm_reject").on("click", function(){
+            Swal.fire(
+                'Success',
+                "Successfully rejected issue.",
+                'success'
+            )
+
+            $("#viewIssueModal").modal("hide");
+        });
     });
+    
 </script>
 
 @endsection
