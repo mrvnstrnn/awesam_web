@@ -14,6 +14,7 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
                 $(".update_issue_form input[name=hidden_issue_id]").val(resp.site.issue_id);
                 $(".remarks_issue_form #site_issue_id").val(resp.site.issue_id);
                 $(".update_issue_form input[name=issue]").val(resp.site.issue);
+                $(".update_issue_form input[name=issue_callout]").val(resp.site.issue_callout);
                 $(".update_issue_form input[name=start_date]").val(resp.site.start_date);
                 $(".update_issue_form input[name=issue_type]").val(resp.site.issue_type);
                 $(".update_issue_form textarea[name=issue_details]").text(resp.site.issue_details);
