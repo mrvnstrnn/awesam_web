@@ -175,6 +175,7 @@
 
                         $(".view_issue_form input[name=issue]").val(resp.message.issue);
                         $(".view_issue_form input[name=start_date]").val(resp.message.start_date);
+                        $(".view_issue_form input[name=issue_callout]").val(resp.message.issue_callout);
                         $(".view_issue_form input[name=issue_type]").val(resp.message.issue_type);
                         $(".view_issue_form textarea[name=issue_details]").text(resp.message.issue_details);
 

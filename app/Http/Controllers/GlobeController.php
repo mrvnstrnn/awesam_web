@@ -3765,7 +3765,8 @@ class GlobeController extends Controller
 
             if($validate->passes()){
                 $issue_type = Issue::create([
-                    'issue_type_id' => $request->input('issue'),
+                    // 'issue_type_id' => $request->input('issue'),
+                    'issue_type_id' => $request->input('issue_callout'),
                     'sam_id' => $request->input('hidden_sam_id'),
                     'start_date' => $request->input('start_date'),
                     'issue_details' => $request->input('issue_details'),
