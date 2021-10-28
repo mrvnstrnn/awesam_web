@@ -58,6 +58,11 @@
                 method: "GET",
                 success: function (resp){
                     if(!resp.error){
+
+                        $("select[name=issue]").append(
+                            '<option value="">Please select issue.</option>'
+                        );
+
                         resp.message.forEach(element => {
                             $("select[name=issue]").append(
                                 '<option value="'+element.issue_type_id+'">'+element.issue+'</option>'
