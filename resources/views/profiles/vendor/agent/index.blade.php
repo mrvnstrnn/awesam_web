@@ -138,17 +138,8 @@
                         
                         @php
 
-                            if(\Auth::user()->profile_id = 2){
-                                $activities = \DB::table('view_COLOC_dashboard_agent')
-                                                ->where('profile_id', \Auth::user()->profile_id)
+$activities = \DB::table('view_COLOC_dashboard_agent')
                                                 ->get();
-                                
-                            }
-                            else {
-                                $activities = \DB::table('view_COLOC_dashboard_temp')
-                                                ->get();
-
-                            }
                         @endphp           
     
                         @foreach ($activities as $activity)                        
