@@ -65,7 +65,7 @@
 
                         resp.message.forEach(element => {
                             $("select[name=issue]").append(
-                                '<option value="'+element.issue_type_id+'">'+element.issue+'</option>'
+                                '<option value="'+element.issue+'">'+element.issue+'</option>'
                             );
                         });
                     } else {

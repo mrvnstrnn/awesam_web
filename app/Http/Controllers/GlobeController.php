@@ -2749,7 +2749,7 @@ class GlobeController extends Controller
         } else if ($activity_type == 'all-site-issues') {
             $sites = \DB::connection('mysql2')
                             ->table("site_issue")
-                            ->leftjoin('view_site', 'view_site.sam_id', 'view_site.sam_id')
+                            ->leftjoin('view_site', 'view_site.sam_id', 'site_issue.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('site_issue.date_resolve');
@@ -3743,7 +3743,7 @@ class GlobeController extends Controller
     public function get_issue_callouts($issue_name)
     {
         try {
-            $issue_type = IssueType::where('issue_type', $issue_name)->get();
+            $issue_type = IssueType::where('issue', $issue_name)->get();
             return response()->json(['error' => false, 'message' => $issue_type ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
