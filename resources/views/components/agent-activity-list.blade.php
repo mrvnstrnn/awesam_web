@@ -177,7 +177,7 @@ $activities = \DB::connection('mysql2')
                     <div class="widget-content-right">
                         <div class="d-inline-block dropdown">
                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="border-0 btn-transition btn btn-link">
-                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v fa-lg"></i>
                             </button>
                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="position: absolute; transform: translate3d(-668px, 31px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
                                 <h6 tabindex="-1" class="dropdown-header">Activity Actions</h6>
