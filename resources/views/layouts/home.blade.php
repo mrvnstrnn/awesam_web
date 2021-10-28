@@ -146,7 +146,7 @@
                             $greeting = "Good Evening";
                         }
                         ?>
-                        <div class="app-page-title">
+                        <div class="app-page-title mb-5">
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading">
                                     <div>
