@@ -41,6 +41,7 @@
                             </div> 
                             <div class="modal-body">
                                 <div class="issue_details_div">
+                                    <H5 class="mb-3">Issue Details</H5>
                                     <form class="update_issue_form mb-2">
                                         <input type="hidden" name="hidden_issue_id" id="hidden_issue_id">
                                         <div class="form-row mb-1">
@@ -61,6 +62,16 @@
                                                 <small class="text-danger issue-error"></small>
                                             </div>
                                         </div>
+                                        <div class="form-row mb-1">
+                                            <div class="col-4">
+                                                <label for="issue" class="mr-sm-2">Final Issue / Callout</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input type="text" name="issue_callout" id="issue_callout" class="form-control" readonly>
+                                                <small class="text-danger issue-error"></small>
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-row mb-1">
                                             <div class="col-4">
@@ -89,13 +100,20 @@
                                             </div>
                                         </div> --}}
                                     </form>
-                                    <button class="btn btn-shadow btn-sm btn-primary pull-right add_update" type="button">Add Update</button>
-                                    <br>
-                                    <br>
-                                    <br>
+                                    <hr>
+                                    <H5 class="mb-4">Issue History</H5>
+                                    <div class="table_div"></div>
+                                    <div class="row">
+                                        <div class="col-12 text-right border-top pt-3">
+                                            {{-- <button type="button" class="mt-1 btn btn-outline-danger mr-1" data-dismiss="modal">Close</button> --}}
+                                            <button class="btn btn-success btn-lg resolve_issue" type="button">Resolve Issue</button>
+                                            <button class="btn btn-shadow btn-lg btn-primary add_update" type="button">Add Update</button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="add_remarks_issue_form d-none">
+                                    <H5 class="mb-3">Add Issue Update</H5>
                                     <form class="mb-2 remarks_issue_form">
                                         <input type="hidden" name="site_issue_id" id="site_issue_id">
                                         <div class="form-row mb-1">
@@ -130,19 +148,14 @@
                                             </div>
                                         </div>
                         
-                                        {{-- @if (\Auth::user()->profile_id == 2) --}}
-                                        <button class="btn btn-sm btn-primary add_btn_remarks_submit float-right" type="button">Add Update</button>
-                                        {{-- @endif --}}
-                                        <button class="btn btn-sm btn-secondary btn_cancel_remarks float-right mr-2" type="button">Cancel</button>
-                                    </form>
-                        
-                                    <br><hr><br>
+                                        <div class="row">
+                                            <div class="col-12 text-right border-top pt-3 mt-3">
+                                                <button class="btn btn-lg btn-secondary btn_cancel_remarks  mr-2" type="button">Cancel</button>
+                                                <button class="btn btn-lg btn-primary add_btn_remarks_submit " type="button">Save Update</button>
+                                            </div>
+                                        </div>
+                                    </form>                        
                                 </div>
-                                <hr>
-                                <div class="table_div"></div>
-
-                                <button class="mt-1 btn btn-primary float-right resolve_issue" type="button">Resolve Issue</button>
-                                <button type="button" class="mt-1 btn btn-outline-danger mr-1 float-right" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +171,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 9;
+    var profile_id = 10;
     var table_to_load = 'issue_validation';
     var main_activity = "Issue Validation";
     //////////////////////////////////////

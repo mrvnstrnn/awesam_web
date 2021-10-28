@@ -12,7 +12,7 @@
     </style>  
 
     {{-- <x-assigned-sites mode="vendor"/> --}}
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all-site-issues"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Management" activitytype="all-site-issues"/>
     {{-- <x-issue-validation-datatable ajaxdatatablesource="site-milestones" tableheader="Issue Validation" activitytype="all"/> --}}
 
 @endsection
@@ -61,15 +61,6 @@
                                                 <small class="text-danger issue-error"></small>
                                             </div>
                                         </div>
-                                        <div class="form-row mb-1">
-                                            <div class="col-4">
-                                                <label for="issue" class="mr-sm-2">Final Issue / Callout</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <input type="text" name="issue" id="issue_callout" class="form-control" readonly>
-                                                <small class="text-danger issue-error"></small>
-                                            </div>
-                                        </div>
 
                                         <div class="form-row mb-1">
                                             <div class="col-4">
@@ -98,7 +89,10 @@
                                             </div>
                                         </div> --}}
                                     </form>
-                                    <button class="btn btn-shadow btn-sm btn-primary add_update">Add Update</button>
+                                    <button class="btn btn-shadow btn-sm btn-primary pull-right add_update" type="button">Add Update</button>
+                                    <br>
+                                    <br>
+                                    <br>
                                 </div>
 
                                 <div class="add_remarks_issue_form d-none">
@@ -131,7 +125,7 @@
                                                 <label for="date_engage" class="mr-sm-2">Date of Update</label>
                                             </div>
                                             <div class="col-8">
-                                                <input type="date" class="form-control" name="date_engage" id="date_engage">
+                                                <input type="text" class="form-control" name="date_engage" id="date_engage" readonly>
                                                 <small class="text-danger date_engage-errors"></small>
                                             </div>
                                         </div>
@@ -164,7 +158,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 6;
+    var profile_id = 9;
     var table_to_load = 'issue_validation';
     var main_activity = "Issue Validation";
     //////////////////////////////////////
@@ -176,15 +170,93 @@
 <script type="text/javascript" src="/js/modal-issue-validation.js"></script>  
 
 <script>
-     $("#btn_add_remarks").on("click", function(){
-        $(".add_remarks_issue_form").removeClass("d-none");
-        $(".issue_details_div").addClass("d-none");
-    });
 
-    $(".btn_cancel_remarks").on("click", function(){
-        $(".add_remarks_issue_form").addClass("d-none");
-        $(".issue_details_div").removeClass("d-none");
-    });
+    $(document).ready(function () {
+        $(document).on("click", ".add_update", function(){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            $("#date_engage").val(today);
+
+            $(".add_remarks_issue_form").removeClass("d-none");
+            $(".issue_details_div").addClass("d-none");
+        });
+
+        $(document).on("click", ".btn_cancel_remarks", function(){
+            $(".add_remarks_issue_form").addClass("d-none");
+            $(".issue_details_div").removeClass("d-none");
+        });
+
+        $(".add_btn_remarks_submit").on("click", function(){
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            var site_issue_id = $("#site_issue_id").val();
+
+            $(".add_remarks_issue_form small").text();
+
+            $.ajax({
+                url: "/add-remarks",
+                method: "POST",
+                data: $(".remarks_issue_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if (!resp.error) {
+                        $("#table_issue_child_"+site_issue_id).DataTable().ajax.reload(function(){
+                            $(".remarks_issue_form")[0].reset();
+                            Swal.fire(
+                                'Success',
+                                resp.message,
+                                'success'
+                            )
+
+                            $(".add_btn_remarks_submit").removeAttr("disabled");
+                            $(".add_btn_remarks_submit").text("Add Update");
+
+                            $(".btn_cancel_remarks").trigger("click");
+                        });
+
+                        $(".my_table_issue").DataTable().ajax.reload();
+                        
+                    } else {
+                        
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                console.log(index);
+                                $(".add_remarks_issue_form ." + index + "-errors").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+
+                        $(".add_btn_remarks_submit").removeAttr("disabled");
+                        $(".add_btn_remarks_submit").text("Add Update");
+                    }
+                },
+                error: function(resp){
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'success'
+                    )
+
+                    $(".add_btn_remarks_submit").removeAttr("disabled");
+                    $(".add_btn_remarks_submit").text("Add Update");
+                }
+            });
+        });
+    })
 </script>
 
 @endsection
