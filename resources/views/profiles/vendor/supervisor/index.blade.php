@@ -142,7 +142,7 @@
                     
                     @php
 
-                            $activities = \DB::table('view_COLOC_dashboard_agent')
+                            $activities = \DB::table('view_COLOC_dashboard_supervisor')
                                             ->get();
                     @endphp           
 
