@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\ActivityController;
 
 
 
@@ -298,7 +299,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/doc-validation-approval', [GlobeController::class, 'doc_validation_approvals']);
     Route::post('/doc-validation-approval-reviewer', [GlobeController::class, 'doc_validation_approval_reviewer']);
 
-    Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
+    // Route::post('/get-all-docs', [GlobeController::class, 'get_all_docs'])->name('get_all_docs');
+    Route::post('/get-component', [ActivityController::class, 'get_component'])->name('get_component');
 
     Route::get('/doc-validation-approve-reject/{data_id}/{data_action}', [GlobeController::class, 'approve_reject_docs']);
 
