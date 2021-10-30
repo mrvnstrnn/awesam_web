@@ -2541,18 +2541,6 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'schedule jtss'){
-            // $sites = \DB::connection('mysql2')
-            //                     ->table("site")
-            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-            //                     ->where('site.program_id', $program_id)
-            //                     ->where('activities->activity_id', '11')
-            //                     ->where('activities->profile_id', '26')
-            //                     ->get();
-
             $sites = \DB::connection('mysql2')
                                 ->table("view_newsites_jtss_schedule_requests")
                                 ->get();

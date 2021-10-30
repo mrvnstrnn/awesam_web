@@ -15,7 +15,8 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
             var activity = $(this).attr('data-activity');
             var main_activity = $(this).attr('data-main_activity');
             var site = $(this).attr("data-site");
-
+            var type = $(this).parent().parent().attr("data-type");
+            
             var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
 
             // loader = "<img src='/images/awesam_med.png' />";
@@ -46,6 +47,7 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
                     site : site,
                     mode : table_to_load,
                     sam_id : sam_id,
+                    type : type,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

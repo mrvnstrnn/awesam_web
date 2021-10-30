@@ -1,3 +1,12 @@
+<style>
+    .modal-dialog{
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -moz-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        -o-box-shadow: 0 5px 15px rgba(0,0,0,0);
+        box-shadow: 0 5px 15px rgba(0,0,0,0);
+    }   
+</style>
+
 <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
@@ -23,8 +32,10 @@
 
                         <div class="modal-body">
                             <div class="row p-0">
-                                <div class="col-12">
-                                    <img src="{{ asset('images/construction.gif') }}" alt="">
+                                <div class="text-center col-12">
+                                    <img src="/images/construction.gif"/>
+                                    <H1 class="">Action Component Not Yet Configured</H1>
+                                    <button class="btn btn-lg mt-5 btn-shadow btn-primary" type="button">Move To Next Activity</button>
                                 </div>
                             </div>
                         </div>
