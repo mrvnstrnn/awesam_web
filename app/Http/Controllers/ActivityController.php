@@ -18,7 +18,7 @@ class ActivityController extends Controller
                                 ->where('sam_id', $request['sam_id'])
                                 ->get();
 
-                return \View::make('components.modal-view-site')
+                return \View::make('components.modal-info-site')
                             ->with([
                                 'site' => $site,
                                 'main_activity' => ''
