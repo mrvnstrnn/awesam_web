@@ -2348,7 +2348,7 @@ class GlobeController extends Controller
                 $sites = \DB::connection('mysql2')
                                 ->table("view_site")
                                 // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                                // ->where('view_sites_per_program.program_id', $program_id)
+                                ->where('view_site.program_id', $program_id)
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {

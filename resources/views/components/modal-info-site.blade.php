@@ -21,12 +21,7 @@
         font-size: 1.3em;
     }
     
-</style>    
-    
-    <input id="modal_sam_id" type="hidden" value="{{ $site[0]->sam_id }}">
-    <input id="modal_activity_name" type="hidden" value="{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}">
-    <input id="modal_site_vendor_id" type="hidden" value="{{ $site[0]->vendor_id }}">
-    <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
+</style>
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
@@ -77,8 +72,9 @@
                             <div class="card-body">
 
                                 @php
-                                $dynamicComponent = "site-modal-details-view";
+                                    $dynamicComponent = "site-modal-details-view";
                                 @endphp
+                                
                                 <x-dynamic-component :component="$dynamicComponent" :site="$site" :mainactivity="$main_activity" />
 
                             </div>

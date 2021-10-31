@@ -10,8 +10,24 @@ class ActivityController extends Controller
     public function get_component(Request $request)
     {
         try {
-            // return response()->json(['error' => true, 'message' => $request->all()]);
-            if ($request['type'] == 'mine_completed' || $request['type'] == 'unassigned sites' || $request['type'] == 'all' ) {
+            $get_current_act = \DB::connection('mysql2')
+                                ->table('view_site')
+                                ->select('program_id', 'site_category', 'activity_id')
+                                ->where('sam_id', $request['sam_id'])
+                                ->first();
+
+            $get_component = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
+                                ->select('activity_component')
+                                // ->where('profile_id', \Auth::id())
+                                ->where('stage_activities.category', $get_current_act->site_category)
+                                ->where('stage_activities.program_id', $get_current_act->program_id)
+                                ->where('stage_activities.activity_id', $get_current_act->activity_id)
+                                ->where('stage_activities_profiles.activity_source', $request->get('type'))
+                                ->first();
+
+            if ( is_null($get_component) ) {
                 $site = \DB::connection('mysql2')
                                 ->table('view_site')
                                 ->distinct()
@@ -19,38 +35,19 @@ class ActivityController extends Controller
                                 ->get();
 
                 return \View::make('components.modal-info-site')
-                            ->with([
-                                'site' => $site,
-                                'main_activity' => ''
-                            ])
-                            ->render();
+                        ->with([
+                            'site' => $site,
+                            'site_category' => $get_current_act->site_category,
+                            'main_activity' => '',
+                        ])
+                        ->render();
             } else {
-                $get_current_act = \DB::connection('mysql2')
-                                    ->table('view_site')
-                                    ->select('program_id', 'site_category', 'activity_id')
-                                    ->where('sam_id', $request['sam_id'])
-                                    ->first();
-    
-                $get_component = \DB::connection('mysql2')
-                                    ->table('stage_activities')
-                                    ->select('component_activity')
-                                    // ->where('profile_id', \Auth::id())
-                                    ->where('category', $get_current_act->site_category)
-                                    ->where('program_id', $get_current_act->program_id)
-                                    ->where('activity_id', $get_current_act->activity_id)
-                                    ->first();
-    
-                if ( is_null($get_component) ) {
-                    return \View::make('components.activity_error')
-                            ->render();
-                } else {
-                    return \View::make('components.' . $get_component->component_activity)
-                            ->with([
-                                'site' => $request['site'],
-                                'site_category' => $get_current_act->site_category,
-                            ])
-                            ->render();
-                }
+                return \View::make('components.' . $get_component->activity_component)
+                        ->with([
+                            'site' => $request['site'],
+                            'site_category' => $get_current_act->site_category,
+                        ])
+                        ->render();
             }
 
         } catch (\Throwable $th) {

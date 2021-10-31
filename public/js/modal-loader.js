@@ -45,7 +45,7 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
                 // },
                 data: {
                     site : site,
-                    mode : table_to_load,
+                    // mode : table_to_load,
                     sam_id : sam_id,
                     type : type,
                 },
