@@ -50,17 +50,17 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
+                                    <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="table-sm align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
                                             <tr>
                                                 <th width="150px">Category</th>
-                                                <th width="60px">ID</th>
-                                                <th width="60px">Profile</th>
+                                                <th width="80px">ID</th>
+                                                <th width="80px">Profile</th>
                                                 <th>Activity Name</th>
-                                                <th width="60px">SEQ</th>
-                                                <th width="60px">Next</th>
-                                                <th width="60px">Return</th>
-                                                <th width="60px">Days</th>
+                                                <th width="80px">SEQ</th>
+                                                <th width="80px">Next</th>
+                                                <th width="80px">Return</th>
+                                                <th width="80px">Days</th>
                                                 <th width="80px">Action</th>
                                             </tr>
                                         </thead>
@@ -71,8 +71,9 @@
                                         @endphp  
                                         <tbody>
                                             @foreach ($activities as $activity)
-                                            <form>
                                                 <tr data-stage_activity_id="{{$activity->id}}">
+                                                    <form>
+
                                                     <td><input type="text" class="form-control" value="{{ $activity->category }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->activity_id }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->profile_id }}" /></td>
@@ -82,6 +83,8 @@
                                                     <td><input type="text" class="form-control" value="{{ $activity->return_activity }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->activity_duration_days }}" /></td>
                                                     <td><input type="submit" class="form-control btn-primary" value="Save" /></td>
+                                                    
+                                                    </form>
                                                 </tr>
                                                 <tr class="border-bottom">                                                    
                                                     <td colspan="9">
@@ -91,7 +94,7 @@
                                                                                     ->get();
                                                         @endphp     
                                                         <div class="p-2 border">
-                                                            <table class="table table-sm">
+                                                            <table class="table table-xs">
                                                                 <thead>
                                                                     <th>Profile</th>
                                                                     <th>Activity Component</th>
@@ -101,24 +104,27 @@
                                                                 <tbody>
                                                                     @foreach ($activity_profiles as $activity_profile)                                                                
                                                                     <tr>
+                                                                        <form>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" /></td>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" /></td>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" /></td>
                                                                         <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
+                                                                        </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
+                                                                        <form>
                                                                         <td><input type="text" class="form-control" value="" /></td>
                                                                         <td><input type="text" class="form-control" value="" /></td>
                                                                         <td><input type="text" class="form-control" value="" /></td>
                                                                         <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                        </form>
                                                                     </tr>                                                                    
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            </form>
                                             @endforeach
                                         </tbody>
                                     </table>
