@@ -122,6 +122,7 @@ $('.show_activity_modal').on( 'click', function (e) {
     var activity_id = $(this).attr('data-activity_id')
     var site = $(this).attr("data-site");
     var main_activity = main_activity;
+    var activity_source = $(this).attr('data-activity_source');
 
     loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
     $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
@@ -132,17 +133,9 @@ $('.show_activity_modal').on( 'click', function (e) {
     $.ajax({
         url: "/get-component",
         method: "POST",
-        // data: {
-        //     site : site,
-        //     activity : activity,
-        //     activity_id : activity_id,
-        //     main_activity : main_activity,
-        //     sam_id : sam_id,
-        //     vendor_mode : true
-        // },
         data: {
             sam_id : sam_id,
-            activity_source : "my-activities",
+            activity_source : activity_source,
         },
 
         headers: {
@@ -174,61 +167,54 @@ $('.show_activity_modal').on( 'click', function (e) {
 });
 
 
-$('.set_workplan_activity').on( 'click', function (e) {
+// $('.set_workplan_activity').on( 'click', function (e) {
 
-    e.preventDefault();
+//     e.preventDefault();
 
-    var sam_id = $(this).attr('data-sam_id');
-    var activity = $(this).attr('data-activity')
-    var activity_id = $(this).attr('data-activity_id')
-    var site = $(this).attr("data-site");
-    var main_activity = "Work Plan"
+//     var sam_id = $(this).attr('data-sam_id');
+//     var activity = $(this).attr('data-activity')
+//     var activity_id = $(this).attr('data-activity_id')
+//     var site = $(this).attr("data-site");
+//     var main_activity = "Work Plan"
     
-    // loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
-
-    // $.blockUI({ message: loader });
-    loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
-    $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
+//     loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
+//     $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
 
 
-    $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
-    $(".ajax_content_box").attr("data-activity", $(this).attr('data-activity'));
+//     $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
+//     $(".ajax_content_box").attr("data-activity", $(this).attr('data-activity'));
 
-    $.ajax({
-        url: "/get-all-docs",
-        method: "POST",
-        data: {
-            site : site,
-            activity : activity,
-            activity_id : activity_id,
-            main_activity : main_activity,
-            sam_id : sam_id,
-            vendor_mode : true
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        beforeSend: function() {
-            },
+//     $.ajax({
+//         url: "/get-component",
+//         method: "POST",
+//         data: {
+//             sam_id : sam_id,
+//             activity_source : "my-activity-workplan",
+//         },
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         },
+//         beforeSend: function() {
+//             },
 
-        success: function (resp){
-            $('.ajax_content_box').html("");   
-            $('.ajax_content_box').html(resp);   
+//         success: function (resp){
+//             $('.ajax_content_box').html("");   
+//             $('.ajax_content_box').html(resp);   
 
-            $.unblockUI();
-            $('#viewInfoModal').modal('show');
+//             $.unblockUI();
+//             $('#viewInfoModal').modal('show');
 
 
-        },
-        complete: function(){
-            // $('#loader_modal').modal('hide');
-            // $('.modal-backdrop').hide();
-        },
-        error: function (resp){
-            toastr.error(resp.message, "Error");
-        }
-    });
+//         },
+//         complete: function(){
+//             // $('#loader_modal').modal('hide');
+//             // $('.modal-backdrop').hide();
+//         },
+//         error: function (resp){
+//             toastr.error(resp.message, "Error");
+//         }
+//     });
 
 
 
-});
+// });
