@@ -71,18 +71,18 @@
                                         @endphp  
                                         <tbody>
                                             @foreach ($activities as $activity)
-                                                <tr data-stage_activity_id="{{$activity->id}}">
-                                                    <form>
-
-                                                    <td><input type="text" class="form-control" value="{{ $activity->category }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_id }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->profile_id }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_name }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_sequence }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->next_activity }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->return_activity }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_duration_days }}" /></td>
-                                                    <td><input type="submit" class="form-control btn-primary" value="Save" /></td>
+                                                <tr class="bg-dark"  data-stage_activity_id="{{$activity->id}}">
+                                                    <form class="stage_activity_update">                                                                        
+                                                        
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_id }}"  name="activity_id" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->profile_id }}"  name="profile_id" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_name }}"  name="activity_name" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_sequence }}"  name="activity_sequence" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->next_activity }}"  name="next_activity" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->return_activity }}"  name="return_activity" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_duration_days }}"  name="activity_duration_days" /></td>
+                                                        <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
                                                     
                                                     </form>
                                                 </tr>
@@ -104,20 +104,22 @@
                                                                 <tbody>
                                                                     @foreach ($activity_profiles as $activity_profile)                                                                
                                                                     <tr>
-                                                                        <form>
-                                                                        <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
-                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" /></td>
-                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" /></td>
-                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" /></td>
+                                                                        <form class="stage_activity_profile_update">     
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
+                                                                            <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
+                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" name="profile_id" /></td>
+                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" name="activity_component"/></td>
+                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" name="activity_source"/></td>
                                                                         </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
-                                                                        <form>
-                                                                        <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <form class="stage_activity_profile_add">
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
+                                                                            <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                            <td><input type="text" class="form-control" value=""  name="profile_id" /></td>
+                                                                            <td><input type="text" class="form-control" value=""  name="activity_component"/></td>
+                                                                            <td><input type="text" class="form-control" value="" name="activity_source"/></td>
                                                                         </form>
                                                                     </tr>                                                                    
                                                                 </tbody>
