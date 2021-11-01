@@ -36,7 +36,13 @@
                                     <img src="/images/construction.gif"/>
                                     <H1 class="">Action Component Not Yet Configured</H1>
                                     <h5>{{$activity_source}}</h5>
-                                    <button class="btn btn-lg mt-5 btn-shadow btn-primary" type="button">Move To Next Activity</button>
+                                    <button class="btn btn-lg mt-5 mb-5 btn-shadow btn-primary" type="button">Move To Next Activity</button>
+                                    <div class="border-top text-left pt-3">
+                                    <H5>Debugging</H5>
+                                    @php
+                                        dd($site);
+                                    @endphp
+                                    </div>
                                 </div>
                             </div>
                         </div>
