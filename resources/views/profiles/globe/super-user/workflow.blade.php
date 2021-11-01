@@ -62,6 +62,8 @@
                                             <th width="80px">Next</th>
                                             <th width="80px">Return</th>
                                             <th width="80px">Days</th>
+                                            <th>Type</th>
+                                            <th>SubType</th>
                                             <th width="80px">Action</th>
                                         </tr>
                                     </thead>
@@ -78,6 +80,8 @@
                                                 <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="next_activity" /></td>
                                                 <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="return_activity" /></td>
                                                 <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_duration_days" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_type" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="subactivities_type" /></td>
                                                 <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
                                             </form>
                                         </tr>
@@ -96,12 +100,15 @@
                                                 <th width="80px">Next</th>
                                                 <th width="80px">Return</th>
                                                 <th width="80px">Days</th>
+                                                <th>Type</th>
+                                                <th>SubType</th>
                                                 <th width="80px">Action</th>
                                             </tr>
                                         </thead>
                                         @php
                                             $activities = \DB::table('stage_activities')
                                                         ->where('program_id', ($program->program_id))
+                                                        ->orderBy('activity_id', 'asc')
                                                         ->get();
                                         @endphp  
                                         <tbody>
@@ -118,12 +125,14 @@
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->next_activity }}"  name="next_activity" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->return_activity }}"  name="return_activity" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_duration_days }}"  name="activity_duration_days" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_type }}"  name="activity_type" /></td>
+                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->subactivities_type }}"  name="subactivities_type" /></td>
                                                         <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
                                                     
                                                     </form>
                                                 </tr>
                                                 <tr class="border-bottom">                                                    
-                                                    <td colspan="9">
+                                                    <td colspan="11">
                                                         @php
                                                             $activity_profiles = \DB::table('stage_activities_profiles')
                                                                                     ->where('stage_activity_id', $activity->id)
