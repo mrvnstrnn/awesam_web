@@ -16,16 +16,18 @@ class ActivityController extends Controller
                                 ->where('sam_id', $request['sam_id'])
                                 ->first();
 
+            // return dd($get_current_act);
+
             $get_component = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
                                 ->select('activity_component')
-                                // ->where('profile_id', \Auth::id())
                                 ->where('stage_activities.category', $get_current_act->site_category)
                                 ->where('stage_activities.program_id', $get_current_act->program_id)
                                 ->where('stage_activities.activity_id', $get_current_act->activity_id)
-                                ->where('stage_activities_profiles.activity_source', $request->get('type'))
+                                ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                 ->first();
+
 
                                 
             $site = \DB::connection('mysql2')
@@ -45,6 +47,7 @@ class ActivityController extends Controller
                 return \View::make('components.' . $get_component->activity_component)
                         ->with([
                             'site' => $site,
+                            'activity_source' => $request->get('activity_source'),
                             'main_activity' => '',
                         ])
                         ->render();

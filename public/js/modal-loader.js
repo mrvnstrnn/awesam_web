@@ -19,15 +19,6 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
             
             var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
 
-            // loader = "<img src='/images/awesam_med.png' />";
-            // $.blockUI({ 
-            //     message: loader,  
-            //     css: {
-            //         backgroundColor: 'transparent',
-            //         border: '0',
-            //         width: '300px',
-            //     }
-            // });
 
             $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -64,8 +55,6 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
 
                 },
                 complete: function(){
-                    // $('#loader_modal').modal('hide');
-                    // $('.modal-backdrop').hide();
                 },
                 error: function (resp){
                     toastr.error(resp.message, "Error");
@@ -83,9 +72,6 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
             var activity = $(this).attr('data-activity');
             var all = $(this).attr('data-site_all');
             var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
-
-            // loader = "<img src='/images/awesam_loader.png' width='200px;'/>";
-            // $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
 
 
             $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
@@ -116,18 +102,11 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
                     },
                     complete: function(){
 
-                        // $('#loader_modal').modal('hide');
-                        // $('.modal-backdrop').hide();
                     },
                     error: function (resp){
                         toastr.error(resp.message, "Error");
                     }
                 });
-
-
-
-
-            
 
         }
     } 
@@ -147,31 +126,25 @@ $('.show_activity_modal').on( 'click', function (e) {
     loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
     $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
 
-    // var loader =  '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
-    // '<div class="loader">' +
-    //  '<div class="ball-scale-multiple">' +
-    //    '<div></div>' +
-    //    '<div></div>' +
-    //    '<div></div>' +
-    //  '</div>' +
-    // '</div>' +
-    // '</div>';
-    // $.blockUI({ message: loader, backgroundColor: "transparent" });
-
     $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
     $(".ajax_content_box").attr("data-activity", $(this).attr('data-activity'));
 
     $.ajax({
-        url: "/get-all-docs",
+        url: "/get-component",
         method: "POST",
+        // data: {
+        //     site : site,
+        //     activity : activity,
+        //     activity_id : activity_id,
+        //     main_activity : main_activity,
+        //     sam_id : sam_id,
+        //     vendor_mode : true
+        // },
         data: {
-            site : site,
-            activity : activity,
-            activity_id : activity_id,
-            main_activity : main_activity,
             sam_id : sam_id,
-            vendor_mode : true
+            activity_source : "my-activities",
         },
+
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

@@ -152,11 +152,6 @@ $activities = \DB::connection('mysql2')
                         <div class="siteName">
                             {{ $activities[$i]->site_name }}
                         </div>
-                        {{-- <div class="mt-1">
-                            <i class="lnr-calendar-full"></i>
-                            <i>{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }} to {{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}</i>
-                            <div class="badge badge-{{ $activity_color }} ml-2" style="font-size: 9px !important;">{{ $activity_badge }}</div>
-                        </div> --}}
                         <div class="mt-1" style="font-size: 12px;">
                             SAM ID: {{ $activities[$i]->sam_id }}
                         </div>
@@ -193,78 +188,3 @@ $activities = \DB::connection('mysql2')
 @endfor
 
 <script src="js/modal-loader.js"></script>
-<script>
-    // $.ajax({
-    //     url: "/get-agent-activity-timeline",
-    //     method: "GET",
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     },
-    //     success: function (resp){
-
-    //         console.log(resp.message);
-            
-
-    //         $.each(resp.message, function(){
-
-    //             start_date = new Date(this.start_date);
-    //             end_date = new Date(this.end_date);
-    //             date_today = new Date();
-
-    //             var what_color = "dark";
-    //             var what_badge = "Upcoming";
-
-    //             if(start_date < date_today){
-    //                 what_color = "danger";
-    //                 what_badge = "Delayed";
-    //             } 
-    //             else if(start_date >= date_today || end_date >= date_today){
-    //                 what_color = "success";
-    //                 what_badge = "On Schedule";
-    //             } 
-    //             else {
-    //                 what_color = "warning";
-    //                 what_badge = "Upcoming";
-    //             }
-
-
-    //             var m = moment(this.activity_created); 
-    //             var today = moment().startOf('day');
-
-    //             var days = Math.round(moment.duration(today - m).asDays());
-
-    //             if(days == 0){
-    //                 dayTxt = 'Today';
-    //             } 
-    //             else if(days == 1) {
-    //                 dayTxt = days + ' Day';
-    //             } else {
-    //                 dayTxt = days + ' Days';
-    //             }
-
-    //             $('#from-to-' + this.sam_id).html(
-    //                 '<div>Forecast: ' + this.start_date + ' to ' + this.end_date + '</div>' +
-    //                 '<div>Started: ' + this.activity_created + '</div>' +
-    //                 '<div>Aging: ' + dayTxt + '</div>'
-    //             );
-
-    //             $('#from-to-badge-' + this.sam_id).text(what_badge);
-    //             $('#from-to-badge-' + this.sam_id).text(what_badge).removeClass('badge-dark');
-    //             $('#from-to-badge-' + this.sam_id).text(what_badge).addClass('badge-' + what_color);
-
-    //             $('#to-do-indicator-' + this.sam_id).removeClass('bg-dark');
-    //             $('#to-do-indicator-' + this.sam_id).addClass('bg-' + what_color);
-
-
-    //             $('#started-' + this.sam_id).text(this.activity_created + ' | Aging: ');
-    //         })
-        
-
-    //     },
-    //     complete: function(){
-    //     },
-    //     error: function (resp){
-    //         toastr.error(resp.message, "Error");
-    //     }
-    // });    
-</script>
