@@ -41,7 +41,6 @@
             @endif
                 @if($program->program_id == 3)
 
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
@@ -52,6 +51,38 @@
                                 </div>      
                             </div>
                             <div class="card-body">
+                                <table class="table table-borderless table-striped table-hover new-endorsement-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="150px">Category</th>
+                                            <th width="80px">ID</th>
+                                            <th width="80px">Profile</th>
+                                            <th>Activity Name</th>
+                                            <th width="80px">SEQ</th>
+                                            <th width="80px">Next</th>
+                                            <th width="80px">Return</th>
+                                            <th width="80px">Days</th>
+                                            <th width="80px">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-dark">
+                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">  
+                                                <input type="hidden" class="form-control" name="program_id" value="{{ $program->program_id }}">
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="category" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_id" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="profile_id" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_name" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_sequence" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="next_activity" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="return_activity" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_duration_days" /></td>
+                                                <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
+                                            </form>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr>
                                 <div class="table-responsive">
                                     <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="table-sm align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
@@ -74,9 +105,10 @@
                                         @endphp  
                                         <tbody>
                                             @foreach ($activities as $activity)
-                                                <tr class="bg-dark"  data-stage_activity_id="{{$activity->id}}">
-                                                    <form class="stage_activity_update">                                                                        
-                                                        
+                                                <tr class="bg-dark" data-stage_activity_id="{{$activity->id}}">
+                                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">                                                                        
+                                                        <input type="hidden" class="form-control" name="id" value="{{ $activity->id }}">
+                                                        <input type="hidden" class="form-control" name="program_id" value="{{ $activity->program_id }}">
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_id }}"  name="activity_id" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->profile_id }}"  name="profile_id" /></td>
@@ -107,8 +139,9 @@
                                                                 <tbody>
                                                                     @foreach ($activity_profiles as $activity_profile)                                                                
                                                                     <tr>
-                                                                        <form class="stage_activity_profile_update">     
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
+                                                                        <form class="stage_activity_profile_update" action="{{ route('save_stage_activities_profiles') }}">     
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">   
+                                                                            <input type="hidden" value="{{$activity_profile->id}}" name="id">                                                                                         
                                                                             <td>
                                                                                 <input type="submit" class="btn-secondary btn-sm form-control" value="Update" />
                                                                             </td>
@@ -127,12 +160,14 @@
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
-                                                                        <form class="stage_activity_profile_add">
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
-                                                                            <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}">                            
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                               
                                                                             <td>
-                                                                                <select class="form-control">
-                                                                                    <option value="" selected>Select Profile</option>
+                                                                                <input type="submit" class="btn-primary btn-sm form-control" value="Add" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control" name="profile_id">
+                                                                                    <option value="">Select Profile</option>
                                                                                     @foreach($profiles as $profile)
                                                                                         <option value="{{ $profile->id }}">{{ $profile->profile }}</option>
                                                                                     @endforeach
@@ -161,32 +196,43 @@
     </div>
 @endsection
 
-@section('js_script')
-    {{-- <script src="{{ asset('js/super-user.js') }}"></script> --}}
+@section('js_scripts')
+{{-- <script>
+    $(document).on('ready', function () {
+        $(document).on("click", ".btn-primary.save_btn", function (e) {
+            e.preventDefault();
+
+            console.log("test");
+            var id = $(this).attr("id");
+
+            $.ajax({
+                url: "/save-stage-activities-profiles",
+                method: "POST",
+                data: $("#stage_activity_profile_add"+id).serialize(),
+                success: function (resp) {
+                    if (!resp.error) {
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
+        });
+    });
+</script> --}}
 @endsection
-
-{{-- @section('modals')
-
-    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-@endsection --}}
