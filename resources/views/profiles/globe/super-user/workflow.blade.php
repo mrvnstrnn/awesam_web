@@ -14,9 +14,10 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            // $programs = App\Models\VendorProgram::orderBy('vendor_program')->get();
             $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
-            // dd($programs);
+
+            $profiles = \DB::table('profiles')->get();
+
         @endphp
 
         @foreach ($programs as $program)
@@ -39,6 +40,8 @@
             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
             @endif
                 @if($program->program_id == 3)
+
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
@@ -106,8 +109,18 @@
                                                                     <tr>
                                                                         <form class="stage_activity_profile_update">     
                                                                             <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
-                                                                            <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
-                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" name="profile_id" /></td>
+                                                                            <td>
+                                                                                <input type="submit" class="btn-secondary btn-sm form-control" value="Update" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option value="">Select Profile</option>
+                                                                                    @foreach($profiles as $profile)
+                                                                                        <option value="{{ $profile->id }}" {{ ( $profile->id == $activity_profile->profile_id) ? "selected" : ""}} >{{ $profile->profile }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                {{-- <input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" name="profile_id" /> --}}
+                                                                            </td>
                                                                             <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" name="activity_component"/></td>
                                                                             <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" name="activity_source"/></td>
                                                                         </form>
@@ -117,7 +130,14 @@
                                                                         <form class="stage_activity_profile_add">
                                                                             <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
                                                                             <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
-                                                                            <td><input type="text" class="form-control" value=""  name="profile_id" /></td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option value="" selected>Select Profile</option>
+                                                                                    @foreach($profiles as $profile)
+                                                                                        <option value="{{ $profile->id }}">{{ $profile->profile }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </td>
                                                                             <td><input type="text" class="form-control" value=""  name="activity_component"/></td>
                                                                             <td><input type="text" class="form-control" value="" name="activity_source"/></td>
                                                                         </form>
