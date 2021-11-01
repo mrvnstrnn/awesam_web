@@ -37,7 +37,7 @@ class ActivityController extends Controller
                     
             if ( is_null($get_component) ) {
 
-                return \View::make('components.modal-info-site')
+                return \View::make('components.activity-error')
                         ->with([
                             'site' => $site,
                             'main_activity' => '',
