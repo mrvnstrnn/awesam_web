@@ -107,8 +107,9 @@
                                                                 <tbody>
                                                                     @foreach ($activity_profiles as $activity_profile)                                                                
                                                                     <tr>
-                                                                        <form class="stage_activity_profile_update">     
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
+                                                                        <form class="stage_activity_profile_update" action="{{ route('save_stage_activities_profiles') }}">     
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">   
+                                                                            <input type="hidden" value="{{$activity_profile->id}}" name="id">                                                                                         
                                                                             <td>
                                                                                 <input type="submit" class="btn-secondary btn-sm form-control" value="Update" />
                                                                             </td>
@@ -127,12 +128,14 @@
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
-                                                                        <form class="stage_activity_profile_add">
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                                   
-                                                                            <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}">                            
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                               
                                                                             <td>
-                                                                                <select class="form-control">
-                                                                                    <option value="" selected>Select Profile</option>
+                                                                                <input type="submit" class="btn-primary btn-sm form-control" value="Add" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control" name="profile_id">
+                                                                                    <option value="">Select Profile</option>
                                                                                     @foreach($profiles as $profile)
                                                                                         <option value="{{ $profile->id }}">{{ $profile->profile }}</option>
                                                                                     @endforeach
@@ -161,32 +164,43 @@
     </div>
 @endsection
 
-@section('js_script')
-    {{-- <script src="{{ asset('js/super-user.js') }}"></script> --}}
+@section('js_scripts')
+{{-- <script>
+    $(document).on('ready', function () {
+        $(document).on("click", ".btn-primary.save_btn", function (e) {
+            e.preventDefault();
+
+            console.log("test");
+            var id = $(this).attr("id");
+
+            $.ajax({
+                url: "/save-stage-activities-profiles",
+                method: "POST",
+                data: $("#stage_activity_profile_add"+id).serialize(),
+                success: function (resp) {
+                    if (!resp.error) {
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
+        });
+    });
+</script> --}}
 @endsection
-
-{{-- @section('modals')
-
-    <div class="modal fade" id="modal-endorsement" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="form-row content-data">
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn btn-outline-danger btn-accept-endorsement" data-complete="false" id="" data-href="{{ route('accept-reject.endorsement') }}">Reject</button>
-                    <button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="" data-href="{{ route('accept-reject.endorsement') }}">Accept Endorsement</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-@endsection --}}

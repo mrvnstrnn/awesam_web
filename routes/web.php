@@ -448,6 +448,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
          
     Route::get('/get-dar-dashboard/{program_id}', [GlobeController::class, 'get_DAR_dashboard']);
 
+    // Activities
+    Route::any('/save-stage-activities-profiles', [ActivityController::class, 'save_stage_activities_profiles'])->name('save_stage_activities_profiles');
+
 });
     
 
