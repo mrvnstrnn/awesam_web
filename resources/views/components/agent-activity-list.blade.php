@@ -147,7 +147,11 @@ $activities = \DB::connection('mysql2')
                     </div>
                     <div class="widget-content-left  pl-2 show_activity_modal"  data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_source="my-activities" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}" style="cursor: pointer;">
                         <div class="">
-                            {{ $activities[$i]->activity_name }} <span class="ml-1 px-2 py-1 badge badge-secondary"><small>{{ $activities[$i]->site_category }}</small></span>
+                            @if($activities[$i]->site_category != null && $activities[$i]->site_category != 'none')
+                                {{ $activities[$i]->activity_name }} <span class="ml-1 px-2 py-1 badge badge-secondary"><small>{{ $activities[$i]->site_category }}</small></span>
+                            @else
+                                {{ $activities[$i]->activity_name }}
+                            @endif
                         </div>
                         <div class="siteName">
                             {{ $activities[$i]->site_name }}
@@ -177,7 +181,8 @@ $activities = \DB::connection('mysql2')
                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="position: absolute; transform: translate3d(-668px, 31px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
                                 <h6 tabindex="-1" class="dropdown-header">Activity Actions</h6>
                                 <div tabindex="-1" class="dropdown-divider"></div>
-                                <a tabindex="0" class="dropdown-item show_activity_modal"   data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_source = "my-activity-workplan" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}">Set Work Plan</a>
+                                <a tabindex="0" class="dropdown-item show_activity_modal"   data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_source = "my-activities-workplan" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}">Set Work Plan</a>
+                                <a tabindex="0" class="dropdown-item show_activity_modal"   data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_source = "my-activities-engagement" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}">Add Engagement</a>
                             </div>
                         </div>                        
                     </div>
