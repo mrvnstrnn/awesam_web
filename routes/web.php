@@ -450,6 +450,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Activities
     Route::any('/save-stage-activities-profiles', [ActivityController::class, 'save_stage_activities_profiles'])->name('save_stage_activities_profiles');
+    Route::any('/save-stage-activities', [ActivityController::class, 'save_stage_activities'])->name('save_stage_activities');
 
 });
     

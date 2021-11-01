@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Log;
 use App\Models\StageActivitiesProfile;
+use App\Models\StageActivities;
 
 class ActivityController extends Controller
 {
@@ -65,6 +66,20 @@ class ActivityController extends Controller
     {
         try {
             StageActivitiesProfile::updateOrCreate([
+                'id'   => $request->get('id'),
+            ], $request->all());
+
+            return redirect('/workflow');
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_stage_activities (Request $request) 
+    {
+        try {
+            StageActivities::updateOrCreate([
                 'id'   => $request->get('id'),
             ], $request->all());
 

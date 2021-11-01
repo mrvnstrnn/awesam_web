@@ -41,7 +41,6 @@
             @endif
                 @if($program->program_id == 3)
 
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
@@ -52,6 +51,38 @@
                                 </div>      
                             </div>
                             <div class="card-body">
+                                <table class="table table-borderless table-striped table-hover new-endorsement-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="150px">Category</th>
+                                            <th width="80px">ID</th>
+                                            <th width="80px">Profile</th>
+                                            <th>Activity Name</th>
+                                            <th width="80px">SEQ</th>
+                                            <th width="80px">Next</th>
+                                            <th width="80px">Return</th>
+                                            <th width="80px">Days</th>
+                                            <th width="80px">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-dark">
+                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">  
+                                                <input type="hidden" class="form-control" name="program_id" value="{{ $program->program_id }}">
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="category" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_id" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="profile_id" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_name" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_sequence" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="next_activity" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="return_activity" /></td>
+                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_duration_days" /></td>
+                                                <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
+                                            </form>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr>
                                 <div class="table-responsive">
                                     <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="table-sm align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
@@ -74,9 +105,10 @@
                                         @endphp  
                                         <tbody>
                                             @foreach ($activities as $activity)
-                                                <tr class="bg-dark"  data-stage_activity_id="{{$activity->id}}">
-                                                    <form class="stage_activity_update">                                                                        
-                                                        
+                                                <tr class="bg-dark" data-stage_activity_id="{{$activity->id}}">
+                                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">                                                                        
+                                                        <input type="hidden" class="form-control" name="id" value="{{ $activity->id }}">
+                                                        <input type="hidden" class="form-control" name="program_id" value="{{ $activity->program_id }}">
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_id }}"  name="activity_id" /></td>
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->profile_id }}"  name="profile_id" /></td>
