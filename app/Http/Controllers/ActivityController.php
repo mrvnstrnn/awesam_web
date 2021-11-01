@@ -27,25 +27,25 @@ class ActivityController extends Controller
                                 ->where('stage_activities_profiles.activity_source', $request->get('type'))
                                 ->first();
 
+                                
+            $site = \DB::connection('mysql2')
+                        ->table('view_site')
+                        ->where('sam_id', $request['sam_id'])
+                        ->get();
+                    
             if ( is_null($get_component) ) {
-                $site = \DB::connection('mysql2')
-                                ->table('view_site')
-                                ->distinct()
-                                ->where('sam_id', $request['sam_id'])
-                                ->get();
 
                 return \View::make('components.modal-info-site')
                         ->with([
                             'site' => $site,
-                            'site_category' => $get_current_act->site_category,
                             'main_activity' => '',
                         ])
                         ->render();
             } else {
                 return \View::make('components.' . $get_component->activity_component)
                         ->with([
-                            'site' => $request['site'],
-                            'site_category' => $get_current_act->site_category,
+                            'site' => $site,
+                            'main_activity' => '',
                         ])
                         ->render();
             }
