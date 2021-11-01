@@ -38,7 +38,7 @@
             @else
             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
             @endif
-
+                @if($program->program_id == 3)
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
@@ -55,8 +55,9 @@
                                             <tr>
                                                 <th width="150px">Category</th>
                                                 <th width="60px">ID</th>
-                                                <th width="60px">SEQ</th>
+                                                <th width="60px">Profile</th>
                                                 <th>Activity Name</th>
+                                                <th width="60px">SEQ</th>
                                                 <th width="60px">Next</th>
                                                 <th width="60px">Return</th>
                                                 <th width="60px">Days</th>
@@ -71,20 +72,53 @@
                                         <tbody>
                                             @foreach ($activities as $activity)
                                             <form>
-                                                <tr>
+                                                <tr data-stage_activity_id="{{$activity->id}}">
                                                     <td><input type="text" class="form-control" value="{{ $activity->category }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->activity_id }}" /></td>
-                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_sequence }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->profile_id }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->activity_name }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_sequence }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->next_activity }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->return_activity }}" /></td>
                                                     <td><input type="text" class="form-control" value="{{ $activity->activity_duration_days }}" /></td>
                                                     <td><input type="submit" class="form-control btn-primary" value="Save" /></td>
                                                 </tr>
-                                                <tr class="border-bottom">
-                                                    <td colspan="8">DITO ANG DATATABLE</td>
+                                                <tr class="border-bottom">                                                    
+                                                    <td colspan="9">
+                                                        @php
+                                                            $activity_profiles = \DB::table('stage_activities_profiles')
+                                                                                    ->where('stage_activity_id', $activity->id)
+                                                                                    ->get();
+                                                        @endphp     
+                                                        <div class="p-2 border">
+                                                            <table class="table table-sm">
+                                                                <thead>
+                                                                    <th>Profile</th>
+                                                                    <th>Activity Component</th>
+                                                                    <th>Activity Source</th>
+                                                                    <th>Action</th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($activity_profiles as $activity_profile)                                                                
+                                                                    <tr>
+                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" /></td>
+                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" /></td>
+                                                                        <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" /></td>
+                                                                        <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
+                                                                    </tr>                                                                    
+                                                                    @endforeach
+                                                                    <tr>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                    </tr>                                                                    
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
                                                 </tr>
-                                                </form>
+                                            </form>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -93,6 +127,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         @endforeach
     </div>
