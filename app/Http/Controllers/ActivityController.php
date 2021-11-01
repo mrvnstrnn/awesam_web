@@ -24,7 +24,7 @@ class ActivityController extends Controller
                                 ->where('stage_activities.category', $get_current_act->site_category)
                                 ->where('stage_activities.program_id', $get_current_act->program_id)
                                 ->where('stage_activities.activity_id', $get_current_act->activity_id)
-                                ->where('stage_activities_profiles.activity_source', $request->get('type'))
+                                ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                 ->first();
 
                                 
