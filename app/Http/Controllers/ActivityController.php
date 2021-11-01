@@ -28,6 +28,7 @@ class ActivityController extends Controller
                                 ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                 ->first();
 
+            // return dd($request->all());
 
                                 
             $site = \DB::connection('mysql2')
