@@ -96,28 +96,28 @@
                                                         <div class="p-2 border">
                                                             <table class="table table-xs">
                                                                 <thead>
+                                                                    <th>Action</th>
                                                                     <th>Profile</th>
                                                                     <th>Activity Component</th>
                                                                     <th>Activity Source</th>
-                                                                    <th>Action</th>
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($activity_profiles as $activity_profile)                                                                
                                                                     <tr>
                                                                         <form>
+                                                                        <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" /></td>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" /></td>
                                                                         <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" /></td>
-                                                                        <td><input type="submit" class="btn-secondary btn-sm form-control" value="Update" /></td>
                                                                         </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
                                                                         <form>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
-                                                                        <td><input type="text" class="form-control" value="" /></td>
                                                                         <td><input type="submit" class="btn-danger btn-sm form-control" value="Add" /></td>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
+                                                                        <td><input type="text" class="form-control" value="" /></td>
                                                                         </form>
                                                                     </tr>                                                                    
                                                                 </tbody>
