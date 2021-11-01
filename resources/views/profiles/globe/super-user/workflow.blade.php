@@ -69,7 +69,7 @@
                                     </thead>
                                     <tbody>
                                         <tr class="bg-dark">
-                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">  
+                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">  
                                                 <input type="hidden" class="form-control" name="program_id" value="{{ $program->program_id }}">
                                                 <input type="hidden" class="form-control" name="stage_id" value="1">
                                                 <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="category" /></td>
@@ -114,7 +114,7 @@
                                         <tbody>
                                             @foreach ($activities as $activity)
                                                 <tr class="bg-dark" data-stage_activity_id="{{$activity->id}}">
-                                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">                                                                        
+                                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">                                                                        
                                                         <input type="hidden" class="form-control" name="id" value="{{ $activity->id }}">
                                                         <input type="hidden" class="form-control" name="program_id" value="{{ $activity->program_id }}">
                                                         <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" /></td>
