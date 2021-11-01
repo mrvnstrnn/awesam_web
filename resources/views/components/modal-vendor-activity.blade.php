@@ -112,7 +112,11 @@
 
                                 @else
 
+                                    
+
                                     @php
+                                        // dd($site);
+
                                         $activity = \DB::connection('mysql2')
                                                 ->table('stage_activities')
                                                 ->where("program_id", $site[0]->program_id)        
@@ -160,7 +164,7 @@
                                                             </div>
                                                             <div class="row p-2 pt-3 action_to_complete_parent">
                                                                 @foreach ($sub_activities as $sub_activity)
-                                                                    @if($sub_activity->activity_id == $activity_id)
+                                                                    @if($sub_activity->activity_id == $site[0]->activity_id)
                                                                         <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
                                                                             data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
                                                                             >
@@ -272,7 +276,7 @@
                                                                 $ctr = 0;
                                                             @endphp
                                                             @foreach ($sub_activities as $sub_activity)
-                                                                @if($sub_activity->activity_id == $activity_id)
+                                                                @if($sub_activity->activity_id == $site[0]->activity_id)
                                                                     @if($prev_step == $sub_activity->sequential_step)
                                                                         <div class="row btn_switch_show_action pb-3  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
                                                                             <div class="col-2">                                                                        
@@ -361,7 +365,7 @@
             var substep_same = $(this).attr('data-substep_same');
 
             var site_category = "{{ $site[0]->site_category }}";
-            var activity_id = "{{ $activity_id }}";
+            var activity_id = "{{ $site[0]->activity_id }}";
 
             $("#sub_activity_id").val(sub_activity_id);
 

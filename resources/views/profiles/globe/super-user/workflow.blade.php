@@ -53,15 +53,39 @@
                                     <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
                                         <thead>
                                             <tr>
-                                                <th>Category</th>
-                                                <th>Activity ID</th>
+                                                <th width="150px">Category</th>
+                                                <th width="60px">ID</th>
+                                                <th width="60px">SEQ</th>
                                                 <th>Activity Name</th>
-                                                <th>Profile ID</th>
-                                                <th>Profile</th>
-                                                <th>Notification</th>
+                                                <th width="60px">Next</th>
+                                                <th width="60px">Return</th>
+                                                <th width="60px">Days</th>
+                                                <th width="80px">Action</th>
                                             </tr>
                                         </thead>
+                                        @php
+                                            $activities = \DB::table('stage_activities')
+                                                        ->where('program_id', ($program->program_id))
+                                                        ->get();
+                                        @endphp  
                                         <tbody>
+                                            @foreach ($activities as $activity)
+                                            <form>
+                                                <tr>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->category }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_id }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_sequence }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_name }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->next_activity }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->return_activity }}" /></td>
+                                                    <td><input type="text" class="form-control" value="{{ $activity->activity_duration_days }}" /></td>
+                                                    <td><input type="submit" class="form-control btn-primary" value="Save" /></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td colspan="8">DITO ANG DATATABLE</td>
+                                                </tr>
+                                                </form>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -75,7 +99,7 @@
 @endsection
 
 @section('js_script')
-    <script src="{{ asset('js/super-user.js') }}"></script>
+    {{-- <script src="{{ asset('js/super-user.js') }}"></script> --}}
 @endsection
 
 {{-- @section('modals')

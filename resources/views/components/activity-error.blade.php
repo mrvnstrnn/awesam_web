@@ -33,12 +33,14 @@
                         <div class="modal-body">
                             <div class="row p-0">
                                 <div class="text-center col-12">
-                                    <img src="/images/construction.gif"/>
+                                    <img src="/images/construction.gif" width="90%"/>
                                     <H1 class="">Action Component Not Yet Configured</H1>
                                     @if(isset($activity_source))
                                         <h5>activity_source: {{$activity_source}}</h5>
-                                    @else()
-                                        <h5>activity_source not yet configured</h5>
+                                        <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
+                                    @else
+                                        <h5>activity_source is not yet configured in the clicked element</H5>
+                                        <div class="text-danger">Please check if the datatable or link contains the attribute data-activity_source</div>
                                     @endisset
                                     <button class="btn btn-lg mt-5 mb-5 btn-shadow btn-primary" type="button">Move To Next Activity</button>
                                     <div class="border-top text-left pt-3">

@@ -40,6 +40,7 @@ class ActivityController extends Controller
                 return \View::make('components.activity-error')
                         ->with([
                             'site' => $site,
+                            'activity_source' => $request->get('activity_source'),  
                             'main_activity' => '',
                         ])
                         ->render();
