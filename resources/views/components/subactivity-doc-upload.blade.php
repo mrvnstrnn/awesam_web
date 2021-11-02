@@ -227,7 +227,8 @@
                 },
                 success: function (file, resp) {
                     if (!resp.error){
-                        this.removeFile(file);
+                        var _this = this;
+                        var file = file;
                         var sam_id = "{{ $sam_id }}";
                         var sub_activity_id = "{{ $sub_activity_id }}";
                         var sub_activity_name = "{{ $sub_activity }}";
@@ -261,6 +262,8 @@
                                             resp.message,
                                             'success'
                                         )
+                                        
+                                        _this.removeFile(file);
 
                                         $(".mark_complete_area").removeClass("d-none");
 

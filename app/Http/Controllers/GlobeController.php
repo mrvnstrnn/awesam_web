@@ -1304,14 +1304,38 @@ class GlobeController extends Controller
                                                         // ->where('status', 'pending')
                                                         ->groupBy('sub_activity_id')->get();
 
+                $stage_activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('activity_type', 'approver_profile_id_1')
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('activity_id', $request->input('activity_id'))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
+
+                if ($stage_activities->activity_type == 'doc upload') {
+                    $array_data = [
+                        'file' => $new_file,
+                        'validator' => $stage_activities->approver_profile_id_1,
+                    ];
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload_validator',
+                        'status' => $file_status,
+                    ]);
+                }
+
                 if (count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                    $stage_activities = \DB::connection('mysql2')
-                                                ->table('stage_activities')
-                                                ->select('activity_type')
-                                                ->where('program_id', $request->input('program_id'))
-                                                ->where('activity_id', $request->input('activity_id'))
-                                                ->where('category', $request->input("site_category"))
-                                                ->first();
+                    // $stage_activities = \DB::connection('mysql2')
+                    //                             ->table('stage_activities')
+                    //                             ->select('activity_type')
+                    //                             ->where('program_id', $request->input('program_id'))
+                    //                             ->where('activity_id', $request->input('activity_id'))
+                    //                             ->where('category', $request->input("site_category"))
+                    //                             ->first();
 
                     if ($stage_activities->activity_type != 'doc upload') {
                         $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
@@ -4220,6 +4244,7 @@ class GlobeController extends Controller
         try {
             $sub_activity_ids = SubActivityValue::where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
+                                        ->where('type', 'doc_upload')
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids)
