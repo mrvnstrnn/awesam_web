@@ -9,6 +9,7 @@
         table {
             width: 100% !important;
         }
+
     </style> 
 
     <ul class="tabs-animated body-tabs-animated nav">
@@ -39,7 +40,7 @@
             @else
             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
             @endif
-                @if($program->program_id == 3)
+                @if($program->program_id == 3 || $program->program_id == 4)
 
                 <div class="row">
                     <div class="col-md-12">
@@ -51,60 +52,127 @@
                                 </div>      
                             </div>
                             <div class="card-body">
-                                <table class="table table-borderless table-striped table-hover new-endorsement-table">
-                                    <thead>
-                                        <tr>
-                                            <th width="150px">Category</th>
-                                            <th width="80px">ID</th>
-                                            <th width="80px">Profile</th>
-                                            <th>Activity Name</th>
-                                            <th width="80px">SEQ</th>
-                                            <th width="80px">Next</th>
-                                            <th width="80px">Return</th>
-                                            <th width="80px">Days</th>
-                                            <th>Type</th>
-                                            <th>SubType</th>
-                                            <th width="80px">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-dark">
-                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">  
-                                                <input type="hidden" class="form-control" name="program_id" value="{{ $program->program_id }}">
-                                                <input type="hidden" class="form-control" name="stage_id" value="1">
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="category" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_id" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="profile_id" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_name" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_sequence" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="next_activity" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="return_activity" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_duration_days" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="activity_type" /></td>
-                                                <td><input type="text" class="form-control bg-dark text-white font-weight-bold" name="subactivities_type" /></td>
-                                                <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
+                                <div class="bg-light py-3 border">
+                                    <h4 class="pl-3">Add Activity</h4>
+                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">  
+                                        <div class="container">
+                                            <input type="hidden" class="form-control form-control-sm" name="program_id" value="{{ $program->program_id }}">
+                                            <input type="hidden" class="form-control form-control-sm" name="stage_id" value="1">
+                                            <div class="row py-2 align-items-end">
+                                                <div class="col-3">
+                                                    <label for="" class="text-dark">Category</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold" name="category" />
+                                                </div>
+                                                <div class="col-1">
+                                                    <label for="" class="text-dark">Act ID</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_id" />
+                                                </div>
+                                                <div class="col-1">
+                                                    <label for="" class="text-dark">Profile</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="profile_id" />
+                                                </div>
+                                                <div class="col-7">
+                                                    <label for="" class="text-dark">Activity Name</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_name" />
+                                                </div>
+                                            </div>
+                                            <div class="row py-2 align-items-end">
+                                                <div class="col-1">
+                                                    <label for="" class="text-dark">Next</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="next_activity" />
+                                                </div>
+                                                <div class="col-1">
+                                                    <label for="" class="text-dark">Return</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="return_activity" />
+                                                </div>
+                                                <div class="col-1">
+                                                    <label for="" class="text-dark">Sequence</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_sequence" />
+                                                </div>
+                                                <div class="col-2">
+                                                    <label for="" class="text-dark">Duration Days</label>
+                                                    <input type="text" class="form-control form-control-sm  text-white font-weight-bold"  name="activity_duration_days" />
+                                                </div>
+                                                <div class="col-2">
+                                                    <label for="" class="text-dark">Activity Type</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_type" />
+                                                </div>
+                                                <div class="col-2">
+                                                    <label for="" class="text-dark">Subactivity Type</label>
+                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="subactivities_type" />
+                                                </div>
+                                                <div class="col-3">
+                                                    <td><input type="submit" class="form-control form-control-sm btn-danger" value="Add" /></td>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    </form>
+                                </div>
+                                <div class="mt-5">
+                                    <H3>Workflow</H3>
+                                    @php
+                                    $activities = \DB::table('stage_activities')
+                                                ->where('program_id', ($program->program_id))
+                                                ->orderBy('category', 'asc')
+                                                ->orderBy('activity_id', 'asc')
+                                                ->get();
+                                    @endphp  
+                                    @foreach ($activities as $activity)
+                                        <div class="bg-dark">
+                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">                                                                        
+                                                <div class="container">
+                                                    <input type="hidden" class="form-control form-control-sm" name="id" value="{{ $activity->id }}">
+                                                    <input type="hidden" class="form-control form-control-sm" name="program_id" value="{{ $activity->program_id }}">
+                                                    <div class="row py-2 align-items-end">
+                                                        <div class="col-3">
+                                                            <label for="" class="text-light">Category</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" />
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <label for="" class="text-light">Act ID</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->activity_id }}"  name="activity_id" />
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <label for="" class="text-light">Profile</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->profile_id }}"  name="profile_id" />
+                                                        </div>
+                                                        <div class="col-7">
+                                                            <label for="" class="text-light">Activity Name</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->activity_name }}"  name="activity_name" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row py-2 align-items-end">
+                                                        <div class="col-1">
+                                                            <label for="" class="text-light">Next</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->next_activity }}"  name="next_activity" />
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <label for="" class="text-light">Return</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->return_activity }}"  name="return_activity" />
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <label for="" class="text-light">Sequence</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->activity_sequence }}"  name="activity_sequence" />
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="" class="text-light">Duration Days</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->activity_duration_days }}"  name="activity_duration_days" />
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="" class="text-light">Activity Type</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->activity_type }}"  name="activity_type" />
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="" class="text-light">Subactivity Type</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-white font-weight-bold" value="{{ $activity->subactivities_type }}"  name="subactivities_type" />
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <input type="submit" class="form-control form-control-sm btn-warning" value="Save" /></td>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <hr>
-                                <div class="table-responsive">
-                                    <table id="workflow-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="table-sm align-middle mb-0 table table-borderless table-striped table-hover new-endorsement-table" data-href="{{ route('all.getDataWorkflow', $program->program_id) }}">
-                                        <thead>
-                                            <tr>
-                                                <th width="150px">Category</th>
-                                                <th width="80px">ID</th>
-                                                <th width="80px">Profile</th>
-                                                <th>Activity Name</th>
-                                                <th width="80px">SEQ</th>
-                                                <th width="80px">Next</th>
-                                                <th width="80px">Return</th>
-                                                <th width="80px">Days</th>
-                                                <th>Type</th>
-                                                <th>SubType</th>
-                                                <th width="80px">Action</th>
-                                            </tr>
-                                        </thead>
+                                        </div>
                                         @php
                                             $activities = \DB::table('stage_activities')
                                                         ->where('program_id', ($program->program_id))
@@ -200,6 +268,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
