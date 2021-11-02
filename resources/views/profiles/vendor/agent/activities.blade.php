@@ -312,4 +312,6 @@ $(document).find('.circle-progress').each(function(index, element){
 </script>
 
 
+
+
 @endsection
