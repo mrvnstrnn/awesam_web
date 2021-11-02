@@ -167,11 +167,16 @@
                                                                             <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" name="activity_component"/></td>
                                                                             <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" name="activity_source"/></td>
                                                                         </form>
+                                                                        <form id="stage_activity_profile_delete" action="{{ route('delete_stage_activities_profiles', $activity_profile->id) }}">
+                                                                            <td>
+                                                                                <input type="submit" class="btn-danger btn-sm form-control" value="Delete" />
+                                                                            </td>
+                                                                        </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
-                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}">                            
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                               
+                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}" target="_blank">
+                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">
                                                                             <td>
                                                                                 <input type="submit" class="btn-primary btn-sm form-control" value="Add" />
                                                                             </td>

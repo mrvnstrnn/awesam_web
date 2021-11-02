@@ -90,4 +90,15 @@ class ActivityController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function delete_stage_activities_profiles ($id)
+    {
+        try {
+            StageActivitiesProfile::where('id', $id)->delete();
+            return redirect('/workflow');
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }
