@@ -52,6 +52,7 @@
         @if ( count( $status_collect->all() ) > 0 )
             @php
                 $json_file_status = json_decode( $data[0]->value );
+                
                 if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
                     $extension = "fa-file-pdf";
                 } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
@@ -183,12 +184,12 @@
             $(".approve_reject_doc_btns").addClass("d-none");
         }
 
-        if( extensions.includes(values[0].value.split('.').pop()) == true) {     
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
         } else {
-          htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + JSON.parse(values[0].value).file + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
-                
+        
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
 
