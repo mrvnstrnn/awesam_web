@@ -30,7 +30,7 @@ class ActivityController extends Controller
                                 ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                 ->first();
 
-            // return dd($request->all());
+            // return dd($get_component);
 
                                 
             $site = \DB::connection('mysql2')

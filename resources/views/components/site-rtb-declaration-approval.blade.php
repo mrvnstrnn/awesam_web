@@ -1,8 +1,6 @@
 <div class="row">
 
     @php
-
-        
         $json = json_decode($rtbdeclaration->value, true);
     @endphp
     <div class="col-lg-5 text-center m-auto">
