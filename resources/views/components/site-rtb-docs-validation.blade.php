@@ -53,15 +53,18 @@
                                     @for ($i = 0; $i < count($data); $i++)
                                         @php
                                             $json_status = json_decode( $data[$i]->value );
+                                            $json_status_first = json_decode( $data[0]->value );
 
                                             if ( isset($json_status->validators) ) {
                                                 for ($j=0; $j < count($json_status->validators); $j++) { 
                                                     if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
                                                         $status_collect->push( $json_status->validators[$j]->status );
+                                                        $status_file = $json_status_first->validators[$j]->status;
                                                     }
                                                 }
                                             } else {
                                                 $status_collect->push( $data[$i]->status );
+                                                $status_file = $data[0]->status;
                                             }
                                             // $status_collect->push( $data[$i]->status );
                                         @endphp
@@ -93,7 +96,7 @@
                                             }
                                         @endphp
                                         
-                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                                             <div class="child_div_{{ $data[0]->sub_activity_id }}">
                                                 <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                                                     <div>
@@ -163,25 +166,10 @@
 
         var values = JSON.parse($(this).attr('data-value'));
 
-        if ( JSON.parse(values[0].value).validators != undefined) {
-
-            var array_validators = JSON.parse(values[0].value).validators;
-
-            for (let i = 0; i < array_validators.length; i++) {
-                if ( array_validators[i].profile_id == "{{ \Auth::user()->profile_id }}" ) { 
-                    if (array_validators[i].status == "pending"){
-                        $(".approve_reject_doc_btns").removeClass("d-none");
-                    } else {
-                        $(".approve_reject_doc_btns").addClass("d-none");
-                    }
-                }
-            }
+        if ($(this).attr('data-status') == "pending"){
+            $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
-            if (values.status == "pending"){
-                $(".approve_reject_doc_btns").removeClass("d-none");
-            } else {
-                $(".approve_reject_doc_btns").addClass("d-none");
-            }
+            $(".approve_reject_doc_btns").addClass("d-none");
         }
 
         
