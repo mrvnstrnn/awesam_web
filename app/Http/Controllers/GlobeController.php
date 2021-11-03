@@ -2169,19 +2169,28 @@ class GlobeController extends Controller
 
                                 $approvers_collect->push($new_array);
                             } else {
-                                $new_array = array(
-                                    'profile_id' => $validator->profile_id,
-                                    'status' => $validator->status
-                                );
+                                if ( isset($validator->user_id) ) {
+                                    $new_array = array(
+                                        'profile_id' => $validator->profile_id,
+                                        'status' => $validator->status,
+                                        'user_id' => $validator->user_id,
+                                        'approved_date' => $validator->approved_date,
+                                    );
+                                } else {
+                                    $new_array = array(
+                                        'profile_id' => $validator->profile_id,
+                                        'status' => $validator->status,
+                                    );
+                                    $approvers_pending_collect->push($validator->profile_id);
+                                }
 
                                 $approvers_collect->push($new_array);
-                                $approvers_pending_collect->push($validator->profile_id);
                             }
                         }
         
                         $array_data = [
                             'file' => $file,
-                            'active_profile' => $approvers_pending_collect->all()[0],
+                            'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
                             'active_status' => "pending",
                             'validator' => count($approvers_pending_collect->all()),
                             'validators' => $approvers_collect->all()
