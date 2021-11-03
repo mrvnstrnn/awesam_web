@@ -1,4 +1,4 @@
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
@@ -16,7 +16,7 @@
                             </div>
                         </div> 
 
-                        <div class="modal-body">
+                        <div class="modal-body"> --}}
 
                             <div class="row file_preview d-none">
                                 <div class="col-12 mb-3">
@@ -41,7 +41,8 @@
                                                     ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id')
                                                     ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                                                     ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                                                    ->where('sub_activity.action', 'doc upload')
+                                                    // ->where('sub_activity.action', 'doc upload')
+                                                    ->where('sub_activity_value.type', 'doc_upload')
                                                     ->orderBy('sub_activity_value.sub_activity_id')
                                                     ->get();
 
@@ -66,12 +67,12 @@
                                                 $status_collect->push( $data[$i]->status );
                                                 $status_file = $data[0]->status;
                                             }
-                                            // $status_collect->push( $data[$i]->status );
                                         @endphp
                                     @endfor
                                     @if ( count( $status_collect->all() ) > 0 )
                                         @php
                                             $json_file_status = json_decode( $data[0]->value );
+                                            
                                             if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
                                                 $extension = "fa-file-pdf";
                                             } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
@@ -134,14 +135,14 @@
                                 </div>
                             </div>
 
-                        </div>
+                        {{-- </div>
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 <script src="/js/dropzone/dropzone.js"></script>
 
@@ -171,8 +172,6 @@
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
         }
-
-        
 
         // if( extensions.includes(values[0].value.split('.').pop()) == true) {     
         //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
@@ -358,11 +357,10 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
-        var site_vendor_id = $("#modal_site_vendor_id").val();
-        var program_id = $("#modal_program_id").val();
+        var program_id = "{{ $site[0]->program_id }}"
 
         // var sam_id = $("#details_sam_id").val();
-        var sam_id = "{{ $site[0]->sam_id }}"
+        var sam_id = "{{ $site[0]->sam_id }}";
         var filename = $("#hidden_filename").val();
 
         $(this).attr("disabled", "disabled");
@@ -379,7 +377,6 @@
                 reason : text_area_reason,
                 sam_id : sam_id,
                 filename : filename,
-                site_vendor_id : site_vendor_id,
                 program_id : program_id,
                 activity_id : activity_id,
                 site_category : site_category,

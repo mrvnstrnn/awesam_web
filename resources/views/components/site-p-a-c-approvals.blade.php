@@ -1,3 +1,5 @@
+
+
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
         <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
@@ -12,34 +14,47 @@
     <div class="col-12 file_viewer_list pt-3">
     </div>
 </div>
+
 <div class="row file_lists">
     @php
         // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
         $datas = \DB::connection('mysql2')
                         ->table('sub_activity_value')
-                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
+                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id')
                         ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                         ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                        ->where('sub_activity.action', 'doc upload')
+                        ->where('sub_activity_value.type', 'doc_upload')
                         ->orderBy('sub_activity_value.sub_activity_id')
                         ->get();
 
-        $keys_datas = $datas->groupBy('sub_activity_name')->keys();
+        $keys_datas = $datas->groupBy('sub_activity_id')->keys();
     @endphp
 
-    @forelse ($datas->groupBy('sub_activity_name') as $data)
+    @forelse ($datas->groupBy('sub_activity_id') as $data)
         @php $status_collect = collect(); @endphp
         @for ($i = 0; $i < count($data); $i++)
             @php
-                $status_collect->push( $data[$i]->status );
+                $json_status = json_decode( $data[$i]->value );
+                $json_status_first = json_decode( $data[0]->value );
+
+                if ( isset($json_status->validators) ) {
+                    for ($j=0; $j < count($json_status->validators); $j++) { 
+                        $status_collect->push( $json_status->validators[$j]->status );
+                        $status_file = $json_status_first->validators[$j]->status;
+                    }
+                } else {
+                    $status_collect->push( $data[$i]->status );
+                    $status_file = $data[0]->status;
+                }
+                // $status_collect->push( $data[$i]->status );
             @endphp
         @endfor
         @if ( count( $status_collect->all() ) > 0 )
             @php
-
-                if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                $json_file_status = json_decode( $data[0]->value );
+                if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
                     $extension = "fa-file-pdf";
-                } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
                     $extension = "fa-file-image";
                 } else {
                     $extension = "fa-file";
@@ -61,7 +76,7 @@
                 }
             @endphp
             
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                 <div class="child_div_{{ $data[0]->sub_activity_id }}">
                     <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -133,6 +148,7 @@
         <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
     </div>
 </div>
+
 
 <script src="/js/dropzone/dropzone.js"></script>
 
@@ -290,13 +306,12 @@
     $(".btn-accept-endorsement").click(function(e){
         e.preventDefault();
 
-        var sam_id = [$(this).attr('data-sam_id')];
+        var sam_id = ["{{ $site[0]->sam_id }}"];
         var data_complete = $(this).attr('data-complete');
-        var site_category = [$(this).attr('data-site_category')];
-        var activity_id = [$(this).attr('data-activity_id')];
+        var site_category = ["{{ $site[0]->site_category }}"];
+        var activity_id = ["{{ $site[0]->activity_id }}"];
         var activity_name = $("#modal_activity_name").val();
-        var site_vendor_id = [$("#modal_site_vendor_id").val()];
-        var program_id = $("#modal_program_id").val();
+        var program_id = "{{ $site[0]->program_id }}";
 
         // if ("{{ \Auth::user()->profile_id }}" == 10) {
         //     activity_name = "pac_approval";
@@ -317,7 +332,6 @@
                 sam_id : sam_id,
                 data_complete : data_complete,
                 activity_name : activity_name,
-                site_vendor_id : site_vendor_id,
                 program_id : program_id,
                 site_category : site_category,
                 activity_id : activity_id,
@@ -329,7 +343,7 @@
                 sam_id : sam_id,
                 data_complete : data_complete,
                 activity_name : activity_name,
-                site_vendor_id : site_vendor_id,
+                // site_vendor_id : site_vendor_id,
                 program_id : program_id,
                 site_category : site_category,
                 activity_id : activity_id,
@@ -426,14 +440,14 @@
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
-        var activity_id = $(this).attr("data-activity_id");
-        var site_category = $(this).attr("data-site_category");
+        var activity_id = "{{ $site[0]->activity_id }}";
+        var site_category = "{{ $site[0]->site_category }}";
 
         var text_area_reason = $("#text_area_reason").val();
 
         // var sam_id = $("#details_sam_id").val();
-        var sam_id = "{{ $site[0]->sam_id }}"
-        var program_id = "{{ $site[0]->program_id }}"
+        var sam_id = "{{ $site[0]->sam_id }}";
+        var program_id = "{{ $site[0]->program_id }}";
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");

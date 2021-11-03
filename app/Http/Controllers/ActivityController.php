@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Log;
 use App\Models\StageActivitiesProfile;
 use App\Models\StageActivities;
+use App\Models\SubActivityValue;
 
 class ActivityController extends Controller
 {
@@ -58,6 +59,50 @@ class ActivityController extends Controller
 
             } else {
 
+// <<<<<<< HEAD
+                if ( $get_current_act->activity_id == 17 && $get_current_act->program_id == 3 ) {
+                    $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('status', "pending")
+                                        ->where('type', "rtb_declaration")
+                                        ->first();
+
+                    return \View::make('components.modal-view-site')
+                        ->with([
+                            'activity_component' => $get_component->activity_component,
+                            'rtbdeclaration' => $rtbdeclaration,
+                            'site' => $site,
+                            'activity_source' => $request->get('activity_source'),
+                            'main_activity' => '',
+                        ])
+                        ->render();
+                }
+                // return \View::make('components.' . $get_component->activity_component)
+                //         ->with([
+                //             'site' => $site,
+                //             'activity_source' => $request->get('activity_source'),
+                //             'main_activity' => '',
+                //         ])
+                //         ->render();
+
+                if (\Auth::user()->profile_id == 2) {
+                    return \View::make('components.' . $get_component->activity_component)
+                            ->with([
+                                'site' => $site,
+                                'activity_source' => $request->get('activity_source'),
+                                'main_activity' => '',
+                            ])
+                            ->render();
+                }
+                
+                return \View::make('components.modal-view-site')
+                        ->with([
+                            'activity_component' => $get_component->activity_component,
+                            'site' => $site,
+                            'activity_source' => $request->get('activity_source'),
+                            'main_activity' => '',
+                        ])
+                        ->render();
+// =======
                 return \View::make('components.activity-work-plan-date')
                 ->with([
                     'activity_source' => $request['activity_source'],  
@@ -65,6 +110,7 @@ class ActivityController extends Controller
                 ])
                 ->render();
 
+// >>>>>>> 4362f23a9f8392bc452147be220ded5d1cc89ddc
             }
 
 
