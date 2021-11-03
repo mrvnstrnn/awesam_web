@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Log;
 use App\Models\StageActivitiesProfile;
 use App\Models\StageActivities;
+use App\Models\SubActivityValue;
 
 class ActivityController extends Controller
 {
@@ -50,6 +51,21 @@ class ActivityController extends Controller
                         ])
                         ->render();
             } else {
+                if ( $get_current_act->activity_id == 17 ) {
+                    $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('status', "pending")
+                                        ->where('type', "rtb_declaration")
+                                        ->first();
+
+                    return \View::make('components.' . $get_component->activity_component)
+                        ->with([
+                            'rtbdeclaration' => $rtbdeclaration,
+                            'site' => $site,
+                            'activity_source' => $request->get('activity_source'),
+                            'main_activity' => '',
+                        ])
+                        ->render();
+                }
                 return \View::make('components.' . $get_component->activity_component)
                         ->with([
                             'site' => $site,

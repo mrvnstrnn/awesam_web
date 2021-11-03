@@ -4122,19 +4122,6 @@ class GlobeController extends Controller
                                             'date_approved'=> Carbon::now()->toDate(),
                                         ]);
 
-                // $email_receiver = User::select('users.*')
-                //         ->join('user_details', 'users.id', 'user_details.user_id')
-                //         ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //         ->where('user_details.vendor_id', $request->input('site_vendor_id'))
-                //         ->where('user_programs.program_id', $request->input('program_id'))
-                //         ->get();
-
-                // SiteEndorsementEvent::dispatch($request->input('sam_id'));
-
-                // for ($j=0; $j < count($email_receiver); $j++) {
-                //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), "rtb_declation_approval", $request->input('action'), "", "", $request->input('remarks') ));
-                // }
-
                 $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
                 return response()->json(['error' => false, 'message' => "Successfully approved RTB."]);
