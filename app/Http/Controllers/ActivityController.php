@@ -13,6 +13,10 @@ class ActivityController extends Controller
     public function get_component(Request $request)
     {
         try {
+            $site = \DB::connection('mysql2')
+                            ->table('view_site')
+                            ->where('sam_id', $request['sam_id'])
+                            ->get();
             
             if(!isset($request->direct_mode)){
 
@@ -31,11 +35,6 @@ class ActivityController extends Controller
                                     ->where('stage_activities.activity_id', $get_current_act->activity_id)
                                     ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                     ->first();
-
-                $site = \DB::connection('mysql2')
-                            ->table('view_site')
-                            ->where('sam_id', $request['sam_id'])
-                            ->get();
                         
                 if ( is_null($get_component) ) {
 
