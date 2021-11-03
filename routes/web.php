@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\GlobeController;
+use App\Http\Controllers\DataController;
 use App\Http\Controllers\LocalCoopController;
 use App\Http\Controllers\TowerCoController;
 use App\Http\Controllers\NewSitesController;
@@ -255,6 +256,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
     Route::get('/yajra-test', [GlobeController::class, 'YajraTest'])->name('YajraTest');
+
+
+    // Datatable Data
+    Route::get('/datatable-data/{program_id}/{profile_id}/{activity_type}', [DataController::class, 'Datatable_Data'])->name('Datatable_Data');
+
+
 
 
     // Site issues
