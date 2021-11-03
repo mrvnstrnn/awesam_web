@@ -48,13 +48,15 @@ class ActivityController extends Controller
                             ])
                             ->render();
                 } else {
-                    return \View::make('components.' . $get_component->activity_component)
-                            ->with([
-                                'site' => $site,
-                                'activity_source' => $request->get('activity_source'),
-                                'main_activity' => '',
-                            ])
-                            ->render();
+
+                    return \View::make('components.modal-view-site')
+                        ->with([
+                            'activity_component' => $get_component->activity_component,
+                            'site' => $site,
+                            'activity_source' => $request->get('activity_source'),
+                            'main_activity' => '',
+                        ])
+                        ->render();
                 }
 
             } else {
@@ -76,13 +78,6 @@ class ActivityController extends Controller
                         ])
                         ->render();
                 }
-                // return \View::make('components.' . $get_component->activity_component)
-                //         ->with([
-                //             'site' => $site,
-                //             'activity_source' => $request->get('activity_source'),
-                //             'main_activity' => '',
-                //         ])
-                //         ->render();
 
                 if (\Auth::user()->profile_id == 2) {
                     return \View::make('components.' . $get_component->activity_component)
