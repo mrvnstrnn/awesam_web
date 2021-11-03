@@ -468,8 +468,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Datatable Data
     Route::get('/datatable-data/{program_id}/{profile_id}/{activity_type}', [DataController::class, 'Datatable_Data'])->name('Datatable_Data');
 
+    
+    // WORK PLAN
     Route::post('/work-plan/add', [DataController::class, 'Add_Work_Plan'])->name('Add_Work_Plan');
 
+    // GET STAGE ACTIVITIES
+    Route::post('/site-ajax', [DataController::class, 'SiteAjax'])->name('SiteAjax');
 
 });
     

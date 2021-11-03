@@ -61,8 +61,11 @@ class DataController extends Controller
 
             $validate = Validator::make($request->all(), array(              
                 'sam_id' => 'required',
+                'site_name' => 'required',
                 'activity_id' => 'required',
+                'activity_name' => 'required',
                 'sub_activity_id' => 'required',
+                'sub_activity_name' => 'required',
                 'method' => 'required',
                 'planned_date' => 'required',
                 'saq_objective' => 'required',
@@ -73,6 +76,10 @@ class DataController extends Controller
 
                 SubActivityValue::create([
                     'sam_id' => $request->sam_id,
+                    'site_name' => $request->site_name,
+                    'activity_id' => $request->activity_id,
+                    'activity_name' => $request->activity_name,
+                    'sub_activity_name' => $request->sub_activity_name,
                     'sub_activity_id' => $request->sub_activity_id,
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
@@ -98,9 +105,68 @@ class DataController extends Controller
 
     // ************ WORK PLAN ************** //
 
+
+    // ///////////////////////////// //
+    //                               //
+    //     GETTING DATA VIA AJAX     //
+    //                               //
+    // ///////////////////////////// //
+
     
+    // ************ GET SITE DATA VIA AJAX ************** //
 
 
+    public function SiteAjax(Request $request)
+    {
+        try {        
+
+
+            if($request->type === 'work_plan_stage_activities'){
+
+                $site = \DB::table('view_site')
+                        ->where('sam_id', $request->sam_id)
+                        ->first();
+
+                $data = \DB::table('stage_activities')
+                        ->where('program_id', $site->program_id)          
+                        ->where('category', $site->site_category)
+                        ->where('activity_id','>',  $site->activity_id)
+                        ->where('profile_id','=',  2)
+                        ->get();      
+
+            }  
+
+            elseif($request->type === 'work_plan_sub_activities'){
+
+                $site = \DB::table('view_site')
+                        ->where('sam_id', $request->sam_id)
+                        ->first();
+
+                $data = \DB::table('sub_activity')
+                        ->where('program_id', $site->program_id)          
+                        ->where('category', $site->site_category)
+                        ->where('activity_id','=',  $request->activity_id)
+                        ->get();      
+            }  
+
+            
+            else {
+
+                return response()->json(['error' => true, 'message' => $request->type ]);
+            }
+
+            return response()->json(['error' => false, 'message' => $data]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+
+
+    }
+
+
+    // ************ GET SITE DATA VIA AJAX ************** //
 
 
 

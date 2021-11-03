@@ -112,4 +112,7 @@ class ActivityController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
 }
+
+
