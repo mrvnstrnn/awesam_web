@@ -4414,7 +4414,26 @@ class GlobeController extends Controller
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
                     
-                                            return $json->file;
+                                            return $json['file'];
+                                        } else {
+                                            return $row->value;
+                                        }
+
+                                    })
+                                    ->addColumn('status', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+
+                                            if ( isset($json['validators']) ) {
+                                                for ($i=0; $i < count($json['validators']); $i++) { 
+                                                    if ( $json['validators'][$i]['profile_id'] ) {
+                                                        return $json['validators'][$i]['status'];
+                                                    }
+                                                }
+                                            } else {
+                                                return $row->status;
+                                            }
+                    
                                         } else {
                                             return $row->value;
                                         }

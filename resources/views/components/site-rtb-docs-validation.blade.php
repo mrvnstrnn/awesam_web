@@ -52,7 +52,18 @@
                                     @php $status_collect = collect(); @endphp
                                     @for ($i = 0; $i < count($data); $i++)
                                         @php
-                                            $status_collect->push( $data[$i]->status );
+                                            $json_status = json_decode( $data[$i]->value );
+
+                                            if ( isset($json_status->validators) ) {
+                                                for ($j=0; $j < count($json_status->validators); $j++) { 
+                                                    if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                                        $status_collect->push( $json_status->validators[$j]->status );
+                                                    }
+                                                }
+                                            } else {
+                                                $status_collect->push( $data[$i]->status );
+                                            }
+                                            // $status_collect->push( $data[$i]->status );
                                         @endphp
                                     @endfor
                                     @if ( count( $status_collect->all() ) > 0 )
