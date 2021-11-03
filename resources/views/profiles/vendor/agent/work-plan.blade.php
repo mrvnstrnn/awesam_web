@@ -231,16 +231,29 @@
                         </div>
                     </div>
                     <div class="mb-3 card">
-                        <div class="card-header bg-dark text-white">
+                        <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                            <div class="row px-4">
+                                <div class="menu-header-content btn-pane-right">
+                                    <h5 class="menu-header-title text-dark">
+                                        <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
+                                         Work Plan This Week
+                                    </h5>
+                                </div>
+                                <div class="btn-actions-pane-right py-0">
+                                    <button type="button" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" class=" btn-dark px-3 py-2 text-white btn mr-2 my-0">
+                                        Add Engagement
+                                    </button>        
+                                </div>
+                            </div>
+                        </div>
+        
+                        {{-- <div class="card-header bg-dark text-white">
                             <i class="header-icon lnr-laptop-phone icon-gradient bg-white"></i>
                             Work Plan This Week
-                        </div>                        
+                        </div>                         --}}
                         <div class="card-body">
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
-                                    <button type="button" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" class=" btn-danger btn-icon btn-icon-only btn btn-link">
-                                        Add Unplanned Engagement
-                                    </button>        
                                 </div>
                             </div>
                             <div class="row mb-3">
