@@ -1322,7 +1322,7 @@ class GlobeController extends Controller
                 } else if ($stage_activities->activity_type != 'doc upload') {
 
                     $array_data = [
-                        'file' => $new_file,
+                        'file' => $new_file
                     ];
 
                     SubActivityValue::create([
@@ -2779,9 +2779,9 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')->table("view_doc_validation")
                 ->where('program_id', $program_id)
-                ->whereNull('approver_id')
-                ->whereNull('approver_id2')
-                ->whereNull('approver_id3')
+                // ->whereNull('approver_id')
+                // ->whereNull('approver_id2')
+                // ->whereNull('approver_id3')
                 ->get();
 
         }
@@ -4420,6 +4420,26 @@ class GlobeController extends Controller
                                         }
 
                                     });
+                                } else if (\Auth::user()->profile_id == 2) {
+                                    $dt->addColumn('value', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+                    
+                                            return $json['file'];
+                                        } else {
+                                            return $row->value;
+                                        }
+                                    })
+                                    ->addColumn('status', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+                    
+                                            return isset($json['status']) ? $json['status'] : $row->status;
+                                        } else {
+                                            return $row->value;
+                                        }
+                                    })
+                                    ;
                                 }
             return $dt->make(true);
         } catch (\Throwable $th) {
