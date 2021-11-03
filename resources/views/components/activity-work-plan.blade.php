@@ -73,7 +73,6 @@
                                             <div class="mb-0 mt-2">
                                                 @php
     
-                                                    // dd($site);
                                                     if ( isset($site[0]->end_date) ){
                                                         if($site[0]->end_date > now()){
                                                             $badge_color = "success";
@@ -133,8 +132,15 @@
                                     <div class="divider"></div>
                                     <div class="row px-0" id="control_form_log">
                                         <div class="col-12">                                
-                                            <form class="engagement_form">
+                                            <form class="add_worplan_form">
+                                                <input type="hidden" class="form-control" id="sam_id" name="activity_id" value="{{ $site[0]->sam_id }}">
                                                 <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{ $site[0]->activity_id }}">
+                                                <div class="position-relative row form-group">
+                                                    <label for="lessor_method_log" class="col-sm-3 col-form-label">Site</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="activity_name" name="activity_name" value="{{ $site[0]->site_name }}" readonly="">
+                                                    </div>
+                                                </div>
                                                 <div class="position-relative row form-group">
                                                     <label for="lessor_method_log" class="col-sm-3 col-form-label">Activity</label>
                                                     <div class="col-sm-9">
@@ -166,34 +172,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">Planned Date</label>
+                                                    <label for="planned_date" class="col-sm-3 col-form-label">Planned Date</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" id="lessor_date_log" name="lessor_date_log" class="form-control flatpicker flatpickr-input">
+                                                        <input type="text" id="planned_date" name="planned_date" class="form-control datepicker flatpicker bg-white">
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="lessor_date_log" class="col-sm-3 col-form-label">SAQ Objective</label>
+                                                    <label for="saq_objective" class="col-sm-3 col-form-label">SAQ Objective</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" id="saq_objective" name="saq_objective" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="lessor_remarks_log" class="col-sm-3 col-form-label">Remarks</label>
+                                                    <label for="remarks" class="col-sm-3 col-form-label">Remarks</label>
                                                     <div class="col-sm-9">
-                                                        <textarea name="lessor_remarks_log" id="lessor_remarks_log" class="form-control"></textarea>
+                                                        <textarea name="remarks" id="remarks" class="form-control"></textarea>
                                                         <small class="text-danger lessor_remarks-errors"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="position-relative row form-group d-none">
-                                                    <label for="lessor_approval_log" class="col-sm-3 col-form-label">Approval</label>
-                                                    <div class="col-sm-9">
-                                                        <select name="lessor_approval_log" id="lessor_approval_log" class="form-control">
-                                                            <option value="engagement" selected="">Approval not yet secured</option>
-                                                            <option value="active">Approval not yet secured</option>
-                                                            <option value="approved">Approval Secured</option>
-                                                            <option value="denied">Rejected</option>
-                                                        </select>
-                                                        <small class="text-danger lessor_approval-errors"></small>
                                                     </div>
                                                 </div>
                                             </form>
@@ -221,6 +215,13 @@
 
     <script>
     $(document).ready(() => {
+
+        $(".flatpicker").flatpickr(
+        {
+            minDate: "today"
+        }
+    );
+
 
         $('.show_add_activity_planned').on('click', function(e){
             e.preventDefault();
