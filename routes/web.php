@@ -258,8 +258,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/yajra-test', [GlobeController::class, 'YajraTest'])->name('YajraTest');
 
 
-    // Datatable Data
-    Route::get('/datatable-data/{program_id}/{profile_id}/{activity_type}', [DataController::class, 'Datatable_Data'])->name('Datatable_Data');
 
 
 
@@ -459,6 +457,19 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::any('/save-stage-activities-profiles', [ActivityController::class, 'save_stage_activities_profiles'])->name('save_stage_activities_profiles');
     Route::any('/save-stage-activities', [ActivityController::class, 'save_stage_activities'])->name('save_stage_activities');
     Route::get('/delete-stage-activities-profiles/{id}', [ActivityController::class, 'delete_stage_activities_profiles'])->name('delete_stage_activities_profiles');
+
+    // ////////////////////////////// //
+    //                                //
+    //        DATACONTROLLER          //
+    //                                //
+    // ////////////////////////////// //
+
+
+    // Datatable Data
+    Route::get('/datatable-data/{program_id}/{profile_id}/{activity_type}', [DataController::class, 'Datatable_Data'])->name('Datatable_Data');
+
+    Route::post('/work-plan/add', [DataController::class, 'Add_Work_Plan'])->name('Add_Work_Plan');
+
 
 });
     

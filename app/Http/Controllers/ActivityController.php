@@ -13,45 +13,53 @@ class ActivityController extends Controller
     public function get_component(Request $request)
     {
         try {
-            $get_current_act = \DB::connection('mysql2')
-                                ->table('view_site')
-                                ->select('program_id', 'site_category', 'activity_id')
-                                ->where('sam_id', $request['sam_id'])
-                                ->first();
 
-            // return dd($get_current_act);
+            if(!isset($request->direct_mode)){
 
-            // dd($request->all());
+                $get_current_act = \DB::connection('mysql2')
+                                    ->table('view_site')
+                                    ->select('program_id', 'site_category', 'activity_id')
+                                    ->where('sam_id', $request['sam_id'])
+                                    ->first();
 
-            $get_component = \DB::connection('mysql2')
-                                ->table('stage_activities')
-                                ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
-                                ->select('activity_component')
-                                ->where('stage_activities.category', $get_current_act->site_category)
-                                ->where('stage_activities.program_id', $get_current_act->program_id)
-                                ->where('stage_activities.activity_id', $get_current_act->activity_id)
-                                ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
-                                ->first();
+                $get_component = \DB::connection('mysql2')
+                                    ->table('stage_activities')
+                                    ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
+                                    ->select('activity_component')
+                                    ->where('stage_activities.category', $get_current_act->site_category)
+                                    ->where('stage_activities.program_id', $get_current_act->program_id)
+                                    ->where('stage_activities.activity_id', $get_current_act->activity_id)
+                                    ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
+                                    ->first();
 
-            // return dd($get_component);
+                                    
+                $site = \DB::connection('mysql2')
+                            ->table('view_site')
+                            ->where('sam_id', $request['sam_id'])
+                            ->get();
+                        
+                if ( is_null($get_component) ) {
 
-                                
-            $site = \DB::connection('mysql2')
-                        ->table('view_site')
-                        ->where('sam_id', $request['sam_id'])
-                        ->get();
-                    
-            if ( is_null($get_component) ) {
+                    return \View::make('components.activity-error')
+                            ->with([
+                                'site' => $site,
+                                'activity_source' => $request->get('activity_source'),  
+                                'main_activity' => '',
+                            ])
+                            ->render();
+                } else {
+                    return \View::make('components.' . $get_component->activity_component)
+                            ->with([
+                                'site' => $site,
+                                'activity_source' => $request->get('activity_source'),
+                                'main_activity' => '',
+                            ])
+                            ->render();
+                }
 
-                return \View::make('components.activity-error')
-                        ->with([
-                            'site' => $site,
-                            'activity_source' => $request->get('activity_source'),  
-                            'main_activity' => '',
-                        ])
-                        ->render();
             } else {
 
+// <<<<<<< HEAD
                 if ( $get_current_act->activity_id == 17 && $get_current_act->program_id == 3 ) {
                     $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('status', "pending")
@@ -94,7 +102,17 @@ class ActivityController extends Controller
                             'main_activity' => '',
                         ])
                         ->render();
+// =======
+                return \View::make('components.activity-work-plan-date')
+                ->with([
+                    'activity_source' => $request['activity_source'],  
+                    'json' => $request['json'],
+                ])
+                ->render();
+
+// >>>>>>> 4362f23a9f8392bc452147be220ded5d1cc89ddc
             }
+
 
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
