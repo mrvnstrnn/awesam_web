@@ -2,6 +2,13 @@
 
 @section('content')
 
+<style>
+    .work_plan_view{
+        cursor: pointer;
+    }
+</style>
+
+
 <div id="workplan-list" class='mt-5'>
     <div class="row">
         <div class="col-12">
@@ -53,152 +60,94 @@
                         </div>
                     </div>
                     <div class="mb-3 card">
-                        <div class="card-body">                                        
-                            <table class="table table-bordered table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 1, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 2, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 3, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 4, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 5, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 6, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 7, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                            <div class="row px-4">
+                                <div class="menu-header-content btn-pane-right">
+                                    <h5 class="menu-header-title text-dark">
+                                        <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
+                                         Previous Work Plan
+                                    </h5>
+                                </div>
+                                <div class="btn-actions-pane-right py-0">
+                                </div>
+                            </div>
+                        </div>        
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-12 text-right">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div id="work_plan_upcoming" class="col-12 table-responsive">
+                                    @php 
+                                        $Date = date('Y-m-d',strtotime('last monday'));
+                                        $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
+
+                                        $work_plans = \DB::table('view_work_plans')
+                                                                ->get();
+
+
+                                    @endphp
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <tbody>                                            
+                                            @for ($i = 0; $i < 7; $i++)
+                                            @php
+                                                $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
+                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                $wp_ctr = 0;
+                                            @endphp
+                                            <tr>
+            
+                                                <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                        </div>
+                                                        <div class="col-6 text-right">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr  class="bg-light">
+                                                <th>Site</th>
+                                                <th>Activity</th>
+                                                <th>Subactivity</th>
+                                                <th>Method</th>
+                                                <th>SAQ Objective</th>
+                                                <th>Status</th>
+                                            </tr>        
+                                            @foreach ($work_plans as $work_plan)
+                                                @php
+                                                    $wp = json_decode($work_plan->value);
+                                                @endphp
+                                                @if($wp->planned_date == $zdate)
+                                                @php
+                                                    $wp_ctr++;
+                                                @endphp
+                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                    <td>
+                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                    </td>
+                                                    <td>{{ $wp->activity_name}}</td>
+                                                    <td>{{ $work_plan->sub_activity_name}}</td>
+                                                    <td>{{ $wp->method}}</td>
+                                                    <td>{{ $wp->saq_objective}}</td>
+                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endforeach
+
+                                            @if($wp_ctr == 0)
+                                            <tr>
+                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
+                                            </tr>
+                                            @endif
+                                        @endfor
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -247,9 +196,6 @@
                                     </h5>
                                 </div>
                                 <div class="btn-actions-pane-right py-0">
-                                    <button type="button" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" class=" btn-dark px-3 py-2 text-white btn mr-2 my-0">
-                                        Add Engagement
-                                    </button>        
                                 </div>
                             </div>
                         </div>
@@ -264,51 +210,78 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-12">
+                                <div id="work_plan_this_week" class="col-12 table-responsive">
                                     @php 
                                         $Date = date('Y-m-d',strtotime('last monday'));
-                                    @endphp
 
-                                    <table class="table table-bordered table-sm">
-                                        <tbody>
-                                                
+                                        $work_plans = \DB::table('view_work_plans')
+                                                                ->get();
+
+
+                                    @endphp
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <tbody>                                            
                                             @for ($i = 0; $i < 7; $i++)
                                             @php
                                                 $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
-
-
+                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                $wp_ctr = 0;
                                             @endphp
                                             <tr>
-                                                <td  class="bg-secondary p-2 text-white" colspan="6">{{ $xdate }}</td>
+            
+                                                <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                        </div>
+                                                        <div class="col-6 text-right">
+                                                            {{-- @if(date('Y-m-d') <= $zdate)
+                                                            <button type="button"  class=" btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                                Add Work Plan
+                                                            </button>
+                                                            @endif   --}}
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                            <tr>
+                                            <tr  class="bg-light">
                                                 <th>Site</th>
                                                 <th>Activity</th>
                                                 <th>Subactivity</th>
-                                                <th>Mode</th>
+                                                <th>Method</th>
                                                 <th>SAQ Objective</th>
                                                 <th>Status</th>
-                                            </tr>
+                                            </tr>        
+                                            @foreach ($work_plans as $work_plan)
+                                                @php
+                                                    $wp = json_decode($work_plan->value);
+                                                @endphp
+                                                @if($wp->planned_date == $zdate)
+                                                @php
+                                                    $wp_ctr++;
+                                                @endphp
+                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                    <td>
+                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                    </td>
+                                                    <td>{{ $wp->activity_name}}</td>
+                                                    <td>{{ $work_plan->sub_activity_name}}</td>
+                                                    <td>{{ $wp->method}}</td>
+                                                    <td>{{ $wp->saq_objective}}</td>
+                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endforeach
+
+                                            @if($wp_ctr == 0)
                                             <tr>
-                                                <td>Site</td>
-                                                <td>Activity</td>
-                                                <td>Subactivity</td>
-                                                <td>Mode</td>
-                                                <td>SAQ Objective</td>
-                                                <td>Status</td>
+                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
                                             </tr>
-                                            <tr>
-                                                <td>Site</td>
-                                                <td>Activity</td>
-                                                <td>Subactivity</td>
-                                                <td>Mode</td>
-                                                <td>SAQ Objective</td>
-                                                <td>Status</td>
-                                            </tr>
-                                                
-                                            @endfor
+                                            @endif
+                                        @endfor
                                         </tbody>
-                                    </table>        
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -339,156 +312,100 @@
                                         <div class="widget-subheading">Planned Activities</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                     <div class="mb-3 card">
+                        <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                            <div class="row px-4">
+                                <div class="menu-header-content btn-pane-right">
+                                    <h5 class="menu-header-title text-dark">
+                                        <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
+                                         Upcoming Work Plan
+                                    </h5>
+                                </div>
+                                <div class="btn-actions-pane-right py-0">
+                                </div>
+                            </div>
+                        </div>        
                         <div class="card-body">
-                            <table class="table table-bordered table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 1, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 2, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 3, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 4, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 5, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 6, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td  class="bg-secondary p-2 text-white" colspan="6">January 7, 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Activity</th>
-                                        <th>Subactivity</th>
-                                        <th>Mode</th>
-                                        <th>SAQ Objective</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Site</td>
-                                        <td>Activity</td>
-                                        <td>Subactivity</td>
-                                        <td>Mode</td>
-                                        <td>SAQ Objective</td>
-                                        <td>Status</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="row mb-2">
+                                <div class="col-12 text-right">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div id="work_plan_upcoming" class="col-12 table-responsive">
+                                    @php 
+                                        $Date = date('Y-m-d',strtotime('last monday'));
+
+                                        $work_plans = \DB::table('view_work_plans')
+                                                                ->get();
+
+
+                                    @endphp
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <tbody>                                            
+                                            @for ($i = 7; $i < 14; $i++)
+                                            @php
+                                                $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
+                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                $wp_ctr = 0;
+                                            @endphp
+                                            <tr>
+            
+                                                <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                        </div>
+                                                        <div class="col-6 text-right">
+                                                            <button type="button" data-activity_source="work-plan-add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                                Add Work Plan
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr  class="bg-light">
+                                                <th>Site</th>
+                                                <th>Activity</th>
+                                                <th>Subactivity</th>
+                                                <th>Method</th>
+                                                <th>SAQ Objective</th>
+                                                <th>Status</th>
+                                            </tr>        
+                                            @foreach ($work_plans as $work_plan)
+                                                @php
+                                                    $wp = json_decode($work_plan->value);
+                                                @endphp
+                                                @if($wp->planned_date == $zdate)
+                                                @php
+                                                    $wp_ctr++;
+                                                @endphp
+                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                    <td>
+                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                    </td>
+                                                    <td>{{ $wp->activity_name}}</td>
+                                                    <td>{{ $work_plan->sub_activity_name}}</td>
+                                                    <td>{{ $wp->method}}</td>
+                                                    <td>{{ $wp->saq_objective}}</td>
+                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                @endif
+                                            @endforeach
+
+                                            @if($wp_ctr == 0)
+                                            <tr>
+                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
+                                            </tr>
+                                            @endif
+                                        @endfor
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -499,5 +416,18 @@
 
 </div>
 
+@endsection
+
+
+@section('js_script')
+
+<script src="\js\modal-loader.js"> </script>
+
+
+@endsection
+
+@section('modals')
+
+    <x-milestone-modal />
 
 @endsection

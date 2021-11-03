@@ -163,3 +163,51 @@ $('.show_activity_modal').on( 'click', function (e) {
 
 
 });
+
+
+$('.show_action_modal').on('click', function(e){
+    e.preventDefault();
+
+    loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
+    $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
+
+    // $(".ajax_content_box").attr("data-sam_id", $(this).attr('data-sam_id'));
+    // $(".ajax_content_box").attr("data-activity", $(this).attr('data-activity'));
+
+    var activity_source = $(this).attr('data-activity_source');
+    var json = $(this).attr('data-json');
+
+    $.ajax({
+        url: "/get-component",
+        method: "POST",
+        data: {
+            // sam_id : sam_id,
+            activity_source : activity_source,
+            direct_mode : true,
+            json : json
+        },
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function() {
+            },
+
+        success: function (resp){
+            $('.ajax_content_box').html("");   
+            $('.ajax_content_box').html(resp);   
+
+            $.unblockUI();
+            $('#viewInfoModal').modal('show');
+
+
+        },
+        complete: function(){
+        },
+        error: function (resp){
+            toastr.error(resp.message, "Error");
+        }
+    });
+
+
+});
