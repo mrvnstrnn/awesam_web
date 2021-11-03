@@ -28,19 +28,22 @@
                     <div class="mb-3 mt-3 card">
                         <div class="card-body p-0">                                        
                             <div class="no-gutters row">
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border">         
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                                                       
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Schedule Adherence</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border">   
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-red.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                             
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Planning Accuracy</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border"> 
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                               
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Completion Rate</div>
@@ -203,25 +206,29 @@
                     <div class="mb-3 mt-3 card">
                         <div class="card-body p-0">                                        
                             <div class="no-gutters row">
-                                <div class="col-3 col-sm-3 border">            
+                                <div class="col-3 col-sm-3 border">     
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                           
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Planned Activities</div>
                                     </div>
                                 </div>
                                 <div class="col-3 col-sm-3 border">            
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                    
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Schedule Adherence</div>
                                     </div>
                                 </div>
                                 <div class="col-3 col-sm-3 border">            
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-red.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                    
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Planning Accuracy</div>
                                     </div>
                                 </div>
-                                <div class="col-3 col-sm-3 border">            
+                                <div class="col-3 col-sm-3 border">    
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                            
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0%</div>
                                         <div class="widget-subheading">Completion Rate</div>
@@ -311,19 +318,22 @@
                     <div class="mb-3 mt-3 card">
                         <div class="card-body p-0">                                        
                             <div class="no-gutters row">
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border">           
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                     
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Assigned Sites</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border">      
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                          
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Activities w/o Work Plan</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 border">            
+                                <div class="col-sm-4 border"> 
+                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-green-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                               
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Planned Activities</div>

@@ -74,4 +74,26 @@
         @endif
     @endforeach
 </ul>    
+<ul class="vertical-nav-menu">
+    @php
+        $programs = \Auth::user()->getUserProgram();    
+
+    @endphp
+
+        @foreach ($programs as $program)
+        <li class="app-sidebar__heading">{{ $program->program}}</li>
+        @php
+        $stages = \DB::table('program_stages')->where('program_id',$program->program_id)->get();
+        @endphp
+
+        @foreach ($stages as $stages)
+        <li class="">
+            <a class="">
+                {{ $stages->stage_name }}
+            </a> 
+        </li>
+        @endforeach
+        @endforeach
+</ul>    
+
 
