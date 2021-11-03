@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Documents Validation" activitytype="doc validation"/>
+  <x-activity-datatable ajaxdatatablesource="datatable-data" tableheader="Documents Validation" activitytype="doc validation"/>
 
 @endsection
 
@@ -16,7 +16,7 @@
 @section('js_script')
 <script>
     //////////////////////////////////////
-    var profile_id = 8;
+    var profile_id = 3;
     var table_to_load = 'doc_validation';
     var main_activity = 'Document Validation';
  
