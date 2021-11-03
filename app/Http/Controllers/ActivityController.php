@@ -20,6 +20,8 @@ class ActivityController extends Controller
 
             // return dd($get_current_act);
 
+            // dd($request->all());
+
             $get_component = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
