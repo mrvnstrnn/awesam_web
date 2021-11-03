@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div id="work_plan_upcoming" class="col-12 table-responsive">
+                                <div id="work_plan_previous" class="col-12 table-responsive">
                                     @php 
                                         $Date = date('Y-m-d',strtotime('last monday'));
                                         $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
@@ -124,7 +124,7 @@
                                                 @php
                                                     $wp_ctr++;
                                                 @endphp
-                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
                                                     <td>
                                                         <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
                                                         <div class=""><small>{{ $work_plan->sam_id}}</small></div>
@@ -260,7 +260,7 @@
                                                 @php
                                                     $wp_ctr++;
                                                 @endphp
-                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
                                                     <td>
                                                         <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
                                                         <div class=""><small>{{ $work_plan->sam_id}}</small></div>
@@ -340,8 +340,6 @@
 
                                         $work_plans = \DB::table('view_work_plans')
                                                                 ->get();
-
-
                                     @endphp
                                     <table class="table table-bordered table-hover table-striped">
                                         <tbody>                                            
@@ -359,7 +357,7 @@
                                                             <H5 class="p-0 m-0">{{ $xdate }}<H5>
                                                         </div>
                                                         <div class="col-6 text-right">
-                                                            <button type="button" data-activity_source="work-plan-add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                            <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
                                                                 Add Work Plan
                                                             </button>
                                                         </div>
@@ -382,7 +380,7 @@
                                                 @php
                                                     $wp_ctr++;
                                                 @endphp
-                                                <tr class="work_plan_view" data-sam_id="{{ $work_plan->sam_id}}" data-activity_source="work_plan_table">
+                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
                                                     <td>
                                                         <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
                                                         <div class=""><small>{{ $work_plan->sam_id}}</small></div>
@@ -418,16 +416,15 @@
 
 @endsection
 
-
-@section('js_script')
-
-<script src="\js\modal-loader.js"> </script>
-
-
-@endsection
-
 @section('modals')
 
     <x-milestone-modal />
 
 @endsection
+
+@section('js_script')
+
+<script src="\js\modal-loader.js"> </script>
+
+@endsection
+
