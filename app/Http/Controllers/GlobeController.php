@@ -2779,9 +2779,9 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')->table("view_doc_validation")
                 ->where('program_id', $program_id)
-                // ->whereNull('approver_id')
-                // ->whereNull('approver_id2')
-                // ->whereNull('approver_id3')
+                ->whereNull('approver_id')
+                ->whereNull('approver_id2')
+                ->whereNull('approver_id3')
                 ->get();
 
         }
