@@ -2148,59 +2148,53 @@ class GlobeController extends Controller
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
 
-                if ($request->input('action') != "rejected") {
+                $validators = json_decode($sub_activity_files->value)->validators;
+                $file = json_decode($sub_activity_files->value)->file;
 
-                    // $subactivity_file = SubActivityValue::where('sub_activity_id', $sub_activity_files->sub_activity_id)
-                    //                                         ->where('sam_id', $request->input('sam_id'))
-                    //                                         ->where('status', 'pending')
-                    //                                         ->where('type', 'doc_upload_validators')
-                    //                                         ->first();
+                $approvers_collect = collect();
+                $approvers_pending_collect = collect();
+
+                foreach ($validators as $validator) {
+                    if ( $validator->profile_id == \Auth::user()->profile_id ) {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $request->get('action'),
+                            'user_id' => \Auth::id(),
+                            'approved_date' => Carbon::now()->toDateString(),
+                        );
+
+                        $approvers_collect->push($new_array);
+                    } else {
+                        if ( isset($validator->user_id) ) {
+                            $new_array = array(
+                                'profile_id' => $validator->profile_id,
+                                'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                                'user_id' => $validator->user_id,
+                                'approved_date' => $validator->approved_date,
+                            );
+                        } else {
+                            $new_array = array(
+                                'profile_id' => $validator->profile_id,
+                                'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                            );
+                            $approvers_pending_collect->push($validator->profile_id);
+                        }
+
+                        $approvers_collect->push($new_array);
+                    }
+                }
+
+                $array_data = [
+                    'file' => $file,
+                    'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
+                    'active_status' => "pending",
+                    'validator' => count($approvers_pending_collect->all()),
+                    'validators' => $approvers_collect->all()
+                ];
+
+                if ($request->input('action') != "rejected") {
                                                             
                     if ( !is_null($sub_activity_files) ) {
-
-                        $validators = json_decode($sub_activity_files->value)->validators;
-                        $file = json_decode($sub_activity_files->value)->file;
-
-                        $approvers_collect = collect();
-                        $approvers_pending_collect = collect();
-
-                        foreach ($validators as $validator) {
-                            if ( $validator->profile_id == \Auth::user()->profile_id ) {
-                                $new_array = array(
-                                    'profile_id' => $validator->profile_id,
-                                    'status' => $request->get('action'),
-                                    'user_id' => \Auth::id(),
-                                    'approved_date' => Carbon::now()->toDateString(),
-                                );
-
-                                $approvers_collect->push($new_array);
-                            } else {
-                                if ( isset($validator->user_id) ) {
-                                    $new_array = array(
-                                        'profile_id' => $validator->profile_id,
-                                        'status' => $validator->status,
-                                        'user_id' => $validator->user_id,
-                                        'approved_date' => $validator->approved_date,
-                                    );
-                                } else {
-                                    $new_array = array(
-                                        'profile_id' => $validator->profile_id,
-                                        'status' => $validator->status,
-                                    );
-                                    $approvers_pending_collect->push($validator->profile_id);
-                                }
-
-                                $approvers_collect->push($new_array);
-                            }
-                        }
-        
-                        $array_data = [
-                            'file' => $file,
-                            'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
-                            'active_status' => "pending",
-                            'validator' => count($approvers_pending_collect->all()),
-                            'validators' => $approvers_collect->all()
-                        ];
                         // return response()->json(['error' => true, 'message' => $array_data]);
 
                         if ( count($approvers_pending_collect) < 1 ) {
@@ -2256,6 +2250,14 @@ class GlobeController extends Controller
                     }
 
                 } else {
+                    $current_status = $request->input('action') == "rejected" ? "rejected" : "approved";
+
+                    $sub_activity_files->update([
+                        'value' => json_encode($array_data),
+                        'status' => $current_status,
+                        'remarks' => $request->input('reason')
+                    ]);
+
                     SubActivityValue::where('id', $request->input('id'))
                                 ->update([
                                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,

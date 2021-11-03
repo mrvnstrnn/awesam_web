@@ -1,4 +1,4 @@
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
@@ -21,7 +21,7 @@
                             </div>
                         </div> 
 
-                        <div class="modal-body">
+                        <div class="modal-body"> --}}
 
                             <div class="row">
 
@@ -77,14 +77,14 @@
                                 </div>
                             </div>
 
-                        </div>
+                        {{-- </div>
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 <script>

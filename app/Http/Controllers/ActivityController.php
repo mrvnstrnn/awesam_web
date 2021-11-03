@@ -51,14 +51,16 @@ class ActivityController extends Controller
                         ])
                         ->render();
             } else {
-                if ( $get_current_act->activity_id == 17 ) {
+
+                if ( $get_current_act->activity_id == 17 && $get_current_act->program_id == 3 ) {
                     $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                         ->where('status', "pending")
                                         ->where('type', "rtb_declaration")
                                         ->first();
 
-                    return \View::make('components.' . $get_component->activity_component)
+                    return \View::make('components.modal-view-site')
                         ->with([
+                            'activity_component' => $get_component->activity_component,
                             'rtbdeclaration' => $rtbdeclaration,
                             'site' => $site,
                             'activity_source' => $request->get('activity_source'),
@@ -66,8 +68,27 @@ class ActivityController extends Controller
                         ])
                         ->render();
                 }
-                return \View::make('components.' . $get_component->activity_component)
+                // return \View::make('components.' . $get_component->activity_component)
+                //         ->with([
+                //             'site' => $site,
+                //             'activity_source' => $request->get('activity_source'),
+                //             'main_activity' => '',
+                //         ])
+                //         ->render();
+
+                if (\Auth::user()->profile_id == 2) {
+                    return \View::make('components.' . $get_component->activity_component)
+                            ->with([
+                                'site' => $site,
+                                'activity_source' => $request->get('activity_source'),
+                                'main_activity' => '',
+                            ])
+                            ->render();
+                }
+                
+                return \View::make('components.modal-view-site')
                         ->with([
+                            'activity_component' => $get_component->activity_component,
                             'site' => $site,
                             'activity_source' => $request->get('activity_source'),
                             'main_activity' => '',

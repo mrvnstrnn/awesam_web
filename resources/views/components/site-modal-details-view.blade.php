@@ -89,7 +89,6 @@
             <x-site-issues :site="$site" />
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
-            {{-- <x-site-files :site="$site" /> --}}
             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
@@ -165,20 +164,20 @@
         });
 
         
-        $.ajax({
-            url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
-            method: "GET",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                $('#tab-content-files').html("");   
-                $('#tab-content-files').html(resp);
-            },
-            error: function (resp){
-                toastr.error(resp.message, "Error");
-            }
-        });
+        // $.ajax({
+        //     url: "/modal-view-site-component/" + sam_id + "/tab-content-files",
+        //     method: "GET",
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     success: function (resp){
+        //         $('#tab-content-files').html("");   
+        //         $('#tab-content-files').html(resp);
+        //     },
+        //     error: function (resp){
+        //         toastr.error(resp.message, "Error");
+        //     }
+        // });
 
         $.ajax({
             url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
