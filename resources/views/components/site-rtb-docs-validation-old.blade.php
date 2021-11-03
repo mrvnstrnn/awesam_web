@@ -1,194 +1,137 @@
-<div class="row file_preview d-none">
-    <div class="col-12 mb-3">
-        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-        <button class="float-right mt-0 btn btn-success approve_reject_doc_btns" data-action="approve" type="button">Approve Document</button>
-        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
-    </div>
-    <div class="col-12 file_viewer">
-    </div>
-    <div class="col-12 my-3">
-        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
-    </div>
-    <div class="col-12 file_viewer_list pt-3">
-    </div>
-</div>
-<div class="row file_lists">
-    @php
-        $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-    @endphp
+<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="background-color: transparent; border: 0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="main-card mb-3 card ">
 
-    @forelse ($datas as $data)
-        {{-- @if (is_null($data->files)) --}}
-            {{-- <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                <div class="dropzone dropzone_files" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
-                    <div class="dz-message">
-                        <i class="fa fa-plus fa-3x"></i>
-                        <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
+                        <div class="dropdown-menu-header">
+                            <div class="dropdown-menu-header-inner bg-dark">
+                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                                <div class="menu-header-content btn-pane-right">
+                                    <h5 class="menu-header-title">
+                                        Doc Validation
+                                    </h5>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="modal-body">
+
+                            <div class="row file_preview d-none">
+                                <div class="col-12 mb-3">
+                                    <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+                                    <button class="float-right mt-0 btn btn-success approve_reject_doc_btns" data-action="approve" type="button">Approve Document</button>
+                                    <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
+                                </div>
+                                <div class="col-12 file_viewer">
+                                </div>
+                                <div class="col-12 my-3">
+                                    <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+                                </div>
+                                <div class="col-12 file_viewer_list pt-3">
+                                </div>
+                            </div>
+                            
+                            <div class="row file_lists">
+                                @php
+                                    // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
+                                    $datas = \DB::connection('mysql2')
+                                                    ->table('sub_activity_value')
+                                                    ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id')
+                                                    ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                                    ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                                    ->where('sub_activity.action', 'doc upload')
+                                                    ->orderBy('sub_activity_value.sub_activity_id')
+                                                    ->get();
+
+                                    $keys_datas = $datas->groupBy('sub_activity_id')->keys();
+                                @endphp
+
+                                @forelse ($datas->groupBy('sub_activity_id') as $data)
+                                    @php $status_collect = collect(); @endphp
+                                    @for ($i = 0; $i < count($data); $i++)
+                                        @php
+                                            $status_collect->push( $data[$i]->status );
+                                        @endphp
+                                    @endfor
+                                    @if ( count( $status_collect->all() ) > 0 )
+                                        @php
+
+                                            if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                                                $extension = "fa-file-pdf";
+                                            } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                                                $extension = "fa-file-image";
+                                            } else {
+                                                $extension = "fa-file";
+                                            }
+
+                                            $icon_color = "";
+                                            if ( in_array( 'approved', $status_collect->all() ) ) {
+                                                $icon_color = "success";
+                                                $border = "border-success";
+                                            } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                                                $icon_color = "secondary";
+                                                $border = "border-secondary";
+                                            } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                                                $icon_color = "secondary";
+                                                $border = "border-secondary";
+                                            } else {
+                                                $icon_color = "danger";
+                                                $border = "border-danger";
+                                            }
+                                        @endphp
+                                        
+                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                                            <div class="child_div_{{ $data[0]->sub_activity_id }}">
+                                                <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
+                                                    <div>
+                                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                                                    <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                                                    </div>
+                                                </div>
+                                                @if($icon_color == "success")   
+                                                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                                @elseif($icon_color == "danger")   
+                                                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+                                @empty
+                                    <div class="col-12 text-center">
+                                        <h3>No files here.</h3>
+                                    </div>
+                                @endforelse
+
+                                <input type="hidden" name="hidden_filename" id="hidden_filename">
+                            </div>
+
+                            <div class="row confirmation_message text-center pt-2 pb-5 d-none">
+                                <div class="col-12">
+                                    <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
+                                    <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
+
+                                    <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
+                                    <small class="reason-error text-danger"></small><br>
+                                    
+                                    <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
+                                    <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
-            </div> --}}
-        {{-- @else --}}
-        
-        @if (!is_null($data->files))
-            @php
-                $uploaded_files = json_decode($data->files);
-
-                if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "pdf") {
-                    $extension = "fa-file-pdf";
-                } else if (pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($uploaded_files[0]->value, PATHINFO_EXTENSION) == "jpg") {
-                    $extension = "fa-file-image";
-                } else {
-                    $extension = "fa-file";
-                }
-
-                $icon_color = "";
-                foreach($uploaded_files as $approved){
-                    if($approved->status == "approved"){
-                        $icon_color = "success";
-                    } else {
-                        $icon_color = "secondary";
-                    }
-                }
-            @endphp
-            
-            @foreach ($uploaded_files as $item)
-                @if ($item->status == "denied")
-                    <div class="col-md-4 col-sm-4 col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style='min-height: 100px;'>
-                        <div class="dropzone dropzone_files" data-sam_id="{{ $site[0]->sam_id }}" data-sub_activity_id="{{ $data->sub_activity_id }}" data-sub_activity_name="{{ $data->sub_activity_name }}">
-                            <div class="dz-message">
-                                <i class="fa fa-plus fa-3x"></i>
-                                <p><small class="sub_activity_name{{ $data->sub_activity_id }}">{{ $data->sub_activity_name }}</small></p>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    @if($loop->first)
-                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($uploaded_files) }}" data-sub_activity_name="{{ $data->sub_activity_name }}" data-id="{{ $uploaded_files[0]->id }}" data-status="{{ $uploaded_files[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data->sub_activity_id }}">
-                            <div class="child_div_{{ $data->sub_activity_id }}">
-                                <div class="dz-message text-center align-center border" style='padding: 25px 0px 15px 0px;'>
-                                    <div>
-                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                    <p><small>{{ $data->sub_activity_name }}</small></p>
-                                    </div>
-                                </div>
-                                @if($icon_color == "success")   
-                                <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-                @endif
-            @endforeach
-        @endif
-    @empty
-        <div class="col-12 text-center">
-            <h3>No files here.</h3>
+            </div>
         </div>
-    @endforelse
-
-    <input type="hidden" name="hidden_filename" id="hidden_filename">
-</div>
-
-<div class="row confirmation_message pt-2 pb-5 d-none">
-    <div class="col-12 text-center">
-        <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
-        <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
-
-        <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
-        {{-- <small class="text_area_reason-error text-danger"></small> --}}
-        
-        <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
-        <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
     </div>
 </div>
 
 <script src="/js/dropzone/dropzone.js"></script>
 
 <script>  
-
-    if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
-        Dropzone.autoDiscover = false;
-        $(".dropzone_files").dropzone({
-            addRemoveLinks: true,
-            maxFiles: 1,
-            // maxFilesize: 1,
-            paramName: "file",
-            url: "/upload-file",
-            init: function() {
-                this.on("maxfilesexceeded", function(file){
-                    this.removeFile(file);
-                });
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (file, resp) {
-                if (!resp.error){
-                    var sam_id = this.element.attributes[1].value;
-                    var sub_activity_id = this.element.attributes[2].value;
-                    var sub_activity_name = this.element.attributes[3].value;
-                    var file_name = resp.file;
-
-                    $.ajax({
-                        url: "/upload-my-file",
-                        method: "POST",
-                        data: {
-                            sam_id : sam_id,
-                            sub_activity_id : sub_activity_id,
-                            file_name : file_name,
-                            sub_activity_name : sub_activity_name
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (resp) {
-                            if (!resp.error){
-
-                                var ext = file_name.split('.').pop();
-
-                                var class_name = "";
-
-                                if (ext == "pdf") {
-                                    class_name = "fa-file-pdf";
-                                } else if (ext == "png" || ext == "jpeg" || ext == "jpg") {
-                                    class_name = "fa-file-image";
-                                } else {
-                                    class_name = "fa-file";
-                                }
-
-                                $(".dropzone_div_"+sub_activity_id+ " .dropzone_files").remove();
-
-                                $(".dropzone_div_"+sub_activity_id).append(
-                                    '<div class="child_div_'+sub_activity_id+'">' +
-                                        '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;"">' +
-                                            '<div>' +
-                                                '<i class="fa '+class_name+' fa-2x text-primary"></i><br>' +
-                                                '<p><small>'+sub_activity_name+'</small></p>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>'
-                                );
-                                
-                                // $(".child_div_"+sub_activity_id).load(document.location.href + " .child_div_"+sub_activity_id );
-                                
-                                toastr.success(resp.message, "Success");
-                            } else {
-                                toastr.error(resp.message, "Error");
-                            }
-                        },
-                        error: function (file, resp) {
-                            toastr.error(resp.message, "Error");
-                        }
-                    });
-                } else {
-                    toastr.error(resp.message, "Error");
-                }
-            },
-            error: function (file, resp) {
-                toastr.error(resp.message, "Error");
-            }
-        });
-    }
     
     $(".view_file").on("click", function (e){
 
@@ -396,11 +339,14 @@
         var site_vendor_id = $("#modal_site_vendor_id").val();
         var program_id = $("#modal_program_id").val();
 
-        var sam_id = $("#details_sam_id").val();
+        // var sam_id = $("#details_sam_id").val();
+        var sam_id = "{{ $site[0]->sam_id }}"
         var filename = $("#hidden_filename").val();
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
+
+        $(".confirmation_message small").text("");
 
         $.ajax({
             url: "/doc-validation-approval",
@@ -437,16 +383,28 @@
                         $(".child_div_"+sub_activity_id).append(
                             '<i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i><br>'
                         );
+                    } else {
+                        $(".child_div_"+sub_activity_id).append(
+                            '<i class="fa fa-times-circle fa-lg text-danger" style="position: absolute; top:10px; right: 20px"></i><br>'
+                        );
                     }
                     
                     $(".file_lists").removeClass("d-none");
                     $(".confirmation_message").addClass("d-none");
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".confirmation_message ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                    
                     $(".approve_reject_doc_btns_final").removeAttr("disabled");
                     $(".approve_reject_doc_btns_final").text("Confirm");
                 }

@@ -1277,15 +1277,6 @@ class GlobeController extends Controller
                     $file_status = "approved";
                 }
 
-                SubActivityValue::create([
-                    'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => $request->input("sub_activity_id"),
-                    'value' => $new_file,
-                    'user_id' => \Auth::id(),
-                    'type' => 'doc_upload',
-                    'status' => $file_status,
-                ]);
-
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
@@ -1324,10 +1315,25 @@ class GlobeController extends Controller
                         'sub_activity_id' => $request->input("sub_activity_id"),
                         'value' => json_encode($array_data),
                         'user_id' => \Auth::id(),
-                        'type' => 'doc_upload_validator',
+                        'type' => 'doc_upload',
                         'status' => $file_status,
                     ]);
+
                 } else if ($stage_activities->activity_type != 'doc upload') {
+
+                    $array_data = [
+                        'file' => $new_file
+                    ];
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => $file_status,
+                    ]);
+
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
                                                 ->where('category', $request->input("site_category"))
@@ -2144,16 +2150,16 @@ class GlobeController extends Controller
 
                 if ($request->input('action') != "rejected") {
 
-                    $subactivity_file = SubActivityValue::where('sub_activity_id', $sub_activity_files->sub_activity_id)
-                                                            ->where('sam_id', $request->input('sam_id'))
-                                                            ->where('status', 'pending')
-                                                            ->where('type', 'doc_upload_validator')
-                                                            ->first();
+                    // $subactivity_file = SubActivityValue::where('sub_activity_id', $sub_activity_files->sub_activity_id)
+                    //                                         ->where('sam_id', $request->input('sam_id'))
+                    //                                         ->where('status', 'pending')
+                    //                                         ->where('type', 'doc_upload_validators')
+                    //                                         ->first();
                                                             
-                    if ( !is_null($subactivity_file) ) {
+                    if ( !is_null($sub_activity_files) ) {
 
-                        $validators = json_decode($subactivity_file->value)->validators;
-                        $file = json_decode($subactivity_file->value)->file;
+                        $validators = json_decode($sub_activity_files->value)->validators;
+                        $file = json_decode($sub_activity_files->value)->file;
 
                         $approvers_collect = collect();
                         $approvers_pending_collect = collect();
@@ -2169,19 +2175,28 @@ class GlobeController extends Controller
 
                                 $approvers_collect->push($new_array);
                             } else {
-                                $new_array = array(
-                                    'profile_id' => $validator->profile_id,
-                                    'status' => $validator->status
-                                );
+                                if ( isset($validator->user_id) ) {
+                                    $new_array = array(
+                                        'profile_id' => $validator->profile_id,
+                                        'status' => $validator->status,
+                                        'user_id' => $validator->user_id,
+                                        'approved_date' => $validator->approved_date,
+                                    );
+                                } else {
+                                    $new_array = array(
+                                        'profile_id' => $validator->profile_id,
+                                        'status' => $validator->status,
+                                    );
+                                    $approvers_pending_collect->push($validator->profile_id);
+                                }
 
                                 $approvers_collect->push($new_array);
-                                $approvers_pending_collect->push($validator->profile_id);
                             }
                         }
         
                         $array_data = [
                             'file' => $file,
-                            'active_profile' => $approvers_pending_collect->all()[0],
+                            'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
                             'active_status' => "pending",
                             'validator' => count($approvers_pending_collect->all()),
                             'validators' => $approvers_collect->all()
@@ -2205,7 +2220,7 @@ class GlobeController extends Controller
                                     ]);
                         }
 
-                        $subactivity_file->update([
+                        $sub_activity_files->update([
                             'value' => json_encode($array_data),
                             'status' => $current_status
                         ]);
@@ -4393,10 +4408,58 @@ class GlobeController extends Controller
                                         ->where('type', 'doc_upload')
                                         ->get();
 
-            $dt = DataTables::of($sub_activity_ids)
-                                ->addColumn('value', function($row) {
-                                    return $row->value;
-                                });
+            $dt = DataTables::of($sub_activity_ids);
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8) {
+                                    $dt->addColumn('value', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+                    
+                                            return $json['file'];
+                                        } else {
+                                            return $row->value;
+                                        }
+
+                                    })
+                                    ->addColumn('status', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+
+                                            if ( isset($json['validators']) ) {
+                                                for ($i=0; $i < count($json['validators']); $i++) { 
+                                                    if ( $json['validators'][$i]['profile_id'] == \Auth::user()->profile_id ) {
+                                                        return $json['validators'][$i]['status'];
+                                                    }
+                                                }
+                                            } else {
+                                                return $row->status;
+                                            }
+                    
+                                        } else {
+                                            return $row->value;
+                                        }
+
+                                    });
+                                } else if (\Auth::user()->profile_id == 2) {
+                                    $dt->addColumn('value', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+                    
+                                            return $json['file'];
+                                        } else {
+                                            return $row->value;
+                                        }
+                                    })
+                                    ->addColumn('status', function($row) {
+                                        if (json_last_error() == JSON_ERROR_NONE){
+                                            $json = json_decode($row->value, true);
+                    
+                                            return isset($json['status']) ? $json['status'] : $row->status;
+                                        } else {
+                                            return $row->value;
+                                        }
+                                    })
+                                    ;
+                                }
             return $dt->make(true);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);

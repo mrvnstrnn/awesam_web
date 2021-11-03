@@ -52,15 +52,29 @@
                                     @php $status_collect = collect(); @endphp
                                     @for ($i = 0; $i < count($data); $i++)
                                         @php
-                                            $status_collect->push( $data[$i]->status );
+                                            $json_status = json_decode( $data[$i]->value );
+                                            $json_status_first = json_decode( $data[0]->value );
+
+                                            if ( isset($json_status->validators) ) {
+                                                for ($j=0; $j < count($json_status->validators); $j++) { 
+                                                    if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                                        $status_collect->push( $json_status->validators[$j]->status );
+                                                        $status_file = $json_status_first->validators[$j]->status;
+                                                    }
+                                                }
+                                            } else {
+                                                $status_collect->push( $data[$i]->status );
+                                                $status_file = $data[0]->status;
+                                            }
+                                            // $status_collect->push( $data[$i]->status );
                                         @endphp
                                     @endfor
                                     @if ( count( $status_collect->all() ) > 0 )
                                         @php
-
-                                            if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                                            $json_file_status = json_decode( $data[0]->value );
+                                            if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
                                                 $extension = "fa-file-pdf";
-                                            } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                                            } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
                                                 $extension = "fa-file-image";
                                             } else {
                                                 $extension = "fa-file";
@@ -82,7 +96,7 @@
                                             }
                                         @endphp
                                         
-                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                                             <div class="child_div_{{ $data[0]->sub_activity_id }}">
                                                 <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                                                     <div>
@@ -148,23 +162,31 @@
         var sub_activity_id = $(this).attr("data-sub_activity_id");
         $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
 
-        if ($(this).attr("data-status") == "pending"){
+        var extensions = ["pdf", "jpg", "png"];
+
+        var values = JSON.parse($(this).attr('data-value'));
+
+        if ($(this).attr('data-status') == "pending"){
             $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
         }
 
-        var extensions = ["pdf", "jpg", "png"];
+        
 
-        var values = JSON.parse($(this).attr('data-value'));
+        // if( extensions.includes(values[0].value.split('.').pop()) == true) {     
+        //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        // } else {
+        //   htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        // }
 
-        if( extensions.includes(values[0].value.split('.').pop()) == true) {     
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
         } else {
-          htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + JSON.parse(values[0].value).file + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
 
-        $("#hidden_filename").val(values[0].value);
+        $("#hidden_filename").val(JSON.parse(values[0].value).file);
 
         var sam_id = $(this).attr('data-sam_id');
                 
