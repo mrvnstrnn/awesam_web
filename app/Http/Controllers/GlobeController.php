@@ -2235,8 +2235,6 @@ class GlobeController extends Controller
                                                 ->where('requires_validation', '1')
                                                 ->get();
 
-
-
                     $array_sub_activity = collect();
 
                     foreach ($sub_activities as $sub_activity) {
@@ -2247,7 +2245,8 @@ class GlobeController extends Controller
                     $sub_activity_value = SubActivityValue::select('sub_activity_id')
                                                         ->whereIn('sub_activity_id', $array_sub_activity->all())
                                                         ->where('sam_id', $request->input('sam_id'))
-                                                        ->where('status', 'pending')
+                                                        // ->where('status', 'pending')
+                                                        ->where('status', 'approved')
                                                         ->where('type', 'doc_upload')
                                                         ->groupBy('sub_activity_id')
                                                         ->get();
@@ -2543,7 +2542,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [17, 20, 14, 17])
                                     ->get();
                                 } else if ( $program_id == 3 ) {
-                                    $sites->whereIn('view_site.activity_id', [13, 18, 19, 22, 23])
+                                    $sites->whereIn('view_site.activity_id', [15, 22, 23, 28, 29])
                                     ->get();
                                 } else if ( $program_id == 4 ) {
                                     if(\Auth::user()->profile_id == 8){

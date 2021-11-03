@@ -358,11 +358,10 @@
 
         var text_area_reason = $("#text_area_reason").val();
 
-        var site_vendor_id = $("#modal_site_vendor_id").val();
-        var program_id = $("#modal_program_id").val();
+        var program_id = "{{ $site[0]->program_id }}"
 
         // var sam_id = $("#details_sam_id").val();
-        var sam_id = "{{ $site[0]->sam_id }}"
+        var sam_id = "{{ $site[0]->sam_id }}";
         var filename = $("#hidden_filename").val();
 
         $(this).attr("disabled", "disabled");
@@ -379,7 +378,6 @@
                 reason : text_area_reason,
                 sam_id : sam_id,
                 filename : filename,
-                site_vendor_id : site_vendor_id,
                 program_id : program_id,
                 activity_id : activity_id,
                 site_category : site_category,
