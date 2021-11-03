@@ -68,10 +68,10 @@
                                     @endfor
                                     @if ( count( $status_collect->all() ) > 0 )
                                         @php
-
-                                            if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                                            $json_file_status = json_decode( $data[0]->value );
+                                            if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
                                                 $extension = "fa-file-pdf";
-                                            } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                                            } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
                                                 $extension = "fa-file-image";
                                             } else {
                                                 $extension = "fa-file";
@@ -159,23 +159,46 @@
         var sub_activity_id = $(this).attr("data-sub_activity_id");
         $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
 
-        if ($(this).attr("data-status") == "pending"){
-            $(".approve_reject_doc_btns").removeClass("d-none");
-        } else {
-            $(".approve_reject_doc_btns").addClass("d-none");
-        }
-
         var extensions = ["pdf", "jpg", "png"];
 
         var values = JSON.parse($(this).attr('data-value'));
 
-        if( extensions.includes(values[0].value.split('.').pop()) == true) {     
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        if ( JSON.parse(values[0].value).validators != undefined) {
+
+            var array_validators = JSON.parse(values[0].value).validators;
+
+            for (let i = 0; i < array_validators.length; i++) {
+                if ( array_validators[i].profile_id == "{{ \Auth::user()->profile_id }}" ) { 
+                    if (array_validators[i].status == "pending"){
+                        $(".approve_reject_doc_btns").removeClass("d-none");
+                    } else {
+                        $(".approve_reject_doc_btns").addClass("d-none");
+                    }
+                }
+            }
         } else {
-          htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+            if (values.status == "pending"){
+                $(".approve_reject_doc_btns").removeClass("d-none");
+            } else {
+                $(".approve_reject_doc_btns").addClass("d-none");
+            }
         }
 
-        $("#hidden_filename").val(values[0].value);
+        
+
+        // if( extensions.includes(values[0].value.split('.').pop()) == true) {     
+        //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        // } else {
+        //   htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        // }
+
+        if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
+        } else {
+          htmltoload = '<div class="text-center my-5"><a href="/files/' + JSON.parse(values[0].value).file + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        $("#hidden_filename").val(JSON.parse(values[0].value).file);
 
         var sam_id = $(this).attr('data-sam_id');
                 
