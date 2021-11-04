@@ -74,10 +74,10 @@
         @endif
     @endforeach
 </ul>    
+@if(\Auth::user()->profile_id == 2)
 <ul class="vertical-nav-menu">
     @php
         $programs = \Auth::user()->getUserProgram();    
-
     @endphp
 
         @foreach ($programs as $program)
@@ -95,5 +95,5 @@
         @endforeach
         @endforeach
 </ul>    
-
+@endif
 

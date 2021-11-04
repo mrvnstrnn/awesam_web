@@ -114,8 +114,7 @@
         </div>
     </div>
 </div>
-<div class="divider"></div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-12">
         <h3>Team Dashboard</h3>
     </div>
@@ -194,76 +193,85 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="divider"></div>
+
+<x-home-dashboard-productivity />
+
 <div class="row" style="">
-        <div class="col-12">
-            <h3>My Team</h3>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+    <div class="col-12">
+        <h3>My Team</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col mb-2 mt-1" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
                         </div>
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
                         </div>
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                    </div>
+                    <div class="col mb-2 mt-1" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
                         </div>
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
                         </div>
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                    </div>
+                    <div class="col mb-2 mt-1" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle offline" src="images/avatars/6.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
                         </div>
-                        <div class="col mb-2" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle" src="images/avatars/8.jpg" alt="" width="70">
-                            </div>
-                            <div style="text-align: center;">
-                                <small>Test</small>
-                            </div>
+                    </div>
+                    <div class="col mb-2 mt-1" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
+                        </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
+                        </div>
+                    </div>
+                    <div class="col mb-2 mt-1" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
+                        </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
+                        </div>
+                    </div>
+                    <div class="col mb-2" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle offline" src="images/avatars/6.jpg" alt="" width="70">
+                        </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
+                        </div>
+                    </div>
+                    <div class="col mb-2" style="text-align: center;">
+                        <div>
+                            <img class="rounded-circle" src="images/avatars/8.jpg" alt="" width="70">
+                        </div>
+                        <div style="text-align: center;">
+                            <small>Test</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </div>
+
+<div class="divider"></div>
+
+<x-home-dashboard-milestone />
+
+<div class="divider"></div>
 
 @endsection
 

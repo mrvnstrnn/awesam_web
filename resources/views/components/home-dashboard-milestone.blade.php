@@ -1,12 +1,14 @@
 @php
     if(\Auth::user()->profile_id == 2){
         $title = "My Site Milestones";
+        $table = 'view_COLOC_dashboard_agent';
     }
     elseif(\Auth::user()->profile_id == 3){
         $title = "My Team's Site Milestones";
+        $table = 'view_COLOC_dashboard_supervisor';
     }
 
-    $milestones = \DB::table('view_COLOC_dashboard_agent')
+    $milestones = \DB::table($table)
                     ->orderBy('activity_id', 'asc') 
                     ->get();
 

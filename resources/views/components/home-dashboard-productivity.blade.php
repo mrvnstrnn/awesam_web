@@ -1,6 +1,14 @@
+@php
+    if(\Auth::user()->profile_id == 2){
+        $title = "My Productivity";
+    }
+    elseif(\Auth::user()->profile_id == 3){
+        $title = "My Team's Productivity";
+    }
+@endphp
 <div class="row">
     <div class="col-12">
-        <h3>My Productivity</h3>
+        <h3>{{$title}}</h3>
     </div>
 </div>
 <div class="row">
