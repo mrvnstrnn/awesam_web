@@ -40,10 +40,19 @@ class ActivityController extends Controller
                         
                 if ( is_null($get_component) ) {
 
-                    return \View::make('components.activity-error')
+                    // return \View::make('components.activity-error')
+                    //         ->with([
+                    //             'site' => $site,
+                    //             'activity_source' => $request->get('activity_source'),  
+                    //             'main_activity' => '',
+                    //         ])
+                    //         ->render();
+
+                    return \View::make('components.modal-view-site')
                             ->with([
+                                'activity_component' => "site-modal-details-view",
                                 'site' => $site,
-                                'activity_source' => $request->get('activity_source'),  
+                                'activity_source' => $request->get('activity_source'),
                                 'main_activity' => '',
                             ])
                             ->render();
