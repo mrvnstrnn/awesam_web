@@ -89,12 +89,35 @@ class ActivityController extends Controller
 
             } else {
 
-                return \View::make('components.activity-work-plan-date')
-                ->with([
-                    'activity_source' => $request['activity_source'],  
-                    'json' => $request['json'],
-                ])
-                ->render();
+                switch($request['activity_source']){
+
+                    case "work_plan_add": 
+                        
+                        $component_to_load = "activity-work-plan-date";
+                        break;
+
+                    case "work_plan_activity_add": 
+                        
+                        $component_to_load = "activity-work-plan-date";
+                        break;
+
+                    case "work_plan_view": 
+                        
+                        $component_to_load = "activity-work-plan-date";
+                        break;
+
+                    default: 
+                    
+                        $component_to_load = "activity-error";
+
+                }
+
+                return \View::make('components.' . $component_to_load)
+                            ->with([
+                                'activity_source' => $request['activity_source'],  
+                                'json' => $request['json'],
+                            ])
+                            ->render();
 
             }
 
