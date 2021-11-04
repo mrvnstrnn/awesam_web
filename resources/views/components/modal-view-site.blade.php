@@ -54,7 +54,6 @@
                                         } else {
                                             $badge_color = "danger";
                                         }
-                                
                                         @endphp
                                 
                                         @if($main_activity == "")
