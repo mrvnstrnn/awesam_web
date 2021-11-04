@@ -62,6 +62,7 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
+            // return response()->json(['error' => true, 'message' => $request->all()]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -278,42 +279,42 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                if ($request->input('data_complete') == 'false') {
+                // if ($request->input('data_complete') == 'false') {
 
-                    $activities = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->select('return_activity')
-                                        ->where('activity_id', $activity_id[0])
-                                        ->where('program_id', $program_id)
-                                        ->where('category', $site_category[0])
-                                        ->first();
+                //     $activities = \DB::connection('mysql2')
+                //                         ->table('stage_activities')
+                //                         ->select('return_activity')
+                //                         ->where('activity_id', $activity_id[0])
+                //                         ->where('program_id', $program_id)
+                //                         ->where('category', $site_category[0])
+                //                         ->first();
 
-                    $sub_activities = \DB::connection('mysql2')
-                                            ->table('sub_activity')
-                                            ->select('sub_activity_id')
-                                            ->where('activity_id', $activities->return_activity)
-                                            ->where('program_id', $program_id)
-                                            ->where('category', $site_category[0])
-                                            ->where('requires_validation', 1)
-                                            ->get()
-                                            ->pluck('sub_activity_id');
+                //     $sub_activities = \DB::connection('mysql2')
+                //                             ->table('sub_activity')
+                //                             ->select('sub_activity_id')
+                //                             ->where('activity_id', $activities->return_activity)
+                //                             ->where('program_id', $program_id)
+                //                             ->where('category', $site_category[0])
+                //                             ->where('requires_validation', 1)
+                //                             ->get()
+                //                             ->pluck('sub_activity_id');
 
-                    if (\Auth::user()->profile_id == 8) {
-                        $column_var = 'reviewer_id';
-                        $column_var2 = 'reviewer_approved';
-                    } else {
-                        $column_var = 'reviewer_id_2';
-                        $column_var2 = 'reviewer_approved_2';
-                    }
+                //     if (\Auth::user()->profile_id == 8) {
+                //         $column_var = 'reviewer_id';
+                //         $column_var2 = 'reviewer_approved';
+                //     } else {
+                //         $column_var = 'reviewer_id_2';
+                //         $column_var2 = 'reviewer_approved_2';
+                //     }
 
-                    SubActivityValue::whereIn('sub_activity_id', $sub_activities)
-                                        ->update([
-                                            'status' => 'rejected',
-                                            'reason' => $request->input('text_area_reason'),
-                                            $column_var => \Auth::id(),
-                                            $column_var2 => Carbon::now()->toDate(),
-                                        ]);
-                }
+                //     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
+                //                         ->update([
+                //                             'status' => 'rejected',
+                //                             'reason' => $request->input('text_area_reason'),
+                //                             $column_var => \Auth::id(),
+                //                             $column_var2 => Carbon::now()->toDate(),
+                //                         ]);
+                // }
 
             } else if ($request->input('activity_name') == "elas_approved") {
 
@@ -2291,35 +2292,37 @@ class GlobeController extends Controller
 
             if ($validate->passes()) {
                 
-                $activities_check = \DB::connection('mysql2')
-                                        ->table('stage_activities')
-                                        ->where('activity_id', $request->input("activity_id"))
-                                        ->where('program_id', $request->input("program_id"))
-                                        ->where('category', $request->input("site_category"))
-                                        ->first();
+                // $activities_check = \DB::connection('mysql2')
+                //                         ->table('stage_activities')
+                //                         ->where('activity_id', $request->input("activity_id"))
+                //                         ->where('program_id', $request->input("program_id"))
+                //                         ->where('category', $request->input("site_category"))
+                //                         ->first();
 
-                $sub_activity_value_check = SubActivityValue::where('id', $request->input('id'))->first();
+                // $sub_activity_value_check = SubActivityValue::where('id', $request->input('id'))->first();
                                         
                 SubActivityValue::where('id', $request->input('id'))
                                 ->update([
                                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    'status' => $request->input('action') == "rejected" ? "rejected" : "approved",
+                                    'approver_id' => \Auth::id(),
                                 ]);
 
-                if ( is_null($sub_activity_value_check->reviewer_id) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'reviewer_id' => \Auth::id(),
-                                        'reviewer_approved' => Carbon::now()->toDate(),
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-                } else if ( !is_null($sub_activity_value_check->reviewer_id) && is_null($sub_activity_value_check->reviewer_id_2) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'reviewer_id_2' => \Auth::id(),
-                                        'reviewer_approved_2' => Carbon::now()->toDate(),
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-                }
+                // if ( is_null($sub_activity_value_check->reviewer_id) ) {
+                //     SubActivityValue::where('id', $request->input('id'))
+                //                     ->update([
+                //                         'reviewer_id' => \Auth::id(),
+                //                         'reviewer_approved' => Carbon::now()->toDate(),
+                //                         'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                //                     ]);
+                // } else if ( !is_null($sub_activity_value_check->reviewer_id) && is_null($sub_activity_value_check->reviewer_id_2) ) {
+                //     SubActivityValue::where('id', $request->input('id'))
+                //                     ->update([
+                //                         'reviewer_id_2' => \Auth::id(),
+                //                         'reviewer_approved_2' => Carbon::now()->toDate(),
+                //                         'status' => $request->input('action') == "rejected" ? "denied" : "approved"
+                //                     ]);
+                // }
 
                 return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
             } else {
