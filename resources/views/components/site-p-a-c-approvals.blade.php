@@ -31,20 +31,27 @@
     @endphp
 
     @forelse ($datas->groupBy('sub_activity_id') as $data)
-        @php $status_collect = collect(); @endphp
+        @php 
+            $status_collect = collect();
+            $status_docs_collect = collect();
+        @endphp
         @for ($i = 0; $i < count($data); $i++)
             @php
-                $json_status = json_decode( $data[$i]->value );
-                $json_status_first = json_decode( $data[0]->value );
-
-                if ( isset($json_status->validators) ) {
-                    for ($j=0; $j < count($json_status->validators); $j++) { 
-                        $status_collect->push( $json_status->validators[$j]->status );
-                        $status_file = $json_status_first->validators[$j]->status;
-                    }
-                } else {
+                if ($data[$i]->status == 'rejected') {
                     $status_collect->push( $data[$i]->status );
-                    $status_file = $data[0]->status;
+                } else {
+                    $json_status = json_decode( $data[$i]->value );
+                    $json_status_first = json_decode( $data[0]->value );
+
+                    if ( isset($json_status->validators) ) {
+                        for ($j=0; $j < count($json_status->validators); $j++) { 
+                            $status_collect->push( $json_status->validators[$j]->status );
+                            $status_file = $json_status_first->validators[$j]->status;
+                        }
+                    } else {
+                        $status_collect->push( $data[$i]->status );
+                        $status_file = $data[0]->status;
+                    }
                 }
                 // $status_collect->push( $data[$i]->status );
             @endphp
@@ -77,7 +84,9 @@
                 }
             @endphp
             
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+            {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
+                
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                 <div class="child_div_{{ $data[0]->sub_activity_id }}">
                     <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -114,7 +123,9 @@
         <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
     </div>
 </div>
-
+{{-- @php
+ dd($status_collect);
+@endphp --}}
 <div class="row reject_remarks d-none">
     <div class="col-12">
         <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
@@ -144,9 +155,10 @@
 @endif
 
 <div class="row mb-3 border-top pt-3 button_area_div">
-    <div class="col-12 align-right">                            
-        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                                      
+    <div class="col-12 align-right">
+        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement  {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }}" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
+        
+        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                               
     </div>
 </div>
 
@@ -311,7 +323,7 @@
         var data_complete = $(this).attr('data-complete');
         var site_category = ["{{ $site[0]->site_category }}"];
         var activity_id = ["{{ $site[0]->activity_id }}"];
-        var activity_name = $("#modal_activity_name").val();
+        var activity_name = "{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}";
         var program_id = "{{ $site[0]->program_id }}";
 
         // if ("{{ \Auth::user()->profile_id }}" == 10) {
@@ -478,6 +490,12 @@
                     $(".dropzone_div_"+sub_activity_id).attr("data-status", data_action);
 
                     $(".button_area_div").addClass("d-none");
+
+                    if (data_action == "rejected") {
+                        $(".btn-accept-endorsement").addClass("d-none");
+                        $(".btn-accept-endorsement-confirmation").removeClass("d-none");
+                    }
+                    $(".button_area_div").removeClass("d-none");
 
                     Swal.fire(
                         'Success',
