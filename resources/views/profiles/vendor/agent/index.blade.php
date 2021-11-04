@@ -79,6 +79,7 @@
             </div>
         </div>
     </div>
+    <div class="divider"></div>
 
 
 @endsection
