@@ -48,9 +48,8 @@ class ActivityController extends Controller
                     //         ])
                     //         ->render();
 
-                    return \View::make('components.modal-view-site')
+                    return \View::make('components.modal-info-site')
                             ->with([
-                                'activity_component' => "site-modal-details-view",
                                 'site' => $site,
                                 'activity_source' => $request->get('activity_source'),
                                 'main_activity' => '',

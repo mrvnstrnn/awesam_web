@@ -11,9 +11,13 @@ class ModalInfoSite extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $site, $main_activity, $activity_component;
+
+    public function __construct($site, $mainactivity, $activity_component)
     {
-        //
+        $this->site = $site;
+        $this->main_activity = $mainactivity;
+        $this->activity_component = $activity_component;
     }
 
     /**
