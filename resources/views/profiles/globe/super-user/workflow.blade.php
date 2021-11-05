@@ -54,52 +54,52 @@
                             <div class="card-body">
                                 <div class="bg-light py-3 border">
                                     <h4 class="pl-3">Add Activity</h4>
-                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">  
+                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">  
                                         <div class="container">
                                             <input type="hidden" class="form-control form-control-sm" name="program_id" value="{{ $program->program_id }}">
                                             <input type="hidden" class="form-control form-control-sm" name="stage_id" value="1">
                                             <div class="row py-2 align-items-end">
                                                 <div class="col-3">
                                                     <label for="" class="text-dark">Category</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold" name="category" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold" name="category" />
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="" class="text-dark">Act ID</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_id" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="activity_id" />
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="" class="text-dark">Profile</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="profile_id" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="profile_id" />
                                                 </div>
                                                 <div class="col-7">
                                                     <label for="" class="text-dark">Activity Name</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_name" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="activity_name" />
                                                 </div>
                                             </div>
                                             <div class="row py-2 align-items-end">
                                                 <div class="col-1">
                                                     <label for="" class="text-dark">Next</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="next_activity" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="next_activity" />
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="" class="text-dark">Return</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="return_activity" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="return_activity" />
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="" class="text-dark">Sequence</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_sequence" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="activity_sequence" />
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="" class="text-dark">Duration Days</label>
-                                                    <input type="text" class="form-control form-control-sm  text-white font-weight-bold"  name="activity_duration_days" />
+                                                    <input type="text" class="form-control form-control-sm  font-weight-bold"  name="activity_duration_days" />
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="" class="text-dark">Activity Type</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="activity_type" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="activity_type" />
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="" class="text-dark">Subactivity Type</label>
-                                                    <input type="text" class="form-control form-control-sm text-white font-weight-bold"  name="subactivities_type" />
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold"  name="subactivities_type" />
                                                 </div>
                                                 <div class="col-3">
                                                     <td><input type="submit" class="form-control form-control-sm btn-danger" value="Add" /></td>
@@ -119,7 +119,7 @@
                                     @endphp  
                                     @foreach ($activities as $activity)
                                         <div class="bg-dark">
-                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}">                                                                        
+                                            <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">                                                                        
                                                 <div class="container">
                                                     <input type="hidden" class="form-control form-control-sm" name="id" value="{{ $activity->id }}">
                                                     <input type="hidden" class="form-control form-control-sm" name="program_id" value="{{ $activity->program_id }}">
