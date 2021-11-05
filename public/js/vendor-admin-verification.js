@@ -125,6 +125,8 @@ $(document).ready(() => {
     
             $("#modal-employee-verification").modal("show");
             $(".modal-footer .btn-assign-profile").removeClass("d-none");
+
+            $(".supervisor_select select option").remove();
     
             if(data.designation != null){
                 if($( this ).parent().attr("data-profile_id") == 2){

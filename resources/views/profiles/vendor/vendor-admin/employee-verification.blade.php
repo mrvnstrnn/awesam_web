@@ -99,7 +99,7 @@
                     </button>
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <form action="employee-details-form">
+                    <form id="employee-details-form">
                         <div class="form-row mt-3 px-3">
                             <div class="col-md-5">
                                 <H5>Employee Details</H5>
