@@ -40,11 +40,13 @@
                                             ->select('date_added', 'site_name', 'sam_id')
                                             ->where('user_id', \Auth::user()->id)
                                             ->where('type', '<>',  'work_plan')
+                                            ->where('type', '<>',  'doc_upload')
                                             ->get();
 
                                 $dars =  \DB::table('view_dar_agent')
                                             ->where('user_id', \Auth::user()->id)
                                             ->where('type', '<>',  'work_plan')
+                                            ->where('type', '<>',  'doc_upload')
                                             ->get();
                                            
                                             

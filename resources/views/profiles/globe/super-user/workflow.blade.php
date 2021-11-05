@@ -173,7 +173,6 @@
                                                 </div>
                                             </form>
                                         </div>
-<<<<<<< HEAD
                                         <div class="p-2 border">
                                             <div class="card">
                                                 <div class="card-body">
@@ -203,43 +202,6 @@
                                                             @endphp     
                     
                                                             <table class="table table-sm">
-=======
-                                        @php
-                                            $activities = \DB::table('stage_activities')
-                                                        ->where('program_id', ($program->program_id))
-                                                        ->orderBy('activity_id', 'asc')
-                                                        ->get();
-                                        @endphp  
-                                        <tbody>
-                                            @foreach ($activities as $activity)
-                                                <tr class="bg-dark" data-stage_activity_id="{{$activity->id}}">
-                                                    <form class="stage_activity_update" action="{{ route('save_stage_activities') }}" target="_blank">                                                                        
-                                                        <input type="hidden" class="form-control" name="id" value="{{ $activity->id }}">
-                                                        <input type="hidden" class="form-control" name="program_id" value="{{ $activity->program_id }}">
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->category }}" name="category" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_id }}"  name="activity_id" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->profile_id }}"  name="profile_id" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_name }}"  name="activity_name" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_sequence }}"  name="activity_sequence" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->next_activity }}"  name="next_activity" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->return_activity }}"  name="return_activity" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_duration_days }}"  name="activity_duration_days" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->activity_type }}"  name="activity_type" /></td>
-                                                        <td><input type="text" class="form-control bg-dark text-white font-weight-bold" value="{{ $activity->subactivities_type }}"  name="subactivities_type" /></td>
-                                                        <td><input type="submit" class="form-control btn-warning" value="Save" /></td>
-                                                    
-                                                    </form>
-                                                </tr>
-                                                <tr class="border-bottom">                                                    
-                                                    <td colspan="11">
-                                                        @php
-                                                            $activity_profiles = \DB::table('stage_activities_profiles')
-                                                                                    ->where('stage_activity_id', $activity->id)
-                                                                                    ->get();
-                                                        @endphp     
-                                                        <div class="p-2 border">
-                                                            <table class="table table-xs">
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                                                 <thead>
                                                                     <th>Action</th>
                                                                     <th>Profile</th>
@@ -253,43 +215,23 @@
                                                                             <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">   
                                                                             <input type="hidden" value="{{$activity_profile->id}}" name="id">                                                                                         
                                                                             <td>
-<<<<<<< HEAD
                                                                                 <input type="submit" class="btn-secondary btn-sm form-control form-control-sm" value="Update" />
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control form-control-sm">
-=======
-                                                                                <input type="submit" class="btn-secondary btn-sm form-control" value="Update" />
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control">
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                                                                     <option value="">Select Profile</option>
                                                                                     @foreach($profiles as $profile)
                                                                                         <option value="{{ $profile->id }}" {{ ( $profile->id == $activity_profile->profile_id) ? "selected" : ""}} >{{ $profile->profile }}</option>
                                                                                     @endforeach
                                                                                 </select>
-<<<<<<< HEAD
                                                                                 {{-- <input type="text" class="form-control form-control-sm" value="{{ $activity_profile->profile_id }}" name="profile_id" /> --}}
                                                                             </td>
                                                                             <td><input type="text" class="form-control form-control-sm" value="{{ $activity_profile->activity_component }}" name="activity_component"/></td>
                                                                             <td><input type="text" class="form-control form-control-sm" value="{{ $activity_profile->activity_source }}" name="activity_source"/></td>
-=======
-                                                                                {{-- <input type="text" class="form-control" value="{{ $activity_profile->profile_id }}" name="profile_id" /> --}}
-                                                                            </td>
-                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->activity_component }}" name="activity_component"/></td>
-                                                                            <td><input type="text" class="form-control" value="{{ $activity_profile->activity_source }}" name="activity_source"/></td>
-                                                                        </form>
-                                                                        <form id="stage_activity_profile_delete" action="{{ route('delete_stage_activities_profiles', $activity_profile->id) }}">
-                                                                            <td>
-                                                                                <input type="submit" class="btn-danger btn-sm form-control" value="Delete" />
-                                                                            </td>
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                                                         </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
                                                                     <tr>
-<<<<<<< HEAD
                                                                         <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}">                            
                                                                             <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                               
                                                                             <td>
@@ -297,44 +239,26 @@
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control form-control-sm" name="profile_id">
-=======
-                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}" target="_blank">
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">
-                                                                            <td>
-                                                                                <input type="submit" class="btn-primary btn-sm form-control" value="Add" />
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="profile_id">
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                                                                     <option value="">Select Profile</option>
                                                                                     @foreach($profiles as $profile)
                                                                                         <option value="{{ $profile->id }}">{{ $profile->profile }}</option>
                                                                                     @endforeach
                                                                                 </select>
                                                                             </td>
-<<<<<<< HEAD
                                                                             <td><input type="text" class="form-control form-control-sm" value=""  name="activity_component"/></td>
                                                                             <td><input type="text" class="form-control form-control-sm" value="" name="activity_source"/></td>
-=======
-                                                                            <td><input type="text" class="form-control" value=""  name="activity_component"/></td>
-                                                                            <td><input type="text" class="form-control" value="" name="activity_source"/></td>
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                                                         </form>
                                                                     </tr>                                                                    
                                                                 </tbody>
                                                             </table>
                                                         </div>
-<<<<<<< HEAD
-                                                        <div class="tab-pane" id="tab-animated1-1{{$activity->id}}" role="tabpanel">
+                                                        {{-- <div class="tab-pane" id="tab-animated1-1{{$activity->id}}" role="tabpanel">
                                                             @php
                                                             $sub_activities = \DB::table('sub_activity')
                                                                                     ->where('program_id', $program->program_id)
                                                                                     ->where('category', $activity->category)
                                                                                     ->where('activity_id', $activity->activity_id)
                                                                                     ->get();
-                                                            // if(count($sub_activities)>0){
-                                                            //     dd($sub_activities);
-                                                            // }
                                                             @endphp     
                     
                                                             <table class="table table-sm">
@@ -358,28 +282,10 @@
                                                                         </form>
                                                                     </tr>                                                                    
                                                                     @endforeach
-                                                                    {{-- <tr>
-                                                                        <form id="stage_activity_profile_add{{ $activity->id }}" action="{{ route('save_stage_activities_profiles') }}">                            
-                                                                            <input type="hidden" value="{{$activity->id}}" name="stage_activity_id">                                                               
-                                                                            <td>
-                                                                                <input type="submit" class="btn-primary btn-sm form-control form-control-sm" value="Add" />
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control form-control-sm" name="profile_id">
-                                                                                    <option value="">Select Profile</option>
-                                                                                    @foreach($profiles as $profile)
-                                                                                        <option value="{{ $profile->id }}">{{ $profile->profile }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </td>
-                                                                            <td><input type="text" class="form-control form-control-sm" value=""  name="activity_component"/></td>
-                                                                            <td><input type="text" class="form-control form-control-sm" value="" name="activity_source"/></td>
-                                                                        </form>
-                                                                    </tr>                                                                     --}}
                                                                 </tbody>
                                                             </table>
 
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="tab-pane" id="tab-animated1-2{{$activity->id}}" role="tabpanel">
                                                             Notifications
                                                         </div>
@@ -388,13 +294,6 @@
                                             </div>                                            
                                         </div>
                                         <div class="divider"></div>
-=======
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
->>>>>>> 19b2f44cc27b1c6c41c768ab1b7b19cdc58e627a
                                     @endforeach
                                 </div>
                             </div>
