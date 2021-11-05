@@ -49,7 +49,11 @@ class ActivityController extends Controller
                             ->render();
                 } else {
 
-                    if ( $get_current_act->activity_id == 17 && $get_current_act->program_id == 3 ) {
+                    if ( 
+                        ($get_current_act->activity_id == 17 && $get_current_act->program_id == 3) ||
+                        ($get_current_act->activity_id == 18 && $get_current_act->program_id == 4)
+                        
+                        ) {
                         $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
                                             ->where('status', "pending")
                                             ->where('type', "rtb_declaration")
