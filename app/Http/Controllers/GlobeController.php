@@ -4480,7 +4480,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 9) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -4510,7 +4510,7 @@ class GlobeController extends Controller
                                         }
 
                                     });
-                                } else if (\Auth::user()->profile_id == 2) {
+                                } else if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 9) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
