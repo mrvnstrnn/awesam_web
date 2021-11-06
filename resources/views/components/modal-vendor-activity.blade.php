@@ -52,8 +52,8 @@
     
 </style>    
 
-    <input id="modal_vendor_id" type="hidden" value="{{ $site[0]->vendor_id }}">
-    <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}">
+    {{-- <input id="modal_vendor_id" type="hidden" value="{{ $site[0]->vendor_id }}">
+    <input id="modal_program_id" type="hidden" value="{{ $site[0]->program_id }}"> --}}
     <input id="sub_activity_id" type="hidden" value="{{ $site[0]->activity_id }}">
 
     <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
@@ -165,13 +165,16 @@
                                                             <div class="row p-2 pt-3 action_to_complete_parent">
                                                                 @foreach ($sub_activities as $sub_activity)
                                                                     @if($sub_activity->activity_id == $site[0]->activity_id)
-                                                                        <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
+                                                                    {{-- <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
+                                                                        data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
+                                                                        > --}}
+                                                                        <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
                                                                             data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
                                                                             >
                                                                             <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}"><i class="pe-7s-cloud-upload pe-lg pt-2 mr-2"></i>{{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
                                                                             
                                                                             @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
-                                                                            <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                            <i class="fa fa-check-circle fa-lg text-success" style="top:10px;"></i>
                                                                             @endif
                                                                         </div>
                                                                     @endif                               
@@ -278,27 +281,29 @@
                                                             @foreach ($sub_activities as $sub_activity)
                                                                 @if($sub_activity->activity_id == $site[0]->activity_id)
                                                                     @if($prev_step == $sub_activity->sequential_step)
-                                                                        <div class="row btn_switch_show_action pb-3  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
+                                                                    {{-- <div class="row btn_switch_show_action pb-3  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"> --}}
+                                                                        <div class="row btn_switch_show_action pb-3  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
                                                                             <div class="col-2">                                                                        
                                                                             </div>
                                                                             <div class="col-10">
                                                                                 <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}">
                                                                                 @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
-                                                                                <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                                <i class="fa fa-check-circle fa-lg text-success" style="top:10px;"></i>
                                                                                 @endif
                                                                                 {{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
                                                                             </div>
                                                                         </div>
                                                                     @else
                                                                         <hr>
-                                                                        <div class="row btn_switch_show_action  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
+                                                                        {{-- <div class="row btn_switch_show_action  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"> --}}
+                                                                            <div class="row btn_switch_show_action  action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required="" data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}">
                                                                             <div class="col-2">                                                                        
                                                                                 <div class="numberCircle">{{ $sub_activity->sequential_step }}</div>                   
                                                                             </div>
                                                                             <div class="col-10">
                                                                                 <h6 class="action_to_complete_child_{{$sub_activity->sub_activity_id}}" style="display: unset; {{ $sub_activity->requirements == "required" ? "font-weight: 700" : "" }}">
                                                                                 @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
-                                                                                <i class="fa fa-check-circle fa-lg text-success" style="position: absolute; top:10px; right: 20px"></i>
+                                                                                <i class="fa fa-check-circle fa-lg text-success" style="top:10px;"></i>
                                                                                 @endif
                                                                                 {{ $sub_activity->sub_activity_name }} {{ $sub_activity->requirements == "required" ? "*" : "" }}</h6>
                                                                             </div>
@@ -347,11 +352,9 @@
     <script>
     $(document).ready(function(){
 
-        $(".flatpicker").flatpickr(
-        {
-            minDate: "today"
-        }
-    );
+        $(".flatpicker").flatpickr({
+                minDate: "today"
+            });
 
         $(".btn_switch_show_action").on("click", function(){
 
@@ -359,7 +362,7 @@
             $("#actions_list").addClass('d-none');
 
             var active_subactivity = $(this).attr('data-sub_activity').replace("/", " ");
-            var active_sam_id = $(this).attr('data-sam_id');
+            var active_sam_id = "{{ $site[0]->sam_id }}";
             var sub_activity_id = $(this).attr('data-sub_activity_id');
             var document_type = $(this).attr('data-document_type');
             var substep_same = $(this).attr('data-substep_same');
@@ -369,7 +372,7 @@
 
             $("#sub_activity_id").val(sub_activity_id);
 
-            var program_id = $('#modal_program_id').val();
+            var program_id = "{{ $site[0]->program_id }}";
 
             var loader =    '<div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">' +
                                 '<div class="loader">' +
@@ -515,112 +518,6 @@
             });
         }
 
-        // var today = new Date();
-        // var dd = String(today.getDate()).padStart(2, '0');
-        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        // var yyyy = today.getFullYear();
-        // today = mm + '/' + dd + '/' + yyyy;
-
-        // $(document).on("click", ".contact-lessor", function(){
-        //     $('#control_box').addClass('d-none');
-        //     $('#control_form').removeClass('d-none');
-
-        //     $("#lessor_method").val($(this).attr("data-value"));
-        //     $("#lessor_date").val(today);
-        // });
-
-        // <div class="row">
-        //     <div class="col-12 table-responsive table_lessor_parent">
-        //         {{-- <table class="table_lessor align-middle mb-0 table table-borderless table-striped table-hover w-100">
-        //             <thead>
-        //                 <tr>
-        //                     <th>Date</th>
-        //                     <th>Method</th>
-        //                     <th>Remarks</th>
-        //                     <th>Approved</th>
-        //                 </tr>
-        //             </thead>
-        //         </table> --}}
-        //     </div>
-        // </div>
-
-        // $(".save_engagement").on("click",  function (e){
-        //     // e.preventDefault();
-
-        //     console.log("test");
-        //     var lessor_method = $("#lessor_method").val();
-        //     var lessor_approval = $("#lessor_approval").val();
-        //     var lessor_remarks = $("#lessor_remarks").val();
-        //     var vendor_id = $("#modal_vendor_id").val();
-        //     var program_id = $("#modal_program_id").val();
-        //     var sam_id = $(".ajax_content_box").attr("data-sam_id");
-        //     // var sub_activity_id = $(this).attr("data-sub_activity_id");
-        //     var sub_activity_id = $("#sub_activity_id").val();
-        //     var site_name = $("#viewInfoModal .menu-header-title").text();
-
-        //     $(this).attr('disabled', 'disabled');
-        //     $(this).text('Processing...');
-
-        //     $.ajax({
-        //         url: "/add-engagement",
-        //         method: "POST",
-        //         data: {
-        //             lessor_method : lessor_method,
-        //             lessor_approval : lessor_approval,
-        //             lessor_remarks : lessor_remarks,
-        //             sam_id : sam_id,
-        //             sub_activity_id : sub_activity_id,
-        //             site_name : site_name,
-        //             vendor_id : vendor_id,
-        //             program_id : program_id
-        //         },
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         success: function (resp){
-        //             if (!resp.error) {
-
-        //                 $('#table_lessor_'+sub_activity_id).DataTable().ajax.reload(function (){
-        //                     Swal.fire(
-        //                         'Success',
-        //                         resp.message,
-        //                         'success'
-        //                     )
-
-        //                     // $("#viewInfoModal").modal("hide");
-        //                     $("#lessor_remarks").val("");
-        //                     $(".save_engagement").removeAttr('disabled');
-        //                     $(".save_engagement").text('Save Engagement');
-        //                 });
-                        
-        //             } else {
-        //                 if (typeof resp.message === 'object' && resp.message !== null) {
-        //                     $.each(resp.message, function(index, data) {
-        //                         $("." + index + "-error").text(data);
-        //                     });
-        //                 } else {
-        //                     Swal.fire(
-        //                         'Error',
-        //                         resp.message,
-        //                         'error'
-        //                     )
-        //                 }
-        //                 $(".save_engagement").removeAttr('disabled');
-        //                 $(".save_engagement").text('Save Engagement');
-        //             }
-        //         },
-        //         error: function (resp){
-        //             Swal.fire(
-        //                 'Error',
-        //                 resp.message,
-        //                 'error'
-        //             )
-        //             $(".save_engagement").removeAttr('disabled');
-        //             $(".save_engagement").text('Save Engagement');
-        //         }
-        //     });
-        // });
-
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -629,7 +526,7 @@
 
 
         var sub_activity_id = $("#sub_activity_id").val();
-        var sam_id = $(".ajax_content_box").attr("data-sam_id");
+        var sam_id = "{{ $site[0]->sam_id }}";
         
         htmllist = '<div class="table-responsive table_uploaded_parent_log">' +
                 '<table class="table_uploaded_log align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
@@ -692,12 +589,12 @@
             var lessor_method = $("#lessor_method_log").val();
             var lessor_approval = $("#lessor_approval_log").val();
             var lessor_remarks = $("#lessor_remarks_log").val();
-            var vendor_id = $("#modal_vendor_id").val();
-            var program_id = $("#modal_program_id").val();
-            var sam_id = $(".ajax_content_box").attr("data-sam_id");
+            // var vendor_id = $("#modal_vendor_id").val();
+            var program_id = "{{ $site[0]->program_id }}";
+            var sam_id = "{{ $site[0]->sam_id }}";
             var log = $(this).attr("data-log");
             var sub_activity_id = $("#sub_activity_id").val();
-            var site_name = $("#viewInfoModal .menu-header-title").text();
+            var site_name = "{{ $site[0]->site_name }}";
 
             $(this).attr('disabled', 'disabled');
             $(this).text('Processing...');
@@ -714,7 +611,7 @@
                     sam_id : sam_id,
                     sub_activity_id : sub_activity_id,
                     site_name : site_name,
-                    vendor_id : vendor_id,
+                    // vendor_id : vendor_id,
                     program_id : program_id,
                     log : log,
                 },

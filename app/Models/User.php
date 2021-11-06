@@ -235,7 +235,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $sub_act = SubActivityValue::select('id')
                                         ->where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
-                                        ->whereNull('type')
+                                        // ->whereNull('type')
                                         ->first();
 
         return $sub_act;
