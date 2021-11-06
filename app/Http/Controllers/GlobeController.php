@@ -4183,7 +4183,8 @@ class GlobeController extends Controller
 
                 $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
-                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]);
+                $message = $request->input('action') == "false" ? "rejected" : "approved";
+                return response()->json(['error' => false, 'message' => "Successfully " .$message. " RTB."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
