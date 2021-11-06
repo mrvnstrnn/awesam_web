@@ -150,7 +150,7 @@
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading">
                                     <div>
-                                        <H1>{{ $greeting }} <strong>{{ ucwords(\Auth::user()->firstname) }}</strong> </H1>
+                                        <H1>{{ $greeting }} <strong>{{ ucwords(\Auth::user()->name) }}</strong> </H1>
                                     </div>
                                 </div>
                             </div>

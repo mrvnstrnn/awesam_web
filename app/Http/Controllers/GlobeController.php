@@ -1995,6 +1995,7 @@ class GlobeController extends Controller
                     ->get();
 
                     
+                    
 
         return $cols;
 
@@ -2394,7 +2395,7 @@ class GlobeController extends Controller
 
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech");
+                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type");
             }
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
@@ -2426,12 +2427,12 @@ class GlobeController extends Controller
             //                 ->distinct()
             //                 ->get();
                             
-            $last_act = \DB::connection('mysql2')
-                            ->table("stage_activities")
-                            ->select('activity_id')
-                            ->where('program_id', $program_id)
-                            ->orderBy('activity_id', 'desc')
-                            ->first();
+            // $last_act = \DB::connection('mysql2')
+            //                 ->table("stage_activities")
+            //                 ->select('activity_id')
+            //                 ->where('program_id', $program_id)
+            //                 ->orderBy('activity_id', 'desc')
+            //                 ->first();
 
             // $sites = \DB::connection('mysql2')
             //                     ->table("site")
@@ -2445,15 +2446,14 @@ class GlobeController extends Controller
             //                     ->get();
 
             $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
+                                ->table("view_site")
                                 ->where('program_id', $program_id)
-                                // ->where('activity_name', "Completed")
-                                ->where('activity_id', $last_act->activity_id);
+                                ->where('activity_type', 'complete');
 
             if ( $program_id == 3 ) {
                                     
-                $sites->leftJoin('program_coloc', 'view_sites_per_program.sam_id', 'program_coloc.sam_id')
-                ->select("view_sites_per_program.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech");
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
 
             }
 
@@ -2463,19 +2463,26 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'is'){
             
-            $getAgentOfSupervisor = UserDetail::select('users.id')
-                                                ->join('users', 'user_details.user_id', 'users.id')
-                                                ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
-                                                ->where('user_details.IS_id', \Auth::id())
-                                                ->get()
-                                                ->pluck('id');
+            // $getAgentOfSupervisor = UserDetail::select('users.id')
+            //                                     ->join('users', 'user_details.user_id', 'users.id')
+            //                                     ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+            //                                     ->where('user_details.IS_id', \Auth::id())
+            //                                     ->get()
+            //                                     ->pluck('id');
             
             $sites = \DB::connection('mysql2')
-                        ->table("view_sites_activity_3")
-                        ->join("site_users", "site_users.sam_id", "view_sites_activity_3.sam_id")
+                        ->table("view_vendor_assigned_sites")
                         ->where('program_id', $program_id)
-                        ->whereIn('agent_id', $getAgentOfSupervisor)
-                        ->get();
+                        ->where('IS_id', \Auth::user()->id);
+
+            if($program_id == 3){
+
+                $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
+                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+
+            }                        
+
+            $sites->get();
 
         }
 
@@ -2516,87 +2523,90 @@ class GlobeController extends Controller
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            if ($program_id == 1 && \Auth::user()->profile_id == 6) {
-                $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id)
-                    ->where('activity_id', 22)
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
-            } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
-                $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id)
-                    ->where('activity_id', 23)
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+            // if ($program_id == 1 && \Auth::user()->profile_id == 6) {
+            //     $sites = \DB::connection('mysql2')
+            //         ->table("view_sites_activity")
+            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+            //         ->where('program_id', $program_id)
+            //         ->where('activity_id', 22)
+            //         ->where('profile_id', \Auth::user()->profile_id)
+            //         ->get();
+            // } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
+            //     $sites = \DB::connection('mysql2')
+            //         ->table("view_sites_activity")
+            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+            //         ->where('program_id', $program_id)
+            //         ->where('activity_id', 23)
+            //         ->where('profile_id', \Auth::user()->profile_id)
+            //         ->get();
 
-            } else if ($program_id == 3 && \Auth::user()->profile_id == 9) {
-                $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id)
-                    ->where('activity_id', 17)
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+            // } else if ($program_id == 3 && \Auth::user()->profile_id == 9) {
+            //     $sites = \DB::connection('mysql2')
+            //         ->table("view_sites_activity")
+            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+            //         ->where('program_id', $program_id)
+            //         ->where('activity_id', 17)
+            //         ->where('profile_id', \Auth::user()->profile_id)
+            //         ->get();
 
-            } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
-                $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id)
-                    ->where('activity_id', 18)
-                    ->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+            // } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
+            //     $sites = \DB::connection('mysql2')
+            //         ->table("view_sites_activity")
+            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+            //         ->where('program_id', $program_id)
+            //         ->where('activity_id', 18)
+            //         ->where('profile_id', \Auth::user()->profile_id)
+            //         ->get();
 
-            } else if (\Auth::user()->profile_id == 6) {
+            // } else if (\Auth::user()->profile_id == 6) {
 
-                $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
-                                // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                                ->leftJoin('stage_activities', function($join)
-                                {
-                                    $join->on('view_sites_per_program.activity_id', '=', 'stage_activities.activity_id');
-                                    $join->on('view_sites_per_program.site_category', '=', 'stage_activities.category');
-                                })
-                                ->where('view_sites_per_program.program_id', $program_id)
-                                ->whereIn('stage_activities.activity_type', ['rtb declaration'])
-                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                // ->whereIn('view_sites_per_program.activity_id', [16])
-                                ->distinct()
-                                ->get();
-            } else {
-                if ($program_id == 2) {
-                    $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
-                                ->where('view_sites_per_program.program_id', $program_id)
-                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                ->whereIn('view_sites_per_program.activity_id', [13, 14, 10, 11])
-                                ->distinct()
-                                ->get();
-                }                            
-                elseif ($program_id == 4) {
-                    $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
-                                ->where('view_sites_per_program.program_id', $program_id)
-                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                ->whereIn('view_sites_per_program.activity_id', [14])
-                                ->distinct()
-                                ->get();
-                } else {
-                    $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
-                                ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-                                ->where('view_sites_per_program.program_id', $program_id)
-                                ->whereIn('stage_activities.activity_type', ['rtb declaration'])
-                                ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-                                // ->whereIn('view_sites_per_program.activity_id', [16])
-                                ->distinct()
-                                ->get();
-                }
+            $sites = \DB::connection('mysql2')
+                            ->table("view_site")
+                            ->whereIn('view_site.activity_type', ['rtb declaration'])
+                            ->where('view_site.program_id', $program_id)
+                            ->where('view_site.profile_id', \Auth::user()->profile_id);
+
+            if($program_id == 3){
+
+                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
+                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type");
+
             }
+                
+            $sites->get();
+
+
+            // } 
+            // else {
+            //     if ($program_id == 2) {
+            //         $sites = \DB::connection('mysql2')
+            //                     ->table("view_sites_per_program")
+            //                     ->where('view_sites_per_program.program_id', $program_id)
+            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+            //                     ->whereIn('view_sites_per_program.activity_id', [13, 14, 10, 11])
+            //                     ->distinct()
+            //                     ->get();
+            //     }                            
+            //     elseif ($program_id == 4) {
+            //         $sites = \DB::connection('mysql2')
+            //                     ->table("view_sites_per_program")
+            //                     ->where('view_sites_per_program.program_id', $program_id)
+            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+            //                     ->whereIn('view_sites_per_program.activity_id', [14])
+            //                     ->distinct()
+            //                     ->get();
+            //     } else {
+            //         $sites = \DB::connection('mysql2')
+            //                     ->table("view_sites_per_program")
+            //                     ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
+            //                     ->where('view_sites_per_program.program_id', $program_id)
+            //                     ->whereIn('stage_activities.activity_type', ['rtb declaration'])
+            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
+            //                     // ->whereIn('view_sites_per_program.activity_id', [16])
+            //                     ->distinct()
+            //                     ->get();
+            //     }
+            // }
 
         }
 
@@ -2621,7 +2631,7 @@ class GlobeController extends Controller
                                     
                                     $sites->whereIn('view_site.activity_id', [15, 22, 23, 28, 29]);
                                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech")              
+                                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type")              
                                             ->get();
 
                                     // return dd($sites->get());
@@ -2857,13 +2867,20 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')->table("view_doc_validation")
-                ->where('program_id', $program_id)
+            $sites = \DB::connection('mysql2')->table("site");
+                // ->where('program_id', $program_id)
+                // ->where('active_profile', \Auth::user()->profile_id);
                 // ->whereNull('approver_id')
                 // ->whereNull('approver_id2')
                 // ->whereNull('approver_id3')
-                ->whereNot('status', 'rejected')
-                ->get();
+                // ->whereNot('status', 'rejected')
+
+            if($program_id == 3){
+
+                $site->get();
+
+            }
+
 
         }
 
@@ -2898,30 +2915,40 @@ class GlobeController extends Controller
             //         ->get();
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program_id);
-                    if ($program_id == 3 && \Auth::user()->profile_id == 1) {
-                        $sites->where('activity_id', 5);
-                    } else if ($program_id == 4 && \Auth::user()->profile_id == 6) {
-                        $sites->where('activity_id', 2);
-                    } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
-                        $sites->where('activity_id', 3);
-                    } else if ($program_id == 4 && \Auth::user()->profile_id == 8) {
-                        $sites->where('activity_id', 4);
-                    } else if ($program_id == 5 && \Auth::user()->profile_id == 6) {
-                        $sites->where('activity_id', 2);
-                    } else if ($program_id == 5 && \Auth::user()->profile_id == 7) {
-                        $sites->where('activity_id', 3);
-                    } else if ($program_id == 5 && \Auth::user()->profile_id == 8) {
-                        $sites->where('activity_id', 4);
-                    } else if ($program_id == 1 && \Auth::user()->profile_id == 6) {
-                        $sites->where('activity_id', 1);
-                    } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
-                        $sites->where('activity_id', 1);
+                    ->table("view_site")
+                    ->where('program_id', $program_id)
+                    ->where('activity_type', "endorsement")
+                    ->where('profile_id', \Auth::user()->profile_id);
+
+
+                    if($program_id == 3){
+                        $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
+                              ->select('view_site.*', 'program_coloc.nomination_id', 'program_coloc.pla_id', 'program_coloc.highlevel_tech',  'program_coloc.technology', 'program_coloc.site_type');
                     }
-                    $sites->where('profile_id', \Auth::user()->profile_id)
-                    ->get();
+
+
+
+                    // if ($program_id == 3 && \Auth::user()->profile_id == 1) {
+                    //     $sites->where('activity_id', 5);
+                    // } else if ($program_id == 4 && \Auth::user()->profile_id == 6) {
+                    //     $sites->where('activity_id', 2);
+                    // } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
+                    //     $sites->where('activity_id', 3);
+                    // } else if ($program_id == 4 && \Auth::user()->profile_id == 8) {
+                    //     $sites->where('activity_id', 4);
+                    // } else if ($program_id == 5 && \Auth::user()->profile_id == 6) {
+                    //     $sites->where('activity_id', 2);
+                    // } else if ($program_id == 5 && \Auth::user()->profile_id == 7) {
+                    //     $sites->where('activity_id', 3);
+                    // } else if ($program_id == 5 && \Auth::user()->profile_id == 8) {
+                    //     $sites->where('activity_id', 4);
+                    // } else if ($program_id == 1 && \Auth::user()->profile_id == 6) {
+                    //     $sites->where('activity_id', 1);
+                    // } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
+                    //     $sites->where('activity_id', 1);
+                    // }
+
+                    $sites->get();
 
         }
 
@@ -2986,7 +3013,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'unassigned sites'){
 
             $sites = \DB::connection('mysql2')
-                ->table("view_sites_activity")
+                ->table("view_site")
                 ->where('program_id', $program_id);
                 if ($program_id == 1) {
                     $sites->where('activity_id', 8);

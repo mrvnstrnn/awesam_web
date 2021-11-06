@@ -67,87 +67,64 @@ function makeDT(whatTable, whatCols, active_program) {
                     "searchable": true,
                     "render": function ( data, type, row ) {
                         if (row['region_name'] == undefined || row['province_name'] == undefined || row['lgu_name'] == undefined) {
-                            return '<div class="font-weight-bold">' + data +'</div><div></div><div> <small>'+ row['sam_id'] + '</small></div>';
+                            return '<div class="font-weight-bold">' + data +'</div><div></div><div> <small>'+ row['sam_id'] + '</small></div><div> <small>'+ row['activity_name'] + '</small> : <small>'+ row['activity_type'] + '</small></div>';
                         } else {
-                            return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div>';
+                            return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div><div> <small>'+ row['activity_name'] + '</small> : <small>'+ row['activity_type'] + '</small></div>';
                         }
                     },
                 },
-                {
-                    "targets": [ "sam_id" ],
-                    "visible": false,
-                    "searchable": true,
-                },
-                {
-                    "targets": [ "activity_name" ],
-                    "visible": true,
-                    "searchable": true,
-                    "render": function ( data, type, row ) {
-
-                        var varDate = new Date(row['end_date']);
-                        var today = new Date();
-                        today.setHours(0,0,0,0);
-
-                        if(varDate >= today) {
-                            // console.log('Greater: ' + row['end_date']);
-                            badge_color = "success";
-                            date_text = row['start_date'] + ' to ' +row['end_date'];
-
-                        } else {
-                            // console.log('Lower: ' + row['end_date']);
-                            badge_color = "danger";
-                            const diffTime = Math.abs(today - varDate);
-                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                            date_text = diffDays + " days delayed";
-                                                        
-                        }
-
-                        
-                        return '<div class="badge badge-' + badge_color + ' text-sm mb-0 px-2 py-1">' + data +'</div>' + 
-                                '<div><small>'+ date_text +'</small></div>'
-                    },
-                }
-
             ],
 
             "fnInitComplete": function(oSettings, json) {
 
-                var makeMiniDashCounters = 0;
+
+                // MINIDASHBOARD FILTER MAKER
 
                 if(active_program == 3){
 
-                    var occurences = json.data.reduce(function (r, row) {
-                        r[row.highlevel_tech] = ++r[row.highlevel_tech] || 1;
-                        return r;
-                    }, {});
-                
-                    var result = Object.keys(occurences).map(function (key) {
-                        return { key: key, value: occurences[key] };
-                    });
+                    if(window.location.pathname != "/assigned-sites"){
+                        var filter_column = "highlevel_tech";
+                    } else {
+                        var filter_column = "agent";
 
-                    makeMiniDashCounters = 1;
-
+                    }
                 }        
+                
+                console.log(result);
 
-                if(makeMiniDashCounters == 1){
+                var occurences = json.data.reduce(function (r, row) {
+                    r[row[filter_column]] = ++r[row[filter_column]] || 1;
+                    return r;
+                }, {});
+            
+                var result = Object.keys(occurences).map(function (key) {
+                    return { key: key, value: occurences[key] };
+                });
 
-                    console.log(result);
-                    var i = 0;
-                    $.each(result, function(){
+                var i = 0;
+                var bg = 1;
+                $.each(result, function(){
 
-                        var xx =    '<div class="col border">' +          
-                                        '<div class="milestone-bg bg_img_' + (i+1) + '" style=""></div>' +
-                                        '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
-                                            '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
-                                            '<div class="widget-subheading">'+ result[i].key + '</div>' +
-                                        '</div>' +
-                                    '</div>';         
+                    var xx =    '<div class="col border">' +          
+                                    '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
+                                    '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
+                                        '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
+                                        '<div class="widget-subheading">'+ result[i].key + '</div>' +
+                                    '</div>' +
+                                '</div>';         
 
-                        $(document).find('#dashboard_counters_options').append(xx);
-                        i = i+1;
+                    $(document).find('#dashboard_counters_options').append(xx);
 
-                    });
-                }
+                    i = i+1;
+                    
+                    if(bg < 7){
+                        bg = bg + 1;
+                    } else {
+                        bg = 1;
+                    }
+
+
+                });
 
             }
               

@@ -2,7 +2,8 @@
 
 @section('content')
 
-  <x-activity-datatable ajaxdatatablesource="datatable-data" tableheader="Documents Validation" activitytype="doc validation"/>
+  {{-- <x-activity-datatable ajaxdatatablesource="datatable-data" tableheader="Documents Validation" activitytype="doc validation"/> --}}
+  <x-milestone-datatable ajaxdatatablesource="datatable-data" tableheader="Documents Validation" activitytype="doc validation"/>
 
 @endsection
 

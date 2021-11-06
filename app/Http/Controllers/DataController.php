@@ -33,8 +33,15 @@ class DataController extends Controller
                 ->table("views_sites_with_document_validation")
                 ->leftJoin('view_site', 'views_sites_with_document_validation.sam_id', 'view_site.sam_id')
                 ->where('program_id', $program_id)
-                ->where('active_profile_id', \Auth::user()->profile_id)
-                ->get();
+                ->where('active_status', 'pending')
+                ->where('active_profile_id', \Auth::user()->profile_id);
+            
+            
+            if($program_id == 3){
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id');
+                $sites->get();
+            }                
+
        }
        elseif($activity_type == 'program sites'){
 

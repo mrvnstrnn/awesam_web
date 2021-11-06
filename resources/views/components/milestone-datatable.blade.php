@@ -5,6 +5,7 @@
 
     table {
         width: 100% !important;
+        font-size: .9em !important;
     }
 </style> 
 <style>
@@ -77,7 +78,7 @@
         opacity: 0.20; 
         height: 100%; 
         width:100%; 
-        background-image: url('/images/milestone-gray.jpeg');   
+        background-image: url('/images/milestone-blue-2.jpeg');   
         background-repeat: no-repeat; background-size: 200%;        
     }
 
