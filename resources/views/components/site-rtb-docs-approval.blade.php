@@ -146,6 +146,7 @@
                             '<th style="width: 5%">#</th>' +
                             '<th>Filename</th>' +
                             '<th style="width: 35%">Status</th>' +
+                            '<th style="width: 35%">Reason</th>' +
                             '<th>Date Uploaded</th>' +
                         '</tr>' +
                     '</thead>' +
@@ -182,6 +183,7 @@
                     { data: "id" },
                     { data: "value" },
                     { data: "status" },
+                    { data: "reason" },
                     { data: "date_created" },
                 ],
             });
