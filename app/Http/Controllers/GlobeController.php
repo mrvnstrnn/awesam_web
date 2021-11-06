@@ -2828,6 +2828,7 @@ class GlobeController extends Controller
                 ->whereNull('approver_id')
                 ->whereNull('approver_id2')
                 ->whereNull('approver_id3')
+                ->whereNot('status', 'rejected')
                 ->get();
 
         }
