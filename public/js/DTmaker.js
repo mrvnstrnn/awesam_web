@@ -1,5 +1,5 @@
 
-function makeDT(whatTable, whatCols, table_to_load) {
+function makeDT(whatTable, whatCols, active_program) {
 
         if (typeof main_activity === 'undefined') {
             main_activity = "";
@@ -112,32 +112,46 @@ function makeDT(whatTable, whatCols, table_to_load) {
 
             "fnInitComplete": function(oSettings, json) {
 
-                var occurences = json.data.reduce(function (r, row) {
-                    r[row.highlevel_tech] = ++r[row.highlevel_tech] || 1;
-                    return r;
-                }, {});
-              
-                var result = Object.keys(occurences).map(function (key) {
-                    return { key: key, value: occurences[key] };
-                });
-                                
+                var makeMiniDashCounters = 0;
 
-                console.log(result);
-                var i = 0;
-                $.each(result, function(){
+                if(active_program == 3){
 
-                    var xx =    '<div class="col border">' +          
-                                    '<div class="milestone-bg bg_img_' + (i+1) + '" style=""></div>' +
-                                    '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
-                                        '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
-                                        '<div class="widget-subheading">'+ result[i].key + '</div>' +
-                                    '</div>' +
-                                '</div>';         
+                    var occurences = json.data.reduce(function (r, row) {
+                        r[row.highlevel_tech] = ++r[row.highlevel_tech] || 1;
+                        return r;
+                    }, {});
+                
+                    var result = Object.keys(occurences).map(function (key) {
+                        return { key: key, value: occurences[key] };
+                    });
 
-                    $(document).find('#dashboard_counters_options').append(xx);
-                    i = i+1;
+                    makeMiniDashCounters = 1;
 
-                })
+                } else {
+
+                    makeMiniDashCounters = 0;
+
+                }        
+
+                if(makeMiniDashCounters == 1){
+                    
+                    console.log(result);
+                    var i = 0;
+                    $.each(result, function(){
+
+                        var xx =    '<div class="col border">' +          
+                                        '<div class="milestone-bg bg_img_' + (i+1) + '" style=""></div>' +
+                                        '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
+                                            '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
+                                            '<div class="widget-subheading">'+ result[i].key + '</div>' +
+                                        '</div>' +
+                                    '</div>';         
+
+                        $(document).find('#dashboard_counters_options').append(xx);
+                        i = i+1;
+
+                    });
+                }
 
             }
               
@@ -184,7 +198,7 @@ $(document).ready(() => {
                         $(str).appendTo($(activeTable).find("thead>tr"));
                 });
 
-                var dt_json = makeDT(activeTable, cols, table_to_load);
+                var dt_json = makeDT(activeTable, cols, active_program);
 
                 console.log(dt_json);
 
