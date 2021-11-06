@@ -211,6 +211,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/all-newagent/{program_id}', [GlobeController::class, 'newagent'])->name('all.newagent');
 
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
+    Route::post('/assign-supervisor', [GlobeController::class, 'assign_supervisor'])->name('assign.supervisor');
 
     Route::get('/get-region', [GlobeController::class, 'get_region'])->name('get.region');
 

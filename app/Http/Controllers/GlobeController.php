@@ -814,6 +814,35 @@ class GlobeController extends Controller
         }
     }
 
+    public function assign_supervisor(Request $request)
+    {
+        try {
+            $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::user()->id;
+
+            if(is_null($checkAgent)) {
+
+                SiteAgent::create([
+                    'agent_id' => $request->input('agent_id'),
+                    'sam_id' => $request->input('sam_id'),
+                ]);
+
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
+            } else {
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function vendor_assigned_sites($program_id, $mode)
     {
         if($mode == "vendor"){
