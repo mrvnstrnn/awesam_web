@@ -211,6 +211,7 @@
                             '<th style="width: 5%">#</th>' +
                             '<th>Filename</th>' +
                             '<th style="width: 35%">Status</th>' +
+                            '<th style="width: 35%">Reason</th>' +
                             '<th>Date Uploaded</th>' +
                             '<th>Date Approved</th>' +
                         '</tr>' +
@@ -248,6 +249,7 @@
                     { data: "id" },
                     { data: "value" },
                     { data: "status" },
+                    { data: "reason" },
                     { data: "date_created" },
                     { data: "date_approved" },
                 ],
