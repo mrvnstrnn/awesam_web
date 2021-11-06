@@ -2516,6 +2516,15 @@ class GlobeController extends Controller
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 
+            } else if ($program_id == 3 && \Auth::user()->profile_id == 9) {
+                $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id)
+                    ->where('activity_id', 17)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+
             } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
                 $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
