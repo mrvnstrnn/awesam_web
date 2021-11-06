@@ -186,7 +186,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (resp){
-                console.log(resp);
                 $('#site-modal-site_fields').html("");   
                 $('#site-modal-site_fields').html(resp);
             },
