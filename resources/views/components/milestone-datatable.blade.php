@@ -7,6 +7,81 @@
         width: 100% !important;
     }
 </style> 
+<style>
+
+    .bg_img_1 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-gray.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+
+    .bg_img_2 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-orange.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_3 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-blue.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_4 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-green.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_5 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-red.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_6 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-orange-2.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_7 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-gray.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+
+</style>
 <ul class="tabs-animated body-tabs-animated nav">
 
     @php
@@ -52,20 +127,34 @@
 
 <div class="row">
     <div class="col-md-12">
+
+        <div class="mini_dashboard_counters mb-3">
+
+            <div class="card">
+                <div class="card-body p-0">                                        
+                    <div class="no-gutters row" id="dashboard_counters_options">
+                    </div>                            
+                </div>
+            </div>
+
+        </div>
+
         <div class="main-card mb-3 card">
-            <div class="dropdown-menu-header"> 
-                <div class="dropdown-menu-header-inner px-2 p-3 bg-primary">
-                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+            <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                {{-- <div class="dropdown-menu-header">  --}}
+    
+                {{-- <div class="dropdown-menu-header-inner px-2 p-3 bg-primary"> --}}
+                    {{-- <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div> --}}
                     <div class="menu-header-content btn-pane-right d-flex justify-content-between button_header_area">
-                        <h5 class="menu-header-title">
-                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                        <h5 class="menu-header-title text-dark pl-1">
+                            <i class="header-icon lnr-layers icon-gradient bg-dark"></i>
                             {{ $tableheader }}
                         </h5>
                         @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
                         <button class="btn btn-warning btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
                         @endif
                     </div>
-                </div>
+                {{-- </div> --}}
             </div> 
 
             <div class="card-body" style="overflow-x: auto; max-width: 100%;">
@@ -139,3 +228,30 @@
     </div>
 </div>
 
+
+
+{{-- <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script> --}}
+
+<script>
+
+// function showResult() {
+// 	var table = $('.assigned-sites-table').DataTable();
+
+
+//     var filteredData = table
+//     .column(6, {search: 'applied'})
+//     .data()
+//     .filter( function ( value, index ) {
+//         return value == "MIGRATION" ? true : false;
+//     } );
+
+//     console.log(filteredData);
+
+// }
+// $(document).ready(function () {
+
+// showResult();
+
+// });
+
+</script>
