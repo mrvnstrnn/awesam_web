@@ -122,9 +122,9 @@
                                                 ->where("program_id", $site[0]->program_id)        
                                                 ->where("category", $site[0]->site_category)        
                                                 ->where("activity_id", $site[0]->activity_id)
-                                                ->get();
+                                                ->first();
 
-                                        $subactivity_type = $activity[0]->subactivities_type;
+                                        $subactivity_type = $activity->subactivities_type;
 
                                         $sub_activities = \DB::connection('mysql2')
                                                 ->table('sub_activity')
@@ -132,6 +132,7 @@
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->where('category', $site[0]->site_category)
                                                 ->orderBy('sequential_step')
+                                                ->orderBy('requires_validation', 'desc')
                                                 ->get();
 
                                     @endphp
