@@ -156,7 +156,8 @@
 
 <div class="row mb-3 border-top pt-3 button_area_div">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement  {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }}" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
+        {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
+        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
         
         <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                               
     </div>
@@ -211,6 +212,7 @@
                             '<th style="width: 5%">#</th>' +
                             '<th>Filename</th>' +
                             '<th style="width: 35%">Status</th>' +
+                            '<th style="width: 35%">Reason</th>' +
                             '<th>Date Uploaded</th>' +
                             '<th>Date Approved</th>' +
                         '</tr>' +
@@ -248,6 +250,7 @@
                     { data: "id" },
                     { data: "value" },
                     { data: "status" },
+                    { data: "reason" },
                     { data: "date_created" },
                     { data: "date_approved" },
                 ],

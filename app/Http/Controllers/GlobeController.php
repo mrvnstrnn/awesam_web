@@ -814,6 +814,35 @@ class GlobeController extends Controller
         }
     }
 
+    public function assign_supervisor(Request $request)
+    {
+        try {
+            $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::user()->id;
+
+            if(is_null($checkAgent)) {
+
+                SiteAgent::create([
+                    'agent_id' => $request->input('agent_id'),
+                    'sam_id' => $request->input('sam_id'),
+                ]);
+
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
+            } else {
+                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function vendor_assigned_sites($program_id, $mode)
     {
         if($mode == "vendor"){
@@ -2504,6 +2533,15 @@ class GlobeController extends Controller
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 
+            } else if ($program_id == 3 && \Auth::user()->profile_id == 9) {
+                $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id)
+                    ->where('activity_id', 17)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+
             } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
                 $sites = \DB::connection('mysql2')
                     ->table("view_sites_activity")
@@ -2821,9 +2859,10 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')->table("view_doc_validation")
                 ->where('program_id', $program_id)
-                ->whereNull('approver_id')
-                ->whereNull('approver_id2')
-                ->whereNull('approver_id3')
+                // ->whereNull('approver_id')
+                // ->whereNull('approver_id2')
+                // ->whereNull('approver_id3')
+                ->whereNot('status', 'rejected')
                 ->get();
 
         }
@@ -4169,7 +4208,8 @@ class GlobeController extends Controller
 
                 $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action'), $request->input('site_category'), $request->input('activity_id'));
 
-                return response()->json(['error' => false, 'message' => "Successfully approved RTB."]);
+                $message = $request->input('action') == "false" ? "rejected" : "approved";
+                return response()->json(['error' => false, 'message' => "Successfully " .$message. " RTB."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);

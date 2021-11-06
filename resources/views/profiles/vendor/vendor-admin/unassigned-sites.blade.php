@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="btn-assign-sites" data-href="{{ route('assign.agent') }}" data-activity_name="site_assign">Assign</button>
+                                <button type="button" class="btn btn-primary" id="btn-assign-sites" data-href="{{ route('assign.supervisor') }}" data-activity_name="site_assign">Assign</button>
                             </div>
                         </form>
 
