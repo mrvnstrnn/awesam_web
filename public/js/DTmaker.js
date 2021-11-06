@@ -127,14 +127,10 @@ function makeDT(whatTable, whatCols, active_program) {
 
                     makeMiniDashCounters = 1;
 
-                } else {
-
-                    makeMiniDashCounters = 0;
-
                 }        
 
                 if(makeMiniDashCounters == 1){
-                    
+
                     console.log(result);
                     var i = 0;
                     $.each(result, function(){
