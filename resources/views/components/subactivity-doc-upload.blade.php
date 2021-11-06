@@ -92,8 +92,8 @@
                     '<thead>' +
                         '<tr>' +
                             '<th style="width: 5%">#</th>' +
-                            '<th>Filename</th>' +
-                            '<th style="width: 35%">Status</th>' +
+                            '<th style="width: 35%">Filename</th>' +
+                            '<th style="width: 15%">Status</th>' +
                             '<th style="width: 35%">Reason</th>' +
                             '<th>Date Uploaded</th>' +
                         '</tr>' +

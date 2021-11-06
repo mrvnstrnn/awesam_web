@@ -514,7 +514,7 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
 
             } else {
-                $notification = "Success";
+                $notification = "Successfully approved site.";
                 $vendor = $request->input('site_vendor_id');
                 $action = $request->input('data_complete');
                 $activity_id = $request->input('activity_id');
@@ -1293,6 +1293,10 @@ class GlobeController extends Controller
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
+
+                    if ( count($stage_activities_approvers) < 1 ) {
+                        return response()->json(['error' => true, 'message' => "No approver found."]);
+                    }
 
                     $approvers_collect = collect();
 
@@ -2480,6 +2484,15 @@ class GlobeController extends Controller
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program_id)
                     ->where('activity_id', 23)
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->get();
+
+            } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
+                $sites = \DB::connection('mysql2')
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id)
+                    ->where('activity_id', 18)
                     ->where('profile_id', \Auth::user()->profile_id)
                     ->get();
 
@@ -4383,7 +4396,7 @@ class GlobeController extends Controller
             $dt = DataTables::of($sub_activity_ids)
                                 ->addColumn('value', function($row) {
                                     $json = json_decode($row->value, true);
-                                    return $row->value;
+                                    return $json['file'];
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
