@@ -69,13 +69,17 @@
                         </div> 
 
                         <div class="card-body">
-
+                            {{-- @php
+                                dd($site);
+                            @endphp --}}
+                            @if($activity_component != null)
                             <div id="site_action_view" class="">
                                 <div id="site_action_box">
                                     <x-dynamic-component :component="$activity_component" :site="$site" :mainactivity="$main_activity" />
                                 </div>
                                 <x-btn-show-site-details />
                             </div>
+                            @endif
                             <div id="site_details_view" class="d-none">
                                 <x-site-modal-details-view :site="$site" :mainactivity="$main_activity"/>
                             </div>

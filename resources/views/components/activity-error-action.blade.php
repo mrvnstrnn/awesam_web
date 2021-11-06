@@ -22,10 +22,7 @@
                                 <div class="menu-header-content text-left">
                                     <div>
                                         <h5 class="menu-header-title">
-                                            {{ $site[0]->site_name }}
-                                            @if(!is_null($site[0]->site_category) && $site[0]->site_category != "none")
-                                                <span class="mr-3 badge badge-secondary"><small class="site_category">{{ $site[0]->site_category }}</small></span>
-                                            @endif
+                                            Activity Action Error
                                         </h5>
                                     </div>
                                 </div>
@@ -44,11 +41,11 @@
                                         <h5>activity_source is not yet configured in the clicked element</H5>
                                         <div class="text-danger">Please check if the datatable or link contains the attribute data-activity_source</div>
                                     @endisset
-                                    <button class="btn btn-lg mt-5 mb-5 btn-shadow btn-primary" type="button">Move To Next Activity</button>
+                                    {{-- <button class="btn btn-lg mt-5 mb-5 btn-shadow btn-primary" type="button">Move To Next Activity</button> --}}
                                     <div class="border-top text-left pt-3">
                                     <H5>Debugging</H5>
                                     @php
-                                        dd($site);
+                                        // dd($site);
                                     @endphp
                                     </div>
                                 </div>

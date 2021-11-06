@@ -35,6 +35,14 @@ class DataController extends Controller
                 ->where('program_id', $program_id)
                 ->where('active_profile_id', \Auth::user()->profile_id)
                 ->get();
+       }
+       elseif($activity_type == 'program sites'){
+
+            $sites = \DB::connection('mysql2')
+                ->table("view_site")
+                ->where('program_id', $program_id)
+                // ->where('active_profile_id', \Auth::user()->profile_id)
+                ->get();
 
         } else {
             

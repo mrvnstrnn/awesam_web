@@ -475,6 +475,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // GET STAGE ACTIVITIES
     Route::post('/site-ajax', [DataController::class, 'SiteAjax'])->name('SiteAjax');
 
+
+    // GET DATATABLE CONTENTS
+    Route::post('/get-datatable', [DataController::class, 'GetDatatable'])->name('GetDatatable');
+
+
+
 });
     
 

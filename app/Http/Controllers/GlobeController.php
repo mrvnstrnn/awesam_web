@@ -2361,8 +2361,17 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                             ->table("view_site")
                             ->where('program_id', $program_id)
-                            ->whereNotNull('activity_name')
-                            ->get();
+                            ->whereNotNull('activity_name');
+
+            if($program_id == 3){                
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech");
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
+            }
+            
+            $sites->get();
         }
 
         elseif($activity_type == 'mine'){
@@ -2410,8 +2419,16 @@ class GlobeController extends Controller
                                 ->table("view_sites_per_program")
                                 ->where('program_id', $program_id)
                                 // ->where('activity_name', "Completed")
-                                ->where('activity_id', $last_act->activity_id)
-                                ->get();
+                                ->where('activity_id', $last_act->activity_id);
+
+            if ( $program_id == 3 ) {
+                                    
+                $sites->leftJoin('program_coloc', 'view_sites_per_program.sam_id', 'program_coloc.sam_id')
+                ->select("view_sites_per_program.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech");
+
+            }
+
+            $sites->get();
 
         }
 
@@ -2557,11 +2574,19 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [16, 17, 26, 28])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
+
                                     $sites->whereIn('view_site.activity_id', [17, 20, 14, 17])
+              
                                     ->get();
+
                                 } else if ( $program_id == 3 ) {
-                                    $sites->whereIn('view_site.activity_id', [15, 22, 23, 28, 29])
-                                    ->get();
+                                    
+                                    $sites->whereIn('view_site.activity_id', [15, 22, 23, 28, 29]);
+                                    $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech")              
+                                            ->get();
+
+                                    // return dd($sites->get());
                                 } else if ( $program_id == 4 ) {
                                     if(\Auth::user()->profile_id == 8){
 

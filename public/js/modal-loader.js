@@ -2,6 +2,7 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
 
     e.preventDefault();
 
+
     loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";
     $.blockUI({ message: loader, css:{backgroundColor: "transparent", border: '0px;'} });
 
@@ -165,6 +166,11 @@ $('.show_activity_modal').on( 'click', function (e) {
 });
 
 
+
+
+
+
+
 $('.show_action_modal').on('click', function(e){
     e.preventDefault();
 
@@ -183,8 +189,8 @@ $('.show_action_modal').on('click', function(e){
         data: {
             // sam_id : sam_id,
             activity_source : activity_source,
+            json : json,
             direct_mode : true,
-            json : json
         },
 
         headers: {

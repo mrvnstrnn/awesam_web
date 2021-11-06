@@ -13,82 +13,98 @@ class ActivityController extends Controller
     public function get_component(Request $request)
     {
         try {
+
             
             if(!isset($request->direct_mode)){
+
 
                 $site = \DB::connection('mysql2')
                                 ->table('view_site')
                                 ->where('sam_id', $request['sam_id'])
                                 ->get();
 
+                if(!isset($request->bypass_activity_profiles)){
                 
-                $get_current_act = \DB::connection('mysql2')
-                                ->table('view_site')
-                                ->select('program_id', 'site_category', 'activity_id')
-                                ->where('sam_id', $request['sam_id'])
-                                ->first();
+                    $get_current_act = \DB::connection('mysql2')
+                                    ->table('view_site')
+                                    ->select('program_id', 'site_category', 'activity_id')
+                                    ->where('sam_id', $request['sam_id'])
+                                    ->first();
 
-                $get_component = \DB::connection('mysql2')
-                                ->table('stage_activities')
-                                ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
-                                ->select('activity_component')
-                                ->where('stage_activities.category', $get_current_act->site_category)
-                                ->where('stage_activities.program_id', $get_current_act->program_id)
-                                ->where('stage_activities.activity_id', $get_current_act->activity_id)
-                                ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
-                                ->first();
-                        
-                if ( is_null($get_component) ) {
+                    $get_component = \DB::connection('mysql2')
+                                    ->table('stage_activities')
+                                    ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
+                                    ->select('activity_component')
+                                    ->where('stage_activities.category', $get_current_act->site_category)
+                                    ->where('stage_activities.program_id', $get_current_act->program_id)
+                                    ->where('stage_activities.activity_id', $get_current_act->activity_id)
+                                    ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
+                                    ->first();
+                            
+                    if ( is_null($get_component) ) {
 
-                    return \View::make('components.activity-error')
-                            ->with([
-                                'site' => $site,
-                                'activity_source' => $request->get('activity_source'),  
-                                'main_activity' => '',
-                            ])
-                            ->render();
-                } else {
-
-                    if ( 
-                        ($get_current_act->activity_id == 17 && $get_current_act->program_id == 3) ||
-                        ($get_current_act->activity_id == 18 && $get_current_act->program_id == 4)
-                        
-                        ) {
-                        $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                            ->where('status', "pending")
-                                            ->where('type', "rtb_declaration")
-                                            ->first();
-    
-                        return \View::make('components.modal-view-site')
-                            ->with([
-                                'activity_component' => $get_component->activity_component,
-                                'rtbdeclaration' => $rtbdeclaration,
-                                'site' => $site,
-                                'activity_source' => $request->get('activity_source'),
-                                'main_activity' => '',
-                            ])
-                            ->render();
-                    }
-
-                    if (\Auth::user()->profile_id == 2) {
-                        return \View::make('components.' . $get_component->activity_component)
+                        return \View::make('components.activity-error')
                                 ->with([
+                                    'site' => $site,
+                                    'activity_source' => $request->get('activity_source'),  
+                                    'main_activity' => '',
+                                ])
+                                ->render();
+                    } else {
+
+                        if ( 
+                            ($get_current_act->activity_id == 17 && $get_current_act->program_id == 3) ||
+                            ($get_current_act->activity_id == 18 && $get_current_act->program_id == 4)
+                            
+                            ) {
+                            $rtbdeclaration = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                                ->where('status', "pending")
+                                                ->where('type', "rtb_declaration")
+                                                ->first();
+        
+                            return \View::make('components.modal-view-site')
+                                ->with([
+                                    'activity_component' => $get_component->activity_component,
+                                    'rtbdeclaration' => $rtbdeclaration,
                                     'site' => $site,
                                     'activity_source' => $request->get('activity_source'),
                                     'main_activity' => '',
                                 ])
                                 ->render();
-                    } else {
-                
-                        return \View::make('components.modal-view-site')
-                            ->with([
-                                'activity_component' => $get_component->activity_component,
-                                'site' => $site,
-                                'activity_source' => $request->get('activity_source'),
-                                'main_activity' => '',
-                            ])
-                            ->render();
+                        }
+
+                        if (\Auth::user()->profile_id == 2) {
+                            return \View::make('components.' . $get_component->activity_component)
+                                    ->with([
+                                        'site' => $site,
+                                        'activity_source' => $request->get('activity_source'),
+                                        'main_activity' => '',
+                                    ])
+                                    ->render();
+                        } else {
+                    
+                            return \View::make('components.modal-view-site')
+                                ->with([
+                                    'activity_component' => $get_component->activity_component,
+                                    'site' => $site,
+                                    'activity_source' => $request->get('activity_source'),
+                                    'main_activity' => '',
+                                ])
+                                ->render();
+                        }
                     }
+
+                } else {
+
+                    return \View::make('components.modal-view-site')
+                    ->with([
+                        'activity_component' => "site-rtb-docs-validation",
+                        'site' => $site,
+                        'activity_source' => $request->get('activity_source'),
+                        'main_activity' => $request->activity_source,
+                    ])
+                    ->render();
+
                 }
 
             } else {
@@ -110,9 +126,14 @@ class ActivityController extends Controller
                         $component_to_load = "activity-work-plan-date";
                         break;
 
+                    case "new endorsement apmo": 
+                        
+                        $component_to_load = "activity-work-plan-date";
+                        break;
+
                     default: 
 
-                        $component_to_load = "activity-error";
+                        $component_to_load = "activity-error-action";
 
                 }
 
