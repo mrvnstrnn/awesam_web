@@ -2830,6 +2830,8 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 2);
                     } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
                         $sites->where('activity_id', 3);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 8) {
+                        $sites->where('activity_id', 4);
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 6) {
                         $sites->where('activity_id', 2);
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 7) {
