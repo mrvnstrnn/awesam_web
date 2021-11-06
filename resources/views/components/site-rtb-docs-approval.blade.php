@@ -1,131 +1,96 @@
-{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content" style="background-color: transparent; border: 0">
-            <div class="row justify-content-center">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="main-card mb-3 card ">
+<div class="row file_preview d-none">
+    <div class="col-12 mb-3">
+        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+        {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
+        {{-- <button id="btn_back_to_file_list" class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger" type="button">Reject Document</button> --}}
+    </div>
+    <div class="col-12 file_viewer">
+    </div>
+    <div class="col-12 my-3">
+        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+    </div>
+    <div class="col-12 file_viewer_list pt-3">
+    </div>
+</div>
 
-                        <div class="dropdown-menu-header">
-                            <div class="dropdown-menu-header-inner bg-dark">
-                                <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                                <div class="menu-header-content btn-pane-right">
-                                    <h5 class="menu-header-title">
-                                        <h5 class="menu-header-title">
-                                            {{ $site[0]->site_name }}
-                                            @if($site[0]->site_category != 'none')
-                                                <span class="mr-3 badge badge-secondary"><small>{{ $site[0]->site_category }}</small></span>
-                                            @endif
-                                        </h5>
-                                    </h5>
-                                </div>
-                            </div>
-                        </div> 
+<div class="row file_lists">
+    @php
+        $datas = \DB::connection('mysql2')
+                        ->table('sub_activity_value')
+                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
+                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                        ->where('sub_activity.action', 'doc upload')
+                        ->orderBy('sub_activity_value.sub_activity_id')
+                        ->get();
 
-                        <div class="modal-body"> --}}
-                            
-                            <div class="row file_preview d-none">
-                                <div class="col-12 mb-3">
-                                    <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-                                    {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
-                                    {{-- <button id="btn_back_to_file_list" class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger" type="button">Reject Document</button> --}}
-                                </div>
-                                <div class="col-12 file_viewer">
-                                </div>
-                                <div class="col-12 my-3">
-                                    <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
-                                </div>
-                                <div class="col-12 file_viewer_list pt-3">
-                                </div>
-                            </div>
-                            
-                            <div class="row file_lists">
-                                @php
-                                    // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-                                    $datas = \DB::connection('mysql2')
-                                                    ->table('sub_activity_value')
-                                                    ->select('sub_activity_value.*', 'sub_activity.sub_activity_name')
-                                                    ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                                                    ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                                                    ->where('sub_activity.action', 'doc upload')
-                                                    ->orderBy('sub_activity_value.sub_activity_id')
-                                                    ->get();
+        $keys_datas = $datas->groupBy('sub_activity_name')->keys();
+    @endphp
 
-                                    $keys_datas = $datas->groupBy('sub_activity_name')->keys();
-                                @endphp
+    @forelse ($datas->groupBy('sub_activity_name') as $data)
+        @php $status_collect = collect(); @endphp
+        @for ($i = 0; $i < count($data); $i++)
+            @php
+                $status_collect->push( $data[$i]->status );
+            @endphp
+        @endfor
+        @if ( count( $status_collect->all() ) > 0 )
+            @php
 
-                                @forelse ($datas->groupBy('sub_activity_name') as $data)
-                                    @php $status_collect = collect(); @endphp
-                                    @for ($i = 0; $i < count($data); $i++)
-                                        @php
-                                            $status_collect->push( $data[$i]->status );
-                                        @endphp
-                                    @endfor
-                                    @if ( count( $status_collect->all() ) > 0 )
-                                        @php
+                if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
+                    $extension = "fa-file-pdf";
+                } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
+                    $extension = "fa-file-image";
+                } else {
+                    $extension = "fa-file";
+                }
 
-                                            if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "pdf") {
-                                                $extension = "fa-file-pdf";
-                                            } else if (pathinfo($data[0]->value, PATHINFO_EXTENSION) == "png" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpeg" || pathinfo($data[0]->value, PATHINFO_EXTENSION) == "jpg") {
-                                                $extension = "fa-file-image";
-                                            } else {
-                                                $extension = "fa-file";
-                                            }
-
-                                            $icon_color = "";
-                                            if ( in_array( 'approved', $status_collect->all() ) ) {
-                                                $icon_color = "success";
-                                                $border = "border-success";
-                                            } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
-                                                $icon_color = "secondary";
-                                                $border = "border-secondary";
-                                            } else if ( in_array( 'pending', $status_collect->all() ) ) {
-                                                $icon_color = "secondary";
-                                                $border = "border-secondary";
-                                            } else {
-                                                $icon_color = "danger";
-                                                $border = "border-danger";
-                                            }
-                                        @endphp
-                                        
-                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
-                                            <div class="child_div_{{ $data[0]->sub_activity_id }}">
-                                                <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
-                                                    <div>
-                                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                                    <p><small>{{ $data[0]->sub_activity_name }}</small></p>
-                                                    </div>
-                                                </div>
-                                                @if($icon_color == "success")   
-                                                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                                                @elseif($icon_color == "danger")   
-                                                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endif
-                                @empty
-                                    <div class="col-12 text-center">
-                                        <h3>No files here.</h3>
-                                    </div>
-                                @endforelse
-
-                                <input type="hidden" name="hidden_filename" id="hidden_filename">
-                            </div>
-
-                            <div class="row mb-3 border-top pt-3">
-                                <div class="col-12 align-right">
-                                    <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}">Approve RTB Documents</button>                                            
-                                </div>
-                            </div>
-
-                        {{-- </div>
-
+                $icon_color = "";
+                if ( in_array( 'approved', $status_collect->all() ) ) {
+                    $icon_color = "success";
+                    $border = "border-success";
+                } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                    $border = "border-secondary";
+                } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                    $icon_color = "secondary";
+                    $border = "border-secondary";
+                } else {
+                    $icon_color = "danger";
+                    $border = "border-danger";
+                }
+            @endphp
+            
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                <div class="child_div_{{ $data[0]->sub_activity_id }}">
+                    <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
+                        <div>
+                        <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                        <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                        </div>
                     </div>
+                    @if($icon_color == "success")   
+                        <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @elseif($icon_color == "danger")   
+                        <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                    @endif
                 </div>
             </div>
+        @endif
+    @empty
+        <div class="col-12 text-center">
+            <h3>No files here.</h3>
         </div>
+    @endforelse
+
+    <input type="hidden" name="hidden_filename" id="hidden_filename">
+</div>
+
+<div class="row mb-3 border-top pt-3">
+    <div class="col-12 align-right">
+        <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}">Approve RTB Documents</button>                                            
     </div>
-</div> --}}
+</div>
 
 
 <script src="/js/dropzone/dropzone.js"></script>
@@ -135,6 +100,8 @@
     $(".view_file").on("click", function (e){
 
         e.preventDefault();
+
+        console.log("test");
 
         var id = $(this).attr("data-id");
 
@@ -157,13 +124,13 @@
 
         var values = JSON.parse($(this).attr('data-value'));
 
-        if( extensions.includes(values[0].value.split('.').pop()) == true) {     
-            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
+        if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
         } else {
-        htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        htmltoload = '<div class="text-center my-5"><a href="/files/' + JSON.parse(values[0].value).file + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
 
-        $("#hidden_filename").val(values[0].value);
+        $("#hidden_filename").val(JSON.parse(values[0].value).file);
 
         var sam_id = $(this).attr('data-sam_id');
                 
@@ -226,6 +193,36 @@
         $('.file_preview').removeClass('d-none');
 
     });
+
+    function remarks_file (id, sam_id) {
+        $.ajax({
+            url: "/get-remarks-file/"+id+"/"+sam_id,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    if (resp.message == null) {
+                        $(".remarks_paragraph").text("No remarks available.");
+                    } else {
+                        $(".remarks_paragraph").text(JSON.parse(resp.message.value).remarks);
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            },
+        });
+    }
 
     $("#btn_back_to_file_list").on("click", function (){
         $('.file_lists').removeClass('d-none');
