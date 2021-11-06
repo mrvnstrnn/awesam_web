@@ -140,19 +140,21 @@
         </div>
 
         <div class="main-card mb-3 card">
-            <div class="dropdown-menu-header"> 
-                <div class="dropdown-menu-header-inner px-2 p-3 bg-primary">
-                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+            <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                {{-- <div class="dropdown-menu-header">  --}}
+    
+                {{-- <div class="dropdown-menu-header-inner px-2 p-3 bg-primary"> --}}
+                    {{-- <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div> --}}
                     <div class="menu-header-content btn-pane-right d-flex justify-content-between button_header_area">
-                        <h5 class="menu-header-title">
-                            <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                        <h5 class="menu-header-title text-dark pl-1">
+                            <i class="header-icon lnr-layers icon-gradient bg-dark"></i>
                             {{ $tableheader }}
                         </h5>
                         @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
                         <button class="btn btn-warning btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
                         @endif
                     </div>
-                </div>
+                {{-- </div> --}}
             </div> 
 
             <div class="card-body" style="overflow-x: auto; max-width: 100%;">
