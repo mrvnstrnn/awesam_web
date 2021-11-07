@@ -2958,7 +2958,7 @@ class GlobeController extends Controller
 
             $sites = \DB::connection('mysql2')
                     ->table("view_site")
-                    ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                    // ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                     ->whereNull('activity_id')
                     ->get();
 
