@@ -160,7 +160,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
 $(document).ready(() => {
 
-    var table = null;
+
 
     $('.assigned-sites-table').each(function(i, obj) {
 
