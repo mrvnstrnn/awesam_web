@@ -97,7 +97,9 @@
                                             }
                                         @endphp
                                         
-                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+                                        {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
+
+                                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                                             <div class="child_div_{{ $data[0]->sub_activity_id }}">
                                                 <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                                                     <div>
@@ -157,8 +159,8 @@
         $(".approve_reject_doc_btns").attr("data-id", id);
 
         $(".approve_reject_doc_btns").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
-        $(".approve_reject_doc_btns").attr("data-activity_id", $(this).attr("data-activity_id"));
-        $(".approve_reject_doc_btns").attr("data-site_category", $(this).attr("data-site_category"));
+        // $(".approve_reject_doc_btns").attr("data-activity_id", $(this).attr("data-activity_id"));
+        // $(".approve_reject_doc_btns").attr("data-site_category", $(this).attr("data-site_category"));
         
         var sub_activity_id = $(this).attr("data-sub_activity_id");
         $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
@@ -187,7 +189,7 @@
 
         $("#hidden_filename").val(JSON.parse(values[0].value).file);
 
-        var sam_id = $(this).attr('data-sam_id');
+        var sam_id = "{{ $site[0]->sam_id }}";
                 
         $('.file_viewer').html('');
         $('.file_viewer').html(htmltoload);
@@ -285,7 +287,7 @@
         e.preventDefault();
         var extensions = ["pdf", "jpg", "png"];
 
-        var sam_id = $("#modal_sam_id").val();
+        var sam_id = "{{ $site[0]->sam_id }}";
         var value = $(this).attr("data-value");
         var id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
@@ -335,8 +337,8 @@
         $(".approve_reject_doc_btns_final").attr("data-action", $(this).attr("data-action") == "reject" ? "rejected" : "approved");
         $(".approve_reject_doc_btns_final").attr("data-id", $(this).attr("data-id"));
         $(".approve_reject_doc_btns_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
-        $(".approve_reject_doc_btns_final").attr("data-activity_id", $(this).attr("data-activity_id"));
-        $(".approve_reject_doc_btns_final").attr("data-site_category", $(this).attr("data-site_category"));
+        // $(".approve_reject_doc_btns_final").attr("data-activity_id", $(this).attr("data-activity_id"));
+        // $(".approve_reject_doc_btns_final").attr("data-site_category", $(this).attr("data-site_category"));
 
         if ($(this).attr("data-action") == "reject"){
             $(".confirmation_message textarea").removeClass("d-none");
@@ -354,8 +356,8 @@
         var data_action = $(this).attr("data-action");
         var data_id = $(this).attr("data-id");
         var sub_activity_id = $(this).attr("data-sub_activity_id");
-        var activity_id = $(this).attr("data-activity_id");
-        var site_category = $(this).attr("data-site_category");
+        var activity_id = "{{ $site[0]->activity_id }}";
+        var site_category = "{{ $site[0]->site_category }}";
 
         var text_area_reason = $("#text_area_reason").val();
 
