@@ -20,7 +20,7 @@
 <script>
     //////////////////////////////////////
     var profile_id = 2;
-    var table_to_load = 'assigned_sites';
+    var table_to_load = 'completed_sites_globe';
     var main_activity = "Completed";
     //////////////////////////////////////
 </script>

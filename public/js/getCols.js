@@ -267,7 +267,7 @@ function getCols(active_program, active_table, active_profile){
                                             if (row['region_name'] == undefined || row['province_name'] == undefined || row['lgu_name'] == undefined) {
                                                 return '<div class="font-weight-bold">' + data +'</div>';
                                             } else {
-                                                return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div>';
+                                                return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['province_name'] + '</small><div><small>' + row['lgu_name'] + '</small></div>';
                                             }    
                                         } else {
                                             return "--";
