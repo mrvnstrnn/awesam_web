@@ -309,6 +309,7 @@ class GlobeController extends Controller
 
                     // return response()->json(['error' => true, 'message' => $sub_activities ]);
                     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
+                                        ->whereNull('reason')
                                         ->update([
                                             'status' => 'rejected',
                                             'reason' => $request->input('text_area_reason'),
