@@ -74,18 +74,6 @@
     $(document).ready(function () {
 
         
-        
-        $(document).on( 'click','.widget-chart-hover', function (e) {
-            e.preventDefault();
-
-            var table = $('.assigned-sites-table').DataTable( {
-                retrieve: true,
-                paging: false
-            });
-            table.column( 5 ).search($(this).find('.widget-subheading').html()).draw();
-        });
-
-        
     
         $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
             e.preventDefault();

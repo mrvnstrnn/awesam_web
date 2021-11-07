@@ -16,7 +16,7 @@ function makeDT(whatTable, whatCols, active_program) {
             regex: true,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],    
       
-            scrollX: true,   
+            // scrollX: true,   
     
             dom: 'Bfrtip',
             buttons: [
@@ -89,7 +89,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "highlevel_tech";
                     } 
                     else {
-                        var filter_column = "agent";
+                        var filter_column = "highlevel_tech";
 
                     }
                 }        
@@ -99,7 +99,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "program";
                     } 
                     else {
-                        var filter_column = "agent";
+                        var filter_column = "program";
 
                     }
                 }        
@@ -160,7 +160,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
 $(document).ready(() => {
 
-    var table = null;
+
 
     $('.assigned-sites-table').each(function(i, obj) {
 
