@@ -89,7 +89,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "highlevel_tech";
                     } 
                     else {
-                        var filter_column = "agent";
+                        var filter_column = "highlevel_tech";
 
                     }
                 }        
@@ -99,7 +99,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "program";
                     } 
                     else {
-                        var filter_column = "agent";
+                        var filter_column = "program";
 
                     }
                 }        

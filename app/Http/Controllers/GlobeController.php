@@ -3135,6 +3135,7 @@ class GlobeController extends Controller
             $sites = \DB::connection('mysql2')
                 ->table("view_site")
                 ->where('program_id', $program_id);
+
                 if ($program_id == 1) {
                     $sites->where('activity_id', 8);
                 } else if ($program_id == 3 && \Auth::user()->profile_id == 1) {
@@ -3146,8 +3147,23 @@ class GlobeController extends Controller
                 } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
                     $sites->where('activity_id', 5);
                 }
-                $sites->where('profile_id', \Auth::user()->profile_id)
-                            ->get();
+
+                $sites->where('profile_id', \Auth::user()->profile_id);
+
+                if ( $program_id == 3 ) {
+                                    
+                    $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+    
+                }
+    
+                elseif($program_id == 4){
+                    $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_assigned_sites.sam_id')
+                          ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                }
+    
+
+                $sites->get();
 
         } else if ($activity_type == 'all-site-issues') {
             $sites = \DB::connection('mysql2')
