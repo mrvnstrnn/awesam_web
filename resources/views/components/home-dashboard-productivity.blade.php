@@ -1,9 +1,18 @@
 @php
     if(\Auth::user()->profile_id == 2){
         $title = "My Productivity";
+        $view_work_plan = "View My Work Plan";
+        $view_dar = "View My DAR";
+
     }
     elseif(\Auth::user()->profile_id == 3){
         $title = "My Team's Productivity";
+        $view_work_plan = "View Team's Work Plan";
+        $view_dar = "View Team's DAR";
+    } else {
+        $title = "Productivity";
+        $view_work_plan = "View Work Plan";
+        $view_dar = "View DAR";
     }
 @endphp
 <div class="row">
@@ -61,19 +70,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
         <div class="text-center">
             <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
-                <span class="mr-1">View My Work Plan</span>
+                <span class="mr-1">{{ $view_work_plan }}</span>
             </button>
             <button class="btn-pill ml-2 btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
-                <span class="mr-1">View My DAR</span>
+                <span class="mr-1">{{ $view_dar }}</span>
             </button>
         </div>
     </div>        
