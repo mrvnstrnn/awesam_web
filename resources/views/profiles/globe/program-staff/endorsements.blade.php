@@ -87,7 +87,7 @@
         e.preventDefault();
         $(document).find('#viewInfoModal').modal('show');
 
-        var json_parse = JSON.parse($(this).parent().attr('data-site_all'));
+        var sam_id = $(this).parent().attr('data-sam_id');
 
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
@@ -101,7 +101,7 @@
         var program_id = $(this).closest('tr').attr('data-program_id');
 
         $.ajax({
-            url: '/get-program-fields/' + json_parse.sam_id + '/' + $(this).closest('tr').attr('data-program_id'),
+            url: '/get-program-fields/' + sam_id + '/' + $(this).closest('tr').attr('data-program_id'),
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
