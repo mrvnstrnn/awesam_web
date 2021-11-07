@@ -158,26 +158,3 @@
 
 {{-- <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script> --}}
 
-<script>
-
-// function showResult() {
-// 	var table = $('.assigned-sites-table').DataTable();
-
-
-//     var filteredData = table
-//     .column(6, {search: 'applied'})
-//     .data()
-//     .filter( function ( value, index ) {
-//         return value == "MIGRATION" ? true : false;
-//     } );
-
-//     console.log(filteredData);
-
-// }
-// $(document).ready(function () {
-
-// showResult();
-
-// });
-
-</script>
