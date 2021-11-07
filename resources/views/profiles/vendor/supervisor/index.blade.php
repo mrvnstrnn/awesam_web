@@ -269,7 +269,7 @@
 
 <div class="divider"></div>
 
-<x-home-dashboard-milestone />
+<x-home-dashboard-milestone :programid=3 />
 
 <div class="divider"></div>
 
