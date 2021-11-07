@@ -12,10 +12,17 @@
         $table = 'view_milestone_stages_globe';
     }
 
-    $milestones = \DB::table($table)
-                    ->select('stage_id', 'stage_name', DB::raw("SUM(counter) as counter"))
-                    ->groupBy('stage_id', 'stage_name')
-                    ->get();
+    // $milestones = \DB::table($table)
+    //                 ->select('stage_id', 'stage_name', DB::raw("SUM(counter) as counter"))
+    //                 ->where('program_id', $programid)
+    //                 ->groupBy('stage_id', 'stage_name')
+    //                 ->get();
+
+    $milestones = \DB::table("program_stages")
+        ->select('stage_id', 'stage_name')
+        ->where('program_id', $programid)
+        ->get();
+
     $i = 0;
 
 @endphp
@@ -27,7 +34,15 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <div class="main-card mb-3 card">
+        @if($programid == 4)
+        <div class=" my-2">
+            <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark active">ALL</button>
+            <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">BAU</button>
+            <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">REFARM</button>
+            <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">RETROFIT</button>
+        </div>
+        @endif
+        <div class="main-card mb-3 card">            
                 <div class="no-gutters row border">
                     @foreach ($milestones as $milestone)    
                     @php
@@ -37,8 +52,8 @@
                         <div class="milestone-bg bg_img_{{ $i }}"></div>
 
                         <div class="widget-chart widget-chart-hover milestone_sites">
-                            <div class="widget-numbers">{{ $milestone->counter}}</div>
-                            <div class="widget-subheading">{{ $milestone->stage_name}}</div>
+                            <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">- -</div>
+                            <div class="widget-subheading" id="stage_counter_label_{{ $milestone->stage_id }}">{{ $milestone->stage_name}}</div>
                         </div>
                     </div>
                     @endforeach
@@ -56,3 +71,46 @@
     </div>
 
 </div>
+
+@push("js_scripts")
+
+<script>
+
+$(document).ready(() => {
+
+    var programid = "{{ $programid }}";
+
+    $.ajax({
+    url: "/site-ajax",
+    method: "POST",
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    data: {
+        type: "home_widgets_stage_counters",
+        programid: programid
+    },
+    success: function (resp){
+      if(!resp.error){
+
+        $.each(resp.message, function(k, v){
+
+            $('#stage_counter_'+resp.message[k].stage_id).text(resp.message[k].counter)
+
+        });
+
+
+      } else {
+        toastr.error(resp.message);
+      }
+    },
+    error: function (resp){
+      toastr.error(resp.message);
+    }
+  });
+
+
+});
+
+
+</script>
+
+@endpush

@@ -480,6 +480,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // GET DATATABLE CONTENTS
     Route::post('/get-datatable', [DataController::class, 'GetDatatable'])->name('GetDatatable');
 
+    
+
 
 
 });

@@ -323,7 +323,10 @@
     </script>
     
     @yield('js_script')
+    
     @yield('modals')
+
+    @stack('js_scripts')
     
 </body>
 </html>

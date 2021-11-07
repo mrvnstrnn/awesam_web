@@ -33,7 +33,7 @@ class DataController extends Controller
                 ->table("views_sites_with_document_validation")
                 ->leftJoin('view_site', 'views_sites_with_document_validation.sam_id', 'view_site.sam_id')
                 ->where('program_id', $program_id)
-                ->where('active_status', 'pending')
+                ->where('active_status', 'pending   ')
                 ->where('active_profile_id', \Auth::user()->profile_id);
             
             
@@ -50,6 +50,7 @@ class DataController extends Controller
                 ->where('program_id', $program_id)
                 // ->where('active_profile_id', \Auth::user()->profile_id)
                 ->get();
+
 
         } else {
             
@@ -163,6 +164,16 @@ class DataController extends Controller
                         ->where('activity_id','=',  $request->activity_id)
                         ->get();      
             }  
+            elseif($request->type === 'home_widgets_stage_counters'){
+                
+
+                $data = \DB::table("view_milestone_stages_globe")
+                        ->select('stage_id', 'stage_name', \DB::raw("SUM(counter) as counter"))
+                        ->where('program_id', $request->programid)
+                        ->groupBy('stage_id', 'stage_name')
+                        ->get();
+
+            }
 
             
             else {
