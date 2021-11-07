@@ -50,7 +50,7 @@
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
-                <span class="mr-1">View Sites</span>
+                <span class="">View Sites</span>
             </button>
         </div>
     </div>
