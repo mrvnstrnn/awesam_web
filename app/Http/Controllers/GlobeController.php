@@ -2638,7 +2638,7 @@ class GlobeController extends Controller
 
                                 } else if ( $program_id == 3 ) {
                                     
-                                    $sites->whereIn('view_site.activity_id', [15, 22, 23, 28, 29]);
+                                    $sites->whereIn('view_site.activity_id', [15, 21, 22, 26, 27]);
                                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                                     ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type")              
                                             ->get();
