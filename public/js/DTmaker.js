@@ -78,6 +78,16 @@ function makeDT(whatTable, whatCols, active_program) {
 
                     }
                 }        
+                else if(active_program == 4){
+
+                    if(window.location.pathname != "/assigned-sites"){
+                        var filter_column = "program";
+                    } 
+                    else {
+                        var filter_column = "agent";
+
+                    }
+                }        
                 
                 console.log(result);
 
