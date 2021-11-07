@@ -2955,10 +2955,11 @@ class GlobeController extends Controller
         elseif($activity_type == 'new endorsements apmo'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_APMO_New_Endorsements")
-                    ->where('program_id', $program_id)
-                    // ->take(4000)
+                    ->table("view_site")
+                    ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                    ->whereNull('activity_id')
                     ->get();
+
 
         }
 
