@@ -3014,6 +3014,65 @@ class GlobeController extends Controller
     
         }
 
+        elseif($activity_type == 'site editor'){
+
+            if($program_id == 3){
+
+                $sites = \DB::connection('mysql2')
+                        ->table('program_coloc')
+                        ->join('view_site','view_site.sam_id', 'program_coloc.sam_id')
+
+                        ->select(
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address"
+                            )
+                        ->where('view_site.program_id', $program_id)
+                        ->whereNull('view_site.activity_id')
+                    ->get();
+                }
+                elseif($program_id == 4){
+
+                    $sites = \DB::connection('mysql2')
+                            ->table('program_ibs')
+                            ->join('view_site','view_site.sam_id', 'program_ibs.sam_id')
+    
+                            ->select(
+                                "view_site.site_name", 
+                                "view_site.vendor_acronym", 
+                                "view_site.sam_id", 
+                                "view_site.activity_id", 
+                                "view_site.activity_type", 
+                                "view_site.activity_name", 
+                                "view_site.sam_region_name", 
+                                "view_site.region_name", 
+                                "view_site.province_name", 
+                                "view_site.lgu_name", 
+                                "view_site.site_category",
+                                "view_site.aging",
+                                "program_ibs.wireless_project_code",
+                                "program_ibs.program",
+                                "program_ibs.address"
+                                )
+                            ->where('view_site.program_id', $program_id)
+                            ->whereNull('view_site.activity_id')
+                        ->get();
+                    }
+    
+        }        
         elseif($activity_type == 'new endorsements vendor'){
 
             $sites = \DB::connection('mysql2')
