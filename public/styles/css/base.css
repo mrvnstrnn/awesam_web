@@ -7389,7 +7389,7 @@ button,
   .app-header__logo .logo-src {
     height: 23px;
     width: 97px;
-    /* background: url("../../images/awesam_small.png");  */
+    background: url("../../images/awesam_small.png"); 
   }
 
 .app-header__menu,
@@ -7825,7 +7825,8 @@ button,
   .app-sidebar.sidebar-text-light .ps__rail-y:hover .ps__thumb-y {
     background: rgba(255, 255, 255, 0.2); }
   .app-sidebar.sidebar-text-light .app-header__logo .logo-src {
-    background: url("../images/logo.png"); }
+    background: url("../../images/logo-inverse.png"); }
+  }
   .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner,
   .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner::before,
   .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner::after {
@@ -14342,17 +14343,17 @@ legend {
       .profile-block .dropdown-menu-header .menu-header-btn-pane .btn-icon:hover {
         background: rgba(255, 255, 255, 0.2); }
 
-/* .app-logo {
+.app-logo {
   height: 33px;
   width: 100px;
-  background: url("/images/awesam_small.png"); 
+  /* background: url("/images/awesam_small.png");  */
 }
 
 .app-logo-inverse {
   height: 84px;
   width: 230px;
-  background: url("/images/awesam_med.png"); */
- } */
+  /* background: url("/images/awesam_med.png"); */
+ }
 
 .app-login-box .app-logo {
   margin-bottom: 3rem; }

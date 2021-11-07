@@ -2,7 +2,7 @@
     <div class="app-header__logo">
         <a href="{{ url('/') }}">
             <div class="app-logo">
-                <img src="{{ asset('images/awesam_small.png') }}" alt="">
+                {{-- <img src="{{ asset('images/awesam_small.png') }}" alt=""> --}}
             </div>
         </a>
         <div class="header__pane ml-auto">
