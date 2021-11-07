@@ -44,6 +44,7 @@
                                                     // ->where('sub_activity.action', 'doc upload')
                                                     ->where('sub_activity_value.type', 'doc_upload')
                                                     ->orderBy('sub_activity_value.sub_activity_id')
+                                                    ->orderBy('sub_activity_value.value->active_status')
                                                     ->get();
 
                                     $keys_datas = $datas->groupBy('sub_activity_id')->keys();

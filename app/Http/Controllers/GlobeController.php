@@ -279,42 +279,42 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                // if ($request->input('data_complete') == 'false') {
+                if ($request->input('data_complete') == 'false') {
 
-                //     $activities = \DB::connection('mysql2')
-                //                         ->table('stage_activities')
-                //                         ->select('return_activity')
-                //                         ->where('activity_id', $activity_id[0])
-                //                         ->where('program_id', $program_id)
-                //                         ->where('category', $site_category[0])
-                //                         ->first();
+                    $activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('return_activity')
+                                        ->where('activity_id', $activity_id[0])
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[0])
+                                        ->first();
 
-                //     $sub_activities = \DB::connection('mysql2')
-                //                             ->table('sub_activity')
-                //                             ->select('sub_activity_id')
-                //                             ->where('activity_id', $activities->return_activity)
-                //                             ->where('program_id', $program_id)
-                //                             ->where('category', $site_category[0])
-                //                             ->where('requires_validation', 1)
-                //                             ->get()
-                //                             ->pluck('sub_activity_id');
+                    $sub_activities = \DB::connection('mysql2')
+                                            ->table('sub_activity')
+                                            ->select('sub_activity_id')
+                                            ->where('activity_id', $activities->return_activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[0])
+                                            ->where('requires_validation', 1)
+                                            ->get()
+                                            ->pluck('sub_activity_id');
 
-                //     if (\Auth::user()->profile_id == 8) {
-                //         $column_var = 'reviewer_id';
-                //         $column_var2 = 'reviewer_approved';
-                //     } else {
-                //         $column_var = 'reviewer_id_2';
-                //         $column_var2 = 'reviewer_approved_2';
-                //     }
+                    // if (\Auth::user()->profile_id == 8) {
+                    //     $column_var = 'reviewer_id';
+                    //     $column_var2 = 'reviewer_approved';
+                    // } else {
+                    //     $column_var = 'reviewer_id_2';
+                    //     $column_var2 = 'reviewer_approved_2';
+                    // }
 
-                //     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
-                //                         ->update([
-                //                             'status' => 'rejected',
-                //                             'reason' => $request->input('text_area_reason'),
-                //                             $column_var => \Auth::id(),
-                //                             $column_var2 => Carbon::now()->toDate(),
-                //                         ]);
-                // }
+                    SubActivityValue::whereIn('sub_activity_id', $sub_activities)
+                                        ->update([
+                                            'status' => 'rejected',
+                                            'reason' => $request->input('text_area_reason'),
+                                            'approver_id' => \Auth::id(),
+                                            'date_approved' => Carbon::now()->toDate(),
+                                        ]);
+                }
 
             } else if ($request->input('activity_name') == "elas_approved") {
 

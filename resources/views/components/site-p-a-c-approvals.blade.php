@@ -20,7 +20,7 @@
         // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
         $datas = \DB::connection('mysql2')
                         ->table('sub_activity_value')
-                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id')
+                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation')
                         ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                         ->where('sub_activity_value.sam_id', $site[0]->sam_id)
                         ->where('sub_activity_value.type', 'doc_upload')
@@ -86,7 +86,7 @@
             
             {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
                 
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
                 <div class="child_div_{{ $data[0]->sub_activity_id }}">
                     <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -159,7 +159,8 @@
         {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
         <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
         
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>                               
+        {{-- <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button> --}}
+        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>
     </div>
 </div>
 
@@ -189,7 +190,11 @@
         var id = values[0].id;
 
         if ($(this).attr("data-status") != "rejected"){
-            $(".approve_reject_doc_btns").removeClass("d-none");
+            if ($(this).attr("data-requires_validation") == 1) {
+                $(".approve_reject_doc_btns").removeClass("d-none");
+            } else {
+                $(".approve_reject_doc_btns").addClass("d-none");
+            }
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
         }
