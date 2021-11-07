@@ -88,7 +88,7 @@
 
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}">Approve RTB Documents</button>                                            
+        <button class="float-right btn btn-shadow btn-success" id="btn-accept-endorsement" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}">Approve RTB Documents</button>
     </div>
 </div>
 

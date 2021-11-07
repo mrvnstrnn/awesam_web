@@ -1332,15 +1332,15 @@ class GlobeController extends Controller
                     foreach ($stage_activities_approvers as $stage_activities_approver) {
                         $approvers_collect->push([
                             'profile_id' => $stage_activities_approver->approver_profile_id,
-                            'status' => 'pending'
+                            'status' => $file_status == 'approved' ? 'approved' : 'pending'
                         ]);
                     }
 
                     $array_data = [
                         'file' => $new_file,
-                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                        'active_status' => "pending",
-                        'validator' => count($approvers_collect->all()),
+                        'active_profile' => $file_status == 'approved' ? '' : $stage_activities_approvers[0]->approver_profile_id,
+                        'active_status' => $file_status == 'approved' ? 'approved' : 'pending',
+                        'validator' => $file_status == 'approved' ? 0 : count($approvers_collect->all()),
                         'validators' => $approvers_collect->all()
                     ];
 
@@ -2222,7 +2222,7 @@ class GlobeController extends Controller
                 $array_data = [
                     'file' => $file,
                     'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
-                    'active_status' => "pending",
+                    'active_status' => count($approvers_pending_collect->all()) < 1 ? "approved" : "pending",
                     'validator' => count($approvers_pending_collect->all()),
                     'validators' => $approvers_collect->all()
                 ];

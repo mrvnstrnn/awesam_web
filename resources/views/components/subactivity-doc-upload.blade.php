@@ -269,6 +269,8 @@
 
                                         $(".mark_complete_area").removeClass("d-none");
 
+                                        $(".action_to_complete_child"+sub_activity_id+" i").remove();
+
                                         $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
                                             '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
                                         );
