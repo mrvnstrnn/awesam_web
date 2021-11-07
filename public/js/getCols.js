@@ -158,30 +158,30 @@ function getCols(active_program, active_table, active_profile){
                             );
                             break;
 
-                        case "site_name":
+                        // case "site_name":
 
-                            cols.push(
-                                {
-                                    data : field['source_field'], 
-                                    name: field['field_name'],
-                                    searchable: true,
-                                    regex: true,
-                                    className: function(){
-                                        if(field['field_alignment'] != ''){
-                                            if(field['field_alignment'] == 'right'){
-                                                return 'text-right';
-                                            }
-                                            else if(field['field_alignment'] == 'center'){
-                                                return 'text-center';
-                                            }
-                                        } else {
-                                            return 'text-left';
-                                        }
-                                    }
+                        //     cols.push(
+                        //         {
+                        //             data : field['source_field'], 
+                        //             name: field['field_name'],
+                        //             searchable: true,
+                        //             regex: true,
+                        //             className: function(){
+                        //                 if(field['field_alignment'] != ''){
+                        //                     if(field['field_alignment'] == 'right'){
+                        //                         return 'text-right';
+                        //                     }
+                        //                     else if(field['field_alignment'] == 'center'){
+                        //                         return 'text-center';
+                        //                     }
+                        //                 } else {
+                        //                     return 'text-left';
+                        //                 }
+                        //             }
         
-                                }
-                            );
-                            break;
+                        //         }
+                        //     );
+                        //     break;
 
                         case 'site_agent':
                             cols.push(
@@ -238,6 +238,41 @@ function getCols(active_program, active_table, active_profile){
                                         return col['activity_name'];
                                     },
                                     className: classVar
+        
+                                }
+                            );
+                            break;
+
+                        case 'site_name':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render: function ( data, type, row ) {
+                                        return '<div class="font-weight-bold">' + data +'</div><div></div><div> <small>'+ row['sam_id'] + '</small></div><div> <small>'+ row['activity_name'] + '</small> : <small>'+ row['activity_type'] + '</small></div>';
+
+                                    },
+        
+                                }
+                            );
+                            break;
+        
+                        case 'sam_region_name':
+                            cols.push(
+                                {
+                                    data : field['source_field'], 
+                                    name: field['field_name'],
+                                    render: function ( data, type, row ) {
+                                        if(data != null){
+                                            if (row['region_name'] == undefined || row['province_name'] == undefined || row['lgu_name'] == undefined) {
+                                                return '<div class="font-weight-bold">' + data +'</div>';
+                                            } else {
+                                                return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div>';
+                                            }    
+                                        } else {
+                                            return "--";
+                                        }
+                                    },
         
                                 }
                             );

@@ -4,6 +4,8 @@
     }
     elseif(\Auth::user()->profile_id == 3){
         $title = "My Team's Productivity";
+    } else {
+        $title = "Productivity";
     }
 @endphp
 <div class="row">

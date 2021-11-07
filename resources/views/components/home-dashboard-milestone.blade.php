@@ -7,6 +7,10 @@
         $title = "My Team's Site Milestones";
         $table = 'view_COLOC_dashboard_supervisor';
     }
+    else{
+        $title = "Site Milestones";
+        $table = 'view_COLOC_dashboard_supervisor';
+    }
 
     $milestones = \DB::table($table)
                     ->orderBy('activity_id', 'asc') 

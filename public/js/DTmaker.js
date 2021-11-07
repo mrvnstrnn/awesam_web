@@ -60,20 +60,8 @@ function makeDT(whatTable, whatCols, active_program) {
             
             columns: whatCols,
 
-            columnDefs: [ 
-                {
-                    "targets": [ "site_name" ],
-                    "visible": true,
-                    "searchable": true,
-                    "render": function ( data, type, row ) {
-                        if (row['region_name'] == undefined || row['province_name'] == undefined || row['lgu_name'] == undefined) {
-                            return '<div class="font-weight-bold">' + data +'</div><div></div><div> <small>'+ row['sam_id'] + '</small></div><div> <small>'+ row['activity_name'] + '</small> : <small>'+ row['activity_type'] + '</small></div>';
-                        } else {
-                            return '<div class="font-weight-bold">' + data +'</div><div><small>' + row['region_name'] + ' > ' + row['province_name'] + ' > ' + row['lgu_name'] + '</small></div><div> <small>'+ row['sam_id'] + '</small></div><div> <small>'+ row['activity_name'] + '</small> : <small>'+ row['activity_type'] + '</small></div>';
-                        }
-                    },
-                },
-            ],
+            // columnDefs: [ 
+            // ],
 
             "fnInitComplete": function(oSettings, json) {
 
@@ -84,7 +72,8 @@ function makeDT(whatTable, whatCols, active_program) {
 
                     if(window.location.pathname != "/assigned-sites"){
                         var filter_column = "highlevel_tech";
-                    } else {
+                    } 
+                    else {
                         var filter_column = "agent";
 
                     }
