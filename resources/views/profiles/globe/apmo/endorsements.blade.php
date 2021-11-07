@@ -49,7 +49,13 @@
 @endsection
 
 @section('js_script')
+<script>
 
+    $(document).ready(() => {
+    
+    });
+    
+    </script>
 <script>
     //////////////////////////////////////
     var profile_id = 8;
@@ -67,6 +73,19 @@
 
     $(document).ready(function () {
 
+        
+        
+        $(document).on( 'click','.widget-chart-hover', function (e) {
+            e.preventDefault();
+
+            var table = $('.assigned-sites-table').DataTable( {
+                retrieve: true,
+                paging: false
+            });
+            table.column( 5 ).search($(this).find('.widget-subheading').html()).draw();
+        });
+
+        
     
         $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
             e.preventDefault();
@@ -169,8 +188,6 @@
             // $(".btn-accept-endorsement").attr('data-what_table', $(this).closest('tr').attr('data-what_table'));
             // $(".btn-accept-endorsement").attr('data-program_id', $(this).closest('tr').attr('data-program_id'));
         } );
-
-
 
         $(document).on("click", ".checkAll", function(e){
             e.preventDefault();

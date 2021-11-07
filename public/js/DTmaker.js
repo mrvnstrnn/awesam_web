@@ -5,7 +5,7 @@ function makeDT(whatTable, whatCols, active_program) {
             main_activity = "";
         }
         
-        $(whatTable).DataTable({
+        var dt = $(whatTable).DataTable({
             processing: true,
             serverSide: false,
             filter: true,
@@ -150,7 +150,7 @@ function makeDT(whatTable, whatCols, active_program) {
     //     XDT.search( this.value ).draw();
     // } );
 
-
+        return dt;
 
     
     
@@ -160,6 +160,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
 $(document).ready(() => {
 
+    var table = null;
 
     $('.assigned-sites-table').each(function(i, obj) {
 
@@ -185,10 +186,7 @@ $(document).ready(() => {
                         $(str).appendTo($(activeTable).find("thead>tr"));
                 });
 
-                var dt_json = makeDT(activeTable, cols, active_program);
-            
-
-                console.log(dt_json);
+                makeDT(activeTable, cols, active_program);
 
                 // Set Table setting to loaded
                 $(activeTable).attr('data-table_loaded', "true");
