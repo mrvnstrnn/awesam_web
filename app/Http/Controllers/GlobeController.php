@@ -4425,6 +4425,7 @@ class GlobeController extends Controller
                     'status' => $request->input('lessor_approval'),
                     'type' => 'lessor_engagement',
                 ]);
+                // return response()->json(['error' => true, 'message' => $request->input('lessor_approval') == "approved" && !in_array($request->input("sub_activity_id"), [213, 255]) ]);
 
                 if ( $request->input('lessor_approval') == "approved" && !in_array($request->input("sub_activity_id"), [213, 255]) ) {
                     $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));

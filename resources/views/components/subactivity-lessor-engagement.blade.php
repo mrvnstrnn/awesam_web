@@ -153,7 +153,7 @@
         var lessor_approval = $("#lessor_approval").val();
         var lessor_remarks = $("#lessor_remarks").val();
         var site_vendor_id = $("#modal_site_vendor_id").val();
-        var program_id = $("#modal_program_id").val();
+        var program_id = "{{ $program_id }}";
         var sam_id = "{{ $sam_id }}";
         // var sub_activity_id = $(this).attr("data-sub_activity_id");
         var sub_activity_id = "{{ $sub_activity_id }}";
