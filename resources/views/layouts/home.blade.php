@@ -73,6 +73,81 @@
         }            
 
     </style>    
+<style>
+
+    .bg_img_1 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-gray.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+
+    .bg_img_2 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-orange.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_3 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-blue.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_4 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-green.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_5 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-red.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_6 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-orange-2.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+    .bg_img_7 {
+        position: absolute; 
+        left: 0px; 
+        top:0px; 
+        opacity: 0.20; 
+        height: 100%; 
+        width:100%; 
+        background-image: url('/images/milestone-blue-2.jpeg');   
+        background-repeat: no-repeat; background-size: 200%;        
+    }
+
+</style>
         
     @yield('style')
 

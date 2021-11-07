@@ -1,5 +1,5 @@
 
-<x-home-dashboard-productivity />
 <x-home-dashboard-milestone />
+<x-home-dashboard-productivity />
 <div class="divider"></div>
 
