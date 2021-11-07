@@ -269,7 +269,7 @@ class GlobeController extends Controller
                     ]);
                 }
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ibs_lead" || $request->input('activity_name') == "precon_docs_approval_ms_lead" || $request->input('activity_name') == "precon_docs_approval_ibs_lead" || $request->input('activity_name') == "postcon_docs_approval_ms_lead" || $request->input('activity_name') == "postcon_docs_approval_ibs_lead") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ibs_lead" || $request->input('activity_name') == "precon_docs_approval_ms_lead" || $request->input('activity_name') == "precon_docs_approval_ibs_lead" || $request->input('activity_name') == "postcon_docs_approval_ms_lead" || $request->input('activity_name') == "postcon_docs_approval_ibs_lead" || $request->input('activity_name') == "loi___ip_approval_ibs_lead") {
                 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
@@ -279,42 +279,44 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                // if ($request->input('data_complete') == 'false') {
+                if ($request->input('data_complete') == 'false') {
 
-                //     $activities = \DB::connection('mysql2')
-                //                         ->table('stage_activities')
-                //                         ->select('return_activity')
-                //                         ->where('activity_id', $activity_id[0])
-                //                         ->where('program_id', $program_id)
-                //                         ->where('category', $site_category[0])
-                //                         ->first();
+                    $activities = \DB::connection('mysql2')
+                                        ->table('stage_activities')
+                                        ->select('return_activity')
+                                        ->where('activity_id', $activity_id[0])
+                                        ->where('program_id', $program_id)
+                                        ->where('category', $site_category[0])
+                                        ->first();
 
-                //     $sub_activities = \DB::connection('mysql2')
-                //                             ->table('sub_activity')
-                //                             ->select('sub_activity_id')
-                //                             ->where('activity_id', $activities->return_activity)
-                //                             ->where('program_id', $program_id)
-                //                             ->where('category', $site_category[0])
-                //                             ->where('requires_validation', 1)
-                //                             ->get()
-                //                             ->pluck('sub_activity_id');
+                    $sub_activities = \DB::connection('mysql2')
+                                            ->table('sub_activity')
+                                            ->select('sub_activity_id')
+                                            ->where('activity_id', $activities->return_activity)
+                                            ->where('program_id', $program_id)
+                                            ->where('category', $site_category[0])
+                                            ->where('requires_validation', 1)
+                                            ->get()
+                                            ->pluck('sub_activity_id');
 
-                //     if (\Auth::user()->profile_id == 8) {
-                //         $column_var = 'reviewer_id';
-                //         $column_var2 = 'reviewer_approved';
-                //     } else {
-                //         $column_var = 'reviewer_id_2';
-                //         $column_var2 = 'reviewer_approved_2';
-                //     }
+                    // if (\Auth::user()->profile_id == 8) {
+                    //     $column_var = 'reviewer_id';
+                    //     $column_var2 = 'reviewer_approved';
+                    // } else {
+                    //     $column_var = 'reviewer_id_2';
+                    //     $column_var2 = 'reviewer_approved_2';
+                    // }
 
-                //     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
-                //                         ->update([
-                //                             'status' => 'rejected',
-                //                             'reason' => $request->input('text_area_reason'),
-                //                             $column_var => \Auth::id(),
-                //                             $column_var2 => Carbon::now()->toDate(),
-                //                         ]);
-                // }
+                    // return response()->json(['error' => true, 'message' => $sub_activities ]);
+                    SubActivityValue::whereIn('sub_activity_id', $sub_activities)
+                                        ->whereNull('reason')
+                                        ->update([
+                                            'status' => 'rejected',
+                                            'reason' => $request->input('text_area_reason'),
+                                            'approver_id' => \Auth::id(),
+                                            'date_approved' => Carbon::now()->toDate(),
+                                        ]);
+                }
 
             } else if ($request->input('activity_name') == "elas_approved") {
 

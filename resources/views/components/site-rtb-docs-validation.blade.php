@@ -35,6 +35,7 @@
                             
                             <div class="row file_lists">
                                 @php
+                                dd("rest");
                                     // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
                                     $datas = \DB::connection('mysql2')
                                                     ->table('sub_activity_value')
@@ -44,6 +45,7 @@
                                                     // ->where('sub_activity.action', 'doc upload')
                                                     ->where('sub_activity_value.type', 'doc_upload')
                                                     ->orderBy('sub_activity_value.sub_activity_id')
+                                                    ->orderBy('sub_activity_value.value->active_status', 'desc')
                                                     ->get();
 
                                     $keys_datas = $datas->groupBy('sub_activity_id')->keys();
