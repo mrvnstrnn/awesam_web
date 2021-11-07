@@ -114,7 +114,7 @@
                                 @endphp
 
                                 @if($MiniDashComponent != "")
-                                    <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
+                                    {{-- <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/> --}}
                                 @endif
 
                                 <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 

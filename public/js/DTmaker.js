@@ -14,6 +14,15 @@ function makeDT(whatTable, whatCols, active_program) {
             responsive: true,
             stateSave: false,
             regex: true,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],    
+      
+            scrollX: true,   
+    
+            dom: 'Bfrtip',
+            buttons: [
+                'pageLength', 'excelHtml5'
+            ],
+    
             ajax: {
                 url: $(whatTable).attr('data-href'),
                 type: 'GET',
@@ -173,6 +182,7 @@ $(document).ready(() => {
                 });
 
                 var dt_json = makeDT(activeTable, cols, active_program);
+            
 
                 console.log(dt_json);
 
