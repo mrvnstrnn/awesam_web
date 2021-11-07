@@ -35,7 +35,7 @@
                             
                             <div class="row file_lists">
                                 @php
-                                dd("rest");
+                                // dd("rest");
                                     // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
                                     $datas = \DB::connection('mysql2')
                                                     ->table('sub_activity_value')

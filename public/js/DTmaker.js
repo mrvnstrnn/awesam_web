@@ -29,6 +29,7 @@ function makeDT(whatTable, whatCols, active_program) {
             },
             
             dataSrc: function(json){
+                console.log(json.data);
                 return json.data;
             },
 
@@ -47,6 +48,7 @@ function makeDT(whatTable, whatCols, active_program) {
                 // // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
+                // console.log(data);
                 // $(row).attr('data-main_activity', main_activity);
                 // $(row).attr('data-profile', data.profile_id);
                 // $(row).attr('data-what_table', $(whatTable).attr('id'));
