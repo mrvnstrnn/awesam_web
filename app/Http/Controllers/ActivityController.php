@@ -34,7 +34,7 @@ class ActivityController extends Controller
                     $get_component = \DB::connection('mysql2')
                                     ->table('stage_activities')
                                     ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
-                                    ->select('activity_component')
+                                    ->select('activity_component', 'return_activity')
                                     ->where('stage_activities.category', $get_current_act->site_category)
                                     ->where('stage_activities.program_id', $get_current_act->program_id)
                                     ->where('stage_activities.activity_id', $get_current_act->activity_id)
@@ -46,7 +46,7 @@ class ActivityController extends Controller
                         return \View::make('components.activity-error')
                                 ->with([
                                     'site' => $site,
-                                    'activity_source' => $request->get('activity_source'),  
+                                    'activity_source' => $request->get('activity_source'),
                                     'main_activity' => '',
                                 ])
                                 ->render();
@@ -87,6 +87,7 @@ class ActivityController extends Controller
                                 ->with([
                                     'activity_component' => $get_component->activity_component,
                                     'site' => $site,
+                                    'return_activity' => $get_component->return_activity,
                                     'activity_source' => $request->get('activity_source'),
                                     'main_activity' => '',
                                 ])

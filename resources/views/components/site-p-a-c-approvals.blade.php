@@ -31,7 +31,7 @@
     @endphp
 
     @forelse ($datas->groupBy('sub_activity_id') as $data)
-        @php 
+        @php
             $status_collect = collect();
             $status_docs_collect = collect();
         @endphp
@@ -86,7 +86,7 @@
             
             {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
                 
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
+            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                 <div class="child_div_{{ $data[0]->sub_activity_id }}">
                     <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
                         <div>
@@ -184,7 +184,7 @@
 
         var values = JSON.parse($(this).attr('data-value'));
 
-        var sam_id = $(this).attr('data-sam_id');
+        var sam_id = "{{ $site[0]->sam_id }}";
         var sub_activity_id = $(this).attr('data-sub_activity_id');
         var id = values[0].id;
 
@@ -426,9 +426,9 @@
 
         $(".approve_reject_doc_btns_final").attr("data-action", $(this).attr("data-action") == "reject" ? "rejected" : "approved");
         $(".approve_reject_doc_btns_final").attr("data-id", $(this).attr("data-id"));
-        $(".approve_reject_doc_btns_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
+        // $(".approve_reject_doc_btns_final").attr("data-sub_activity_id", $(this).attr("data-sub_activity_id"));
         $(".approve_reject_doc_btns_final").attr("data-activity_id", $(this).attr("data-activity_id"));
-        $(".approve_reject_doc_btns_final").attr("data-site_category", $(this).attr("data-site_category"));
+        // $(".approve_reject_doc_btns_final").attr("data-site_category", $(this).attr("data-site_category"));
 
         if ($(this).attr("data-action") == "reject"){
             $(".confirmation_message textarea").removeClass("d-none");
