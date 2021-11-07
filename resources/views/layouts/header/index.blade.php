@@ -1,9 +1,22 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
-        <a href="{{ url('/') }}">
+        {{-- <a href="{{ url('/') }}"> --}}
+            <div class="logo-src"></div>
+            {{-- <div class="app-header__logo">
+                    <div class="logo-src"></div>
+                    <div class="header__pane ml-auto">
+                        <div>
+                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             <div class="app-logo">
-                {{-- <img src="{{ asset('images/awesam_small.png') }}" alt=""> --}}
-            </div>
+                <img src="{{ asset('images/awesam_small.png') }}" alt="">
+            </div> --}}
         </a>
         <div class="header__pane ml-auto">
             <div>

@@ -7387,8 +7387,11 @@ button,
   align-items: center;
   transition: width .2s; }
   .app-header__logo .logo-src {
-    height: 23px;
-    width: 97px;
+    height: 33px;
+    width: 100px;
+  
+    /* height: 23px;
+    width: 97px; */
     background: url("../../images/awesam_small.png"); 
   }
 

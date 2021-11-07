@@ -2926,6 +2926,10 @@ class GlobeController extends Controller
                               ->select('view_site.*', 'program_coloc.nomination_id', 'program_coloc.pla_id', 'program_coloc.highlevel_tech',  'program_coloc.technology', 'program_coloc.site_type');
                     }
 
+                    if($program_id == 4){
+                        $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
+                              ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                    }
 
 
                     // if ($program_id == 3 && \Auth::user()->profile_id == 1) {
