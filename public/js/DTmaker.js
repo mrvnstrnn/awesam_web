@@ -6,13 +6,13 @@ function makeDT(whatTable, whatCols, active_program) {
         }
         
         $(whatTable).DataTable({
-            processing: true,
+            processing: false,
             serverSide: false,
             filter: true,
             searching: true,
             lengthChange: true,
             responsive: true,
-            stateSave: true,
+            stateSave: false,
             regex: true,
             ajax: {
                 url: $(whatTable).attr('data-href'),
@@ -33,29 +33,29 @@ function makeDT(whatTable, whatCols, active_program) {
             },
 
             createdRow: function (row, data, dataIndex) {
-                if (data.activities != undefined) {
-                    var activity_names = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
+                // if (data.activities != undefined) {
+                //     var activity_names = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
 
-                    var activity_name = JSON.parse(activity_names) != null ? JSON.parse(activity_names).activity_name : "";
-                } else {
-                    var activity_name = data.activity_name;
-                }
+                //     var activity_name = JSON.parse(activity_names) != null ? JSON.parse(activity_names).activity_name : "";
+                // } else {
+                //     var activity_name = data.activity_name;
+                // }
 
-                $(row).attr('data-site_all', JSON.stringify(data));
-                // $(row).attr('data-activity', data.activity_name);
-                $(row).attr('data-activity', activity_name);
-                // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
+                // $(row).attr('data-site_all', JSON.stringify(data));
+                // // $(row).attr('data-activity', data.activity_name);
+                // $(row).attr('data-activity', activity_name);
+                // // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
-                $(row).attr('data-main_activity', main_activity);
-                $(row).attr('data-profile', data.profile_id);
-                $(row).attr('data-what_table', $(whatTable).attr('id'));
-                $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
+                // $(row).attr('data-main_activity', main_activity);
+                // $(row).attr('data-profile', data.profile_id);
+                // $(row).attr('data-what_table', $(whatTable).attr('id'));
+                // $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
 
-                $(row).attr('data-program_id', data.program_id ? data.program_id : "");
-                $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
-                $(row).attr('data-site_category', data.site_category);
-                $(row).attr('data-activity_id', data.activity_id);
+                // $(row).attr('data-program_id', data.program_id ? data.program_id : "");
+                // $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
+                // $(row).attr('data-site_category', data.site_category);
+                // $(row).attr('data-activity_id', data.activity_id);
             },
             
             columns: whatCols,
