@@ -2915,6 +2915,7 @@ class GlobeController extends Controller
             //         ->get();
 
             $sites = \DB::connection('mysql2')
+<<<<<<< HEAD
                     ->table("view_site")
                     ->where('program_id', $program_id)
                     ->where('activity_type', "endorsement")
@@ -2924,6 +2925,31 @@ class GlobeController extends Controller
                     if($program_id == 3){
                         $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
                               ->select('view_site.*', 'program_coloc.nomination_id', 'program_coloc.pla_id', 'program_coloc.highlevel_tech',  'program_coloc.technology', 'program_coloc.site_type');
+=======
+                    ->table("view_sites_activity")
+                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+                    ->where('program_id', $program_id);
+                    if ($program_id == 3 && \Auth::user()->profile_id == 1) {
+                        $sites->where('activity_id', 5);
+                    } else if ($program_id == 3 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 2);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 2);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
+                        $sites->where('activity_id', 3);
+                    } else if ($program_id == 4 && \Auth::user()->profile_id == 8) {
+                        $sites->where('activity_id', 4);
+                    } else if ($program_id == 5 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 2);
+                    } else if ($program_id == 5 && \Auth::user()->profile_id == 7) {
+                        $sites->where('activity_id', 3);
+                    } else if ($program_id == 5 && \Auth::user()->profile_id == 8) {
+                        $sites->where('activity_id', 4);
+                    } else if ($program_id == 1 && \Auth::user()->profile_id == 6) {
+                        $sites->where('activity_id', 1);
+                    } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
+                        $sites->where('activity_id', 1);
+>>>>>>> e67796f2466639c7ebc5befbd427bff83c5587bc
                     }
 
 
