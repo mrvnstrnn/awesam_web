@@ -328,7 +328,7 @@
         var data_complete = $(this).attr('data-complete');
         var site_category = ["{{ $site[0]->site_category }}"];
         var activity_id = ["{{ $site[0]->activity_id }}"];
-        var activity_name = "{{ str_replace(" ", "_", strtolower($site[0]->activity_name)) }}";
+        var activity_name = "{{ preg_replace("/[^A-Za-z0-9\-]/", "_", strtolower($site[0]->activity_name)) }}";
         var program_id = "{{ $site[0]->program_id }}";
 
         // if ("{{ \Auth::user()->profile_id }}" == 10) {
@@ -354,7 +354,7 @@
                 site_category : site_category,
                 activity_id : activity_id,
                 type : type,
-                remarks : remarks,
+                text_area_reason : remarks,
             }
         } else {
             data = {
