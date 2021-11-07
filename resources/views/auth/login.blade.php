@@ -9,7 +9,7 @@
                     <div class="h5 modal-title text-center">
                         <h4 class="mt-2">
                             <div class="app-logo-inverse mx-auto mb-3">
-                                <img src="{{ asset('images/awesam_med.png') }}" alt="">
+                                {{-- <img src="{{ asset('images/awesam_med.png') }}" alt=""> --}}
                             </div>
                             <span>Please sign in to your account below.</span>
                         </h4>
