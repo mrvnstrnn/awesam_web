@@ -16,7 +16,7 @@ function makeDT(whatTable, whatCols, active_program) {
             regex: true,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],    
       
-            scrollX: true,   
+            // scrollX: true,   
     
             dom: 'Bfrtip',
             buttons: [
