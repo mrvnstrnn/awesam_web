@@ -2975,6 +2975,8 @@ class GlobeController extends Controller
                         "program_coloc.technology", 
                         "program_coloc.site_type"
                         )
+                    ->where('view_site.program_id', $program_id)
+                    ->whereNull('view_site.activity_id')
                     ->get();
 
 
