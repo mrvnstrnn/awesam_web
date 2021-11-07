@@ -20,7 +20,11 @@ function makeDT(whatTable, whatCols, active_program) {
     
             dom: 'Bfrtip',
             buttons: [
-                'pageLength', 'excelHtml5'
+                'pageLength', 
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+    
             ],
     
             ajax: {
