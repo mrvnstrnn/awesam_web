@@ -129,7 +129,7 @@ class DataController extends Controller
                 'activity_name' => 'required',
                 'sub_activity_id' => 'required',
                 'sub_activity_name' => 'required',
-                'method' => 'required',
+                'lessor_method' => 'required',
                 'saq_objective' => 'required',
                 'remarks' => 'required',
             ));
@@ -146,7 +146,7 @@ class DataController extends Controller
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
                     'status' => 'pending',
-                    'type' => 'add_engagement'
+                    'type' => 'lessor_engagement'
                 ]);
 
                 return response()->json(['error' => false, 'message' => $notification ]);

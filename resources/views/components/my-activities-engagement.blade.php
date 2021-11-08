@@ -76,18 +76,18 @@
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="method" class="col-sm-3 col-form-label">Method</label>
+                                                    <label for="lessor_method" class="col-sm-3 col-form-label">Method</label>
                                                     <div class="col-sm-9">
 
-                                                        <select class="form-control" name="method">
+                                                        <select class="form-control" name="lessor_method">
                                                             <option value="">Select Method</option>
                                                             <option value="Call">Call</option>
                                                             <option value="Text">Text</option>
                                                             <option value="Email">Email</option>
                                                             <option value="Site Visit">Site Visit</option>
-                                                            <option value="Call">Upload Document</option>
+                                                            <option value="Upload Document">Upload Document</option>
                                                         </select>
-                                                        <small class="text-danger method-errors"></small>
+                                                        <small class="text-danger lessor_method-errors"></small>
 
                                                     </div>
                                                 </div>
