@@ -473,6 +473,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // WORK PLAN
     Route::post('/work-plan/add', [DataController::class, 'Add_Work_Plan'])->name('Add_Work_Plan');
 
+    // ENGAGEMENT PLAN
+    Route::post('/engagement/add', [DataController::class, 'add_engagement'])->name('add_engagement');
+
     // GET STAGE ACTIVITIES
     Route::post('/site-ajax', [DataController::class, 'SiteAjax'])->name('SiteAjax');
 

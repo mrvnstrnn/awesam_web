@@ -114,10 +114,55 @@ class DataController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
 
-
-
-
     }
+
+    public function add_engagement(Request $request)
+    {   
+        try {
+
+            $notification = "Successfully Added Engagement";
+
+            $validate = Validator::make($request->all(), array(              
+                'sam_id' => 'required',
+                'site_name' => 'required',
+                // 'activity_id' => 'required',
+                'activity_name' => 'required',
+                'sub_activity_id' => 'required',
+                'sub_activity_name' => 'required',
+                'method' => 'required',
+                'saq_objective' => 'required',
+                'remarks' => 'required',
+            ));
+
+            if ($validate->passes()) {
+
+                SubActivityValue::create([
+                    'sam_id' => $request->sam_id,
+                    // 'site_name' => $request->site_name,
+                    // 'activity_id' => $request->activity_id,
+                    // 'activity_name' => $request->activity_name,
+                    // 'sub_activity_name' => $request->sub_activity_name,
+                    'sub_activity_id' => $request->sub_activity_id,
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'status' => 'pending',
+                    'type' => 'add_engagement'
+                ]);
+
+                return response()->json(['error' => false, 'message' => $notification ]);
+            } 
+            else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+
+            return response()->json(['error' => false, 'message' => $notification ]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    
 
     // ************ WORK PLAN ************** //
 

@@ -14,7 +14,7 @@ class ActivityController extends Controller
     {
         try {
 
-            
+            // dd($request->all());
             if(!isset($request->direct_mode)){
 
 
@@ -126,6 +126,11 @@ class ActivityController extends Controller
                     case "work_plan_view": 
                         
                         $component_to_load = "activity-work-plan-date";
+                        break;
+
+                    case "my-activities-engagement": 
+                        
+                        $component_to_load = "my-activities-engagement";
                         break;
 
                     case "new endorsement apmo": 
