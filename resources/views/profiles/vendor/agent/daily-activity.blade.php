@@ -78,6 +78,7 @@
                                                                 <tr>
                                                                     <th>Sub Activity</th>
                                                                     <th>Method</th>
+                                                                    <th>SAQ Objective</th>
                                                                     <th>Work Plan</th>
                                                                 </tr>
                                                             </thead>
@@ -96,6 +97,18 @@
                                                                                 {{ $v->lessor_method }}
                                                                             @endif
                                                                         </td>
+
+                                                                        <td>
+                                                                            @php
+                                                                                $v = json_decode($dar->value);    
+                                                                                if(isset($v->saq_objective)){
+                                                                                    $saq = $v->saq_objective;
+                                                                                } else {
+                                                                                    $saq = "";
+                                                                                }
+                                                                            @endphp 
+                                                                            {{ $saq }}
+                                                                        </td>                                                                        
                                                                         <td> -- -- </td>
                                                                     </tr>
                                                                     @endif
@@ -120,6 +133,7 @@
                                                                 <tr>
                                                                     <th>Sub Activity</th>
                                                                     <th>Method</th>
+                                                                    <th>SAQ Objective</th>
                                                                     <th>Work Plan</th>
                                                                 </tr>
                                                             </thead>
@@ -143,6 +157,17 @@
                                                                                 @endphp 
                                                                                 {{ $v->lessor_method }}
                                                                             @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @php
+                                                                                $v = json_decode($dar->value);    
+                                                                                if(isset($v->saq_objective)){
+                                                                                    $saq = $v->saq_objective;
+                                                                                } else {
+                                                                                    $saq = "";
+                                                                                }
+                                                                            @endphp 
+                                                                            {{ $saq }}
                                                                         </td>
                                                                         <td> -- -- </td>
                                                                     </tr>
