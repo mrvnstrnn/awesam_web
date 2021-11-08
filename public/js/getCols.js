@@ -34,7 +34,8 @@ function getCols(active_program, active_table, active_profile){
                             width: '20px',
                             orderable: false,
                             render: function(data){
-                                return "<input type='checkbox' name='program"+data.program_id+"' id='checkbox_"+data.sam_id+"' value='"+data.sam_id+"' class='form-control checkbox-new-endorsement' data-site_vendor_id='"+data.vendor_id+"' data-site_category='"+data.site_category+"' data-activity_id='"+data.activity_id+"' style='width:20px;' />";
+                                // return "<input type='checkbox' name='program"+data.program_id+"' id='checkbox_"+data.sam_id+"' value='"+data.sam_id+"' class='form-control checkbox-new-endorsement' data-site_vendor_id='"+data.vendor_id+"' data-site_category='"+data.site_category+"' data-activity_id='"+data.activity_id+"' style='width:20px;' />";
+                                return "<input type='checkbox' name='program"+data.program_id+"' id='checkbox_"+data.sam_id+"' value='"+data.sam_id+"' class='form-control checkbox-new-endorsement' data-site_category='"+data.site_category+"' data-activity_id='"+data.activity_id+"' style='width:20px;' />";
                             }                            
                         }
                     );
