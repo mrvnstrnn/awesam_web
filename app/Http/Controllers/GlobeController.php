@@ -2978,6 +2978,8 @@ class GlobeController extends Controller
                             "view_site.vendor_acronym", 
                             "view_site.sam_id", 
                             "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
                             "view_site.activity_type", 
                             "view_site.activity_name", 
                             "view_site.sam_region_name", 
@@ -3005,6 +3007,8 @@ class GlobeController extends Controller
                                 "view_site.vendor_acronym", 
                                 "view_site.sam_id", 
                                 "view_site.activity_id", 
+                                "view_site.program_id", 
+                                "view_site.site_category", 
                                 "view_site.activity_type", 
                                 "view_site.activity_name", 
                                 "view_site.sam_region_name", 
@@ -5913,6 +5917,7 @@ class GlobeController extends Controller
             } else if ($program == 5) {
                 $table = 'program_mwan';
             }
+            
             $datas = \DB::connection('mysql2')
                             ->table($table)
                             ->where('sam_id', $sam_id)

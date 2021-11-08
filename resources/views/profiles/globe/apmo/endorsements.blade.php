@@ -185,12 +185,12 @@
 
             $(this).prop('checked', true);
 
-            var atLeastOneIsChecked = $('input[name='+val+']:checkbox:checked').length > 0;
+            var atLeastOneIsChecked = $('input[name=program'+val+']:checkbox:checked').length > 0;
             
             if (!atLeastOneIsChecked) {
-                $('input[name='+val+']').not(this).prop('checked', this.checked);
+                $('input[name=program'+val+']').not(this).prop('checked', this.checked);
             } else {
-                $('input[name='+val+']').not(this).prop('checked', false);
+                $('input[name=program'+val+']').not(this).prop('checked', false);
             }
         });
 
