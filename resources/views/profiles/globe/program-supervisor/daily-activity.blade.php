@@ -18,7 +18,7 @@
                         <div class="menu-header-content btn-pane-right">
                             <h5 class="menu-header-title text-dark">
                                 <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
-                                 My Activities
+                                 Daily Activity Report
                             </h5>
                         </div>
                         <div class="btn-actions-pane-right py-0">
@@ -26,10 +26,43 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-12 text-right">
+                    <div class="row">
+                        <div class="col-2">
+                            Vendor
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>Vendor.ph</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            Supervisor
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>All</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            Region
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>All</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            Agent
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>All</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             @php 
@@ -38,13 +71,13 @@
                                 $dates = \DB::table('view_dar_agent')
                                             ->distinct()
                                             ->select('date_added', 'site_name', 'sam_id')
-                                            ->where('user_id', \Auth::user()->id)
+                                            // ->where('user_id', \Auth::user()->id)
                                             ->where('type', '<>',  'work_plan')
                                             ->where('type', '<>',  'doc_upload')
                                             ->get();
 
                                 $dars =  \DB::table('view_dar_agent')
-                                            ->where('user_id', \Auth::user()->id)
+                                            // ->where('user_id', \Auth::user()->id)
                                             ->where('type', '<>',  'work_plan')
                                             ->where('type', '<>',  'doc_upload')
                                             ->get();
