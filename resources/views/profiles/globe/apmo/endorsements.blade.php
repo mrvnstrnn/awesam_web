@@ -292,9 +292,9 @@
             for(var i=0; inputElements[i]; ++i){
                 if(inputElements[i].checked){
                     sam_id.push(inputElements[i].value);
-                    site_vendor_id.push(inputElements[i].attributes[5].value);
-                    site_category.push(inputElements[i].attributes[6].value);
-                    activity_id.push(inputElements[i].attributes[7].value);
+                    site_vendor_id.push(inputElements[i].attributes[4].value);
+                    site_category.push(inputElements[i].attributes[5].value);
+                    activity_id.push(inputElements[i].attributes[6].value);
                 }
             }
 
