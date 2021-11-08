@@ -49,6 +49,38 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <textarea name="details_address" id="details_address" type="text" readonly class="form-control"></textarea>
                         </div>
                     </div>
+                    <div class="form-row mb-2 pb-2 border-bottom">
+                        <div class="col-5">
+                            <label for="details_site_pr" class="mr-sm-2">PR</label>
+                        </div>
+                        <div class="col-7">
+                            <input name="details_site_pr" id="details_site_pr" type="text" value="" readonly class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row mb-2 pb-2 border-bottom">
+                        <div class="col-5">
+                            <label for="details_site_po" class="mr-sm-2">PO</label>
+                        </div>
+                        <div class="col-7">
+                            <input name="details_site_po" id="details_site_po" type="text" value="" readonly class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row mb-2 pb-2 border-bottom">
+                        <div class="col-5">
+                            <label for="details_site_program" class="mr-sm-2">Program</label>
+                        </div>
+                        <div class="col-7">
+                            <input name="details_site_program" id="details_site_program" type="text" value="" readonly class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row mb-2 pb-2 border-bottom">
+                        <div class="col-5">
+                            <label for="details_site_program" class="mr-sm-2">Tech</label>
+                        </div>
+                        <div class="col-7">
+                            <input name="details_site_program" id="details_site_program" type="text" value="" readonly class="form-control">
+                        </div>
+                    </div>
                 </form>                                                        
             </div>
         </div>

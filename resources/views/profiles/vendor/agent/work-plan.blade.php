@@ -80,7 +80,10 @@
                             <div class="row mb-3">
                                 <div id="work_plan_previous" class="col-12 table-responsive">
                                     @php 
-                                        $Date = date('Y-m-d',strtotime('last monday'));
+                                        
+                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+
+                                        date_default_timezone_set('Asia/Manila');
                                         $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
 
                                         $work_plans = \DB::table('view_work_plans')
@@ -212,7 +215,7 @@
                             <div class="row mb-3">
                                 <div id="work_plan_this_week" class="col-12 table-responsive">
                                     @php 
-                                        $Date = date('Y-m-d',strtotime('last monday'));
+                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
                                         $work_plans = \DB::table('view_work_plans')
                                                                 ->get();
@@ -336,7 +339,7 @@
                             <div class="row mb-3">
                                 <div id="work_plan_upcoming" class="col-12 table-responsive">
                                     @php 
-                                        $Date = date('Y-m-d',strtotime('last monday'));
+                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
                                         $work_plans = \DB::table('view_work_plans')
                                                                 ->get();
