@@ -93,6 +93,11 @@
     $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
         if ($(this).attr("colspan") != 4) {
+            $(document).find('#modal-assign-sites').modal('show');
+
+            $("#modal-assign-sites select#agent_id").append(
+                '<option value="">Processing...</option>'
+            );
 
             $("#sam_id").val($(this).parent().attr('data-sam_id'));
             $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
@@ -104,14 +109,15 @@
             $("#btn-assign-sites").attr("data-site_category", $(this).parent().attr('data-site_category'));
             $("#btn-assign-sites").attr("data-activity_id", $(this).parent().attr('data-activity_id'));
 
-            $("#modal-assign-sites select#agent_id option").remove();
 
             $.ajax({
                 url: "/get-agent-based-program/"+ $(this).parent().attr('data-program_id'),
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
-                        $(document).find('#modal-assign-sites').modal('show');
+                        
+                        $("#modal-assign-sites select#agent_id option").remove();
+
                         resp.message.forEach(element => {
                             $("#modal-assign-sites select#agent_id").append(
                                 '<option value="'+element.id+'">'+element.name+'</option>'
