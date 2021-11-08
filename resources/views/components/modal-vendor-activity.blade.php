@@ -147,11 +147,11 @@
                                                                 <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        {{-- <li class="nav-item">
                                                             <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
                                                                 <span>Engagement</span>
                                                             </a>
-                                                        </li>
+                                                        </li> --}}
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
@@ -185,7 +185,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
+                                                        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
                                                             <div id="action_lessor_engagement" class=''>
                                                                 <div class="row py-5 px-4" id="control_box_log">
                                                                     <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor_log" data-value="Call">
@@ -256,7 +256,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 @elseif($subactivity_type == "sequential")
                                                 <ul class="tabs-animated body-tabs-animated nav mb-4">
