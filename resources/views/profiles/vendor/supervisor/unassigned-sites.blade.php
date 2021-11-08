@@ -93,7 +93,6 @@
     $('.assigned-sites-table').on( 'click', 'tr td:first-child', function (e) {
         e.preventDefault();
         if ($(this).attr("colspan") != 4) {
-            $(document).find('#modal-assign-sites').modal('show');
 
             $("#sam_id").val($(this).parent().attr('data-sam_id'));
             $("#btn-assign-sites").attr('data-id', $(this).parent().attr('data-id'));
@@ -112,7 +111,7 @@
                 method: "GET",
                 success: function (resp) {
                     if (!resp.error) {
-                        console.log(resp.message);
+                        $(document).find('#modal-assign-sites').modal('show');
                         resp.message.forEach(element => {
                             $("#modal-assign-sites select#agent_id").append(
                                 '<option value="'+element.id+'">'+element.name+'</option>'
