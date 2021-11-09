@@ -6944,7 +6944,6 @@ class GlobeController extends Controller
                                         ->where('type', 'work_plan')
                                         ->where('status', 'pending')
                                         ->get();
-
                                    
         if ( count($get_workplans) > 0 ) {
 
@@ -6952,7 +6951,7 @@ class GlobeController extends Controller
                 
                 $json = json_decode( $get_workplan->value );
 
-                if ( $json->planned_date == Carbon::now()->toDateString() || $json->planned_date <= Carbon::now()->toDateString() ) {
+                if ( $json->planned_date == Carbon::now()->toDateString() || $json->planned_date >= Carbon::now()->toDateString() ) {
                     $get_workplan->update([
                         'status' => 'Done - Missed'
                     ]);
