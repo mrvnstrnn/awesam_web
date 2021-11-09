@@ -303,7 +303,7 @@
                                 </div>
                                 <div class="col-sm-4 border">      
                                     <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                          
-                                    <div class="widget-chart widget-chart-hover milestone_sites show_action_modal" data-activity_source="work_plan_add" data-activity_name="" data-total="" data-activity_id="">
+                                    <div class="widget-chart widget-chart-hover milestone_sites get_activities_wo_work_plan" data-activity_source="work_plan_add" data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
                                             Add Work Plan
@@ -444,8 +444,38 @@
                         <table class="table table-hover assigned_sites_table">
                             <thead>
                                 <tr>
-                                    <th>SAM ID</th>
                                     <th>Site</th>
+                                    {{-- <th>Activity Name</th> --}}
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="activities-wo-work-plan-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="dropdown-menu-header">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <h5 class="menu-header-title">
+                                Activities Without Work Plan
+                            </h5>
+                        </div>
+                    </div>
+                </div> 
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table class="table table-hover get_activities_wo_work_plan_table">
+                            <thead>
+                                <tr>
+                                    <th>Site</th>
+                                    <th>Activity Name</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -461,8 +491,6 @@
 <script>
     $(document).ready(function(){
         $(".get_assigned_site").on("click", function(){
-
-            console.log("test");
 
             $("#assigned-sites-modal").modal("show");
 
@@ -483,8 +511,8 @@
                         return json.data;
                     },
                     columns: [
-                        { data: "sam_id" },
-                        { data: "site_name" }
+                        { data: "site_name" },
+                        // { data: "activity_name" }
                     ],
                 });
 
@@ -492,6 +520,40 @@
                 $('.assigned_sites_table').DataTable().ajax.reload();
             }
         });
+
+
+        $(".get_activities_wo_work_plan").on("click", function(){
+
+            $("#activities-wo-work-plan-modal").modal("show");
+
+            if ( ! $.fn.DataTable.isDataTable('.get_activities_wo_work_plan_table') ) {
+
+                $('.get_activities_wo_work_plan_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    // pageLength: 3,
+                    ajax: {
+                        url: "/get-assigned-sites",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "site_name" },
+                        { data: "activity_name" },
+                        { data: "action" }
+                    ],
+                });
+
+            } else {
+                $('.get_activities_wo_work_plan_table').DataTable().ajax.reload();
+            }
+        });
+        
     });
 </script>
 <script src="\js\modal-loader.js"> </script>

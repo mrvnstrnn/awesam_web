@@ -273,8 +273,8 @@ class DataController extends Controller
             if (\Auth::user()->profile_id == 2) {
                 $sites = \DB::connection('mysql2')
                         ->table("site_users")
-                        ->join("site", 'site.sam_id', 'site_users.sam_id')
-                        ->select("site.site_name", "site.sam_id")
+                        ->join("view_site", 'view_site.sam_id', 'site_users.sam_id')
+                        ->select("view_site.site_name", "view_site.activity_name", "view_site.sam_id", "view_site.activity_id", "view_site.activity_name", "view_site.program_id", "view_site.site_category")
                         // ->whereJsonContains('site_agent', [
                         //     'user_id' => \Auth::id()
                         // ])
@@ -288,8 +288,8 @@ class DataController extends Controller
 
                 $sites = \DB::connection('mysql2')
                         ->table("site_users")
-                        ->join("site", 'site.sam_id', 'site_users.sam_id')
-                        ->select("site.site_name", "site.sam_id")
+                        ->join("view_site", 'view_site.sam_id', 'site_users.sam_id')
+                        ->select("view_site.site_name", "view_site.activity_name", "view_site.sam_id", "view_site.activity_id", "view_site.activity_name", "view_site.program_id", "view_site.site_category")
                         // ->whereJsonContains('site_agent', [
                         //     'user_id' => \Auth::id()
                         // ])
@@ -297,7 +297,24 @@ class DataController extends Controller
                         ->get();
             }
     
-            $dt = DataTables::of($sites);
+            $dt = DataTables::of($sites)
+                            ->addColumn('action', function($row){
+
+                                $json = array(
+                                    'sam_id' => $row->sam_id,
+                                    'activity_id' => $row->activity_id,
+                                    'activity_name' => $row->activity_name,
+                                    'site_name' => $row->site_name,
+                                    'program_id' => $row->program_id,
+                                    'category' => $row->site_category
+                                );
+
+                                // data-json='{"sam_id" : "{{ $row->sam_id }}", "activity_id" : "{{$activities[$i]->activity_id}}", "activity_name" : "{{ $activities[$i]->activity_name }}","site_name" : "{{ $activities[$i]->site_name }}", "program_id" : "{{ $activities[$i]->program_id }}", "category" : "{{ $activities[$i]->site_category }}" }'
+
+                                return '<button class="btn btn-sm btn-primary show_action_modal" data-activity_source="work_plan_activity_add" data-json="'.json_encode($json).'">Add Work Plan</button>';
+                            });
+                            
+            $dt->rawColumns(['action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
