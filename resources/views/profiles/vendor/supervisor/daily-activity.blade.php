@@ -61,7 +61,14 @@
 
                                             <option value="">Please select user.</option>
                                             @foreach ($get_user_under_me as $user)
-                                                <option {{ $user_id == $user->user_id ? 'selected': '' }} value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                                @php
+                                                    if (isset($user_id)) {
+                                                        $selected = $user_id == $user->user_id ? 'selected': '';
+                                                    } else {
+                                                        $selected = "";
+                                                    }
+                                                @endphp
+                                                <option {{ $selected }} value="{{ $user->user_id }}">{{ $user->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -77,7 +84,9 @@
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             <div id="accordion" class="accordion-wrapper mb-3">
                                 @php
-                                    $users = App\Models\User::find($user_id);
+                                    if (isset($user_id)) {
+                                        $users = App\Models\User::find($user_id);
+                                    }
                                     $date_ctr = 0;
                                 @endphp
                                 <h1>{{ isset($users) ? $users->name : "" }}</h1>
