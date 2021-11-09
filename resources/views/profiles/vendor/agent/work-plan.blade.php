@@ -296,15 +296,18 @@
                             <div class="no-gutters row">
                                 <div class="col-sm-4 border">           
                                     <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                     
-                                    <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
+                                    <div class="widget-chart widget-chart-hover milestone_sites get_assigned_site"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Assigned Sites</div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 border">      
                                     <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                          
-                                    <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
+                                    <div class="widget-chart widget-chart-hover milestone_sites show_action_modal" data-activity_source="work_plan_add" data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
+                                        {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                            Add Work Plan
+                                        </button> --}}
                                         <div class="widget-subheading">Activities w/o Work Plan</div>
                                     </div>
                                 </div>
@@ -422,11 +425,75 @@
 @section('modals')
 
     <x-milestone-modal />
+    
+    <div class="modal fade" id="assigned-sites-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="dropdown-menu-header">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <h5 class="menu-header-title">
+                                Assigned Sites
+                            </h5>
+                        </div>
+                    </div>
+                </div> 
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table class="table table-hover assigned_sites_table">
+                            <thead>
+                                <tr>
+                                    <th>Site</th>
+                                    <th>Activity</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
 @section('js_script')
+<script>
+    $(document).ready(function(){
+        $(".get_assigned_site").on("click", function(){
 
+            console.log("test");
+
+            $("#assigned-sites-modal").modal("show");
+
+            if ( ! $.fn.DataTable.isDataTable('.assigned_sites_table') ) {
+
+                $('.assigned_sites_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    // pageLength: 3,
+                    ajax: {
+                        url: "/get-assigned-sites",
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    },
+                    dataSrc: function(json){
+                        return json.data;
+                    },
+                    columns: [
+                        { data: "site_name" },
+                        { data: "activity_name" }
+                    ],
+                });
+
+            } else {
+                $('.assigned_sites_table').DataTable().ajax.reload();
+            }
+        });
+    });
+</script>
 <script src="\js\modal-loader.js"> </script>
 
 @endsection

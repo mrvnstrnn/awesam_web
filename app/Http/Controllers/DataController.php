@@ -9,6 +9,7 @@ use Validator;
 use Carbon;
 
 use App\Models\SubActivityValue;
+use App\Models\UserDetail;
 
 
 class DataController extends Controller
@@ -19,6 +20,11 @@ class DataController extends Controller
 
 
 
+
+    }
+
+    public function work_plan ($user_id = '')
+    {
 
     }
 
@@ -154,13 +160,7 @@ class DataController extends Controller
                         $get_workplan->update([
                             'status' => 'Done'
                         ]);
-                    } 
-                    // else if () {
-                    //     $get_workplan->update([
-                    //         'status' => 'Delayed'
-                    //     ]);
-                    // } 
-                    else {
+                    } else {
                         $get_workplan->update([
                             'status' => 'Delayed'
                         ]);
@@ -265,6 +265,44 @@ class DataController extends Controller
         }
 
 
+    }
+
+    public function get_assigned_sites ()
+    {
+        try {
+            if (\Auth::user()->profile_id == 2) {
+                $sites = \DB::connection('mysql2')
+                        ->table("view_site")
+                        ->select("site_name", "activity_name")
+                        // ->where('profile_id', \Auth::user()->profile_id)
+                        ->whereJsonContains('site_agent', [
+                            'user_id' => \Auth::id()
+                        ])
+                        // ->where('site_agent->user_id', \Auth::id())
+                        ->get();
+            } else {
+                $get_user_under_me = UserDetail::select('user_id')
+                                        ->where('IS_id', \Auth::id())
+                                        ->get()
+                                        ->pluck('user_id');
+
+                $sites = \DB::connection('mysql2')
+                        ->table("view_site")
+                        ->select("site_name", "activity_name")
+                        ->where('profile_id', \Auth::user()->profile_id)
+                        ->whereJsonContains('site_agent', [
+                            'user_id' => $get_user_under_me
+                        ])
+                        // ->where('site_agent->user_id', \Auth::id())
+                        ->get();
+            }
+    
+            $dt = DataTables::of($sites);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
     }
 
 

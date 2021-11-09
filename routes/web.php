@@ -38,6 +38,7 @@ use App\Http\Controllers\ActivityController;
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
+    Route::post('/daily-activity', [UserController::class, 'daily_activity'])->name('daily_activity');
     Route::get('/onboarding', [UserController::class, 'onboarding']);
 
     Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');
@@ -484,6 +485,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-datatable', [DataController::class, 'GetDatatable'])->name('GetDatatable');
 
     
+    // Datatable Assigened Sites
+    Route::get('/get-assigned-sites', [DataController::class, 'get_assigned_sites'])->name('get_assigned_sites');
 
 
 
