@@ -470,7 +470,7 @@ class UserController extends Controller
 
     }
 
-    public function daily_activity($user_id = null){
+    public function daily_activity(Request $request){
 
 
         if(is_null(\Auth::user()->profile_id)){
@@ -497,6 +497,8 @@ class UserController extends Controller
             $profile_menu = self::getProfileMenuLinks();
             $profile_direct_links = self::getProfileMenuDirectLinks();
             $program_direct_links = self::getProgramMenuDirectLinks();
+
+            $user_id = $request->get('user_id');
             
             return view($view, 
                 compact(
