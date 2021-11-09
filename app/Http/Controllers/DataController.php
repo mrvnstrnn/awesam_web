@@ -154,13 +154,7 @@ class DataController extends Controller
                         $get_workplan->update([
                             'status' => 'Done'
                         ]);
-                    } 
-                    // else if () {
-                    //     $get_workplan->update([
-                    //         'status' => 'Delayed'
-                    //     ]);
-                    // } 
-                    else {
+                    } else {
                         $get_workplan->update([
                             'status' => 'Delayed'
                         ]);
