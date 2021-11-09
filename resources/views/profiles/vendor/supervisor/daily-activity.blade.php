@@ -76,7 +76,6 @@
                                                 $dars =  \DB::table('view_dar_agent')
                                                             ->where('date_added', $date->date_added)
                                                             ->where('type', '<>',  'work_plan')
-                                                            ->where('type', '<>',  'doc_upload')
                                                             ->get();                                                
                                             @endphp
                                             <div id="accordion-sites{{ $date_ctr }}" class="p-0 m-0 ">
