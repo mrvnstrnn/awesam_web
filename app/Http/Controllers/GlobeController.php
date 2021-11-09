@@ -3163,7 +3163,7 @@ class GlobeController extends Controller
     
                 elseif($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_assigned_sites.sam_id')
-                          ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                          ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
                 }
     
 
