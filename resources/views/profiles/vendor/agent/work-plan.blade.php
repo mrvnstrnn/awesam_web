@@ -444,8 +444,8 @@
                         <table class="table table-hover assigned_sites_table">
                             <thead>
                                 <tr>
+                                    <th>SAM ID</th>
                                     <th>Site</th>
-                                    <th>Activity</th>
                                 </tr>
                             </thead>
                         </table>
@@ -483,8 +483,8 @@
                         return json.data;
                     },
                     columns: [
-                        { data: "site_name" },
-                        { data: "activity_name" }
+                        { data: "sam_id" },
+                        { data: "site_name" }
                     ],
                 });
 
