@@ -77,12 +77,15 @@
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             <div id="accordion" class="accordion-wrapper mb-3">
                                 @php
+                                    $users = App\Models\User::find($user_id);
                                     $date_ctr = 0;
                                 @endphp
+                                <h1>{{ isset($users) ? $users->name : "" }}</h1>
                                 @foreach ($dates as $date)
                                 @php
                                     $date_ctr++;
                                 @endphp
+                                
                                 <div class="card">
                                     <div id="headingOne" class="card-header bg-light">
                                         <button type="button" data-toggle="collapse" data-target="#collapse{{ $date_ctr }}" aria-expanded=" " aria-controls="collapse{{ $date_ctr }}" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
