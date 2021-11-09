@@ -492,7 +492,7 @@ class UserController extends Controller
             $title_subheading  = ucwords($mode . " : " . $profile);
             $title_icon = 'home';
 
-            $active_slug = 'work-plan';
+            $active_slug = 'daily-activity';
 
             $profile_menu = self::getProfileMenuLinks();
             $profile_direct_links = self::getProfileMenuDirectLinks();
