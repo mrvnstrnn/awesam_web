@@ -79,7 +79,6 @@
                                                                     <th>Sub Activity</th>
                                                                     <th>Method</th>
                                                                     <th>SAQ Objective</th>
-                                                                    <th>Work Plan</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -108,8 +107,7 @@
                                                                                 }
                                                                             @endphp 
                                                                             {{ $saq }}
-                                                                        </td>                                                                        
-                                                                        <td> -- -- </td>
+                                                                        </td>
                                                                     </tr>
                                                                     @endif
                                                                 @endforeach    
@@ -134,7 +132,6 @@
                                                                     <th>Sub Activity</th>
                                                                     <th>Method</th>
                                                                     <th>SAQ Objective</th>
-                                                                    <th>Work Plan</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -169,7 +166,6 @@
                                                                             @endphp 
                                                                             {{ $saq }}
                                                                         </td>
-                                                                        <td> -- -- </td>
                                                                     </tr>
                                                                     @endif
                                                                 @endforeach    

@@ -139,7 +139,7 @@
                                                             <th>Sub Activity</th>
                                                             <th>Method</th>
                                                             <th>SAQ Objective</th>
-                                                            <th>Work Plan</th>
+                                                            {{-- <th>Work Plan</th> --}}
                                                         </tr>
                                                     </thead>
                                                     <tbody>    
@@ -175,7 +175,7 @@
                                                                 @endphp 
                                                                 {{ $saq }}
                                                             </td>
-                                                            <td> -- -- </td>
+                                                            {{-- <td> -- -- </td> --}}
                                                         </tr>                                            
                                                         @endforeach
                                                     </tbody>

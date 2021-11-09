@@ -303,8 +303,11 @@
                                 </div>
                                 <div class="col-sm-4 border">      
                                     <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                          
-                                    <div class="widget-chart widget-chart-hover milestone_sites get_activity_without_workplan"  data-activity_name="" data-total="" data-activity_id="">
+                                    <div class="widget-chart widget-chart-hover milestone_sites show_action_modal" data-activity_source="work_plan_add" data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
+                                        {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                            Add Work Plan
+                                        </button> --}}
                                         <div class="widget-subheading">Activities w/o Work Plan</div>
                                     </div>
                                 </div>
