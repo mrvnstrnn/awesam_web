@@ -470,6 +470,52 @@ class UserController extends Controller
 
     }
 
+    public function daily_activity($user_id = null){
+
+
+        if(is_null(\Auth::user()->profile_id)){
+            
+            return redirect('/onboarding');
+
+        } else {
+
+            $role = \Auth::user()->getUserProfile();
+
+            $mode = $role->mode;
+            $profile = $role->profile;
+
+            $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
+
+            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.daily-activity';
+
+            $title = ucwords(Auth::user()->name);
+            $title_subheading  = ucwords($mode . " : " . $profile);
+            $title_icon = 'home';
+
+            $active_slug = 'work-plan';
+
+            $profile_menu = self::getProfileMenuLinks();
+            $profile_direct_links = self::getProfileMenuDirectLinks();
+            $program_direct_links = self::getProgramMenuDirectLinks();
+            
+            return view($view, 
+                compact(
+                    'mode',
+                    'profile',
+                    'active_slug',
+                    'profile_menu',
+                    'profile_direct_links',
+                    'program_direct_links',
+                    'title', 
+                    'title_subheading', 
+                    'title_icon',
+                    'user_id'
+                )
+            );
+        }
+
+    }
+
 
     private function getProfileMenuLinks(){
         $profile_menu = \Auth::user()->getAllNavigation()

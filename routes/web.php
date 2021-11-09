@@ -38,6 +38,7 @@ use App\Http\Controllers\ActivityController;
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
+    Route::get('/daily-activity/{user_id}', [UserController::class, 'daily_activity'])->name('daily_activity');
     Route::get('/onboarding', [UserController::class, 'onboarding']);
 
     Route::post('/address', [UserController::class, 'getAddress'])->name('get.address');

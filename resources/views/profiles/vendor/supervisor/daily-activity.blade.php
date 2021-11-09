@@ -73,11 +73,31 @@
                                     <div data-parent="#accordion" id="collapse{{ $date_ctr }}" aria-labelledby="heading{{ $date_ctr }}" class="collapse {{ ($date_ctr==1) ? 'show' : ''}}" style="">
                                         <div class="card-body p-0">
                                             @php
-                                                $dars =  \DB::table('view_dar_agent')
+
+                                                if (isset($user_id)) {
+
+                                                    $dars =  \DB::table('view_dar_agent')
                                                             ->where('date_added', $date->date_added)
                                                             ->where('type', '<>',  'work_plan')
                                                             ->where('type', '<>',  'doc_upload')
-                                                            ->get();                                                
+                                                            ->where('user_id', $user_id)
+                                                            ->get();
+                                                } else {
+
+                                                    $get_user_under_me = App\Models\UserDetail::select('user_id')
+                                                                    ->where('IS_id', \Auth::id())
+                                                                    ->get()
+                                                                    ->pluck('user_id');
+
+                                                                    
+                                                    $dars =  \DB::table('view_dar_agent')
+                                                            ->where('date_added', $date->date_added)
+                                                            ->where('type', '<>',  'work_plan')
+                                                            ->where('type', '<>',  'doc_upload')
+                                                            ->whereIn('user_id', $get_user_under_me)
+                                                            ->get();
+                                                }
+
                                             @endphp
                                             <div id="accordion-sites{{ $date_ctr }}" class="p-0 m-0 ">
                                                 <table class='table table-bordered table-striped table-sm'>
