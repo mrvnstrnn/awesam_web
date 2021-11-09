@@ -106,9 +106,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="position-relative row form-group">
-                                                    <label for="remarks" class="col-sm-3 col-form-label">Remarks</label>
+                                                    <label for="lessor_remarks" class="col-sm-3 col-form-label">Remarks</label>
                                                     <div class="col-sm-9">
-                                                        <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                                                        <textarea name="lessor_remarks" id="lessor_remarks" class="form-control"></textarea>
                                                         <small class="text-danger remarks-errors"></small>
                                                     </div>
                                                 </div>

@@ -132,7 +132,7 @@ class DataController extends Controller
                 'sub_activity_name' => 'required',
                 'lessor_method' => 'required',
                 'saq_objective' => 'required',
-                'remarks' => 'required',
+                'lessor_remarks' => 'required',
             ));
 
             if ($validate->passes()) {

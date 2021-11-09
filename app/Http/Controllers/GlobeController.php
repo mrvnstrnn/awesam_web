@@ -647,16 +647,18 @@ class GlobeController extends Controller
                                                 ->where('program_id', $program_id)
                                                 ->first();
 
-                    $get_program_stages = \DB::connection('mysql2')
+                    if (!is_null($get_stage_activity)) {
+                        $get_program_stages = \DB::connection('mysql2')
                                                 ->table('program_stages')
                                                 ->select('stage_name')
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
                                                 ->first();
+                    }
 
                     $array = array(
-                        'stage_id' => !is_null($get_stage_activity->stage_id) ? $get_stage_activity->stage_id : "",
-                        'stage_name' => !is_null($get_program_stages->stage_name) ? $get_program_stages->stage_name : "",
+                        'stage_id' => !is_null($get_stage_activity) ? $get_stage_activity->stage_id : "",
+                        'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
                         'activity_id' => $activity,
                         'activity_name' => $activity_name,
                         'profile_id' => $get_activitiess->profile_id,
@@ -1408,6 +1410,8 @@ class GlobeController extends Controller
                         $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
                     }
                 }
+
+                $this->dar_check($request->input("sam_id"), $request->input("sub_activity_id"));
 
                 return response()->json(['error' => false, 'message' => "Successfully uploaded a file."]);
             } else {
@@ -6929,6 +6933,36 @@ class GlobeController extends Controller
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    private function dar_check ($sam_id, $sub_activity_id)
+    {
+        $get_workplans = SubActivityValue::where('sam_id', $sam_id)
+                                        // ->where('value->planned_date', Carbon::now()->toDateString())
+                                        // ->where('value->method', $request->get('lessor_method'))
+                                        ->where('sub_activity_id', $sub_activity_id)
+                                        ->where('type', 'work_plan')
+                                        ->where('status', 'pending')
+                                        ->get();
+
+                                   
+        if ( count($get_workplans) > 0 ) {
+
+            foreach ( $get_workplans as $get_workplan ) {
+                
+                $json = json_decode( $get_workplan->value );
+
+                if ( $json->planned_date == Carbon::now()->toDateString() || $json->planned_date <= Carbon::now()->toDateString() ) {
+                    $get_workplan->update([
+                        'status' => 'Done - Missed'
+                    ]);
+                } else {
+                    $get_workplan->update([
+                        'status' => 'Delayed - Missed'
+                    ]);
+                }
+            }
+        } 
     }
 
 }
