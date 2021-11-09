@@ -272,13 +272,13 @@ class DataController extends Controller
         try {
             if (\Auth::user()->profile_id == 2) {
                 $sites = \DB::connection('mysql2')
-                        ->table("view_site")
-                        ->select("site_name", "activity_name")
-                        // ->where('profile_id', \Auth::user()->profile_id)
-                        ->whereJsonContains('site_agent', [
-                            'user_id' => \Auth::id()
-                        ])
-                        // ->where('site_agent->user_id', \Auth::id())
+                        ->table("site_users")
+                        ->join("site", 'site.sam_id', 'site_users.sam_id')
+                        ->select("site.site_name", "site.sam_id")
+                        // ->whereJsonContains('site_agent', [
+                        //     'user_id' => \Auth::id()
+                        // ])
+                        ->where('site_users.agent_id', \Auth::id())
                         ->get();
             } else {
                 $get_user_under_me = UserDetail::select('user_id')
@@ -287,13 +287,13 @@ class DataController extends Controller
                                         ->pluck('user_id');
 
                 $sites = \DB::connection('mysql2')
-                        ->table("view_site")
-                        ->select("site_name", "activity_name")
-                        ->where('profile_id', \Auth::user()->profile_id)
-                        ->whereJsonContains('site_agent', [
-                            'user_id' => $get_user_under_me
-                        ])
-                        // ->where('site_agent->user_id', \Auth::id())
+                        ->table("site_users")
+                        ->join("site", 'site.sam_id', 'site_users.sam_id')
+                        ->select("site.site_name", "site.sam_id")
+                        // ->whereJsonContains('site_agent', [
+                        //     'user_id' => \Auth::id()
+                        // ])
+                        ->whereIn('site_users.agent_id', $get_user_under_me)
                         ->get();
             }
     
