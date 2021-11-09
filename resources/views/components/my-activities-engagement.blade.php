@@ -163,7 +163,7 @@ $(document).ready(function () {
                         'success'
                     )
 
-                    $(".add_engagement_btn").attr("disabled", "disabled");
+                    $(".add_engagement_btn").removeAttr("disabled");
                     $(".add_engagement_btn").text("Log Engagement");
                 } else {
 
@@ -180,7 +180,7 @@ $(document).ready(function () {
                         )
                     }
 
-                    $(".add_engagement_btn").attr("disabled", "disabled");
+                    $(".add_engagement_btn").removeAttr("disabled");
                     $(".add_engagement_btn").text("Log Engagement");
                 }
             },
@@ -193,7 +193,7 @@ $(document).ready(function () {
                     'error'
                 )
 
-                $(".add_engagement_btn").attr("disabled", "disabled");
+                $(".add_engagement_btn").removeAttr("disabled");
                 $(".add_engagement_btn").text("Log Engagement");
             }
         });

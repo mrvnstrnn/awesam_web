@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use Log;
 use Validator;
+use Carbon;
 
 use App\Models\SubActivityValue;
 
@@ -136,13 +137,37 @@ class DataController extends Controller
 
             if ($validate->passes()) {
 
+                $get_workplan = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                        // ->where('value->planned_date', Carbon::now()->toDateString())
+                                        ->where('value->method', $request->get('lessor_method'))
+                                        // ->where('sub_activity_id', $request->get('sub_activity_id'))
+                                        ->where('type', 'work_plan')
+                                        ->where('status', 'pending')
+                                        ->first();
+
+                                   
+                if ( !is_null($get_workplan) ) {
+
+                    $json = json_decode( $get_workplan->value );
+
+                    if ( $json->planned_date == Carbon::now()->toDateString() ) {
+                        $get_workplan->update([
+                            'status' => 'Done'
+                        ]);
+                    } else {
+                        $get_workplan->update([
+                            'status' => 'Delayed'
+                        ]);
+                    }
+                }  
+
                 SubActivityValue::create([
-                    'sam_id' => $request->sam_id,
+                    'sam_id' => $request->get('sam_id'),
                     // 'site_name' => $request->site_name,
                     // 'activity_id' => $request->activity_id,
                     // 'activity_name' => $request->activity_name,
                     // 'sub_activity_name' => $request->sub_activity_name,
-                    'sub_activity_id' => $request->sub_activity_id,
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
                     'status' => 'pending',
