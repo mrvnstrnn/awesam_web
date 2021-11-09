@@ -295,7 +295,7 @@
                         <div class="card-body p-0">                                        
                             <div class="no-gutters row">
                                 <div class="col-sm-4 border">           
-                                    <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                     
+                                    <div class="milestone-bg get_assigned_site" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-gray.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                     
                                     <div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">
                                         <div class="widget-numbers">0</div>
                                         <div class="widget-subheading">Assigned Sites</div>
@@ -423,11 +423,13 @@
 
     <x-milestone-modal />
 
+
 @endsection
 
 @section('js_script')
 
 <script src="\js\modal-loader.js"> </script>
+
 
 @endsection
 

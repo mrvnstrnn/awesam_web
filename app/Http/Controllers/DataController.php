@@ -261,6 +261,27 @@ class DataController extends Controller
 
     }
 
+    public function get_assigned_sites ()
+    {
+        try {
+            $sites = \DB::connection('mysql2')
+                    ->table("view_site")
+                    ->select("site_name", "activity_name")
+                    ->where('profile_id', \Auth::user()->profile_id)
+                    ->whereJsonContains('site_agent', [
+                        'user_id' => \Auth::id()
+                    ])
+                    // ->where('site_agent->user_id', \Auth::id())
+                    ->get();
+    
+            $dt = DataTables::of($sites);
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
 
     // ************ GET SITE DATA VIA AJAX ************** //
 

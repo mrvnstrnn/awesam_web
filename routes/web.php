@@ -484,6 +484,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-datatable', [DataController::class, 'GetDatatable'])->name('GetDatatable');
 
     
+    // Datatable Assigened Sites
+    Route::get('/get-assigned-sites', [DataController::class, 'get_assigned_sites'])->name('get_assigned_sites');
 
 
 
