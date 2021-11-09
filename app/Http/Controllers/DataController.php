@@ -150,11 +150,17 @@ class DataController extends Controller
 
                     $json = json_decode( $get_workplan->value );
 
-                    if ( $json->planned_date == Carbon::now()->toDateString() ) {
+                    if ( $json->planned_date == Carbon::now()->toDateString() || $json->planned_date <= Carbon::now()->toDateString() ) {
                         $get_workplan->update([
                             'status' => 'Done'
                         ]);
-                    } else {
+                    } 
+                    // else if () {
+                    //     $get_workplan->update([
+                    //         'status' => 'Delayed'
+                    //     ]);
+                    // } 
+                    else {
                         $get_workplan->update([
                             'status' => 'Delayed'
                         ]);

@@ -640,7 +640,23 @@ class GlobeController extends Controller
                         ]);
                     }
 
+                    $get_stage_activity = \DB::connection('mysql2')
+                                                ->table('stage_activities')
+                                                ->select('stage_id')
+                                                ->where('activity_id', $activity)
+                                                ->where('program_id', $program_id)
+                                                ->first();
+
+                    $get_program_stages = \DB::connection('mysql2')
+                                                ->table('program_stages')
+                                                ->select('stage_name')
+                                                ->where('stage_id', $get_stage_activity->stage_id)
+                                                ->where('program_id', $program_id)
+                                                ->first();
+
                     $array = array(
+                        'stage_id' => !is_null($get_stage_activity->stage_id) ? $get_stage_activity->stage_id : "",
+                        'stage_name' => !is_null($get_program_stages->stage_name) ? $get_program_stages->stage_name : "",
                         'activity_id' => $activity,
                         'activity_name' => $activity_name,
                         'profile_id' => $get_activitiess->profile_id,
