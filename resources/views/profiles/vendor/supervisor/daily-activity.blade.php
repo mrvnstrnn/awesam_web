@@ -65,9 +65,9 @@
                                     $date_ctr++;
                                 @endphp
                                 <div class="card">
-                                    <div id="headingOne" class="card-header bg-dark">
+                                    <div id="headingOne" class="card-header bg-light">
                                         <button type="button" data-toggle="collapse" data-target="#collapse{{ $date_ctr }}" aria-expanded=" " aria-controls="collapse{{ $date_ctr }}" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
-                                            <h5 class="m-0 p-0  text-white">{{ $date->date_added }}</h5>
+                                            <h5 class="m-0 p-0  text-dark">{{ $date->date_added }}</h5>
                                         </button>
                                     </div>
                                     <div data-parent="#accordion" id="collapse{{ $date_ctr }}" aria-labelledby="heading{{ $date_ctr }}" class="collapse {{ ($date_ctr==1) ? 'show' : ''}}" style="">
