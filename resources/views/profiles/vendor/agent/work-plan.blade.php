@@ -554,6 +554,9 @@
             }
         });
         
+        $(document).on('click', '.show_action_modal', function(e){
+            $("#activities-wo-work-plan-modal").modal("hide");
+        });
     });
 </script>
 <script src="\js\modal-loader.js"> </script>
