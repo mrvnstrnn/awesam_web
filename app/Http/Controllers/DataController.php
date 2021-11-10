@@ -309,9 +309,10 @@ class DataController extends Controller
                                     'category' => $row->site_category
                                 );
 
-                                // data-json='{"sam_id" : "{{ $row->sam_id }}", "activity_id" : "{{$activities[$i]->activity_id}}", "activity_name" : "{{ $activities[$i]->activity_name }}","site_name" : "{{ $activities[$i]->site_name }}", "program_id" : "{{ $activities[$i]->program_id }}", "category" : "{{ $activities[$i]->site_category }}" }'
+                                // {"sam_id":'.$row->sam_id.',"activity_id":'.$row->activity_id.',"sam_id":'.$row->activity_name.',"site_name":'.$row->site_name.',"program_id":'.$row->program_id.',"category":'.$row->site_category.'}
 
-                                return '<button class="btn btn-sm btn-primary show_action_modal" data-activity_source="work_plan_activity_add" data-json="'.json_encode($json).'">Add Work Plan</button>';
+                                // return '<button class="btn btn-sm btn-primary show_action_modal" data-activity_source="work_plan_activity_add" data-json="'.json_encode($json).'">Add Work Plan</button>';
+                                return "<button class='btn btn-sm btn-primary show_action_modal' data-activity_source='work_plan_activity_add' data-json='".json_encode($json)."'>Add Work Plan</button>";
                             });
                             
             $dt->rawColumns(['action']);
