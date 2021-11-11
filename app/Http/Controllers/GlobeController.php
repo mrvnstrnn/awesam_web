@@ -1073,7 +1073,7 @@ class GlobeController extends Controller
     public function get_agent_of_supervisor($user_id)
     {
         try {
-            $getAgentOfSupervisor = UserDetail::select('users.firstname', 'users.lastname', 'users.email', 'users_areas.lgu', 'users_areas.province', 'users_areas.region')
+            $getAgentOfSupervisor = UserDetail::select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.lgu', 'users_areas.province', 'users_areas.region')
                                     ->join('users', 'user_details.user_id', 'users.id')
                                     ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                                     ->where('user_details.IS_id', $user_id)
