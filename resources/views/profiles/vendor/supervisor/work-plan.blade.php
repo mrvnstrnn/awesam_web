@@ -8,6 +8,15 @@
     }
 </style>
 
+@php
+    $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                        ->join('users', 'users.id', 'user_details.user_id')
+                        ->where('IS_id', \Auth::id())
+                        ->get();
+
+    $get_user_under_me = $get_user_under_sup->pluck('user_id');
+@endphp
+
 
 <div id="workplan-list" class='mt-5'>
     <div class="row">
@@ -33,7 +42,7 @@
 
                 <div class="tab-pane" id="tab-animated1-2" role="tabpanel">
                     <div class="mb-3 mt-3 card">
-                        <div class="card-body p-0">                                        
+                        <div class="card-body p-0">
                             <div class="no-gutters row">
                                 <div class="col-sm-4 border">         
                                     <div class="milestone-bg" style="position: absolute; left: 0px; top:0px; opacity: 0.30; height: 100%; width:100%; background-image: url('/images/milestone-orange-2.jpeg');   background-repeat: no-repeat; background-size: 200%;"></div>                                                                       
@@ -71,12 +80,53 @@
                                 <div class="btn-actions-pane-right py-0">
                                 </div>
                             </div>
-                        </div>        
+                        </div>   
+                         
                         <div class="card-body">
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" class="region">
+                                                    <option>All</option>
+                                                </select>
+                                            </div>
+        
+                                            
+                                            <div class="col-12 col-md-6">
+                                                <label for="user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id">
+        
+                                                    <option value="">Please select user.</option>
+                                                    {{-- @if ( isset($users) ) --}}
+                                                        @foreach ($get_user_under_sup as $item)
+                                                            @php
+                                                                $selected = "";    
+                                                                if ( isset($user_id) && $item->user_id == $user_id ) {
+                                                                    $selected = "selected";
+                                                                }
+                                                            @endphp
+                                                            <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                        @endforeach
+                                                    {{-- @endif --}}
+                                                </select>
+                                            </div>
+        
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
                             </div>
+                            @if (isset($user_id))  
                             <div class="row mb-3">
                                 <div id="work_plan_previous" class="col-12 table-responsive">
                                     @php 
@@ -86,8 +136,14 @@
                                         date_default_timezone_set('Asia/Manila');
                                         $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
 
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
+                                        if(isset($user_id)) {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->where('user_id', $user_id)
+                                                                    ->get();
+                                        } else {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->get();
+                                        }
 
 
                                     @endphp
@@ -151,6 +207,7 @@
                                     </table>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -189,6 +246,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="mb-3 card">
                         <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                             <div class="row px-4">
@@ -208,6 +266,47 @@
                             Work Plan This Week
                         </div>                         --}}
                         <div class="card-body">
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" class="region">
+                                                    <option>All</option>
+                                                </select>
+                                            </div>
+        
+                                            
+                                            <div class="col-12 col-md-6">
+                                                <label for="user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id">
+        
+                                                    <option value="">Please select user.</option>
+                                                    {{-- @if ( isset($users) ) --}}
+                                                        @foreach ($get_user_under_sup as $item)
+                                                            @php
+                                                                $selected = "";    
+                                                                if ( isset($user_id) && $item->user_id == $user_id ) {
+                                                                    $selected = "selected";
+                                                                }
+                                                            @endphp
+                                                            <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                        @endforeach
+                                                    {{-- @endif --}}
+                                                </select>
+                                            </div>
+        
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+                            @if (isset($user_id))
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
@@ -217,8 +316,14 @@
                                     @php 
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
                                         
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
+                                        if(isset($user_id)) {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->where('user_id', $user_id)
+                                                                    ->get();
+                                        } else {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->get();
+                                        }
 
 
                                     @endphp
@@ -287,6 +392,7 @@
                                     </table>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -332,6 +438,48 @@
                             </div>
                         </div>        
                         <div class="card-body">
+
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-6">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" class="region">
+                                                    <option>All</option>
+                                                </select>
+                                            </div>
+        
+                                            
+                                            <div class="col-12 col-md-6">
+                                                <label for="user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id">
+        
+                                                    <option value="">Please select user.</option>
+                                                    {{-- @if ( isset($users) ) --}}
+                                                        @foreach ($get_user_under_sup as $item)
+                                                            @php
+                                                                $selected = "";    
+                                                                if ( isset($user_id) && $item->user_id == $user_id ) {
+                                                                    $selected = "selected";
+                                                                }
+                                                            @endphp
+                                                            <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                        @endforeach
+                                                    {{-- @endif --}}
+                                                </select>
+                                            </div>
+        
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+                            @if (isset($user_id))
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
@@ -341,8 +489,15 @@
                                     @php 
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
+                                        
+                                        if(isset($user_id)) {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->where('user_id', $user_id)
+                                                                    ->get();
+                                        } else {
+                                            $work_plans = \DB::table('view_work_plans')
+                                                                    ->get();
+                                        }
                                     @endphp
                                     <table class="table table-bordered table-hover table-striped">
                                         <tbody>                                            
@@ -407,6 +562,7 @@
                                     </table>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
