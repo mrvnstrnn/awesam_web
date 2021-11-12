@@ -26,8 +26,10 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-12 text-right">
+                    <div class="row mb-3 border-bottom pb-3">
+                        <div class="col-sm-4">
+                            <label>Start Date</label>
+                            <input class="form-control" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -204,6 +206,28 @@
                             @endfor --}}
                         </div>
                     </div>
+                    @php 
+                                        
+                        $Date = date('Y-m-d', strtotime('today'));
+
+                        date_default_timezone_set('Asia/Manila');
+                        $Date = date('l F d, Y', strtotime($Date. ' - 0 days'));
+
+                    @endphp
+                    @for ($i = 0; $i < 7; $i++)
+                        @php
+                            $xdate =  date('l F d, Y', strtotime($Date. ' - ' . $i . ' days'));
+                            $zdate =  date('Y-m-d', strtotime($Date. ' - ' . $i . ' days'));
+                            $wp_ctr = 0;
+                        @endphp
+                        <div class="row">
+                            <div id="daily_activity" class="col-12 table-responsive   py-3 bg-light border-bottom">
+                                <strong>{{ $xdate }}</strong>
+                            </div>
+                        </div>
+
+                    @endfor                    
+
                 </div>
             </div>            
         </div>
