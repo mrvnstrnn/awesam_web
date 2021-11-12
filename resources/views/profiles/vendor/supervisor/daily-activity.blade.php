@@ -17,6 +17,18 @@
             ->orderBy('date_added', 'desc')
             ->get();
 
+    $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                ->join('users', 'users.id', 'user_details.user_id')
+                                                ->where('IS_id', \Auth::id())
+                                                ->get();
+
+    $get_user_under_me = $get_user_under_sup->pluck('user_id');
+                                                
+    if(isset($user_id) || isset($region_data)) {
+        $users = App\Models\User::find($user_id);
+        $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
+    }
+    $date_ctr = 0;
 @endphp
 
 <div id="workplan-list" class='mt-5'>
@@ -42,8 +54,16 @@
                                 <div class="form-row">
                                     <div class="col-12 col-md-6">
                                         <label for="region">Region</label>
-                                        <select class="mb-2 form-control" class="region">
-                                            <option>All</option>
+                                        <select class="mb-2 form-control" name="region">
+                                            @php
+                                                $regions = \DB::connection('mysql2')
+                                                                ->table('location_sam_regions')
+                                                                ->get();  
+                                            @endphp
+                                            <option value="">All</option>
+                                            @foreach ($regions as $region)
+                                            <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
 
@@ -52,15 +72,8 @@
                                         <label for="user_id">Agent</label>
                                         
                                         <select class="mb-2 form-control" name="user_id">
-                                            @php
-                                                $get_user_under_me = App\Models\UserDetail::select('user_details.user_id', 'users.name')
-                                                                                ->join('users', 'users.id', 'user_details.user_id')
-                                                                                ->where('IS_id', \Auth::id())
-                                                                                ->get();
-                                            @endphp
-
-                                            <option value="">Please select user.</option>
-                                            @foreach ($get_user_under_me as $user)
+                                            <option value="All">All</option>
+                                            @foreach ($get_user_under_sup as $user)
                                                 @php
                                                     if (isset($user_id)) {
                                                         $selected = $user_id == $user->user_id ? 'selected': '';
@@ -84,12 +97,6 @@
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             <div id="accordion" class="accordion-wrapper mb-3">
-                                @php
-                                    if (isset($user_id)) {
-                                        $users = App\Models\User::find($user_id);
-                                    }
-                                    $date_ctr = 0;
-                                @endphp
                                 <h1>{{ isset($users) ? $users->name : "" }}</h1>
                                 @foreach ($dates as $date)
                                 @php
@@ -106,29 +113,51 @@
                                         <div class="card-body p-0">
                                             @php
 
-                                                if (isset($user_id)) {
-
-                                                    $dars =  \DB::table('view_dar_agent')
-                                                            ->where('date_added', $date->date_added)
-                                                            ->where('type', '<>',  'work_plan')
-                                                            ->where('type', '<>',  'doc_upload')
-                                                            ->where('user_id', $user_id)
-                                                            ->get();
-                                                } else {
-
-                                                    $get_user = App\Models\UserDetail::select('user_id')
-                                                                    ->where('IS_id', \Auth::id())
-                                                                    ->get()
-                                                                    ->pluck('user_id');
-
-                                                                    
-                                                    $dars =  \DB::table('view_dar_agent')
-                                                            ->where('date_added', $date->date_added)
-                                                            ->where('type', '<>',  'work_plan')
-                                                            ->where('type', '<>',  'doc_upload')
-                                                            ->whereIn('user_id', $get_user)
-                                                            ->get();
+                                                if(isset($user_id) || isset($region_data)) {
+                                                    // dd(isset($region_data));
+                                                    if (isset($region_data) && $region_data != 'All') {
+                                                        $dars =  \DB::table('view_dar_agent')
+                                                                ->where('date_added', $date->date_added)
+                                                                ->where('type', '<>',  'work_plan')
+                                                                ->where('type', '<>',  'doc_upload')
+                                                                ->whereIn('user_id', $user_to_search)
+                                                                ->where('sam_region_name', $user_to_search)
+                                                                ->get();
+                                                    } else {
+                                                        $dars =  \DB::table('view_dar_agent')
+                                                                ->where('date_added', $date->date_added)
+                                                                ->where('type', '<>',  'work_plan')
+                                                                ->where('type', '<>',  'doc_upload')
+                                                                ->whereIn('user_id', $user_to_search)
+                                                                ->get();
+                                                    }
                                                 }
+
+                                                // if (isset($user_id) != 'All') {
+                                                //     if (isset($region_data) && $region_data != 'All') {
+                                                //         $dars =  \DB::table('view_dar_agent')
+                                                //                 ->where('date_added', $date->date_added)
+                                                //                 ->where('type', '<>',  'work_plan')
+                                                //                 ->where('type', '<>',  'doc_upload')
+                                                //                 ->whereIn('user_id', $user_to_search)
+                                                //                 ->where('sam_region_name', $user_to_search)
+                                                //                 ->get();
+                                                //     } else {
+                                                //         $dars =  \DB::table('view_dar_agent')
+                                                //                 ->where('date_added', $date->date_added)
+                                                //                 ->where('type', '<>',  'work_plan')
+                                                //                 ->where('type', '<>',  'doc_upload')
+                                                //                 ->whereIn('user_id', $user_to_search)
+                                                //                 ->get();
+                                                //     }
+                                                // } else {     
+                                                //     $dars =  \DB::table('view_dar_agent')
+                                                //             ->where('date_added', $date->date_added)
+                                                //             ->where('type', '<>',  'work_plan')
+                                                //             ->where('type', '<>',  'doc_upload')
+                                                //             ->whereIn('user_id', $user_to_search)
+                                                //             ->get();
+                                                // }
 
                                             @endphp
                                             <div id="accordion-sites{{ $date_ctr }}" class="p-0 m-0 ">

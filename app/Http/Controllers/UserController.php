@@ -500,6 +500,7 @@ class UserController extends Controller
 
             $user_id = $request->get('user_id');
             $agent_user_id = $request->get('agent_user_id');
+            $region_data = $request->get('region');
             
             return view($view, 
                 compact(
@@ -513,7 +514,8 @@ class UserController extends Controller
                     'title_subheading', 
                     'title_icon',
                     'user_id',
-                    'agent_user_id'
+                    'agent_user_id',
+                    'region_data'
                 )
             );
         }
@@ -550,6 +552,9 @@ class UserController extends Controller
 
             $user_id = $request->get('user_id');
             $agent_user_id = $request->get('agent_user_id');
+            $region_data = $request->get('region');
+
+            // dd($region_data);
             
             return view($view, 
                 compact(
@@ -563,7 +568,8 @@ class UserController extends Controller
                     'title_subheading', 
                     'title_icon',
                     'user_id',
-                    'agent_user_id'
+                    'agent_user_id',
+                    'region_data'
                 )
             );
         }

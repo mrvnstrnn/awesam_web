@@ -15,6 +15,37 @@
                         ->get();
 
     $get_user_under_me = $get_user_under_sup->pluck('user_id');
+
+    if(isset($user_id) || isset($region_data)) {
+            $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
+        // if ($user_id != 'All') {
+            if ($region_data != 'All') {
+                $work_plans = \DB::connection('mysql2')
+                                    ->table('view_work_plans')
+                                    ->whereIn('user_id',  $user_to_search)
+                                    ->where('sam_region_name', $region_data)
+                                    ->get();
+            } else {
+                $work_plans = \DB::connection('mysql2')
+                                    ->table('view_work_plans')
+                                    ->whereIn('user_id',  $user_to_search)
+                                    ->get();
+            }
+        // } else {
+        //     if ($region_data != 'All') {
+        //         $work_plans = \DB::connection('mysql2')
+        //                             ->table('view_work_plans')
+        //                             ->whereIn('user_id',  $user_to_search)
+        //                             ->where('sam_region_name', $region_data)
+        //                             ->get();
+        //     } else {
+        //         $work_plans = \DB::connection('mysql2')
+        //                             ->table('view_work_plans')
+        //                             ->whereIn('user_id',  $user_to_search)
+        //                             ->get();
+        //     }
+        // }
+    }
 @endphp
 
 
@@ -89,8 +120,16 @@
                                         <div class="form-row">
                                             <div class="col-12 col-md-6">
                                                 <label for="region">Region</label>
-                                                <select class="mb-2 form-control" class="region">
-                                                    <option>All</option>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
         
@@ -100,7 +139,7 @@
                                                 
                                                 <select class="mb-2 form-control" name="user_id">
         
-                                                    <option value="">Please select user.</option>
+                                                    <option value="All">All</option>
                                                     {{-- @if ( isset($users) ) --}}
                                                         @foreach ($get_user_under_sup as $item)
                                                             @php
@@ -136,14 +175,14 @@
                                         date_default_timezone_set('Asia/Manila');
                                         $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
 
-                                        if(isset($user_id)) {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->where('user_id', $user_id)
-                                                                    ->get();
-                                        } else {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->get();
-                                        }
+                                        // if(isset($user_id)) {
+                                        //     $work_plans = \DB::table('view_work_plans')
+                                        //                             ->where('user_id', $user_id)
+                                        //                             ->get();
+                                        // } else {
+                                        //     $work_plans = \DB::table('view_work_plans')
+                                        //                             ->get();
+                                        // }
 
 
                                     @endphp
@@ -272,8 +311,16 @@
                                         <div class="form-row">
                                             <div class="col-12 col-md-6">
                                                 <label for="region">Region</label>
-                                                <select class="mb-2 form-control" class="region">
-                                                    <option>All</option>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
         
@@ -283,7 +330,7 @@
                                                 
                                                 <select class="mb-2 form-control" name="user_id">
         
-                                                    <option value="">Please select user.</option>
+                                                    <option value="All">All</option>
                                                     {{-- @if ( isset($users) ) --}}
                                                         @foreach ($get_user_under_sup as $item)
                                                             @php
@@ -315,17 +362,6 @@
                                 <div id="work_plan_this_week" class="col-12 table-responsive">
                                     @php 
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
-                                        
-                                        if(isset($user_id)) {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->where('user_id', $user_id)
-                                                                    ->get();
-                                        } else {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->get();
-                                        }
-
-
                                     @endphp
                                     <table class="table table-bordered table-hover table-striped">
                                         <tbody>                                            
@@ -445,8 +481,16 @@
                                         <div class="form-row">
                                             <div class="col-12 col-md-6">
                                                 <label for="region">Region</label>
-                                                <select class="mb-2 form-control" class="region">
-                                                    <option>All</option>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
         
@@ -456,7 +500,7 @@
                                                 
                                                 <select class="mb-2 form-control" name="user_id">
         
-                                                    <option value="">Please select user.</option>
+                                                    <option value="All">All</option>
                                                     {{-- @if ( isset($users) ) --}}
                                                         @foreach ($get_user_under_sup as $item)
                                                             @php
@@ -488,16 +532,6 @@
                                 <div id="work_plan_upcoming" class="col-12 table-responsive">
                                     @php 
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
-
-                                        
-                                        if(isset($user_id)) {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->where('user_id', $user_id)
-                                                                    ->get();
-                                        } else {
-                                            $work_plans = \DB::table('view_work_plans')
-                                                                    ->get();
-                                        }
                                     @endphp
                                     <table class="table table-bordered table-hover table-striped">
                                         <tbody>                                            
