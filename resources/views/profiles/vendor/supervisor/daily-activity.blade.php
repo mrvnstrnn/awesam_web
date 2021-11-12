@@ -80,6 +80,7 @@
                             </form>
                         </div>
                     </div>
+                    @if (isset($user_id))
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             <div id="accordion" class="accordion-wrapper mb-3">
@@ -189,6 +190,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>            
         </div>

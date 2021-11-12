@@ -87,6 +87,7 @@
                                         $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
 
                                         $work_plans = \DB::table('view_work_plans')
+                                                                ->where('user_id', \Auth::id())
                                                                 ->get();
 
 
@@ -218,6 +219,7 @@
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
                                         $work_plans = \DB::table('view_work_plans')
+                                                                ->where('user_id', \Auth::id())
                                                                 ->get();
 
 
@@ -345,6 +347,7 @@
                                         $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
                                         $work_plans = \DB::table('view_work_plans')
+                                                                ->where('user_id', \Auth::id())
                                                                 ->get();
                                     @endphp
                                     <table class="table table-bordered table-hover table-striped">

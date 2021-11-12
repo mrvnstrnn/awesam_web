@@ -499,6 +499,7 @@ class UserController extends Controller
             $program_direct_links = self::getProgramMenuDirectLinks();
 
             $user_id = $request->get('user_id');
+            $agent_user_id = $request->get('agent_user_id');
             
             return view($view, 
                 compact(
@@ -511,7 +512,58 @@ class UserController extends Controller
                     'title', 
                     'title_subheading', 
                     'title_icon',
-                    'user_id'
+                    'user_id',
+                    'agent_user_id'
+                )
+            );
+        }
+
+    }
+
+    public function work_plan(Request $request){
+
+
+        if(is_null(\Auth::user()->profile_id)){
+            
+            return redirect('/onboarding');
+
+        } else {
+
+            $role = \Auth::user()->getUserProfile();
+
+            $mode = $role->mode;
+            $profile = $role->profile;
+
+            $profile_for_view = strtolower(str_replace(' ', '-', ucfirst($profile)));
+
+            $view = 'profiles' . '.' .$mode. '.' .$profile_for_view. '.work-plan';
+
+            $title = ucwords(Auth::user()->name);
+            $title_subheading  = ucwords($mode . " : " . $profile);
+            $title_icon = 'home';
+
+            $active_slug = 'work-plan';
+
+            $profile_menu = self::getProfileMenuLinks();
+            $profile_direct_links = self::getProfileMenuDirectLinks();
+            $program_direct_links = self::getProgramMenuDirectLinks();
+
+            $user_id = $request->get('user_id');
+            $agent_user_id = $request->get('agent_user_id');
+            
+            return view($view, 
+                compact(
+                    'mode',
+                    'profile',
+                    'active_slug',
+                    'profile_menu',
+                    'profile_direct_links',
+                    'program_direct_links',
+                    'title', 
+                    'title_subheading', 
+                    'title_icon',
+                    'user_id',
+                    'agent_user_id'
                 )
             );
         }

@@ -7,7 +7,41 @@
         cursor: pointer;
     }
 </style>
+@php
+    $dates = \DB::table('view_dar_agent')
+            ->distinct()
+            ->select('date_added')
+            // ->where('user_id', \Auth::user()->id)
+            ->where('type', '<>',  'work_plan')
+            ->where('type', '<>',  'doc_upload')
+            ->orderBy('date_added', 'desc')
+            ->get();
 
+    if (isset($user_id)) {
+        $users = App\Models\User::find(isset($agent_user_id) ? $agent_user_id : $user_id);
+
+        if ($users->profile_id == 3) {
+            $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                ->join('users', 'users.id', 'user_details.user_id')
+                                ->where('IS_id', $user_id)
+                                ->get();
+
+            $get_user_under_me = $get_user_under_sup;
+                
+            $get_user_under_me = $get_user_under_me->pluck('user_id');
+        } else {
+
+            $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                ->join('users', 'users.id', 'user_details.user_id')
+                                ->where('IS_id', $user_id)
+                                ->get();
+                                
+            $get_user_under_me = [$agent_user_id];
+        }
+    }
+    $date_ctr = 0;
+
+@endphp
 
 <div id="workplan-list" class='mt-5'>
     <div class="row">
@@ -26,25 +60,79 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-2">
-                            Vendor
-                        </div>
-                        <div class="col-4">
-                            <select class="mb-2 form-control">
-                                <option>Vendor.ph</option>
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            Supervisor
-                        </div>
-                        <div class="col-4">
-                            <select class="mb-2 form-control">
-                                <option>All</option>
-                            </select>
+                    <div class="row mb-3 border-bottom pb-3">
+                        <div class="col-12">
+                            <form action="{{ route('daily_activity') }}" method="POST">@csrf
+                                <div class="form-row">
+                                    <div class="col-12 col-md-3">
+                                        <label for="vendor">Vendor</label>
+                                        <select class="mb-2 form-control" class="vendor">
+                                            <option>All</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="region">Region</label>
+                                        <select class="mb-2 form-control" class="region">
+                                            <option>All</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-12 col-md-3">
+                                        <label for="user_id">Supervisor</label>
+                                        
+                                        <select class="mb-2 form-control" name="user_id" id="user_id">
+                                            @php
+                                                $get_supervisor = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                                                ->join('users', 'users.id', 'user_details.user_id')
+                                                                                // ->where('IS_id', \Auth::id())
+                                                                                ->where('users.profile_id', 3)
+                                                                                ->get();
+                                            @endphp
+
+                                            <option value="">Please select user.</option>
+                                            @foreach ($get_supervisor as $user)
+                                                @php
+                                                    if (isset($user_id)) {
+                                                        $selected = $user_id == $user->user_id ? 'selected': '';
+                                                    } else {
+                                                        $selected = "";
+                                                    }
+                                                @endphp
+                                                <option {{ $selected }} value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="agent_user_id">Agent</label>
+                                        
+                                        <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
+                                            <option value="">Please select agent.</option>
+                                            @if ( isset($users) )
+                                                {{-- @if ( $users->profile_id == 3 ) --}}
+                                                    @foreach ($get_user_under_sup as $item)
+                                                        @php
+                                                            $selected = "";    
+                                                            if ( isset($agent_user_id) && $item->user_id == $agent_user_id ) {
+                                                                $selected = "selected";
+                                                            }
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                {{-- @endif --}}
+                                            @endif
+                                        </select>
+                                    </div>
+
+                                    <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                
+                                </div>
+                                
+                            </form>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    {{-- <div class="row mb-3">
                         <div class="col-2">
                             Region
                         </div>
@@ -61,186 +149,120 @@
                                 <option>All</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
+                    @if (isset($user_id))
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
-                            @php 
-                                $Date = date('Y-m-d',strtotime('last monday'));
-
-                                $dates = \DB::table('view_dar_agent')
-                                            ->distinct()
-                                            ->select('date_added', 'site_name', 'sam_id')
-                                            // ->where('user_id', \Auth::user()->id)
-                                            ->where('type', '<>',  'work_plan')
-                                            ->where('type', '<>',  'doc_upload')
-                                            ->get();
-
-                                $dars =  \DB::table('view_dar_agent')
-                                            // ->where('user_id', \Auth::user()->id)
-                                            ->where('type', '<>',  'work_plan')
-                                            ->where('type', '<>',  'doc_upload')
-                                            ->get();
-                                           
-                                            
-                                $current_date = "";
-                                $previous_date = "0";
-                                $ctr = 0;
-
-                                foreach($dates as $date){
-                                    
-                                    $current_date = $date->date_added;
-                                    $ctr++;
-
-                                    if($current_date <> $previous_date){
-                                        if($previous_date != "0"){                                                    
-                                            echo "</div>";
-                                        }
-                                        echo "<div class='border-top pt-2 mb-3'><div class='col-12 p-0'>";
-                                        echo "<H3 class='' style='font-weight: bolder;'>" . $date->date_added . "</H3></div>";
-                                        echo "<div class='pt-3 border-top'>"; 
-                                            echo "<div class='row'>";
-                                                echo "<div class='col-md-3'>";
-                                                    echo "<H5 class='m-0 p-0'>" . $date->site_name . "</H5>"; 
-                                                    echo "<small>" . $date->sam_id . "</small>";
-                                                echo "</div>";
-                                                echo "<div class='col-md-9'>";
-                            @endphp
-                                                        <table class='table table-bordered table-striped table-sm'>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Sub Activity</th>
-                                                                    <th>Method</th>
-                                                                    <th>SAQ Objective</th>
-                                                                    <th>Work Plan</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach ($dars as $dar )
-                                                                    @if($dar->date_added == $date->date_added && $dar->sam_id == $date->sam_id)
-                                                                    <tr>
-                                                                        <td>{{ $dar->sub_activity_name }}</td>
-                                                                        <td>
-                                                                            @if($dar->type == 'doc_upload')
-                                                                                Doc Upload
-                                                                            @elseif($dar->type == 'lessor_engagement')
-                                                                                @php
-                                                                                    $v = json_decode($dar->value);                                                                            
-                                                                                @endphp 
-                                                                                {{ $v->lessor_method }}
-                                                                            @endif
-                                                                        </td>
-
-                                                                        <td>
-                                                                            @php
-                                                                                $v = json_decode($dar->value);    
-                                                                                if(isset($v->saq_objective)){
-                                                                                    $saq = $v->saq_objective;
-                                                                                } else {
-                                                                                    $saq = "";
-                                                                                }
-                                                                            @endphp 
-                                                                            {{ $saq }}
-                                                                        </td>                                                                        
-                                                                        <td> -- -- </td>
-                                                                    </tr>
-                                                                    @endif
-                                                                @endforeach    
-                                                            </tbody>
-                                                        </table>
-                            @php                                                            
-                                                echo "</div>";
-                                            echo "</div>";
-                                        echo "</div>";
-                                    } else {
-                                        echo "<div class='pt-3 border-top'>"; 
-                                            echo "<div class='row'>";
-                                                echo "<div class='col-md-3'>";
-                                                    echo "<H5 class='m-0 p-0'>" . $date->site_name . "</H5>"; 
-                                                    echo "<small>" . $date->sam_id . "</small>";
-                                                echo "</div>";
-                                                echo "<div class='col-md-9'>";
-                            @endphp
-                                                        <table class='table table-bordered table-striped table-sm'>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Sub Activity</th>
-                                                                    <th>Method</th>
-                                                                    <th>SAQ Objective</th>
-                                                                    <th>Work Plan</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach ($dars as $dar )
-                                                                    @if($dar->date_added == $date->date_added && $dar->sam_id == $date->sam_id)
-                                                                    <tr>
-                                                                        <td>
-                                                                            @if($dar->type == 'lessor_engagement' && $dar->sub_activity_name == "")
-                                                                                ENGAGEMENT
-                                                                            @else
-                                                                                {{ $dar->sub_activity_name }}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @if($dar->type == 'doc_upload')
-                                                                                Doc Upload
-                                                                            @elseif($dar->type == 'lessor_engagement')
-                                                                                @php
-                                                                                    $v = json_decode($dar->value);                                                                            
-                                                                                @endphp 
-                                                                                {{ $v->lessor_method }}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @php
-                                                                                $v = json_decode($dar->value);    
-                                                                                if(isset($v->saq_objective)){
-                                                                                    $saq = $v->saq_objective;
-                                                                                } else {
-                                                                                    $saq = "";
-                                                                                }
-                                                                            @endphp 
-                                                                            {{ $saq }}
-                                                                        </td>
-                                                                        <td> -- -- </td>
-                                                                    </tr>
-                                                                    @endif
-                                                                @endforeach    
-                                                            </tbody>
-                                                        </table>
-                            @php                                                            
-                                                echo "</div>";
-                                            echo "</div>";
-                                        echo "</div>";
-                                    }
-
-                                    // if(count($dates) == $ctr){
-                                    //     echo "<hr>CLOSE";
-                                    // }
-
-                                    $previous_date = $current_date;
-                                    
-
-                                    
-                                }
-
-
-                            @endphp
-                            {{-- @for ($i = 0; $i < 7; $i++)
-                            
+                            <div id="accordion" class="accordion-wrapper mb-3">
+                                @if (isset($users))
+                                    @if ($users->profile_id == 3)
+                                    <h1>DAR of Agents under {{ $users->name }}</h1>
+                                    @else
+                                    <h1>{{ $users->name }}</h1>
+                                    @endif  
+                                @endif
+                                @foreach ($dates as $date)
                                 @php
-                                    $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
-                                    $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
-                                    $wp_ctr = 0;
+                                    $date_ctr++;
                                 @endphp
+                                
+                                <div class="card">
+                                    <div id="headingOne" class="card-header bg-light">
+                                        <button type="button" data-toggle="collapse" data-target="#collapse{{ $date_ctr }}" aria-expanded=" " aria-controls="collapse{{ $date_ctr }}" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
+                                            <h5 class="m-0 p-0  text-dark">{{ $date->date_added }}</h5>
+                                        </button>
+                                    </div>
+                                    <div data-parent="#accordion" id="collapse{{ $date_ctr }}" aria-labelledby="heading{{ $date_ctr }}" class="collapse {{ ($date_ctr==1) ? 'show' : ''}}" style="">
+                                        <div class="card-body p-0">
+                                            @php
 
-                                {{ $xdate }}
+                                                if (isset($user_id)) {
 
+                                                    $dars =  \DB::table('view_dar_agent')
+                                                            ->where('date_added', $date->date_added)
+                                                            ->where('type', '<>',  'work_plan')
+                                                            ->where('type', '<>',  'doc_upload')
+                                                            ->whereIn('user_id', $get_user_under_me)
+                                                            ->get();
 
+                                                } else {
 
-                            @endfor --}}
+                                                    $get_user = App\Models\UserDetail::select('user_id')
+                                                                    ->where('IS_id', \Auth::id())
+                                                                    ->get()
+                                                                    ->pluck('user_id');
+
+                                                                    
+                                                    $dars =  \DB::table('view_dar_agent')
+                                                            ->where('date_added', $date->date_added)
+                                                            ->where('type', '<>',  'work_plan')
+                                                            ->where('type', '<>',  'doc_upload')
+                                                            ->whereIn('user_id', $get_user)
+                                                            ->get();
+                                                }
+
+                                            @endphp
+                                            <div id="accordion-sites{{ $date_ctr }}" class="p-0 m-0 ">
+                                                <table class='table table-bordered table-striped table-sm'>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Site</th>
+                                                            <th>Activity</th>
+                                                            <th>Sub Activity</th>
+                                                            <th>Method</th>
+                                                            <th>SAQ Objective</th>
+                                                            {{-- <th>Work Plan</th> --}}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>    
+                                                        @foreach ($dars as $dar)
+                                                        <tr>
+                                                            <td>{{ $dar->site_name }}</td>
+                                                            <td>{{ $dar->activity_name }}</td>
+                                                            <td>
+                                                                @if($dar->type == 'lessor_engagement' && $dar->sub_activity_name == "")
+                                                                    ENGAGEMENT
+                                                                @else
+                                                                    {{ $dar->sub_activity_name }}
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if($dar->type == 'doc_upload')
+                                                                    Doc Upload
+                                                                @elseif($dar->type == 'lessor_engagement')
+                                                                    @php
+                                                                        $v = json_decode($dar->value);                                                                            
+                                                                    @endphp 
+                                                                    {{ $v->lessor_method }}
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @php
+                                                                    $v = json_decode($dar->value);    
+                                                                    if(isset($v->saq_objective)){
+                                                                        $saq = $v->saq_objective;
+                                                                    } else {
+                                                                        $saq = "";
+                                                                    }
+                                                                @endphp 
+                                                                {{ $saq }}
+                                                            </td>
+                                                            {{-- <td> -- -- </td> --}}
+                                                        </tr>                                            
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>                                                
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>                            
+
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>            
         </div>
@@ -258,7 +280,51 @@
 
 @section('js_script')
 
+<script>
+
+    $("select#user_id").on("change", function() {
+
+        var user_id = $(this).val();
+        
+        if ( user_id != '') {
+            $.ajax({
+                url: "/get-agent-of-supervisor/" + user_id,
+                method: "GET",
+                success: function (resp) {
+
+                    console.log(resp);
+                    $("#agent_user_id option").remove();
+
+                    if (resp.message.length < 1) {
+                        $("#agent_user_id").append(
+                            '<option value="">No agent available.</option>'
+                        );
+                    } else {
+                        $("#agent_user_id").append(
+                            '<option value="">Please select agent.</option>'
+                        );
+
+                        resp.message.forEach(element => {
+                            $("#agent_user_id").append(
+                                '<option value="'+ element.id +'">' + element.firstname + ' ' + element.lastname + '</option>'
+                            );
+                        });
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            });
+        }
+    });
+</script>
+
 <script src="\js\modal-loader.js"> </script>
+
 
 @endsection
 
