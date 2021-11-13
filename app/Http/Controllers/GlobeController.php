@@ -3015,8 +3015,7 @@ class GlobeController extends Controller
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
                     ->get();
-                }
-                elseif($program_id == 4){
+                } elseif($program_id == 4){
 
                     $sites = \DB::connection('mysql2')
                             ->table('program_ibs')
@@ -3042,7 +3041,32 @@ class GlobeController extends Controller
                                 )
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('view_site.activity_id')
-                        ->get();
+                            ->get();
+                } elseif($program_id == 8){
+
+                    $sites = \DB::connection('mysql2')
+                            ->table('program_renewal')
+                            ->join('view_site','view_site.sam_id', 'program_renewal.sam_id')
+    
+                            ->select(
+                                "view_site.site_name", 
+                                "view_site.vendor_acronym", 
+                                "view_site.sam_id", 
+                                "view_site.activity_id", 
+                                "view_site.program_id", 
+                                "view_site.site_category", 
+                                "view_site.activity_type", 
+                                "view_site.activity_name", 
+                                "view_site.sam_region_name", 
+                                "view_site.region_name", 
+                                "view_site.province_name", 
+                                "view_site.lgu_name", 
+                                "view_site.site_category",
+                                "view_site.aging",
+                                )
+                            ->where('view_site.program_id', $program_id)
+                            ->whereNull('view_site.activity_id')
+                            ->get();
                     }
     
         }
