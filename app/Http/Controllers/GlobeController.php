@@ -3669,6 +3669,8 @@ class GlobeController extends Controller
                     $table = 'program_newsites';
                 } else if ($programs->program_id == 5) {
                     $table = 'program_mwan';
+                } else if ($programs->program_id == 8) {
+                    $table = 'program_renewal';
                 }
 
                 $sites = \DB::connection('mysql2')
@@ -5960,6 +5962,8 @@ class GlobeController extends Controller
                 $table = 'program_newsites';
             } else if ($program == 5) {
                 $table = 'program_mwan';
+            } else if ($program == 8) {
+                $table = 'program_renewal';
             }
             
             $datas = \DB::connection('mysql2')

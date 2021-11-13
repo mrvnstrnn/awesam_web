@@ -87,8 +87,11 @@
         e.preventDefault();
         $(document).find('#viewInfoModal').modal('show');
 
-        // var json_parse = JSON.parse($(this).parent().attr('data-site_all'));
         var sam_id = $(this).parent().attr('data-sam_id');
+        var program_id = $(this).parent().attr('data-sam_id');
+        var site_category = $(this).parent().attr('data-site_category');
+        var activity_id = $(this).parent().attr('data-activity_id');
+        var site_name = $(this).parent().attr('data-site_name');
 
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
@@ -146,18 +149,18 @@
                             '<button type="button" class="btn btn btn-success btn-shadow btn-artb btn-sm" data-activity_name="endorse_site_artb" data-complete="true" id="btn-accept-endorsement-artb">Available for Auto RTB</button>'
                         );
 
-                        $("#btn-accept-endorsement-artb").attr('data-sam_id', json_parse.sam_id);
-                        $("#btn-accept-endorsement-artb").attr('data-site_vendor_id', json_parse.vendor_id);
+                        $("#btn-accept-endorsement-artb").attr('data-sam_id', sam_id);
+                        // $("#btn-accept-endorsement-artb").attr('data-site_vendor_id', vendor_id);
                         $("#btn-accept-endorsement-artb").attr('data-what_table', what_table);
                         $("#btn-accept-endorsement-artb").attr('data-program_id', program_id);
                     }
 
-                    $(".modal-title").text(json_parse.site_name);
-                    $(".btn-reject").attr('data-sam_id', json_parse.sam_id);
-                    $(".btn-accept-endorsement").attr('data-sam_id', json_parse.sam_id);
-                    $(".btn-accept-endorsement").attr('data-site_category', json_parse.site_category);
-                    $(".btn-accept-endorsement").attr('data-site_vendor_id', json_parse.vendor_id);
-                    $(".btn-accept-endorsement").attr('data-activity_id', json_parse.activity_id);
+                    $(".modal-title").text(site_name);
+                    $(".btn-reject").attr('data-sam_id', sam_id);
+                    $(".btn-accept-endorsement").attr('data-sam_id', sam_id);
+                    $(".btn-accept-endorsement").attr('data-site_category', site_category);
+                    // $(".btn-accept-endorsement").attr('data-site_vendor_id', vendor_id);
+                    $(".btn-accept-endorsement").attr('data-activity_id', activity_id);
                     $(".btn-accept-endorsement").attr('data-what_table', what_table);
                     $(".btn-accept-endorsement").attr('data-program_id', program_id);
 
