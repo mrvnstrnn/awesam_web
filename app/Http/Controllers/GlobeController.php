@@ -3042,6 +3042,7 @@ class GlobeController extends Controller
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('view_site.activity_id')
                             ->get();
+
                 } elseif($program_id == 8){
 
                     $sites = \DB::connection('mysql2')
@@ -3063,6 +3064,7 @@ class GlobeController extends Controller
                                 "view_site.lgu_name", 
                                 "view_site.site_category",
                                 "view_site.aging",
+                                "program_renewal.*"
                                 )
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('view_site.activity_id')

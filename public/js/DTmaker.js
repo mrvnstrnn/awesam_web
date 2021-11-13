@@ -104,6 +104,17 @@ function makeDT(whatTable, whatCols, active_program) {
                     }
                 }        
                 
+                else if(active_program == 8){
+
+                    if(window.location.pathname != "/assigned-sites"){
+                        var filter_column = "classification";
+                    } 
+                    else {
+                        var filter_column = "classification";
+
+                    }
+                }        
+
                 console.log(result);
 
                 var occurences = json.data.reduce(function (r, row) {
