@@ -107,10 +107,10 @@ function makeDT(whatTable, whatCols, active_program) {
                 else if(active_program == 8){
 
                     if(window.location.pathname != "/assigned-sites"){
-                        var filter_column = "classification";
+                        var filter_column = "contract_type";
                     } 
                     else {
-                        var filter_column = "classification";
+                        var filter_column = "contract_type";
 
                     }
                 }        
