@@ -32,14 +32,13 @@ class RenewalController extends Controller
                 $activity_id = $request->input("activity_id");
                 $action = "true";
 
-                $date_from = new DateTime($request->input("from_date"));
-                $date_to = new DateTime($request->input("to_date"));
-
                 $date = Carbon::parse($request->input("from_date"));
 
                 $diffDays = $date->diffInDays($request->input("to_date"));
                 $diffMonths = $date->diffInMonths($request->input("to_date"));
                 $diffYears = $date->diffInYears($request->input("to_date"));
+
+                dd( $date->diff($request->input("to_date")) );
 
                 if ( $diffYears > 0 ) {
                     $date_word = 'fifteen ('.$diffYears.') years';
@@ -51,17 +50,21 @@ class RenewalController extends Controller
                     $date_word = 'fifteen ('.$diffDays.') days';
                 }
 
+                $array = [
+                    'lessor' => $request->input("lessor"),
+                    'lessor_address' => $request->input("lessor_address"),
+                    'cell_site_address' => $request->input("cell_site_address"),
+                    'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
+                    'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
+                    'date_word' => $date_word,
+                    'expiration_date' => date('M d, Y', strtotime($request->input("expiration_date"))),
+                    'undersigned_number' => $request->input("undersigned_number"),
+                    'undersigned_email' => $request->input("undersigned_email")
+                ];
+
                 $view = \View::make('components.loi-pdf')
                     ->with([
-                        'lessor' => $request->input("lessor"),
-                        'lessor_address' => $request->input("lessor_address"),
-                        'cell_site_address' => $request->input("cell_site_address"),
-                        'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
-                        'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
-                        'date_word' => $date_word,
-                        'expiration_date' => $request->input("expiration_date"),
-                        'undersigned_number' => $request->input("undersigned_number"),
-                        'undersigned_email' => $request->input("undersigned_email"),
+                        'json_data' => json_encode($array)   
                     ])
                     ->render();
 
