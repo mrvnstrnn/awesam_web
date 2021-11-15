@@ -15,6 +15,9 @@ use App\Models\Site;
 use Notification;
 use App\Notifications\SiteMoved;
 
+use App\Mail\LOIMail;
+use Illuminate\Support\Facades\Mail;
+
 class RenewalController extends Controller
 {
     public function save_loi(Request $request)
@@ -38,16 +41,14 @@ class RenewalController extends Controller
                 $diffMonths = $date->diffInMonths($request->input("to_date"));
                 $diffYears = $date->diffInYears($request->input("to_date"));
 
-                dd( $date->diff($request->input("to_date")) );
-
                 if ( $diffYears > 0 ) {
-                    $date_word = 'fifteen ('.$diffYears.') years';
+                    $date_word = 'fifteen ('.$diffYears.') year/s';
                 } else if ( $diffYears < 1 && $diffMonths > 0 ) {
-                    $date_word = 'fifteen ('.$diffMonths.') months';
+                    $date_word = 'fifteen ('.$diffMonths.') month/s';
                 } else if ( $diffMonths < 1 && $diffDays > 0) {
-                    $date_word = 'fifteen ('.$diffDays.') days';
+                    $date_word = 'fifteen ('.$diffDays.') day/s';
                 } else {
-                    $date_word = 'fifteen ('.$diffDays.') days';
+                    $date_word = 'fifteen ('.$diffDays.') day/s';
                 }
 
                 $array = [
@@ -74,6 +75,8 @@ class RenewalController extends Controller
                 $pdf->download();
 
                 \Storage::put('pdf/'. strtolower($samid)."-loi-renew.pdf", $pdf->output());
+
+                Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
                 return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
                 $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);

@@ -7068,7 +7068,7 @@ class GlobeController extends Controller
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
             foreach ($form_datas as $form_data) {
                 $fields .= '<div class="row border-bottom mb-1 pb-1">';
-                $fields .= '<div class="col-md-4">' .$form_data->program_fields. '</div>';
+                $fields .= '<div class="col-md-4"><label for="'.str_replace(" ", "_", strtolower($form_data->program_fields) ).'">' .$form_data->program_fields. '</label></div>';
 
                 if ($form_data->type == 'selection') {
 
