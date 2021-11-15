@@ -10,7 +10,7 @@
     }   
 </style>    
 
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="New Endorsements" activitytype="new endorsements vendor accept"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Set PO Details" activitytype="set po"/>
 
 @endsection
 
@@ -35,7 +35,7 @@
                             </div>
                         </div> 
 
-                        <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+                        <div class="card-body form-row justify-content-center" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                             <div class="row form_fields"></div>
 
                             <div class="row reject_remarks d-none">
@@ -50,14 +50,13 @@
                                             <small class="text-danger remarks-error"></small>
                                         </div>
                                         <div class="form-group">
-                                            <button class="btn btn-primary btn-sm btn-shadow confirm_reject" type="button">Confirm</button>
+                                            <button class="btn btn-primary btn-sm btn-shadow confirm_reject">Confirm</button>
                                             
-                                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-
                         </div>
                     </div> 
                 </div>
@@ -72,7 +71,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 3;
+    var profile_id = 8;
     var table_to_load = 'new_endorsements_globe';
     var main_activity = 'New Endorsements Globe';
 
@@ -83,7 +82,7 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 {{-- <script type="text/javascript" src="/js/modal-loader.js"></script>   --}}
 
-<script>
+{{-- <script>
     $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
         $(document).find('#viewInfoModal').modal('show');
@@ -91,12 +90,16 @@
         var sam_id = $(this).parent().attr('data-sam_id');
         var program_id = $(this).parent().attr('data-sam_id');
         var site_category = $(this).parent().attr('data-site_category');
-        var activity_id = $(this).parent().attr('data-activity_id');        
+        var activity_id = $(this).parent().attr('data-activity_id');
         var site_name = $(this).parent().attr('data-site_name');
 
         $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
 
         allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
+
+        var program = "";
+        var technology = "";
+        var site_type = "";
 
         var what_table = $(this).closest('tr').attr('data-what_table');
         var program_id = $(this).closest('tr').attr('data-program_id');
@@ -113,14 +116,11 @@
                     $(".card-body .position-relative.form-group").remove();
                     $(".main-card.mb-3.card .modal-footer").remove();
 
-
                     $.each(resp.message[0], function(index, data) {
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
                         $("#viewInfoModal .card-body .form_fields").append(
-                            '<div class="position-relative form-group col-md-4" style="text-transform: uppercase;">' +
-                                '<label for="' + index.toUpperCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
-                            '</div>'+
-                            '<div class="position-relative form-group col-md-8">' +
+                            '<div class="position-relative form-group col-md-6">' +
+                                '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
                                 '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
                             '</div>'
                         );
@@ -129,18 +129,29 @@
                     if ("{{ \Auth::user()->profile_id != 2 }}") {
                         $("#viewInfoModal .main-card.mb-3.card").append(
                             '<div class="modal-footer">' +
-                                '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
+                                '<button type="button" class="btn btn-primary btn-accept-endorsement btn-shadow btn-sm" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
                                 '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-accept-endorsement btn-sm d-none" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
 
-                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-sm btn-reject" data-complete="false" id="btn-accept-endorsement-false">Reject Site</button>' +
+                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-reject btn-sm" data-complete="false" id="btn-accept-endorsement-false">Reject Site</button>' +
                             '</div>'
                         );
                     } else {
                         $("#viewInfoModal .main-card.mb-3.card").append(
                             '<div class="modal-footer">' +
-                                '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+                                '<button type="button" class="btn btn-primary btn-accept-endorsement btn-shadow btn-sm" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
                             '</div>'
                         );
+                    }
+
+                    if (program == 1 && technology == 1 && site_type == 1 && "{{ \Auth::user()->profile_id }}" == 6 && $(this).closest('tr').attr('data-program_id') == 3) {
+                        $("#viewInfoModal .main-card.mb-3.card .modal-footer").prepend(
+                            '<button type="button" class="btn btn btn-success btn-shadow btn-artb btn-sm" data-activity_name="endorse_site_artb" data-complete="true" id="btn-accept-endorsement-artb">Available for Auto RTB</button>'
+                        );
+
+                        $("#btn-accept-endorsement-artb").attr('data-sam_id', sam_id);
+                        // $("#btn-accept-endorsement-artb").attr('data-site_vendor_id', vendor_id);
+                        $("#btn-accept-endorsement-artb").attr('data-what_table', what_table);
+                        $("#btn-accept-endorsement-artb").attr('data-program_id', program_id);
                     }
 
                     $(".modal-title").text(site_name);
@@ -168,26 +179,7 @@
                 )
             }
         });
-
     } );
-
-    $(document).on("click", ".btn-reject", function(e){
-        e.preventDefault();
-
-        $(".reject_form #sam_id").val($(this).attr("data-sam_id"));
-        $(".message_p b").text($(this).attr("data-sam_id"));
-        $(".form_fields").addClass("d-none");
-        $(".modal-footer").addClass("d-none");
-        $(".reject_remarks").removeClass("d-none");
-    });
-
-    $(document).on("click", ".cancel_reject", function(e){
-        e.preventDefault();
-        
-        $(".form_fields").removeClass("d-none");
-        $(".modal-footer").removeClass("d-none");
-        $(".reject_remarks").addClass("d-none");
-    });
 
     $(document).on("click", ".checkAll", function(e){
         e.preventDefault();
@@ -225,7 +217,7 @@
                 site_vendor_id : site_vendor_id,
                 data_program : data_program,
                 site_category : site_category,
-                activity_id : activity_id,
+                activity_id : activity_id
             },
             type: 'POST',
             headers: {
@@ -353,6 +345,24 @@
 
     });
 
+    $(document).on("click", ".btn-reject", function(e){
+        e.preventDefault();
+
+        $(".reject_form #sam_id").val($(this).attr("data-sam_id"));
+        $(".message_p b").text($(this).attr("data-sam_id"));
+        $(".form_fields").addClass("d-none");
+        $(".modal-footer").addClass("d-none");
+        $(".reject_remarks").removeClass("d-none");
+    });
+
+    $(document).on("click", ".cancel_reject", function(e){
+        e.preventDefault();
+        
+        $(".form_fields").removeClass("d-none");
+        $(".modal-footer").removeClass("d-none");
+        $(".reject_remarks").addClass("d-none");
+    });
+
     $(document).on("click", ".confirm_reject", function(e){
         e.preventDefault();
 
@@ -413,7 +423,7 @@
         })
     });
 
-</script>
+</script> --}}
 
 
 
