@@ -2685,6 +2685,21 @@ class GlobeController extends Controller
                             }
         }
 
+        elseif($activity_type == 'renewal vendor awarding'){
+            $sites = \DB::connection('mysql2')
+                    ->table('view_site')
+                    ->where('program_id',  $program_id)
+                    ->where('activity_type', "vendor awarding");
+
+            $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
+            ->select('view_site.*', 'program_renewal.*');
+
+                    
+
+            $sites->get();
+
+        }
+
         elseif($activity_type == 'pr issuance'){
             $sites = \DB::connection('mysql2')
                             ->table("view_pr_memo")
@@ -2922,7 +2937,23 @@ class GlobeController extends Controller
                 ->get();
 
         }
+        elseif($activity_type == 'set po'){
 
+            $sites = \DB::connection('mysql2')
+                    ->table("view_site")
+                    ->where('program_id', $program_id)
+                    ->where('activity_type', "endorsement")
+                    ->where('profile_id', \Auth::user()->profile_id);
+
+
+                    if($program_id == 8){
+                        $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
+                              ->select('view_site.*', 'program_renewal.*');
+                    }
+
+                    $sites->get();
+
+        }
         elseif($activity_type == 'new endorsements globe'){
 
             // $sites = \DB::connection('mysql2')
@@ -3143,11 +3174,11 @@ class GlobeController extends Controller
         elseif($activity_type == 'new endorsements vendor accept'){
 
             $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
-                    ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
-                    ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
-                    ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
+                    ->table("view_site")
+                    // ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
+                    // ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
+                    // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
+                    // ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
                     
                     ->where('program_id', $program_id);
 
@@ -3162,6 +3193,11 @@ class GlobeController extends Controller
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 10);
                     }   
+
+
+                    if($program_id == 8){
+                        $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+                    }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
