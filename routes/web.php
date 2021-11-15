@@ -14,6 +14,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\RenewalController;
 
 
 
@@ -297,6 +298,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
 
+    //Form get
+    Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
+
+
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
 
     Route::get('/get-uploaded-files/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_uploaded_files']);
@@ -489,7 +494,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Datatable Assigened Sites
     Route::get('/get-assigned-sites', [DataController::class, 'get_assigned_sites'])->name('get_assigned_sites');
 
-
+    
+    // Renewal
+    Route::post('/save-loi', [RenewalController::class, 'save_loi'])->name('save_loi');
 
 });
     

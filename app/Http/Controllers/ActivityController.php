@@ -22,7 +22,7 @@ class ActivityController extends Controller
                                 ->table('view_site')
                                 ->where('sam_id', $request['sam_id'])
                                 ->get();
-
+                                
                 if(!isset($request->bypass_activity_profiles)){
                 
                     $get_current_act = \DB::connection('mysql2')
@@ -40,7 +40,7 @@ class ActivityController extends Controller
                                     ->where('stage_activities.activity_id', $get_current_act->activity_id)
                                     ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                     ->first();
-                            
+                                    // dd($get_component);
                     if ( is_null($get_component) ) {
 
                         // return \View::make('components.activity-error')

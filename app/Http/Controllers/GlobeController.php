@@ -1748,18 +1748,6 @@ class GlobeController extends Controller
 
                 SiteEndorsementEvent::dispatch($request->input('sam_id'));
 
-                // $email_receiver = User::select('users.*')
-                //                 ->join('user_details', 'users.id', 'user_details.user_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->join('program', 'program.program_id', 'user_programs.program_id')
-                //                 ->where('user_details.vendor_id', $request->input('vendor'))
-                //                 ->where('user_programs.program_id', $request->input('data_program'))
-                //                 ->get();
-
-                // for ($j=0; $j < count($email_receiver); $j++) {
-                //     $email_receiver[$j]->notify( new SiteEndorsementNotification($request->input('sam_id'), $request->input('activity_name'), "") );
-                // }
-
                 if (is_null($sub_activity)) {
                     $new_file = $this->rename_file($request->input("pr_file"), $request->input("activity_name"), $request->input("sam_id"));
 
@@ -3568,6 +3556,27 @@ class GlobeController extends Controller
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+            ])
+            ->render();
+        }
+        elseif($sub_activity == 'LOI to Renew'){
+
+            $program_renewal = \DB::connection('mysql2')
+                                ->table('program_renewal')
+                                ->select('site_address', 'lessor', 'expiration')
+                                ->where('sam_id', $sam_id)
+                                ->first();
+
+            $what_component = "components.loi-maker";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'program_renewal' => $program_renewal,
             ])
             ->render();
 
@@ -6992,6 +7001,60 @@ class GlobeController extends Controller
                 // }
             }
         } 
+    }
+
+    public function get_form ($sub_activity_id, $form_name)
+    {
+        try {
+            $form_data = \DB::connection('mysql2')
+                        ->table('program_fields_map')
+                        ->join('program_fileds_map_profiles', 'program_fileds_map_profiles.program_fields_id', 'program_fields_map.program_fields_id')
+                        ->where('program_fileds_map_profiles.sub_activity_id', $sub_activity_id)
+                        ->orderBy('program_fields_map.sort', 'asc')
+                        ->get();
+
+            $form = $this->create_form($form_data, $form_name);
+              
+            return response()->json(['error' => false, 'message' => $form ]);          
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    private function create_form ($form_datas, $form_name)
+    {
+        try {
+            if ($form_name = "LOI to Renew"){
+                $button_name = "Save LOI";
+            }
+            $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
+            foreach ($form_datas as $form_data) {
+                $fields .= '<div class="row border-bottom mb-1 pb-1">';
+                $fields .= '<div class="col-md-4">' .$form_data->program_fields. '</div>';
+
+                if ($form_data->type == 'selection') {
+
+                } else {
+                    $fields .= '<div class="col-md-8">';
+                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="form-control">';
+                    $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
+                    $fields .= '</div>';
+                }
+                $fields .= '</div>';
+            }
+
+            $fields .= '<div class="row mb-2">';
+            $fields .= '<div class="col-12">';
+            $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+            $fields .= '</div></div>';
+
+            return $fields .= "</form>";
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return $th->getMessage();
+        }
     }
 
 }
