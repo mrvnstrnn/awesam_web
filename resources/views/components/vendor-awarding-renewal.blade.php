@@ -57,6 +57,7 @@
 
             var po_number = $("#po_number").val();
             var vendor = $("#vendor").val();
+            var data_complete = "true";
 
             $.ajax({
                 url: "/accept-reject-endorsement",
@@ -69,6 +70,7 @@
                     program_id : program_id,
                     po_number : po_number,
                     vendor : vendor,
+                    data_complete : data_complete,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
