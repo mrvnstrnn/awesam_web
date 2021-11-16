@@ -7,7 +7,7 @@
                 }
 
                 #content {
-                    margin: 50px;
+                    margin: 150px;
                 }
 
                 body {

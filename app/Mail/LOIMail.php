@@ -17,12 +17,12 @@ class LOIMail extends Mailable
      * @return void
      */
 
-    public $file, $url;
+    public $file;
 
-    public function __construct($file, $url)
+    public function __construct($file)
     {
         $this->file = $file;
-        $this->url = $url;
+        // $this->url = $url;
     }
 
     /**
