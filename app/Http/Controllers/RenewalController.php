@@ -44,14 +44,16 @@ class RenewalController extends Controller
                 $diffMonths = $date->diffInMonths($request->input("to_date"));
                 $diffYears = $date->diffInYears($request->input("to_date"));
 
+                $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
                 if ( $diffYears > 0 ) {
-                    $date_word = 'fifteen ('.$diffYears.') year/s';
+                    $date_word = $f->format($diffYears) .' ('.$diffYears.') year/s';
                 } else if ( $diffYears < 1 && $diffMonths > 0 ) {
-                    $date_word = 'fifteen ('.$diffMonths.') month/s';
+                    $date_word = $f->format($diffMonths) .' ('.$diffMonths.') month/s';
                 } else if ( $diffMonths < 1 && $diffDays > 0) {
-                    $date_word = 'fifteen ('.$diffDays.') day/s';
+                    $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
                 } else {
-                    $date_word = 'fifteen ('.$diffDays.') day/s';
+                    $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
                 }
 
                 $array = [
@@ -66,16 +68,18 @@ class RenewalController extends Controller
                     'undersigned_email' => $request->input("undersigned_email")
                 ];
 
-                $view = \View::make('components.loi-pdf')
-                    ->with([
-                        'json_data' => json_encode($array)   
-                    ])
-                    ->render();
+                // $view = \View::make('components.loi-pdf')
+                //     ->with([
+                //         'json_data' => json_encode($array)   
+                //     ])
+                //     ->render();
 
-                $pdf = \App::make('dompdf.wrapper');
-                $pdf = PDF::loadHTML($view);
-                $pdf->setPaper('a4', 'portrait');
-                $pdf->download();
+                // $pdf = \App::make('dompdf.wrapper');
+                // $pdf = PDF::loadHTML($view);
+                // $pdf->setPaper('a4', 'portrait');
+                // $pdf->download();
+
+                $this->create_pdf($array, $samid, 'loi-pdf', 'loi.pdf');
 
                 \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
 
@@ -196,6 +200,25 @@ class RenewalController extends Controller
                 }
 
                 return response()->json(['error' => false, 'message' => "Successfully submitted a LOI.", 'program_id' => $request->get('program_id') ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_lrn (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                '*' => 'required'
+            ]);
+
+            if ($validate->passes()) {
+                $this->create_pdf($request->all(), $request->get('sam_id'), 'lrn-no-security-a-r-e-r-pdf','lrn.pdf');
+                return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
@@ -415,5 +438,21 @@ class RenewalController extends Controller
 
 
 
+    }
+
+    private function create_pdf ($array, $samid, $component, $filename)
+    {
+        $view = \View::make('components.'.$component)
+                    ->with([
+                        'json_data' => json_encode($array)   
+                    ])
+                    ->render();
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf = PDF::loadHTML($view);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->download();
+
+        \Storage::put(strtolower($samid)."-".$filename, $pdf->output());
     }
 }

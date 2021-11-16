@@ -98,9 +98,10 @@
             success: function (resp) {
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
-                    $("#lessor").val("{{ $program_renewal->lessor }}").attr("readonly", "readonly");
-                    $("#lessor_address").val("{{ $program_renewal->site_address }}").attr("readonly", "readonly");
-                    $("#expiration_date").val("{{ $program_renewal->expiration }}").attr("readonly", "readonly");
+                    // $("#lessor").val("{{ $program_renewal->lessor }}").attr("readonly", "readonly");
+                    $("#lessor").val("{{ $program_renewal->lessor }}");
+                    $("#cell_site_address").val("{{ $program_renewal->site_address }}");
+                    $("#expiration_date").val("{{ $program_renewal->expiration }}");
                 } else {
                     Swal.fire(
                         'Error',

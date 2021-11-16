@@ -10,14 +10,160 @@
     </div>
 </div>
 
-<button class="btn btn-primary btn-lg btn-shadow text-white btn-block mark_as_complete" type="button">Mark as Complete</button>
+<div class="row">
+    <div class="col-12">
+        <div class="form_html"></div>
+        <form class="site_data_form">
+            <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
+            <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
+            <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
+            <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
+            <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
+        </form>
+    </div>
+</div>
+
+{{-- <form class="select_company_form">
+    <input type="hidden" name="sub_activity" value="{{ $sub_activity }}">
+    <div class="form-group">
+        <label for="company">Companies</label>
+        <select class="form-control" name="company" id="company">
+            <option value="">Please select company</option>
+            <option value="Bayantel">Bayantel</option>
+            <option value="Globe">Globe</option>
+            <option value="Innove">Innove</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="lrn_type">LRN Type</label>
+        <select class="form-control" name="lrn_type" id="lrn_type">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary btn-lg btn-shadow get_form" type="button">Get form</button>
+    </div>
+</form> --}}
 
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
     });
-    
+
+    // $(".select_company_form #company").on("change", function(){
+    //     $("#form option").remove();
+
+    //     if ( $(this).val() != '' ) {
+    //         array_form = [
+    //             'No security deposit, Advance Rental, Escalation Rate',
+    //             'Advance Rent, Escalation Rate',
+    //             'Advance Rent, Security Deposit',
+    //             'Advance Rent',
+    //             'Advance Rent, Escalation Rate, Security Deposit',
+    //             'Escalation Rate, Security Deposit',
+    //             'Escalation Rate',
+    //             'Security Deposit',
+    //             'Free of Charge',
+    //             'One Time Payment',
+    //         ];
+
+    //         $(".select_company_form #lrn_type").append(
+    //             '<option value="">Please select form</option>'
+    //         );
+    //         for (let i = 0; i < array_form.length; i++) {
+    //             $(".select_company_form #lrn_type").append(
+    //                 '<option value="'+ array_form[i] +'">'+ array_form[i] +'</option>'
+    //             );
+    //         }
+    //     }
+    // });
+
+    $(document).ready(function(){
+        $.ajax({
+            url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",
+            method: "GET",
+            // headers: {
+            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            // },
+            success: function (resp) {
+                if (!resp.error) {
+                    $(".form_html").html(resp.message);
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+    });
+
+    $(document).on("click", ".save_lease_renewal_notice_btn", function() {
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        $(".lease_renewal_notice_form small").text("");
+
+        $.ajax({
+            url: "/save-lrn",
+            method: "POST",
+            data: $(".lease_renewal_notice_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
+                    $(".save_lease_renewal_notice_btn").removeAttr("disabled");
+                    $(".save_lease_renewal_notice_btn").text("Create LRN");
+
+                    // $("#viewInfoModal").modal("hide");
+                } else {
+
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".lease_renewal_notice_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+
+                    $(".save_lease_renewal_notice_btn").removeAttr("disabled");
+                    $(".save_lease_renewal_notice_btn").text("Create LRN");
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".save_lease_renewal_notice_btn").removeAttr("disabled");
+                $(".save_lease_renewal_notice_btn").text("Create LRN");
+            }
+        });
+    });
+
     $(".mark_as_complete").on("click", function() {
         $("#submit_not_assds").attr("disabled", "disabled");
         $("#submit_not_assds").text("Processing...");

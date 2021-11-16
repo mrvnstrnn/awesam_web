@@ -7099,6 +7099,7 @@ class GlobeController extends Controller
                         ->table('program_fields_map')
                         ->join('program_fileds_map_profiles', 'program_fileds_map_profiles.program_fields_id', 'program_fields_map.program_fields_id')
                         ->where('program_fileds_map_profiles.sub_activity_id', $sub_activity_id)
+                        ->where('program_fields_map.form_name', $form_name)
                         ->orderBy('program_fields_map.sort', 'asc')
                         ->get();
 
@@ -7119,6 +7120,10 @@ class GlobeController extends Controller
                 $button_name = "Save LOI";
             } else if ($form_name == "Create PR") {
                 $button_name = "Set PO";
+            } else if ($form_name == "Lease Renewal Notice") {
+                $button_name = "Create LRN";
+            } else {
+                $button_name = "Save";
             }
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
             foreach ($form_datas as $form_data) {
@@ -7127,7 +7132,12 @@ class GlobeController extends Controller
 
                 if ($form_data->type == 'selection') {
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '"></select>';
+                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '">';
+                    $new_array = explode("(,)",$form_data->selection);
+                    for ($i=0; $i < count($new_array); $i++) { 
+                        $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
+                    }
+                    $fields .= '</select>';
                     $fields .= '</div>';
                 } else {
                     $fields .= '<div class="col-md-8">';
