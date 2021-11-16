@@ -382,6 +382,23 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
                 $samid = $request->input('sam_id');
 
+            } else if ($request->input('activity_name') == "award_to_vendor") {
+
+                $notification = "Site successfully awarded to a vendor.";
+                $action = $request->input('data_complete');
+                $site_category = $request->input('site_category');
+                $activity_id = $request->input('activity_id');
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+                $po_number = $request->input('po_number');
+                $vendor = $request->input('vendor');
+
+                Site::where('sam_id', $samid[0])
+                        ->update([
+                            'site_po' => $po_number,
+                            'site_vendor_id' => $vendor,
+                        ]);
+
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
                 $notification = "RTB Docs successfully approved";
@@ -7065,7 +7082,7 @@ class GlobeController extends Controller
             if ($form_name == "Create LOI to Renew"){
                 $button_name = "Save LOI";
             } else if ($form_name == "Create PR") {
-                $button_name = "Create PR";
+                $button_name = "Set PO";
             }
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
             foreach ($form_datas as $form_data) {
