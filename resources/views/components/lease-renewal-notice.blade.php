@@ -10,9 +10,14 @@
     </div>
 </div>
 
-<button class="btn btn-primary btn-lg btn-shadow text-white pull-right mark_as_complete" type="button">Mark as Complete</button>
+<button class="btn btn-primary btn-lg btn-shadow text-white btn-block mark_as_complete" type="button">Mark as Complete</button>
 
 <script>
+    $(".btn_switch_back_to_actions").on("click", function(){
+        $("#actions_box").addClass('d-none');
+        $("#actions_list").removeClass('d-none');
+    });
+    
     $(".mark_as_complete").on("click", function() {
         $("#submit_not_assds").attr("disabled", "disabled");
         $("#submit_not_assds").text("Processing...");
