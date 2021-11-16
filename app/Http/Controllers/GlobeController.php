@@ -3634,6 +3634,27 @@ class GlobeController extends Controller
             ->render();
 
         }
+        elseif($sub_activity == 'Get Send Approved LOI'){
+
+            $files = SubActivityValue::select('value')
+                                ->where('sub_activity_id', 423)
+                                ->where('sam_id', $sam_id)
+                                ->first();
+
+            $what_component = "components.get-send-approved-loi";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+                'files' => $files,
+            ])
+            ->render();
+
+        }
         else {
 
             $what_component = "components.subactivity-doc-upload";

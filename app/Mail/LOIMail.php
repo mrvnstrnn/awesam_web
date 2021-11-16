@@ -17,10 +17,12 @@ class LOIMail extends Mailable
      * @return void
      */
 
-    public $file;
-    public function __construct($file)
+    public $file, $url;
+
+    public function __construct($file, $url)
     {
         $this->file = $file;
+        $this->url = $url;
     }
 
     /**
@@ -32,6 +34,6 @@ class LOIMail extends Mailable
     {
         return $this->markdown('emails.loi')
                     ->subject('LOI Contracts')
-                    ->attach('files/' .$this->file);
+                    ->attach('files/' . $this->file);
     }
 }

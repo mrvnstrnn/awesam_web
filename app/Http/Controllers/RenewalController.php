@@ -134,6 +134,27 @@ class RenewalController extends Controller
         }
     }
 
+    public function email_loi (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                'email' => 'required | email'
+            ]);
+
+            if ($validate->passes()) {
+                $url = asset('files/'.$request->input("file_name"));
+                Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name"), $url));
+
+                return response()->json(['error' => false, 'message' => "Successfully emailed loi to " .$request->input("email") ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function create_pr (Request $request)
     {
         try {

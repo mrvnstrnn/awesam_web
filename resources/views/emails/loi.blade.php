@@ -3,7 +3,7 @@
 
 The body of your message.
 
-@component('mail::button', ['url' => $file])
+@component('mail::button', ['url' => $url])
 Download PDF
 @endcomponent
 
