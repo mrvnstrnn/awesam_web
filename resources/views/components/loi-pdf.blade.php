@@ -51,6 +51,24 @@
     <body>
         @php
             $json = json_decode($json_data);
+
+            $date = Carbon::parse($json->from_date);
+
+            $diffDays = $date->diffInDays($json->to_date);
+            $diffMonths = $date->diffInMonths($json->to_date);
+            $diffYears = $date->diffInYears($json->to_date);
+
+            $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
+            if ( $diffYears > 0 ) {
+                $date_word = $f->format($diffYears) .' ('.$diffYears.') year/s';
+            } else if ( $diffYears < 1 && $diffMonths > 0 ) {
+                $date_word = $f->format($diffMonths) .' ('.$diffMonths.') month/s';
+            } else if ( $diffMonths < 1 && $diffDays > 0) {
+                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+            } else {
+                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+            }
         @endphp
         <div id="content">
 
@@ -81,7 +99,7 @@
                         <p>
                             We are writing on behalf of Globe Telecom, Inc. (Globe) in connection with the existing Contract of
                             Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that Globe would like to signify its intent
-                            to renew the said Contract of Lease for {{ $json->date_word }} or from <b>{{ $json->from_date }}</b> to <b>{{ $json->to_date }}</b>. In
+                            to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->from_date }}</b> to <b>{{ $json->to_date }}</b>. In
                             line with this, we would like to request for the submission of the following documents which are
                             necessary in the processing of the contract renewal:</p>
                             <ul>

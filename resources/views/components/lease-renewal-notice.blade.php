@@ -52,34 +52,6 @@
         $("#actions_list").removeClass('d-none');
     });
 
-    // $(".select_company_form #company").on("change", function(){
-    //     $("#form option").remove();
-
-    //     if ( $(this).val() != '' ) {
-    //         array_form = [
-    //             'No security deposit, Advance Rental, Escalation Rate',
-    //             'Advance Rent, Escalation Rate',
-    //             'Advance Rent, Security Deposit',
-    //             'Advance Rent',
-    //             'Advance Rent, Escalation Rate, Security Deposit',
-    //             'Escalation Rate, Security Deposit',
-    //             'Escalation Rate',
-    //             'Security Deposit',
-    //             'Free of Charge',
-    //             'One Time Payment',
-    //         ];
-
-    //         $(".select_company_form #lrn_type").append(
-    //             '<option value="">Please select form</option>'
-    //         );
-    //         for (let i = 0; i < array_form.length; i++) {
-    //             $(".select_company_form #lrn_type").append(
-    //                 '<option value="'+ array_form[i] +'">'+ array_form[i] +'</option>'
-    //             );
-    //         }
-    //     }
-    // });
-
     $(document).ready(function(){
         $.ajax({
             url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",

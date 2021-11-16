@@ -27,7 +27,8 @@ class RenewalController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                '*' => 'required'
+                '*' => 'required',
+                'undersigned_email' => 'required | email',
             ]);
 
             if ($validate->passes()) {
@@ -38,31 +39,13 @@ class RenewalController extends Controller
                 $activity_id = $request->input("activity_id");
                 $action = "true";
 
-                $date = Carbon::parse($request->input("from_date"));
-
-                $diffDays = $date->diffInDays($request->input("to_date"));
-                $diffMonths = $date->diffInMonths($request->input("to_date"));
-                $diffYears = $date->diffInYears($request->input("to_date"));
-
-                $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-
-                if ( $diffYears > 0 ) {
-                    $date_word = $f->format($diffYears) .' ('.$diffYears.') year/s';
-                } else if ( $diffYears < 1 && $diffMonths > 0 ) {
-                    $date_word = $f->format($diffMonths) .' ('.$diffMonths.') month/s';
-                } else if ( $diffMonths < 1 && $diffDays > 0) {
-                    $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
-                } else {
-                    $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
-                }
-
                 $array = [
                     'lessor' => $request->input("lessor"),
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
                     'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
                     'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
-                    'date_word' => $date_word,
+                    // 'date_word' => $date_word,
                     'expiration_date' => date('M d, Y', strtotime($request->input("expiration_date"))),
                     'undersigned_number' => $request->input("undersigned_number"),
                     'undersigned_email' => $request->input("undersigned_email")
@@ -81,7 +64,7 @@ class RenewalController extends Controller
 
                 $this->create_pdf($array, $samid, 'loi-pdf', 'loi.pdf');
 
-                \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
+                // \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
 
                 // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
@@ -116,14 +99,25 @@ class RenewalController extends Controller
                     'validators' => $approvers_collect->all()
                 ];
 
-                SubActivityValue::create([
-                    'sam_id' => $request->input("sam_id"),
-                    'sub_activity_id' => $request->input("sub_activity_id"),
-                    'value' => json_encode($array_data),
-                    'user_id' => \Auth::id(),
-                    'type' => 'doc_upload',
-                    'status' => 'pending',
-                ]);
+                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                        ->where('status', 'pending')
+                                                        ->first();
+
+                if (!is_null($sub_activity_value)) {
+                    $sub_activity_value->update([
+                        'value' => json_encode($array_data),
+                    ]);
+                } else {
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
+                    ]);   
+                }
 
                 // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 

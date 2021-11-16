@@ -61,7 +61,7 @@
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $(".loi_to_renew_form ." + index + "-error").text(data);
+                            $(".create_loi_to_renew_form ." + index + "-error").text(data);
                         });
                     } else {
                         Swal.fire(
