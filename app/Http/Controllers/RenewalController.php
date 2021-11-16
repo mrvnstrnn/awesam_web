@@ -211,7 +211,29 @@ class RenewalController extends Controller
             ]);
 
             if ($validate->passes()) {
-                $this->create_pdf($request->all(), $request->get('sam_id'), 'lrn-no-security-a-r-e-r-pdf','lrn.pdf');
+
+                    if ($request->get('lrn') == 'No security deposit, Advance Rental, Escalation Rate') {
+                        $component = 'lrn-no-security-a-r-e-r-pdf';
+                    } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate') {
+                        $component = 'advance-rent-escalation-rate-pdf';
+                    } else if ($request->get('lrn') == 'Advance Rent, Security Deposit') {
+                        $component = 'advance-rent-security-deposit-pdf';
+                    } else if ($request->get('lrn') == 'Advance Rent') {
+                        $component = 'advance-rent-pdf';
+                    } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate, Security Deposit') {
+                        $component = 'advance-rent-escalation-rate-security-deposit-pdf';
+                    } else if ($request->get('lrn') == 'Escalation Rate, Security Deposit') {
+                        $component = 'escalation-rate-security-deposit-pdf';
+                    } else if ($request->get('lrn') == 'Escalation Rate') {
+                        $component = 'escalation-rate-pdf';
+                    } else if ($request->get('lrn') == 'Security Deposit') {
+                        $component = 'security-depost-pdf';
+                    } else if ($request->get('lrn') == 'Free of Charge') {
+                        $component = 'free-of-charge-pdf';
+                    } else if ($request->get('lrn') == 'One Time Payment') {
+                        $component = 'one-time-payment-pdf';
+                    }
+                $this->create_pdf($request->all(), $request->get('sam_id'), $component,'lrn.pdf');
                 return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);

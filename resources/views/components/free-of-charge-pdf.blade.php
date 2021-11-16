@@ -31,9 +31,9 @@
     </head>
     <body>
         @php
-            //////////////////////////////////////////////////////////
-            // No Security Deposit, Advance Rental, Escalation Rate //
-            //////////////////////////////////////////////////////////
+            ////////////////////
+            // Free of Charge //
+            ////////////////////
 
             $json = json_decode($json_data);
 
@@ -130,33 +130,24 @@
                     </td>
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
-                            Lease Term: <span style="text-decoration: underline;">{{ $f->format( $json->lease_term ) }}</span> (<span style="text-decoration: underline;">{{ $json->lease_term }}</span>) years;
+                            Term: <span style="text-decoration: underline;">{{ $f->format( $json->lease_term ) }}</span> (<span style="text-decoration: underline;">{{ $json->lease_term }}</span>) years;
                             Commencing on <span style="text-decoration: underline;">{{ $json->start_date }}</span> to <span style="text-decoration: underline;">{{ $json->start_date }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
-                            Monthly Rent: <span style="text-decoration: underline;">{{ $f->format( $json->monthly_rent ) }}</span> <b>(Php <span style="text-decoration: underline;">{{ $json->monthly_rent }}</span>).</b> 
-                            Tax Application: ______ VAT and ______ Withholding Tax.
+                            Consideration: FREE OF CHARGE
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>C.</b>
-                            Mode of Payment: <span style="text-decoration: underline;">{{ $json->mode_of_payment }}</span>.
+                            GRANTOR warrants that he/she is the duly registered owner/legal possessor of the Assigned Premises. Further, GRANTOR shall hold {{ ucfirst($company_name) }} (“{{ $json->company }}”) free and harmless from any claims and suits related to the GRANTOR’s ownership and possession of the Assigned Premises.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>D.</b>
-                            Upon execution of this Lease Renewal Notice and Lessor’s submission of all the documents required by {{ ucfirst($company_name) }} (“{{ $json->company }}”), the monthly rental payment shall be made via bank deposit through the nominated bank account of the Lessor/s.
+                            This Renewal Notice is intended to set the basic terms and conditions of the Memorandum of Agreement (“Agreement”) and shall be binding to the Parties, subject to execution of the said Agreement. Parties agree that any delay in the execution of the Agreement due to fortuitous event, national emergencies or as a consequence of a government order shall be excused. Accordingly, the execution of the Agreement shall be complied with whenever possible.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>E.</b>
-                            LESSOR warrants that he/she is the duly registered owner/legal possessor of the Leased Premises. Further, LESSOR shall hold {{ $json->company }} free and harmless from any claims and suits related to the LESSOR’s ownership and possession of the Leased Premises.
-                        </p>
-
-                        <p style="text-align: justify; text-justify: inter-word;"><b>F.</b>
-                            This Lease Renewal Notice is intended to set the basic terms and conditions of the Renewal of Contract of Lease (“Agreement”) and shall be binding to the Parties, subject to execution of the said Agreement. Parties agree that any delay in the execution of the Agreement due to fortuitous event, national emergencies or as a consequence of a government order shall be excused. Accordingly, the execution of the Agreement shall be complied with whenever possible.
-                        </p>
-
-                        <p style="text-align: justify; text-justify: inter-word;"><b>G.</b>
-                            LESSOR agrees to the collection, processing, use, and sharing of the data that the LESSOR provides to {{ ucfirst($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The LESSOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2021 and the Privacy Policy of {{ ucfirst($company_name) }}
+                            GRANTOR agrees to the collection, processing, use, and sharing of the data that the GRANTOR provides to {{ ucfirst($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The GRANTOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2021 and the Privacy Policy of {{ ucfirst($company_name) }}
                         </p>
 
                     </td>

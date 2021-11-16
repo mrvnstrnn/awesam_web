@@ -31,10 +31,10 @@
     </head>
     <body>
         @php
-            //////////////////////////////////////////////////////////
-            // No Security Deposit, Advance Rental, Escalation Rate //
-            //////////////////////////////////////////////////////////
-
+            //////////////////
+            // Advance Rent //
+            //////////////////
+            
             $json = json_decode($json_data);
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
@@ -140,22 +140,26 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>C.</b>
-                            Mode of Payment: <span style="text-decoration: underline;">{{ $json->mode_of_payment }}</span>.
+                            Advance Rent: <span style="text-decoration: underline;">{{ $f->format( $json->advance_rent ) }}</span> <b>(Php <span style="text-decoration: underline;">{{ $json->advance_rent }}</span>).</b> Equal to _______ (___) month/s rent to be applied on the first _______ (___) month/s of the Lease Term.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>D.</b>
-                            Upon execution of this Lease Renewal Notice and Lessor’s submission of all the documents required by {{ ucfirst($company_name) }} (“{{ $json->company }}”), the monthly rental payment shall be made via bank deposit through the nominated bank account of the Lessor/s.
+                            Mode of Payment: <span style="text-decoration: underline;">{{ $json->mode_of_payment }}</span>.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>E.</b>
-                            LESSOR warrants that he/she is the duly registered owner/legal possessor of the Leased Premises. Further, LESSOR shall hold {{ $json->company }} free and harmless from any claims and suits related to the LESSOR’s ownership and possession of the Leased Premises.
+                            Upon execution of this Lease Renewal Notice and Lessor’s submission of all the documents required by {{ ucfirst($company_name) }} (“{{ $json->company }}”), the monthly rental payment shall be made via bank deposit through the nominated bank account of the Lessor/s.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>F.</b>
-                            This Lease Renewal Notice is intended to set the basic terms and conditions of the Renewal of Contract of Lease (“Agreement”) and shall be binding to the Parties, subject to execution of the said Agreement. Parties agree that any delay in the execution of the Agreement due to fortuitous event, national emergencies or as a consequence of a government order shall be excused. Accordingly, the execution of the Agreement shall be complied with whenever possible.
+                            LESSOR warrants that he/she is the duly registered owner/legal possessor of the Leased Premises. Further, LESSOR shall hold {{ $json->company }} free and harmless from any claims and suits related to the LESSOR’s ownership and possession of the Leased Premises.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>G.</b>
+                            This Lease Renewal Notice is intended to set the basic terms and conditions of the Renewal of Contract of Lease (“Agreement”) and shall be binding to the Parties, subject to execution of the said Agreement. Parties agree that any delay in the execution of the Agreement due to fortuitous event, national emergencies or as a consequence of a government order shall be excused. Accordingly, the execution of the Agreement shall be complied with whenever possible.
+                        </p>
+
+                        <p style="text-align: justify; text-justify: inter-word;"><b>H.</b>
                             LESSOR agrees to the collection, processing, use, and sharing of the data that the LESSOR provides to {{ ucfirst($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The LESSOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2021 and the Privacy Policy of {{ ucfirst($company_name) }}
                         </p>
 
