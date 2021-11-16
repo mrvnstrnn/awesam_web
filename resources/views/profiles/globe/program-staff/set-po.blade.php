@@ -69,7 +69,7 @@
         }
     });
 
-    $(".create_pr_po").on("click", function (){
+    $(document).on("click", ".create_pr_po", function (){
         var data_program = $(this).attr('data-program');
         var data_program_id = $(this).attr('data-program_id');
 

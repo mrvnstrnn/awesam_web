@@ -3595,7 +3595,7 @@ class GlobeController extends Controller
             ])
             ->render();
         }
-        elseif($sub_activity == 'LOI to Renew'){
+        elseif($sub_activity == 'Create LOI to Renew'){
 
             $program_renewal = \DB::connection('mysql2')
                                 ->table('program_renewal')
@@ -7062,9 +7062,9 @@ class GlobeController extends Controller
     private function create_form ($form_datas, $form_name)
     {
         try {
-            if ($form_name == "LOI to Renew"){
+            if ($form_name == "Create LOI to Renew"){
                 $button_name = "Save LOI";
-            } else if ($form_name = "Create PR") {
+            } else if ($form_name == "Create PR") {
                 $button_name = "Create PR";
             }
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
@@ -7084,11 +7084,12 @@ class GlobeController extends Controller
                 }
                 $fields .= '</div>';
             }
-
-            $fields .= '<div class="row mb-2">';
-            $fields .= '<div class="col-12">';
-            $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
-            $fields .= '</div></div>';
+            // if ($form_name = "Vendor Awarding") {
+                $fields .= '<div class="row mb-2">';
+                $fields .= '<div class="col-12">';
+                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                $fields .= '</div></div>';
+            // }
 
             return $fields .= "</form>";
         } catch (\Throwable $th) {

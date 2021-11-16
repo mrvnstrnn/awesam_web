@@ -15,6 +15,7 @@
         <div class="form_html"></div>
         <form class="site_data_form">
             <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
+            <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
             <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
             <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
             <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
@@ -28,7 +29,7 @@
         $("#actions_list").removeClass('d-none');
     });
 
-    $(document).on("click", ".save_loi_to_renew_btn", function(e){
+    $(document).on("click", ".save_create_loi_to_renew_btn", function(e){
         e.preventDefault();
 
         $(this).attr("disabled", "disabled");
@@ -37,14 +38,14 @@
         $.ajax({
             url: "/save-loi",
             method: "POST",
-            data: $(".loi_to_renew_form, .site_data_form").serialize(),
+            data: $(".create_loi_to_renew_form, .site_data_form").serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (resp) {
                 if (!resp.error) {
 
-                    // $(".loi_to_renew_form")[0].reset();
+                    $(".create_loi_to_renew_form")[0].reset();
 
                     Swal.fire(
                         'Success',
@@ -52,8 +53,10 @@
                         'success'
                     )
                     
-                    $(".save_loi_to_renew_btn").removeAttr("disabled");
-                    $(".save_loi_to_renew_btn").text("Save LOI");
+                    $(".save_create_loi_to_renew_btn").removeAttr("disabled");
+                    $(".save_create_loi_to_renew_btn").text("Save LOI");
+
+                    $("#viewInfoModal").modal("hide");
                 } else {
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {
@@ -68,8 +71,8 @@
                         )
                     }
 
-                    $(".save_loi_to_renew_btn").removeAttr("disabled");
-                    $(".save_loi_to_renew_btn").text("Save LOI");
+                    $(".save_create_loi_to_renew_btn").removeAttr("disabled");
+                    $(".save_create_loi_to_renew_btn").text("Save LOI");
                 }
             },
             error: function (resp) {
@@ -79,8 +82,8 @@
                     'error'
                 )
 
-                $(".save_loi_to_renew_btn").removeAttr("disabled");
-                $(".save_loi_to_renew_btn").text("Save LOI");
+                $(".save_create_loi_to_renew_btn").removeAttr("disabled");
+                $(".save_create_loi_to_renew_btn").text("Save LOI");
             }
         });
     });

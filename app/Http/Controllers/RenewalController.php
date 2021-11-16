@@ -77,11 +77,51 @@ class RenewalController extends Controller
                 $pdf->setPaper('a4', 'portrait');
                 $pdf->download();
 
-                \Storage::put('pdf/'. strtolower($samid)."-loi-renew.pdf", $pdf->output());
+                \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
 
-                Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
+                // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
-                $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
+                $stage_activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('id', 'activity_type', 'approver_profile_id_1')
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('activity_id', $request->input('activity_id'))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
+
+                $stage_activities_approvers = \DB::connection('mysql2')
+                                ->table('stage_activities_approvers')
+                                ->select('approver_profile_id')
+                                ->where('stage_activities_id', $stage_activities->id)
+                                ->get();
+
+                $approvers_collect = collect();
+
+                foreach ($stage_activities_approvers as $stage_activities_approver) {
+                    $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'pending'
+                    ]);
+                }
+
+                $array_data = [
+                    'file' => strtolower($samid)."-loi-renew.pdf",
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect->all()),
+                    'validators' => $approvers_collect->all()
+                ];
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($array_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'pending',
+                ]);
+
+                // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 
                 return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
 
