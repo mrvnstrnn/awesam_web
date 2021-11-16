@@ -497,6 +497,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     
     // Renewal
     Route::post('/save-loi', [RenewalController::class, 'save_loi'])->name('save_loi');
+    Route::post('/create-pr-renewal', [RenewalController::class, 'create_pr'])->name('create_pr');
 
 });
     

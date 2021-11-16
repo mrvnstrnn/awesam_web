@@ -11,6 +11,9 @@ use DateTime;
 use App\Models\User;
 use App\Models\SiteStageTracking;
 use App\Models\Site;
+use App\Models\SubActivityValue;
+use App\Models\PrMemoTableRenewal;
+use App\Models\PrMemoSite;
 
 use Notification;
 use App\Notifications\SiteMoved;
@@ -78,9 +81,60 @@ class RenewalController extends Controller
 
                 Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
-                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
                 $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
+                
+                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
 
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function create_pr (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                '*' => 'required'
+            ]);
+
+            if ($validate->passes()) {
+                $po_number = $request->get('po_number');
+                $po_date = $request->get('po_date');
+                $vendor = $request->get('vendor');
+                $action = "true";
+
+                $last_pr_memo = PrMemoTableRenewal::orderBy('pr_memo_id', 'desc')->first();
+
+                $generated_pr = "PR-MEMO-00000".(!is_null($last_pr_memo) ? $last_pr_memo->pr_memo_id + 1 : 0 + 1);
+                
+                PrMemoTableRenewal::create([
+                    'po_number' => $request->get('po_number'),
+                    'po_date' => $request->get('po_date'),
+                    'vendor' => $request->get('vendor'),
+                    'generated_pr_memo' => $generated_pr,
+                ]);
+
+                for ($i=0; $i < count($request->input('sam_id')); $i++) { 
+
+                    PrMemoSite::create([
+                        'sam_id' => $request->input("sam_id")[$i],
+                        'pr_memo_id'=> $generated_pr
+                    ]);
+
+                    $sites = \DB::connection('mysql2')
+                                ->table('view_site')
+                                ->select('program_id', 'site_category', 'activity_id')
+                                ->where('sam_id', $request->get('sam_id')[$i])
+                                ->first();
+
+                    $asd = $this->move_site([$request->input('sam_id')[$i]], $sites->program_id, $action, [$sites->site_category], [$sites->activity_id]);
+                }
+
+                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI.", 'program_id' => $request->get('program_id') ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }

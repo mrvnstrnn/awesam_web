@@ -7062,8 +7062,10 @@ class GlobeController extends Controller
     private function create_form ($form_datas, $form_name)
     {
         try {
-            if ($form_name = "LOI to Renew"){
+            if ($form_name == "LOI to Renew"){
                 $button_name = "Save LOI";
+            } else if ($form_name = "Create PR") {
+                $button_name = "Create PR";
             }
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
             foreach ($form_datas as $form_data) {
@@ -7071,7 +7073,9 @@ class GlobeController extends Controller
                 $fields .= '<div class="col-md-4"><label for="'.str_replace(" ", "_", strtolower($form_data->program_fields) ).'">' .$form_data->program_fields. '</label></div>';
 
                 if ($form_data->type == 'selection') {
-
+                    $fields .= '<div class="col-md-8">';
+                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '"></select>';
+                    $fields .= '</div>';
                 } else {
                     $fields .= '<div class="col-md-8">';
                     $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="form-control">';

@@ -141,6 +141,12 @@
                                             @endif
                                         </button>
                                     </div>
+                                @elseif($activitytype == 'set po')
+                                    <div class="text-right mt-2 pt-2 button_endorsement_area">
+                                        <button type="button" class="btn btn-primary btn-sm create_pr_po btn-shadow" data-program="{{ strtolower($program->program) }}" data-program_id="{{ $program->program_id }}" id="accept{{ strtolower(str_replace(" ", "-", $program->program))  }}">
+                                            Create PR
+                                        </button>
+                                    </div>
                                 @endif
 
 
