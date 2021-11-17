@@ -342,6 +342,9 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
+        $("#btn-false").attr("disabled", "disabled");
+        $("#btn-false").text("Processing...");
+
         if (data_complete == "false") {
             var type = $("#type").val();
             var remarks = $("#remarks").val();
@@ -387,6 +390,9 @@
                         
                         $("#btn-"+data_complete).removeAttr("disabled");
                         $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
+
+                        $("#btn-false").removeAttr("disabled");
+                        $("#btn-false").text("Reject Site");
                         // $("#loaderModal").modal("hide");
                     });
                 } else {
@@ -403,6 +409,9 @@
                     }
                     $("#btn-"+data_complete).removeAttr("disabled");
                     $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
+
+                        $("#btn-false").removeAttr("disabled");
+                        $("#btn-false").text("Reject Site");
                 }
             },
             error: function(resp){
@@ -414,6 +423,10 @@
                 )
                 $("#btn-"+data_complete).removeAttr("disabled");
                 $("#btn-"+data_complete).text(data_complete == "false" ? "Reject" : "Approve Site");
+
+                
+                $("#btn-false").removeAttr("disabled");
+                $("#btn-false").text("Reject Site");
             }
         });
 

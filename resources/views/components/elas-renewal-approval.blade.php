@@ -1,7 +1,7 @@
 
 <div class="row">
     <div class="col-12">
-        <button class="float-right btn-sm btn-shadow btn btn-primary mark_as_complete">Approved eLAS</button>
+        <button class="btn-sm btn-shadow btn btn-block btn-primary mark_as_complete">Approved eLAS</button>
     </div>
 </div>
 
