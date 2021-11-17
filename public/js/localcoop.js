@@ -147,7 +147,8 @@
             $('#engagement_table tbody').empty();
             $('#issues_table tbody').empty();
 
-            var id = JSON.parse($(this).attr('data-site_all')).id;
+            // var id = JSON.parse($(this).attr('data-site_all')).id;
+            var id = $(this).attr('data-id');
 
             $("#contacts_table").addClass("contacts_table"+id);
             $("#engagement_table").addClass("engagement_table"+id);

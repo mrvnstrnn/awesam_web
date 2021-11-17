@@ -57,7 +57,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
                 // $(row).attr('data-site_all', JSON.stringify(data));
                 // // $(row).attr('data-activity', data.activity_name);
-                // $(row).attr('data-activity', activity_name);
+                $(row).attr('data-id', data.id);
                 // // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
