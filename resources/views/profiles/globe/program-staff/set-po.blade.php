@@ -105,10 +105,10 @@
                         }
 
                         $(".form_html form").append(
-                                "<input type='hidden' name='program_id' value='"+ data_program +"'>"
-                            );
+                            "<input type='hidden' name='program_id' value='"+ data_program +"'>"
+                        );
 
-                        var vendors = JSON.parse("{{ \Auth::user()->vendor_list('listVendor') }}".replace(/&quot;/g,'"'));
+                        var vendors = JSON.parse("{{ \Auth::user()->vendor_list_based_program(8) }}".replace(/&quot;/g,'"'));
 
                         $("#vendor option").remove();
 

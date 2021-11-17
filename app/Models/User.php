@@ -138,6 +138,14 @@ class User extends Authenticatable implements MustVerifyEmail
                             ->first();
     }
 
+    public function vendor_list_based_program ($program_id)
+    {
+        return VendorProgram::select('vendor.vendor_id', 'vendor.vendor_sec_reg_name', 'vendor.vendor_acronym')
+                            ->join('vendor', 'vendor.vendor_id', 'vendor_programs.vendors_id')
+                            ->where('vendor_programs.programs', $program_id)
+                            ->get();
+    }
+
     public function allRoles()
     {
         return Profile::get();
