@@ -2702,6 +2702,21 @@ class GlobeController extends Controller
                             }
         }
 
+        elseif($activity_type == 'elas_renewal'){
+            $sites = \DB::connection('mysql2')
+                    ->table('view_site')
+                    ->where('program_id',  $program_id)
+                    ->where('activity_type', "elas renewal");
+
+            $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
+            ->select('view_site.*', 'program_renewal.*');
+
+                    
+
+            $sites->get();
+
+        }
+
         elseif($activity_type == 'renewal vendor awarding'){
             $sites = \DB::connection('mysql2')
                     ->table('view_site')
