@@ -37,7 +37,7 @@
                         $(".save_elas_renewal_btn").text("Save eLAS");
 
                         $("#viewInfoModal").modal("hide");
-                    }
+                    });
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
