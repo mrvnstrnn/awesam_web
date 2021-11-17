@@ -3634,7 +3634,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'Lease Renewal Notice'){
+        elseif($sub_activity == 'Create Lease Renewal Notice'){
 
             $what_component = "components.lease-renewal-notice";
             return \View::make($what_component)
@@ -3649,14 +3649,24 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'Get Send Approved LOI'){
+        elseif($sub_activity == 'Get Send Approved LOI' || $sub_activity == 'Get Send Approved LRN'){
 
-            $files = SubActivityValue::select('value')
+            if ($sub_activity == 'Get Send Approved LOI') {
+                $what_component = "components.get-send-approved-loi";
+
+                $files = SubActivityValue::select('value')
                                 ->where('sub_activity_id', 423)
                                 ->where('sam_id', $sam_id)
                                 ->first();
 
-            $what_component = "components.get-send-approved-loi";
+            } else if ($sub_activity == 'Get Send Approved LRN') {
+                $what_component = "components.get-send-approved-lrn";
+
+                $files = SubActivityValue::select('value')
+                                ->where('sub_activity_id', 424)
+                                ->where('sam_id', $sam_id)
+                                ->first();
+            }
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -7120,7 +7130,7 @@ class GlobeController extends Controller
                 $button_name = "Save LOI";
             } else if ($form_name == "Create PR") {
                 $button_name = "Set PO";
-            } else if ($form_name == "Lease Renewal Notice") {
+            } else if ($form_name == "Create Lease Renewal Notice") {
                 $button_name = "Create LRN";
             } else {
                 $button_name = "Save";

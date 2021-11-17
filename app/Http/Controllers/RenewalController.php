@@ -19,6 +19,7 @@ use Notification;
 use App\Notifications\SiteMoved;
 
 use App\Mail\LOIMail;
+use App\Mail\LrnMail;
 use Illuminate\Support\Facades\Mail;
 
 class RenewalController extends Controller
@@ -62,7 +63,7 @@ class RenewalController extends Controller
                 // $pdf->setPaper('a4', 'portrait');
                 // $pdf->download();
 
-                $this->create_pdf($array, $samid, 'loi-pdf', 'loi.pdf');
+                $this->create_pdf($array, $samid, 'loi-pdf');
 
                 // \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
 
@@ -92,7 +93,7 @@ class RenewalController extends Controller
                 }
 
                 $array_data = [
-                    'file' => strtolower($samid)."-loi-renew.pdf",
+                    'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'pending',
                     'validator' => count($approvers_collect->all()),
@@ -143,7 +144,28 @@ class RenewalController extends Controller
                 // $url = asset('files/'.$request->input("file_name"));
                 Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name")));
 
-                return response()->json(['error' => false, 'message' => "Successfully emailed loi to " .$request->input("email") ]);
+                return response()->json(['error' => false, 'message' => "Successfully emailed LOI to " .$request->input("email") ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function email_lrn (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                'email' => 'required | email'
+            ]);
+
+            if ($validate->passes()) {
+                // $url = asset('files/'.$request->input("file_name"));
+                Mail::to($request->input("email"))->send(new LrnMail( $request->input("file_name")));
+
+                return response()->json(['error' => false, 'message' => "Successfully emailed LRN to " .$request->input("email") ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
@@ -212,29 +234,82 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
 
-                    if ($request->get('lrn') == 'No security deposit, Advance Rental, Escalation Rate') {
-                        $component = 'lrn-no-security-a-r-e-r-pdf';
-                    } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate') {
-                        $component = 'advance-rent-escalation-rate-pdf';
-                    } else if ($request->get('lrn') == 'Advance Rent, Security Deposit') {
-                        $component = 'advance-rent-security-deposit-pdf';
-                    } else if ($request->get('lrn') == 'Advance Rent') {
-                        $component = 'advance-rent-pdf';
-                    } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate, Security Deposit') {
-                        $component = 'advance-rent-escalation-rate-security-deposit-pdf';
-                    } else if ($request->get('lrn') == 'Escalation Rate, Security Deposit') {
-                        $component = 'escalation-rate-security-deposit-pdf';
-                    } else if ($request->get('lrn') == 'Escalation Rate') {
-                        $component = 'escalation-rate-pdf';
-                    } else if ($request->get('lrn') == 'Security Deposit') {
-                        $component = 'security-depost-pdf';
-                    } else if ($request->get('lrn') == 'Free of Charge') {
-                        $component = 'free-of-charge-pdf';
-                    } else if ($request->get('lrn') == 'One Time Payment') {
-                        $component = 'one-time-payment-pdf';
-                    }
-                $this->create_pdf($request->all(), $request->get('sam_id'), $component,'lrn.pdf');
-                return response()->json(['error' => true, 'message' => $request->all()]);
+                if ($request->get('lrn') == 'No security deposit, Advance Rental, Escalation Rate') {
+                    $component = 'lrn-no-security-a-r-e-r-pdf';
+                } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate') {
+                    $component = 'advance-rent-escalation-rate-pdf';
+                } else if ($request->get('lrn') == 'Advance Rent, Security Deposit') {
+                    $component = 'advance-rent-security-deposit-pdf';
+                } else if ($request->get('lrn') == 'Advance Rent') {
+                    $component = 'advance-rent-pdf';
+                } else if ($request->get('lrn') == 'Advance Rent, Escalation Rate, Security Deposit') {
+                    $component = 'advance-rent-escalation-rate-security-deposit-pdf';
+                } else if ($request->get('lrn') == 'Escalation Rate, Security Deposit') {
+                    $component = 'escalation-rate-security-deposit-pdf';
+                } else if ($request->get('lrn') == 'Escalation Rate') {
+                    $component = 'escalation-rate-pdf';
+                } else if ($request->get('lrn') == 'Security Deposit') {
+                    $component = 'security-depost-pdf';
+                } else if ($request->get('lrn') == 'Free of Charge') {
+                    $component = 'free-of-charge-pdf';
+                } else if ($request->get('lrn') == 'One Time Payment') {
+                    $component = 'one-time-payment-pdf';
+                }
+
+                $this->create_pdf($request->all(), $request->get('sam_id'), $component);
+
+                $stage_activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('id', 'activity_type', 'approver_profile_id_1')
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('activity_id', $request->input('activity_id'))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
+
+                $stage_activities_approvers = \DB::connection('mysql2')
+                                ->table('stage_activities_approvers')
+                                ->select('approver_profile_id')
+                                ->where('stage_activities_id', $stage_activities->id)
+                                ->get();
+
+                $approvers_collect = collect();
+
+                foreach ($stage_activities_approvers as $stage_activities_approver) {
+                    $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'pending'
+                    ]);
+                }
+
+                $array_data = [
+                    'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect->all()),
+                    'validators' => $approvers_collect->all()
+                ];
+
+                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                        ->where('status', 'pending')
+                                                        ->first();
+
+                if (!is_null($sub_activity_value)) {
+                    $sub_activity_value->update([
+                        'value' => json_encode($array_data),
+                    ]);
+                } else {
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
+                    ]);   
+                }
+
+                return response()->json(['error' => false, 'message' => "Successfully submitted LRN." ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
@@ -456,7 +531,7 @@ class RenewalController extends Controller
 
     }
 
-    private function create_pdf ($array, $samid, $component, $filename)
+    private function create_pdf ($array, $samid, $component)
     {
         $view = \View::make('components.'.$component)
                     ->with([
@@ -469,6 +544,6 @@ class RenewalController extends Controller
         $pdf->setPaper('a4', 'portrait');
         $pdf->download();
 
-        \Storage::put(strtolower($samid)."-".$filename, $pdf->output());
+        \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
     }
 }

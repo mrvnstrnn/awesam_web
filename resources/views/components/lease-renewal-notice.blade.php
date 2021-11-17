@@ -80,16 +80,16 @@
         });
     });
 
-    $(document).on("click", ".save_lease_renewal_notice_btn", function() {
+    $(document).on("click", ".save_create_lease_renewal_notice_btn", function() {
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        $(".lease_renewal_notice_form small").text("");
+        $(".create_lease_renewal_notice_form small").text("");
 
         $.ajax({
             url: "/save-lrn",
             method: "POST",
-            data: $(".lease_renewal_notice_form, .site_data_form").serialize(),
+            data: $(".create_lease_renewal_notice_form, .site_data_form").serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -101,15 +101,15 @@
                         'success'
                     )
 
-                    $(".save_lease_renewal_notice_btn").removeAttr("disabled");
-                    $(".save_lease_renewal_notice_btn").text("Create LRN");
+                    $(".save_create_lease_renewal_notice_btn").removeAttr("disabled");
+                    $(".save_create_lease_renewal_notice_btn").text("Create LRN");
 
                     // $("#viewInfoModal").modal("hide");
                 } else {
 
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $(".lease_renewal_notice_form ." + index + "-error").text(data);
+                            $(".create_lease_renewal_notice_form ." + index + "-error").text(data);
                         });
                     } else {
                         Swal.fire(
@@ -119,8 +119,8 @@
                         )
                     }
 
-                    $(".save_lease_renewal_notice_btn").removeAttr("disabled");
-                    $(".save_lease_renewal_notice_btn").text("Create LRN");
+                    $(".save_create_lease_renewal_notice_btn").removeAttr("disabled");
+                    $(".save_create_lease_renewal_notice_btn").text("Create LRN");
                 }
             },
             error: function (resp) {
@@ -130,8 +130,8 @@
                     'error'
                 )
 
-                $(".save_lease_renewal_notice_btn").removeAttr("disabled");
-                $(".save_lease_renewal_notice_btn").text("Create LRN");
+                $(".save_create_lease_renewal_notice_btn").removeAttr("disabled");
+                $(".save_create_lease_renewal_notice_btn").text("Create LRN");
             }
         });
     });
