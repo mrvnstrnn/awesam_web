@@ -7147,6 +7147,8 @@ class GlobeController extends Controller
                 $button_name = "Set PO";
             } else if ($form_name == "Create Lease Renewal Notice") {
                 $button_name = "Create LRN";
+            } else if ($form_name == "eLAS Renewal") {
+                $button_name = "Save eLAS";
             } else {
                 $button_name = "Save";
             }

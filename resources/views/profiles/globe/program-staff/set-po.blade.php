@@ -25,7 +25,7 @@
                         <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
                         <div class="menu-header-content btn-pane-right">
                             <h5 class="menu-header-title">
-                                Create PR
+                                Set PO
                             </h5>
                         </div>
                     </div>

@@ -319,6 +319,27 @@ class RenewalController extends Controller
         }
     }
 
+    public function save_elas (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(),[
+                '*' => 'required'
+            ]);
+
+            if ($validate->passes()) {
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfully save eLAS."]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
