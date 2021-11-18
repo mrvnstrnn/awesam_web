@@ -2686,7 +2686,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [18, 20, 21, 24, 27])
+                                    $sites->whereIn('view_site.activity_id', [20, 21, 24, 27])
                                     ->get();
                                 }
         }
