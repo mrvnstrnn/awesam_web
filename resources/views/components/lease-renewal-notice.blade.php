@@ -101,10 +101,12 @@
                         'success'
                     )
 
+                    $(".create_lease_renewal_notice_form")[0].reset();
+
                     $(".save_create_lease_renewal_notice_btn").removeAttr("disabled");
                     $(".save_create_lease_renewal_notice_btn").text("Create LRN");
 
-                    // $("#viewInfoModal").modal("hide");
+                    $("#viewInfoModal").modal("hide");
                 } else {
 
                     if (typeof resp.message === 'object' && resp.message !== null) {
