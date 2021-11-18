@@ -20,6 +20,7 @@ use App\Notifications\SiteMoved;
 
 use App\Mail\LOIMail;
 use App\Mail\LrnMail;
+use App\Mail\eLasRenewal;
 use Illuminate\Support\Facades\Mail;
 
 class RenewalController extends Controller
@@ -322,21 +323,74 @@ class RenewalController extends Controller
     public function save_elas (Request $request)
     {
         try {
+
             $validate = \Validator::make($request->all(),[
                 '*' => 'required'
             ]);
 
             if ($validate->passes()) {
 
-                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                $activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('next_activity')
+                                ->where('activity_id', $request->input("activity_id"))
+                                ->where('program_id', $request->input("program_id"))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
 
-                return response()->json(['error' => false, 'message' => "Successfully save eLAS."]);
+                if ( !is_null($activities) ) {
+
+                    Mail::to('awesam-finance@globe.com.ph')->send(new eLasRenewal( $request->input("sam_id"), $request->input("program_id"), $request->input("site_category"), $activities->next_activity, $request->input("_token"), $request->input("reference_number"), $request->input("filing_date") ));
+    
+                    SubActivityValue::create([
+                        'sam_id' => $request->input('sam_id'),
+                        'type' => 'elas_renewal',
+                        'value' => json_encode($request->all()),
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                    ]);
+    
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+    
+                    return response()->json(['error' => false, 'message' => "Successfully save eLAS." ]);
+                } else {
+                    return response()->json(['error' => true, 'message' => "No activity found." ]);
+                }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function elas_approval($token, $sam_id, $program_id, $site_category, $activity_id, $action)
+    {
+        try {
+
+            $sub_activity_value = SubActivityValue::where('sam_id', $sam_id)
+                                                    ->where('type', 'elas_renewal')
+                                                    ->where('value->_token', $token)
+                                                    ->first();
+
+            if ( !is_null($sub_activity_value) ) {
+                
+                $asd = $this->move_site([$sam_id], $program_id, $action, [$site_category], [$activity_id]);
+
+                if ($action == 'false') {
+                    $message = "Successfully rejected eLAS.";
+                } else {
+                    $message = "Successfully approved eLAS.";
+                }
+    
+                return view('elas-approval', [ 'message' => $message, 'error' => false ]);
+            } else {
+                return view('elas-approval', [ 'message' => 'Unable to process this time.', 'error' => true ]);
+            }
+            
+        } catch (\Throwable $th) {
+            return view('elas-approval', [ 'message' => $th->getMessage(), 'error' => true ]);
         }
     }
 
@@ -350,12 +404,13 @@ class RenewalController extends Controller
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
+
             if (count($get_past_activities) < 1) {
                 SiteStageTracking::create([
                     'sam_id' => $sam_id[$i],
                     'activity_id' => 1,
                     'activity_complete' => 'false',
-                    'user_id' => \Auth::id()
+                    'user_id' => !\Auth::guest() ? \Auth::id() : 0
                 ]);
 
                 $get_past_activities = \DB::connection('mysql2')
@@ -414,7 +469,7 @@ class RenewalController extends Controller
                                 'sam_id' => $sam_id[$i],
                                 'activity_id' => $activity,
                                 'activity_complete' => 'false',
-                                'user_id' => \Auth::id()
+                                'user_id' => !\Auth::guest() ? \Auth::id() : 0
                             ]);
                         }
 

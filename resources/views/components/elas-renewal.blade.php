@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <div class="form_html"></div>
-        <form class="site_data_form">
+        <form class="site_data_form">@csrf
             <input type="hidden" name="sam_id" id="sam_id" value="{{ $site[0]->sam_id }}">
             <input type="hidden" name="site_category" id="site_category" value="{{ $site[0]->site_category }}">
             <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">

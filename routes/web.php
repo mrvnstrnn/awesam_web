@@ -523,6 +523,8 @@ Route::get('send',[NotificationController::class, 'notification']);
 //******************* END OF Multi Program *******************//
 
 
+Route::get('/elas-approval/{token}/{sam_id}/{program_id}/{site_category}/{activity_id}/{action}', [RenewalController::class, 'elas_approval'])->name('elas_approval');
+
 Route::post('/register-user', [UserController::class, 'register_user'])->name('register.user');
 
 Route::get('/invitation-link/{token}/{invitation_code}', [InviteController::class, 'invitation_registration'])->name('invite.link')->middleware(['invitation']);
