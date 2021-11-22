@@ -121,7 +121,7 @@
                                                                 ->where('type', '<>',  'work_plan')
                                                                 ->where('type', '<>',  'doc_upload')
                                                                 ->whereIn('user_id', $user_to_search)
-                                                                ->where('sam_region_name', $user_to_search)
+                                                                ->where('sam_region_name', $region_data)
                                                                 ->get();
                                                     } else {
                                                         $dars =  \DB::table('view_dar_agent')
