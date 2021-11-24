@@ -8,6 +8,38 @@
     }
 </style>
 
+@php
+    if(isset($user_id)) {
+        $users = App\Models\User::find(isset($agent_user_id) ? $agent_user_id : $user_id);
+
+        $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                        ->join('users', 'users.id', 'user_details.user_id')
+                        ->where('IS_id', $user_id)
+                        ->get();
+
+        if ($users->profile_id == 3) {
+            $get_user_under_me = $get_user_under_sup->pluck('user_id');
+
+            $user_to_search = $get_user_under_me;
+        } else {
+            $user_to_search = [$agent_user_id];
+        }
+
+        if ($region_data != 'All') {
+            $work_plans = \DB::connection('mysql2')
+                                ->table('view_work_plans')
+                                ->whereIn('user_id',  $user_to_search)
+                                ->where('sam_region_name', $region_data)
+                                ->get();
+        } else {
+            $work_plans = \DB::connection('mysql2')
+                                ->table('view_work_plans')
+                                ->whereIn('user_id',  $user_to_search)
+                                ->get();
+
+        }
+    }
+@endphp
 
 <div id="workplan-list" class='mt-5'>
     <div class="row">
@@ -73,84 +105,165 @@
                             </div>
                         </div>        
                         <div class="card-body">
+
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form class="previous_plan_form" action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-3">
+                                                <label for="vendor">Vendor</label>
+                                                <select class="mb-2 form-control" class="vendor">
+                                                    <option value="All">All</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="All">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-12 col-md-3">
+                                                <label for="user_id">Supervisor</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id" id="user_id">
+                                                    @php
+                                                        $get_supervisor = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                                                        // ->where('IS_id', \Auth::id())
+                                                                                        ->where('users.profile_id', 3)
+                                                                                        ->get();
+                                                    @endphp
+
+                                                    <option value="">Please select user.</option>
+                                                    @foreach ($get_supervisor as $user)
+                                                        @php
+                                                            if (isset($user_id)) {
+                                                                $selected = $user_id == $user->user_id ? 'selected': '';
+                                                            } else {
+                                                                $selected = "";
+                                                            }
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="agent_user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
+                                                    <option value="">Please select agent.</option>
+                                                    @if ( isset($users) )
+                                                        {{-- @if ( $users->profile_id == 3 ) --}}
+                                                            @foreach ($get_user_under_sup as $item)
+                                                                @php
+                                                                    $selected = "";    
+                                                                    if ( isset($agent_user_id) && $item->user_id == $agent_user_id ) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                @endphp
+                                                                <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                            @endforeach
+                                                        {{-- @endif --}}
+                                                    @endif
+                                                </select>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div id="work_plan_previous" class="col-12 table-responsive">
-                                    @php 
-                                        
-                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
-                                        date_default_timezone_set('Asia/Manila');
-                                        $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
+                            @if (isset($user_id))
+                                <div class="row mb-3">
+                                    <div id="work_plan_previous" class="col-12 table-responsive">
+                                        @php 
+                                            
+                                            $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
+                                            date_default_timezone_set('Asia/Manila');
+                                            $Date = date('l F d, Y', strtotime($Date. ' - 7 days'));
 
-
-                                    @endphp
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <tbody>                                            
-                                            @for ($i = 0; $i < 7; $i++)
-                                            @php
-                                                $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
-                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
-                                                $wp_ctr = 0;
-                                            @endphp
-                                            <tr>
-            
-                                                <td  class="bg-secondary text-white text-bold" colspan="6">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
-                                                        </div>
-                                                        <div class="col-6 text-right">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr  class="bg-light">
-                                                <th>Site</th>
-                                                <th>Activity</th>
-                                                <th>Subactivity</th>
-                                                <th>Method</th>
-                                                <th>SAQ Objective</th>
-                                                <th>Status</th>
-                                            </tr>        
-                                            @foreach ($work_plans as $work_plan)
+                                        @endphp
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <tbody>                                            
+                                                @for ($i = 0; $i < 7; $i++)
                                                 @php
-                                                    $wp = json_decode($work_plan->value);
+                                                    $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $wp_ctr = 0;
                                                 @endphp
-                                                @if($wp->planned_date == $zdate)
-                                                @php
-                                                    $wp_ctr++;
-                                                @endphp
-                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
-                                                    <td>
-                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
-                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                <tr>
+                
+                                                    <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                            </div>
+                                                            <div class="col-6 text-right">
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td>{{ $wp->activity_name}}</td>
-                                                    <td>{{ $work_plan->sub_activity_name}}</td>
-                                                    <td>{{ $wp->method}}</td>
-                                                    <td>{{ $wp->saq_objective}}</td>
-                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                <tr  class="bg-light">
+                                                    <th>Site</th>
+                                                    <th>Activity</th>
+                                                    <th>Subactivity</th>
+                                                    <th>Method</th>
+                                                    <th>SAQ Objective</th>
+                                                    <th>Status</th>
+                                                </tr>        
+                                                @foreach ($work_plans as $work_plan)
+                                                    @php
+                                                        $wp = json_decode($work_plan->value);
+                                                    @endphp
+                                                    @if($wp->planned_date == $zdate)
+                                                    @php
+                                                        $wp_ctr++;
+                                                    @endphp
+                                                    <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
+                                                        <td>
+                                                            <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                            <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                        </td>
+                                                        <td>{{ $wp->activity_name}}</td>
+                                                        <td>{{ $work_plan->sub_activity_name}}</td>
+                                                        <td>{{ $wp->method}}</td>
+                                                        <td>{{ $wp->saq_objective}}</td>
+                                                        <td>{{ ucfirst($work_plan->status) }}</td>
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+
+                                                @if($wp_ctr == 0)
+                                                <tr>
+                                                    <td colspan="6" class="text-center py-3">Nothing Planned</td>
                                                 </tr>
                                                 @endif
-                                            @endforeach
-
-                                            @if($wp_ctr == 0)
-                                            <tr>
-                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
-                                            </tr>
-                                            @endif
-                                        @endfor
-                                        </tbody>
-                                    </table>
+                                            @endfor
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -208,85 +321,165 @@
                             Work Plan This Week
                         </div>                         --}}
                         <div class="card-body">
+                            
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form class="work_plan_form" action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-3">
+                                                <label for="vendor">Vendor</label>
+                                                <select class="mb-2 form-control" class="vendor">
+                                                    <option>All</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="All">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-12 col-md-3">
+                                                <label for="user_id">Supervisor</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id" id="user_id">
+                                                    @php
+                                                        $get_supervisor = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                                                        // ->where('IS_id', \Auth::id())
+                                                                                        ->where('users.profile_id', 3)
+                                                                                        ->get();
+                                                    @endphp
+
+                                                    <option value="">Please select user.</option>
+                                                    @foreach ($get_supervisor as $user)
+                                                        @php
+                                                            if (isset($user_id)) {
+                                                                $selected = $user_id == $user->user_id ? 'selected': '';
+                                                            } else {
+                                                                $selected = "";
+                                                            }
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="agent_user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
+                                                    <option value="">Please select agent.</option>
+                                                    @if ( isset($users) )
+                                                        {{-- @if ( $users->profile_id == 3 ) --}}
+                                                            @foreach ($get_user_under_sup as $item)
+                                                                @php
+                                                                    $selected = "";    
+                                                                    if ( isset($agent_user_id) && $item->user_id == $agent_user_id ) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                @endphp
+                                                                <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                            @endforeach
+                                                        {{-- @endif --}}
+                                                    @endif
+                                                </select>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div id="work_plan_this_week" class="col-12 table-responsive">
-                                    @php 
-                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
-
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
-
-
-                                    @endphp
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <tbody>                                            
-                                            @for ($i = 0; $i < 7; $i++)
-                                            @php
-                                                $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
-                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
-                                                $wp_ctr = 0;
-                                            @endphp
-                                            <tr>
-            
-                                                <td  class="bg-secondary text-white text-bold" colspan="6">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
-                                                        </div>
-                                                        <div class="col-6 text-right">
-                                                            {{-- @if(date('Y-m-d') <= $zdate)
-                                                            <button type="button"  class=" btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
-                                                                Add Work Plan
-                                                            </button>
-                                                            @endif   --}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr  class="bg-light">
-                                                <th>Site</th>
-                                                <th>Activity</th>
-                                                <th>Subactivity</th>
-                                                <th>Method</th>
-                                                <th>SAQ Objective</th>
-                                                <th>Status</th>
-                                            </tr>        
-                                            @foreach ($work_plans as $work_plan)
+                            
+                            @if (isset($user_id))
+                                <div class="row mb-3">
+                                    <div id="work_plan_this_week" class="col-12 table-responsive">
+                                        @php 
+                                            $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+                                        @endphp
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <tbody>                                            
+                                                @for ($i = 0; $i < 7; $i++)
                                                 @php
-                                                    $wp = json_decode($work_plan->value);
+                                                    $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $wp_ctr = 0;
                                                 @endphp
-                                                @if($wp->planned_date == $zdate)
-                                                @php
-                                                    $wp_ctr++;
-                                                @endphp
-                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
-                                                    <td>
-                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
-                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                <tr>
+                
+                                                    <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                            </div>
+                                                            <div class="col-6 text-right">
+                                                                {{-- @if(date('Y-m-d') <= $zdate)
+                                                                <button type="button"  class=" btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                                    Add Work Plan
+                                                                </button>
+                                                                @endif   --}}
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td>{{ $wp->activity_name}}</td>
-                                                    <td>{{ $work_plan->sub_activity_name}}</td>
-                                                    <td>{{ $wp->method}}</td>
-                                                    <td>{{ $wp->saq_objective}}</td>
-                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                <tr  class="bg-light">
+                                                    <th>Site</th>
+                                                    <th>Activity</th>
+                                                    <th>Subactivity</th>
+                                                    <th>Method</th>
+                                                    <th>SAQ Objective</th>
+                                                    <th>Status</th>
+                                                </tr>        
+                                                @foreach ($work_plans as $work_plan)
+                                                    @php
+                                                        $wp = json_decode($work_plan->value);
+                                                    @endphp
+                                                    @if($wp->planned_date == $zdate)
+                                                    @php
+                                                        $wp_ctr++;
+                                                    @endphp
+                                                    <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
+                                                        <td>
+                                                            <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                            <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                        </td>
+                                                        <td>{{ $wp->activity_name}}</td>
+                                                        <td>{{ $work_plan->sub_activity_name}}</td>
+                                                        <td>{{ $wp->method}}</td>
+                                                        <td>{{ $wp->saq_objective}}</td>
+                                                        <td>{{ ucfirst($work_plan->status) }}</td>
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+
+                                                @if($wp_ctr == 0)
+                                                <tr>
+                                                    <td colspan="6" class="text-center py-3">Nothing Planned</td>
                                                 </tr>
                                                 @endif
-                                            @endforeach
-
-                                            @if($wp_ctr == 0)
-                                            <tr>
-                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
-                                            </tr>
-                                            @endif
-                                        @endfor
-                                        </tbody>
-                                    </table>
+                                            @endfor
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -332,81 +525,163 @@
                             </div>
                         </div>        
                         <div class="card-body">
+                            
+                            <div class="row mb-3 border-bottom pb-3">
+                                <div class="col-12">
+                                    <form class="upcoming_plan_form" action="{{ route('work_plan') }}" method="POST">@csrf
+                                        <div class="form-row">
+                                            <div class="col-12 col-md-3">
+                                                <label for="vendor">Vendor</label>
+                                                <select class="mb-2 form-control" class="vendor">
+                                                    <option>All</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="region">Region</label>
+                                                <select class="mb-2 form-control" name="region">
+                                                    @php
+                                                        $regions = \DB::connection('mysql2')
+                                                                        ->table('location_sam_regions')
+                                                                        ->get();  
+                                                    @endphp
+                                                    <option value="All">All</option>
+                                                    @foreach ($regions as $region)
+                                                    <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-12 col-md-3">
+                                                <label for="user_id">Supervisor</label>
+                                                
+                                                <select class="mb-2 form-control" name="user_id" id="user_id">
+                                                    @php
+                                                        $get_supervisor = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                                                        // ->where('IS_id', \Auth::id())
+                                                                                        ->where('users.profile_id', 3)
+                                                                                        ->get();
+                                                    @endphp
+
+                                                    <option value="">Please select user.</option>
+                                                    @foreach ($get_supervisor as $user)
+                                                        @php
+                                                            if (isset($user_id)) {
+                                                                $selected = $user_id == $user->user_id ? 'selected': '';
+                                                            } else {
+                                                                $selected = "";
+                                                            }
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-3">
+                                                <label for="agent_user_id">Agent</label>
+                                                
+                                                <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
+                                                    <option value="">Please select agent.</option>
+                                                    @if ( isset($users) )
+                                                        {{-- @if ( $users->profile_id == 3 ) --}}
+                                                            @foreach ($get_user_under_sup as $item)
+                                                                @php
+                                                                    $selected = "";    
+                                                                    if ( isset($agent_user_id) && $item->user_id == $agent_user_id ) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                @endphp
+                                                                <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                            @endforeach
+                                                        {{-- @endif --}}
+                                                    @endif
+                                                </select>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
+                                        
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="row mb-2">
                                 <div class="col-12 text-right">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div id="work_plan_upcoming" class="col-12 table-responsive">
-                                    @php 
-                                        $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
 
-                                        $work_plans = \DB::table('view_work_plans')
-                                                                ->get();
-                                    @endphp
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <tbody>                                            
-                                            @for ($i = 7; $i < 14; $i++)
-                                            @php
-                                                $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
-                                                $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
-                                                $wp_ctr = 0;
-                                            @endphp
-                                            <tr>
-            
-                                                <td  class="bg-secondary text-white text-bold" colspan="6">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <H5 class="p-0 m-0">{{ $xdate }}<H5>
-                                                        </div>
-                                                        <div class="col-6 text-right">
-                                                            {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
-                                                                Add Work Plan
-                                                            </button> --}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr  class="bg-light">
-                                                <th>Site</th>
-                                                <th>Activity</th>
-                                                <th>Subactivity</th>
-                                                <th>Method</th>
-                                                <th>SAQ Objective</th>
-                                                <th>Status</th>
-                                            </tr>        
-                                            @foreach ($work_plans as $work_plan)
+                            @if (isset($user_id))
+                                <div class="row mb-3">
+                                    <div id="work_plan_upcoming" class="col-12 table-responsive">
+                                        @php 
+                                            $Date = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+                                        @endphp
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <tbody>                                            
+                                                @for ($i = 7; $i < 14; $i++)
                                                 @php
-                                                    $wp = json_decode($work_plan->value);
+                                                    $xdate =  date('l F d, Y', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $zdate =  date('Y-m-d', strtotime($Date. ' + ' . $i . ' days'));
+                                                    $wp_ctr = 0;
                                                 @endphp
-                                                @if($wp->planned_date == $zdate)
-                                                @php
-                                                    $wp_ctr++;
-                                                @endphp
-                                                <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
-                                                    <td>
-                                                        <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
-                                                        <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                <tr>
+                
+                                                    <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <H5 class="p-0 m-0">{{ $xdate }}<H5>
+                                                            </div>
+                                                            <div class="col-6 text-right">
+                                                                {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                                    Add Work Plan
+                                                                </button> --}}
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td>{{ $wp->activity_name}}</td>
-                                                    <td>{{ $work_plan->sub_activity_name}}</td>
-                                                    <td>{{ $wp->method}}</td>
-                                                    <td>{{ $wp->saq_objective}}</td>
-                                                    <td>{{ ucfirst($work_plan->status) }}</td>
+                                                </tr>
+                                                <tr  class="bg-light">
+                                                    <th>Site</th>
+                                                    <th>Activity</th>
+                                                    <th>Subactivity</th>
+                                                    <th>Method</th>
+                                                    <th>SAQ Objective</th>
+                                                    <th>Status</th>
+                                                </tr>        
+                                                @foreach ($work_plans as $work_plan)
+                                                    @php
+                                                        $wp = json_decode($work_plan->value);
+                                                    @endphp
+                                                    @if($wp->planned_date == $zdate)
+                                                    @php
+                                                        $wp_ctr++;
+                                                    @endphp
+                                                    <tr class="work_plan_view show_action_modal"  data-activity_source="work_plan_view" data-json='{"work_plan_id" : "{{$work_plan->id}}"}'>
+                                                        <td>
+                                                            <div class=''><strong>{{ $work_plan->site_name}}</strong></div>
+                                                            <div class=""><small>{{ $work_plan->sam_id}}</small></div>
+                                                        </td>
+                                                        <td>{{ $wp->activity_name}}</td>
+                                                        <td>{{ $work_plan->sub_activity_name}}</td>
+                                                        <td>{{ $wp->method}}</td>
+                                                        <td>{{ $wp->saq_objective}}</td>
+                                                        <td>{{ ucfirst($work_plan->status) }}</td>
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+
+                                                @if($wp_ctr == 0)
+                                                <tr>
+                                                    <td colspan="6" class="text-center py-3">Nothing Planned</td>
                                                 </tr>
                                                 @endif
-                                            @endforeach
-
-                                            @if($wp_ctr == 0)
-                                            <tr>
-                                                <td colspan="6" class="text-center py-3">Nothing Planned</td>
-                                            </tr>
-                                            @endif
-                                        @endfor
-                                        </tbody>
-                                    </table>
+                                            @endfor
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -426,7 +701,47 @@
 @endsection
 
 @section('js_script')
+<script>
 
+    $("select#user_id").on("change", function() {
+
+        var user_id = $(this).val();
+        
+        if ( user_id != '') {
+            $.ajax({
+                url: "/get-agent-of-supervisor/" + user_id,
+                method: "GET",
+                success: function (resp) {
+                    
+                    $(".previous_plan_form #agent_user_id option, .work_plan_form #agent_user_id option, .upcoming_plan_form #agent_user_id option").remove();
+
+                    if (resp.message.length < 1) {
+                        $(".previous_plan_form #agent_user_id, .work_plan_form #agent_user_id, .upcoming_plan_form #agent_user_id").append(
+                            '<option value="">No agent available.</option>'
+                        );
+                    } else {
+                        $(".previous_plan_form #agent_user_id, .work_plan_form #agent_user_id, .upcoming_plan_form #agent_user_id").append(
+                            '<option value="">Please select agent.</option>'
+                        );
+
+                        resp.message.forEach(element => {
+                            $(".previous_plan_form #agent_user_id, .work_plan_form #agent_user_id, .upcoming_plan_form #agent_user_id").append(
+                                '<option value="'+ element.id +'">' + element.firstname + ' ' + element.lastname + '</option>'
+                            );
+                        });
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            });
+        }
+    });
+</script>
 <script src="\js\modal-loader.js"> </script>
 
 @endsection
