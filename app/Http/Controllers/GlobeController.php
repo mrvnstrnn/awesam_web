@@ -2678,7 +2678,7 @@ class GlobeController extends Controller
                                     }
                                     elseif(\Auth::user()->profile_id == 10){
 
-                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26])
+                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39])
                                         ->get();
 
                                     }
