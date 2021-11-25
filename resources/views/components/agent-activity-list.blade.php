@@ -98,15 +98,15 @@ $uniques_stage = \DB::connection('mysql2')
                                             @endif
                                         </div>
                                         <div class="widget-content-left  pl-2 show_activity_modal"  data-sam_id="{{ $activities[$i]->sam_id }}" data-activity_source="my-activities" data-activity_id="{{ $activities[$i]->activity_id }}" data-activity_complete="{{ isset($activities[$i]->activity_complete) ? $activities[$i]->activity_complete : "false" }}" data-start_date="{{ isset($activities[$i]->start_date) ? $activities[$i]->start_date : "" }}" data-end_date="{{ isset($activities[$i]->end_date) ? $activities[$i]->end_date : "" }}" data-profile_id="{{ $activities[$i]->activity_profile_id }}" style="cursor: pointer;">
-                                            <div class="name_to_search">
+                                            <div>
                                                 @if($activities[$i]->site_category != null && $activities[$i]->site_category != 'none')
                                                     {{ $activities[$i]->activity_name }} <span class="ml-1 px-2 py-1 badge badge-secondary"><small>{{ $activities[$i]->site_category }}</small></span>
                                                 @else
-                                                    {{ $activities[$i]->activity_name }}
+                                                {{ $activities[$i]->activity_name }}
                                                 @endif
                                                 <span class="ml-1 px-2 py-1 badge badge-secondary">{{ $activities[$i]->stage_name }}</span>
                                             </div>
-                                            <div class="siteName">
+                                            <div class="siteName name_to_search">
                                                 {{ $activities[$i]->site_name }}
                                             </div>
                                             <div class="mt-1" style="font-size: 12px;">
@@ -152,14 +152,15 @@ $uniques_stage = \DB::connection('mysql2')
     </div>
 @endforeach
 
-{{-- <script>
+<script>
     $(document).ready(function(){
         $("input[name=search]").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $(".name_to_search").filter(function() {
-                $("li").toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                console.log($(this).parent().parent().parent().parent().text());
+                $(this).parent().parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
     });
-</script> --}}
+</script>
 <script src="js/modal-loader.js"></script>
