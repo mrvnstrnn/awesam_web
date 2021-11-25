@@ -157,7 +157,6 @@ $uniques_stage = \DB::connection('mysql2')
         $("input[name=search]").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $(".name_to_search").filter(function() {
-                console.log($(this).parent().parent().parent().parent().text());
                 $(this).parent().parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
