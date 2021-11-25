@@ -179,8 +179,6 @@
             },
             success: function(resp){
                 if(!resp.error){
-                    $("#btn-assign-sites").removeAttr('disabled');
-                    $("#btn-assign-sites").text('Assign');
                     $("#"+table).DataTable().ajax.reload(function(){
                         $("#modal-assign-sites").modal("hide");
                         Swal.fire(
@@ -188,6 +186,8 @@
                             resp.message,
                             'success'
                         )
+                        $("#btn-assign-sites").removeAttr('disabled');
+                        $("#btn-assign-sites").text('Assign');
                     });
                 } else {
                     $("#btn-assign-sites").removeAttr('disabled');
