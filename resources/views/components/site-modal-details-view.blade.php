@@ -42,11 +42,11 @@
                         <span>Site Chat</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a role="tab" class="nav-link" data-id="tab-content-site_approval id="tab-site_approval" data-toggle="tab" href="#tab-content-site_approval">
                         <span>Site Approvals</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>
@@ -112,7 +112,7 @@
             <x-site-chat  :site="$site" />
         </div>
 
-        <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
+        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
@@ -122,8 +122,8 @@
                     </div>
                 </div>
             </div>        
-            {{-- <x-site-approval-details :site="$site" /> --}}
-        </div>
+            <x-site-approval-details :site="$site" />
+        </div> --}}
     </div>
 </div>
 
