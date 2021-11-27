@@ -88,7 +88,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
     <div class="card">
         <div id="headingThree" class="card-header">
             <button type="button" data-toggle="collapse" data-target="#collapseSiteFields" aria-expanded="false" aria-controls="collapseThree" class="text-left m-0 p-0 btn btn-link btn-block">
-                <h5 class="m-0 p-0">
+                <h5 class="m-0 p-0 program_fields">
                     <i class="pe-7s-global"></i>
                         Program Fields
                 </h5>
