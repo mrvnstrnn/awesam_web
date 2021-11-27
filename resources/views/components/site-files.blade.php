@@ -18,6 +18,7 @@
                                 ->table('stage_activities')
                                 ->select('activity_id', 'activity_name')
                                 ->where('program_id', $datas[0]->program_id)
+                                ->where('category', $datas[0]->category)
                                 ->whereIn('activity_id', $unique_activity_id )
                                 ->get();
 
