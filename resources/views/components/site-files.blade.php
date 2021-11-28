@@ -80,6 +80,7 @@
                     <h3>No files here.</h3>
                 </div>
             @endforelse
+            <div class="divider col-12"></div>
         @endforeach
 
         <input type="hidden" name="hidden_sam_id" value="{{ $sam_id }}">

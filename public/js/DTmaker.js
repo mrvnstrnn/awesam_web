@@ -65,8 +65,10 @@ function makeDT(whatTable, whatCols, active_program) {
                 // $(row).attr('data-main_activity', main_activity);
                 // $(row).attr('data-profile', data.profile_id);
                 $(row).attr('data-what_table', $(whatTable).attr('id'));
-                // $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
 
+                if ( data.issue_id != undefined || data.issue_id) {
+                    $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
+                }
                 $(row).attr('data-program_id', data.program_id ? data.program_id : "");
                 // $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
                 $(row).attr('data-site_category', data.site_category);

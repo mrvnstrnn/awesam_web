@@ -3289,7 +3289,9 @@ class GlobeController extends Controller
                             ->leftjoin('view_site', 'view_site.sam_id', 'site_issue.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('view_site.program_id', $program_id)
-                            ->whereNull('site_issue.date_resolve');
+                            ->whereNull('site_issue.date_resolve')
+                            ->where('site_issue.approvers->active_profile', \Auth::user()->profile_id)
+                            ->where('site_issue.approvers->active_status', 'active');
                             // if (\Auth::user()->profile_id == 2) {
                             //     $sites->where('site_issue.user_id', \Auth::id());
                             // } else if (\Auth::user()->profile_id == 3) {
@@ -4303,12 +4305,93 @@ class GlobeController extends Controller
     public function resolve_issues($issue_id)
     {
         try {
+
+            $action_status = "resolve";
+
+            $approvers = Issue::where('issue_id', $issue_id)->first();
+
+            if ( is_null($approvers) ) {
+                return response()->json(['error' => true, 'message' => "No data found."]);
+            }
+
+            $validators = json_decode($approvers->approvers)->validators;
+
+            $approvers_collect = collect();
+            $approvers_pending_collect = collect();
+
+            foreach ($validators as $validator) {
+                if ( $validator->profile_id == \Auth::user()->profile_id ) {
+                    $new_array = array(
+                        'profile_id' => $validator->profile_id,
+                        'status' => $action_status,
+                        'user_id' => \Auth::id(),
+                        'approved_date' => Carbon::now()->toDateString(),
+                    );
+
+                    $approvers_collect->push($new_array);
+                } else {
+                    if ( isset($validator->user_id) ) {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $action_status == "rejected" ? "rejected" : $validator->status,
+                            'user_id' => $validator->user_id,
+                            'approved_date' => $validator->approved_date,
+                        );
+                    } else {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $action_status == "rejected" ? "rejected" : $validator->status,
+                        );
+                        $approvers_pending_collect->push($validator->profile_id);
+                    }
+
+                    $approvers_collect->push($new_array);
+                }
+            }
+
+            $array_data = [
+                'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
+                'active_status' => count($approvers_pending_collect->all()) < 1 ? "resolved" : "active",
+                'validator' => count($approvers_pending_collect->all()),
+                'validators' => $approvers_collect->all()
+            ];
+
+            // if ( !is_null($approvers) ) {
+
+            //     if ( count($approvers_pending_collect) < 1 ) {
+            //         $current_status = $action_status == "rejected" ? "rejected" : "approved";
+
+            //         $approvers->where('issue_id', $request->input('id'))
+            //                 ->update([
+            //                     'reason' => $action_status == "rejected" ? $request->input('reason') : null,
+            //                     'status' => $current_status,
+            //                 ]);
+            //     } else {
+            //         $current_status = $approvers->status;
+
+            //         $approvers->where('issue_id', $request->input('id'))
+            //                 ->update([
+            //                     'reason' => $action_status == "rejected" ? $request->input('reason') : null,
+            //                 ]);
+            //     }
+
+            //     $approvers->update([
+            //         'value' => json_encode($array_data),
+            //         'status' => $current_status
+            //     ]);
+
+            // } else {
+            //     return response()->json(['error' => true, 'message' => "No data found."]);
+            // }
+
             $site = \DB::connection('mysql2')
                             ->table('site_issue')
                             ->where('issue_id', $issue_id)
                             ->update([
-                                'date_resolve' => Carbon::now()->toDate(),
+                                'issue_status' => count($approvers_pending_collect->all()) < 1 ? "resolved" : "active",
+                                'date_resolve' => count($approvers_pending_collect->all()) < 1 ? Carbon::now()->toDate() : NULL,
                                 'approver_id' => \Auth::id(),
+                                'approvers' => json_encode($array_data),
                             ]);
 
 
@@ -4361,8 +4444,6 @@ class GlobeController extends Controller
         try {
             // return response()->json(['error' => true, 'message' => $request->all() ]);
 
-
-
             $validate = Validator::make($request->all(), array(
                 'issue_type' => 'required',
                 'issue' => 'required',
@@ -4370,6 +4451,33 @@ class GlobeController extends Controller
             ));
 
             if($validate->passes()){
+
+                // if ( $request->input('hidden_program_id') == 3 || $request->input('hidden_program_id') == 4 ) {
+                    $stage_activities_approvers = \DB::connection('mysql2')
+                                    ->table('stage_activities_approvers')
+                                    ->where('stage_activities_id', 0)
+                                    ->get();
+    
+                    if ( count($stage_activities_approvers) < 1 ) {
+                        return response()->json(['error' => true, 'message' => "No approver found."]);
+                    }
+
+                    $approvers_collect = collect();
+
+                    foreach ($stage_activities_approvers as $stage_activities_approver) {
+                        $approvers_collect->push([
+                            'profile_id' => $stage_activities_approver->approver_profile_id,
+                            'status' => 'pending'
+                        ]);
+                    }
+
+                    $array_data = [
+                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                        'active_status' => 'pending',
+                        'validator' => count($approvers_collect->all()),
+                        'validators' => $approvers_collect->all()
+                    ];
+                // }
                 $issue_type = Issue::create([
                     // 'issue_type_id' => $request->input('issue'),
                     'issue_type_id' => $request->input('issue_callout'),
@@ -4378,6 +4486,7 @@ class GlobeController extends Controller
                     'issue_details' => $request->input('issue_details'),
                     'issue_status' => "active",
                     'user_id' => \Auth::id(),
+                    'approvers' => json_encode($array_data)
                 ]);
                 return response()->json(['error' => false, 'message' => "Successfully added issue." ]);
             } else {
