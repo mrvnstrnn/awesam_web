@@ -98,10 +98,18 @@ class RenewalController extends Controller
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'pending',
                     'validator' => count($approvers_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'validators' => $approvers_collect->all(),
+                    'type' => 'loi'
                 ];
 
-                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input("sam_id"))
+                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                        ->where('status', 'pending')
+                                                        ->first();
+
+                $sub_activity_value_loi = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                         ->where('status', 'pending')
                                                         ->first();
@@ -109,7 +117,37 @@ class RenewalController extends Controller
                 if (!is_null($sub_activity_value)) {
                     $sub_activity_value->update([
                         'value' => json_encode($array_data),
+                        'status' => 'rejected',
+                        'user_id' => \Auth::id(),
+                        'reason' => 'Old LOI'
                     ]);
+
+                    $sub_activity_value_loi->update([
+                        'value' => json_encode($request->all()),
+                        'status' => 'rejected',
+                        'user_id' => \Auth::id(),
+                        'reason' => 'Old LOI'
+                    ]);
+
+                    
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'loi',
+                        'status' => 'pending',
+                    ]);
+
                 } else {
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
@@ -118,7 +156,16 @@ class RenewalController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
-                    ]);   
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'loi',
+                        'status' => 'pending',
+                    ]);
                 }
 
                 // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
@@ -287,10 +334,18 @@ class RenewalController extends Controller
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'pending',
                     'validator' => count($approvers_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'validators' => $approvers_collect->all(),
+                    'type' => 'lrn'
                 ];
 
-                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input("sam_id"))
+                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                        ->where('status', 'pending')
+                                                        ->first();
+
+                $sub_activity_value_lrn = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                         ->where('status', 'pending')
                                                         ->first();
@@ -298,6 +353,34 @@ class RenewalController extends Controller
                 if (!is_null($sub_activity_value)) {
                     $sub_activity_value->update([
                         'value' => json_encode($array_data),
+                        'status' => 'rejected',
+                        'user_id' => \Auth::id(),
+                        'reason' => 'Old LRN'
+                    ]);
+
+                    $sub_activity_value_lrn->update([
+                        'value' => json_encode($array_data),
+                        'status' => 'rejected',
+                        'user_id' => \Auth::id(),
+                        'reason' => 'Old LRN'
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'lrn',
+                        'status' => 'pending',
                     ]);
                 } else {
                     SubActivityValue::create([
@@ -307,7 +390,16 @@ class RenewalController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
-                    ]);   
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'lrn',
+                        'status' => 'pending',
+                    ]);
                 }
 
                 return response()->json(['error' => false, 'message' => "Successfully submitted LRN." ]);

@@ -1376,7 +1376,8 @@ class GlobeController extends Controller
                         'active_profile' => $file_status == 'approved' ? '' : $stage_activities_approvers[0]->approver_profile_id,
                         'active_status' => $file_status == 'approved' ? 'approved' : 'pending',
                         'validator' => $file_status == 'approved' ? 0 : count($approvers_collect->all()),
-                        'validators' => $approvers_collect->all()
+                        'validators' => $approvers_collect->all(),
+                        'type' => 'doc_upload'
                     ];
 
                     SubActivityValue::create([
@@ -2194,7 +2195,6 @@ class GlobeController extends Controller
     public function doc_validation_approvals(Request $request)
     {
         try {
-            
             $required = "";
             if ($request->input('action') == "rejected") {
                 $required = "required";
@@ -2208,6 +2208,7 @@ class GlobeController extends Controller
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
 
+                $validators_type = json_decode($sub_activity_files->value)->type;
                 $validators = json_decode($sub_activity_files->value)->validators;
                 $file = json_decode($sub_activity_files->value)->file;
 
@@ -2249,7 +2250,8 @@ class GlobeController extends Controller
                     'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
                     'active_status' => count($approvers_pending_collect->all()) < 1 ? "approved" : "pending",
                     'validator' => count($approvers_pending_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'validators' => $approvers_collect->all(),
+                    'type' => $validators_type
                 ];
 
                 if ($request->input('action') != "rejected") {
@@ -2265,12 +2267,26 @@ class GlobeController extends Controller
                                         'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                         'status' => $current_status,
                                     ]);
+
+                            SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                    ->where('type', $validators_type)
+                                    ->update([
+                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                        'status' => $current_status,
+                                    ]);
                         } else {
                             $current_status = $sub_activity_files->status;
 
                             SubActivityValue::where('id', $request->input('id'))
                                     ->update([
                                         'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    ]);
+
+                            SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                    ->where('type', $validators_type)
+                                    ->update([
+                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                        'status' => $current_status,
                                     ]);
                         }
 
@@ -2319,6 +2335,13 @@ class GlobeController extends Controller
                     ]);
 
                     SubActivityValue::where('id', $request->input('id'))
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    'status' => $current_status,
+                                ]);
+
+                    SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                ->where('type', $validators_type)
                                 ->update([
                                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                     'status' => $current_status,
@@ -3659,6 +3682,21 @@ class GlobeController extends Controller
                 'site_category' => $site_category,
                 'activity_id' => $activity_id,
                 'program_renewal' => $program_renewal,
+            ])
+            ->render();
+
+        }
+        elseif($sub_activity == 'Savings Computation'){
+
+            $what_component = "components.savings-computation";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
             ])
             ->render();
 
@@ -7288,8 +7326,9 @@ class GlobeController extends Controller
                     $fields .= '</select>';
                     $fields .= '</div>';
                 } else {
+                    $class_add = $form_data->type == "date" ? "flatpicker" : "";
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="form-control">';
+                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control">';
                     $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 }

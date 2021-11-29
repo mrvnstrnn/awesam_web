@@ -368,5 +368,14 @@ class User extends Authenticatable implements MustVerifyEmail
             return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter;
         }
     }
+
+    public function get_lrn ($sam_id)
+    {
+        $lrn = SubActivityValue::where('sam_id', $sam_id)
+                                    ->where('status', 'approved')
+                                    ->first();
+
+        return $lrn->value;
+    }
     
 }

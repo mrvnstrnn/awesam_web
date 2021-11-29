@@ -13,7 +13,7 @@
         <table class="table" id="dtTable">
             <thead>
                 <tr>
-                    <th>Site Namesd</th>
+                    <th>Site Names</th>
                     <th>Lessor</th>
                     <th>Address</th>
                     <th>Latitude</th>
