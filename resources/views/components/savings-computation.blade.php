@@ -27,7 +27,7 @@
     <div class="col-12">
         <h6>If there is a change of Tax Application:</h6>
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th class="text-center">Type of Lessor</th>
