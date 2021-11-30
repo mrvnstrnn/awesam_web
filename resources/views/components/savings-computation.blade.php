@@ -75,11 +75,11 @@
             </table>
         </div>
         
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-bordered table-hover summary_table">
                 <thead>
                     <tr>
-                        <th rowspan="2" colspan="2" class="text-center">Years</th>
+                        <th rowspan="2" class="text-center">Years</th>
                         <th rowspan="2" colspan="2" class="text-center">Period</th>
                         <th colspan="2" class="text-center">Per Contract</th>
                         <th colspan="2" class="text-center">Lessor Demand</th>
@@ -95,6 +95,30 @@
                         <th>Annual</th>
                         <th>Monthly</th>
                         <th>Annual</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-hover summary_exdeal_table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="text-center">Other Consideration</th>
+                        <th colspan="2" class="text-center">Per Contract</th>
+                        <th colspan="2" class="text-center">Lessor Demand</th>
+                        <th colspan="2" class="text-center">New Terms</th>
+                        <th class="text-center">Savings</th>
+                    </tr>
+                    <tr>
+                        <th>Particulars</th>
+                        <th>Total Amount</th>
+                        <th>Particulars</th>
+                        <th>Total Amount</th>
+                        <th>Particulars</th>
+                        <th>Total Amount</th>
+                        <th>Full Term</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -117,30 +141,29 @@
         var start_date = new Date($("#start_date").val());
         var end_date = new Date($("#end_date").val());
 
+        var exdeal_request = $("#exdeal_request").val();
+
+        var now = new Date();
+
         $(".summary_table tbody tr").remove();
+        $(".summary_exdeal_table tbody tr").remove();
 
-        var old_start_date = start_date.setFullYear( start_date.getFullYear() - 1 );
-        new_start_date = new Date(old_start_date);
+        var i = 1;
+        var count = 1;
+        for (var d = new Date(start_date); d < end_date; d.setFullYear(d.getFullYear() + 1)) {
+            count = i++;
+            new_date = new Date(d);
 
-        var old_end_date = end_date.setFullYear( end_date.getFullYear() - 2 );
-        new_end_date = new Date(old_end_date);
-
-        while(new_start_date <= new_end_date){
-            var oldDate = new_start_date.setFullYear(new_start_date.getFullYear() + 1);
-            oldLoop = new Date(oldDate);
-
-            let formatted_old_date = oldLoop.getFullYear() + "-" + oldLoop.getDate() + "-" + (oldLoop.getMonth() + 1);
-
+            let formatted_old_date = new_date.getFullYear() + "-" + new_date.getDate() + "-" + (new_date.getMonth() + 1);
             
-            var newDate = oldLoop.setFullYear(oldLoop.getFullYear() + 1);
-            newLoop = new Date(newDate);
+            oldLoop = new_date.setFullYear(new_date.getFullYear() + 1);
 
+            newLoop = new Date(oldLoop)
             let formatted_new_date = newLoop.getFullYear() + "-" + newLoop.getDate() + "-" + (newLoop.getMonth() + 1);
-
+            
             $(".summary_table tbody").append(
                 "<tr>" +
-                    "<td></td>" +
-                    "<td></td>" +
+                    "<td>" + count + "</td>" +
                     "<td>" + formatted_old_date + "</td>" +
                     "<td>" + formatted_new_date + "</td>" +
                     "<td></td>" +
@@ -154,6 +177,19 @@
                 "<tr>"
             );
         }
+
+        $(".summary_exdeal_table tbody").append(
+            "<tr>" +
+                "<td>" + exdeal_request + "</td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+            "<tr>"
+        );
 
         $(".form_div").addClass("d-none");
         $(".table_computation_div").removeClass("d-none");
