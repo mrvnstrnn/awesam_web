@@ -2268,12 +2268,14 @@ class GlobeController extends Controller
                                         'status' => $current_status,
                                     ]);
 
-                            SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                    ->where('type', $validators_type)
-                                    ->update([
-                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                        'status' => $current_status,
-                                    ]);
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
                         } else {
                             $current_status = $sub_activity_files->status;
 
@@ -2282,12 +2284,14 @@ class GlobeController extends Controller
                                         'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                     ]);
 
-                            SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                    ->where('type', $validators_type)
-                                    ->update([
-                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                        'status' => $current_status,
-                                    ]);
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
                         }
 
                         $sub_activity_files->update([
@@ -2709,7 +2713,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [20, 21, 24, 27, 28])
+                                    $sites->whereIn('view_site.activity_id', [18, 20, 21, 24, 27, 28])
                                     ->get();
                                 }
         }
@@ -3704,6 +3708,21 @@ class GlobeController extends Controller
         elseif($sub_activity == 'Create Lease Renewal Notice'){
 
             $what_component = "components.lease-renewal-notice";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
+        elseif($sub_activity == 'Schedule of Rental Payment'){
+
+            $what_component = "components.renewal-schedule-of-rental-payment";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -7318,7 +7337,7 @@ class GlobeController extends Controller
 
                 if ($form_data->type == 'selection') {
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '">';
+                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" '.$form_data->readonly.'>';
                     $new_array = explode("(,)",$form_data->selection);
                     for ($i=0; $i < count($new_array); $i++) { 
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
@@ -7328,7 +7347,7 @@ class GlobeController extends Controller
                 } else {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control">';
+                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'>';
                     $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 }

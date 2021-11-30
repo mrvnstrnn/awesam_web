@@ -42,19 +42,19 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
+                    // lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
 
-                    if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
-                        $.each(lrn, function(index, data) {
-                            $("#"+index).val(data);
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            "Can't process this right now.",
-                            'error'
-                        )
-                    }
+                    // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
+                    //     $.each(lrn, function(index, data) {
+                    //         $("#"+index).val(data);
+                    //     });
+                    // } else {
+                    //     Swal.fire(
+                    //         'Error',
+                    //         "Can't process this right now.",
+                    //         'error'
+                    //     )
+                    // }
                     
                 } else {
                     Swal.fire(

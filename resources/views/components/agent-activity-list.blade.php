@@ -10,13 +10,22 @@
 </style>
 @php
 
-$activities = \DB::connection('mysql2')
+if (\Auth::user()->profile_id == 2) {
+    $activities = \DB::connection('mysql2')
                     ->table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
+                    ->get();   
+} else {
+    $activities = \DB::connection('mysql2')
+                    ->table('view_assigned_sites')
+                    ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
+                    ->orderBy('stage_id', 'ASC')
+                    ->orderBy('activity_id', 'ASC')
                     ->get();
+}
 
 $uniques_stage = \DB::connection('mysql2')
                     ->table('view_assigned_sites')

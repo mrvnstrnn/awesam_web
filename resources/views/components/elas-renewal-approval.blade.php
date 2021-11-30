@@ -39,8 +39,8 @@
                             'success'
                         )
 
-                        $("#submit_not_assds").removeAttr("disabled");
-                        $("#submit_not_assds").text("Approved eLAS");
+                        $(".mark_as_complete").removeAttr("disabled");
+                        $(".mark_as_complete").text("Approved eLAS");
 
                         $("#viewInfoModal").modal("hide");
 
@@ -52,8 +52,8 @@
                         'error'
                     )
 
-                    $("#submit_not_assds").removeAttr("disabled");
-                    $("#submit_not_assds").text("Approved eLAS");
+                    $(".mark_as_complete").removeAttr("disabled");
+                    $(".mark_as_complete").text("Approved eLAS");
                 }
             },
             error: function (resp) {
@@ -63,8 +63,8 @@
                     'error'
                 )
 
-                $("#submit_not_assds").removeAttr("disabled");
-                $("#submit_not_assds").text("Approved eLAS");
+                $(".mark_as_complete").removeAttr("disabled");
+                $(".mark_as_complete").text("Approved eLAS");
             }
         });
 
