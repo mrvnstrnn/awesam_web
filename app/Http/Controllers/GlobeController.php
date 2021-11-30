@@ -7327,6 +7327,8 @@ class GlobeController extends Controller
                 $button_name = "Create LRN";
             } else if ($form_name == "eLAS Renewal") {
                 $button_name = "Save eLAS";
+            } else if ($form_name == "Savings Computation") {
+                $button_name = "Generate Computation";
             } else {
                 $button_name = "Save";
             }
