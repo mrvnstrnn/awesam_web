@@ -23,29 +23,6 @@
     </div>
 </div>
 
-{{-- <form class="select_company_form">
-    <input type="hidden" name="sub_activity" value="{{ $sub_activity }}">
-    <div class="form-group">
-        <label for="company">Companies</label>
-        <select class="form-control" name="company" id="company">
-            <option value="">Please select company</option>
-            <option value="Bayantel">Bayantel</option>
-            <option value="Globe">Globe</option>
-            <option value="Innove">Innove</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="lrn_type">LRN Type</label>
-        <select class="form-control" name="lrn_type" id="lrn_type">
-        </select>
-    </div>
-
-    <div class="form-group">
-        <button class="btn btn-primary btn-lg btn-shadow get_form" type="button">Get form</button>
-    </div>
-</form> --}}
-
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
@@ -62,6 +39,12 @@
             success: function (resp) {
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
+
+                    var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
+
+                    $.each(get_program_renewal, function(index, data) {
+                        $("#"+index).val(data);
+                    });
 
                 } else {
                     Swal.fire(
@@ -81,7 +64,7 @@
         });
     });
 
-    $(document).on("click", ".save_create_lease_renewal_notice_btn", function() {
+    $(".form_html").on("click", ".save_create_lease_renewal_notice_btn", function() {
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
@@ -137,6 +120,30 @@
                 $(".save_create_lease_renewal_notice_btn").text("Create LRN");
             }
         });
+    });
+
+    $(".form_html").on("change", "#start_date, #lease_term", function(e){
+        var lease_term = $("#lease_term").val();
+        var start_date = $("#start_date").val();
+        if ( lease_term != null && start_date != null ) {
+            var lease_term = $("#lease_term").val();
+            var start_date = new Date($("#start_date").val());
+
+            new_date = start_date.setFullYear(start_date.getFullYear() + +lease_term);
+
+            new_start_date = new Date(new_date)
+
+            date_day = (new_start_date.getDate()) < 10 ? "0" + (new_start_date.getDate()) : new_start_date.getDate() ;
+            let formatted_new_date =  new_start_date.getFullYear() + "-" + ( new_start_date.getMonth() + 1 ) + "-" + date_day;
+
+            $("#end_date").val(formatted_new_date);
+        }
+    });
+
+    $(".form_html").on("change", "#escalation_rate", function(e){
+        var percent = $(this).val() / 100;
+
+        $(this).val(percent);
     });
 
     $(".mark_as_complete").on("click", function() {

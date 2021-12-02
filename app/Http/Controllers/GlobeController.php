@@ -7358,7 +7358,7 @@ class GlobeController extends Controller
             // if ($form_name = "Vendor Awarding") {
                 $fields .= '<div class="row mb-2">';
                 $fields .= '<div class="col-12">';
-                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
                 $fields .= '</div></div>';
             // }
 

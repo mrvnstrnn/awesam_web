@@ -52,22 +52,12 @@
         @php
             $json = json_decode($json_data);
 
-            $date = Carbon::parse($json->from_date);
-
-            $diffDays = $date->diffInDays($json->to_date);
-            $diffMonths = $date->diffInMonths($json->to_date);
-            $diffYears = $date->diffInYears($json->to_date);
-
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-            if ( $diffYears > 0 ) {
-                $date_word = $f->format($diffYears) .' ('.$diffYears.') year/s';
-            } else if ( $diffYears < 1 && $diffMonths > 0 ) {
-                $date_word = $f->format($diffMonths) .' ('.$diffMonths.') month/s';
-            } else if ( $diffMonths < 1 && $diffDays > 0) {
-                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+            if ( $json->terms_in_years > 1 ) {
+                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') years';
             } else {
-                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') year';
             }
         @endphp
         <div id="content">

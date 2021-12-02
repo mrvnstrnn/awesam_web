@@ -45,6 +45,7 @@ class RenewalController extends Controller
                     'lessor' => $request->input("lessor"),
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
+                    'terms_in_years' => $request->input("terms_in_years"),
                     'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
                     'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
                     // 'date_word' => $date_word,
@@ -69,6 +70,13 @@ class RenewalController extends Controller
                 // \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
 
                 // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
+
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'pending')
+                                ->first();
 
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -102,32 +110,35 @@ class RenewalController extends Controller
                     'type' => 'loi'
                 ];
 
-                $sub_activity_value = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
-                                                        ->first();
-
-                $sub_activity_value_loi = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
-                                                        ->first();
-
                 if (!is_null($sub_activity_value)) {
-                    $sub_activity_value->update([
-                        'value' => json_encode($array_data),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LOI'
-                    ]);
 
-                    $sub_activity_value_loi->update([
-                        'value' => json_encode($request->all()),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LOI'
-                    ]);
+                    $array_data_old = [
+                        'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                        'active_status' => 'rejected',
+                        'validator' => count($approvers_collect->all()),
+                        'validators' => $approvers_collect->all(),
+                        'type' => 'loi'
+                    ];
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'rejected')
+                                ->update([
+                                    'value' => json_encode($array_data_old),
+                                    'status' => 'rejected',
+                                    'user_id' => \Auth::id(),
+                                    'reason' => 'Old LOI'
+                                ]);
+
+                    // $sub_activity_value_loi->update([
+                    //     'value' => json_encode($request->all()),
+                    //     'status' => 'rejected',
+                    //     'user_id' => \Auth::id(),
+                    //     'reason' => 'Old LOI'
+                    // ]);
 
                     
                     SubActivityValue::create([

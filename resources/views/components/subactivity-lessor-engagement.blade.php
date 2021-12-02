@@ -147,7 +147,7 @@
         $("#table_lessor_engage_"+sub_activity_id).DataTable().ajax.reload();
     }
 
-    $(".save_engagement").on("click",  function (e){
+    $(".engagement_form").on("click", ".save_engagement", function (e){
         // e.preventDefault();
         var lessor_method = $("#lessor_method").val();
         var lessor_approval = $("#lessor_approval").val();
