@@ -6,7 +6,7 @@
 
 <div class="row pt-4">
     <div class="col-md-12">
-        <H5 id="active_action">{{ $sub_activity }}</H5>
+        <h4 id="active_action">{{ $sub_activity }}</h4>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
 
 <div class="row table_computation_div d-none">
     <div class="col-12">
-        <h6>If there is a change of Tax Application:</h6>
+        {{-- <h6>If there is a change of Tax Application:</h6> --}}
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -125,7 +125,8 @@
             </table>
         </div>
 
-        <button class="btn btn-lg btn-shadow btn-primary back_to_form pull-right">Back to form</button>
+        <button class="btn btn-lg btn-shadow btn-primary pull-right save_computation" type="button">Save Computation</button>
+        <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mr-1" type="button">Back to form</button>
     </div>
 </div>
 
@@ -198,6 +199,54 @@
     $(document).on("click", ".back_to_form", function () {
         $(".form_div").removeClass("d-none");
         $(".table_computation_div").addClass("d-none");
+    });
+
+    $(document).on("click", ".save_computation", function () {
+        
+        $(".save_computation").attr("disabled", "disabled");
+        $(".save_computation").text("Processing...");
+
+        $.ajax({
+            url: "/save-saving-computation",
+            method: "POST",
+            data: $(".savings_computation_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Save Computation");
+                } else {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Save Computation");
+                }
+            },
+            error: function (resp) {
+
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".save_computation").removeAttr("disabled");
+                $(".save_computation").text("Save Computation");
+            }
+        });
     });
 
     $(document).ready(function(){
