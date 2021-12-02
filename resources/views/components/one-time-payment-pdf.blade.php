@@ -39,11 +39,11 @@
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-            if ($json->company == 'Bayantel') {
+            if ($json->company == 'BAYANTEL') {
                 $company_name = "BAYAN TELECOMMUNICATIONS, INC.";
-            } elseif ($json->company == 'Innove') {
+            } elseif ($json->company == 'INNOVE') {
                 $company_name = "INNOVE COMMUNICATIONS, INC.";
-            } else if ($json->company == 'Globe') {
+            } else if ($json->company == 'GLOBE') {
                 $company_name = "GLOBE TELECOM, INC.";
             }
         @endphp
@@ -61,9 +61,9 @@
                 <table style="width: 100%; margin-top: 0px;">
                     <tr>
                         <td style="width: 100%; text-align: left;">
-                            @if ($json->company == 'Bayantel')
+                            @if ($json->company == 'BAYANTEL')
                             <p style="margin-bottom: 0px; margin-top: 0px;">BAYAN TELECOMMUNICATIONS, INC.</p>
-                            @elseif ($json->company == 'Innove')
+                            @elseif ($json->company == 'INNOVE')
                             <p style="margin-bottom: 0px; margin-top: 0px;">INNOVE COMMUNICATIONS, INC.</p>
                             @endif
                         </td>

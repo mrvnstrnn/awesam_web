@@ -87,10 +87,17 @@
 
                     $(".create_lease_renewal_notice_form")[0].reset();
 
+                    $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
+
+                    $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
+                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                    );
+
                     $(".save_create_lease_renewal_notice_btn").removeAttr("disabled");
                     $(".save_create_lease_renewal_notice_btn").text("Create LRN");
 
-                    $("#viewInfoModal").modal("hide");
+                    $(".btn_switch_back_to_actions").trigger("click");
+                    // $("#viewInfoModal").modal("hide");
                 } else {
 
                     if (typeof resp.message === 'object' && resp.message !== null) {

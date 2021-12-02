@@ -1,12 +1,13 @@
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 approve_elas_div">
         <button class="btn-sm btn-shadow btn btn-block btn-primary mark_as_complete">Approved eLAS</button>
     </div>
 </div>
 
 <script>
-    $(".mark_as_complete").on("click", function() {
+    $(".approve_elas_div").on("click", ".mark_as_complete", function(e) {
+        e.preventDefault();
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 

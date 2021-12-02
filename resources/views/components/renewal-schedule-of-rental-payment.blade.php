@@ -42,8 +42,20 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    // lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
+                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
 
+                    $.each(lrn, function(index, data) {
+                        if (index == "start_date") {
+                            indexNew = "contract_start";
+                        } else if (index == "end_date") {
+                            indexNew = "contract_end";
+                        } else if (index == "end_date") {
+                            indexNew = "contract_end";
+                        } else {
+                            indexNew = index;
+                        }
+                        $("#"+indexNew).val(data);
+                    });
                     // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                     //     $.each(lrn, function(index, data) {
                     //         $("#"+index).val(data);

@@ -39,11 +39,11 @@
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-            if ($json->company == 'Bayantel') {
+            if ($json->company == 'BAYANTEL') {
                 $company_name = "BAYAN TELECOMMUNICATIONS, INC.";
-            } elseif ($json->company == 'Innove') {
+            } elseif ($json->company == 'INNOVE') {
                 $company_name = "INNOVE COMMUNICATIONS, INC.";
-            } else if ($json->company == 'Globe') {
+            } else if ($json->company == 'GLOBE') {
                 $company_name = "GLOBE TELECOM, INC.";
             }
         @endphp
@@ -131,11 +131,11 @@
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
                             Lease Term: <span style="text-decoration: underline;">{{ $f->format( $json->lease_term ) }}</span> (<span style="text-decoration: underline;">{{ $json->lease_term }}</span>) years;
-                            Commencing on <span style="text-decoration: underline;">{{ $json->start_date }}</span> to <span style="text-decoration: underline;">{{ $json->start_date }}</span>.
+                            Commencing on <span style="text-decoration: underline;">{{ $json->start_date }}</span> to <span style="text-decoration: underline;">{{ $json->end_date }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
-                            Monthly Rent: <span style="text-decoration: underline;">{{ $f->format( $json->monthly_rent ) }}</span> <b>(Php <span style="text-decoration: underline;">{{ $json->monthly_rent }}</span>).</b> 
+                            Monthly Rent: <span style="text-decoration: underline;">{{ $f->format( $json->monthly_rent_lessor_demand ) }}</span> <b>(Php <span style="text-decoration: underline;">{{ $json->monthly_rent_lessor_demand }}</span>).</b> 
                             Tax Application: ______ VAT and ______ Withholding Tax.
                         </p>
 
