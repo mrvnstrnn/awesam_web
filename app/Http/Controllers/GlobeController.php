@@ -2541,7 +2541,12 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
                 ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
 
-            }                        
+            }                       
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
+            }
+
+
 
             $sites->get();
 
@@ -2961,7 +2966,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')->table("site");
+            $sites = \DB::connection('mysql2')->table("view_site");
                 // ->where('program_id', $program_id)
                 // ->where('active_profile', \Auth::user()->profile_id);
                 // ->whereNull('approver_id')
@@ -2974,6 +2979,10 @@ class GlobeController extends Controller
                 $site->get();
 
             }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+
 
 
         }

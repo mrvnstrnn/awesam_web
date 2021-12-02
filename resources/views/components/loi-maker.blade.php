@@ -88,6 +88,22 @@
         });
     });
 
+
+    
+    $(document).on("change", "#from_date", function(e){
+        e.preventDefault();
+
+        if(!$('#terms_in_years').val()){
+            console.log('set terms');
+        } else {
+            console.log(moment().add(7, 'years'));
+        }
+    });
+
+
+    
+
+
     $(document).ready(function(){
         $.ajax({
             url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",

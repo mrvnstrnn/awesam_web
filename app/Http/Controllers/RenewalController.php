@@ -45,6 +45,7 @@ class RenewalController extends Controller
                     'lessor' => $request->input("lessor"),
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
+                    'terms_in_years' => $request->input("terms_in_years"),
                     'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
                     'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
                     // 'date_word' => $date_word,
@@ -170,7 +171,7 @@ class RenewalController extends Controller
 
                 // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 
-                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
+                return response()->json(['error' => false, 'message' => "Successfully submitted an LOI." ]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
