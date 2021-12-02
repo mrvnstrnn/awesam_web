@@ -141,9 +141,13 @@
     });
 
     $(".form_html").on("change", "#escalation_rate", function(e){
-        var percent = $(this).val() / 100;
+        if ($(this).val() > 0 && $(this).val() < 101) {
+            var percent = $(this).val() / 100;
 
-        $(this).val(percent);
+            $(this).val(percent);
+        } else if ($(this).val() > 101) {
+            $(this).val(1);
+        }
     });
 
     $(".mark_as_complete").on("click", function() {
