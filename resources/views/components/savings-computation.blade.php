@@ -73,6 +73,9 @@
                         resp.message,
                         'error'
                     )
+
+                    console.log(resp);
+
                 }
             },
             error: function (resp) {

@@ -1,18 +1,11 @@
 @php
 
-
-$lease_term_years = (int) $lease_term;
+$lease_term_years = (int)$lease_term;
 
 $old_terms_escalation_rate = 0.03;
-$lessor_demand_escalation_rate = 0.03;
-$new_escalation_rate = (float) 0.03;
+$lessor_demand_escalation_rate = 0.04;
+$new_escalation_rate = 0.04;
 
-if($amount_used == "Gross to Gross"){
-    $old_renewal_rate = $gross_amt_old;
-}
-elseif($amount_used == "Net to Net"){
-    $old_renewal_rate = $net_amt_old;
-}
     
 
 switch($old_terms_tax_application){
@@ -126,11 +119,13 @@ switch($old_terms_tax_application){
 
         break;
 
-    default:         
+    case "Not Applicable":      
         $gross_amt_old = 0;
         $add_vat_old = 0;
-        $less_ewt_old =  $gross_amt_old * 0.05;
-        $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
+        $less_ewt_old =  0;
+        $net_amt_old = 0;
+
+        break;
 
 }
 
@@ -245,11 +240,15 @@ switch($lessor_demand_tax_application){
 
         break;
 
-    default:         
+    case "Not Applicable":      
+
         $gross_amt_demand = 0;
         $add_vat_demand = 0;
-        $less_ewt_demand =  $gross_amt_demand * 0.05;
-        $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
+        $less_ewt_demand =  0;
+        $net_amt_demand = 0;
+
+        break;
+
 }
 
 switch($new_terms_tax_application){
@@ -267,7 +266,7 @@ switch($new_terms_tax_application){
 
     case "Vatable: Inclusive of VAT - Inclusive of EWT":    
 
-        $amount_used = 'Net to Net';
+    $amount_used = 'Gross to Gross';
 
         $gross_amt_new =  $new_terms__contract_rate / 1.12;
         $add_vat_new =  $gross_amt_new * 0.12;
@@ -278,7 +277,7 @@ switch($new_terms_tax_application){
 
     case "Vatable: Inclusive of VAT - Exclusive of EWT":    
 
-        $amount_used = 'Gross to Gross';
+        $amount_used = 'Net to Net';
 
         $gross_amt_new =  $new_terms__contract_rate / 1.07;
         $add_vat_new =  $gross_amt_new * 0.12;
@@ -333,7 +332,7 @@ switch($new_terms_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Inclusive of EWT":     
 
-        $amount_used = 'Net to Net';
+    $amount_used = 'Gross to Gross';
 
         $gross_amt_new =  $new_terms__contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
@@ -344,7 +343,7 @@ switch($new_terms_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Exclusive of EWT":     
 
-        $amount_used = 'Gross to Gross';
+    $amount_used = 'Net to Net';
 
         $gross_amt_new =  $new_terms__contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
@@ -366,7 +365,7 @@ switch($new_terms_tax_application){
 
     case "Non Vatable: Exclusive of VAT - Inclusive of EWT":     
 
-        $amount_used = 'Net to Net';
+    $amount_used = 'Gross to Gross';
 
         $gross_amt_new =  $new_terms__contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
@@ -386,14 +385,17 @@ switch($new_terms_tax_application){
 
         break;
 
-    default:      
+    case "Not Applicable":      
 
         $amount_used = 'Not Applicable';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1;
-        $add_vat_new =  $gross_amt_new * 0.12;
-        $less_ewt_new =  $gross_amt_new * 0.05;
-        $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
+        $gross_amt_new = 0;
+        $add_vat_new = 0;
+        $less_ewt_new =  0;
+        $net_amt_new = 0;
+
+        break;
+
 }
 
 
@@ -532,6 +534,11 @@ switch($new_terms_tax_application){
                         $amount_new = $gross_amt_new;
                     }
                     elseif($amount_used === "Net to Net"){
+                        $amount_old = $net_amt_old;
+                        $amount_demand = $net_amt_demand;
+                        $amount_new = $net_amt_new;
+                    }
+                    elseif($amount_used === "Not Applicable"){
                         $amount_old = $net_amt_old;
                         $amount_demand = $net_amt_demand;
                         $amount_new = $net_amt_new;
