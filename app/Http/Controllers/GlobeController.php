@@ -7303,6 +7303,15 @@ class GlobeController extends Controller
             }
         } 
     }
+    public function get_form_generator_view (Request $request)
+    {
+
+        $what_component = "components.savings-computation-generator";
+        return \View::make($what_component)
+        ->with($request->all())
+        ->render();
+
+    }
 
     public function get_form ($sub_activity_id, $form_name)
     {
@@ -7337,7 +7346,7 @@ class GlobeController extends Controller
             } else if ($form_name == "eLAS Renewal") {
                 $button_name = "Save eLAS";
             } else if ($form_name == "Savings Computation") {
-                $button_name = "Generate Computation";
+                $button_name = "Make Savings Computation";
             } else {
                 $button_name = "Save";
             }

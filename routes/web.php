@@ -298,6 +298,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
 
+
+    
+    //Form Generator
+    Route::post('/get-form-generator-view', [GlobeController::class, 'get_form_generator_view'])->name('get_form_generator_view');
+
+    //Form get
+    Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
+
     //Form get
     Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
 

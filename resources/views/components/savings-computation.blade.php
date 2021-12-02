@@ -4,9 +4,9 @@
     </div>
 </div>
 
-<div class="row pt-4">
+<div class="row pt-4 pb-3">
     <div class="col-md-12">
-        <H5 id="active_action">{{ $sub_activity }}</H5>
+        <H4 id="active_action">{{ $sub_activity }}</H4>
     </div>
 </div>
 
@@ -24,112 +24,10 @@
 </div>
 
 <div class="row table_computation_div d-none">
-    <div class="col-12">
-        <h6>If there is a change of Tax Application:</h6>
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th class="text-center">Type of Lessor</th>
-                        <th class="text-center">Tax Application (VAT/EWT)</th>
-                        <th class="text-center">Contract Rate</th>
-                        <th class="text-center">Add: 12% VAT</th>
-                        <th class="text-center">Less: 5% EWT</th>
-                        <th class="text-center">Net Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Old Terms:</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Lessors Demand: </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>New Terms: </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>*Amount Used:</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="table-responsive mt-3">
-            <table class="table table-bordered table-hover summary_table">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="text-center">Years</th>
-                        <th rowspan="2" colspan="2" class="text-center">Period</th>
-                        <th colspan="2" class="text-center">Per Contract</th>
-                        <th colspan="2" class="text-center">Lessor Demand</th>
-                        <th colspan="2" class="text-center">New Terms</th>
-                        <th colspan="2" class="text-center">Savings</th>
-                    </tr>
-                    <tr>
-                        <th>Monthly</th>
-                        <th>Annual</th>
-                        <th>Monthly</th>
-                        <th>Annual</th>
-                        <th>Monthly</th>
-                        <th>Annual</th>
-                        <th>Monthly</th>
-                        <th>Annual</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
 
-        <div class="table-responsive mt-3">
-            <table class="table table-bordered table-hover summary_exdeal_table">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="text-center">Other Consideration</th>
-                        <th colspan="2" class="text-center">Per Contract</th>
-                        <th colspan="2" class="text-center">Lessor Demand</th>
-                        <th colspan="2" class="text-center">New Terms</th>
-                        <th class="text-center">Savings</th>
-                    </tr>
-                    <tr>
-                        <th>Particulars</th>
-                        <th>Total Amount</th>
-                        <th>Particulars</th>
-                        <th>Total Amount</th>
-                        <th>Particulars</th>
-                        <th>Total Amount</th>
-                        <th>Full Term</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        <button class="btn btn-lg btn-shadow btn-primary back_to_form pull-right">Back to form</button>
-    </div>
 </div>
 
-<button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button>
+{{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button> --}}
 
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
@@ -138,58 +36,55 @@
     });
 
     $(document).on("click", ".save_savings_computation_btn", function () {
-        var start_date = new Date($("#start_date").val());
-        var end_date = new Date($("#end_date").val());
-
+        var start_date = $("#start_date").val();
+        var end_date = $("#end_date").val();
         var exdeal_request = $("#exdeal_request").val();
 
-        var now = new Date();
+        $.ajax({
+            url: "/get-form-generator-view",
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: 
+                $('.savings_computation_form').serialize()
+            ,
+            success: function (resp) {
+                if (!resp.error) {
+                    $(".table_computation_div").html(resp);
 
-        $(".summary_table tbody tr").remove();
-        $(".summary_exdeal_table tbody tr").remove();
 
-        var i = 1;
-        var count = 1;
-        for (var d = new Date(start_date); d < end_date; d.setFullYear(d.getFullYear() + 1)) {
-            count = i++;
-            new_date = new Date(d);
+                    // console.log(resp.message);
 
-            let formatted_old_date = new_date.getFullYear() + "-" + new_date.getDate() + "-" + (new_date.getMonth() + 1);
-            
-            oldLoop = new_date.setFullYear(new_date.getFullYear() + 1);
+                    // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
 
-            newLoop = new Date(oldLoop)
-            let formatted_new_date = newLoop.getFullYear() + "-" + newLoop.getDate() + "-" + (newLoop.getMonth() + 1);
-            
-            $(".summary_table tbody").append(
-                "<tr>" +
-                    "<td>" + count + "</td>" +
-                    "<td>" + formatted_old_date + "</td>" +
-                    "<td>" + formatted_new_date + "</td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                "<tr>"
-            );
-        }
 
-        $(".summary_exdeal_table tbody").append(
-            "<tr>" +
-                "<td>" + exdeal_request + "</td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-            "<tr>"
-        );
+
+                    // } else {
+                    //     Swal.fire(
+                    //         'Error',
+                    //         "Can't process this right now.",
+                    //         'error'
+                    //     )
+                    // }
+                    
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+
 
         $(".form_div").addClass("d-none");
         $(".table_computation_div").removeClass("d-none");
@@ -201,6 +96,7 @@
     });
 
     $(document).ready(function(){
+
         $.ajax({
             url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",
             method: "GET",
@@ -241,6 +137,7 @@
                 )
             }
         });
+
     });
 
     $(".mark_as_complete").on("click", function() {
@@ -302,4 +199,5 @@
         });
 
     });
+
 </script>

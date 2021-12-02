@@ -90,15 +90,15 @@
 
 
     
-    $(document).on("change", "#from_date", function(e){
-        e.preventDefault();
+    // $(document).on("change", "#from_date", function(e){
+    //     e.preventDefault();
 
-        if(!$('#terms_in_years').val()){
-            console.log('set terms');
-        } else {
-            console.log(moment().add(7, 'years'));
-        }
-    });
+    //     if(!$('#terms_in_years').val()){
+    //         console.log('set terms');
+    //     } else {
+    //         console.log(moment().add(7, 'years'));
+    //     }
+    // });
 
 
     
