@@ -471,6 +471,18 @@ class RenewalController extends Controller
     public function save_saving_computation (Request $request)
     {
         try {
+            // return dd($request->all());
+            $this->create_pdf($request->all(), $request->get('sam_id'), 'savings-computation-generator');
+            return response()->json(['error' => true, 'message' => $request->all()]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_saving_computation_generated (Request $request)
+    {
+        try {
             $this->create_pdf($request->all(), $request->get('sam_id'), 'renewal-saving-computation-pdf');
             return response()->json(['error' => true, 'message' => $request->all()]);
         } catch (\Throwable $th) {
@@ -478,6 +490,7 @@ class RenewalController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
 
     public function elas_approval($token, $sam_id, $program_id, $site_category, $activity_id, $action)
     {

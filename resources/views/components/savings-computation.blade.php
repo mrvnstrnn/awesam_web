@@ -26,7 +26,7 @@
 <div class="row table_computation_div d-none">
 </div>
 
-{{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button> --}}
+<button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button>
 
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
@@ -45,6 +45,7 @@
         var activity_id = ["{{ $activity_id }}"];
         var program_id = "{{ $program_id }}";
 
+        console.log($('.savings_computation_form, .site_data_form').serialize());
 
         $.ajax({
             url: "/get-form-generator-view",
@@ -53,7 +54,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: 
-                    $('.savings_computation_form').serialize()
+                    $('.savings_computation_form, .site_data_form').serialize()
             ,
             success: function (resp) {
                 if (!resp.error) {
@@ -197,7 +198,7 @@
 
     $(document).on("click", ".mark_as_complete", function() {
         $(this).attr("disabled", "disabled");
-        $(this).text("Processing...");
+        $(".mark_as_complete").text("Processing...");
 
         var sam_id = ["{{ $sam_id }}"];
         var activity_name = "mark_as_complete";

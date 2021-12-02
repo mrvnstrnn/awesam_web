@@ -422,7 +422,6 @@ elseif($amount_used == 'Not Applicable'){
     }
 </style>
 <div class="col-12">
-    {{-- <h6>If there is a change of Tax Application:</h6> --}}
     <div class="table-responsive">
         <table class="table table-bordered table-hover table-sm">
             <thead>
@@ -818,10 +817,6 @@ elseif($amount_used == 'Not Applicable'){
             </tfoot>
         </table>
     </div>
-    <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 mark_as_complete">Generate and Upload</button>
+    <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 save_computation">Generate and Upload</button>
     <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
 </div>
-
-{{-- <script>
-
-</script> --}}
