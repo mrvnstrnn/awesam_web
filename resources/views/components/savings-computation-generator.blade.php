@@ -2,11 +2,10 @@
 
 $lease_term_years = (int)$lease_term;
 
-$old_terms_escalation_rate = 0.03;
-$lessor_demand_escalation_rate = 0.04;
-$new_escalation_rate = 0.04;
+$old_escalation_rate =  (float) $old_terms_escalation_rate;
+$demand_escalation_rate = (float) $lessor_demand_escalation_rate;
+$new_escalation_rate = (float) $new_terms_escalation_rate;
 
-    
 
 switch($old_terms_tax_application){
 
@@ -257,7 +256,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -268,7 +267,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1.12;
+        $gross_amt_new =  $new_terms_contract_rate / 1.12;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -279,7 +278,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1.07;
+        $gross_amt_new =  $new_terms_contract_rate / 1.07;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -290,7 +289,7 @@ switch($new_terms_tax_application){
          
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -301,7 +300,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1;
+        $gross_amt_new =  $new_terms_contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -312,7 +311,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1;
+        $gross_amt_new =  $new_terms_contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -323,7 +322,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms__contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -334,7 +333,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1;
+        $gross_amt_new =  $new_terms_contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -345,7 +344,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms__contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -356,7 +355,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms__contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_contract_rate / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -367,7 +366,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate / 1;
+        $gross_amt_new =  $new_terms_contract_rate / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -378,7 +377,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms__contract_rate /  1;
+        $gross_amt_new =  $new_terms_contract_rate /  1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -398,6 +397,22 @@ switch($new_terms_tax_application){
 
 }
 
+
+if($amount_used == 'Gross to Gross'){
+    $old_renewal_rate = $gross_amt_old;
+    $demand_renewal_rate = $gross_amt_demand;
+    $new_renewal_rate = $gross_amt_new;
+}
+elseif($amount_used == 'Net to Net'){
+    $old_renewal_rate = $net_amt_old;
+    $demand_renewal_rate = $net_amt_demand;
+    $new_renewal_rate = $net_amt_new;
+}
+elseif($amount_used == 'Not Applicable'){
+    $old_renewal_rate = 0;
+    $demand_renewal_rate = 0;
+    $new_renewal_rate = 0;
+}
 
 @endphp
 
@@ -445,7 +460,7 @@ switch($new_terms_tax_application){
                 <tr>
                     <td>New Terms: </td>
                     <td class="text-center">{{ $new_terms_tax_application }}</td>
-                    <td class="text-right">{{ number_format($new_terms__contract_rate, 2) }}</td>
+                    <td class="text-right">{{ number_format($new_terms_contract_rate, 2) }}</td>
                     <td class="text-right">{{ number_format($gross_amt_new, 2) }}</td>
                     <td class="text-right">{{ number_format($add_vat_new, 2) }}</td>
                     <td class="text-right">{{ number_format($less_ewt_new, 2) }}</td>
@@ -470,16 +485,16 @@ switch($new_terms_tax_application){
             <thead>
                 <tr>
                     <th rowspan="1" colspan="3" class="text-center">Renewal Rate</th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($old_renewal_rate, 2) }}</th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($demand_renewal_rate, 2) }}</th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($new_renewal_rate, 2) }}</th>
                     <th rowspan="1" colspan="1" class="text-center"></th>
                 </tr>
                 <tr>
                     <th rowspan="1" colspan="3" class="text-center">Annual Escalation</th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
-                    <th rowspan="1" colspan="2" class="text-center"></th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($old_escalation_rate * 100, 2) }} %</th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($demand_escalation_rate * 100, 2) }} %</th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ number_format($new_escalation_rate * 100, 2) }} %</th>
                     <th rowspan="1" colspan="1" class="text-center"></th>
                 </tr>
 
@@ -545,19 +560,19 @@ switch($new_terms_tax_application){
                     }
 
                     if($per_contract_monthly == 0){
-                        $per_contract_monthly = ($old_terms_escalation_rate * $amount_old) + $amount_old;
+                        $per_contract_monthly = ($old_escalation_rate * $amount_old) + $amount_old;
                         $running_per_contract_monthly  = $per_contract_monthly ;
                     } else {
 
-                        $running_per_contract_monthly = ($running_per_contract_monthly * $old_terms_escalation_rate) + $running_per_contract_monthly;
+                        $running_per_contract_monthly = ($running_per_contract_monthly * $old_escalation_rate) + $running_per_contract_monthly;
                     }
 
                     if($demand_monthly == 0){
 
-                        if($i < $escalation_year){
+                        if($i < $lessor_demand_escalation_year){
                             $demand_monthly = $amount_demand;
                         } else {
-                            $demand_monthly = ($lessor_demand_escalation_rate * $amount_demand) + $amount_demand;
+                            $demand_monthly = ($demand_escalation_rate * $amount_demand) + $amount_demand;
                         }
 
                         $running_demand_monthly  = $demand_monthly ;
@@ -565,8 +580,8 @@ switch($new_terms_tax_application){
                     } else {
 
 
-                        if($i >= $escalation_year){
-                            $running_demand_monthly = ($running_demand_monthly * $lessor_demand_escalation_rate) + $running_demand_monthly;
+                        if($i >= $lessor_demand_escalation_year){
+                            $running_demand_monthly = ($running_demand_monthly * $demand_escalation_rate) + $running_demand_monthly;
 
                         } else {
                             $running_demand_monthly = $running_demand_monthly;
@@ -578,7 +593,7 @@ switch($new_terms_tax_application){
 
                     if($new_monthly == 0){
 
-                        if($i < $escalation_year){
+                        if($i < $new_terms_escalation_year){
                             $new_monthly = $amount_new;
                         } else {
                             $new_monthly = ($new_escalation_rate * $amount_new) + $amount_new;
@@ -588,7 +603,7 @@ switch($new_terms_tax_application){
 
                     } else {
 
-                        if($i >= $escalation_year){
+                        if($i >= $new_terms_escalation_year){
                             $running_new_monthly = ($running_new_monthly * $new_escalation_rate) + $running_new_monthly;
 
                         } else {
@@ -632,7 +647,7 @@ switch($new_terms_tax_application){
     </div>
 
     <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover summary_exdeal_table">
+        <table class="table table-bordered table-hover table-sm table-striped summary_exdeal_table">
             <thead>
                 <tr>
                     <th rowspan="2" class="text-center">Other Consideration</th>
@@ -651,9 +666,162 @@ switch($new_terms_tax_application){
                     <th>Full Term</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                <tr>
+                    <td>Handset</td>
+                    @if($old_exdeal_request == 'HANDSET')
+                        <td>{{ $old_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($old_exdeal_request == 'HANDSET')
+                        <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'HANDSET')
+                        <td>{{ $lessor_demand_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'HANDSET')
+                        <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'HANDSET')
+                        <td>{{ $new_terms_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'HANDSET')
+                        <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    <td class="text-right"> - </td>
+                </tr>
+                <tr>
+                    <td>OTP</td>
+                    @if($old_exdeal_request == 'OTP')
+                        <td>{{ $old_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($old_exdeal_request == 'OTP')
+                        <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'OTP')
+                        <td>{{ $lessor_demand_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'OTP')
+                        <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'OTP')
+                        <td>{{ $new_terms_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'OTP')
+                        <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    <td class="text-right"> - </td>
+                </tr>
+                <tr>
+                    <td>Plan</td>
+                    @if($old_exdeal_request == 'PLAN')
+                        <td>{{ $old_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($old_exdeal_request == 'PLAN')
+                        <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'PLAN')
+                        <td>{{ $lessor_demand_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'PLAN')
+                        <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'PLAN')
+                        <td>{{ $new_terms_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'PLAN')
+                        <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    <td class="text-right"> - </td>
+                </tr>
+                <tr>
+                    <td>Others</td>
+                    @if($old_exdeal_request == 'OTHERS')
+                        <td>{{ $old_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($old_exdeal_request == 'OTHERS')
+                        <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'OTHERS')
+                        <td>{{ $lessor_demand_exdeal_particulars}}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($lessor_demand_exdeal_request == 'OTHERS')
+                        <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'OTHERS')
+                        <td>{{ $new_terms_exdeal_particulars}}</td>
+                    @else
+                        <td class="text-right"> - </td>
+                    @endif
+                    @if($new_terms_exdeal_request == 'OTHERS')
+                        <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                    @else
+                    <td class="text-right"> - </td>
+                    @endif
+                    <td class="text-right"> - </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($old_exdeal_amount, 2) }}</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</th>
+                    <th class="text-right">{{ number_format($old_exdeal_amount - $new_terms_exdeal_amount, 2) }}</th>
+                </tr>
+            </tfoot>
         </table>
     </div>
-    <button class="btn btn-lg btn-shadow btn-primary back_to_form pull-right">Generate and Upload</button>
-    <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mr-1">Edit Details</button>
+    <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 mark_as_complete">Generate and Upload</button>
+    <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
 </div>
+
+{{-- <script>
+
+</script> --}}

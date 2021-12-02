@@ -39,6 +39,13 @@
         var end_date = $("#end_date").val();
         var exdeal_request = $("#exdeal_request").val();
 
+        var sam_id = ["{{ $sam_id }}"];
+        var activity_name = "mark_as_complete";
+        var site_category = ["{{ $site_category }}"];
+        var activity_id = ["{{ $activity_id }}"];
+        var program_id = "{{ $program_id }}";
+
+
         $.ajax({
             url: "/get-form-generator-view",
             method: "POST",
@@ -46,7 +53,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: 
-                $('.savings_computation_form').serialize()
+                    $('.savings_computation_form').serialize()
             ,
             success: function (resp) {
                 if (!resp.error) {
@@ -73,9 +80,6 @@
                         resp.message,
                         'error'
                     )
-
-                    console.log(resp);
-
                 }
             },
             error: function (resp) {
@@ -190,9 +194,10 @@
 
     });
 
-    $(".mark_as_complete").on("click", function() {
-        $(".mark_as_complete").attr("disabled", "disabled");
-        $(".mark_as_complete").text("Processing...");
+
+    $(document).on("click", ".mark_as_complete", function() {
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
 
         var sam_id = ["{{ $sam_id }}"];
         var activity_name = "mark_as_complete";
@@ -249,5 +254,4 @@
         });
 
     });
-
 </script>
