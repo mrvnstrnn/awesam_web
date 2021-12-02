@@ -24,7 +24,6 @@
 </div>
 
 <div class="row table_computation_div d-none">
-
 </div>
 
 {{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button> --}}
@@ -93,6 +92,54 @@
     $(document).on("click", ".back_to_form", function () {
         $(".form_div").removeClass("d-none");
         $(".table_computation_div").addClass("d-none");
+    });
+
+    $(document).on("click", ".save_computation", function () {
+        
+        $(".save_computation").attr("disabled", "disabled");
+        $(".save_computation").text("Processing...");
+
+        $.ajax({
+            url: "/save-saving-computation",
+            method: "POST",
+            data: $(".savings_computation_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Save Computation");
+                } else {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Save Computation");
+                }
+            },
+            error: function (resp) {
+
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".save_computation").removeAttr("disabled");
+                $(".save_computation").text("Save Computation");
+            }
+        });
     });
 
     $(document).ready(function(){

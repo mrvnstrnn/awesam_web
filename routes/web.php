@@ -510,6 +510,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/email-lrn', [RenewalController::class, 'email_lrn'])->name('email_lrn');
     Route::post('/save-lrn', [RenewalController::class, 'save_lrn'])->name('save_lrn');
     Route::post('/save-elas', [RenewalController::class, 'save_elas'])->name('save_elas');
+    Route::post('/save-saving-computation', [RenewalController::class, 'save_saving_computation'])->name('save_saving_computation');
 
 });
     

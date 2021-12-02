@@ -29,9 +29,8 @@
         $("#actions_list").removeClass('d-none');
     });
 
-    $(document).on("click", ".save_create_loi_to_renew_btn", function(e){
-        e.preventDefault();
-
+    $(".form_html").on("click", ".save_create_loi_to_renew_btn", function(e){
+        e.stopPropagation();
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
@@ -134,5 +133,23 @@
                 )
             }
         });
+    });
+
+    $(".form_html").on("change", "#from_date, #terms_in_years", function(e){
+        var terms_in_years = $("#terms_in_years").val();
+        var from_date = $("#from_date").val();
+        if ( terms_in_years != null && from_date != null ) {
+            var terms_in_years = $("#terms_in_years").val();
+            var from_date = new Date($("#from_date").val());
+
+            new_date = from_date.setFullYear(from_date.getFullYear() + +terms_in_years);
+
+            new_from_date = new Date(new_date)
+
+            date_day = (new_from_date.getDate()) < 10 ? "0" + (new_from_date.getDate()) : new_from_date.getDate() ;
+            let formatted_new_date =  new_from_date.getFullYear() + "-" + ( new_from_date.getMonth() + 1 ) + "-" + date_day;
+
+            $("#to_date").val(formatted_new_date);
+        }
     });
 </script>

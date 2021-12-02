@@ -71,6 +71,13 @@ class RenewalController extends Controller
 
                 // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'pending')
+                                ->first();
+
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
@@ -103,32 +110,35 @@ class RenewalController extends Controller
                     'type' => 'loi'
                 ];
 
-                $sub_activity_value = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
-                                                        ->first();
-
-                $sub_activity_value_loi = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
-                                                        ->first();
-
                 if (!is_null($sub_activity_value)) {
-                    $sub_activity_value->update([
-                        'value' => json_encode($array_data),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LOI'
-                    ]);
 
-                    $sub_activity_value_loi->update([
-                        'value' => json_encode($request->all()),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LOI'
-                    ]);
+                    $array_data_old = [
+                        'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                        'active_status' => 'rejected',
+                        'validator' => count($approvers_collect->all()),
+                        'validators' => $approvers_collect->all(),
+                        'type' => 'loi'
+                    ];
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'rejected')
+                                ->update([
+                                    'value' => json_encode($array_data_old),
+                                    'status' => 'rejected',
+                                    'user_id' => \Auth::id(),
+                                    'reason' => 'Old LOI'
+                                ]);
+
+                    // $sub_activity_value_loi->update([
+                    //     'value' => json_encode($request->all()),
+                    //     'status' => 'rejected',
+                    //     'user_id' => \Auth::id(),
+                    //     'reason' => 'Old LOI'
+                    // ]);
 
                     
                     SubActivityValue::create([
@@ -458,6 +468,17 @@ class RenewalController extends Controller
         }
     }
 
+    public function save_saving_computation (Request $request)
+    {
+        try {
+            $this->create_pdf($request->all(), $request->get('sam_id'), 'renewal-saving-computation-pdf');
+            return response()->json(['error' => true, 'message' => $request->all()]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function elas_approval($token, $sam_id, $program_id, $site_category, $activity_id, $action)
     {
         try {
@@ -483,6 +504,7 @@ class RenewalController extends Controller
             }
             
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return view('elas-approval', [ 'message' => $th->getMessage(), 'error' => true ]);
         }
     }

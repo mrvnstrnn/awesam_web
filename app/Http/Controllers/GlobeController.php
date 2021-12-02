@@ -2718,7 +2718,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [18, 20, 21, 24, 27, 28])
+                                    $sites->whereIn('view_site.activity_id', [16, 18, 20, 21, 24, 27, 28])
                                     ->get();
                                 }
         }
@@ -7376,7 +7376,7 @@ class GlobeController extends Controller
             // if ($form_name = "Vendor Awarding") {
                 $fields .= '<div class="row mb-2">';
                 $fields .= '<div class="col-12">';
-                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
                 $fields .= '</div></div>';
             // }
 
