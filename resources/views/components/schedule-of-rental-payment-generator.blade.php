@@ -205,7 +205,7 @@ switch($new_terms_tax_application){
 
                 if($new_monthly == 0){
 
-                    if($i < $new_terms_escalation_year){
+                    if($i < $new_terms_escalation_year - 1){
                         $new_monthly = $amount_new;
                     } else {
                         $new_monthly = ($new_terms_escalation_rate * $amount_new) + $amount_new;
@@ -215,7 +215,7 @@ switch($new_terms_tax_application){
 
                 } else {
 
-                    if($i >= $new_terms_escalation_year){
+                    if($i >= $new_terms_escalation_year - 1){
                         $running_new_monthly = ($running_new_monthly * $new_terms_escalation_rate) + $running_new_monthly;
 
                     } else {

@@ -50,6 +50,7 @@
         var site_category = ["{{ $site_category }}"];
         var activity_id = ["{{ $activity_id }}"];
         var program_id = "{{ $program_id }}";
+        $(".table_computation_div").html("");
 
         $.ajax({
             url: "/get-form-generator-view",
