@@ -19,6 +19,7 @@
             <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
             <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
             <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
+            <input type="hidden" name="form_generator_type" id="form_generator_type" value="savings computation">
         </form>
     </div>
 </div>
@@ -44,8 +45,6 @@
         var site_category = ["{{ $site_category }}"];
         var activity_id = ["{{ $activity_id }}"];
         var program_id = "{{ $program_id }}";
-
-        console.log($('.savings_computation_form, .site_data_form').serialize());
 
         $.ajax({
             url: "/get-form-generator-view",

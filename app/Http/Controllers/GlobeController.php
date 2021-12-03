@@ -7306,7 +7306,13 @@ class GlobeController extends Controller
     public function get_form_generator_view (Request $request)
     {
 
-        $what_component = "components.savings-computation-generator";
+        if($request->form_generator_type === "savings computation"){
+            $what_component = "components.savings-computation-generator";
+        }
+        elseif($request->form_generator_type === "schedule of rental payment"){
+            $what_component = "components.schedule-of-rental-payment-generator";
+        }
+
         return \View::make($what_component)
         ->with($request->all())
         ->render();
@@ -7347,6 +7353,8 @@ class GlobeController extends Controller
                 $button_name = "Save eLAS";
             } else if ($form_name == "Savings Computation") {
                 $button_name = "Make Savings Computation";
+            } else if ($form_name == "Schedule of Rental Payment") {
+                $button_name = "Make Schedule of Rental Payment";
             } else {
                 $button_name = "Save";
             }
