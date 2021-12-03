@@ -5,7 +5,7 @@
 </div>
 
 <div class="row pt-4">
-    <div class="col-md-12  pb-3">
+    <div class="col-md-12  pb-2">
         <H4 id="active_action">{{ $sub_activity }}</H4>
     </div>
 </div>
