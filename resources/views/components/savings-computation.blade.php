@@ -27,7 +27,7 @@
 <div class="row table_computation_div d-none">
 </div>
 
-<button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button>
+{{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button> --}}
 
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
@@ -35,7 +35,7 @@
         $("#actions_list").removeClass('d-none');
     });
 
-    $(document).on("click", ".save_savings_computation_btn", function () {
+    $(".form_html").on("click", ".save_savings_computation_btn", function () {
         var start_date = $("#start_date").val();
         var end_date = $("#end_date").val();
         var exdeal_request = $("#exdeal_request").val();
@@ -101,7 +101,7 @@
         $(".table_computation_div").addClass("d-none");
     });
 
-    $(document).on("click", ".save_computation", function () {
+    $(".table_computation_div").on("click", ".save_computation", function () {
         
         $(".save_computation").attr("disabled", "disabled");
         $(".save_computation").text("Processing...");

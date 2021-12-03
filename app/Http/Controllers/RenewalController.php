@@ -93,9 +93,15 @@ class RenewalController extends Controller
                                 ->get();
 
                 $approvers_collect = collect();
+                $approvers_collect_no_data = collect();
 
                 foreach ($stage_activities_approvers as $stage_activities_approver) {
                     $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'rejected'
+                    ]);
+
+                    $approvers_collect_no_data->push([
                         'profile_id' => $stage_activities_approver->approver_profile_id,
                         'status' => 'pending'
                     ]);
@@ -104,47 +110,48 @@ class RenewalController extends Controller
                 $array_data = [
                     'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                    'active_status' => 'pending',
+                    'active_status' => 'rejected',
                     'validator' => count($approvers_collect->all()),
                     'validators' => $approvers_collect->all(),
                     'type' => 'loi'
                 ];
 
+                $array_data_no_data = [
+                    'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect_no_data->all()),
+                    'validators' => $approvers_collect_no_data->all(),
+                    'type' => 'loi'
+                ];
+
                 if (!is_null($sub_activity_value)) {
 
-                    $array_data_old = [
-                        'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
-                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                        'active_status' => 'rejected',
-                        'validator' => count($approvers_collect->all()),
-                        'validators' => $approvers_collect->all(),
-                        'type' => 'loi'
-                    ];
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                    'approver_id' => \Auth::id(),
+                                ]);
 
                     SubActivityValue::select('sam_id')
                                 ->where('sam_id', $request->input("sam_id"))
                                 ->where('sub_activity_id', $request->input("sub_activity_id"))
                                 ->whereIn('type', ['doc_upload', 'loi'])
-                                ->where('status', 'rejected')
+                                ->where('status', 'pending')
                                 ->update([
-                                    'value' => json_encode($array_data_old),
                                     'status' => 'rejected',
-                                    'user_id' => \Auth::id(),
                                     'reason' => 'Old LOI'
                                 ]);
-
-                    // $sub_activity_value_loi->update([
-                    //     'value' => json_encode($request->all()),
-                    //     'status' => 'rejected',
-                    //     'user_id' => \Auth::id(),
-                    //     'reason' => 'Old LOI'
-                    // ]);
 
                     
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
@@ -163,7 +170,7 @@ class RenewalController extends Controller
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
@@ -332,9 +339,14 @@ class RenewalController extends Controller
                                 ->get();
 
                 $approvers_collect = collect();
+                $approvers_collect_no_data = collect();
 
                 foreach ($stage_activities_approvers as $stage_activities_approver) {
                     $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'rejected'
+                    ]);
+                    $approvers_collect_no_data->push([
                         'profile_id' => $stage_activities_approver->approver_profile_id,
                         'status' => 'pending'
                     ]);
@@ -343,9 +355,18 @@ class RenewalController extends Controller
                 $array_data = [
                     'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                    'active_status' => 'pending',
+                    'active_status' => 'rejected',
                     'validator' => count($approvers_collect->all()),
                     'validators' => $approvers_collect->all(),
+                    'type' => 'lrn'
+                ];
+
+                $array_data_no_data = [
+                    'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect_no_data->all()),
+                    'validators' => $approvers_collect_no_data->all(),
                     'type' => 'lrn'
                 ];
 
@@ -353,33 +374,35 @@ class RenewalController extends Controller
                                                         ->where('sam_id', $request->input("sam_id"))
                                                         ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                         ->where('status', 'pending')
-                                                        ->first();
-
-                $sub_activity_value_lrn = SubActivityValue::select('sam_id')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
+                                                        ->whereIn('type', ['doc_upload', 'lrn'])
                                                         ->first();
 
                 if (!is_null($sub_activity_value)) {
-                    $sub_activity_value->update([
-                        'value' => json_encode($array_data),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LRN'
-                    ]);
 
-                    $sub_activity_value_lrn->update([
-                        'value' => json_encode($array_data),
-                        'status' => 'rejected',
-                        'user_id' => \Auth::id(),
-                        'reason' => 'Old LRN'
-                    ]);
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->where('type', 'doc_upload')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                    'approver_id' => \Auth::id(),
+                                ]);
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->whereIn('type', ['doc_upload', 'lrn'])
+                                ->update([
+                                    'status' => 'rejected',
+                                    'reason' => 'Old LRN',
+                                ]);
 
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
@@ -393,11 +416,13 @@ class RenewalController extends Controller
                         'type' => 'lrn',
                         'status' => 'pending',
                     ]);
+
                 } else {
+
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
@@ -471,9 +496,125 @@ class RenewalController extends Controller
     public function save_saving_computation (Request $request)
     {
         try {
-            // return dd($request->all());
-            $this->create_pdf($request->all(), $request->get('sam_id'), 'savings-computation-generator');
-            return response()->json(['error' => true, 'message' => $request->all()]);
+
+            $component = 'savings-computation-generator-pdf';
+
+            $stage_activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('id', 'activity_type')
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('activity_id', $request->input('activity_id'))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
+
+            $stage_activities_approvers = \DB::connection('mysql2')
+                            ->table('stage_activities_approvers')
+                            ->select('approver_profile_id')
+                            ->where('stage_activities_id', $stage_activities->id)
+                            ->get();
+
+            $approvers_collect = collect();
+            $approvers_collect_no_data = collect();
+
+            foreach ($stage_activities_approvers as $stage_activities_approver) {
+                $approvers_collect->push([
+                    'profile_id' => $stage_activities_approver->approver_profile_id,
+                    'status' => 'rejected'
+                ]);
+                
+                $approvers_collect_no_data->push([
+                    'profile_id' => $stage_activities_approver->approver_profile_id,
+                    'status' => 'pending'
+                ]);
+            }
+            
+            $array_data = [
+                'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                'active_profile' => "",
+                'active_status' => 'rejected',
+                'validator' => count($approvers_collect->all()),
+                'validators' => $approvers_collect->all(),
+                'type' => 'saving_computation'
+            ];
+
+            $array_data_no_data = [
+                'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                'active_profile' => "",
+                'active_status' => 'pending',
+                'validator' => count($approvers_collect_no_data->all()),
+                'validators' => $approvers_collect_no_data->all(),
+                'type' => 'saving_computation'
+            ];
+
+            $sub_activity_value = SubActivityValue::select('sam_id')
+                                                    ->where('sam_id', $request->input("sam_id"))
+                                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                    ->where('status', 'pending')
+                                                    ->whereIn('type', ['doc_upload', 'saving_computation'])
+                                                    ->first();
+
+            if ( !is_null($sub_activity_value) ) {
+
+                SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->where('type', 'doc_upload')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                ]);
+
+                SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->whereIn('type', ['doc_upload', 'saving_computation'])
+                                ->update([
+                                    'status' => 'rejected',
+                                    'reason' => 'Old Savings Computation',
+                                ]);
+
+                SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($request->all()),
+                    'type' => 'saving_computation',
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($array_data_no_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'pending',
+                ]);
+            } else {
+                                                        
+                SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($request->all()),
+                    'type' => 'saving_computation',
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($array_data_no_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'pending',
+                ]);
+            }
+
+            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), 'savings-computation-generator-pdf');
+            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
+
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -784,6 +925,20 @@ class RenewalController extends Controller
 
 
 
+    }
+
+    private function create_savings_computation_pdf ($array, $samid, $component)
+    {
+        $view = \View::make('components.'.$component)
+                    ->with($array)
+                    ->render();
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf = PDF::loadHTML($view);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->download();
+
+        \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
     }
 
     private function create_pdf ($array, $samid, $component)

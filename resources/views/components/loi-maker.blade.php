@@ -54,8 +54,8 @@
                     
                     $(".save_create_loi_to_renew_btn").removeAttr("disabled");
                     $(".save_create_loi_to_renew_btn").text("Save LOI");
-
-                    $("#viewInfoModal").modal("hide");
+                    $(".btn_switch_back_to_actions").trigger("click");
+                    // $("#viewInfoModal").modal("hide");
                 } else {
                     
                     if (typeof resp.message === 'object' && resp.message !== null) {

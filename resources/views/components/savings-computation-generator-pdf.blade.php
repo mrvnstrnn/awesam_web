@@ -422,7 +422,7 @@ elseif($amount_used == 'Not Applicable'){
 </style>
 <div class="col-12">
     <div class="table-responsive">
-        <table class="table table-bordered table-hover table-sm">
+        <table class="table table-bordered table-hover table-sm" style="width: 100%;" border="1" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
                     <th class="text-center">Type of Lessor</th>
@@ -479,7 +479,7 @@ elseif($amount_used == 'Not Applicable'){
         </table>
     </div>
     <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover summary_table table-striped">
+        <table class="table table-bordered table-hover summary_table table-striped" style="width: 100%;" border="1" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
                     <th rowspan="1" colspan="3" class="text-center">Renewal Rate</th>
@@ -645,7 +645,7 @@ elseif($amount_used == 'Not Applicable'){
     </div>
 
     <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover table-sm table-striped summary_exdeal_table">
+        <table class="table table-bordered table-hover table-sm table-striped summary_exdeal_table" style="width: 100%;" border="1" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
                     <th rowspan="2" class="text-center">Other Consideration</th>
@@ -816,6 +816,4 @@ elseif($amount_used == 'Not Applicable'){
             </tfoot>
         </table>
     </div>
-    <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 save_computation">Generate and Upload</button>
-    <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
 </div>

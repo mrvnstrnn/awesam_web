@@ -7313,11 +7313,11 @@ class GlobeController extends Controller
                 //     ]);
                 // }
             }
-        } 
+        }
     }
+
     public function get_form_generator_view (Request $request)
     {
-
         if($request->form_generator_type === "savings computation"){
             $what_component = "components.savings-computation-generator";
         }
