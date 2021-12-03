@@ -27,7 +27,7 @@
 <div class="row table_computation_div d-none">
 </div>
 
-<button class="btn btn-shadow btn-lg btn-primary mark_as_complete">Mark as Complete</button>
+{{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete">Mark as Complete</button> --}}
 
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
@@ -117,12 +117,15 @@
                     lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
 
                     $.each(lrn, function(index, data) {
+                        // console.log(index);
                         if (index == "start_date") {
                             indexNew = "contract_start";
                         } else if (index == "end_date") {
                             indexNew = "contract_end";
-                        } else if (index == "end_date") {
-                            indexNew = "contract_end";
+                        } else if (index == "lease_term") {
+                            indexNew = "contract_term";
+                        } else if (index == "final_negotiated_amount") {
+                            indexNew = "monthly_rent";
                         } else {
                             indexNew = index;
                         }
@@ -156,6 +159,10 @@
                 )
             }
         });
+    });
+
+    $(".form_html").on("click", ".save_schedule_of_rental_payment_btn", function (e) {
+
     });
 
     $(".mark_as_complete").on("click", function() {

@@ -2718,9 +2718,19 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [16, 18, 20, 21, 24, 27, 28])
+                                    $sites->whereIn('view_site.activity_id', [16, 19, 20, 22, 23, 24, 27, 28, 32])
                                     ->get();
                                 }
+        }
+
+        elseif($activity_type == 'refx process'){
+
+                $sites = \DB::connection('mysql2')
+                                ->table("view_site")
+                                ->where('view_site.program_id', $program_id)
+                                ->where('view_site.profile_id', \Auth::user()->profile_id)
+                                ->whereIn('view_site.activity_id', [30, 31])
+                                ->get();
         }
 
         elseif($activity_type == 'vendor awarding'){
@@ -4982,11 +4992,13 @@ class GlobeController extends Controller
         try {
             $sub_activity_ids = SubActivityValue::where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
+                                        ->where('type', 'doc_upload')
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids)
                                 ->addColumn('value', function($row) {
                                     $json = json_decode($row->value, true);
+
                                     return $json['file'];
                                 });
             return $dt->make(true);
@@ -5006,7 +5018,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -7352,9 +7364,12 @@ class GlobeController extends Controller
             } else if ($form_name == "eLAS Renewal") {
                 $button_name = "Save eLAS";
             } else if ($form_name == "Savings Computation") {
+                // $button_name = "Generate Computation";
                 $button_name = "Make Savings Computation";
             } else if ($form_name == "Schedule of Rental Payment") {
-                $button_name = "Make Schedule of Rental Payment";
+                $button_name = "Save Schedule of Rental Payment";
+            } else if ($form_name == "Application of Payment") {
+                $button_name = "Confirm Application of Payment";
             } else {
                 $button_name = "Save";
             }

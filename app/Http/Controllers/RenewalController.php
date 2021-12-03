@@ -491,6 +491,36 @@ class RenewalController extends Controller
         }
     }
 
+    public function save_endorsment_to_sts (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                '*' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                // $sub_activity_value = SubActivityValue::create([
+                //     'sam_id' => $request->get('sam_id'),
+                //     'type' => 'refx',
+                //     'status' => 'pending',
+                //     'user_id' => \Auth::id(),
+                //     'value' => json_encode($request->all())
+                // ]);
+
+                $action = "true";
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $action, [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfull save the data."]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 
     public function elas_approval($token, $sam_id, $program_id, $site_category, $activity_id, $action)
     {
@@ -519,6 +549,27 @@ class RenewalController extends Controller
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return view('elas-approval', [ 'message' => $th->getMessage(), 'error' => true ]);
+        }
+    }
+
+    public  function approve_schedule_of_payment (Request $request)
+    {
+        try {
+            SubActivityValue::where('sam_id', $request->get('sam_id'))
+                            ->where('type', 'refx')
+                            ->where('status', 'pending')
+                            ->update([
+                                'status' => 'approved',
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => \Carbon::now()->toDateString()
+                            ]);
+
+            $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+            return response()->json(['error' => false, 'message' => "Successfully confirm Application of Payment."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 

@@ -379,6 +379,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $lrn->value;
     }
 
+    public function get_refx ($sam_id, $type)
+    {
+        $lrn = SubActivityValue::where('sam_id', $sam_id)
+                                    ->where('status', 'pending')
+                                    ->where('type', $type)
+                                    ->first();
+
+        return $lrn->value;
+    }
+
     public function get_program_renewal ($sam_id)
     {
         $get_program_renewal = \DB::connection('mysql2')

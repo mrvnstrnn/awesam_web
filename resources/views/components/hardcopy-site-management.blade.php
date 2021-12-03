@@ -3,8 +3,6 @@
 <div class="row file_preview d-none">
     <div class="col-12 mb-3">
         <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-        {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
-        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
     </div>
     <div class="col-12 file_viewer">
     </div>
@@ -96,8 +94,6 @@
                             $border = "border-danger";
                         }
                     @endphp
-                    
-                    {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
                         
                     <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
                         <div class="child_div_{{ $data[0]->sub_activity_id }}">

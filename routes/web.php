@@ -511,6 +511,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/save-lrn', [RenewalController::class, 'save_lrn'])->name('save_lrn');
     Route::post('/save-elas', [RenewalController::class, 'save_elas'])->name('save_elas');
     Route::post('/save-saving-computation', [RenewalController::class, 'save_saving_computation'])->name('save_saving_computation');
+    Route::post('/save-endorsment-to-sts', [RenewalController::class, 'save_endorsment_to_sts'])->name('save_endorsment_to_sts');
+    Route::post('/approve-schedule-of-payment', [RenewalController::class, 'approve_schedule_of_payment'])->name('approve_schedule_of_payment');
 
 });
     

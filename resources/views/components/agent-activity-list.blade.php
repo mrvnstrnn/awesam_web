@@ -17,17 +17,9 @@ if (\Auth::user()->profile_id == 2) {
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
-                    ->get();   
-} else {
-    $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
-                    ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
-                    ->orderBy('stage_id', 'ASC')
-                    ->orderBy('activity_id', 'ASC')
                     ->get();
-}
 
-$uniques_stage = \DB::connection('mysql2')
+    $uniques_stage = \DB::connection('mysql2')
                     ->table('view_assigned_sites')
                     ->select(
                         'stage_id', 
@@ -37,6 +29,25 @@ $uniques_stage = \DB::connection('mysql2')
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->distinct('stage_id')
                     ->get();
+} else {
+    $activities = \DB::connection('mysql2')
+                    ->table('view_assigned_sites')
+                    ->where('activity_profile_id', 38)
+                    ->orderBy('stage_id', 'ASC')
+                    ->orderBy('activity_id', 'ASC')
+                    ->get();
+
+    $uniques_stage = \DB::connection('mysql2')
+                    ->table('view_assigned_sites')
+                    ->select(
+                        'stage_id',
+                        'stage_name'
+                    )
+                    // ->where('agent_id', \Auth::id())
+                    ->where('activity_profile_id', 38)
+                    ->distinct('stage_id')
+                    ->get();
+}
 @endphp
 
 @foreach ($uniques_stage as $unique_stage)
@@ -53,7 +64,7 @@ $uniques_stage = \DB::connection('mysql2')
                         <input type="text" name="search" class="form-control" placeholder="Search {{ $unique_stage->stage_name }} sites...">
                     </div>
                     @for ($i = 0; $i < count($activities); $i++)
-
+                    
                         @if ( $unique_stage->stage_id == $activities[$i]->stage_id )
                         @php
                         $activity_color = 'dark';
