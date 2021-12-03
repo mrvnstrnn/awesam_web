@@ -1,6 +1,11 @@
 @php
     
-    $lease_term_years = 10;
+    if(!isset($contract_term) || $contract_term == ""){
+        $lease_term_years = 10;
+
+    } else {
+        $lease_term_years = $contract_term;
+    }
 
 switch($new_terms_tax_application){
 
