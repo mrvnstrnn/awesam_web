@@ -181,7 +181,7 @@ class RenewalController extends Controller
 
                 // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 
-                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
+                return response()->json(['error' => false, 'message' => "Successfully submitted an LOI." ]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
@@ -469,6 +469,18 @@ class RenewalController extends Controller
     }
 
     public function save_saving_computation (Request $request)
+    {
+        try {
+            // return dd($request->all());
+            $this->create_pdf($request->all(), $request->get('sam_id'), 'savings-computation-generator');
+            return response()->json(['error' => true, 'message' => $request->all()]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_saving_computation_generated (Request $request)
     {
         try {
             $this->create_pdf($request->all(), $request->get('sam_id'), 'renewal-saving-computation-pdf');

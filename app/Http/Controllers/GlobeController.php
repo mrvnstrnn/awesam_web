@@ -2541,7 +2541,12 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
                 ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
 
-            }                        
+            }                       
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
+            }
+
+
 
             $sites->get();
 
@@ -2971,7 +2976,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')->table("site");
+            $sites = \DB::connection('mysql2')->table("view_site");
                 // ->where('program_id', $program_id)
                 // ->where('active_profile', \Auth::user()->profile_id);
                 // ->whereNull('approver_id')
@@ -2984,6 +2989,10 @@ class GlobeController extends Controller
                 $site->get();
 
             }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+
 
 
         }
@@ -7306,6 +7315,21 @@ class GlobeController extends Controller
             }
         } 
     }
+    public function get_form_generator_view (Request $request)
+    {
+
+        if($request->form_generator_type === "savings computation"){
+            $what_component = "components.savings-computation-generator";
+        }
+        elseif($request->form_generator_type === "schedule of rental payment"){
+            $what_component = "components.schedule-of-rental-payment-generator";
+        }
+
+        return \View::make($what_component)
+        ->with($request->all())
+        ->render();
+
+    }
 
     public function get_form ($sub_activity_id, $form_name)
     {
@@ -7340,7 +7364,8 @@ class GlobeController extends Controller
             } else if ($form_name == "eLAS Renewal") {
                 $button_name = "Save eLAS";
             } else if ($form_name == "Savings Computation") {
-                $button_name = "Generate Computation";
+                // $button_name = "Generate Computation";
+                $button_name = "Make Savings Computation";
             } else if ($form_name == "Schedule of Rental Payment") {
                 $button_name = "Save Schedule of Rental Payment";
             } else if ($form_name == "Application of Payment") {
