@@ -3431,7 +3431,7 @@ class GlobeController extends Controller
 
         }
 
-        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement' || $sub_activity == 'Lessor Renewal Negotiation'){ 
             // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
@@ -3447,9 +3447,10 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'LESSOR ENGAGEMENT'){
 
-            $what_component = "components.subactivity-lessor-engagement";
+        else if($sub_activity == 'Commercial Negotiation'){
+
+            $what_component = "components.renewal-commercial-negotiation";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -3462,6 +3463,21 @@ class GlobeController extends Controller
             ->render();
 
         }
+        // elseif($sub_activity == 'LESSOR ENGAGEMENT'){
+
+        //     $what_component = "components.subactivity-lessor-engagement";
+        //     return \View::make($what_component)
+        //     ->with([
+        //         'sub_activity' => $sub_activity,
+        //         'sam_id' => $sam_id,
+        //         'sub_activity_id' => $sub_activity_id,
+        //         'program_id' => $program_id,
+        //         'site_category' => $site_category,
+        //         'activity_id' => $activity_id,
+        //     ])
+        //     ->render();
+
+        // }
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
@@ -4854,6 +4870,61 @@ class GlobeController extends Controller
                                         return $row->value;
                                     }
                                 });
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+    public function get_commercial_engagement($sub_activity_id, $sam_id)
+    {
+        try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('type', 'lessor_commercial_engagement')
+                                                        ->whereIn('user_id', $array_id)
+                                                        ->whereJsonContains("value", [
+                                                            "sub_activity_id" => $sub_activity_id
+                                                        ])
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                        ->addColumn('value', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_remarks'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('method', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_method'];
+                            } else {
+                                return $row->value;
+                            }
+                        });
+                        
             return $dt->make(true);
 
         } catch (\Throwable $th) {
@@ -7372,6 +7443,8 @@ class GlobeController extends Controller
                 $button_name = "Confirm Application of Payment";
             } else if ($form_name == "eLAS Approval") {
                 $button_name = "Confirm eLAS Approval";
+            } else if ($form_name == "Commercial Negotiation") {
+                $button_name = "Save Commercial Negotiation";
             } else {
                 $button_name = "Save";
             }
@@ -7388,6 +7461,12 @@ class GlobeController extends Controller
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
                     }
                     $fields .= '</select>';
+                    $fields .= '</div>';
+                } else if ($form_data->type == 'textarea') {
+                    $class_add = $form_data->type == "date" ? "flatpicker" : "";
+                    $fields .= '<div class="col-md-8">';
+                    $fields .= '<textarea type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'></textarea>';
+                    $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 } else {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";

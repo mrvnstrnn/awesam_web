@@ -349,6 +349,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Lessor Engagement
     Route::post('/add-engagement', [GlobeController::class, 'save_engagement']);
     Route::get('/get-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_engagement']);
+    Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_commercial_engagement']);
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);

@@ -57,7 +57,7 @@
                     <small class="text-danger lessor_approval-errors"></small>
                 </div>
             </div>
-            <div class="position-relative row form-group ">
+            <div class="position-relative row form-group">
                 <div class="col-sm-10 offset-sm-3">
                     <button class="btn btn-lg btn-shadow btn-primary save_engagement" type="button">Save Engagement</button>
                 </div>

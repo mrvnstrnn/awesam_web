@@ -135,21 +135,21 @@
         });
     });
 
-    $(".form_html").on("change", "#from_date, #terms_in_years", function(e){
+    $(".form_html").on("change", "#new_terms_start_date, #terms_in_years", function(e){
         var terms_in_years = $("#terms_in_years").val();
-        var from_date = $("#from_date").val();
-        if ( terms_in_years != null && from_date != null ) {
+        var new_terms_start_date = $("#new_terms_start_date").val();
+        if ( terms_in_years != null && new_terms_start_date != null ) {
             var terms_in_years = $("#terms_in_years").val();
-            var from_date = new Date($("#from_date").val());
+            var new_terms_start_date = new Date($("#new_terms_start_date").val());
 
-            new_date = from_date.setFullYear(from_date.getFullYear() + +terms_in_years);
+            new_date = new_terms_start_date.setFullYear(new_terms_start_date.getFullYear() + +terms_in_years);
 
-            new_from_date = new Date(new_date)
+            new_new_terms_start_date = new Date(new_date)
 
-            date_day = (new_from_date.getDate()) < 10 ? "0" + (new_from_date.getDate()) : new_from_date.getDate() ;
-            let formatted_new_date =  new_from_date.getFullYear() + "-" + ( new_from_date.getMonth() + 1 ) + "-" + date_day;
+            date_day = (new_new_terms_start_date.getDate()) < 10 ? "0" + (new_new_terms_start_date.getDate()) : new_new_terms_start_date.getDate();
+            let formatted_new_date =  new_new_terms_start_date.getFullYear() + "-" + ( new_new_terms_start_date.getMonth() + 1 ) + "-" + date_day;
 
-            $("#to_date").val(formatted_new_date);
+            $("#new_terms_end_date").val(formatted_new_date);
         }
     });
 </script>

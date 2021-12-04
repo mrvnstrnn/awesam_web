@@ -46,30 +46,17 @@ class RenewalController extends Controller
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
                     'terms_in_years' => $request->input("terms_in_years"),
-                    'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
-                    'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
+                    'new_terms_start_date' => date('M d, Y', strtotime($request->input("new_terms_start_date"))),
+                    'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
                     // 'date_word' => $date_word,
                     'expiration_date' => date('M d, Y', strtotime($request->input("expiration_date"))),
                     'undersigned_number' => $request->input("undersigned_number"),
-                    'undersigned_email' => $request->input("undersigned_email")
+                    'undersigned_email' => $request->input("undersigned_email"),
+                    'honorific' => $request->input("honorific"),
+                    'lessor_position' => $request->input("lessor_position"),
+                    // 'signatory' => $request->input("signatory"),
+                    // 'signatory_position' => $request->input("signatory_position")
                 ];
-
-                // $view = \View::make('components.loi-pdf')
-                //     ->with([
-                //         'json_data' => json_encode($array)   
-                //     ])
-                //     ->render();
-
-                // $pdf = \App::make('dompdf.wrapper');
-                // $pdf = PDF::loadHTML($view);
-                // $pdf->setPaper('a4', 'portrait');
-                // $pdf->download();
-
-                $this->create_pdf($array, $samid, 'loi-pdf');
-
-                // \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
-
-                // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
 
                 $sub_activity_value = SubActivityValue::select('sam_id')
                                 ->where('sam_id', $request->input("sam_id"))
@@ -186,6 +173,7 @@ class RenewalController extends Controller
                     ]);
                 }
 
+                $this->create_pdf($array, $samid, 'loi-pdf');
                 // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 
                 return response()->json(['error' => false, 'message' => "Successfully submitted an LOI." ]);

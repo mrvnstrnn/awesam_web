@@ -32,7 +32,6 @@
     <body>
         @php
             $json = json_decode($json_data);
-            print_r($json);
         @endphp
         <div id="content">
 

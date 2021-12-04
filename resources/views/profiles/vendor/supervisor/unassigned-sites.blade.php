@@ -144,7 +144,7 @@
         }
     } );
 
-    $(document).on('click',"#btn-assign-sites", function(e){
+    $(".agent_form").on('click',"#btn-assign-sites", function(e){
         e.preventDefault();
 
         $("#btn-assign-sites").unbind("click");

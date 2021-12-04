@@ -46,11 +46,26 @@
                     padding-top: 30px;
                     margin-bottom: 0px;
                 }
+
+                p, li {
+                    font-size: 14px;
+                }
         </style>
     </head>
     <body>
         @php
             $json = json_decode($json_data);
+
+            $honorific = "";
+            if ( $json->honorific == 'Not Applicable' ) {
+                $honorific = "";
+                $lessor_surname = $json->lessor;
+            } else {
+                $surname = explode(" ", $json->lessor);
+
+                $honorific = $json->honorific;
+                $lessor_surname = $json->honorific . " " . end($surname);
+            }
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
@@ -73,11 +88,13 @@
                 </tr>
             </table>
             
-            <table style="width: 40%; margin-top: 0px;">
+            <table style="width: 50%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p><b>{{ $json->lessor }}</b></p>
-                        <p>{{ $json->lessor_address }}</p>
+                        <p>{{ \Carbon::now()->format('M d, Y') }}</p>
+                        <p style="margin-bottom: 0px;"><b>{{ $honorific . " " . $json->lessor }}</b></p>
+                        <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
+                        <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
                 </tr>
             </table>
@@ -85,11 +102,11 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p>Dear <b>Mr. Mundala:</b>
+                        <p>Dear <b>{{ $lessor_surname }}</b>
                         <p>
                             We are writing on behalf of Globe Telecom, Inc. (Globe) in connection with the existing Contract of
                             Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that Globe would like to signify its intent
-                            to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->from_date }}</b> to <b>{{ $json->to_date }}</b>. In
+                            to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->new_terms_start_date }}</b> to <b>{{ $json->new_terms_end_date }}</b>. In
                             line with this, we would like to request for the submission of the following documents which are
                             necessary in the processing of the contract renewal:</p>
                             <ul>
@@ -118,6 +135,10 @@
 
                             <p>Thank you.</p>
                             <p>Very truly yours,</p>
+                            {{-- <p style="margin-top: 60px;"><b>{{ $json->signatory }}</b></p>
+                            <p style="margin-top: 0px;">{{ $json->signatory_position }}</p> --}}
+                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>Sample Signatory Name</b></p>
+                            <p style="margin-top: 0px;">Sample Signatory Postion</p>
                     </td>
                 </tr>
             </table>
