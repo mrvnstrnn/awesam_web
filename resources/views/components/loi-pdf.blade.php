@@ -102,7 +102,7 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p>Dear <b>{{ $lessor_surname }}</b>
+                        <p>Dear <b>{{ $lessor_surname }}</b>,
                         <p>
                             We are writing on behalf of Globe Telecom, Inc. (Globe) in connection with the existing Contract of
                             Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that Globe would like to signify its intent

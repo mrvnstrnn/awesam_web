@@ -4,6 +4,12 @@
     </div>
 </div>
 
+<div class="row pt-4">
+    <div class="col-md-12">
+        <H5 id="active_action">{{ $sub_activity }}</H5>
+    </div>
+</div>
+
 <div id="action_lessor_engagement" class=''>
     <div class="row py-5 px-4" id="control_box">
         <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Call">

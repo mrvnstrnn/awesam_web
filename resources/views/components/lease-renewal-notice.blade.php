@@ -42,7 +42,13 @@
 
                     var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
 
+                    var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'lessor_commercial_engagement'))); }}".replace(/&quot;/g,'"'));
+
                     $.each(get_program_renewal, function(index, data) {
+                        $("#"+index).val(data);
+                    });
+
+                    $.each(commercial_nego, function(index, data) {
                         $("#"+index).val(data);
                     });
 

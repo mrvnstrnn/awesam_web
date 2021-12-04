@@ -4,6 +4,12 @@
     </div>
 </div>
 
+<div class="row pt-4">
+    <div class="col-md-12">
+        <H5 id="active_action">{{ $sub_activity }}</H5>
+    </div>
+</div>
+
 <div id="action_lessor_engagement">
     <div class="row" id="control_box">
         <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Call">
@@ -64,9 +70,11 @@
                         '<tr>' +
                             '<th style="width: 5%">#</th>' +
                             '<th>Method</th>' +
-                            '<th style="width: 35%">Remarks</th>' +
-                            '<th style="width: 35%">Status</th>' +
-                            '<th>Date Approved</th>' +
+                            '<th>Contract Rate</th>' +
+                            '<th>Escalation Rate</th>' +
+                            '<th>Escalation Year</th>' +
+                            '<th>Advance Rent Months</th>' +
+                            '<th>Date Created</th>' +
                         '</tr>' +
                     '</thead>' +
                 '</table>';
@@ -91,8 +99,10 @@
             columns: [
                 { data: "id" },
                 { data: "method" },
-                { data: "value" },
-                { data: "status" },
+                { data: "lessor_demand_contract_rate" },
+                { data: "lessor_demand_escalation_rate" },
+                { data: "lessor_demand_escalation_year" },
+                { data: "lessor_demand_advance_rent_months" },
                 { data: "date_created" },
             ],
         });
@@ -168,6 +178,9 @@
 
                         $("#method").val(method);
                         $("#date").val(today);
+                        if ( $("#approval").val() == "Approval Secured" ) {
+                            $("#viewInfoModal").modal("hide");
+                        }
 
                         $(".save_commercial_negotiation_btn").removeAttr('disabled');
                         $(".save_commercial_negotiation_btn").text('Save Commercial Negotiation');

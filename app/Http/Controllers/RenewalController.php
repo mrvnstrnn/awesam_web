@@ -810,6 +810,46 @@ class RenewalController extends Controller
                             } else {
                                 return $row->value;
                             }
+                        })
+                        ->addColumn('lessor_demand_contract_rate', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_contract_rate'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_escalation_rate', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_escalation_rate'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_escalation_year', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_escalation_year'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_advance_rent_months', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_advance_rent_months'];
+                            } else {
+                                return $row->value;
+                            }
                         });
                         
             return $dt->make(true);
