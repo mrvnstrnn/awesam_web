@@ -8,6 +8,7 @@ use Log;
 use PDF;
 use Carbon;
 use DateTime;
+use DataTables;
 use App\Models\User;
 use App\Models\SiteStageTracking;
 use App\Models\Site;
@@ -720,6 +721,102 @@ class RenewalController extends Controller
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_commecial_negotiation(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                "*" => "required",
+            ));
+
+            if ($validate->passes()) {
+                $status = "";
+                if ( $request->input('approval') == "Approval not yet secured" ) {
+                    $status = "active";
+                } else if ( $request->input('approval') == "Approval Secured" ) {
+                    $status = "approved";
+                } else if ( $request->input('approval') == "Lessor Rejected" ) {
+                    $status = "denied";
+                }
+                
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'status' => $status,
+                    'type' => 'lessor_commercial_engagement',
+                ]);
+
+                if ( $status == "approved" ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')] );
+                }
+
+                return response()->json(['error' => false, 'message' => "Successfully saved engagement."]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_commercial_engagement($sub_activity_id, $sam_id)
+    {
+        try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('type', 'lessor_commercial_engagement')
+                                                        ->whereIn('user_id', $array_id)
+                                                        ->whereJsonContains("value", [
+                                                            "sub_activity_id" => $sub_activity_id
+                                                        ])
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                        ->addColumn('value', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['remarks'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('method', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['method'];
+                            } else {
+                                return $row->value;
+                            }
+                        });
+                        
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
         }
     }
 

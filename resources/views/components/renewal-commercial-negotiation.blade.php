@@ -36,11 +36,25 @@
     </div>
 </div>
 
+<div class="row d-none">
+    <div class="col-12">
+        <form class="site_data_form">
+            <input type="hidden" name="sam_id" id="sam_id" value="{{ $sam_id }}">
+            <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ $sub_activity_id }}">
+            <input type="hidden" name="site_category" id="site_category" value="{{ $site_category }}">
+            <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
+            <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
+        </form>
+    </div>
+</div>
+
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
     });
+
+    // cancel_commercial_negotiation_btn
 
     var sub_activity_id = "{{ $sub_activity_id }}";
     var sam_id = "{{ $sam_id }}";
@@ -129,30 +143,48 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
+        $(".commercial_negotiation_form small").text("");
+
+        var method = $("#method").val();
+        var today = $("#date").val();
+
         $.ajax({
             url: "/save-commecial-negotiation",
             method: "POST",
-            data: $(".commercial_negotiation_form").serialize(),
-            // headers: {
-            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            // },
+            data: $(".commercial_negotiation_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (resp) {
                 if (!resp.error) {
-                    
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
+                    $('#table_lessor_engage_'+sub_activity_id).DataTable().ajax.reload(function (){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
 
-                    $(".save_commercial_negotiation_btn").removeAttr('disabled');
-                    $(".save_commercial_negotiation_btn").text('Save Commercial Negotiation');
+                        $(".commercial_negotiation_form")[0].reset();
+
+                        $("#method").val(method);
+                        $("#date").val(today);
+
+                        $(".save_commercial_negotiation_btn").removeAttr('disabled');
+                        $(".save_commercial_negotiation_btn").text('Save Commercial Negotiation');
+                    });
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".commercial_negotiation_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
                     
                     $(".save_commercial_negotiation_btn").removeAttr('disabled');
                     $(".save_commercial_negotiation_btn").text('Save Commercial Negotiation');

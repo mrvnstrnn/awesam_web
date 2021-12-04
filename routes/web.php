@@ -349,7 +349,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Lessor Engagement
     Route::post('/add-engagement', [GlobeController::class, 'save_engagement']);
     Route::get('/get-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_engagement']);
-    Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [GlobeController::class, 'get_commercial_engagement']);
 
     // Get agent based on program id
     Route::get('/get-agent-based-program/{program_id}', [GlobeController::class, 'get_agent_based_program']);
@@ -515,6 +514,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/save-endorsment-to-sts', [RenewalController::class, 'save_endorsment_to_sts'])->name('save_endorsment_to_sts');
     Route::post('/approve-schedule-of-payment', [RenewalController::class, 'approve_schedule_of_payment'])->name('approve_schedule_of_payment');
     Route::post('/elas-approval-confirm', [RenewalController::class, 'elas_approval_confirm'])->name('elas_approval_confirm');
+    Route::post('/save-commecial-negotiation', [RenewalController::class, 'save_commecial_negotiation']);
+    Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [RenewalController::class, 'get_commercial_engagement']);
 
 });
     

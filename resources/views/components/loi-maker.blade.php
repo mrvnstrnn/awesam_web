@@ -30,7 +30,6 @@
     });
 
     $(".form_html").on("click", ".save_create_loi_to_renew_btn", function(e){
-        e.stopPropagation();
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 

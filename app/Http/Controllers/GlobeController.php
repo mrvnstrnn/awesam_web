@@ -4878,61 +4878,6 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_commercial_engagement($sub_activity_id, $sam_id)
-    {
-        try {
-
-            if (\Auth::user()->getUserProfile()->id == 3) {
-                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
-
-                $array_id = collect();
-
-                foreach ($user_to_gets as $user_to_get) {
-                    $array_id->push($user_to_get->user_id);
-                }
-            } else {
-                $array_id = collect(\Auth::id());
-            }
-            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
-                                                        // ->where('sub_activity_id', $sub_activity_id)
-                                                        ->where('type', 'lessor_commercial_engagement')
-                                                        ->whereIn('user_id', $array_id)
-                                                        ->whereJsonContains("value", [
-                                                            "sub_activity_id" => $sub_activity_id
-                                                        ])
-                                                        ->orderBy('date_created', 'desc')
-                                                        ->get();
-
-            $dt = DataTables::of($sub_activity_files)
-                        ->addColumn('value', function($row){
-                            json_decode($row->value);
-                            if (json_last_error() == JSON_ERROR_NONE){
-                                $json = json_decode($row->value, true);
-
-                                return $json['lessor_remarks'];
-                            } else {
-                                return $row->value;
-                            }
-                        })
-                        ->addColumn('method', function($row){
-                            json_decode($row->value);
-                            if (json_last_error() == JSON_ERROR_NONE){
-                                $json = json_decode($row->value, true);
-
-                                return $json['lessor_method'];
-                            } else {
-                                return $row->value;
-                            }
-                        });
-                        
-            return $dt->make(true);
-
-        } catch (\Throwable $th) {
-            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
-            throw $th;
-        }
-    }
-
     public function save_engagement(Request $request)
     {
         try {
@@ -7445,6 +7390,7 @@ class GlobeController extends Controller
                 $button_name = "Confirm eLAS Approval";
             } else if ($form_name == "Commercial Negotiation") {
                 $button_name = "Save Commercial Negotiation";
+                $button_name2 = "Back Commercial Negotiation";
             } else {
                 $button_name = "Save";
             }
@@ -7481,6 +7427,9 @@ class GlobeController extends Controller
                 $fields .= '<div class="row mb-2">';
                 $fields .= '<div class="col-12">';
                 $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                if ( isset($button_name2) ) {
+                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name2.'</button>';
+                }
                 $fields .= '</div></div>';
             // }
 
