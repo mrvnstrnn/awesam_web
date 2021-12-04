@@ -2718,7 +2718,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [16, 19, 20, 22, 23, 24, 27, 28, 32])
+                                    $sites->whereIn('view_site.activity_id', [19, 20, 22, 23, 24, 27, 28, 32])
                                     ->get();
                                 }
         }
@@ -7370,6 +7370,8 @@ class GlobeController extends Controller
                 $button_name = "Save Schedule of Rental Payment";
             } else if ($form_name == "Application of Payment") {
                 $button_name = "Confirm Application of Payment";
+            } else if ($form_name == "eLAS Approval") {
+                $button_name = "Confirm eLAS Approval";
             } else {
                 $button_name = "Save";
             }

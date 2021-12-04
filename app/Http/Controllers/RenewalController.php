@@ -621,6 +621,27 @@ class RenewalController extends Controller
         }
     }
 
+    public function elas_approval_confirm (Request $request)
+    {
+        try {
+            SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->where('type', 'elas_renewal')
+                                ->update([
+                                    'status' => 'approved',
+                                ]);
+
+            $asd = $this->move_site($request->input('sam_id'), $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+
+            return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function save_saving_computation_generated (Request $request)
     {
         try {
