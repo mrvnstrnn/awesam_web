@@ -123,6 +123,14 @@
 
                     $(".save_computation").removeAttr("disabled");
                     $(".save_computation").text("Save Computation");
+
+                    $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
+
+                    $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
+                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                    );
+
+                    $(".btn_switch_back_to_actions").trigger("click");
                 } else {
                     
                     Swal.fire(
@@ -165,7 +173,7 @@
 
                     if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                         $.each(lrn, function(index, data) {
-                            $("#"+index).val(data);
+                            $(".savings_computation_form #"+index).val(data);
                         });
                     } else {
                         Swal.fire(
@@ -194,64 +202,74 @@
 
     });
 
+    $(".form_html").on("change", "#old_terms_escalation_rate, #new_terms_escalation_rate", function(e){
+        if ($(this).val() > 0 && $(this).val() < 101) {
+            var percent = $(this).val() / 100;
 
-    $(document).on("click", ".mark_as_complete", function() {
-        $(this).attr("disabled", "disabled");
-        $(".mark_as_complete").text("Processing...");
-
-        var sam_id = ["{{ $sam_id }}"];
-        var activity_name = "mark_as_complete";
-        var site_category = ["{{ $site_category }}"];
-        var activity_id = ["{{ $activity_id }}"];
-        var program_id = "{{ $program_id }}";
-
-        $.ajax({
-            url: "/accept-reject-endorsement",
-            method: "POST",
-            data: {
-                sam_id : sam_id,
-                activity_name : activity_name,
-                site_category : site_category,
-                activity_id : activity_id,
-                program_id : program_id,
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp) {
-                if (!resp.error){
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
-
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-
-                    $("#viewInfoModal").modal("hide");
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-                }
-            },
-            error: function (resp) {
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-
-                $(".mark_as_complete").removeAttr("disabled");
-                $(".mark_as_complete").text("Mark as Complete");
-            }
-        });
-
+            $(this).val(percent);
+        } else if ($(this).val() > 101) {
+            $(this).val(1);
+        }
     });
+
+
+    // $(document).on("click", ".mark_as_complete", function() {
+    //     $(this).attr("disabled", "disabled");
+    //     $(".mark_as_complete").text("Processing...");
+
+    //     var sam_id = ["{{ $sam_id }}"];
+    //     var activity_name = "mark_as_complete";
+    //     var site_category = ["{{ $site_category }}"];
+    //     var activity_id = ["{{ $activity_id }}"];
+    //     var program_id = "{{ $program_id }}";
+
+    //     $.ajax({
+    //         url: "/accept-reject-endorsement",
+    //         method: "POST",
+    //         data: {
+    //             sam_id : sam_id,
+    //             activity_name : activity_name,
+    //             site_category : site_category,
+    //             activity_id : activity_id,
+    //             program_id : program_id,
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function (resp) {
+    //             if (!resp.error){
+    //                 Swal.fire(
+    //                     'Success',
+    //                     resp.message,
+    //                     'success'
+    //                 )
+
+    //                 $(".mark_as_complete").removeAttr("disabled");
+    //                 $(".mark_as_complete").text("Mark as Complete");
+
+    //                 $("#viewInfoModal").modal("hide");
+    //             } else {
+    //                 Swal.fire(
+    //                     'Error',
+    //                     resp.message,
+    //                     'error'
+    //                 )
+
+    //                 $(".mark_as_complete").removeAttr("disabled");
+    //                 $(".mark_as_complete").text("Mark as Complete");
+    //             }
+    //         },
+    //         error: function (resp) {
+    //             Swal.fire(
+    //                 'Error',
+    //                 resp,
+    //                 'error'
+    //             )
+
+    //             $(".mark_as_complete").removeAttr("disabled");
+    //             $(".mark_as_complete").text("Mark as Complete");
+    //         }
+    //     });
+
+    // });
 </script>

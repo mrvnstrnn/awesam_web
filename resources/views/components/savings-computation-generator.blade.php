@@ -10,7 +10,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Net of VAT - Net of EWT":         
 
-        $gross_amt_old =  $old_terms_contract_rate / 0.95;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -19,7 +19,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Inclusive of VAT - Inclusive of EWT":         
     
-        $gross_amt_old =  $old_terms_contract_rate / 1.12;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1.12;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -28,7 +28,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Inclusive of VAT - Exclusive of EWT":     
 
-        $gross_amt_old =  $old_terms_contract_rate / 1.07;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1.07;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -37,7 +37,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Exclusive of VAT - Exclusive of EWT":         
     
-        $gross_amt_old =  $old_terms_contract_rate / 0.95;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -47,7 +47,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Exclusive of VAT - Inclusive of EWT":         
     
-        $gross_amt_old =  $old_terms_contract_rate / 1;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -56,7 +56,7 @@ switch($old_terms_tax_application){
 
     case "Vatable: Silent of Vat - Silent of EWT":         
     
-        $gross_amt_old =  $old_terms_contract_rate / 1;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1;
         $add_vat_old =  $gross_amt_old * 0.12;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -65,7 +65,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Net of VAT - Net of EWT":  
     
-        $gross_amt_old =  $old_terms_contract_rate / 0.95;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -74,7 +74,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Inclusive of EWT":         
 
-        $gross_amt_old =  $old_terms_contract_rate / 1;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -83,7 +83,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Exclusive of EWT":         
 
-        $gross_amt_old =  $old_terms_contract_rate / 0.95;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -92,7 +92,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Exclusive of VAT - Exclusive of EWT":         
 
-        $gross_amt_old =  $old_terms_contract_rate / 0.95;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -101,7 +101,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Exclusive of VAT - Inclusive of EWT":         
 
-        $gross_amt_old =  $old_terms_contract_rate / 1;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -110,7 +110,7 @@ switch($old_terms_tax_application){
 
     case "Non Vatable: Silent of VAT - Silent of VAT":         
         
-        $gross_amt_old =  $old_terms_contract_rate / 1;
+        $gross_amt_old =  $old_terms_monthly_contract_amount / 1;
         $add_vat_old = 0;
         $less_ewt_old =  $gross_amt_old * 0.05;
         $net_amt_old = ( $gross_amt_old + $add_vat_old ) - $less_ewt_old;
@@ -158,7 +158,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Exclusive of VAT - Exclusive of EWT":         
     
-        $gross_amt_demand =  $old_terms_contract_rate / 0.95;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -168,7 +168,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Exclusive of VAT - Inclusive of EWT":         
     
-        $gross_amt_demand =  $old_terms_contract_rate / 1;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 1;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -177,7 +177,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Silent of Vat - Silent of EWT":         
     
-        $gross_amt_demand =  $old_terms_contract_rate / 1;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 1;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -186,7 +186,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Net of VAT - Net of EWT":  
     
-        $gross_amt_demand =  $old_terms_contract_rate / 0.95;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -195,7 +195,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Inclusive of EWT":         
 
-        $gross_amt_demand =  $old_terms_contract_rate / 1;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 1;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -204,7 +204,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Inclusive of VAT - Exclusive of EWT":         
 
-        $gross_amt_demand =  $old_terms_contract_rate / 0.95;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -213,7 +213,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Exclusive of VAT - Exclusive of EWT":         
 
-        $gross_amt_demand =  $old_terms_contract_rate / 0.95;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 0.95;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -222,7 +222,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Exclusive of VAT - Inclusive of EWT":         
 
-        $gross_amt_demand =  $old_terms_contract_rate / 1;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 1;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -231,7 +231,7 @@ switch($lessor_demand_tax_application){
 
     case "Non Vatable: Silent of VAT - Silent of VAT":         
         
-        $gross_amt_demand =  $old_terms_contract_rate / 1;
+        $gross_amt_demand =  $old_terms_monthly_contract_amount / 1;
         $add_vat_demand = 0;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -255,7 +255,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -266,7 +266,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1.12;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1.12;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -277,7 +277,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1.07;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1.07;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -288,7 +288,7 @@ switch($new_terms_tax_application){
          
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -299,7 +299,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -310,7 +310,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -321,7 +321,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms_contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -332,7 +332,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -343,7 +343,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms_contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -354,7 +354,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Net to Net';
 
-        $gross_amt_new =  $new_terms_contract_rate / 0.95;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -365,7 +365,7 @@ switch($new_terms_tax_application){
 
     $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate / 1;
+        $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -376,7 +376,7 @@ switch($new_terms_tax_application){
 
         $amount_used = 'Gross to Gross';
 
-        $gross_amt_new =  $new_terms_contract_rate /  1;
+        $gross_amt_new =  $new_terms_monthly_contract_amount /  1;
         $add_vat_new =  $gross_amt_new * 0.12;
         $less_ewt_new =  $gross_amt_new * 0.05;
         $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -438,7 +438,7 @@ elseif($amount_used == 'Not Applicable'){
                 <tr>
                     <td>Old Terms:</td>
                     <td class="text-center">{{ $old_terms_tax_application }}</td>
-                    <td class="text-right">{{ number_format($old_terms_contract_rate, 2) }}</td>
+                    <td class="text-right">{{ number_format($old_terms_monthly_contract_amount, 2) }}</td>
                     <td class="text-right">{{ number_format($gross_amt_old, 2) }}</td>
                     <td class="text-right">{{ number_format($add_vat_old, 2) }}</td>
                     <td class="text-right">{{ number_format($less_ewt_old, 2) }}</td>
@@ -458,7 +458,7 @@ elseif($amount_used == 'Not Applicable'){
                 <tr>
                     <td>New Terms: </td>
                     <td class="text-center">{{ $new_terms_tax_application }}</td>
-                    <td class="text-right">{{ number_format($new_terms_contract_rate, 2) }}</td>
+                    <td class="text-right">{{ number_format($new_terms_monthly_contract_amount, 2) }}</td>
                     <td class="text-right">{{ number_format($gross_amt_new, 2) }}</td>
                     <td class="text-right">{{ number_format($add_vat_new, 2) }}</td>
                     <td class="text-right">{{ number_format($less_ewt_new, 2) }}</td>

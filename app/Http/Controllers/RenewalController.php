@@ -99,7 +99,7 @@ class RenewalController extends Controller
                     'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'rejected',
-                    'validator' => count($approvers_collect->all()),
+                    'validator' => 0,
                     'validators' => $approvers_collect->all(),
                     'type' => 'loi'
                 ];
@@ -346,7 +346,7 @@ class RenewalController extends Controller
                     'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'rejected',
-                    'validator' => count($approvers_collect->all()),
+                    'validator' => 0,
                     'validators' => $approvers_collect->all(),
                     'type' => 'lrn'
                 ];
@@ -488,8 +488,6 @@ class RenewalController extends Controller
         try {
             $component = 'savings-computation-generator-pdf';
 
-            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
-            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
             $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type')
@@ -523,14 +521,14 @@ class RenewalController extends Controller
                 'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
                 'active_profile' => "",
                 'active_status' => 'rejected',
-                'validator' => count($approvers_collect->all()),
+                'validator' => 0,
                 'validators' => $approvers_collect->all(),
                 'type' => 'saving_computation'
             ];
 
             $array_data_no_data = [
                 'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
-                'active_profile' => "",
+                'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                 'active_status' => 'pending',
                 'validator' => count($approvers_collect_no_data->all()),
                 'validators' => $approvers_collect_no_data->all(),
