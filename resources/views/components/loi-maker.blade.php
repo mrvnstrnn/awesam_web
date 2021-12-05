@@ -33,6 +33,8 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
+        var sub_activity_id = "{{ $sub_activity_id }}";
+
         $.ajax({
             url: "/save-loi",
             method: "POST",
@@ -50,6 +52,12 @@
                         resp.message,
                         'success'
                     )
+
+                    $(".action_to_complete_child"+sub_activity_id+" i.text-success").remove();
+
+                    $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
+                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                    );
                     
                     $(".save_create_loi_to_renew_btn").removeAttr("disabled");
                     $(".save_create_loi_to_renew_btn").text("Save LOI");
@@ -91,7 +99,7 @@
     // $(document).on("change", "#from_date", function(e){
     //     e.preventDefault();
 
-    //     if(!$('#terms_in_years').val()){
+    //     if(!$('#new_lease_terms_in_years').val()){
     //         console.log('set terms');
     //     } else {
     //         console.log(moment().add(7, 'years'));
@@ -113,9 +121,9 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
                     // $("#lessor").val("{{ $program_renewal->lessor }}").attr("readonly", "readonly");
-                    $("#lessor").val("{{ $program_renewal->lessor }}");
-                    $("#cell_site_address").val("{{ $program_renewal->site_address }}");
-                    $("#expiration_date").val("{{ $program_renewal->expiration }}");
+                    $(".create_loi_to_renew_form #lessor").val("{{ $program_renewal->lessor }}");
+                    $(".create_loi_to_renew_form #cell_site_address").val("{{ $program_renewal->site_address }}");
+                    $(".create_loi_to_renew_form #expiration_date").val("{{ $program_renewal->expiration }}");
                 } else {
                     Swal.fire(
                         'Error',
@@ -134,14 +142,14 @@
         });
     });
 
-    $(".form_html").on("change", "#new_terms_start_date, #terms_in_years", function(e){
-        var terms_in_years = $("#terms_in_years").val();
+    $(".form_html").on("change", "#new_terms_start_date, #new_lease_terms_in_years", function(e){
+        var new_lease_terms_in_years = $("#new_lease_terms_in_years").val();
         var new_terms_start_date = $("#new_terms_start_date").val();
-        if ( terms_in_years != null && new_terms_start_date != null ) {
-            var terms_in_years = $("#terms_in_years").val();
+        if ( new_lease_terms_in_years != null && new_terms_start_date != null ) {
+            var new_lease_terms_in_years = $("#new_lease_terms_in_years").val();
             var new_terms_start_date = new Date($("#new_terms_start_date").val());
 
-            new_date = new_terms_start_date.setFullYear(new_terms_start_date.getFullYear() + +terms_in_years);
+            new_date = new_terms_start_date.setFullYear(new_terms_start_date.getFullYear() + +new_lease_terms_in_years);
 
             new_new_terms_start_date = new Date(new_date)
 

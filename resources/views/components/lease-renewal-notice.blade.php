@@ -44,12 +44,18 @@
 
                     var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'lessor_commercial_engagement'))); }}".replace(/&quot;/g,'"'));
 
+                    $(".create_lease_renewal_notice_form #representative").val("{{ \Auth::user()->name }}");
+
                     $.each(get_program_renewal, function(index, data) {
-                        $("#"+index).val(data);
+                        $(".create_lease_renewal_notice_form #"+index).val(data);
+
+                        if (index == 'site_address') {
+                            $(".create_lease_renewal_notice_form #lease_premises").val(data);
+                        }
                     });
 
                     $.each(commercial_nego, function(index, data) {
-                        $("#"+index).val(data);
+                        $(".create_lease_renewal_notice_form #"+index).val(data);
                     });
 
                 } else {

@@ -304,7 +304,7 @@ class RenewalController extends Controller
                 } else if ($request->get('lrn') == 'Escalation Rate') {
                     $component = 'escalation-rate-pdf';
                 } else if ($request->get('lrn') == 'Security Deposit') {
-                    $component = 'security-depost-pdf';
+                    $component = 'security-deposit-pdf';
                 } else if ($request->get('lrn') == 'Free of Charge') {
                     $component = 'free-of-charge-pdf';
                 } else if ($request->get('lrn') == 'One Time Payment') {
@@ -313,6 +313,7 @@ class RenewalController extends Controller
 
                 $this->create_pdf($request->all(), $request->get('sam_id'), $component);
 
+                // return response()->json(['error' => true, 'message' => $request->all()]);
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
@@ -485,9 +486,10 @@ class RenewalController extends Controller
     public function save_saving_computation (Request $request)
     {
         try {
-
             $component = 'savings-computation-generator-pdf';
 
+            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
+            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
             $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type')
@@ -601,7 +603,7 @@ class RenewalController extends Controller
                 ]);
             }
 
-            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), 'savings-computation-generator-pdf');
+            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
             return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
@@ -751,7 +753,7 @@ class RenewalController extends Controller
                 ]);
 
                 if ( $status == "approved" ) {
-                    $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')] );
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')] );
                 }
 
                 return response()->json(['error' => false, 'message' => "Successfully saved engagement."]);
@@ -811,12 +813,12 @@ class RenewalController extends Controller
                                 return $row->value;
                             }
                         })
-                        ->addColumn('lessor_demand_contract_rate', function($row){
+                        ->addColumn('lessor_demand_monthly_contract_amount', function($row){
                             json_decode($row->value);
                             if (json_last_error() == JSON_ERROR_NONE){
                                 $json = json_decode($row->value, true);
 
-                                return $json['lessor_demand_contract_rate'];
+                                return $json['lessor_demand_monthly_contract_amount'];
                             } else {
                                 return $row->value;
                             }
@@ -885,13 +887,13 @@ class RenewalController extends Controller
                                     ->where('activity_complete', 'false')
                                     ->get();
             }
-
+            
             $past_activities = collect();
 
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-
+            
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -1097,7 +1099,7 @@ class RenewalController extends Controller
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf = PDF::loadHTML($view);
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('folio', 'portrait');
         $pdf->download();
 
         \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());

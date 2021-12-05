@@ -101,7 +101,7 @@
     var yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
 
-    $(document).on("click", ".contact-lessor", function(){
+    $("#control_box").on("click", ".contact-lessor", function(){
         $('#control_box').addClass('d-none');
         $('#control_form').removeClass('d-none');
 

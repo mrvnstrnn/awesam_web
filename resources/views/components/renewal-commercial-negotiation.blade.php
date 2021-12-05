@@ -70,7 +70,7 @@
                         '<tr>' +
                             '<th style="width: 5%">#</th>' +
                             '<th>Method</th>' +
-                            '<th>Contract Rate</th>' +
+                            '<th>Monthly Contract Amount</th>' +
                             '<th>Escalation Rate</th>' +
                             '<th>Escalation Year</th>' +
                             '<th>Advance Rent Months</th>' +
@@ -99,7 +99,7 @@
             columns: [
                 { data: "id" },
                 { data: "method" },
-                { data: "lessor_demand_contract_rate" },
+                { data: "lessor_demand_monthly_contract_amount" },
                 { data: "lessor_demand_escalation_rate" },
                 { data: "lessor_demand_escalation_year" },
                 { data: "lessor_demand_advance_rent_months" },
@@ -110,7 +110,12 @@
         $("#table_lessor_engage_"+sub_activity_id).DataTable().ajax.reload();
     }
 
-    $(document).on("click", ".contact-lessor", function(){
+    $(".form_html").on("click", ".cancel_commercial_negotiation_btn", function(){
+        $('#control_box').removeClass('d-none');
+        $('#control_form').addClass('d-none');
+    });
+
+    $("#control_box").on("click", ".contact-lessor", function(){
         $('#control_box').addClass('d-none');
         $('#control_form').removeClass('d-none');
 
@@ -131,6 +136,13 @@
 
                     $("#method").val(value);
                     $("#date").val(today);
+
+                    var get_lrn = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
+
+                    $.each(get_lrn, function(index, data) {
+                        $(".commercial_negotiation_form #"+index).val(data);
+                    });
+
                 } else {
                     Swal.fire(
                         'Error',
@@ -147,6 +159,16 @@
                 )
             }
         });
+    });
+
+    $(".form_html").on("change", "#lessor_demand_escalation_rate", function(e){
+        if ($(this).val() > 0 && $(this).val() < 101) {
+            var percent = $(this).val() / 100;
+
+            $(this).val(percent);
+        } else if ($(this).val() > 101) {
+            $(this).val(1);
+        }
     });
 
     $(".form_html").on("click", ".save_commercial_negotiation_btn", function () {
@@ -176,9 +198,9 @@
 
                         $(".commercial_negotiation_form")[0].reset();
 
-                        $("#method").val(method);
-                        $("#date").val(today);
-                        if ( $("#approval").val() == "Approval Secured" ) {
+                        $(".commercial_negotiation_form #method").val(method);
+                        $(".commercial_negotiation_form #date").val(today);
+                        if ( $(".commercial_negotiation_form #approval").val() == "Approval Secured" ) {
                             $("#viewInfoModal").modal("hide");
                         }
 

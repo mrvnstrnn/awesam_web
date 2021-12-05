@@ -7428,7 +7428,7 @@ class GlobeController extends Controller
                 $fields .= '<div class="col-12">';
                 $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
                 if ( isset($button_name2) ) {
-                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name2.'</button>';
+                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name2.'</button>';
                 }
                 $fields .= '</div></div>';
             // }

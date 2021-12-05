@@ -1,5 +1,5 @@
 @php
-$lease_term_years = (int)$lease_term;
+$lease_term_years = (int)$new_lease_terms_in_years;
 
 $old_escalation_rate =  (float) $old_terms_escalation_rate;
 $demand_escalation_rate = (float) $lessor_demand_escalation_rate;
@@ -131,7 +131,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Net of VAT - Net of EWT":         
 
-        $gross_amt_demand =  $lessor_demand_contract_rate / 0.95;
+        $gross_amt_demand =  $lessor_demand_monthly_contract_amount / 0.95;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -140,7 +140,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Inclusive of VAT - Inclusive of EWT":         
     
-        $gross_amt_demand =  $lessor_demand_contract_rate / 1.12;
+        $gross_amt_demand =  $lessor_demand_monthly_contract_amount / 1.12;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -149,7 +149,7 @@ switch($lessor_demand_tax_application){
 
     case "Vatable: Inclusive of VAT - Exclusive of EWT":     
 
-        $gross_amt_demand =  $lessor_demand_contract_rate / 1.07;
+        $gross_amt_demand =  $lessor_demand_monthly_contract_amount / 1.07;
         $add_vat_demand =  $gross_amt_demand * 0.12;
         $less_ewt_demand =  $gross_amt_demand * 0.05;
         $net_amt_demand = ( $gross_amt_demand + $add_vat_demand ) - $less_ewt_demand;
@@ -448,7 +448,7 @@ elseif($amount_used == 'Not Applicable'){
                 <tr>
                     <td>Lessors Demand: </td>
                     <td class="text-center">{{ $lessor_demand_tax_application }}</td>
-                    <td class="text-right">{{ number_format($lessor_demand_contract_rate, 2) }}</td>
+                    <td class="text-right">{{ number_format($lessor_demand_monthly_contract_amount, 2) }}</td>
                     <td class="text-right">{{ number_format($gross_amt_demand, 2) }}</td>
                     <td class="text-right">{{ number_format($add_vat_demand, 2) }}</td>
                     <td class="text-right">{{ number_format($less_ewt_demand, 2) }}</td>
@@ -532,14 +532,21 @@ elseif($amount_used == 'Not Applicable'){
 
                 @endphp
 
+                {{-- @for ($i = 0; $i < $lease_term_years; $i++) --}}
                 @for ($i = 0; $i < $lease_term_years; $i++)
 
                 @php
-                    $dtStart = new DateTime($start_date);
-                    $dtStart->modify('+' . $i .' years');
-                    $dtEnd = new DateTime($end_date);
-                    $dtEnd->modify('+' . $i .' years');
-                    $dtEnd->modify('-1 day');
+                    // $dtStart = new DateTime($new_terms_start_date);
+                    // $dtStart->modify('+' . $i .' years');
+
+                    $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
+                    // $dtEnd = new DateTime($end_date);
+
+                    // $dtEnd = new DateTime($dtStart);
+                    // $dtEnd->modify('+' . $i .' years');
+                    // $dtEnd->modify('-1 day');
+
+                    $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
 
                     if($amount_used === "Gross to Gross"){
                         $amount_old = $gross_amt_old;
