@@ -23,10 +23,100 @@
     </div>
 </div>
 
+<div class="row mt-3 mb-3">
+    <div class="col-12">
+        <div class="table_html"></div>
+        <div class="file_div d-none">
+            <div class="row">
+                <div class="col-12">
+                    <div class="file_viewer"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-lg btn-primary btn-shadow back_to_form">Back to form</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
+    });
+
+    $(".table_html").html(
+        '<div class="table-responsive table_uploaded_parent">' +
+            '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th style="width: 5%">#</th>' +
+                        '<th style="width: 35%">Filename</th>' +
+                        '<th style="width: 15%">Status</th>' +
+                        '<th style="width: 35%">Reason</th>' +
+                        '<th>Date Uploaded</th>' +
+                    '</tr>' +
+                '</thead>' +
+            '</table>' +
+        '</div>'
+    );
+
+    if (! $.fn.DataTable.isDataTable(".table_uploaded") ){   
+        $(".table_uploaded").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/get-uploaded-files/" + "{{ $sub_activity_id }}" + "/" + "{{ $sam_id }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-value', data.value);
+                $(row).attr('style', 'cursor: pointer');
+            },
+            columns: [
+                { data: "id" },
+                { data: "value" },
+                { data: "status" },
+                { data: "reason" },
+                { data: "date_created" },
+            ],
+        });
+    } else {
+        $(".table_uploaded").DataTable().ajax.reload();
+    }
+
+    $(".file_div").on("click", ".back_to_form", function () {
+        $(".table_html").removeClass("d-none");
+        $(".form_html").removeClass("d-none");
+        $(".file_div").addClass("d-none");
+    });
+
+    $(".table_html").on("click", ".table_uploaded tr td", function () {
+
+        var extensions = ["pdf", "jpg", "png"];
+
+        var values = $(this).parent().attr('data-value');
+
+        if( extensions.includes(values.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
+        } else {
+            htmltoload = '<div class="text-center my-5"><a href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        $(".file_viewer").html(htmltoload);
+
+        $(".table_html").addClass("d-none");
+        $(".form_html").addClass("d-none");
+        $(".file_div").removeClass("d-none");
     });
 
     $(".form_html").on("click", ".save_create_loi_to_renew_btn", function(e){
@@ -34,6 +124,12 @@
         $(this).text("Processing...");
 
         var sub_activity_id = "{{ $sub_activity_id }}";
+
+        var company = $("#company").val();
+        var vendor = $("#vendor").val();
+        var lessor = $("#lessor").val();
+        var facility_site_address = $("#facility_site_address").val();
+        var expiration = $("#expiration").val();
 
         $.ajax({
             url: "/save-loi",
@@ -45,23 +141,33 @@
             success: function (resp) {
                 if (!resp.error) {
 
-                    $(".create_loi_to_renew_form")[0].reset();
+                    $(".table_uploaded").DataTable().ajax.reload(function () {
 
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
+                        $(".create_loi_to_renew_form")[0].reset();
 
-                    $(".action_to_complete_child"+sub_activity_id+" i.text-success").remove();
+                        $("#company").val(company);
+                        $("#vendor").val(vendor);
+                        $("#lessor").val(lessor);
+                        $("#facility_site_address").val(facility_site_address);
+                        $("#expiration").val(expiration);
 
-                    $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
-                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
-                    );
-                    
-                    $(".save_create_loi_to_renew_btn").removeAttr("disabled");
-                    $(".save_create_loi_to_renew_btn").text("Save LOI");
-                    $(".btn_switch_back_to_actions").trigger("click");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".action_to_complete_child"+sub_activity_id+" i.text-success").remove();
+
+                        $(".action_to_complete_parent .action_to_complete_child"+sub_activity_id).append(
+                            '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                        );
+
+                        $(".save_create_loi_to_renew_btn").removeAttr("disabled");
+                        $(".save_create_loi_to_renew_btn").text("Save LOI");
+                        // $(".btn_switch_back_to_actions").trigger("click");
+                    });
+
                     // $("#viewInfoModal").modal("hide");
                 } else {
                     
@@ -93,23 +199,7 @@
             }
         });
     });
-
-
     
-    // $(document).on("change", "#from_date", function(e){
-    //     e.preventDefault();
-
-    //     if(!$('#new_lease_terms_in_years').val()){
-    //         console.log('set terms');
-    //     } else {
-    //         console.log(moment().add(7, 'years'));
-    //     }
-    // });
-
-
-    
-
-
     $(document).ready(function(){
         $.ajax({
             url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",
@@ -120,10 +210,6 @@
             success: function (resp) {
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
-                    // $("#lessor").val("{{ $program_renewal->lessor }}").attr("readonly", "readonly");
-                    // $(".create_loi_to_renew_form #lessor").val("{{ $program_renewal->lessor }}");
-                    // $(".create_loi_to_renew_form #cell_site_address").val("{{ $program_renewal->site_address }}");
-                    // $(".create_loi_to_renew_form #expiration_date").val("{{ $program_renewal->expiration }}");
                     var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
 
                     $.each(get_program_renewal, function(index, data) {

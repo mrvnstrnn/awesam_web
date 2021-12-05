@@ -95,8 +95,23 @@ class RenewalController extends Controller
                     ]);
                 }
 
+                $sub_activity_value_file = SubActivityValue::select('value')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->first();
+                                
+                $file_name = $this->rename_file( strtolower($samid)."-loi-pdf.pdf", "loi", $samid, "" );
+
+                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+
+                $this->create_pdf($array, $samid, 'loi-pdf', $file_name);
+                
+                // return response()->json(['error' => true, 'message' => $file_name]);
+
                 $array_data = [
-                    'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                    'file' => $new_file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'rejected',
                     'validator' => 0,
@@ -105,7 +120,7 @@ class RenewalController extends Controller
                 ];
 
                 $array_data_no_data = [
-                    'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                    'file' => $file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'pending',
                     'validator' => count($approvers_collect_no_data->all()),
@@ -173,9 +188,6 @@ class RenewalController extends Controller
                         'status' => 'pending',
                     ]);
                 }
-
-                $this->create_pdf($array, $samid, 'loi-pdf');
-                // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
                 
                 return response()->json(['error' => false, 'message' => "Successfully submitted an LOI." ]);
 
@@ -311,8 +323,6 @@ class RenewalController extends Controller
                     $component = 'one-time-payment-pdf';
                 }
 
-                $this->create_pdf($request->all(), $request->get('sam_id'), $component);
-
                 // return response()->json(['error' => true, 'message' => $request->all()]);
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -342,8 +352,21 @@ class RenewalController extends Controller
                     ]);
                 }
 
+                $sub_activity_value_file = SubActivityValue::select('value')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->first();
+                                
+                $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+
+                $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+
+                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+
                 $array_data = [
-                    'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                    'file' => $new_file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'rejected',
                     'validator' => 0,
@@ -352,7 +375,7 @@ class RenewalController extends Controller
                 ];
 
                 $array_data_no_data = [
-                    'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                    'file' => $file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                     'active_status' => 'pending',
                     'validator' => count($approvers_collect_no_data->all()),
@@ -523,9 +546,22 @@ class RenewalController extends Controller
                     'status' => 'pending'
                 ]);
             }
+
+            $sub_activity_value_file = SubActivityValue::select('value')
+                            ->where('sam_id', $request->input("sam_id"))
+                            ->where('sub_activity_id', $request->input("sub_activity_id"))
+                            ->where('type', 'doc_upload')
+                            ->where('status', 'pending')
+                            ->first();
+
+            $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+
+            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+
+            $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
             
             $array_data = [
-                'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                'file' => $new_file_name,
                 'active_profile' => "",
                 'active_status' => 'rejected',
                 'validator' => 0,
@@ -534,7 +570,7 @@ class RenewalController extends Controller
             ];
 
             $array_data_no_data = [
-                'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                'file' => $file_name,
                 'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
                 'active_status' => 'pending',
                 'validator' => count($approvers_collect_no_data->all()),
@@ -607,8 +643,7 @@ class RenewalController extends Controller
                     'status' => 'pending',
                 ]);
             }
-
-            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
+            
             return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
@@ -1138,7 +1173,7 @@ class RenewalController extends Controller
 
     }
 
-    private function create_savings_computation_pdf ($array, $samid, $component)
+    private function create_savings_computation_pdf ($array, $samid, $component, $file_name)
     {
         $view = \View::make('components.'.$component)
                     ->with($array)
@@ -1149,10 +1184,10 @@ class RenewalController extends Controller
         $pdf->setPaper('a4', 'portrait');
         $pdf->download();
 
-        \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
+        \Storage::put( $file_name, $pdf->output() );
     }
 
-    private function create_pdf ($array, $samid, $component)
+    private function create_pdf ($array, $samid, $component, $file_name)
     {
         $view = \View::make('components.'.$component)
                     ->with([
@@ -1165,15 +1200,16 @@ class RenewalController extends Controller
         $pdf->setPaper('folio', 'portrait');
         $pdf->download();
 
-        \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
+        \Storage::put( $file_name, $pdf->output() );
     }
 
-    private function rename_file($filename_data, $sub_activity_name, $sam_id, $site_category = null)
+    private function rename_file ($filename_data, $sub_activity_name, $sam_id, $site_category = null)
     {
         $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
 
-        $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
-
+        // return $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
+        $file_name = $filename_data;
+        
         if (file_exists( public_path()."/files/".$file_name )) {
 
             $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);

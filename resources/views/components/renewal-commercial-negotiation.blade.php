@@ -206,6 +206,8 @@
 
                         $(".save_commercial_negotiation_btn").removeAttr('disabled');
                         $(".save_commercial_negotiation_btn").text('Save Commercial Negotiation');
+
+                        $(".cancel_commercial_negotiation_btn").trigger("click");
                     });
                 } else {
                     

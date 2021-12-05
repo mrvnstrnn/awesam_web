@@ -9,7 +9,7 @@
 
 
 
-<div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
+{{-- <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content" style="background-color: transparent; border: 0">
             <div class="row justify-content-center">
@@ -29,7 +29,7 @@
                             </div>
                         </div>
 
-                        <div class="modal-body">
+                        <div class="modal-body"> --}}
                             <div class="row p-0">
                                 <div class="text-center col-12">
                                     <img src="/images/construction.gif" width="90%"/>
@@ -50,10 +50,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {{-- </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
