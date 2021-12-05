@@ -62,7 +62,7 @@
 </div> --}}
 
 <script>
-    $(".mark_as_complete").on("click", function() {
+    $("button").on("click", ".mark_as_complete", function() {
 
         $(".mark_as_complete").attr("disabled", "disabled");
         $(".mark_as_complete").text("Processing...");

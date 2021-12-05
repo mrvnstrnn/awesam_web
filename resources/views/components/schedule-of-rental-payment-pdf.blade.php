@@ -182,7 +182,7 @@
         <div class="col-12">
 
             <div class="table-responsive mt-3">
-                <table class="table table-bordered table-hover summary_table table-striped">
+                <table class="table table-bordered table-hover summary_table table-striped" style="width: 100%;">
                     <thead>
                         <tr>
                             <th colspan="2" class="text-center">Tax Application</th>
@@ -258,18 +258,16 @@
                                 <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
                                 <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
                                 <td class="text-center">{{ $dtEnd->format('Y-m-d') }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly,2) }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly * 0.05,2) }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly + ($running_new_monthly * 0.12) + ($running_new_monthly * 0.05) ,2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly,2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly * 0.05,2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly + ($running_new_monthly * 0.12) + ($running_new_monthly * 0.05) ,2) }}</td>
                             </tr>
                             
                         @endfor
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 save_computation">Generate and Upload</button>
-            <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
         </div>
 
     </body>

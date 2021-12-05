@@ -462,31 +462,31 @@
                             <tr>
                                 <td>Old Terms:</td>
                                 <td class="text-center">{{ $old_terms_tax_application }}</td>
-                                <td class="text-right">{{ number_format($old_terms_monthly_contract_amount, 2) }}</td>
-                                <td class="text-right">{{ number_format($gross_amt_old, 2) }}</td>
-                                <td class="text-right">{{ number_format($add_vat_old, 2) }}</td>
-                                <td class="text-right">{{ number_format($less_ewt_old, 2) }}</td>
-                                <td class="text-right">{{ number_format($net_amt_old, 2) }}</td>
+                                <td class="text-center">{{ number_format($old_terms_monthly_contract_amount, 2) }}</td>
+                                <td class="text-center">{{ number_format($gross_amt_old, 2) }}</td>
+                                <td class="text-center">{{ number_format($add_vat_old, 2) }}</td>
+                                <td class="text-center">{{ number_format($less_ewt_old, 2) }}</td>
+                                <td class="text-center">{{ number_format($net_amt_old, 2) }}</td>
 
                             </tr>
                             <tr>
                                 <td>Lessors Demand: </td>
                                 <td class="text-center">{{ $lessor_demand_tax_application }}</td>
-                                <td class="text-right">{{ number_format($lessor_demand_monthly_contract_amount, 2) }}</td>
-                                <td class="text-right">{{ number_format($gross_amt_demand, 2) }}</td>
-                                <td class="text-right">{{ number_format($add_vat_demand, 2) }}</td>
-                                <td class="text-right">{{ number_format($less_ewt_demand, 2) }}</td>
-                                <td class="text-right">{{ number_format($net_amt_demand, 2) }}</td>
+                                <td class="text-center">{{ number_format($lessor_demand_monthly_contract_amount, 2) }}</td>
+                                <td class="text-center">{{ number_format($gross_amt_demand, 2) }}</td>
+                                <td class="text-center">{{ number_format($add_vat_demand, 2) }}</td>
+                                <td class="text-center">{{ number_format($less_ewt_demand, 2) }}</td>
+                                <td class="text-center">{{ number_format($net_amt_demand, 2) }}</td>
 
                             </tr>
                             <tr>
                                 <td>New Terms: </td>
                                 <td class="text-center">{{ $new_terms_tax_application }}</td>
-                                <td class="text-right">{{ number_format($new_terms_monthly_contract_amount, 2) }}</td>
-                                <td class="text-right">{{ number_format($gross_amt_new, 2) }}</td>
-                                <td class="text-right">{{ number_format($add_vat_new, 2) }}</td>
-                                <td class="text-right">{{ number_format($less_ewt_new, 2) }}</td>
-                                <td class="text-right">{{ number_format($net_amt_new, 2) }}</td>
+                                <td class="text-center">{{ number_format($new_terms_monthly_contract_amount, 2) }}</td>
+                                <td class="text-center">{{ number_format($gross_amt_new, 2) }}</td>
+                                <td class="text-center">{{ number_format($add_vat_new, 2) }}</td>
+                                <td class="text-center">{{ number_format($less_ewt_new, 2) }}</td>
+                                <td class="text-center">{{ number_format($net_amt_new, 2) }}</td>
 
                             </tr>
                             <tr>
@@ -652,13 +652,13 @@
                                 <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
                                 <td>{{ $dtStart->format('Y-m-d') }}</td>
                                 <td>{{ $dtEnd->format('Y-m-d') }}</td>
-                                <td class="text-right">{{ number_format($running_per_contract_monthly, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_per_contract_monthly * 12, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_demand_monthly, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_demand_monthly * 12, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly, 2) }}</td>
-                                <td class="text-right">{{ number_format($running_new_monthly * 12, 2) }}</td>
-                                <td class="font-weight-bold text-right">{{ number_format(($running_per_contract_monthly * 12) - ($running_new_monthly *12), 2) }}</td>
+                                <td class="text-center">{{ number_format($running_per_contract_monthly, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_per_contract_monthly * 12, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_demand_monthly, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_demand_monthly * 12, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly, 2) }}</td>
+                                <td class="text-center">{{ number_format($running_new_monthly * 12, 2) }}</td>
+                                <td class="font-weight-bold text-center">{{ number_format(($running_per_contract_monthly * 12) - ($running_new_monthly *12), 2) }}</td>
                             </tr>
                                 
                             @endfor
@@ -666,10 +666,10 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3">Total</th>
-                                <th colspan="2" class="text-right">{{ number_format($per_contract_yearly_total, 2) }}</th>
-                                <th colspan="2" class="text-right">{{ number_format($demand_yearly_total, 2) }}</th>
-                                <th colspan="2" class="text-right">{{ number_format($new_yearly_total, 2) }}</th>
-                                <th colspan="1" class="text-right">{{ number_format($savings_yearly_total, 2) }}</th>
+                                <th colspan="2" class="text-center">{{ number_format($per_contract_yearly_total, 2) }}</th>
+                                <th colspan="2" class="text-center">{{ number_format($demand_yearly_total, 2) }}</th>
+                                <th colspan="2" class="text-center">{{ number_format($new_yearly_total, 2) }}</th>
+                                <th colspan="1" class="text-center">{{ number_format($savings_yearly_total, 2) }}</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -704,145 +704,145 @@
                                 <td class="text-right"> - </td>
                                 @endif
                                 @if($old_exdeal_request == 'HANDSET')
-                                    <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($old_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'HANDSET')
                                     <td>{{ $lessor_demand_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'HANDSET')
-                                    <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'HANDSET')
                                     <td>{{ $new_terms_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'HANDSET')
-                                    <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                             </tr>
                             <tr>
                                 <td>OTP</td>
                                 @if($old_exdeal_request == 'OTP')
                                     <td>{{ $old_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($old_exdeal_request == 'OTP')
-                                    <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($old_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'OTP')
                                     <td>{{ $lessor_demand_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'OTP')
-                                    <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'OTP')
                                     <td>{{ $new_terms_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'OTP')
-                                    <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                             </tr>
                             <tr>
                                 <td>Plan</td>
                                 @if($old_exdeal_request == 'PLAN')
                                     <td>{{ $old_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($old_exdeal_request == 'PLAN')
-                                    <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($old_exdeal_amount, 2) }}</td>
                                 @else
                                     <td></td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'PLAN')
                                     <td>{{ $lessor_demand_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'PLAN')
-                                    <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'PLAN')
                                     <td>{{ $new_terms_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'PLAN')
-                                    <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                             </tr>
                             <tr>
                                 <td>Others</td>
                                 @if($old_exdeal_request == 'OTHERS')
                                     <td>{{ $old_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($old_exdeal_request == 'OTHERS')
-                                    <td class="text-right">{{ number_format($old_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($old_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'OTHERS')
                                     <td>{{ $lessor_demand_exdeal_particulars}}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($lessor_demand_exdeal_request == 'OTHERS')
-                                    <td class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($lessor_demand_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'OTHERS')
                                     <td>{{ $new_terms_exdeal_particulars}}</td>
                                 @else
-                                    <td class="text-right"> - </td>
+                                    <td class="text-center"> - </td>
                                 @endif
                                 @if($new_terms_exdeal_request == 'OTHERS')
-                                    <td class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
+                                    <td class="text-center">{{ number_format($new_terms_exdeal_amount, 2) }}</td>
                                 @else
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                                 @endif
-                                <td class="text-right"> - </td>
+                                <td class="text-center"> - </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>Total</th>
                                 <th></th>
-                                <th class="text-right">{{ number_format($old_exdeal_amount, 2) }}</th>
+                                <th class="text-center">{{ number_format($old_exdeal_amount, 2) }}</th>
                                 <th></th>
-                                <th class="text-right">{{ number_format($lessor_demand_exdeal_amount, 2) }}</th>
+                                <th class="text-center">{{ number_format($lessor_demand_exdeal_amount, 2) }}</th>
                                 <th></th>
-                                <th class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</th>
-                                <th class="text-right">{{ number_format($old_exdeal_amount - $new_terms_exdeal_amount, 2) }}</th>
+                                <th class="text-center">{{ number_format($new_terms_exdeal_amount, 2) }}</th>
+                                <th class="text-center">{{ number_format($old_exdeal_amount - $new_terms_exdeal_amount, 2) }}</th>
                             </tr>
                         </tfoot>
                     </table>

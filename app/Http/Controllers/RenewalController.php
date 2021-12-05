@@ -50,7 +50,7 @@ class RenewalController extends Controller
                     'new_terms_start_date' => date('M d, Y', strtotime($request->input("new_terms_start_date"))),
                     'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
                     // 'date_word' => $date_word,
-                    'expiration_date' => date('M d, Y', strtotime($request->input("expiration_date"))),
+                    'expiration_date' => date('M d, Y', strtotime($request->input("expiration"))),
                     'undersigned_number' => $request->input("undersigned_number"),
                     'undersigned_email' => $request->input("undersigned_email"),
                     'honorific' => $request->input("honorific"),
@@ -644,7 +644,7 @@ class RenewalController extends Controller
                 ]);
             }
             
-            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
+            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);

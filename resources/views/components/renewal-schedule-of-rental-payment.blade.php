@@ -112,11 +112,11 @@
                     $(".form_html").html(resp.message);
 
                     var saving_computation = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'saving_computation') }}".replace(/&quot;/g,'"')) ) );
-
+// console.log(saving_computation);
                     $.each(saving_computation, function(index, data) {
-                        // if (index == 'lease_premises') {
-                        //     $(".schedule_of_rental_payment_form #lease_premises").val(data);
-                        // }
+                        if (index == 'lessor_address') {
+                            $(".schedule_of_rental_payment_form #lease_premises").val(data);
+                        }
                         $(".schedule_of_rental_payment_form #"+index).val(data);
                     });
                     // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {

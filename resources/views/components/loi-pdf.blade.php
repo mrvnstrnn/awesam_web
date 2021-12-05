@@ -105,7 +105,7 @@
                         <p>Dear <b>{{ $lessor_surname }}</b>,
                         <p>
                             We are writing on behalf of Globe Telecom, Inc. (Globe) in connection with the existing Contract of
-                            Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration }}</b>. Please be informed that Globe would like to signify its intent
+                            Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that Globe would like to signify its intent
                             to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->new_terms_start_date }}</b> to <b>{{ $json->new_terms_end_date }}</b>. In
                             line with this, we would like to request for the submission of the following documents which are
                             necessary in the processing of the contract renewal:</p>

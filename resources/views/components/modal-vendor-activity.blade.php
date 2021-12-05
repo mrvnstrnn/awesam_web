@@ -147,11 +147,11 @@
                                                                 <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                             </a>
                                                         </li>
-                                                        {{-- <li class="nav-item">
-                                                            <a role="tab" class="nav-link" id="tab-lessor-engagement" data-toggle="tab" href="#tab-content-lessor-engagement">
-                                                                <span>Engagement</span>
+                                                        <li class="nav-item">
+                                                            <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
+                                                                <span>Files</span>
                                                             </a>
-                                                        </li> --}}
+                                                        </li>
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
@@ -182,6 +182,15 @@
                                                                 @endforeach
                                                                 <div class="col-12 mt-5">
                                                                 <small>* Required actions are in bold letters</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <img src="/images/construction.gif" width="100%"/>
+                                                                    <h5>activity_source: File</h5>
+                                                                    <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
                                                                 </div>
                                                             </div>
                                                         </div>
