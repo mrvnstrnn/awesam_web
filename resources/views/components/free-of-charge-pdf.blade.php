@@ -147,7 +147,7 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>E.</b>
-                            GRANTOR agrees to the collection, processing, use, and sharing of the data that the GRANTOR provides to {{ ucwords($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The GRANTOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2021 and the Privacy Policy of {{ ucwords($company_name) }}
+                            GRANTOR agrees to the collection, processing, use, and sharing of the data that the GRANTOR provides to {{ ucwords($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The GRANTOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2012 and the Privacy Policy of {{ ucwords($company_name) }}
                         </p>
 
                     </td>

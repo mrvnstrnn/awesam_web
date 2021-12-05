@@ -121,9 +121,19 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
                     // $("#lessor").val("{{ $program_renewal->lessor }}").attr("readonly", "readonly");
-                    $(".create_loi_to_renew_form #lessor").val("{{ $program_renewal->lessor }}");
-                    $(".create_loi_to_renew_form #cell_site_address").val("{{ $program_renewal->site_address }}");
-                    $(".create_loi_to_renew_form #expiration_date").val("{{ $program_renewal->expiration }}");
+                    // $(".create_loi_to_renew_form #lessor").val("{{ $program_renewal->lessor }}");
+                    // $(".create_loi_to_renew_form #cell_site_address").val("{{ $program_renewal->site_address }}");
+                    // $(".create_loi_to_renew_form #expiration_date").val("{{ $program_renewal->expiration }}");
+                    var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
+
+                    $.each(get_program_renewal, function(index, data) {
+                        $(".create_loi_to_renew_form #"+index).val(data);
+
+                        if (index == 'site_address') {
+                            $(".create_loi_to_renew_form #facility_site_address").val(data);
+                        }
+                    });
+
                 } else {
                     Swal.fire(
                         'Error',

@@ -609,7 +609,7 @@ class RenewalController extends Controller
             }
 
             $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
-            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
+            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);

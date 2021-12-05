@@ -40,7 +40,7 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
+                    // var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
 
                     var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'lessor_commercial_engagement'))); }}".replace(/&quot;/g,'"'));
 
@@ -55,8 +55,10 @@
                     // });
 
                     $.each(commercial_nego, function(index, data) {
-                        console.log(index + " - " + data);
                         $(".create_lease_renewal_notice_form #"+index).val(data);
+                        if (index == 'facility_site_address') {
+                            $(".create_lease_renewal_notice_form #lease_premises").val(data);
+                        }
                     });
 
                 } else {
