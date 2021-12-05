@@ -7388,6 +7388,7 @@ class GlobeController extends Controller
                 $button_name = "Confirm Application of Payment";
             } else if ($form_name == "eLAS Approval") {
                 $button_name = "Confirm eLAS Approval";
+                $button_name2 = "Re-Negotiate eLAS";
             } else if ($form_name == "Commercial Negotiation") {
                 $button_name = "Save Commercial Negotiation";
                 $button_name2 = "Back Commercial Negotiation";
@@ -7426,9 +7427,9 @@ class GlobeController extends Controller
             // if ($form_name = "Vendor Awarding") {
                 $fields .= '<div class="row mb-2">';
                 $fields .= '<div class="col-12">';
-                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button" data-action="true">'.$button_name.'</button>';
                 if ( isset($button_name2) ) {
-                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name2.'</button>';
+                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button" data-action="false">'.$button_name2.'</button>';
                 }
                 $fields .= '</div></div>';
             // }

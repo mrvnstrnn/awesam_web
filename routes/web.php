@@ -517,6 +517,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/save-commecial-negotiation', [RenewalController::class, 'save_commecial_negotiation']);
     Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [RenewalController::class, 'get_commercial_engagement']);
 
+    
+    Route::post('/renewal-upload-file', [RenewalController::class, 'fileupload']);
+    Route::post('/renewal-upload-my-file', [RenewalController::class, 'upload_my_file']);
+
 });
     
 

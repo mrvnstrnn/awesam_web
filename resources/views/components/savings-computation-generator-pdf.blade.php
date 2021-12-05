@@ -21,7 +21,7 @@
     </head>
 
     <body>
-        <h3 class="text-center">Savings Computation of {{ $sam_id }}</h3>
+        <h3 class="text-center">Savings Computation - {{ $sam_id }}</h3>
         @php
             $lease_term_years = (int)$new_lease_terms_in_years;
 

@@ -42,7 +42,7 @@ function makeDT(whatTable, whatCols, active_program) {
             },
             
             dataSrc: function(json){
-                console.log(json.data);
+                // console.log(json.data);
                 return json.data;
             },
 
@@ -117,7 +117,7 @@ function makeDT(whatTable, whatCols, active_program) {
                     }
                 }        
 
-                console.log(result);
+                // console.log(result);
 
                 var occurences = json.data.reduce(function (r, row) {
                     r[row[filter_column]] = ++r[row[filter_column]] || 1;

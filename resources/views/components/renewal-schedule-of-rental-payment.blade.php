@@ -20,7 +20,6 @@
             <input type="hidden" name="program_id" id="program_id" value="{{ $program_id }}">
             <input type="hidden" name="activity_id" id="activity_id" value="{{ $activity_id }}">
             <input type="hidden" name="form_generator_type" id="form_generator_type" value="schedule of rental payment">
-
         </form>
     </div>
 </div>
@@ -39,7 +38,7 @@
         $(".table_computation_div").addClass("d-none");
     });
 
-    $(document).on("click", ".save_schedule_of_rental_payment_btn", function () {
+    $(".form_html").on("click", ".save_schedule_of_rental_payment_btn", function () {
 
         var start_date = $("#start_date").val();
         var end_date = $("#end_date").val();
@@ -58,9 +57,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: 
-                    $('.schedule_of_rental_payment_form, .site_data_form').serialize()
-            ,
+            data: $('.schedule_of_rental_payment_form, .site_data_form').serialize(),
             success: function (resp) {
                 if (!resp.error) {
 
@@ -114,22 +111,11 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
+                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'saving_computation') }}".replace(/&quot;/g,'"')) ) );
 
+                    console.log(lrn);
                     $.each(lrn, function(index, data) {
-                        // console.log(index);
-                        if (index == "start_date") {
-                            indexNew = "contract_start";
-                        } else if (index == "end_date") {
-                            indexNew = "contract_end";
-                        } else if (index == "lease_term") {
-                            indexNew = "contract_term";
-                        } else if (index == "final_negotiated_amount") {
-                            indexNew = "monthly_rent";
-                        } else {
-                            indexNew = index;
-                        }
-                        $("#"+indexNew).val(data);
+                        $(".schedule_of_rental_payment_form #"+index).val(data);
                     });
                     // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                     //     $.each(lrn, function(index, data) {
@@ -161,8 +147,60 @@
         });
     });
 
-    $(".form_html").on("click", ".save_schedule_of_rental_payment_btn", function (e) {
+    $(".table_computation_div").on("click", ".save_computation", function () {
+        
+        $(".save_computation").attr("disabled", "disabled");
+        $(".save_computation").text("Processing...");
 
+        $.ajax({
+            url: "/save-saving-computation",
+            method: "POST",
+            data: $(".schedule_of_rental_payment_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Generate and Upload");
+
+                    $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
+
+                    $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
+                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                    );
+
+                    $(".btn_switch_back_to_actions").trigger("click");
+                } else {
+                    
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+
+                    $(".save_computation").removeAttr("disabled");
+                    $(".save_computation").text("Generate and Upload");
+                }
+            },
+            error: function (resp) {
+
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".save_computation").removeAttr("disabled");
+                $(".save_computation").text("Generate and Upload");
+            }
+        });
     });
 
     $(".mark_as_complete").on("click", function() {

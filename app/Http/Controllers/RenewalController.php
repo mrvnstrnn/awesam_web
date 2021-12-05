@@ -486,7 +486,14 @@ class RenewalController extends Controller
     public function save_saving_computation (Request $request)
     {
         try {
-            $component = 'savings-computation-generator-pdf';
+            if ( $request->get('form_generator_type') == "schedule of rental payment" ) {
+                $component = 'schedule-of-rental-payment-pdf';
+                $type = "schedule_of_rental_payment";
+            } else if ( $request->get('form_generator_type') == "savings computation" ) {
+                $component = 'savings-computation-generator-pdf';
+                $type = "saving_computation";
+            }
+            
 
             $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -523,7 +530,7 @@ class RenewalController extends Controller
                 'active_status' => 'rejected',
                 'validator' => 0,
                 'validators' => $approvers_collect->all(),
-                'type' => 'saving_computation'
+                'type' => $type
             ];
 
             $array_data_no_data = [
@@ -532,14 +539,14 @@ class RenewalController extends Controller
                 'active_status' => 'pending',
                 'validator' => count($approvers_collect_no_data->all()),
                 'validators' => $approvers_collect_no_data->all(),
-                'type' => 'saving_computation'
+                'type' => $type
             ];
 
             $sub_activity_value = SubActivityValue::select('sam_id')
                                                     ->where('sam_id', $request->input("sam_id"))
                                                     ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                     ->where('status', 'pending')
-                                                    ->whereIn('type', ['doc_upload', 'saving_computation'])
+                                                    ->whereIn('type', ['doc_upload', $type])
                                                     ->first();
 
             if ( !is_null($sub_activity_value) ) {
@@ -557,7 +564,7 @@ class RenewalController extends Controller
                                 ->where('sam_id', $request->input("sam_id"))
                                 ->where('sub_activity_id', $request->input("sub_activity_id"))
                                 ->where('status', 'pending')
-                                ->whereIn('type', ['doc_upload', 'saving_computation'])
+                                ->whereIn('type', ['doc_upload', $type])
                                 ->update([
                                     'status' => 'rejected',
                                     'reason' => 'Old Savings Computation',
@@ -567,7 +574,7 @@ class RenewalController extends Controller
                     'sam_id' => $request->get('sam_id'),
                     'sub_activity_id' => $request->get('sub_activity_id'),
                     'value' => json_encode($request->all()),
-                    'type' => 'saving_computation',
+                    'type' => $type,
                     'status' => 'pending',
                     'user_id' => \Auth::id(),
                 ]);
@@ -586,7 +593,7 @@ class RenewalController extends Controller
                     'sam_id' => $request->get('sam_id'),
                     'sub_activity_id' => $request->get('sub_activity_id'),
                     'value' => json_encode($request->all()),
-                    'type' => 'saving_computation',
+                    'type' => $type,
                     'status' => 'pending',
                     'user_id' => \Auth::id(),
                 ]);
@@ -602,7 +609,7 @@ class RenewalController extends Controller
             }
 
             $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component);
-            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
+            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -613,16 +620,28 @@ class RenewalController extends Controller
     public function elas_approval_confirm (Request $request)
     {
         try {
-            SubActivityValue::select('sam_id')
-                                ->where('sam_id', $request->input("sam_id"))
-                                ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                ->where('status', 'pending')
-                                ->where('type', 'elas_renewal')
-                                ->update([
-                                    'status' => 'approved',
-                                ]);
+            $validate = \Validator::make($request->all(),[
+                '*' => 'required',
+                'file' => 'required',
+            ]);
 
-            $asd = $this->move_site($request->input('sam_id'), $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+            if ($validate->passes()) {
+
+                SubActivityValue::select('sam_id')
+                                    ->where('sam_id', $request->input("sam_id"))
+                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                    ->where('status', 'pending')
+                                    ->where('type', 'elas_renewal')
+                                    ->update([
+                                        'value' => json_encode($request->all()),
+                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved"
+                                    ]);
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action_file'), [$request->input('site_category')], [$request->input('activity_id')]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
 
             return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
         } catch (\Throwable $th) {
@@ -857,6 +876,52 @@ class RenewalController extends Controller
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
+        }
+    }
+
+    public function fileupload(Request $request)
+    {
+
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file' => 'required',
+            ));
+
+            if($validate->passes()){
+                if($request->hasFile('file')) {
+                    $destinationPath = 'files/';
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $fileName = time().$request->file('file')->getClientOriginalName();
+                    $request->file('file')->move($destinationPath, $fileName);
+
+                    return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
+
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function upload_my_file(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file_name' => 'required',
+            ));
+
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"), $request->input("site_category"));
+
+            \Storage::move( $request->input("file_name"), $new_file );
+
+            return response()->json(['error' => false, 'message' => $new_file]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 
@@ -1101,5 +1166,52 @@ class RenewalController extends Controller
         $pdf->download();
 
         \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
+    }
+
+    private function rename_file($filename_data, $sub_activity_name, $sam_id, $site_category = null)
+    {
+        $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
+
+        $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
+
+        if (file_exists( public_path()."/files/".$file_name )) {
+
+            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+
+            $exploaded_name = explode("-", $withoutExt);
+
+            if ( is_numeric( end( $exploaded_name) ) ) {
+                $counter =  end( $exploaded_name) + "01";
+            } else {
+                $counter =  strtolower(str_replace(" ", "-", $sub_activity_name))."-01";
+            }
+
+            $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+            $cat = $site_category == 'none' ? "-" : "-".$site_category."-";
+
+            $new_file = $imploded_name .$cat. $counter . "." .$ext;
+
+            while (file_exists( public_path()."/files/". $new_file)) {
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  "01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            }
+
+            return $new_file = $new_file;
+
+        } else {
+            return $new_file = $file_name;
+        }
     }
 }
