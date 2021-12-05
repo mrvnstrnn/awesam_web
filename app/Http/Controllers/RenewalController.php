@@ -669,13 +669,13 @@ class RenewalController extends Controller
             ));
 
             if ($validate->passes()) {
-                // $sub_activity_value = SubActivityValue::create([
-                //     'sam_id' => $request->get('sam_id'),
-                //     'type' => 'refx',
-                //     'status' => 'pending',
-                //     'user_id' => \Auth::id(),
-                //     'value' => json_encode($request->all())
-                // ]);
+                $sub_activity_value = SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'type' => 'refx',
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                    'value' => json_encode($request->all())
+                ]);
 
                 $action = "true";
 

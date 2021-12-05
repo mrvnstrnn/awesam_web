@@ -111,10 +111,12 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'saving_computation') }}".replace(/&quot;/g,'"')) ) );
+                    var saving_computation = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'saving_computation') }}".replace(/&quot;/g,'"')) ) );
 
-                    console.log(lrn);
-                    $.each(lrn, function(index, data) {
+                    $.each(saving_computation, function(index, data) {
+                        // if (index == 'lease_premises') {
+                        //     $(".schedule_of_rental_payment_form #lease_premises").val(data);
+                        // }
                         $(".schedule_of_rental_payment_form #"+index).val(data);
                     });
                     // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {

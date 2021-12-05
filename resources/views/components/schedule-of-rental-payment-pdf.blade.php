@@ -21,9 +21,8 @@
     </head>
 
     <body>
-        <h3 class="text-center">Schedule of Rental Payment - {{ $sam_id }}</h3>
         @php
-            
+    
             if(!isset($new_lease_terms_in_years) || $new_lease_terms_in_years == ""){
                 $lease_term_years = 10;
 
@@ -37,7 +36,7 @@
 
                     $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 0.95;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -48,7 +47,7 @@
 
                 $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1.12;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1.12;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -59,7 +58,7 @@
 
                     $amount_used = 'Net to Net';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1.07;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1.07;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -70,7 +69,7 @@
                     
                     $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 0.95;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -81,7 +80,7 @@
 
                     $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -92,7 +91,7 @@
 
                     $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -103,7 +102,7 @@
 
                     $amount_used = 'Net to Net';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 0.95;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -114,7 +113,7 @@
 
                 $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -125,7 +124,7 @@
 
                 $amount_used = 'Net to Net';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 0.95;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -136,7 +135,7 @@
 
                     $amount_used = 'Net to Net';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 0.95;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 0.95;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -147,7 +146,7 @@
 
                 $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate / 1;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount / 1;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -158,7 +157,7 @@
 
                     $amount_used = 'Gross to Gross';
 
-                    $gross_amt_new =  $new_terms_contract_rate /  1;
+                    $gross_amt_new =  $new_terms_monthly_contract_amount /  1;
                     $add_vat_new =  $gross_amt_new * 0.12;
                     $less_ewt_new =  $gross_amt_new * 0.05;
                     $net_amt_new = ( $gross_amt_new + $add_vat_new ) - $less_ewt_new;
@@ -269,6 +268,8 @@
                     </tbody>
                 </table>
             </div>
+            <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 save_computation">Generate and Upload</button>
+            <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
         </div>
 
     </body>
