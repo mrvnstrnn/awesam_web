@@ -19,7 +19,7 @@
 
 <script>
     //////////////////////////////////////
-    var profile_id = 38;
+    var profile_id = 36;
     var table_to_load = 'assigned_sites';
     var main_activity = "Assigned Sites";
     //////////////////////////////////////
