@@ -145,7 +145,7 @@
         }
     } );
 
-    $(".agent_form").on('click',"#btn-assign-sites", function(e){
+    $(document).on('click',"#btn-assign-sites", function(e){
         e.preventDefault();
 
         $(this).attr('disabled', 'disabled');

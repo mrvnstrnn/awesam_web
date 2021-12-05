@@ -46,15 +46,16 @@
 
                     $(".create_lease_renewal_notice_form #representative").val("{{ \Auth::user()->name }}");
 
-                    $.each(get_program_renewal, function(index, data) {
-                        $(".create_lease_renewal_notice_form #"+index).val(data);
+                    // $.each(get_program_renewal, function(index, data) {
+                    //     $(".create_lease_renewal_notice_form #"+index).val(data);
 
-                        if (index == 'site_address') {
-                            $(".create_lease_renewal_notice_form #lease_premises").val(data);
-                        }
-                    });
+                    //     if (index == 'site_address') {
+                    //         $(".create_lease_renewal_notice_form #lease_premises").val(data);
+                    //     }
+                    // });
 
                     $.each(commercial_nego, function(index, data) {
+                        console.log(index + " - " + data);
                         $(".create_lease_renewal_notice_form #"+index).val(data);
                     });
 
