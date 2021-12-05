@@ -33,6 +33,7 @@
             </div>
             <div class="form-row pull-right">
                 <div class="form-group">
+                    <button type="button" class="btn btn-lg btn-shadow btn-success">Check previous site documents</button>
                     <button type="button" class="btn btn-lg btn-shadow btn-primary award_to_vendor">Award to Vendor</button>
                 </div>
             </div>
