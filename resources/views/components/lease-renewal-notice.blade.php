@@ -144,21 +144,21 @@
         });
     });
 
-    $(".form_html").on("change", "#start_date, #lease_term", function(e){
-        var lease_term = $("#lease_term").val();
-        var start_date = $("#start_date").val();
-        if ( lease_term != null && start_date != null ) {
-            var lease_term = $("#lease_term").val();
-            var start_date = new Date($("#start_date").val());
+    $(".form_html").on("change", "#new_terms_start_date, #new_lease_terms_in_years", function(e){
+        var new_lease_terms_in_years = $("#new_lease_terms_in_years").val();
+        var new_terms_start_date = $("#new_terms_start_date").val();
+        if ( new_lease_terms_in_years != null && new_terms_start_date != null ) {
+            var new_lease_terms_in_years = $("#new_lease_terms_in_years").val();
+            var new_terms_start_date = new Date($("#new_terms_start_date").val());
 
-            new_date = start_date.setFullYear(start_date.getFullYear() + +lease_term);
+            new_date = new_terms_start_date.setFullYear(new_terms_start_date.getFullYear() + +new_lease_terms_in_years);
 
-            new_start_date = new Date(new_date)
+            new_new_terms_start_date = new Date(new_date)
 
-            date_day = (new_start_date.getDate()) < 10 ? "0" + (new_start_date.getDate()) : new_start_date.getDate() ;
-            let formatted_new_date =  new_start_date.getFullYear() + "-" + ( new_start_date.getMonth() + 1 ) + "-" + date_day;
+            date_day = (new_new_terms_start_date.getDate()) < 10 ? "0" + (new_new_terms_start_date.getDate()) : new_new_terms_start_date.getDate() ;
+            let formatted_new_date =  new_new_terms_start_date.getFullYear() + "-" + ( new_new_terms_start_date.getMonth() + 1 ) + "-" + date_day;
 
-            $("#end_date").val(formatted_new_date);
+            $("#new_terms_end_date").val(formatted_new_date);
         }
     });
 

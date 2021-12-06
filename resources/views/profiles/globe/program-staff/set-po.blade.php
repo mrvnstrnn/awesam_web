@@ -152,6 +152,12 @@
                     $("#assigned-sites-"+resp.program_id+"-table").DataTable().ajax.reload(function(){
                         $("#create_pr_renewal_modal").modal("hide");
 
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
                         $(".save_create_pr_btn").removeAttr("disabled");
                         $(".save_create_pr_btn").text("Create PR");
                     });

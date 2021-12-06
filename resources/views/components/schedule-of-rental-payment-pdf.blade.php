@@ -179,94 +179,95 @@
 
         @endphp
 
-        <div class="col-12">
-
-            <div class="table-responsive mt-3">
-                <table class="table table-bordered table-hover summary_table table-striped" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="text-center">Tax Application</th>
-                            <th colspan="5" class="text-left">{{ $new_terms_tax_application }}</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2" class="text-center">Yrs</th>
-                            <th rowspan="2" colspan="2" class="text-center">Contract Period</th>
-                            <th rowspan="2" colspan="1" class="text-center">Gross</th>
-                            <th rowspan="2" colspan="1" class="text-center">VAT</th>
-                            <th rowspan="2" colspan="1" class="text-center">EWT</th>
-                            <th rowspan="2" colspan="1" class="text-center">NET</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $new_monthly = 0;
-                            $running_new_monthly = 0;
-
-                            $new_yearly_total = 0;
-                            $savings_yearly_total = 0;
-
-                        @endphp
-
-                        @for ($i = 0; $i < $lease_term_years; $i++)
-
-                        @php
-                            // $dtStart = new DateTime($new_terms_start_date);
-                            // $dtStart->modify('+' . $i .' years');
-                            // $dtEnd = new DateTime($new_terms_start_date);
-                            // $dtEnd->modify('+' . $i .' years');
-                            // $dtEnd->modify('-1 day');
-
-                            $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
-                            $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
-
-                            if($amount_used === "Gross to Gross"){
-                                $amount_new = $gross_amt_new;
-                            }
-                            elseif($amount_used === "Net to Net"){
-                                $amount_new = $net_amt_new;
-                            }
-                            elseif($amount_used === "Not Applicable"){
-                                $amount_new = $net_amt_new;
-                            }
-
-                            if($new_monthly == 0){
-
-                                if($i < $new_terms_escalation_year - 1){
-                                    $new_monthly = $amount_new;
-                                } else {
-                                    $new_monthly = ($new_terms_escalation_rate * $amount_new) + $amount_new;
-                                }
-
-                                $running_new_monthly  = $new_monthly ;
-
-                            } else {
-
-                                if($i >= $new_terms_escalation_year - 1){
-                                    $running_new_monthly = ($running_new_monthly * $new_terms_escalation_rate) + $running_new_monthly;
-
-                                } else {
-                                    $running_new_monthly = $running_new_monthly;
-                                }
-                            }
-
-
-                            $new_yearly_total = $new_yearly_total + ($running_new_monthly * 12);
-                            
-
-                        @endphp
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-hover summary_table table-striped" style="width: 100% !important;">
+                        <thead>
                             <tr>
-                                <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
-                                <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
-                                <td class="text-center">{{ $dtEnd->format('Y-m-d') }}</td>
-                                <td class="text-center">{{ number_format($running_new_monthly,2) }}</td>
-                                <td class="text-center">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
-                                <td class="text-center">{{ number_format($running_new_monthly * 0.05,2) }}</td>
-                                <td class="text-center">{{ number_format($running_new_monthly + ($running_new_monthly * 0.12) + ($running_new_monthly * 0.05) ,2) }}</td>
+                                <th colspan="2" class="text-center">Tax Application</th>
+                                <th colspan="5" class="text-left">{{ $new_terms_tax_application }}</th>
                             </tr>
-                            
-                        @endfor
-                    </tbody>
-                </table>
+                            <tr>
+                                <th rowspan="2" class="text-center">Yrs</th>
+                                <th rowspan="2" colspan="2" class="text-center">Contract Period</th>
+                                <th rowspan="2" colspan="1" class="text-center">Gross</th>
+                                <th rowspan="2" colspan="1" class="text-center">VAT</th>
+                                <th rowspan="2" colspan="1" class="text-center">EWT</th>
+                                <th rowspan="2" colspan="1" class="text-center">NET</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $new_monthly = 0;
+                                $running_new_monthly = 0;
+
+                                $new_yearly_total = 0;
+                                $savings_yearly_total = 0;
+
+                            @endphp
+
+                            @for ($i = 0; $i < $lease_term_years; $i++)
+
+                            @php
+                                // $dtStart = new DateTime($new_terms_start_date);
+                                // $dtStart->modify('+' . $i .' years');
+                                // $dtEnd = new DateTime($new_terms_start_date);
+                                // $dtEnd->modify('+' . $i .' years');
+                                // $dtEnd->modify('-1 day');
+
+                                $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
+                                $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
+
+                                if($amount_used === "Gross to Gross"){
+                                    $amount_new = $gross_amt_new;
+                                }
+                                elseif($amount_used === "Net to Net"){
+                                    $amount_new = $net_amt_new;
+                                }
+                                elseif($amount_used === "Not Applicable"){
+                                    $amount_new = $net_amt_new;
+                                }
+
+                                if($new_monthly == 0){
+
+                                    if($i < $new_terms_escalation_year - 1){
+                                        $new_monthly = $amount_new;
+                                    } else {
+                                        $new_monthly = ($new_terms_escalation_rate * $amount_new) + $amount_new;
+                                    }
+
+                                    $running_new_monthly  = $new_monthly ;
+
+                                } else {
+
+                                    if($i >= $new_terms_escalation_year - 1){
+                                        $running_new_monthly = ($running_new_monthly * $new_terms_escalation_rate) + $running_new_monthly;
+
+                                    } else {
+                                        $running_new_monthly = $running_new_monthly;
+                                    }
+                                }
+
+
+                                $new_yearly_total = $new_yearly_total + ($running_new_monthly * 12);
+                                
+
+                            @endphp
+                                <tr>
+                                    <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
+                                    <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
+                                    <td class="text-center">{{ $dtEnd->format('Y-m-d') }}</td>
+                                    <td class="text-center">{{ number_format($running_new_monthly,2) }}</td>
+                                    <td class="text-center">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
+                                    <td class="text-center">{{ number_format($running_new_monthly * 0.05,2) }}</td>
+                                    <td class="text-center">{{ number_format($running_new_monthly + ($running_new_monthly * 0.12) + ($running_new_monthly * 0.05) ,2) }}</td>
+                                </tr>
+                                
+                            @endfor
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 

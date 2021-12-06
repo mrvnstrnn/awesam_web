@@ -46,7 +46,7 @@ class RenewalController extends Controller
                     'lessor' => $request->input("lessor"),
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
-                    'terms_in_years' => $request->input("terms_in_years"),
+                    'terms_in_years' => $request->input("new_lease_terms_in_years"),
                     'new_terms_start_date' => date('M d, Y', strtotime($request->input("new_terms_start_date"))),
                     'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
                     // 'date_word' => $date_word,
@@ -644,7 +644,7 @@ class RenewalController extends Controller
                 ]);
             }
             
-            return response()->json(['error' => true, 'message' => "Successfully save computation." ]);
+            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
 
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -689,7 +689,7 @@ class RenewalController extends Controller
     {
         try {
             $this->create_pdf($request->all(), $request->get('sam_id'), 'renewal-saving-computation-pdf');
-            return response()->json(['error' => true, 'message' => $request->all()]);
+            return response()->json(['error' => false, 'message' => $request->all()]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
