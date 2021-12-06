@@ -179,14 +179,14 @@
 
         @endphp
 
-        <div class="row">
-            <div class="col-12">
-                <div class="table-responsive mt-3">
-                    <table class="table table-bordered table-hover summary_table table-striped" style="width: 100% !important;">
+        <table style="width: 100%; margin-top: 0px;">
+            <tr>
+                <td style="width: 100%;">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="2" class="text-center">Tax Application</th>
-                                <th colspan="5" class="text-left">{{ $new_terms_tax_application }}</th>
+                                <th colspan="5" class="text-center">{{ $new_terms_tax_application }}</th>
                             </tr>
                             <tr>
                                 <th rowspan="2" class="text-center">Yrs</th>
@@ -256,8 +256,8 @@
                                 @endphp
                                 <tr>
                                     <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
-                                    <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
-                                    <td class="text-center">{{ $dtEnd->format('Y-m-d') }}</td>
+                                    <td class="text-center">{{ $dtStart->format('M d, Y') }}</td>
+                                    <td class="text-center">{{ $dtEnd->format('M d, Y') }}</td>
                                     <td class="text-center">{{ number_format($running_new_monthly,2) }}</td>
                                     <td class="text-center">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
                                     <td class="text-center">{{ number_format($running_new_monthly * 0.05,2) }}</td>
@@ -267,9 +267,41 @@
                             @endfor
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; margin-top: 0px;">
+            <tr>
+                <td style="width: 25%;">
+                    GLOBE TELECOM INC.
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    PREPARED BY
+                </td>
+                <td style="width: 75%;">
+                    <b style="text-decoration: underline;">:_____LM Lead User_____</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    CHECKED & VERIFIED BY: 
+                </td>
+                <td style="width: 75%;">
+                    <b style="text-decoration: underline;">:_____RUEL G. GARRO_____</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">
+                    COMFORME:
+                </td>
+                <td style="width: 75%;">
+                    <b style="text-decoration: underline;">:_____{{ \Auth::user()->name }}_____</b>
+                </td>
+            </tr>
+        </table>
 
     </body>
 

@@ -233,8 +233,8 @@ switch($new_terms_tax_application){
                 @endphp
                     <tr>
                         <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
-                        <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
-                        <td class="text-center">{{ $dtEnd->format('Y-m-d') }}</td>
+                        <td class="text-center">{{ $dtStart->format('M d, Y') }}</td>
+                        <td class="text-center">{{ $dtEnd->format('M d, Y') }}</td>
                         <td class="text-right">{{ number_format($running_new_monthly,2) }}</td>
                         <td class="text-right">{{ number_format($running_new_monthly * 0.12, 2) }}</td>
                         <td class="text-right">{{ number_format($running_new_monthly * 0.05,2) }}</td>
