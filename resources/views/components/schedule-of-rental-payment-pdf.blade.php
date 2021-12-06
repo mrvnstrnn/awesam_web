@@ -209,51 +209,51 @@
 
                             @for ($i = 0; $i < $lease_term_years; $i++)
 
-                            @php
-                                // $dtStart = new DateTime($new_terms_start_date);
-                                // $dtStart->modify('+' . $i .' years');
-                                // $dtEnd = new DateTime($new_terms_start_date);
-                                // $dtEnd->modify('+' . $i .' years');
-                                // $dtEnd->modify('-1 day');
+                                @php
+                                    // $dtStart = new DateTime($new_terms_start_date);
+                                    // $dtStart->modify('+' . $i .' years');
+                                    // $dtEnd = new DateTime($new_terms_start_date);
+                                    // $dtEnd->modify('+' . $i .' years');
+                                    // $dtEnd->modify('-1 day');
 
-                                $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
-                                $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
+                                    $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
+                                    $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
 
-                                if($amount_used === "Gross to Gross"){
-                                    $amount_new = $gross_amt_new;
-                                }
-                                elseif($amount_used === "Net to Net"){
-                                    $amount_new = $net_amt_new;
-                                }
-                                elseif($amount_used === "Not Applicable"){
-                                    $amount_new = $net_amt_new;
-                                }
-
-                                if($new_monthly == 0){
-
-                                    if($i < $new_terms_escalation_year - 1){
-                                        $new_monthly = $amount_new;
-                                    } else {
-                                        $new_monthly = ($new_terms_escalation_rate * $amount_new) + $amount_new;
+                                    if($amount_used === "Gross to Gross"){
+                                        $amount_new = $gross_amt_new;
+                                    }
+                                    elseif($amount_used === "Net to Net"){
+                                        $amount_new = $net_amt_new;
+                                    }
+                                    elseif($amount_used === "Not Applicable"){
+                                        $amount_new = $net_amt_new;
                                     }
 
-                                    $running_new_monthly  = $new_monthly ;
+                                    if($new_monthly == 0){
 
-                                } else {
+                                        if($i < $new_terms_escalation_year - 1){
+                                            $new_monthly = $amount_new;
+                                        } else {
+                                            $new_monthly = ($new_terms_escalation_rate * $amount_new) + $amount_new;
+                                        }
 
-                                    if($i >= $new_terms_escalation_year - 1){
-                                        $running_new_monthly = ($running_new_monthly * $new_terms_escalation_rate) + $running_new_monthly;
+                                        $running_new_monthly  = $new_monthly ;
 
                                     } else {
-                                        $running_new_monthly = $running_new_monthly;
+
+                                        if($i >= $new_terms_escalation_year - 1){
+                                            $running_new_monthly = ($running_new_monthly * $new_terms_escalation_rate) + $running_new_monthly;
+
+                                        } else {
+                                            $running_new_monthly = $running_new_monthly;
+                                        }
                                     }
-                                }
 
 
-                                $new_yearly_total = $new_yearly_total + ($running_new_monthly * 12);
-                                
+                                    $new_yearly_total = $new_yearly_total + ($running_new_monthly * 12);
+                                    
 
-                            @endphp
+                                @endphp
                                 <tr>
                                     <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
                                     <td class="text-center">{{ $dtStart->format('Y-m-d') }}</td>
