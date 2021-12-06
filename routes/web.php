@@ -514,6 +514,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/save-endorsment-to-sts', [RenewalController::class, 'save_endorsment_to_sts'])->name('save_endorsment_to_sts');
     Route::post('/approve-schedule-of-payment', [RenewalController::class, 'approve_schedule_of_payment'])->name('approve_schedule_of_payment');
     Route::post('/elas-approval-confirm', [RenewalController::class, 'elas_approval_confirm'])->name('elas_approval_confirm');
+    Route::post('/elas-approval-confirm-sam-head', [RenewalController::class, 'elas_approval_confirm_sam_head'])->name('elas_approval_confirm_sam_head');
     Route::post('/save-commecial-negotiation', [RenewalController::class, 'save_commecial_negotiation']);
     Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [RenewalController::class, 'get_commercial_engagement']);
 

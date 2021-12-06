@@ -165,7 +165,7 @@
 
                         $(".save_create_loi_to_renew_btn").removeAttr("disabled");
                         $(".save_create_loi_to_renew_btn").text("Save LOI");
-                        // $(".btn_switch_back_to_actions").trigger("click");
+                        $(".btn_switch_back_to_actions").trigger("click");
                     });
 
                     // $("#viewInfoModal").modal("hide");

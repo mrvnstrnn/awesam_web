@@ -46,6 +46,100 @@
             } else if ($json->company == 'GLOBE') {
                 $company_name = "GLOBE TELECOM, INC.";
             }
+
+            switch($json->new_terms_tax_application){
+
+                case "Vatable: Net of VAT - Net of EWT":         
+
+                    $tax1 = "Net";
+                    $tax2 = "Net";
+
+                    break;
+
+                case "Vatable: Inclusive of VAT - Inclusive of EWT":         
+
+                    $tax1 = "Inclusive";
+                    $tax2 = "Inclusive";
+
+                    break;
+
+                case "Vatable: Inclusive of VAT - Exclusive of EWT":            
+
+                    $tax1 = "Inclusive";
+                    $tax2 = "Exclusive";
+
+                    break;
+
+                case "Vatable: Exclusive of VAT - Exclusive of EWT":         
+
+                    $tax1 = "Exclusive";
+                    $tax2 = "Exclusive";
+
+                    break;
+
+                case "Vatable: Exclusive of VAT - Inclusive of EWT":         
+
+                    $tax1 = "Exclusive";
+                    $tax2 = "Inclusive";
+
+                    break;
+
+                case "Vatable: Silent of Vat - Silent of EWT":         
+
+                    $tax1 = "Silent";
+                    $tax2 = "Silent";
+
+                    break;
+
+                case "Non Vatable: Net of VAT - Net of EWT":  
+
+                    $tax1 = "Net";
+                    $tax2 = "Net";
+
+                    break;
+
+                case "Non Vatable: Inclusive of VAT - Inclusive of EWT":         
+
+                    $tax1 = "Inclusive";
+                    $tax2 = "Inclusive";
+
+                    break;
+
+                case "Non Vatable: Inclusive of VAT - Exclusive of EWT":         
+
+                    $tax1 = "Inclusive";
+                    $tax2 = "Exclusive";
+
+                    break;
+
+                case "Non Vatable: Exclusive of VAT - Exclusive of EWT":         
+
+                    $tax1 = "Exclusive";
+                    $tax2 = "Exclusive";
+
+                    break;
+
+                case "Non Vatable: Exclusive of VAT - Inclusive of EWT":         
+
+                    $tax1 = "Exclusive";
+                    $tax2 = "Inclusive";
+
+                    break;
+
+                case "Non Vatable: Silent of VAT - Silent of VAT":         
+                    
+                    $tax1 = "Silent";
+                    $tax2 = "Silent";
+
+                    break;
+
+                case "Not Applicable":      
+                    $tax1 = "";
+                    $tax2 = "";
+
+                    break;
+
+            }
         @endphp
         <div id="content">
 
@@ -131,16 +225,16 @@
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
                             Lease Term: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->new_lease_terms_in_years )) }}</span> (<span style="text-decoration: underline;">{{ $json->new_lease_terms_in_years }}</span>) years;
-                            Commencing on <span style="text-decoration: underline;">{{ $json->new_terms_start_date }}</span> to <span style="text-decoration: underline;">{{ $json->new_terms_end_date }}</span>.
+                            Commencing on <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_start_date)) }}</span> to <span style="text-decoration: underline;">{{ date('M d, Y', strtotime('-1 day', strtotime($json->new_terms_end_date))) }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
-                            Monthly Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_monthly_contract_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->lessor_demand_monthly_contract_amount, 2) }}</span>).</b> 
-                            Tax Application: ______ VAT and ______ Withholding Tax.
+                            Monthly Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->final_negotiated_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->final_negotiated_amount, 2) }}</span>).</b> 
+                            Tax Application: <span style="text-decoration: underline;"><b>{{ strtoupper( $tax1) }}</b></span> of VAT and <span style="text-decoration: underline;"><b>{{ strtoupper( $tax2) }}</b></span> of Withholding Tax.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>C.</b>
-                            Advance Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->lessor_demand_advance_rent, 2) }}</span>).</b> Equal to <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent_months )) }}</span> (<span style="text-decoration: underline;">{{ $json->lessor_demand_advance_rent_months }}</span>) month/s rent to be applied on the first _______ (___) month/s of the Lease Term.
+                            Advance Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->lessor_demand_advance_rent_amount, 2) }}</span>).</b> Equal to <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent_months )) }}</span> (<span style="text-decoration: underline;">{{ $json->lessor_demand_advance_rent_months }}</span>) month/s rent to be applied on the first _______ (___) month/s of the Lease Term.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>D.</b>
@@ -148,7 +242,7 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>E.</b>
-                            Security Deposit: ________________ (Php__________).
+                            Security Deposit: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_security_deposit_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->lessor_demand_security_deposit_amount, 2) }}</span>).</b> 
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>F.</b>

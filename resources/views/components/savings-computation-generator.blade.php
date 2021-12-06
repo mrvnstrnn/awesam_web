@@ -626,8 +626,8 @@ elseif($amount_used == 'Not Applicable'){
                 @endphp
                 <tr>
                     <td class="text-center font-weight-bold"> {{ $i+1 }}</td>
-                    <td>{{ $dtStart->format('Y-m-d') }}</td>
-                    <td>{{ $dtEnd->format('Y-m-d') }}</td>
+                    <td>{{ $dtStart->format('M d, Y') }}</td>
+                    <td>{{ $dtEnd->format('M d, Y') }}</td>
                     <td class="text-right">{{ number_format($running_per_contract_monthly, 2) }}</td>
                     <td class="text-right">{{ number_format($running_per_contract_monthly * 12, 2) }}</td>
                     <td class="text-right">{{ number_format($running_demand_monthly, 2) }}</td>

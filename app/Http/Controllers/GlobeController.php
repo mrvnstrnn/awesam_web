@@ -356,16 +356,34 @@ class GlobeController extends Controller
                 $po_number = $request->input('po_number');
                 $vendor = $request->input('vendor');
 
-                \DB::connection('mysql2')
-                    ->table('program_renewal')
-                    ->where('sam_id', $request->input('sam_id'))
-                    ->update([
-                        'vendor' => $request->get('vendor_name')
+                $validate = Validator::make($request->all(), array(
+                    'folder_url' => 'required',
+                ));
+
+                if (!$validate->passes()) {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                } else {
+
+                    SubActivityValue::create([
+                        'sam_id' => $samid[0],
+                        'type' => 'folder_url',
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'value' => json_encode($request->all())
                     ]);
-                Site::where('sam_id', $samid[0])
+
+                    \DB::connection('mysql2')
+                        ->table('program_renewal')
+                        ->where('sam_id', $request->input('sam_id'))
                         ->update([
-                            'site_vendor_id' => $vendor,
+                            'vendor' => $request->get('vendor_name')
                         ]);
+
+                    Site::where('sam_id', $samid[0])
+                            ->update([
+                                'site_vendor_id' => $vendor,
+                            ]);
+                }
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
@@ -7363,6 +7381,8 @@ class GlobeController extends Controller
             } else if ($form_name == "Commercial Negotiation") {
                 $button_name = "Save Commercial Negotiation";
                 $button_name2 = "Back Commercial Negotiation";
+            } else if ($form_name == "Routing of LRN for SAM Head Signature") {
+                $button_name = "Route eLAS";
             } else {
                 $button_name = "Save";
             }

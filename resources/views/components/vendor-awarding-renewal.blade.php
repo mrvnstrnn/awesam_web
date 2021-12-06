@@ -9,7 +9,7 @@
                                             ->where('vendor_id', $po->vendor)
                                             ->first();
         @endphp
-        <form class="">
+        <form class="vendor_awarding_form">
             <div class="form-row">
                 <div class="col-md-4 col-12">
                     <div class="form-group">
@@ -31,11 +31,24 @@
                     </div>
                 </div>
             </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="folder_url">Folder Url</label>
+                        <input type="text" name="folder_url" id="folder_url" class="form-control">
+                        <small class="folder_url-error text-danger"></small>
+                    </div>
+                </div>
+            </div>
             <div class="form-row pull-right">
                 <div class="form-group">
-                    <button type="button" class="btn btn-lg btn-shadow btn-success">Check previous site documents</button>
+                    {{-- <button type="button" class="btn btn-lg btn-shadow btn-success">Check previous site documents</button> --}}
                     <button type="button" class="btn btn-lg btn-shadow btn-primary award_to_vendor">Award to Vendor</button>
                 </div>
+            </div>
+
+            <div class="iframe_viewer mt-5">
+                <iframe src="{{ asset('new-file-default.html') }}" style="width:100%; border:0;"></iframe>
             </div>
         </form>
     </div>
@@ -46,6 +59,7 @@
 
 <script>
     $(document).ready(function(){
+        
         $("button.award_to_vendor").on("click", function() {
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
@@ -59,7 +73,10 @@
             var po_number = $("#po_number").val();
             var vendor = $("#vendor").val();
             var vendor_name = $("#vendor_name").val();
+            var folder_url = $("#folder_url").val();
             var data_complete = "true";
+
+            $(".vendor_awarding_form small").text("");
 
             $.ajax({
                 url: "/accept-reject-endorsement",
@@ -74,6 +91,7 @@
                     vendor : vendor,
                     vendor_name : vendor_name,
                     data_complete : data_complete,
+                    folder_url : folder_url,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -93,11 +111,17 @@
                             $("#viewInfoModal").modal("hide");
                         });
                     } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $(".vendor_awarding_form ." + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
 
                         $(".award_to_vendor").removeAttr("disabled");
                         $(".award_to_vendor").text("Award to Vendor");
@@ -114,6 +138,27 @@
                     $(".award_to_vendor").text("Award to Vendor");
                 }
             });
+        });
+
+        $(".vendor_awarding_form").on("change", "#folder_url", function () {
+            var url = $(this).val();
+
+            var result = url.replace(/(^\w+:|^)\/\//, '');
+
+            console.log(result.split("/")[3]);
+            if ( result.length > 10) {
+                $(".iframe_viewer").html(
+                    '<iframe src="https://drive.google.com/embeddedfolderview?id='+ result.split("/")[3] +'#grid" style="width:100%; height:600px; border:0;"></iframe>'
+                );
+            } else if ( result.length < 1 ) { 
+                $(".iframe_viewer").html(
+                    '<iframe src="{{ asset("new-file-default.html") }}" style="width:100%; border:0;"></iframe>'
+                );
+            } else {
+                $(".iframe_viewer").html(
+                    '<iframe src="{{ asset("new-file-error.html") }}" style="width:100%; border:0;"></iframe>'
+                );
+            }
         });
     });
 </script>

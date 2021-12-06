@@ -370,6 +370,7 @@ class RenewalController extends Controller
 
                 $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
 
+                // return response()->json(['error' => true, 'message' => $request->all()]);
                 $array_data = [
                     'file' => $new_file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
@@ -684,6 +685,39 @@ class RenewalController extends Controller
             }
 
             return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function elas_approval_confirm_sam_head (Request $request)
+    {
+        try {
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+            $validate = \Validator::make($request->all(),[
+                '*' => 'required',
+                'file' => 'required',
+            ]);
+
+            if ($validate->passes()) {
+
+                SubActivityValue::select('sam_id')
+                                    ->where('sam_id', $request->input("sam_id"))
+                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                    ->where('type', 'elas_renewal')
+                                    ->update([
+                                        'value' => json_encode($request->all()),
+                                        'status' => "approved"
+                                    ]);
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+
+            return response()->json(['error' => false, 'message' => "Successfully routed eLAS."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
