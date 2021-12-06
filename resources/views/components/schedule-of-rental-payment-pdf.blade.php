@@ -207,11 +207,6 @@
                 @for ($i = 0; $i < $lease_term_years; $i++)
 
                     @php
-                        // $dtStart = new DateTime($new_terms_start_date);
-                        // $dtStart->modify('+' . $i .' years');
-                        // $dtEnd = new DateTime($new_terms_start_date);
-                        // $dtEnd->modify('+' . $i .' years');
-                        // $dtEnd->modify('-1 day');
 
                         $dtStart = Carbon::parse($new_terms_start_date)->addYears($i);
                         $dtEnd = Carbon::parse($dtStart)->addYear()->subDay();
