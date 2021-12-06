@@ -214,11 +214,15 @@
 
                     $.each(get_program_renewal, function(index, data) {
                         $(".create_loi_to_renew_form #"+index).val(data);
-
+                        
                         if (index == 'site_address') {
                             $(".create_loi_to_renew_form #facility_site_address").val(data);
                         }
                     });
+
+                    
+                    $(".create_loi_to_renew_form #undersigned_email").val("{{ \Auth::user()->getUserDetail()->first()->email }}");
+                    $(".create_loi_to_renew_form #undersigned_number").val("{{ \Auth::user()->getUserDetail()->first()->contact_no }}");
 
                 } else {
                     Swal.fire(

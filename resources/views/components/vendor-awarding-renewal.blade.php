@@ -46,7 +46,7 @@
 
 <script>
     $(document).ready(function(){
-        $(".award_to_vendor").on("click", function() {
+        $("button.award_to_vendor").on("click", function() {
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
 
@@ -58,6 +58,7 @@
 
             var po_number = $("#po_number").val();
             var vendor = $("#vendor").val();
+            var vendor_name = $("#vendor_name").val();
             var data_complete = "true";
 
             $.ajax({
@@ -71,6 +72,7 @@
                     program_id : program_id,
                     po_number : po_number,
                     vendor : vendor,
+                    vendor_name : vendor_name,
                     data_complete : data_complete,
                 },
                 headers: {

@@ -268,6 +268,11 @@ class RenewalController extends Controller
 
                 for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
+                    Site::where('sam_id', $request->input("sam_id")[$i])
+                        ->update([
+                            'site_po' => $request->get('po_number')
+                        ]);
+
                     PrMemoSite::create([
                         'sam_id' => $request->input("sam_id")[$i],
                         'pr_memo_id'=> $generated_pr

@@ -279,43 +279,6 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                // if ($request->input('data_complete') == 'false') {
-
-                //     $activities = \DB::connection('mysql2')
-                //                         ->table('stage_activities')
-                //                         ->select('return_activity')
-                //                         ->where('activity_id', $activity_id[0])
-                //                         ->where('program_id', $program_id)
-                //                         ->where('category', $site_category[0])
-                //                         ->first();
-
-                //     $sub_activities = \DB::connection('mysql2')
-                //                             ->table('sub_activity')
-                //                             ->select('sub_activity_id')
-                //                             ->where('activity_id', $activities->return_activity)
-                //                             ->where('program_id', $program_id)
-                //                             ->where('category', $site_category[0])
-                //                             ->where('requires_validation', 1)
-                //                             ->get()
-                //                             ->pluck('sub_activity_id');
-
-                //     if (\Auth::user()->profile_id == 8) {
-                //         $column_var = 'reviewer_id';
-                //         $column_var2 = 'reviewer_approved';
-                //     } else {
-                //         $column_var = 'reviewer_id_2';
-                //         $column_var2 = 'reviewer_approved_2';
-                //     }
-
-                //     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
-                //                         ->update([
-                //                             'status' => 'rejected',
-                //                             'reason' => $request->input('text_area_reason'),
-                //                             $column_var => \Auth::id(),
-                //                             $column_var2 => Carbon::now()->toDate(),
-                //                         ]);
-                // }
-
             } else if ($request->input('activity_name') == "elas_approved") {
 
                 $notification = "Site successfully " .$message;
@@ -393,9 +356,14 @@ class GlobeController extends Controller
                 $po_number = $request->input('po_number');
                 $vendor = $request->input('vendor');
 
+                \DB::connection('mysql2')
+                    ->table('program_renewal')
+                    ->where('sam_id', $request->input('sam_id'))
+                    ->update([
+                        'vendor' => $request->get('vendor_name')
+                    ]);
                 Site::where('sam_id', $samid[0])
                         ->update([
-                            'site_po' => $po_number,
                             'site_vendor_id' => $vendor,
                         ]);
 
@@ -4967,15 +4935,18 @@ class GlobeController extends Controller
     public function get_agent_based_program($program_id)
     {
         try {
-            $agents = \DB::connection('mysql2')
-                                        ->table('users')
-                                        ->select('users.*')
-                                        ->join('user_details', 'user_details.user_id', 'users.id')
-                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                        ->where('user_details.IS_id', \Auth::user()->id)
-                                        ->where('user_programs.program_id', $program_id)
-                                        ->get();
+            $site_users = \DB::connection('mysql2')
+                            ->table('site_users')
+                            ->get();
 
+            $agents = \DB::connection('mysql2')
+                        ->table('users')
+                        ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
+                        ->join('user_details', 'user_details.user_id', 'users.id')
+                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                        ->where('user_details.IS_id', \Auth::user()->id)
+                        ->where('user_programs.program_id', $program_id)
+                        ->get();
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
