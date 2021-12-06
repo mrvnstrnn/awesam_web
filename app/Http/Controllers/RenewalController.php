@@ -566,7 +566,7 @@ class RenewalController extends Controller
 
             $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
             
-            return response()->json(['error' => true, 'message' => $request->all()]);
+            // return response()->json(['error' => true, 'message' => $request->all()]);
             $array_data = [
                 'file' => $new_file_name,
                 'active_profile' => "",

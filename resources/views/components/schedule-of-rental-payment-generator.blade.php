@@ -166,12 +166,12 @@ switch($new_terms_tax_application){
                     <th colspan="5" class="text-left">{{ $new_terms_tax_application }}</th>
                 </tr>
                 <tr>
-                    <th rowspan="2" class="text-center">Yrs</th>
-                    <th rowspan="2" colspan="2" class="text-center">Contract Period</th>
-                    <th rowspan="2" colspan="1" class="text-center">Gross</th>
-                    <th rowspan="2" colspan="1" class="text-center">VAT</th>
-                    <th rowspan="2" colspan="1" class="text-center">EWT</th>
-                    <th rowspan="2" colspan="1" class="text-center">NET</th>
+                    <th class="text-center">Yrs</th>
+                    <th colspan="2" class="text-center">Contract Period</th>
+                    <th colspan="1" class="text-center">Gross</th>
+                    <th colspan="1" class="text-center">VAT</th>
+                    <th colspan="1" class="text-center">EWT</th>
+                    <th colspan="1" class="text-center">NET</th>
                 </tr>
             </thead>
             <tbody>
