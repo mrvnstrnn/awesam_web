@@ -145,10 +145,11 @@
 
             var result = url.replace(/(^\w+:|^)\/\//, '');
 
-            console.log(result.split("/")[3]);
+            var array = result.split("/")
+
             if ( result.length > 10) {
                 $(".iframe_viewer").html(
-                    '<iframe src="https://drive.google.com/embeddedfolderview?id='+ result.split("/")[3] +'#grid" style="width:100%; height:600px; border:0;"></iframe>'
+                    '<iframe src="https://drive.google.com/embeddedfolderview?id='+ array[array.length - 1] +'#list" style="width:100%; height:600px; border:0;"></iframe>'
                 );
             } else if ( result.length < 1 ) { 
                 $(".iframe_viewer").html(
