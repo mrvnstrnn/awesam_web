@@ -40,34 +40,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewInfoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content" style="background-color: transparent; border: 0">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="main-card mb-3 card ">
-    
-                            <div class="dropdown-menu-header">
-                                <div class="dropdown-menu-header-inner bg-dark">
-                                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
-                                    <div class="menu-header-content btn-pane-right">
-                                            <h5 class="menu-header-title">
-                                                Endorsement
-                                            </h5>
-                                    </div>
-                                </div>
-                            </div> 
-    
-                            <div class="card-body form-row" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                                <div class="row form_fields"></div>
-                            </div>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('js_script')
@@ -96,93 +68,6 @@
             $('input[name='+val+']').not(this).prop('checked', false);
         }
     });
-
-    $('.assigned-sites-table').on( 'click', 'tr td:not(:first-child)', function (e) {
-        e.preventDefault();
-        $(document).find('#viewInfoModal').modal('show');
-
-        var sam_id = $(this).parent().attr('data-sam_id');
-        var program_id = $(this).parent().attr('data-sam_id');
-        var site_category = $(this).parent().attr('data-site_category');
-        var activity_id = $(this).parent().attr('data-activity_id');        
-        var site_name = $(this).parent().attr('data-site_name');
-
-        $(".btn-accept-endorsement").attr('data-program', $(this).parent().attr('data-program'));
-
-        allowed_keys = ["PLA_ID", "REGION", "VENDOR", "ADDRESS", "PROGRAM", "LOCATION", "SITENAME", "SITE_TYPE", "TECHNOLOGY", "NOMINATION_ID", "HIGHLEVEL_TECH"];
-
-        var what_table = $(this).closest('tr').attr('data-what_table');
-        var program_id = $(this).closest('tr').attr('data-program_id');
-
-        $.ajax({
-            url: '/get-program-fields/' + sam_id + '/' + $(this).closest('tr').attr('data-program_id'),
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
-
-                    $(".card-body .position-relative.form-group").remove();
-                    $(".main-card.mb-3.card .modal-footer").remove();
-
-
-                    $.each(resp.message[0], function(index, data) {
-                        field_name = index.charAt(0).toUpperCase() + index.slice(1);
-                        $("#viewInfoModal .card-body .form_fields").append(
-                            '<div class="position-relative form-group col-md-4" style="text-transform: uppercase;">' +
-                                '<label for="' + index.toUpperCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
-                            '</div>'+
-                            '<div class="position-relative form-group col-md-8">' +
-                                '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
-                            '</div>'
-                        );
-                    });
-
-                    if ("{{ \Auth::user()->profile_id != 2 }}") {
-                        $("#viewInfoModal .main-card.mb-3.card").append(
-                            '<div class="modal-footer">' +
-                                '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
-                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-accept-endorsement btn-sm d-none" data-complete="false" id="btn-accept-endorsement-false" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Reject Site</button>' +
-
-                                '<button type="button" class="btn btn btn-outline-danger btn-shadow btn-sm btn-reject" data-complete="false" id="btn-accept-endorsement-false">Reject Site</button>' +
-                            '</div>'
-                        );
-                    } else {
-                        $("#viewInfoModal .main-card.mb-3.card").append(
-                            '<div class="modal-footer">' +
-                                '<button type="button" class="btn btn-primary btn-accept-endorsement" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
-                            '</div>'
-                        );
-                    }
-
-                    $(".modal-title").text(site_name);
-                    $(".btn-reject").attr('data-sam_id', sam_id);
-                    $(".btn-accept-endorsement").attr('data-sam_id', sam_id);
-                    $(".btn-accept-endorsement").attr('data-site_category', site_category);
-                    // $(".btn-accept-endorsement").attr('data-site_vendor_id', vendor_id);
-                    $(".btn-accept-endorsement").attr('data-activity_id', activity_id);
-                    $(".btn-accept-endorsement").attr('data-what_table', what_table);
-                    $(".btn-accept-endorsement").attr('data-program_id', program_id);
-
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-                }
-            },
-            error: function(resp){
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
-        });
-
-    } );
 
     $(document).on("click", ".create_pr_po", function (){
         var data_program = $(this).attr('data-program');

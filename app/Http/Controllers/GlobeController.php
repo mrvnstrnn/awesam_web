@@ -2438,6 +2438,9 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
             }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+            }
             
             $sites->get();
         }

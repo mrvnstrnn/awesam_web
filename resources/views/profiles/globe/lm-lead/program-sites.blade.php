@@ -3,7 +3,7 @@
 @section('content')
 
     {{-- <x-assigned-sites mode="vendor"/> --}}
-    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Program Sites" activitytype="vendor"/>
+    <x-milestone-datatable ajaxdatatablesource="site-milestones" tableheader="Program Sites" activitytype="all"/>
 
 @endsection
 
