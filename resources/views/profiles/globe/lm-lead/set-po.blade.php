@@ -134,7 +134,22 @@
                         "las_completed_month",
                         "contract_completed_date",
                         "contract_completed_month",
-                        "challenges"
+                        "challenges",
+                        "rate_demand",
+                        "escalation_demand",
+                        "tco_demand",
+                        "escalation_new",
+                        "tco_new",
+                        "tco_increase",
+                        "entire_savings",
+                        "realized_savings",
+                        "entire_cost_avoidance",
+                        "realized_cost_avoidance",
+                        "vendor_name",
+                        "vendor",
+                        "site_class",
+                        "contract_type",
+                        "contract_duration_new"
                     ];
 
                     var data_not_allowed = [
@@ -230,6 +245,12 @@
                                 "<option value='"+ vendor.vendor_id +"'>"+ vendor.vendor_sec_reg_name +" ( " + vendor.vendor_acronym + " )</option>"
                             );
                         });
+                        
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                     } else {
                         Swal.fire(
                             'Error',
