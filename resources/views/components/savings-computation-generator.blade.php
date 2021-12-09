@@ -829,6 +829,20 @@ elseif($amount_used == 'Not Applicable'){
             </tfoot>
         </table>
     </div>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover table-sm table-striped summary_exdeal_table">
+            <tr>
+                <td><strong>TCO Limit</strong></td>
+                <td><strong>2.5%</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Actual TCO Increase</strong></td>
+                <td><strong>{{ number_format((($new_yearly_total - $per_contract_yearly_total) / $per_contract_yearly_total) * 100, 2) }} % </strong></td>
+            </tr>
+        </table>
+    </div>
+
     <button class="btn btn-lg btn-shadow btn-primary pull-right mb-4 save_computation">Generate and Upload</button>
     <button class="btn btn-lg btn-shadow btn-secondary back_to_form pull-right mb-4 mr-1">Edit Details</button>
 </div>

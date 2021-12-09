@@ -174,6 +174,7 @@
                     if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                         $.each(lrn, function(index, data) {
                             $(".savings_computation_form #"+index).val(data);
+                            console.log(index + " : " + data);
                         });
                     } else {
                         Swal.fire(
