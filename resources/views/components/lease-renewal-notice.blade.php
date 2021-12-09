@@ -209,6 +209,10 @@
                         $("#final_negotiated_advance_rent_amount").val("");
                         $("#other_conditions").val("");
 
+                        $("#to_be_applied_on").val("");
+                        $("#number_of_months_advance").val("");
+                        $("#consideration_for_otp_only").val("");
+
                         $(".back_to_form").trigger("click");
                     });
 

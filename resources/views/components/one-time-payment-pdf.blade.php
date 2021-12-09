@@ -229,7 +229,7 @@
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
-                            Consideration: ___________________ (Php___________). 
+                            Consideration: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->consideration_for_otp_only )) }}</span> (Php <span style="text-decoration: underline;">{{ number_format($json->consideration_for_otp_only, 2) }}</span>). 
                             Tax Application: <span style="text-decoration: underline;"><b>{{ strtoupper( $tax1) }}</b></span> of VAT and <span style="text-decoration: underline;"><b>{{ strtoupper( $tax2) }}</b></span> of Withholding Tax.
                         </p>
 
