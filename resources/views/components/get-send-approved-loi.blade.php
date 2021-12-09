@@ -42,6 +42,8 @@
     </div>
 </div>
 
+<script src="/js/dropzone/dropzone.js"></script>
+
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
@@ -126,6 +128,101 @@
                 $(".cancel_email_loi").text("Cancel Email LOI");
             }
         });
+    });
+
+    $(".email_loi_form").prepend(
+        '<div class="dropzone dropzone_files_activities mt-0 mb-5">' +
+            '<div class="dz-message">' +
+                '<i class="fa fa-plus fa-3x"></i>' +
+                '<p><small class="sub_activity_name">Drag and Drop files here</small></p>' +
+            '</div>' +
+        '</div>' +
+        '<small class="file-error text-danger"></small>'
+    );
+
+    
+
+    Dropzone.autoDiscover = false;
+    $(".dropzone_files_activities").dropzone({
+        addRemoveLinks: true,
+        // maxFiles: 1,
+        paramName: "file",
+        url: "/renewal-upload-file",
+        // init: function() {
+        //     this.on("maxfilesexceeded", function(file){
+        //         this.removeFile(file);
+        //     });
+        // },
+        removedfile: function(file) {
+            file.previewElement.remove();
+            $(".email_loi_form input#"+file.upload.uuid).remove();
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (file, resp) {
+            if (!resp.error){
+                var _this = this;
+                var file = file;
+                var sam_id = "{{ $sam_id }}";
+                var sub_activity_name = "{{ $sub_activity }}";
+                var file_name = resp.file;
+                var site_category = "{{ $site_category }}";
+                var activity_id = "{{ $activity_id }}";
+                var program_id = "{{ $program_id }}";
+
+                var file_id = file.upload.uuid;
+
+                $.ajax({
+                    url: "/renewal-upload-my-file",
+                    method: "POST",
+                    data: {
+                        sam_id : sam_id,
+                        file_name : file_name,
+                        sub_activity_name : sub_activity_name,
+                        site_category : site_category,
+                        activity_id : activity_id,
+                        program_id : program_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp) {
+                        if (!resp.error){
+                            $(".email_loi_form").append(
+                                '<input value="'+resp.message+'" name="file[]" id="'+ file_id +'" type="hidden">'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function (file, response) {
+                        Swal.fire(
+                            'Error',
+                            resp,
+                            'error'
+                        )
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Error',
+                    resp.message,
+                    'error'
+                )
+            }
+        },
+        error: function (file, resp) {
+            Swal.fire(
+                'Error',
+                resp,
+                'error'
+            )
+        }
     });
 
 </script>

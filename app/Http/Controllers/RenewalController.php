@@ -212,7 +212,7 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
                 // $url = asset('files/'.$request->input("file_name"));
-                Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name")));
+                Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name"), $request->input("file")));
 
                 return response()->json(['error' => false, 'message' => "Successfully emailed LOI to " .$request->input("email") ]);
             } else {
