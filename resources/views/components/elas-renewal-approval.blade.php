@@ -116,7 +116,6 @@
         $(".reject_remarks").addClass("d-none");
         $(".data_form").removeClass("d-none");
     });
-
     
     $(".reject_form").on("click", ".confirm_reject", function(e) {
         e.preventDefault();

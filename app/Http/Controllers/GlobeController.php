@@ -7207,6 +7207,7 @@ class GlobeController extends Controller
                 $button_name2 = "Back Commercial Negotiation";
             } else if ($form_name == "Routing of LRN for SAM Head Signature") {
                 $button_name = "Route eLAS";
+                $button_name2 = "Re-Negotiate eLAS";
             } else {
                 $button_name = "Save";
             }

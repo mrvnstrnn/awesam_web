@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row data_form">
     <div class="col-12">
         <div class="form_html"></div>
         <form class="site_data_form">@csrf
@@ -16,6 +16,25 @@
 
             <button class="btn btn-primary btn-shadow btn-lg bact_to_files m-2">Back to file list</button>
         </div>
+    </div>
+</div>
+
+<div class="row reject_remarks d-none">
+    <div class="col-12">
+        <p class="message_p">Are you sure you want to reject this eLAS?</p>
+        <form class="reject_form">
+            <input type="hidden" name="action_file" id="action_file">
+            <div class="form-group">
+                <label for="remarks">Remarks:</label>
+                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                <small class="text-danger remarks-error"></small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-sm btn-shadow confirm_reject" data-action="false" type="button">Re-Negotiate eLAS</button>
+                
+                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -79,6 +98,79 @@
 
                 $(".save_routing_of_lrn_for_sam_head_signature_btn").removeAttr("disabled");
                 $(".save_routing_of_lrn_for_sam_head_signature_btn").text("Route eLAS");
+            }
+        });
+
+    });
+
+    $(".form_html").on("click", ".cancel_routing_of_lrn_for_sam_head_signature_btn", function(e) {
+        $(".reject_remarks").removeClass("d-none");
+        $(".data_form").addClass("d-none");
+    });
+
+    $(".reject_form").on("click", ".cancel_reject", function(e) {
+        $(".reject_remarks").addClass("d-none");
+        $(".data_form").removeClass("d-none");
+    });
+
+    $(".reject_form").on("click", ".confirm_reject", function(e) {
+        e.preventDefault();
+        $(".confirm_reject").attr("disabled", "disabled");
+        $(".confirm_reject").text("Processing...");
+
+        $(".reject_form #action_file").val($(this).attr("data-action"));
+
+        $.ajax({
+            url: "/elas-approval-confirm",
+            method: "POST",
+            data: $(".reject_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+
+                    $("table[data-program_id="+"{{ $site[0]->program_id }}"+"]").DataTable().ajax.reload(function(){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".confirm_reject").removeAttr("disabled");
+                        $(".confirm_reject").text("Re-Negotiate eLAS");
+
+                        $("#viewInfoModal").modal("hide");
+
+                    });
+                } else {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".reject_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+
+                    $(".confirm_reject").removeAttr("disabled");
+                    $(".confirm_reject").text("Re-Negotiate eLAS");
+
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".confirm_reject").removeAttr("disabled");
+                $(".confirm_reject").text("Re-Negotiate eLAS");
+
             }
         });
 
