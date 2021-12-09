@@ -26,6 +26,25 @@
 <div class="row table_computation_div d-none">
 </div>
 
+<div class="row mt-3 mb-3">
+    <div class="col-12">
+        <div class="table_html"></div>
+        <div class="file_div d-none">
+            <div class="row">
+                <div class="col-12">
+                    <div class="file_viewer"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-lg btn-primary btn-shadow back_to_form">Back to form</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete">Mark as Complete</button> --}}
 
 <script>
@@ -112,24 +131,13 @@
                     $(".form_html").html(resp.message);
 
                     var saving_computation = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'saving_computation') }}".replace(/&quot;/g,'"')) ) );
-// console.log(saving_computation);
+
                     $.each(saving_computation, function(index, data) {
                         if (index == 'lessor_address') {
                             $(".schedule_of_rental_payment_form #lease_premises").val(data);
                         }
                         $(".schedule_of_rental_payment_form #"+index).val(data);
                     });
-                    // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
-                    //     $.each(lrn, function(index, data) {
-                    //         $("#"+index).val(data);
-                    //     });
-                    // } else {
-                    //     Swal.fire(
-                    //         'Error',
-                    //         "Can't process this right now.",
-                    //         'error'
-                    //     )
-                    // }
                     
                 } else {
                     Swal.fire(
@@ -163,22 +171,26 @@
             },
             success: function (resp) {
                 if (!resp.error) {
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
 
-                    $(".save_computation").removeAttr("disabled");
-                    $(".save_computation").text("Generate and Upload");
+                    $(".table_uploaded").DataTable().ajax.reload( function () {
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
 
-                    $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
+                        $(".save_computation").removeAttr("disabled");
+                        $(".save_computation").text("Generate and Upload");
 
-                    $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
-                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
-                    );
+                        $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
 
-                    $(".btn_switch_back_to_actions").trigger("click");
+                        $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
+                            '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                        );
+
+                        // $(".btn_switch_back_to_actions").trigger("click");
+                        $(".back_to_form").trigger("click");
+                    });
                 } else {
                     
                     Swal.fire(
@@ -205,63 +217,75 @@
         });
     });
 
-    $(".mark_as_complete").on("click", function() {
-        $(".mark_as_complete").attr("disabled", "disabled");
-        $(".mark_as_complete").text("Processing...");
 
-        var sam_id = ["{{ $sam_id }}"];
-        var activity_name = "mark_as_complete";
-        var site_category = ["{{ $site_category }}"];
-        var activity_id = ["{{ $activity_id }}"];
-        var program_id = "{{ $program_id }}";
+    $(".table_html").html(
+        '<div class="table-responsive table_uploaded_parent">' +
+            '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th style="width: 5%">#</th>' +
+                        '<th style="width: 35%">Filename</th>' +
+                        '<th style="width: 15%">Status</th>' +
+                        '<th style="width: 35%">Reason</th>' +
+                        '<th>Date Uploaded</th>' +
+                    '</tr>' +
+                '</thead>' +
+            '</table>' +
+        '</div>'
+    );
 
-        $.ajax({
-            url: "/accept-reject-endorsement",
-            method: "POST",
-            data: {
-                sam_id : sam_id,
-                activity_name : activity_name,
-                site_category : site_category,
-                activity_id : activity_id,
-                program_id : program_id,
+    if (! $.fn.DataTable.isDataTable(".table_uploaded") ){   
+        $(".table_uploaded").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/get-uploaded-files/" + "{{ $sub_activity_id }}" + "/" + "{{ $sam_id }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            dataSrc: function(json){
+                return json.data;
             },
-            success: function (resp) {
-                if (!resp.error){
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
-
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-
-                    $("#viewInfoModal").modal("hide");
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-
-                    $(".mark_as_complete").removeAttr("disabled");
-                    $(".mark_as_complete").text("Mark as Complete");
-                }
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-value', data.value);
+                $(row).attr('style', 'cursor: pointer');
             },
-            error: function (resp) {
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-
-                $(".mark_as_complete").removeAttr("disabled");
-                $(".mark_as_complete").text("Mark as Complete");
-            }
+            columns: [
+                { data: "id" },
+                { data: "value" },
+                { data: "status" },
+                { data: "reason" },
+                { data: "date_created" },
+            ],
         });
+    } else {
+        $(".table_uploaded").DataTable().ajax.reload();
+    }
 
+    $(".file_div").on("click", ".back_to_form", function () {
+        $(".table_html").removeClass("d-none");
+        $(".form_html").removeClass("d-none");
+        $(".file_div").addClass("d-none");
+    });
+
+    $(".table_html").on("click", ".table_uploaded tr td", function () {
+
+        var extensions = ["pdf", "jpg", "png"];
+
+        var values = $(this).parent().attr('data-value');
+
+        if( extensions.includes(values.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
+        } else {
+            htmltoload = '<div class="text-center my-5"><a href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
+
+        $(".file_viewer").html(htmltoload);
+
+        $(".table_html").addClass("d-none");
+        $(".form_html").addClass("d-none");
+        $(".file_div").removeClass("d-none");
     });
 </script>

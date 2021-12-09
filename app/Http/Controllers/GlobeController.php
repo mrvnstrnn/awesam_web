@@ -1378,7 +1378,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : NULL,
                     ]);
 
                 } else if ($stage_activities->activity_type != 'doc upload') {
@@ -1394,7 +1394,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : NULL,
                     ]);
 
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
@@ -4976,7 +4976,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -4992,7 +4992,7 @@ class GlobeController extends Controller
                                             $json = json_decode($row->value, true);
 
                                             if ( isset($json['validators']) ) {
-                                                for ($i=0; $i < count($json['validators']); $i++) { 
+                                                for ($i=0; $i < count($json['validators']); $i++) {
                                                     if ( $json['validators'][$i]['profile_id'] == \Auth::user()->profile_id ) {
                                                         return $json['validators'][$i]['status'];
                                                     }
@@ -5006,7 +5006,7 @@ class GlobeController extends Controller
                                         }
 
                                     });
-                                } else if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 9) {
+                                } else if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 9 || \Auth::user()->profile_id == 38) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);

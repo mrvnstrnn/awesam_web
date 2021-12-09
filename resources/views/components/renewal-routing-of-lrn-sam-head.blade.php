@@ -8,7 +8,9 @@
             <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">
             <input type="hidden" name="activity_id" id="activity_id" value="{{ $site[0]->activity_id }}">
         </form>
-        <div class="file_html"></div>
+        <div class="file_html">
+            <div class="row"></div>
+        </div>
 
         <div class="row file_div d-none">
             <div class="col-12 file_viewer">
@@ -190,7 +192,7 @@
                         $(".routing_of_lrn_for_sam_head_signature_form #"+index).val(data);
                     });
 
-                    $(".file_html div").remove();
+                    $(".file_html .row div").remove();
                     $(".routing_of_lrn_for_sam_head_signature_form input#file").remove();
 
                     for (let i = 0; i < elas_renewal.file.length; i++) {
@@ -209,13 +211,13 @@
                             var extension = "fa-file";
                         }
 
-                        $(".file_html").append(
-                            '<div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div" style="cursor: pointer;">' +
+                        $(".file_html .row").append(
+                            '<div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div" array-id="'+i+'" style="cursor: pointer;">' +
                                 '<div class="child_div">' +
                                     '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;">' +
                                         '<div>' +
                                         '<i class="fa ' + extension + ' fa-3x text-dark"></i><br>' +
-                                        '<p><small>' + elas_renewal.file[i] + '</small></p>' +
+                                        '<p><small class="file_name'+i+'">' + elas_renewal.file[i] + '</small></p>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
@@ -241,7 +243,8 @@
     });
 
     $(".file_html").on("click", ".dropzone_div", function () {
-        var file_name = $(".dropzone_div small").text();
+        var array_id = $(this).attr("array-id");
+        var file_name = $(".dropzone_div small.file_name"+array_id).text();
 
         var extensions = ["pdf", "jpg", "png"];
 
