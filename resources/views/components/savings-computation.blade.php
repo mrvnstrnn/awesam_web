@@ -185,6 +185,7 @@
                     if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                         $.each(lrn, function(index, data) {
                             $(".savings_computation_form #"+index).val(data);
+                            console.log(index + " : " + data);
 
                             if ( index == "lessor_demand_monthly_contract_amount" ) {
                                 $(".savings_computation_form #new_terms_monthly_contract_amount").val(data);
