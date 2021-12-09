@@ -403,7 +403,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $get_program_renewal_old = \DB::connection('mysql2')
                     ->table('program_renewal')
-                    ->select('rate_old', 'escalation_old')
+                    ->select('rate_old', 'escalation_old', 'tco_old')
                     ->where('sam_id', $sam_id)
                     ->first();
                     
