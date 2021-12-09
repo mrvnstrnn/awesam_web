@@ -838,7 +838,7 @@ elseif($amount_used == 'Not Applicable'){
             </tr>
             <tr>
                 <td><strong>Actual TCO Increase</strong></td>
-                <td><strong>{{ number_format((($new_yearly_total - $per_contract_yearly_total) / $per_contract_yearly_total) * 100, 2) }} % </strong></td>
+                <td><strong>{{ number_format((( ($new_yearly_total + $new_terms_exdeal_amount) - ($per_contract_yearly_total + $old_exdeal_amount) ) / ($per_contract_yearly_total + $old_exdeal_amount)) * 100, 2) }} % </strong></td>
             </tr>
         </table>
     </div>
