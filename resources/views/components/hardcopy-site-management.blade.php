@@ -1,271 +1,165 @@
 
 
-<div class="row file_preview d-none">
-    <div class="col-12 mb-3">
-        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-    </div>
-    <div class="col-12 file_viewer">
-    </div>
-    <div class="col-12 my-3">
-        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
-    </div>
-    <div class="col-12 file_viewer_list pt-3">
-    </div>
-</div>
+<div class="modal-body">
+    <ul class="tabs-animated body-tabs-animated nav mb-4">
+        <li class="nav-item">
+            <a role="tab" class="nav-link active" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
+                <span>Checklists</span>
+                <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
+                <span>Files</span>
+            </a>
+        </li>
+    </ul>
 
-<div class="row file_lists">
-    @php
-        $datas = \DB::connection('mysql2')
-                        ->table('sub_activity_value')
-                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
-                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                        ->where('sub_activity_value.type', 'doc_upload')
-                        ->orderBy('sub_activity_value.sub_activity_id')
-                        ->get();
-
-        $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
-
-        $activities = \DB::connection('mysql2')
-                        ->table('stage_activities')
-                        ->select('activity_id', 'activity_name')
-                        ->where('program_id', $site[0]->program_id)
-                        ->where('category', $site[0]->site_category)
-                        ->whereIn('activity_id', $unique_activity_id )
-                        ->distinct()
-                        ->get();
-
-        $keys_datas = $datas->groupBy('sub_activity_id')->keys();
-    @endphp
-
-    {{-- <div class="row"> --}}
-        <div class="col-12">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>File</th>
-                            <th>Date Approved</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $datas_file = \DB::connection('mysql2')
-                                            ->table('sub_activity_value')
-                                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
-                                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                                            ->where('sub_activity_value.type', 'doc_upload')
-                                            ->where('sub_activity_value.status', 'approved')
-                                            ->orderBy('sub_activity_value.sub_activity_id')
-                                            ->get();   
-                        @endphp
-                        @foreach ($datas_file as $data_file)
-                            @php
-                                $file_name = json_decode($data_file->value);
-                            @endphp
-                            <tr>
-                                <td scope="row">
-                                    <input type="checkbox" name="checkbox{{$data_file->id}}" id="checkbox{{$data_file->id}}">
-                                </td>
-                                <td>{{ $file_name->file }}</td>
-                                <td>{{ date('M d, Y', strtotime($data_file->date_update) ) }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <div class="tab-content">
+        <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
+            <div class="row file_preview d-none">
+                <div class="col-12 mb-3">
+                    <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+                </div>
+                <div class="col-12 file_viewer">
+                </div>
+                <div class="col-12 my-3">
+                    <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+                </div>
+                <div class="col-12 file_viewer_list pt-3">
+                </div>
+            </div>
+            
+            <div class="row file_lists">
+                @php
+                    $datas = \DB::table('sub_activity_value')
+                                    ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                    ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                    ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                    ->where('sub_activity_value.type', 'doc_upload')
+                                    ->orderBy('sub_activity_value.sub_activity_id')
+                                    ->get();
+            
+                    $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
+            
+                    $activities = \DB::table('stage_activities')
+                                    ->select('activity_id', 'activity_name')
+                                    ->where('program_id', $site[0]->program_id)
+                                    ->where('category', $site[0]->site_category)
+                                    ->whereIn('activity_id', $unique_activity_id )
+                                    ->distinct()
+                                    ->get();
+            
+                    $keys_datas = $datas->groupBy('sub_activity_id')->keys();
+                @endphp
+            
+                {{-- <div class="row"> --}}
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Submitted By</th>
+                                        <th>File</th>
+                                        <th>Date Submitted</th>
+                                        <th>Date Approved</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $datas_file = \DB::table('sub_activity_value')
+                                                        ->select('users.name', 'sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                                        ->join('users', 'users.id', 'sub_activity_value.user_id')
+                                                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                                        ->where('sub_activity_value.type', 'doc_upload')
+                                                        ->where('sub_activity_value.status', 'approved')
+                                                        ->orderBy('sub_activity_value.sub_activity_id')
+                                                        ->get();   
+                                    @endphp
+                                    @foreach ($datas_file as $data_file)
+                                        @php
+                                            $file_name = json_decode($data_file->value);
+                                        @endphp
+                                        <tr>
+                                            <td scope="row">
+                                                {{ $data_file->name }}
+                                                {{-- <input type="checkbox" name="checkbox{{$data_file->id}}" id="checkbox{{$data_file->id}}"> --}}
+                                            </td>
+                                            <td>{{ $file_name->file }}</td>
+                                            <td>{{ date('M d, Y', strtotime($data_file->date_created) ) }}</td>
+                                            <td>{{ isset($data_file->date_update) ? date('M d, Y', strtotime($data_file->date_update) ) : "No Data" }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {{-- </div> --}}
+            </div>
+            
+            <div class="row confirmation_message text-center pt-2 pb-5 d-none">
+                <div class="col-12">
+                    <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
+                    <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
+            
+                    <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
+                    <small class="reason-error text-danger"></small><br>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
+                    <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
+                </div>
+            </div>
+            {{-- @php
+             dd($status_collect);
+            @endphp --}}
+            <div class="row reject_remarks d-none">
+                <div class="col-12">
+                    <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
+                    <form class="reject_form">
+                        <input type="hidden" name="type" id="type" value="reject_site">
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                            <small class="text-danger remarks-error"></small>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm btn-shadow btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}" type="button">Confirm</button>
+                            
+                            <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            @if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
+                <div class="row my-3">
+                    <div class="col-12">
+                        <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span><br>
+                        <b>Approved By: </b><span>{{ \Auth::user()->getRtbApproved($site[0]->sam_id)->name }}</span>
+                    </div>
+                </div>
+            @endif
+            
+            <div class="row mb-3 border-top pt-3 button_area_div">
+                <div class="col-12 align-right">
+                    {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
+                    <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
+                    
+                    <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>
+                </div>
             </div>
         </div>
-    {{-- </div> --}}
-</div>
-
-<div class="row confirmation_message text-center pt-2 pb-5 d-none">
-    <div class="col-12">
-        <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
-        <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
-
-        <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
-        <small class="reason-error text-danger"></small><br>
-        
-        <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
-        <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
-    </div>
-</div>
-{{-- @php
- dd($status_collect);
-@endphp --}}
-<div class="row reject_remarks d-none">
-    <div class="col-12">
-        <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
-        <form class="reject_form">
-            <input type="hidden" name="type" id="type" value="reject_site">
-            <div class="form-group">
-                <label for="remarks">Remarks:</label>
-                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
-                <small class="text-danger remarks-error"></small>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-shadow btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}" type="button">Confirm</button>
-                
-                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-@if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
-    <div class="row my-3">
-        <div class="col-12">
-            <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span><br>
-            <b>Approved By: </b><span>{{ \Auth::user()->getRtbApproved($site[0]->sam_id)->name }}</span>
+        <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
+            <img src="/images/construction.gif" width="100%"/>
+            <h5>activity_source: File</h5>
+            <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
         </div>
-    </div>
-@endif
-
-<div class="row mb-3 border-top pt-3 button_area_div">
-    <div class="col-12 align-right">
-        {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
-        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
-        
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>
     </div>
 </div>
 
 <script>
-    
-    // $(".view_file").on("click", function (e){
-    //     e.preventDefault();
-
-    //     var id = $(this).attr("data-id");
-    //     $(".button_area_div").addClass("d-none");
-
-    //     $(".approve_reject_doc_btns").attr("data-id", id);
-
-    //     $(".approve_reject_doc_btns").attr("data-sub_activity_name", $(this).attr("data-sub_activity_name"));
-    //     $(".approve_reject_doc_btns").attr("data-activity_id", $(this).attr("data-activity_id"));
-    //     $(".approve_reject_doc_btns").attr("data-site_category", $(this).attr("data-site_category"));
-        
-    //     var sub_activity_id = $(this).attr("data-sub_activity_id");
-    //     $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
-
-    //     var extensions = ["pdf", "jpg", "png"];
-
-    //     var values = JSON.parse($(this).attr('data-value'));
-
-    //     var sam_id = "{{ $site[0]->sam_id }}";
-    //     var sub_activity_id = $(this).attr('data-sub_activity_id');
-    //     var id = values[0].id;
-
-    //     if ($(this).attr("data-status") != "rejected"){
-    //         if ($(this).attr("data-requires_validation") == 1) {
-    //             $(".approve_reject_doc_btns").removeClass("d-none");
-    //         } else {
-    //             $(".approve_reject_doc_btns").addClass("d-none");
-    //         }
-    //     } else {
-    //         $(".approve_reject_doc_btns").addClass("d-none");
-    //     }
-
-    //     if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
-    //         htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
-    //     } else {
-    //       htmltoload = '<div class="text-center my-5"><a href="/files/' + JSON.parse(values[0].value).file + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
-    //     }
-        
-    //     $('.file_viewer').html('');
-    //     $('.file_viewer').html(htmltoload);
-
-    //     $('.file_viewer_list').html('');
-
-    //     htmllist = '<div class="table-responsive table_uploaded_parent">' +
-    //             '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
-    //                 '<thead>' +
-    //                     '<tr>' +
-    //                         '<th style="width: 5%">#</th>' +
-    //                         '<th>Filename</th>' +
-    //                         '<th style="width: 35%">Status</th>' +
-    //                         '<th style="width: 35%">Reason</th>' +
-    //                         '<th>Date Uploaded</th>' +
-    //                         '<th>Date Approved</th>' +
-    //                     '</tr>' +
-    //                 '</thead>' +
-    //             '</table>' +
-    //         '</div>';
-
-    //     $('.file_viewer_list').html(htmllist);
-    //     $(".table_uploaded").attr("id", "table_uploaded_files_"+sub_activity_id);
-
-    //     remarks_file(id, sam_id);
-
-    //     if (! $.fn.DataTable.isDataTable("#table_uploaded_files_"+sub_activity_id) ){
-    //         $("#table_uploaded_files_"+sub_activity_id).DataTable({
-    //             processing: true,
-    //             serverSide: true,
-    //             ajax: {
-    //                 url: "/get-my-sub_act_value/"+sub_activity_id+"/"+sam_id,
-    //                 type: 'GET',
-    //                 headers: {
-    //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //                 },
-    //             },
-    //             dataSrc: function(json){
-    //                 return json.data;
-    //             },
-    //             'createdRow': function( row, data, dataIndex ) {
-    //                 $(row).attr('data-value', data.value);
-    //                 $(row).attr('data-status', data.status);
-    //                 $(row).attr('data-id', data.id);
-    //                 $(row).attr('data-sub_activity_id', data.sub_activity_id);
-    //                 $(row).attr('style', 'cursor: pointer');
-    //             },
-    //             columns: [
-    //                 { data: "id" },
-    //                 { data: "value" },
-    //                 { data: "status" },
-    //                 { data: "reason" },
-    //                 { data: "date_created" },
-    //                 { data: "date_approved" },
-    //             ],
-    //         });
-    //     } else {
-    //         $("#table_uploaded_files_"+sub_activity_id).DataTable().ajax.reload();
-    //     }
-
-    //     $('.file_lists').addClass('d-none');
-    //     $('.file_preview').removeClass('d-none');
-
-    // });
-
-    // function remarks_file (id, sam_id) {
-    //     $.ajax({
-    //         url: "/get-remarks-file/"+id+"/"+sam_id,
-    //         method: "GET",
-    //         success: function (resp) {
-    //             if (!resp.error) {
-    //                 if (resp.message == null) {
-    //                     $(".remarks_paragraph").text("No remarks available.");
-    //                 } else {
-    //                     $(".remarks_paragraph").text(JSON.parse(resp.message.value).remarks);
-    //                 }
-    //             } else {
-    //                 Swal.fire(
-    //                     'Error',
-    //                     resp.message,
-    //                     'error'
-    //                 )
-    //             }
-    //         },
-
-    //         error: function (resp) {
-    //             Swal.fire(
-    //                 'Error',
-    //                 resp,
-    //                 'error'
-    //             )
-    //         },
-    //     });
-    // }
 
     $("#btn_back_to_file_list").on("click", function (){
         $('.file_lists').removeClass('d-none');

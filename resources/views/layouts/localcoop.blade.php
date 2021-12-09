@@ -1,6 +1,5 @@
 @php
-    $user_locations = \DB::connection('mysql2')
-                            ->table('local_coop_user_locations')
+    $user_locations = \DB::table('local_coop_user_locations')
                             ->where('user_id', \Auth::id())
                             ->get();
 
@@ -11,13 +10,11 @@
     }
     
     if (\Auth::user()->profile_id == 18 || \Auth::user()->profile_id == 25) {
-        $coops = \DB::connection('mysql2')
-                        ->table("local_coop")
+        $coops = \DB::table("local_coop")
                         ->orderBy('coop_name')
                         ->get();
     } else {
-        $coops = \DB::connection('mysql2')
-                        ->table("local_coop")
+        $coops = \DB::table("local_coop")
                         ->whereIn('region', $my_locations->all())
                         ->orderBy('coop_name')
                         ->get();
@@ -119,7 +116,7 @@
                                         <div class="col-sm-9">
                                             <select id="contact_type" name="contact_type" class="form-control">
                                                 @php
-                                                    $contacts = \DB::connection('mysql2')->table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
+                                                    $contacts = \DB::table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
                                                 @endphp
                                                     <option value="">Select Contact Type</option>
                                                 @foreach ($contacts as $contact)
@@ -631,7 +628,7 @@
                             <option value="General Manager">General Manager</option>
                             <option value="Secretary">Secretary</option> --}}
                             @php
-                                $contacts = \DB::connection('mysql2')->table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
+                                $contacts = \DB::table('localoop_contact_type')->orderBy('contact_type', 'asc')->get();
                             @endphp
                                 <option value="">Select Contact Type</option>
                             @foreach ($contacts as $contact)
@@ -714,17 +711,6 @@
         <div class="modal-body">
             <div class="table-responsive coop_approval_table_area">
                 <table class="table table-hovered" id="coop_approval_table">
-                    {{-- @php
-                        $values = \DB::connection('mysql2')
-                                        ->table('local_coop_values')
-                                        ->where('type', 'update_details')
-                                        ->whereJsonContains('value', [
-                                            'status' => 'pending'
-                                        ])
-                                        ->get();
-
-                                        $json = json_encode($values);
-                    @endphp --}}
                     <thead>
                         <tr>
                             <th>Coop name</th>

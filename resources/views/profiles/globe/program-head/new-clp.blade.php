@@ -156,8 +156,7 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                                    $sites = \DB::connection('mysql2') 
-                                                                    ->table("site")
+                                                    $sites = \DB::table("site")
                                                                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                                                                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
                                                                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")

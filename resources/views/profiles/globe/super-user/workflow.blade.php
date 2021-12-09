@@ -15,7 +15,7 @@
     <ul class="tabs-animated body-tabs-animated nav">
 
         @php
-            $programs = \DB::connection('mysql2')->table('program')->orderBy('program')->get();
+            $programs = \DB::table('program')->orderBy('program')->get();
 
             $profiles = \DB::table('profiles')->get();
 

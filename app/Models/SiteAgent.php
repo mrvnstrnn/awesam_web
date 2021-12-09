@@ -9,7 +9,7 @@ class SiteAgent extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'site_users';
 

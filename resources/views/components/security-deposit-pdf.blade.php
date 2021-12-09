@@ -257,6 +257,12 @@
                             LESSOR agrees to the collection, processing, use, and sharing of the data that the LESSOR provides to {{ ucwords($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The LESSOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2012 and the Privacy Policy of {{ ucwords($company_name) }}
                         </p>
 
+                        @if (isset($json->other_conditions))
+                            <p style="text-align: justify; text-justify: inter-word;"><b>I.</b>
+                                Other Conditions: {{ $json->other_conditions }}
+                            </p>
+                        @endif
+
                     </td>
                 </tr>
             </table>
@@ -268,6 +274,8 @@
                         <p style="margin-top: 0px;"><b>{{ ucwords($company_name) }}</b></p>
                         <p style="margin-top: 40px;">___________________________</p>
                         <p style="margin-top: 0px; margin-top: 0px;"><b>Vincent L. Tempongko</b></p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Vice President</p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Site Aquisition and Management</p>
                     </td>
                     <td style="width: 40%;">
                         <p style="margin-bottom: 0px;">Conforme:</p>

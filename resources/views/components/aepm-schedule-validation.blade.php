@@ -108,7 +108,7 @@ use App\Models\SubActivityValue;
                                                         <label for="region" class="col-sm-4 col-form-label">Region</label>
                                                         <div class="col-sm-8">
                                                             @php
-                                                                $regions = \DB::connection('mysql2')->table('location_regions')->get();
+                                                                $regions = \DB::table('location_regions')->get();
                                                             @endphp
                                                             <select class="form-control" id="region" name="region" data-name="address">
                                                                 <option value="">Select Region</option>
@@ -447,7 +447,7 @@ use App\Models\SubActivityValue;
                                                     <div class="position-relative row form-group">
                                                         <label for="localcoop" class="col-sm-4 col-form-label">Local COOP</label>
                                                     @php
-                                                        $localcoops = \DB::connection('mysql2')->table('local_coop')->orderBy('coop_name')->get();
+                                                        $localcoops = \DB::table('local_coop')->orderBy('coop_name')->get();
                                                     @endphp
                                         
                                                         <div class="col-sm-8">

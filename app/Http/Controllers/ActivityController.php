@@ -18,21 +18,18 @@ class ActivityController extends Controller
             if(!isset($request->direct_mode)){
 
 
-                $site = \DB::connection('mysql2')
-                                ->table('view_site')
+                $site = \DB::table('view_site')
                                 ->where('sam_id', $request['sam_id'])
                                 ->get();
                                 
                 if(!isset($request->bypass_activity_profiles)){
                 
-                    $get_current_act = \DB::connection('mysql2')
-                                    ->table('view_site')
+                    $get_current_act = \DB::table('view_site')
                                     ->select('program_id', 'site_category', 'activity_id')
                                     ->where('sam_id', $request['sam_id'])
                                     ->first();
 
-                    $get_component = \DB::connection('mysql2')
-                                    ->table('stage_activities')
+                    $get_component = \DB::table('stage_activities')
                                     ->leftjoin('stage_activities_profiles', 'stage_activities_profiles.stage_activity_id', 'stage_activities.id')
                                     ->select('activity_component', 'return_activity')
                                     ->where('stage_activities.category', $get_current_act->site_category)

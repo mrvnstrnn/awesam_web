@@ -9,7 +9,7 @@ class UserDetail extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
 
     protected $fillable = ['user_id', 'mode', 'company_id', 'program_id', 'address_id'];
 }

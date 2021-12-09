@@ -274,8 +274,7 @@
                 <div class="col-sm-9">
                     <select name="coop" id="coop" class="form-control">
                         @php
-                            $coops = \DB::connection('mysql2')
-                                ->table("local_coop")
+                            $coops = \DB::table("local_coop")
                                 ->get();
                         @endphp
                         <option value="">Select COOP</option>
@@ -398,8 +397,7 @@
                 <div class="col-sm-9">
                     <select name="coop" id="coop" class="form-control">
                         @php
-                            $coops = \DB::connection('mysql2')
-                                ->table("local_coop")
+                            $coops = \DB::table("local_coop")
                                 ->get();
                         @endphp
                         <option value="">Select COOP</option>
@@ -472,8 +470,7 @@
                     <div class="col-sm-9">
                         <select name="coop" id="coop" class="form-control">
                             @php
-                                $coops = \DB::connection('mysql2')
-                                    ->table("local_coop")
+                                $coops = \DB::table("local_coop")
                                     ->get();
                             @endphp
                             <option value="">Select COOP</option>

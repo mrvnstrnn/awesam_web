@@ -47,7 +47,7 @@ class UserController extends Controller
 
     public function onboarding()
     {
-        $locations = \DB::connection('mysql2')->table('location_regions')->get();
+        $locations = \DB::table('location_regions')->get();
         if(count(\Auth::user()->getUserDetail()->get()) < 1){
             // $locate = Location::select('region');
             // $locations = $locate->groupBy('region')->get();
@@ -111,7 +111,7 @@ class UserController extends Controller
 
             // $location = $locate->groupBy($select)->get();
 
-            $location = \DB::connection('mysql2')->table($table)->where($where, $val)->get();
+            $location = \DB::table($table)->where($where, $val)->get();
 
             
             // return response()->json(['error' => true, 'message' => $location ]);
@@ -171,8 +171,7 @@ class UserController extends Controller
                 //                         ->where('region', $request->input('hidden_region'))
                 //                         ->first();
 
-                $address = \DB::connection('mysql2')
-                                ->table('location_lgus')
+                $address = \DB::table('location_lgus')
                                 ->where('lgu_id', $request->input('hidden_lgu'))
                                 ->where('region_id', $request->input('hidden_region'))
                                 ->where('province_id', $request->input('hidden_province'))
@@ -613,8 +612,7 @@ class UserController extends Controller
     {
         try {
 
-            $user_details = \DB::connection('mysql2')
-                ->table('users')
+            $user_details = \DB::table('users')
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
                 ->where('users.profile_id', null)
@@ -639,8 +637,7 @@ class UserController extends Controller
         try {
             $is_vendor = UserDetail::where('user_id', \Auth::id())->first();
 
-            $user_details = \DB::connection('mysql2')
-                ->table('invitations')
+            $user_details = \DB::table('invitations')
                 ->select('invitations.firstname', 'invitations.lastname', 'invitations.email')
                 ->leftjoin('users', 'users.email', 'invitations.email')
                 ->where('invitations.company_id', $is_vendor->vendor_id)
@@ -712,8 +709,7 @@ class UserController extends Controller
     public function view_assigned_site($sam_id)
     {
 
-        $site = \DB::connection('mysql2')
-                        ->table('site')
+        $site = \DB::table('site')
                         ->where('site.sam_id', "=", $sam_id)
                         ->get();
 
@@ -723,8 +719,7 @@ class UserController extends Controller
         $agent = $agent[0];
         $agent_name = $agent->firstname . " " .$agent->middlename . " " . $agent->lastname . " " . $agent->suffix;
                 
-        $agent_sites = \DB::connection('mysql2')
-                        ->table('site')
+        $agent_sites = \DB::table('site')
                         ->select('site.sam_id', 'site.site_name')
                         ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                         ->where('agent_id', '=', $agent->user_id)
@@ -924,8 +919,7 @@ class UserController extends Controller
         try {
             $arrayTimeline = collect();
             
-            $timelines = \DB::connection('mysql2')
-                            ->table('site')
+            $timelines = \DB::table('site')
                             ->select('site.timeline', 'site.site_name')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->where('agent_id', '=', \Auth::id())
@@ -952,8 +946,7 @@ class UserController extends Controller
         try {
             $arrayTimeline = collect();
             
-            $timelines = \DB::connection('mysql2')
-                            ->table('site')
+            $timelines = \DB::table('site')
                             ->select('site.timeline', 'site.site_name')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->where('agent_id', '=', \Auth::id())
@@ -1054,7 +1047,7 @@ class UserController extends Controller
     public function read_notifications ($id, $action)
     {
         try {
-            \DB::connection('mysql2')->table("notifications")
+            \DB::table("notifications")
                                     ->where("id", $id)
                                     ->update([
                                         'read_at' => $action == "unread" ? null : Carbon::now(),

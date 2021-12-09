@@ -9,7 +9,7 @@ class LocalCoopValue extends Model
 {
     use HasFactory;
     
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'local_coop_values';
     protected $fillable = ['coop', 'type', 'value', 'user_id'];
