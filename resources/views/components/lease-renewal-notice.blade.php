@@ -172,6 +172,26 @@
         }
     });
 
+    $(".form_html").on("change", "#final_negotiated_amount, #final_negotiated_advance_rent_months", function () {
+        var final_negotiated_amount = $("#final_negotiated_amount").val();
+
+        console.log(final_negotiated_amount);
+
+        var final_negotiated_advance_rent_months = $("#final_negotiated_advance_rent_months").val();
+
+        $("#final_negotiated_advance_rent_amount").val( final_negotiated_advance_rent_months * final_negotiated_amount );
+        
+    });
+
+    $(".form_html").on("change", "#lessor_demand_advance_rent_months, #lessor_demand_monthly_contract_amount", function () {
+        var lessor_demand_advance_rent_months = $("#lessor_demand_advance_rent_months").val();
+
+        var lessor_demand_monthly_contract_amount = $("#lessor_demand_monthly_contract_amount").val();
+
+        $("#lessor_demand_advance_rent_amount").val( lessor_demand_monthly_contract_amount * lessor_demand_advance_rent_months );
+        
+    });
+
     $(".mark_as_complete").on("click", function() {
         $("#submit_not_assds").attr("disabled", "disabled");
         $("#submit_not_assds").text("Processing...");

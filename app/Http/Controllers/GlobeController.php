@@ -7430,6 +7430,7 @@ class GlobeController extends Controller
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
                     }
                     $fields .= '</select>';
+                    $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 } else if ($form_data->type == 'textarea') {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";

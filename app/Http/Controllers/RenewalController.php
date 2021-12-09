@@ -57,6 +57,7 @@ class RenewalController extends Controller
                     'salutation' => $request->input("salutation"),
                     'lessor_position' => $request->input("lessor_position"),
                     'company' => $request->input("company"),
+                    'lessor_surname' => $request->input("lessor_surname"),
                     // 'signatory' => $request->input("signatory"),
                     // 'signatory_position' => $request->input("signatory_position")
                 ];

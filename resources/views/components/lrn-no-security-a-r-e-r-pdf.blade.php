@@ -273,6 +273,8 @@
                         <p style="margin-top: 0px;"><b>{{ ucwords($company_name) }}</b></p>
                         <p style="margin-top: 40px;">___________________________</p>
                         <p style="margin-top: 0px; margin-top: 0px;"><b>Vincent L. Tempongko</b></p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Vice President</p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Site Aquisition and Management</p>
                     </td>
                     <td style="width: 40%;">
                         <p style="margin-bottom: 0px;">Conforme:</p>

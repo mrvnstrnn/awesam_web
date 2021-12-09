@@ -234,7 +234,7 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>C.</b>
-                            Advance Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->lessor_demand_advance_rent_amount, 2) }}</span>).</b> Equal to <span style="text-decoration: underline;">{{ ucwords($f->format( $json->lessor_demand_advance_rent_months )) }}</span> (<span style="text-decoration: underline;">{{ $json->lessor_demand_advance_rent_months }}</span>) month/s rent to be applied on the first _______ (___) month/s of the Lease Term.
+                            Advance Rent: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->final_negotiated_advance_rent_amount )) }}</span> <b>(Php <span style="text-decoration: underline;">{{ number_format($json->final_negotiated_advance_rent_amount, 2) }}</span>).</b> Equal to <span style="text-decoration: underline;">{{ ucwords($f->format( $json->final_negotiated_advance_rent_months )) }}</span> (<span style="text-decoration: underline;">{{ $json->final_negotiated_advance_rent_months }}</span>) month/s rent to be applied on the first _______ (___) month/s of the Lease Term.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>D.</b>
@@ -272,6 +272,8 @@
                         <p style="margin-top: 0px;"><b>{{ ucwords($company_name) }}</b></p>
                         <p style="margin-top: 40px;">___________________________</p>
                         <p style="margin-top: 0px; margin-top: 0px;"><b>Vincent L. Tempongko</b></p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Vice President</p>
+                        <p style="margin-top: 0px; margin-top: 0px;">Site Aquisition and Management</p>
                     </td>
                     <td style="width: 40%;">
                         <p style="margin-bottom: 0px;">Conforme:</p>

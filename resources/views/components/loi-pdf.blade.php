@@ -100,7 +100,7 @@
                 <tr>
                     <td style="width: 100%">
                         <p>{{ \Carbon::now()->format('M d, Y') }}</p>
-                        <p style="margin-bottom: 0px;"><b>{{ $honorific . " " . $json->lessor }}</b></p>
+                        <p style="margin-bottom: 0px;"><b>{{ str_replace("&", "and", $json->lessor) }}</b></p>
                         <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
                         <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
@@ -110,8 +110,8 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p>Dear <b>{{ $lessor_surname }}</b>,
-                        <p>
+                        <p>Dear <b>{{ $honorific ." ". ucfirst(strtolower($json->lessor_surname) ) }}</b>,
+                        <p style="text-align: justify; text-justify: inter-word;">
                             We are writing on behalf of {{ $company_name }} ({{ ucfirst(strtolower($json->company)) }}) in connection with the existing Contract of
                             Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that {{ ucfirst(strtolower($json->company)) }} would like to signify its intent
                             to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->new_terms_start_date }}</b> to <b>{{ $json->new_terms_end_date }}</b>. In
@@ -124,7 +124,7 @@
                                 <li>Updated/latest Special Power of Attorney for the authorized Attorney-in-Fact</li>
                             </ul>
 
-                            <p>
+                            <p style="text-align: justify; text-justify: inter-word;">
                             However, in case you have other plans for your property and will not consider renewing the contract
                             anymore, we would like to request that {{ ucfirst(strtolower($json->company)) }} be given sufficient time to relocate their
                             telecommunications facilities. Being a public utility company, {{ ucfirst(strtolower($json->company)) }} services are always imbued with
@@ -137,7 +137,7 @@
                                 <li>Pull out and dismantling of existing installations</li>
                                 <li>Restoration of leased premises</li>
                             </ul>
-                            <p>
+                            <p style="text-align: justify; text-justify: inter-word;">
                             For further coordination, please get in touch with the undersigned at {{ $json->undersigned_number }}, or at email
                             address {{ $json->undersigned_email }}.</p>
 
