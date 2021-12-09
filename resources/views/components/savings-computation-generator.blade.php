@@ -495,6 +495,13 @@ elseif($amount_used == 'Not Applicable'){
                     <th rowspan="1" colspan="2" class="text-center">{{ number_format($new_escalation_rate * 100, 2) }} %</th>
                     <th rowspan="1" colspan="1" class="text-center"></th>
                 </tr>
+                <tr>
+                    <th rowspan="1" colspan="3" class="text-center">Escalation Year</th>
+                    <th rowspan="1" colspan="2" class="text-center"></th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ $lessor_demand_escalation_year }}</th>
+                    <th rowspan="1" colspan="2" class="text-center">{{ $new_terms_escalation_year }}</th>
+                    <th rowspan="1" colspan="1" class="text-center"></th>
+                </tr>
 
                 <tr>
                     <th rowspan="2" class="text-center">Yrs</th>
@@ -568,7 +575,6 @@ elseif($amount_used == 'Not Applicable'){
                         $per_contract_monthly = ($old_escalation_rate * $amount_old) + $amount_old;
                         $running_per_contract_monthly  = $per_contract_monthly ;
                     } else {
-
                         $running_per_contract_monthly = ($running_per_contract_monthly * $old_escalation_rate) + $running_per_contract_monthly;
                     }
 
@@ -585,7 +591,7 @@ elseif($amount_used == 'Not Applicable'){
                     } else {
 
 
-                        if($i >= $lessor_demand_escalation_year){
+                        if($i >= $lessor_demand_escalation_year - 1){
                             $running_demand_monthly = ($running_demand_monthly * $demand_escalation_rate) + $running_demand_monthly;
 
                         } else {
@@ -598,7 +604,7 @@ elseif($amount_used == 'Not Applicable'){
 
                     if($new_monthly == 0){
 
-                        if($i < $new_terms_escalation_year){
+                        if($i < $new_terms_escalation_year - 1){
                             $new_monthly = $amount_new;
                         } else {
                             $new_monthly = ($new_escalation_rate * $amount_new) + $amount_new;
@@ -608,7 +614,7 @@ elseif($amount_used == 'Not Applicable'){
 
                     } else {
 
-                        if($i >= $new_terms_escalation_year){
+                        if($i >= $new_terms_escalation_year - 1){
                             $running_new_monthly = ($running_new_monthly * $new_escalation_rate) + $running_new_monthly;
 
                         } else {
