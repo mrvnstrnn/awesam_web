@@ -100,7 +100,7 @@
                 <tr>
                     <td style="width: 100%">
                         <p>{{ \Carbon::now()->format('M d, Y') }}</p>
-                        <p style="margin-bottom: 0px;"><b>{{ str_replace("&amp;", "and", $json->lessor) }}</b></p>
+                        <p style="margin-bottom: 0px;"><b>{{ ucwords(str_replace("&amp;", "and", $json->lessor)) }}</b></p>
                         <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
                         <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
@@ -110,7 +110,7 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p>Dear <b>{{ $honorific ." ". ucfirst(strtolower($json->lessor_surname) ) }}</b>,
+                        <p>Dear <b>{{ $honorific ." ". ucwords(strtolower($json->lessor_surname) ) }}</b>,
                         <p style="text-align: justify; text-justify: inter-word;">
                             We are writing on behalf of {{ $company_name }} ({{ ucfirst(strtolower($json->company)) }}) in connection with the existing Contract of
                             Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that {{ ucfirst(strtolower($json->company)) }} would like to signify its intent

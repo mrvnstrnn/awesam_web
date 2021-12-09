@@ -111,7 +111,7 @@ class RenewalController extends Controller
 
                 $this->create_pdf($array, $samid, 'loi-pdf', $file_name);
                 
-                // return response()->json(['error' => true, 'message' => $file_name]);
+                return response()->json(['error' => true, 'message' => $file_name]);
 
                 $array_data = [
                     'file' => $new_file_name,
