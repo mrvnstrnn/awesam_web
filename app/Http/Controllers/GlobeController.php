@@ -537,6 +537,24 @@ class GlobeController extends Controller
 
                 \Storage::put( $samid[0].'-renewal-hard-copy-site-management-pdf.pdf', $pdf->output() );
 
+                $array_data = [
+                    'file' => $samid[0].'-renewal-hard-copy-site-management-pdf.pdf',
+                    'active_profile' => '',
+                    'active_status' => 'approved',
+                    'validator' => 0,
+                    // 'validators' => $approvers_collect->all(),
+                    'type' => 'doc_upload'
+                ];
+
+                SubActivityValue::create([
+                    'sam_id' => $samid[0],
+                    'value' => json_encode($array_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'approved',
+                    'date_approved' => \Carbon::now()->toDate(),
+                ]);
+
                 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
