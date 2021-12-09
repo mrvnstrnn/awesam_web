@@ -11,10 +11,12 @@ use DateTime;
 use DataTables;
 use App\Models\User;
 use App\Models\SiteStageTracking;
+use App\Models\StageActivities;
 use App\Models\Site;
 use App\Models\SubActivityValue;
 use App\Models\PrMemoTableRenewal;
 use App\Models\PrMemoSite;
+use App\Models\SubActivity;
 
 use Notification;
 use App\Notifications\SiteMoved;
@@ -689,24 +691,68 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
 
-                SubActivityValue::select('sam_id')
-                                    ->where('sam_id', $request->input("sam_id"))
-                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                    ->where('status', 'pending')
-                                    ->where('type', 'elas_renewal')
-                                    ->update([
-                                        'value' => json_encode($request->all()),
-                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
-                                        'date_approved' => \Carbon::now()->toDate(),
-                                    ]);
+                if ( $request->input('action_file') == "false" ) {
+
+                    $stage_activity = StageActivities::select('return_activity')
+                                    ->where('activity_id', $request->input("activity_id"))
+                                    ->where('category', $request->get('site_category'))
+                                    ->where('program_id', $request->get('program_id'))
+                                    ->first();
+
+                    $sub_activity = SubActivity::select('sub_activity_id')
+                                    ->whereBetween('activity_id', [$stage_activity->return_activity, $request->input("activity_id")])
+                                    ->where('category', $request->get('site_category'))
+                                    ->where('program_id', $request->get('program_id'))
+                                    ->get()
+                                    ->pluck('sub_activity_id');
+
+                    if ( count($sub_activity) < 1 ) {
+                        return response()->json(['error' => true, 'message' => "No activity found."]);
+                    } else {
+
+                        
+                        SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('type', 'elas_renewal')
+                                ->update([
+                                    'reason' => $request->get('remarks'),
+                                    'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                    'date_approved' => \Carbon::now()->toDate(),
+                                ]);
+                                
+                        SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->whereIn('sub_activity_id', $sub_activity)
+                                ->whereIn('status', ['approved', 'pending'])
+                                ->whereIn('type', ['elas_renewal', 'doc_upload', 'saving_computation', 'lrn'])
+                                ->update([
+                                    'reason' => $request->get('remarks'),
+                                    'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                    'date_approved' => \Carbon::now()->toDate(),
+                                ]);
+                    }
+                } else {
+
+                    SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request->input("sam_id"))
+                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                        ->where('status', 'pending')
+                                        ->where('type', 'elas_renewal')
+                                        ->update([
+                                            'value' => json_encode($request->all()),
+                                            'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                            'date_approved' => \Carbon::now()->toDate(),
+                                        ]);
+                }
 
                 $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action_file'), [$request->input('site_category')], [$request->input('activity_id')]);
+
+                $message = $request->input('action_file') == "false" ? "rejected" : "confirmed";
+                return response()->json(['error' => false, 'message' => "Successfully " .$message." eLAS."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
-
-            return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

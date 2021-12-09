@@ -1378,7 +1378,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : "",
                     ]);
 
                 } else if ($stage_activities->activity_type != 'doc upload') {
@@ -1394,7 +1394,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : "",
                     ]);
 
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
@@ -4974,6 +4974,8 @@ class GlobeController extends Controller
                                         ->where('sam_id', $sam_id)
                                         ->where('type', 'doc_upload')
                                         ->get();
+
+                                        dd($sub_activity_ids);
 
             $dt = DataTables::of($sub_activity_ids);
                                 if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
