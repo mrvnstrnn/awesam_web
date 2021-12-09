@@ -12,7 +12,7 @@ class Site extends Model
 {
     use BroadcastsEvents, HasFactory;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     protected $table = 'site';
     public $timestamps = false;
 

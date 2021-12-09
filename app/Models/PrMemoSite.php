@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrMemoSite extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'pr_memo_site';
 

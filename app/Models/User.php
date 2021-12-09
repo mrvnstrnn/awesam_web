@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
 
     /**
      * The attributes that are mass assignable.

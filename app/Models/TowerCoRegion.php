@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TowerCoRegion extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     protected $table = 'towerco_region_totals';
 }
