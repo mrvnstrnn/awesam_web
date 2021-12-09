@@ -109,7 +109,7 @@ class RenewalController extends Controller
 
                 $this->create_pdf($array, $samid, 'loi-pdf', $file_name);
                 
-                return response()->json(['error' => true, 'message' => $file_name]);
+                // return response()->json(['error' => true, 'message' => $file_name]);
 
                 $array_data = [
                     'file' => $new_file_name,
@@ -676,9 +676,15 @@ class RenewalController extends Controller
     public function elas_approval_confirm (Request $request)
     {
         try {
+            if ( $request->input('action_file') == "false" ) {
+                $required = "";
+            } else {
+                $required = "required";
+            }
+
             $validate = \Validator::make($request->all(),[
                 '*' => 'required',
-                'file' => 'required',
+                'file' => $required,
             ]);
 
             if ($validate->passes()) {
@@ -690,7 +696,8 @@ class RenewalController extends Controller
                                     ->where('type', 'elas_renewal')
                                     ->update([
                                         'value' => json_encode($request->all()),
-                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved"
+                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                        'date_approved' => \Carbon::now()->toDate(),
                                     ]);
 
                 $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action_file'), [$request->input('site_category')], [$request->input('activity_id')]);
