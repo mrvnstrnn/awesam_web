@@ -130,6 +130,8 @@
         var lessor = $("#lessor").val();
         var facility_site_address = $("#facility_site_address").val();
         var expiration = $("#expiration").val();
+        var undersigned_number = $("#undersigned_number").val();
+        var undersigned_email = $("#undersigned_email").val();
 
         $.ajax({
             url: "/save-loi",
@@ -150,6 +152,8 @@
                         $("#lessor").val(lessor);
                         $("#facility_site_address").val(facility_site_address);
                         $("#expiration").val(expiration);
+                        $("#undersigned_number").val(undersigned_number);
+                        $("#undersigned_email").val(undersigned_email);
 
                         Swal.fire(
                             'Success',
@@ -165,7 +169,7 @@
 
                         $(".save_create_loi_to_renew_btn").removeAttr("disabled");
                         $(".save_create_loi_to_renew_btn").text("Save LOI");
-                        $(".btn_switch_back_to_actions").trigger("click");
+                        // $(".btn_switch_back_to_actions").trigger("click");
                     });
 
                     // $("#viewInfoModal").modal("hide");
@@ -251,9 +255,11 @@
 
             new_date = new_terms_start_date.setFullYear(new_terms_start_date.getFullYear() + +new_lease_terms_in_years);
 
-            new_new_terms_start_date = new Date(new_date)
+            new_new_terms_start_date = new Date(new_date);
 
-            date_day = (new_new_terms_start_date.getDate()) < 10 ? "0" + (new_new_terms_start_date.getDate()) : new_new_terms_start_date.getDate();
+            new_new_terms_start_date.setDate(new_new_terms_start_date.getDate() - 1);
+
+            date_day = ( new_new_terms_start_date.getDate() ) < 10 ? "0" + (new_new_terms_start_date.getDate() ) : new_new_terms_start_date.getDate();
             let formatted_new_date =  new_new_terms_start_date.getFullYear() + "-" + ( new_new_terms_start_date.getMonth() + 1 ) + "-" + date_day;
 
             $("#new_terms_end_date").val(formatted_new_date);
