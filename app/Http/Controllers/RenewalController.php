@@ -718,6 +718,7 @@ class RenewalController extends Controller
                                     'reason' => $request->get('remarks'),
                                     'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
                                     'date_approved' => \Carbon::now()->toDate(),
+                                    'approver_id' => \Auth::id(),
                                 ]);
                                 
                         SubActivityValue::select('sam_id')
@@ -729,6 +730,7 @@ class RenewalController extends Controller
                                     'reason' => $request->get('remarks'),
                                     'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
                                     'date_approved' => \Carbon::now()->toDate(),
+                                    'approver_id' => \Auth::id(),
                                 ]);
                     }
                 } else {

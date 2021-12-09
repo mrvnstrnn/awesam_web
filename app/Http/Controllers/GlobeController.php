@@ -4975,8 +4975,6 @@ class GlobeController extends Controller
                                         ->where('type', 'doc_upload')
                                         ->get();
 
-                                        dd($sub_activity_ids);
-
             $dt = DataTables::of($sub_activity_ids);
                                 if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
                                     $dt->addColumn('value', function($row) {
