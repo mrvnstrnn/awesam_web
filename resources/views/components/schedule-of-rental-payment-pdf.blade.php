@@ -264,12 +264,14 @@
                         </tbody>
                     </table>
             
-                    <table>
+                    <table style="margin-top: 50px; width: 100%;">
                         <tr>
                             <td style="width: 25%;">
                                 GLOBE TELECOM INC.
                             </td>
                         </tr>
+                    </table>
+                    <table style="margin-top: 50px; width: 100%;">
                         <tr>
                             <td style="width: 25%;">
                                 PREPARED BY
@@ -278,6 +280,8 @@
                                 <b style="text-decoration: underline;">:_____LM Lead User_____</b>
                             </td>
                         </tr>
+                    </table>
+                    <table style="margin-top: 50px; width: 100%;">
                         <tr>
                             <td style="width: 25%;">
                                 CHECKED & VERIFIED BY: 
@@ -286,12 +290,14 @@
                                 <b style="text-decoration: underline;">:_____RUEL G. GARRO_____</b>
                             </td>
                         </tr>
+                    </table>
+                    <table style="margin-top: 50px; width: 100%;">
                         <tr>
                             <td style="width: 25%;">
-                                COMFORME:
+                                CONFORME:
                             </td>
                             <td style="width: 75%;">
-                                <b style="text-decoration: underline;">:_____{{ \Auth::user()->name }}_____</b>
+                                <b style="text-decoration: underline;">:_____{{ $lessor }}_____</b>
                             </td>
                         </tr>
                     </table>

@@ -194,6 +194,10 @@
                                 $(".savings_computation_form #new_terms_escalation_rate").val(data);
                             } else if ( index == "lessor_demand_escalation_year" ) {
                                 $(".savings_computation_form #new_terms_escalation_year").val(data);
+                            } else if ( index == "lessor_demand_exdeal_request" ) {
+                                $(".savings_computation_form #new_terms_exdeal_request").val(data);
+                            } else if ( index == "old_exdeal_particulars" ) {
+                                $(".savings_computation_form #new_terms_exdeal_particulars").val(data);
                             }
                         });
                     } else {

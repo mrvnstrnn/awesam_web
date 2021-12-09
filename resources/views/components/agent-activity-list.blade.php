@@ -27,6 +27,7 @@ if (\Auth::user()->profile_id == 2) {
                         )
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
+                    ->orderBy('stage_id', 'ASC')
                     ->distinct('stage_id')
                     ->get();
 } else {
@@ -45,6 +46,7 @@ if (\Auth::user()->profile_id == 2) {
                     )
                     // ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', 38)
+                    ->orderBy('stage_id', 'ASC')
                     ->distinct('stage_id')
                     ->get();
 }

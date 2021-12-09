@@ -240,4 +240,13 @@
         });
     });
 
+    $(".form_html").on("change", "#lessor_demand_advance_rent_months, #lessor_demand_monthly_contract_amount", function () {
+        var lessor_demand_advance_rent_months = $("#lessor_demand_advance_rent_months").val();
+
+        var lessor_demand_monthly_contract_amount = $("#lessor_demand_monthly_contract_amount").val();
+
+        $("#lessor_demand_advance_rent_amount").val( lessor_demand_monthly_contract_amount * lessor_demand_advance_rent_months );
+        
+    });
+
 </script>

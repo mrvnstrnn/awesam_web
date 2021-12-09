@@ -167,22 +167,31 @@
 
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
-                    <td style="width: 100%; text-align: left;">
-                        <p style="margin-bottom: 0px;">Date: {{ \Carbon::now()->toDateString() }}</p>
+                    <td style="width: 25%; text-align: left;">
+                        <p style="margin-bottom: 0px;">Date:</p>
+                    </td>
+                    <td style="width: 75%; text-align: left;">
+                        <p style="margin-bottom: 0px;">{{ \Carbon::now()->toDateString() }}</p>
                     </td>
                 </tr>
             </table>
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
-                    <td style="width: 100%; text-align: left;">
-                        <p style="margin-bottom: 0px;">Vendor's Name: {{ $json->vendor }}</p>
+                    <td style="width: 25%; text-align: left;">
+                        <p style="margin-bottom: 0px;">Vendor's Name:</p>
+                    </td>
+                    <td style="width: 75%; text-align: left;">
+                        <p style="margin-bottom: 0px;">{{ $json->vendor }}</p>
                     </td>
                 </tr>
             </table>
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
-                    <td style="width: 100%; text-align: left;">
-                        <p style="margin-bottom: 0px;">Representative: {{ $json->representative }}</p>
+                    <td style="width: 25%; text-align: left;">
+                        <p style="margin-bottom: 0px;">Representative:</p>
+                    </td>
+                    <td style="width: 75%; text-align: left;">
+                        <p style="margin-bottom: 0px;">{{ $json->representative }}</p>
                     </td>
                 </tr>
             </table>

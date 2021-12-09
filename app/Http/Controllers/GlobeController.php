@@ -1400,7 +1400,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
                     ]);
 
                 } else if ($stage_activities->activity_type != 'doc upload') {
@@ -1416,7 +1416,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
                     ]);
 
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))

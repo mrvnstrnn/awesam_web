@@ -48,13 +48,15 @@ class RenewalController extends Controller
                     'cell_site_address' => $request->input("cell_site_address"),
                     'terms_in_years' => $request->input("new_lease_terms_in_years"),
                     'new_terms_start_date' => date('M d, Y', strtotime($request->input("new_terms_start_date"))),
-                    'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
+                    // 'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
+                    'new_terms_end_date' => date('M d, Y', strtotime($request->input("new_terms_end_date"))),
                     // 'date_word' => $date_word,
                     'expiration_date' => date('M d, Y', strtotime($request->input("expiration"))),
                     'undersigned_number' => $request->input("undersigned_number"),
                     'undersigned_email' => $request->input("undersigned_email"),
-                    'honorific' => $request->input("honorific"),
+                    'salutation' => $request->input("salutation"),
                     'lessor_position' => $request->input("lessor_position"),
+                    'company' => $request->input("company"),
                     // 'signatory' => $request->input("signatory"),
                     // 'signatory_position' => $request->input("signatory_position")
                 ];
