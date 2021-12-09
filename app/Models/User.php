@@ -398,5 +398,16 @@ class User extends Authenticatable implements MustVerifyEmail
                     
         return !is_null($get_program_renewal) ? $get_program_renewal : "";
     }
+
+    public function get_program_renewal_old ($sam_id)
+    {
+        $get_program_renewal_old = \DB::connection('mysql2')
+                    ->table('program_renewal')
+                    ->select('rate_old', 'escalation_old')
+                    ->where('sam_id', $sam_id)
+                    ->first();
+                    
+        return !is_null($get_program_renewal_old) ? $get_program_renewal_old : "";
+    }
     
 }

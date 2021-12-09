@@ -171,9 +171,28 @@
 
                     lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
 
+                    var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
+
+                    $.each(get_program_renewal_old, function(index, data) {
+                        console.log(index);
+                        if (index == 'rate_old') {
+                            $(".savings_computation_form #old_terms_monthly_contract_amount").val(data);
+                        } else if (index == 'escalation_old') {
+                            $(".savings_computation_form #old_terms_escalation_rate").val(data);
+                        }
+                    });
+
                     if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
                         $.each(lrn, function(index, data) {
                             $(".savings_computation_form #"+index).val(data);
+
+                            if ( index == "lessor_demand_monthly_contract_amount" ) {
+                                $(".savings_computation_form #new_terms_monthly_contract_amount").val(data);
+                            } else if ( index == "lessor_demand_escalation_rate" ) {
+                                $(".savings_computation_form #new_terms_escalation_rate").val(data);
+                            } else if ( index == "lessor_demand_escalation_year" ) {
+                                $(".savings_computation_form #new_terms_escalation_year").val(data);
+                            }
                         });
                     } else {
                         Swal.fire(

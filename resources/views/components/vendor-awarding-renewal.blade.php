@@ -10,6 +10,7 @@
                                             ->first();
         @endphp
         <form class="vendor_awarding_form">
+            <input type="hidden" name="file_url_id" id="file_url_id" class="form-control" readonly>
             <div class="form-row">
                 <div class="col-md-4 col-12">
                     <div class="form-group">
@@ -74,6 +75,7 @@
             var vendor = $("#vendor").val();
             var vendor_name = $("#vendor_name").val();
             var folder_url = $("#folder_url").val();
+            var file_url_id = $("#file_url_id").val();
             var data_complete = "true";
 
             $(".vendor_awarding_form small").text("");
@@ -92,6 +94,7 @@
                     vendor_name : vendor_name,
                     data_complete : data_complete,
                     folder_url : folder_url,
+                    file_url_id : file_url_id,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -145,19 +148,42 @@
 
             var result = url.replace(/(^\w+:|^)\/\//, '');
 
-            var array = result.split("/")
+            // var array = result.split("/")
 
-            if ( result.length > 10) {
-                $(".iframe_viewer").html(
-                    '<iframe src="https://drive.google.com/embeddedfolderview?id='+ array[array.length - 1] +'#list" style="width:100%; height:600px; border:0;"></iframe>'
-                );
-            } else if ( result.length < 1 ) { 
-                $(".iframe_viewer").html(
-                    '<iframe src="{{ asset("new-file-default.html") }}" style="width:100%; border:0;"></iframe>'
-                );
+            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+            if (pattern.test(url)) {
+                if ( result.length > 10 ) {
+
+                    var split_url = url.split('folders/')[1];
+                    if ( (split_url.split("?resourcekey").length > 1) ) {
+                        var file_url = split_url.split('?resourcekey')[0];
+                    } else {
+                        var file_url = split_url;
+                    }
+
+                    $("#file_url_id").val(file_url);
+
+                    $(".iframe_viewer").html(
+                        '<iframe src="https://drive.google.com/embeddedfolderview?id='+ file_url +'#list" style="width:100%; height:600px; border:0;"></iframe>'
+                    );
+                } else if ( result.length < 1 ) { 
+                    $(".iframe_viewer").html(
+                        '<iframe src="{{ asset("new-file-default.html") }}" style="width:100%; border:0;"></iframe>'
+                    );
+                } else {
+                    $(".iframe_viewer").html(
+                        '<iframe src="{{ asset("new-file-error.html") }}" style="width:100%; border:0;"></iframe>'
+                    );
+                }
             } else {
                 $(".iframe_viewer").html(
-                    '<iframe src="{{ asset("new-file-error.html") }}" style="width:100%; border:0;"></iframe>'
+                    '<iframe src="{{ asset("new-file-url-error.html") }}" style="width:100%; border:0;"></iframe>'
                 );
             }
         });

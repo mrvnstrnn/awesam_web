@@ -38,6 +38,45 @@
         $keys_datas = $datas->groupBy('sub_activity_id')->keys();
     @endphp
 
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>File</th>
+                            <th>Date Approved</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $datas_file = \DB::connection('mysql2')
+                                            ->table('sub_activity_value')
+                                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                            ->where('sub_activity_value.type', 'doc_upload')
+                                            ->where('sub_activity_value.status', 'approved')
+                                            ->orderBy('sub_activity_value.sub_activity_id')
+                                            ->get();   
+                        @endphp
+                        @foreach ($datas_file as $data_file)
+                            @php
+                                $file_name = json_decode($data_file->value);    
+                            @endphp
+                            <tr>
+                                <td scope="row"></td>
+                                <td>{{ $file_name->file }}</td>
+                                <td>{{ date('M d, Y', strtotime($data_file->date_update) ) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     @foreach ($activities as $activity)
         <h5 class="w-100">{{ $activity->activity_name }}</h5>
         @forelse ($datas->groupBy('sub_activity_id') as $data)

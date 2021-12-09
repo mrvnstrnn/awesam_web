@@ -147,9 +147,10 @@
                                                                 <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                             </a>
                                                         </li>
+                                                        
                                                         <li class="nav-item">
                                                             <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
-                                                                <span>Files</span>
+                                                                <span>Old Files From Google Drive</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -188,9 +189,34 @@
                                                         <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
                                                             <div class="row">
                                                                 <div class="col-12">
-                                                                    <img src="/images/construction.gif" width="100%"/>
-                                                                    <h5>activity_source: File</h5>
-                                                                    <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
+                                                                    @if ($site[0]->program_id == 8)
+                                                                        @php
+                                                                            $sub_activity_value_file_id = \DB::connection('mysql2')
+                                                                                            ->table('sub_activity_value')
+                                                                                            ->select('value')
+                                                                                            ->where('sam_id', $site[0]->sam_id)
+                                                                                            ->where('type', 'folder_url')
+                                                                                            ->first();
+                                                                        @endphp
+
+                                                                        @if ( is_null($sub_activity_value_file_id) )
+                                                                            <h5 class="text-center">Nothing to see here.</h5>
+                                                                        @else
+                                                                        @php
+                                                                            $file_data = json_decode($sub_activity_value_file_id->value);
+                                                                        @endphp
+
+                                                                        @if (isset($file_data->file_url_id))
+                                                                        <iframe src="https://drive.google.com/embeddedfolderview?id={{ $file_data->file_url_id }}#list" style="width:100%; height:600px; border:0;"></iframe>
+                                                                        @else
+                                                                        <h5 class="text-center">Nothing to see here.</h5>
+                                                                        @endif
+                                                                        @endif
+                                                                    @else
+                                                                        <img src="/images/construction.gif" width="100%"/>
+                                                                        <h5>activity_source: File</h5>
+                                                                        <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
