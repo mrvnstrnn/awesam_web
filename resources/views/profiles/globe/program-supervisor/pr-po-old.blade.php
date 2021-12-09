@@ -188,7 +188,7 @@
                                             <div class="form-group">
                                                 <label for="financial_analysis">Financial Analysis</label>
                                                 @php
-                                                    $sites = \DB::connection('mysql2')->table('new_sites')->get();
+                                                    $sites = \DB::table('new_sites')->get();
                                                 @endphp
                                                 <select name="financial_analysis" id="financial_analysis" class="form-control">
                                                     <option value="">Select site</option>

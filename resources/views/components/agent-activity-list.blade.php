@@ -11,16 +11,14 @@
 @php
 
 if (\Auth::user()->profile_id == 2) {
-    $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $activities = \DB::table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
 
-    $uniques_stage = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $uniques_stage = \DB::table('view_assigned_sites')
                     ->select(
                         'stage_id', 
                         'stage_name'
@@ -31,15 +29,13 @@ if (\Auth::user()->profile_id == 2) {
                     ->distinct('stage_id')
                     ->get();
 } else {
-    $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $activities = \DB::table('view_assigned_sites')
                     ->where('activity_profile_id', 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
 
-    $uniques_stage = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $uniques_stage = \DB::table('view_assigned_sites')
                     ->select(
                         'stage_id',
                         'stage_name'

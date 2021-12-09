@@ -117,8 +117,7 @@
                                     @php
                                         // dd($site);
 
-                                        $activity = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                                        $activity = \DB::table('stage_activities')
                                                 ->where("program_id", $site[0]->program_id)        
                                                 ->where("category", $site[0]->site_category)        
                                                 ->where("activity_id", $site[0]->activity_id)
@@ -126,8 +125,7 @@
 
                                         $subactivity_type = $activity->subactivities_type;
 
-                                        $sub_activities = \DB::connection('mysql2')
-                                                ->table('sub_activity')
+                                        $sub_activities = \DB::table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->where('category', $site[0]->site_category)
@@ -191,8 +189,7 @@
                                                                 <div class="col-12">
                                                                     @if ($site[0]->program_id == 8)
                                                                         @php
-                                                                            $sub_activity_value_file_id = \DB::connection('mysql2')
-                                                                                            ->table('sub_activity_value')
+                                                                            $sub_activity_value_file_id = \DB::table('sub_activity_value')
                                                                                             ->select('value')
                                                                                             ->where('sam_id', $site[0]->sam_id)
                                                                                             ->where('type', 'folder_url')

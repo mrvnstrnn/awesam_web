@@ -15,8 +15,7 @@
 
 <div class="row file_lists">
     @php
-        $datas = \DB::connection('mysql2')
-                        ->table('sub_activity_value')
+        $datas = \DB::table('sub_activity_value')
                         ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
                         ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                         ->where('sub_activity_value.sam_id', $site[0]->sam_id)
@@ -26,8 +25,7 @@
 
         $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
 
-        $activities = \DB::connection('mysql2')
-                        ->table('stage_activities')
+        $activities = \DB::table('stage_activities')
                         ->select('activity_id', 'activity_name')
                         ->where('program_id', $site[0]->program_id)
                         ->where('category', $site[0]->site_category)
@@ -51,8 +49,7 @@
                     </thead>
                     <tbody>
                         @php
-                            $datas_file = \DB::connection('mysql2')
-                                            ->table('sub_activity_value')
+                            $datas_file = \DB::table('sub_activity_value')
                                             ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
                                             ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                                             ->where('sub_activity_value.sam_id', $site[0]->sam_id)

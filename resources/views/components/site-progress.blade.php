@@ -1,6 +1,5 @@
 @php
-    $site_status = \DB::connection('mysql2')
-        ->table('view_sites_activity_progress')
+    $site_status = \DB::table('view_sites_activity_progress')
         ->select('site_name', 'sam_id', 'site_category','activity_name', 'progress', 'agent_id')
         // ->whereJsonContains('site_agent', [
         //     'user_id' => \Auth::id()

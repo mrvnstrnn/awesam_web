@@ -69,16 +69,14 @@ class RenewalController extends Controller
                                 ->where('status', 'pending')
                                 ->first();
 
-                $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-                $stage_activities_approvers = \DB::connection('mysql2')
-                                ->table('stage_activities_approvers')
+                $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
@@ -281,8 +279,7 @@ class RenewalController extends Controller
                         'pr_memo_id'=> $generated_pr
                     ]);
 
-                    $sites = \DB::connection('mysql2')
-                                ->table('view_site')
+                    $sites = \DB::table('view_site')
                                 ->select('program_id', 'site_category', 'activity_id')
                                 ->where('sam_id', $request->get('sam_id')[$i])
                                 ->first();
@@ -351,16 +348,14 @@ class RenewalController extends Controller
                 }
 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
-                $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-                $stage_activities_approvers = \DB::connection('mysql2')
-                                ->table('stage_activities_approvers')
+                $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
@@ -499,8 +494,7 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
 
-                $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $activities = \DB::table('stage_activities')
                                 ->select('next_activity')
                                 ->where('activity_id', $request->input("activity_id"))
                                 ->where('program_id', $request->input("program_id"))
@@ -546,16 +540,14 @@ class RenewalController extends Controller
             }
             
 
-            $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+            $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-            $stage_activities_approvers = \DB::connection('mysql2')
-                            ->table('stage_activities_approvers')
+            $stage_activities_approvers = \DB::table('stage_activities_approvers')
                             ->select('approver_profile_id')
                             ->where('stage_activities_id', $stage_activities->id)
                             ->get();
@@ -1027,8 +1019,7 @@ class RenewalController extends Controller
         for ($i=0; $i < count($sam_id); $i++) {
 
 
-            $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+            $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -1041,8 +1032,7 @@ class RenewalController extends Controller
                     'user_id' => !\Auth::guest() ? \Auth::id() : 0
                 ]);
 
-                $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+                $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -1055,8 +1045,7 @@ class RenewalController extends Controller
             }
             
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
-                $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
                                 ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
                                 ->where('program_id', $program_id)
@@ -1065,8 +1054,7 @@ class RenewalController extends Controller
                                      
                 if (!is_null($activities)) {
                     if ($action == "true") {
-                        $get_activitiess = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
                                                 ->where('program_id', $program_id)
@@ -1084,8 +1072,7 @@ class RenewalController extends Controller
                                                     'activity_complete' => "true"
                                                 ]);
 
-                        $check_if_added = \DB::connection('mysql2')
-                                            ->table('site_stage_tracking')
+                        $check_if_added = \DB::table('site_stage_tracking')
                                             ->select('sam_id')
                                             ->where('sam_id', $sam_id[$i])
                                             ->where('activity_id', $activity)
@@ -1106,8 +1093,7 @@ class RenewalController extends Controller
 
                         $activity = $activities->return_activity;
 
-                        $get_activitiess = \DB::connection('mysql2')
-                                        ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                         ->where('activity_id', $activity)
                                         ->where('program_id', $program_id)
@@ -1129,16 +1115,14 @@ class RenewalController extends Controller
                         ]);
                     }
 
-                    $get_stage_activity = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                    $get_stage_activity = \DB::table('stage_activities')
                                                 ->select('stage_id')
                                                 ->where('activity_id', $activity)
                                                 ->where('program_id', $program_id)
                                                 ->first();
 
                     if (!is_null($get_stage_activity)) {
-                        $get_program_stages = \DB::connection('mysql2')
-                                                ->table('program_stages')
+                        $get_program_stages = \DB::table('program_stages')
                                                 ->select('stage_name')
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
@@ -1177,16 +1161,14 @@ class RenewalController extends Controller
             $action_id = 0;
         }
 
-        $notification_settings = \DB::connection('mysql2')
-                                    ->table('notification_settings')
+        $notification_settings = \DB::table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
                                     ->where('action', $action_id)
                                     ->first();
 
         if (!is_null($notification_settings)) {
-            $notification_receiver_profiles = \DB::connection('mysql2')
-                        ->table('notification_receiver_profiles')
+            $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                         ->select('profile_id')
                         ->where('notification_settings_id', $notification_settings->notification_settings_id)
                         ->get();

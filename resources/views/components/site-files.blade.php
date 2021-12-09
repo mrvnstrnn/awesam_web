@@ -10,12 +10,11 @@
     </div>
     <div class="row file_lists">
         @php
-            $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $sam_id . '")');
+            $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
 
             $unique_activity_id = array_unique(array_column($datas, 'activity_id'));
 
-            $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+            $activities = \DB::table('stage_activities')
                                 ->select('activity_id', 'activity_name')
                                 ->where('program_id', $datas[0]->program_id)
                                 ->where('category', $datas[0]->category)

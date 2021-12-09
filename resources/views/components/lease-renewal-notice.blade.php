@@ -144,6 +144,7 @@
                     //     }
                     // });
 
+                    $("input[type=number]").val(0);
                     $.each(commercial_nego, function(index, data) {
                         $(".create_lease_renewal_notice_form #"+index).val(data);
                         if (index == 'facility_site_address') {

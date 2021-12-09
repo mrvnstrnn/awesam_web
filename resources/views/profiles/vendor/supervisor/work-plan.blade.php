@@ -19,14 +19,12 @@
     if(isset($user_id) || isset($region_data)) {
         $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
         if ($region_data != 'All') {
-            $work_plans = \DB::connection('mysql2')
-                                ->table('view_work_plans')
+            $work_plans = \DB::table('view_work_plans')
                                 ->whereIn('user_id',  $user_to_search)
                                 ->where('sam_region_name', $region_data)
                                 ->get();
         } else {
-            $work_plans = \DB::connection('mysql2')
-                                ->table('view_work_plans')
+            $work_plans = \DB::table('view_work_plans')
                                 ->whereIn('user_id',  $user_to_search)
                                 ->get();
         }
@@ -107,8 +105,7 @@
                                                 <label for="region">Region</label>
                                                 <select class="mb-2 form-control" name="region">
                                                     @php
-                                                        $regions = \DB::connection('mysql2')
-                                                                        ->table('location_sam_regions')
+                                                        $regions = \DB::table('location_sam_regions')
                                                                         ->get();  
                                                     @endphp
                                                     <option value="">All</option>
@@ -298,8 +295,7 @@
                                                 <label for="region">Region</label>
                                                 <select class="mb-2 form-control" name="region">
                                                     @php
-                                                        $regions = \DB::connection('mysql2')
-                                                                        ->table('location_sam_regions')
+                                                        $regions = \DB::table('location_sam_regions')
                                                                         ->get();  
                                                     @endphp
                                                     <option value="">All</option>
@@ -468,8 +464,7 @@
                                                 <label for="region">Region</label>
                                                 <select class="mb-2 form-control" name="region">
                                                     @php
-                                                        $regions = \DB::connection('mysql2')
-                                                                        ->table('location_sam_regions')
+                                                        $regions = \DB::table('location_sam_regions')
                                                                         ->get();  
                                                     @endphp
                                                     <option value="">All</option>

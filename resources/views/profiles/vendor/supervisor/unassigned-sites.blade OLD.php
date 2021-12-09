@@ -97,8 +97,7 @@
                         <div class="form-row">
                         <input type="hidden" id="sam_id" name="sam_id">
                             {{-- @php
-                                $agents = \DB::connection('mysql2')
-                                        ->table('users')
+                                $agents = \DB::table('users')
                                         ->join('user_details', 'user_details.user_id', 'users.id')
                                         ->where('user_details.IS_id', \Auth::user()->id)
                                         ->get();

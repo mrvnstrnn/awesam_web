@@ -45,22 +45,19 @@
 
 
     @php
-        // $activities = \DB::connection('mysql2')
-        //     ->table('site_milestone')
+        // $activities = \DB::table('site_milestone')
         //     ->join('site', 'site_milestone.sam_id','site.sam_id' )
         //     ->distinct()
         //     ->where('site_agent_id', "=", \Auth::id())
         //     ->where('activity_complete', "=", 'false')
         //     ->get();
 
-        // $site_status = \DB::connection('mysql2')
-        //     ->table('site_milestone_status')
+        // $site_status = \DB::table('site_milestone_status')
         //     ->where('site_agent_id', "=", \Auth::id())
         //     ->orderBy('sam_id')
         //     ->get();
 
-        // $activities = \DB::connection('mysql2')
-        //     ->table('site_milestone')
+        // $activities = \DB::table('site_milestone')
         //     ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
         //     ->distinct()
         //     ->where('site_agent_id', "=", \Auth::id())

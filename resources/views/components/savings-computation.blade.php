@@ -27,6 +27,25 @@
 <div class="row table_computation_div d-none">
 </div>
 
+<div class="row mt-3 mb-3">
+    <div class="col-12">
+        <div class="table_html"></div>
+        <div class="file_div d-none">
+            <div class="row">
+                <div class="col-12">
+                    <div class="file_viewer"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-lg btn-primary btn-shadow back_to_form">Back to form</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- <button class="btn btn-shadow btn-lg btn-primary mark_as_complete" type="button">Mark as Complete</button> --}}
 
 <script>
@@ -115,22 +134,26 @@
             },
             success: function (resp) {
                 if (!resp.error) {
-                    Swal.fire(
-                        'Success',
-                        resp.message,
-                        'success'
-                    )
+                    
+                    $(".table_uploaded").DataTable().ajax.reload(function () {
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
 
-                    $(".save_computation").removeAttr("disabled");
-                    $(".save_computation").text("Save Computation");
+                        $(".save_computation").removeAttr("disabled");
+                        $(".save_computation").text("Save Computation");
 
-                    $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
+                        $(".action_to_complete_child"+"{{ $sub_activity_id }}"+" i.text-success").remove();
 
-                    $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
-                        '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
-                    );
+                        $(".action_to_complete_parent .action_to_complete_child"+"{{ $sub_activity_id }}").append(
+                            '<i class="fa fa-check-circle fa-lg text-success" style="right: 20px"></i>'
+                        );
 
-                    $(".btn_switch_back_to_actions").trigger("click");
+                        $(".back_to_form").trigger("click");
+
+                    });
                 } else {
                     
                     Swal.fire(
@@ -173,14 +196,16 @@
 
                     var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
 
+                    $("input[type=number]").val(0);
                     $.each(get_program_renewal_old, function(index, data) {
                         // console.log(index);
                         if (index == 'rate_old') {
-                            $(".savings_computation_form #old_terms_monthly_contract_amount").val(data);
+                            $(".savings_computation_form #old_terms_monthly_contract_amount").val(data == null || data == "" || data == "NULL" ? 0 : data);
                         } else if (index == 'escalation_old') {
-                            $(".savings_computation_form #old_terms_escalation_rate").val(data);
+                            $(".savings_computation_form #old_terms_escalation_rate").val(data == null || data == "" || data == "NULL" ? 0 : data);
                         } else if (index == 'tco_old') {
-                            $(".savings_computation_form #old_exdeal_amount").val(data);
+                            console.log(data);
+                            $(".savings_computation_form #old_exdeal_amount").val(data == null || data == "" || data == "NULL" ? 0 : data);
                         }
                     });
 
@@ -237,64 +262,75 @@
         }
     });
 
+    $(".table_html").html(
+        '<div class="table-responsive table_uploaded_parent">' +
+            '<table class="table_uploaded align-middle mb-0 table table-borderless table-striped table-hover w-100">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th style="width: 5%">#</th>' +
+                        '<th style="width: 35%">Filename</th>' +
+                        '<th style="width: 15%">Status</th>' +
+                        '<th style="width: 35%">Reason</th>' +
+                        '<th>Date Uploaded</th>' +
+                    '</tr>' +
+                '</thead>' +
+            '</table>' +
+        '</div>'
+    );
 
-    // $(document).on("click", ".mark_as_complete", function() {
-    //     $(this).attr("disabled", "disabled");
-    //     $(".mark_as_complete").text("Processing...");
+    if (! $.fn.DataTable.isDataTable(".table_uploaded") ){   
+        $(".table_uploaded").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/get-uploaded-files/" + "{{ $sub_activity_id }}" + "/" + "{{ $sam_id }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-value', data.value);
+                $(row).attr('style', 'cursor: pointer');
+            },
+            columns: [
+                { data: "id" },
+                { data: "value" },
+                { data: "status" },
+                { data: "reason" },
+                { data: "date_created" },
+            ],
+        });
+    } else {
+        $(".table_uploaded").DataTable().ajax.reload();
+    }
 
-    //     var sam_id = ["{{ $sam_id }}"];
-    //     var activity_name = "mark_as_complete";
-    //     var site_category = ["{{ $site_category }}"];
-    //     var activity_id = ["{{ $activity_id }}"];
-    //     var program_id = "{{ $program_id }}";
+    $(".file_div").on("click", ".back_to_form", function () {
+        $(".table_html").removeClass("d-none");
+        $(".form_html").removeClass("d-none");
+        $(".file_div").addClass("d-none");
+    });
 
-    //     $.ajax({
-    //         url: "/accept-reject-endorsement",
-    //         method: "POST",
-    //         data: {
-    //             sam_id : sam_id,
-    //             activity_name : activity_name,
-    //             site_category : site_category,
-    //             activity_id : activity_id,
-    //             program_id : program_id,
-    //         },
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         success: function (resp) {
-    //             if (!resp.error){
-    //                 Swal.fire(
-    //                     'Success',
-    //                     resp.message,
-    //                     'success'
-    //                 )
+    $(".table_html").on("click", ".table_uploaded tr td", function () {
 
-    //                 $(".mark_as_complete").removeAttr("disabled");
-    //                 $(".mark_as_complete").text("Mark as Complete");
+        var extensions = ["pdf", "jpg", "png"];
 
-    //                 $("#viewInfoModal").modal("hide");
-    //             } else {
-    //                 Swal.fire(
-    //                     'Error',
-    //                     resp.message,
-    //                     'error'
-    //                 )
+        var values = $(this).parent().attr('data-value');
 
-    //                 $(".mark_as_complete").removeAttr("disabled");
-    //                 $(".mark_as_complete").text("Mark as Complete");
-    //             }
-    //         },
-    //         error: function (resp) {
-    //             Swal.fire(
-    //                 'Error',
-    //                 resp,
-    //                 'error'
-    //             )
+        if( extensions.includes(values.split('.').pop()) == true) {     
+            htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values + '" allowfullscreen></iframe>';
+        } else {
+            htmltoload = '<div class="text-center my-5"><a href="/files/' + values + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
+        }
 
-    //             $(".mark_as_complete").removeAttr("disabled");
-    //             $(".mark_as_complete").text("Mark as Complete");
-    //         }
-    //     });
+        $(".file_viewer").html(htmltoload);
 
-    // });
+        $(".table_html").addClass("d-none");
+        $(".form_html").addClass("d-none");
+        $(".file_div").removeClass("d-none");
+    });
+
 </script>

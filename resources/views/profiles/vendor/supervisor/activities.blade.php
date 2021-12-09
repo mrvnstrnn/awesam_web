@@ -61,7 +61,7 @@
 </ul> --}}
 <div class="tab-content">
     {{-- @php
-        $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        $activities = \DB::select('call `agent_activities`('.\Auth::id().')');
 
         function date_sort($a, $b) {
             return strtotime($a->start_date) - strtotime($b->start_date);
@@ -84,24 +84,19 @@
     @endphp --}}
 
     @php
-        $sites = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("milestone_tracking_2")
+        $sites = \DB::table("milestone_tracking_2")
             ->select('sam_id', 'site_name', 'site_category', 'program_id')
             ->distinct()
             ->where('site_IS_id', "=", \Auth::id())
             ->orderBy('sam_id') 
             ->get();
         
-        $site_status = \DB::connection('mysql2')
-            ->table('site_milestone_status')
+        $site_status = \DB::table('site_milestone_status')
             ->where('site_IS_id', "=", \Auth::id())
             ->orderBy('sam_id') 
             ->get();
 
-        $activities = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("milestone_tracking_2")
+        $activities = \DB::table("milestone_tracking_2")
             ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
             ->distinct()
             ->where('site_IS_id', "=", \Auth::id())

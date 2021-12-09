@@ -21,8 +21,7 @@
         @php
         // dd("rest");
             // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-            $datas = \DB::connection('mysql2')
-                            ->table('sub_activity_value')
+            $datas = \DB::table('sub_activity_value')
                             ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.activity_id')
                             ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                             ->where('sub_activity_value.sam_id', $site[0]->sam_id)
@@ -36,8 +35,7 @@
 
             $keys_activity_id_datas = $datas->groupBy('activity_id')->keys();
 
-            $activities = \DB::connection('mysql2')
-                            ->table('stage_activities')
+            $activities = \DB::table('stage_activities')
                             ->select('activity_id', 'activity_name')
                             ->where('program_id', $site[0]->program_id)
                             ->where('category', $site[0]->site_category)

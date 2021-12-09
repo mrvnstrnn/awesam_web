@@ -81,8 +81,7 @@
 
                             <div class="card-body">
                                 @php
-                                    $sub_activities = \DB::connection('mysql2')
-                                                ->table('sub_activity')
+                                    $sub_activities = \DB::table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->get();
