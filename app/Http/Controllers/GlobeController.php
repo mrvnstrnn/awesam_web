@@ -516,6 +516,32 @@ class GlobeController extends Controller
                 $activity_id = $activity_id_collect->all();
                 $program_id = $request->input('program_id');
 
+            } else if ($request->input('activity_name') == "hard_copy_site_management") {
+                $notification = "Successfully approved site.";
+                $vendor = $request->input('site_vendor_id');
+                $action = $request->input('data_complete');
+                $activity_id = $request->input('activity_id');
+                $site_category = $request->input('site_category');
+
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+
+                
+                $view = \View::make('components.renewal-hard-copy-site-management-pdf')
+                        ->with([
+                            'sam_id' => $samid[0]
+                        ])
+                        ->render();
+
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf = PDF::loadHTML($view);
+                $pdf->setPaper('folio', 'portrait');
+                $pdf->download();
+
+                \Storage::put( $samid[0].'-renewal-hard-copy-site-management-pdf.pdf', $pdf->output() );
+
+                
+                // return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
                 $notification = "Successfully approved site.";
                 $vendor = $request->input('site_vendor_id');
