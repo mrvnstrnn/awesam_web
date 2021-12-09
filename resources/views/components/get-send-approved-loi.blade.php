@@ -140,8 +140,6 @@
         '<small class="file-error text-danger"></small>'
     );
 
-    
-
     Dropzone.autoDiscover = false;
     $(".dropzone_files_activities").dropzone({
         addRemoveLinks: true,

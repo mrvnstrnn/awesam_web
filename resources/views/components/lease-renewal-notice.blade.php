@@ -42,6 +42,9 @@
     </div>
 </div>
 
+
+<script src="/js/dropzone/dropzone.js"></script>
+
 <script>
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
@@ -174,7 +177,7 @@
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
-        $(".create_lease_renewal_notice_form small").text("");
+        $(".create_lease_renewal_notice_form small.text-danger").text("");
 
         $.ajax({
             url: "/save-lrn",
@@ -298,68 +301,105 @@
         
     });
 
-    // $(".mark_as_complete").on("click", function() {
-    //     $("#submit_not_assds").attr("disabled", "disabled");
-    //     $("#submit_not_assds").text("Processing...");
+    $(".form_html").on("change", "#lrn_type", function () {
 
-    //     $("#submit_assds").attr("disabled", "disabled");
-    //     $("#submit_assds").text("Processing...");
+        if ($(this).val() == "Non Standard") {
+            $(".create_lease_renewal_notice_form div.dropzone").remove();
+            $(".create_lease_renewal_notice_form").append(
+                '<div class="dropzone dropzone_files_activities mt-0 mb-5">' +
+                    '<div class="dz-message">' +
+                        '<i class="fa fa-plus fa-3x"></i>' +
+                        '<p><small class="sub_activity_name">Drag and Drop files here</small></p>' +
+                    '</div>' +
+                '</div>' +
+                '<small class="file-error text-danger"></small>'
+            );
 
-    //     var sam_id = ["{{ $sam_id }}"];
-    //     var sub_activity_id = "{{ $sub_activity_id }}";
-    //     var activity_name = "mark_as_complete";
-    //     var site_category = ["{{ $site_category }}"];
-    //     var activity_id = ["{{ $activity_id }}"];
-    //     var program_id = "{{ $program_id }}";
+            Dropzone.autoDiscover = false;
+            $(".dropzone_files_activities").dropzone({
+                addRemoveLinks: true,
+                paramName: "file",
+                url: "/renewal-upload-file",
+                removedfile: function(file) {
+                    file.previewElement.remove();
+                    $(".create_lease_renewal_notice_form input#"+file.upload.uuid).remove();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (file, resp) {
+                    if (!resp.error){
+                        var _this = this;
+                        var file = file;
+                        var sam_id = "{{ $sam_id }}";
+                        var sub_activity_name = "{{ $sub_activity }}";
+                        var file_name = resp.file;
+                        var site_category = "{{ $site_category }}";
+                        var activity_id = "{{ $activity_id }}";
+                        var program_id = "{{ $program_id }}";
 
-    //     $.ajax({
-    //         url: "/accept-reject-endorsement",
-    //         method: "POST",
-    //         data: {
-    //             sam_id : sam_id,
-    //             sub_activity_id : sub_activity_id,
-    //             activity_name : activity_name,
-    //             site_category : site_category,
-    //             activity_id : activity_id,
-    //             program_id : program_id,
-    //         },
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         success: function (resp) {
-    //             if (!resp.error){
-    //                 Swal.fire(
-    //                     'Success',
-    //                     resp.message,
-    //                     'success'
-    //                 )
+                        var file_id = file.upload.uuid;
 
-    //                 $("#submit_not_assds").removeAttr("disabled");
-    //                 $("#submit_not_assds").text("Mark as Complete");
+                        $.ajax({
+                            url: "/renewal-upload-my-file",
+                            method: "POST",
+                            data: {
+                                sam_id : sam_id,
+                                file_name : file_name,
+                                sub_activity_name : sub_activity_name,
+                                site_category : site_category,
+                                activity_id : activity_id,
+                                program_id : program_id,
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (resp) {
+                                if (!resp.error){
 
-    //                 $("#viewInfoModal").modal("hide");
-    //             } else {
-    //                 Swal.fire(
-    //                     'Error',
-    //                     resp.message,
-    //                     'error'
-    //                 )
+                                    // _this.removeFile(file);
 
-    //                 $("#submit_not_assds").removeAttr("disabled");
-    //                 $("#submit_not_assds").text("Mark as Complete");
-    //             }
-    //         },
-    //         error: function (resp) {
-    //             Swal.fire(
-    //                 'Error',
-    //                 resp,
-    //                 'error'
-    //             )
+                                    $(".create_lease_renewal_notice_form input[name=file]").remove();
 
-    //             $("#submit_not_assds").removeAttr("disabled");
-    //             $("#submit_not_assds").text("Mark as Complete");
-    //         }
-    //     });
+                                    $(".create_lease_renewal_notice_form").append(
+                                        '<input value="'+resp.message+'" name="file" id="'+ file_id +'" type="hidden">'
+                                    );
+                                } else {
+                                    Swal.fire(
+                                        'Error',
+                                        resp.message,
+                                        'error'
+                                    )
+                                }
+                            },
+                            error: function (file, response) {
+                                Swal.fire(
+                                    'Error',
+                                    resp,
+                                    'error'
+                                )
+                            }
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (file, resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
 
-    // });
+        } else {
+            $(".create_lease_renewal_notice_form div.dropzone").remove();
+            $(".create_lease_renewal_notice_form input[name=file]").remove();
+        }
+    });
 </script>

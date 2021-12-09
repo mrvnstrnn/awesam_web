@@ -307,6 +307,10 @@ class RenewalController extends Controller
                 $required = 'required';
             }
 
+            if ($request->get('lrn_type') == "Non Standard") {
+                $required = 'required';
+            }
+
             $validate = Validator::make($request->all(), [
                 'lrn' => 'required',
                 'final_negotiated_amount' => 'required',
@@ -323,6 +327,7 @@ class RenewalController extends Controller
                 'to_be_applied_on' => 'required',
                 'number_of_months_advance' => 'required',
                 'consideration_for_otp_only' => $required,
+                'file' => $required,
             ]);
 
             if ($validate->passes()) {
@@ -383,11 +388,16 @@ class RenewalController extends Controller
                                 ->where('status', 'pending')
                                 ->first();
                                 
-                $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
-
-                $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
-
-                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+                if ($request->get('lrn_type') == "Non Standard") {
+                    $new_file_name = $request->get("file");
+                    $file_name = $request->get("file");
+                } else {
+                    $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+    
+                    $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+    
+                    $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+                }
 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
                 $array_data = [
