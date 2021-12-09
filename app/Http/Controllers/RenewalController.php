@@ -304,7 +304,18 @@ class RenewalController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                '*' => 'required'
+                'lrn' => 'required',
+                'final_negotiated_amount' => 'required',
+                'final_negotiated_advance_rent_months' => 'required',
+                'final_negotiated_advance_rent_amount' => 'required',
+                'new_terms_tax_application' => 'required',
+                'new_lease_terms_in_years' => 'required',
+                'lessor_demand_monthly_contract_amount' => 'required',
+                'lessor_demand_advance_rent_months' => 'required',
+                'lessor_demand_advance_rent_amount' => 'required',
+                'lessor_demand_security_deposit_amount' => 'required',
+                'lessor_demand_escalation_rate' => 'required',
+                'lessor_demand_escalation_year' => 'required',
             ]);
 
             if ($validate->passes()) {
@@ -331,7 +342,7 @@ class RenewalController extends Controller
                     $component = 'one-time-payment-pdf';
                 }
 
-                // return response()->json(['error' => true, 'message' => $request->all()]);
+                return response()->json(['error' => true, 'message' => $request->all()]);
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
