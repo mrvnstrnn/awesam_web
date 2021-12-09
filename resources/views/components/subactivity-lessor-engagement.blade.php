@@ -65,6 +65,7 @@
             </div>
             <div class="position-relative row form-group">
                 <div class="col-sm-10 offset-sm-3">
+                    <button class="btn btn-lg btn-shadow btn-secondary cancel_engagement" type="button">Cancel Engagement</button>
                     <button class="btn btn-lg btn-shadow btn-primary save_engagement" type="button">Save Engagement</button>
                 </div>
             </div>
@@ -205,6 +206,8 @@
                         $("#lessor_remarks").val("");
                         $(".save_engagement").removeAttr('disabled');
                         $(".save_engagement").text('Save Engagement');
+
+                        $(".cancel_engagement").trigger("click");
                     });
                     
                 } else {
@@ -233,6 +236,12 @@
                 $(".save_engagement").text('Save Engagement');
             }
         });
+    });
+
+
+    $(".engagement_form").on("click", ".cancel_engagement", function(){
+        $('#control_box').removeClass('d-none');
+        $('#control_form').addClass('d-none');
     });
 
 
