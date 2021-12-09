@@ -137,8 +137,8 @@
                             <p>Very truly yours,</p>
                             {{-- <p style="margin-top: 60px;"><b>{{ $json->signatory }}</b></p>
                             <p style="margin-top: 0px;">{{ $json->signatory_position }}</p> --}}
-                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>Sample Signatory Name</b></p>
-                            <p style="margin-top: 0px;">Sample Signatory Postion</p>
+                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>{{ \Auth::user()->name }}</b></p>
+                            <p style="margin-top: 0px;">{{ \Auth::user()->getUserProfile()->profile }}</p>
                     </td>
                 </tr>
             </table>
