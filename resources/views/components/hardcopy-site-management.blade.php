@@ -42,16 +42,18 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Submitted By</th>
                             <th>File</th>
+                            <th>Date Submitted</th>
                             <th>Date Approved</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $datas_file = \DB::table('sub_activity_value')
-                                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                            ->select('users.name', 'sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
                                             ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                            ->join('users', 'users.id', 'sub_activity_value.user_id')
                                             ->where('sub_activity_value.sam_id', $site[0]->sam_id)
                                             ->where('sub_activity_value.type', 'doc_upload')
                                             ->where('sub_activity_value.status', 'approved')
@@ -64,10 +66,12 @@
                             @endphp
                             <tr>
                                 <td scope="row">
-                                    <input type="checkbox" name="checkbox{{$data_file->id}}" id="checkbox{{$data_file->id}}">
+                                    {{ $data_file->name }}
+                                    {{-- <input type="checkbox" name="checkbox{{$data_file->id}}" id="checkbox{{$data_file->id}}"> --}}
                                 </td>
                                 <td>{{ $file_name->file }}</td>
-                                <td>{{ date('M d, Y', strtotime($data_file->date_update) ) }}</td>
+                                <td>{{ date('M d, Y', strtotime($data_file->date_created) ) }}</td>
+                                <td>{{ isset($data_file->date_update) ? date('M d, Y', strtotime($data_file->date_update) ) : "No Data" }}</td>
                             </tr>
                         @endforeach
                     </tbody>

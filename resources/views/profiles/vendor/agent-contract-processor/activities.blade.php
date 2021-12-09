@@ -71,11 +71,18 @@
             <div class="main-card mb-3 card" style="overflow:hidden;">
                 <div class="dropdown-menu-header py-4 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                     <div class="row px-4">
-                        <div class="menu-header-content btn-pane-right">
-                            <h5 class="menu-header-title text-dark">
-                                <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
-                                 My Activities
-                            </h5>
+                        <div class="col-md-6">
+                            <div class="menu-header-content btn-pane-right">
+                                <h5 class="menu-header-title text-dark">
+                                    <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
+                                    My Activities
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="search_site" class="form-control" placeholder="Search sites...">
+                            </div>
                         </div>
                         <div class="btn-actions-pane-right actions-icon-btn">
                             {{-- <button id="show-admin-tasks" type="button" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
@@ -84,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-                <ul class="todo-list-wrapper list-group list-group-flush" id="agent_activity_list">
+                <ul class="todo-list-wrapper list-group list-group-flush p-2" id="agent_activity_list">
                     <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                         <div class="loader">
                             <div class="ball-scale-multiple">
