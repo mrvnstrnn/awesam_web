@@ -100,7 +100,7 @@
                 <tr>
                     <td style="width: 100%">
                         <p>{{ \Carbon::now()->format('M d, Y') }}</p>
-                        <p style="margin-bottom: 0px;"><b>{{ str_replace("&", "and", $json->lessor) }}</b></p>
+                        <p style="margin-bottom: 0px;"><b>{{ str_replace("&amp;", "and", $json->lessor) }}</b></p>
                         <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
                         <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
