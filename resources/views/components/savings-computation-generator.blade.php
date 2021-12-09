@@ -826,6 +826,19 @@ elseif($amount_used == 'Not Applicable'){
                     <th class="text-right">{{ number_format($new_terms_exdeal_amount, 2) }}</th>
                     <th class="text-right">{{ number_format($old_exdeal_amount - $new_terms_exdeal_amount, 2) }}</th>
                 </tr>
+                <tr>
+                    <td colspan="8">&nbsp;</td>
+                </tr>    
+                <tr>
+                    <th>Grand Total</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($old_exdeal_amount + $per_contract_yearly_total, 2) }}</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($lessor_demand_exdeal_amount + $demand_yearly_total, 2) }}</th>
+                    <th></th>
+                    <th class="text-right">{{ number_format($new_terms_exdeal_amount + $new_yearly_total, 2) }}</th>
+                    <th class="text-right">{{ number_format(($old_exdeal_amount - $new_terms_exdeal_amount) + ($savings_yearly_total) , 2) }}</th>
+                </tr>
             </tfoot>
         </table>
     </div>
@@ -838,7 +851,7 @@ elseif($amount_used == 'Not Applicable'){
             </tr>
             <tr>
                 <td><strong>Actual TCO Increase</strong></td>
-                <td><strong>{{ number_format((( ($new_yearly_total + $new_terms_exdeal_amount) - ($per_contract_yearly_total + $old_exdeal_amount) ) / ($per_contract_yearly_total + $old_exdeal_amount)) * 100, 2) }} % </strong></td>
+                <td><strong>{{ number_format(( ($new_terms_exdeal_amount + $new_yearly_total) - ($old_exdeal_amount + $per_contract_yearly_total) ) / ($old_exdeal_amount + $per_contract_yearly_total), 2) }} % </strong></td>
             </tr>
         </table>
     </div>
