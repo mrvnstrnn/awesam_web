@@ -225,7 +225,7 @@
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
                             Term: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->new_lease_terms_in_years )) }}</span> (<span style="text-decoration: underline;">{{ $json->new_lease_terms_in_years }}</span>) years;
-                            Commencing on <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_start_date)) }}</span> to <span style="text-decoration: underline;">{{ date('M d, Y', strtotime('-1 day', strtotime($json->new_terms_end_date))) }}</span>.
+                            Commencing on <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_start_date)) }}</span> to <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_end_date)) }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
