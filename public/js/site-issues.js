@@ -312,7 +312,7 @@
                 Swal.fire(
                     'Error',
                     resp,
-                    'success'
+                    'error'
                 )
 
                 $(".add_btn_remarks_submit").removeAttr("disabled");

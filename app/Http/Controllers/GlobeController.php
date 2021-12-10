@@ -279,43 +279,6 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                // if ($request->input('data_complete') == 'false') {
-
-                //     $activities = \DB::connection('mysql2')
-                //                         ->table('stage_activities')
-                //                         ->select('return_activity')
-                //                         ->where('activity_id', $activity_id[0])
-                //                         ->where('program_id', $program_id)
-                //                         ->where('category', $site_category[0])
-                //                         ->first();
-
-                //     $sub_activities = \DB::connection('mysql2')
-                //                             ->table('sub_activity')
-                //                             ->select('sub_activity_id')
-                //                             ->where('activity_id', $activities->return_activity)
-                //                             ->where('program_id', $program_id)
-                //                             ->where('category', $site_category[0])
-                //                             ->where('requires_validation', 1)
-                //                             ->get()
-                //                             ->pluck('sub_activity_id');
-
-                //     if (\Auth::user()->profile_id == 8) {
-                //         $column_var = 'reviewer_id';
-                //         $column_var2 = 'reviewer_approved';
-                //     } else {
-                //         $column_var = 'reviewer_id_2';
-                //         $column_var2 = 'reviewer_approved_2';
-                //     }
-
-                //     SubActivityValue::whereIn('sub_activity_id', $sub_activities)
-                //                         ->update([
-                //                             'status' => 'rejected',
-                //                             'reason' => $request->input('text_area_reason'),
-                //                             $column_var => \Auth::id(),
-                //                             $column_var2 => Carbon::now()->toDate(),
-                //                         ]);
-                // }
-
             } else if ($request->input('activity_name') == "elas_approved") {
 
                 $notification = "Site successfully " .$message;
@@ -393,11 +356,34 @@ class GlobeController extends Controller
                 $po_number = $request->input('po_number');
                 $vendor = $request->input('vendor');
 
-                Site::where('sam_id', $samid[0])
+                $validate = Validator::make($request->all(), array(
+                    'folder_url' => 'required',
+                ));
+
+                if (!$validate->passes()) {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                } else {
+
+                    SubActivityValue::create([
+                        'sam_id' => $samid[0],
+                        'type' => 'folder_url',
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'value' => json_encode($request->all())
+                    ]);
+
+                    \DB::connection('mysql2')
+                        ->table('program_renewal')
+                        ->where('sam_id', $request->input('sam_id'))
                         ->update([
-                            'site_po' => $po_number,
-                            'site_vendor_id' => $vendor,
+                            'vendor' => $request->get('vendor_name')
                         ]);
+
+                    Site::where('sam_id', $samid[0])
+                            ->update([
+                                'site_vendor_id' => $vendor,
+                            ]);
+                }
 
             } else if ($request->input('activity_name') == "rtb_docs_approval") {
 
@@ -530,6 +516,32 @@ class GlobeController extends Controller
                 $activity_id = $activity_id_collect->all();
                 $program_id = $request->input('program_id');
 
+            } else if ($request->input('activity_name') == "hard_copy_site_management") {
+                $notification = "Successfully approved site.";
+                $vendor = $request->input('site_vendor_id');
+                $action = $request->input('data_complete');
+                $activity_id = $request->input('activity_id');
+                $site_category = $request->input('site_category');
+
+                $program_id = $request->input('program_id');
+                $samid = $request->input('sam_id');
+
+                
+                $view = \View::make('components.renewal-hard-copy-site-management-pdf')
+                        ->with([
+                            'sam_id' => $samid[0]
+                        ])
+                        ->render();
+
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf = PDF::loadHTML($view);
+                $pdf->setPaper('folio', 'portrait');
+                $pdf->download();
+
+                \Storage::put( $samid[0].'-renewal-hard-copy-site-management-pdf.pdf', $pdf->output() );
+
+                
+                // return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
                 $notification = "Successfully approved site.";
                 $vendor = $request->input('site_vendor_id');
@@ -919,7 +931,7 @@ class GlobeController extends Controller
         return $sites;
     }
 
-    public function agents($program_id)
+    public function agents(Request $request)
     {
 
         try {
@@ -930,8 +942,9 @@ class GlobeController extends Controller
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
                                     ->join('users_areas', 'users_areas.user_id', 'users.id')
                                     ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->where('user_programs.program_id', $program_id)
+                                    ->where('user_programs.program_id', $request->program_id)
                                     ->get();
+
 
             $dt = DataTables::of($checkAgent)
                     ->addColumn('photo', function($row){
@@ -1376,7 +1389,8 @@ class GlobeController extends Controller
                         'active_profile' => $file_status == 'approved' ? '' : $stage_activities_approvers[0]->approver_profile_id,
                         'active_status' => $file_status == 'approved' ? 'approved' : 'pending',
                         'validator' => $file_status == 'approved' ? 0 : count($approvers_collect->all()),
-                        'validators' => $approvers_collect->all()
+                        'validators' => $approvers_collect->all(),
+                        'type' => 'doc_upload'
                     ];
 
                     SubActivityValue::create([
@@ -1386,6 +1400,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
+                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
                     ]);
 
                 } else if ($stage_activities->activity_type != 'doc upload') {
@@ -1401,6 +1416,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
+                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
                     ]);
 
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
@@ -2194,7 +2210,6 @@ class GlobeController extends Controller
     public function doc_validation_approvals(Request $request)
     {
         try {
-            
             $required = "";
             if ($request->input('action') == "rejected") {
                 $required = "required";
@@ -2208,6 +2223,7 @@ class GlobeController extends Controller
 
                 $sub_activity_files = SubActivityValue::find($request->input('id'));
 
+                $validators_type = json_decode($sub_activity_files->value)->type;
                 $validators = json_decode($sub_activity_files->value)->validators;
                 $file = json_decode($sub_activity_files->value)->file;
 
@@ -2249,7 +2265,8 @@ class GlobeController extends Controller
                     'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
                     'active_status' => count($approvers_pending_collect->all()) < 1 ? "approved" : "pending",
                     'validator' => count($approvers_pending_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'validators' => $approvers_collect->all(),
+                    'type' => $validators_type
                 ];
 
                 if ($request->input('action') != "rejected") {
@@ -2265,6 +2282,15 @@ class GlobeController extends Controller
                                         'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                         'status' => $current_status,
                                     ]);
+
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
                         } else {
                             $current_status = $sub_activity_files->status;
 
@@ -2272,6 +2298,15 @@ class GlobeController extends Controller
                                     ->update([
                                         'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                     ]);
+
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
                         }
 
                         $sub_activity_files->update([
@@ -2319,6 +2354,13 @@ class GlobeController extends Controller
                     ]);
 
                     SubActivityValue::where('id', $request->input('id'))
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    'status' => $current_status,
+                                ]);
+
+                    SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                ->where('type', $validators_type)
                                 ->update([
                                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                     'status' => $current_status,
@@ -2425,6 +2467,9 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
             }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+            }
             
             $sites->get();
         }
@@ -2514,7 +2559,12 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
                 ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
 
-            }                        
+            }                       
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
+            }
+
+
 
             $sites->get();
 
@@ -2678,7 +2728,7 @@ class GlobeController extends Controller
                                     }
                                     elseif(\Auth::user()->profile_id == 10){
 
-                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26])
+                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39])
                                         ->get();
 
                                     }
@@ -2686,9 +2736,19 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [20, 21, 24, 27, 28])
+                                    $sites->whereIn('view_site.activity_id', [19, 20, 21, 24, 25, 26, 29, 30, 34])
                                     ->get();
                                 }
+        }
+
+        elseif($activity_type == 'refx process'){
+
+                $sites = \DB::connection('mysql2')
+                                ->table("view_site")
+                                ->where('view_site.program_id', $program_id)
+                                ->where('view_site.profile_id', \Auth::user()->profile_id)
+                                ->whereIn('view_site.activity_id', [32, 33])
+                                ->get();
         }
 
         elseif($activity_type == 'vendor awarding'){
@@ -2934,7 +2994,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')->table("site");
+            $sites = \DB::connection('mysql2')->table("view_site");
                 // ->where('program_id', $program_id)
                 // ->where('active_profile', \Auth::user()->profile_id);
                 // ->whereNull('approver_id')
@@ -2947,6 +3007,10 @@ class GlobeController extends Controller
                 $site->get();
 
             }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+
 
 
         }
@@ -3289,7 +3353,9 @@ class GlobeController extends Controller
                             ->leftjoin('view_site', 'view_site.sam_id', 'site_issue.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('view_site.program_id', $program_id)
-                            ->whereNull('site_issue.date_resolve');
+                            ->whereNull('site_issue.date_resolve')
+                            ->where('site_issue.approvers->active_profile', \Auth::user()->profile_id)
+                            ->where('site_issue.approvers->active_status', 'active');
                             // if (\Auth::user()->profile_id == 2) {
                             //     $sites->where('site_issue.user_id', \Auth::id());
                             // } else if (\Auth::user()->profile_id == 3) {
@@ -3383,7 +3449,7 @@ class GlobeController extends Controller
 
         }
 
-        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement' || $sub_activity == 'Lessor Renewal Negotiation'){ 
             // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
@@ -3399,9 +3465,10 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'LESSOR ENGAGEMENT'){
 
-            $what_component = "components.subactivity-lessor-engagement";
+        else if($sub_activity == 'Commercial Negotiation'){
+
+            $what_component = "components.renewal-commercial-negotiation";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -3414,6 +3481,21 @@ class GlobeController extends Controller
             ->render();
 
         }
+        // elseif($sub_activity == 'LESSOR ENGAGEMENT'){
+
+        //     $what_component = "components.subactivity-lessor-engagement";
+        //     return \View::make($what_component)
+        //     ->with([
+        //         'sub_activity' => $sub_activity,
+        //         'sam_id' => $sam_id,
+        //         'sub_activity_id' => $sub_activity_id,
+        //         'program_id' => $program_id,
+        //         'site_category' => $site_category,
+        //         'activity_id' => $activity_id,
+        //     ])
+        //     ->render();
+
+        // }
         elseif($sub_activity == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
@@ -3661,9 +3743,39 @@ class GlobeController extends Controller
             ->render();
 
         }
+        elseif($sub_activity == 'Savings Computation'){
+
+            $what_component = "components.savings-computation";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
         elseif($sub_activity == 'Create Lease Renewal Notice'){
 
             $what_component = "components.lease-renewal-notice";
+            return \View::make($what_component)
+            ->with([
+                'sub_activity' => $sub_activity,
+                'sam_id' => $sam_id,
+                'sub_activity_id' => $sub_activity_id,
+                'program_id' => $program_id,
+                'site_category' => $site_category,
+                'activity_id' => $activity_id,
+            ])
+            ->render();
+
+        }
+        elseif($sub_activity == 'Schedule of Rental Payment'){
+
+            $what_component = "components.renewal-schedule-of-rental-payment";
             return \View::make($what_component)
             ->with([
                 'sub_activity' => $sub_activity,
@@ -4303,12 +4415,93 @@ class GlobeController extends Controller
     public function resolve_issues($issue_id)
     {
         try {
+
+            $action_status = "resolve";
+
+            $approvers = Issue::where('issue_id', $issue_id)->first();
+
+            if ( is_null($approvers) ) {
+                return response()->json(['error' => true, 'message' => "No data found."]);
+            }
+
+            $validators = json_decode($approvers->approvers)->validators;
+
+            $approvers_collect = collect();
+            $approvers_pending_collect = collect();
+
+            foreach ($validators as $validator) {
+                if ( $validator->profile_id == \Auth::user()->profile_id ) {
+                    $new_array = array(
+                        'profile_id' => $validator->profile_id,
+                        'status' => $action_status,
+                        'user_id' => \Auth::id(),
+                        'approved_date' => Carbon::now()->toDateString(),
+                    );
+
+                    $approvers_collect->push($new_array);
+                } else {
+                    if ( isset($validator->user_id) ) {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $action_status == "rejected" ? "rejected" : $validator->status,
+                            'user_id' => $validator->user_id,
+                            'approved_date' => $validator->approved_date,
+                        );
+                    } else {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $action_status == "rejected" ? "rejected" : $validator->status,
+                        );
+                        $approvers_pending_collect->push($validator->profile_id);
+                    }
+
+                    $approvers_collect->push($new_array);
+                }
+            }
+
+            $array_data = [
+                'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
+                'active_status' => count($approvers_pending_collect->all()) < 1 ? "resolved" : "active",
+                'validator' => count($approvers_pending_collect->all()),
+                'validators' => $approvers_collect->all()
+            ];
+
+            // if ( !is_null($approvers) ) {
+
+            //     if ( count($approvers_pending_collect) < 1 ) {
+            //         $current_status = $action_status == "rejected" ? "rejected" : "approved";
+
+            //         $approvers->where('issue_id', $request->input('id'))
+            //                 ->update([
+            //                     'reason' => $action_status == "rejected" ? $request->input('reason') : null,
+            //                     'status' => $current_status,
+            //                 ]);
+            //     } else {
+            //         $current_status = $approvers->status;
+
+            //         $approvers->where('issue_id', $request->input('id'))
+            //                 ->update([
+            //                     'reason' => $action_status == "rejected" ? $request->input('reason') : null,
+            //                 ]);
+            //     }
+
+            //     $approvers->update([
+            //         'value' => json_encode($array_data),
+            //         'status' => $current_status
+            //     ]);
+
+            // } else {
+            //     return response()->json(['error' => true, 'message' => "No data found."]);
+            // }
+
             $site = \DB::connection('mysql2')
                             ->table('site_issue')
                             ->where('issue_id', $issue_id)
                             ->update([
-                                'date_resolve' => Carbon::now()->toDate(),
+                                'issue_status' => count($approvers_pending_collect->all()) < 1 ? "resolved" : "active",
+                                'date_resolve' => count($approvers_pending_collect->all()) < 1 ? Carbon::now()->toDate() : NULL,
                                 'approver_id' => \Auth::id(),
+                                'approvers' => json_encode($array_data),
                             ]);
 
 
@@ -4361,8 +4554,6 @@ class GlobeController extends Controller
         try {
             // return response()->json(['error' => true, 'message' => $request->all() ]);
 
-
-
             $validate = Validator::make($request->all(), array(
                 'issue_type' => 'required',
                 'issue' => 'required',
@@ -4370,6 +4561,33 @@ class GlobeController extends Controller
             ));
 
             if($validate->passes()){
+
+                // if ( $request->input('hidden_program_id') == 3 || $request->input('hidden_program_id') == 4 ) {
+                    $stage_activities_approvers = \DB::connection('mysql2')
+                                    ->table('stage_activities_approvers')
+                                    ->where('stage_activities_id', 0)
+                                    ->get();
+    
+                    if ( count($stage_activities_approvers) < 1 ) {
+                        return response()->json(['error' => true, 'message' => "No approver found."]);
+                    }
+
+                    $approvers_collect = collect();
+
+                    foreach ($stage_activities_approvers as $stage_activities_approver) {
+                        $approvers_collect->push([
+                            'profile_id' => $stage_activities_approver->approver_profile_id,
+                            'status' => 'pending'
+                        ]);
+                    }
+
+                    $array_data = [
+                        'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                        'active_status' => 'pending',
+                        'validator' => count($approvers_collect->all()),
+                        'validators' => $approvers_collect->all()
+                    ];
+                // }
                 $issue_type = Issue::create([
                     // 'issue_type_id' => $request->input('issue'),
                     'issue_type_id' => $request->input('issue_callout'),
@@ -4378,6 +4596,7 @@ class GlobeController extends Controller
                     'issue_details' => $request->input('issue_details'),
                     'issue_status' => "active",
                     'user_id' => \Auth::id(),
+                    'approvers' => json_encode($array_data)
                 ]);
                 return response()->json(['error' => false, 'message' => "Successfully added issue." ]);
             } else {
@@ -4766,15 +4985,18 @@ class GlobeController extends Controller
     public function get_agent_based_program($program_id)
     {
         try {
-            $agents = \DB::connection('mysql2')
-                                        ->table('users')
-                                        ->select('users.*')
-                                        ->join('user_details', 'user_details.user_id', 'users.id')
-                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                        ->where('user_details.IS_id', \Auth::user()->id)
-                                        ->where('user_programs.program_id', $program_id)
-                                        ->get();
+            $site_users = \DB::connection('mysql2')
+                            ->table('site_users')
+                            ->get();
 
+            $agents = \DB::connection('mysql2')
+                        ->table('users')
+                        ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
+                        ->join('user_details', 'user_details.user_id', 'users.id')
+                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                        ->where('user_details.IS_id', \Auth::user()->id)
+                        ->where('user_programs.program_id', $program_id)
+                        ->get();
 
             return response()->json(['error' => false, 'message' => $agents ]);
         } catch (\Throwable $th) {
@@ -4807,11 +5029,13 @@ class GlobeController extends Controller
         try {
             $sub_activity_ids = SubActivityValue::where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
+                                        ->where('type', 'doc_upload')
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids)
                                 ->addColumn('value', function($row) {
                                     $json = json_decode($row->value, true);
+
                                     return $json['file'];
                                 });
             return $dt->make(true);
@@ -4831,7 +5055,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -7126,7 +7350,22 @@ class GlobeController extends Controller
                 //     ]);
                 // }
             }
-        } 
+        }
+    }
+
+    public function get_form_generator_view (Request $request)
+    {
+        if($request->form_generator_type === "savings computation"){
+            $what_component = "components.savings-computation-generator";
+        }
+        elseif($request->form_generator_type === "schedule of rental payment"){
+            $what_component = "components.schedule-of-rental-payment-generator";
+        }
+
+        return \View::make($what_component)
+        ->with($request->all())
+        ->render();
+
     }
 
     public function get_form ($sub_activity_id, $form_name)
@@ -7161,6 +7400,21 @@ class GlobeController extends Controller
                 $button_name = "Create LRN";
             } else if ($form_name == "eLAS Renewal") {
                 $button_name = "Save eLAS";
+            } else if ($form_name == "Savings Computation") {
+                // $button_name = "Generate Computation";
+                $button_name = "Make Savings Computation";
+            } else if ($form_name == "Schedule of Rental Payment") {
+                $button_name = "Save Schedule of Rental Payment";
+            } else if ($form_name == "Application of Payment") {
+                $button_name = "Confirm Application of Payment";
+            } else if ($form_name == "eLAS Approval") {
+                $button_name = "Confirm eLAS Approval";
+                $button_name2 = "Re-Negotiate eLAS";
+            } else if ($form_name == "Commercial Negotiation") {
+                $button_name = "Save Commercial Negotiation";
+                $button_name2 = "Back Commercial Negotiation";
+            } else if ($form_name == "Routing of LRN for SAM Head Signature") {
+                $button_name = "Route eLAS";
             } else {
                 $button_name = "Save";
             }
@@ -7171,16 +7425,23 @@ class GlobeController extends Controller
 
                 if ($form_data->type == 'selection') {
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '">';
+                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" '.$form_data->readonly.'>';
                     $new_array = explode("(,)",$form_data->selection);
                     for ($i=0; $i < count($new_array); $i++) { 
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
                     }
                     $fields .= '</select>';
                     $fields .= '</div>';
-                } else {
+                } else if ($form_data->type == 'textarea') {
+                    $class_add = $form_data->type == "date" ? "flatpicker" : "";
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="form-control">';
+                    $fields .= '<textarea type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'></textarea>';
+                    $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
+                    $fields .= '</div>';
+                } else {
+                    $class_add = $form_data->type == "date" ? "flatpicker" : "";
+                    $fields .= '<div class="col-md-8">';
+                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'>';
                     $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 }
@@ -7189,7 +7450,10 @@ class GlobeController extends Controller
             // if ($form_name = "Vendor Awarding") {
                 $fields .= '<div class="row mb-2">';
                 $fields .= '<div class="col-12">';
-                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button">'.$button_name.'</button>';
+                $fields .= '<button class="btn btn-lg btn-primary pull-right save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="save_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button" data-action="true">'.$button_name.'</button>';
+                if ( isset($button_name2) ) {
+                    $fields .= '<button class="btn btn-lg btn-secondary pull-right mr-1 cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" id="cancel_'.str_replace(" ", "_", strtolower($form_name) ).'_btn" type="button" data-action="false">'.$button_name2.'</button>';
+                }
                 $fields .= '</div></div>';
             // }
 

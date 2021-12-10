@@ -210,7 +210,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/unassigend-sites-data/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'unassignedSites'])->name('all.unassignedSites');
     Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');
 
-    Route::get('/all-agent/{program_id}', [GlobeController::class, 'agents'])->name('all.agent');
+    Route::post('/all-agent', [GlobeController::class, 'agents'])->name('all.agent');
     Route::get('/all-newagent/{program_id}', [GlobeController::class, 'newagent'])->name('all.newagent');
 
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
@@ -297,6 +297,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/get-my-uploaded-file', [GlobeController::class, 'get_my_uploade_file']);
     Route::get('/doc-validation-approvals/{id}/{action}', [GlobeController::class, 'doc_validation_approvals'])->name('doc_validation_approvals');
 
+
+
+    
+    //Form Generator
+    Route::post('/get-form-generator-view', [GlobeController::class, 'get_form_generator_view'])->name('get_form_generator_view');
+
+    //Form get
+    Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
 
     //Form get
     Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
@@ -502,6 +510,17 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/email-lrn', [RenewalController::class, 'email_lrn'])->name('email_lrn');
     Route::post('/save-lrn', [RenewalController::class, 'save_lrn'])->name('save_lrn');
     Route::post('/save-elas', [RenewalController::class, 'save_elas'])->name('save_elas');
+    Route::post('/save-saving-computation', [RenewalController::class, 'save_saving_computation'])->name('save_saving_computation');
+    Route::post('/save-endorsment-to-sts', [RenewalController::class, 'save_endorsment_to_sts'])->name('save_endorsment_to_sts');
+    Route::post('/approve-schedule-of-payment', [RenewalController::class, 'approve_schedule_of_payment'])->name('approve_schedule_of_payment');
+    Route::post('/elas-approval-confirm', [RenewalController::class, 'elas_approval_confirm'])->name('elas_approval_confirm');
+    Route::post('/elas-approval-confirm-sam-head', [RenewalController::class, 'elas_approval_confirm_sam_head'])->name('elas_approval_confirm_sam_head');
+    Route::post('/save-commecial-negotiation', [RenewalController::class, 'save_commecial_negotiation']);
+    Route::get('/get-commercial-engagement/{sub_activity_id}/{sam_id}', [RenewalController::class, 'get_commercial_engagement']);
+
+    
+    Route::post('/renewal-upload-file', [RenewalController::class, 'fileupload']);
+    Route::post('/renewal-upload-my-file', [RenewalController::class, 'upload_my_file']);
 
 });
     

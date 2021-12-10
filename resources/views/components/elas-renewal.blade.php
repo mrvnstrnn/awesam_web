@@ -11,7 +11,7 @@
 </div>
 
 <script>
-    $(document).on("click", ".save_elas_renewal_btn", function() {
+    $(".form_html").on("click", ".save_elas_renewal_btn", function() {
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 

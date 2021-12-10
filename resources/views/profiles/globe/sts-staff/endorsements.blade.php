@@ -117,14 +117,38 @@
                     $(".card-body .position-relative.form-group").remove();
                     $(".main-card.mb-3.card .modal-footer").remove();
 
+                    var array_not_allowed = [
+                        "id",
+                        "sam_id",
+                        "load_date",
+                        "mar_status",
+                        "las_completed_date",
+                        "las_completed_month",
+                        "contract_completed_date",
+                        "contract_completed_month",
+                        "challenges"
+                    ];
+
+                    var data_not_allowed = [
+                        'NULL',
+                        'null',
+                        null,
+                    ];
+
                     $.each(resp.message[0], function(index, data) {
                         field_name = index.charAt(0).toUpperCase() + index.slice(1);
-                        $("#viewInfoModal .card-body .form_fields").append(
-                            '<div class="position-relative form-group col-md-6">' +
-                                '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
-                                '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
-                            '</div>'
-                        );
+
+                        if ( !array_not_allowed.includes(index) ) {
+                            if (!data_not_allowed.includes(data)) {
+                                $("#viewInfoModal .card-body .form_fields").append(
+                                    '<div class="position-relative form-group col-md-6">' +
+                                        '<label for="' + index.toLowerCase() + '" style="font-size: 11px;">' + field_name.split('_').join(' ') + '</label>' +
+                                        '<input class="form-control"  value="'+data+'" name="' + index.toLowerCase() + '"  id="'+index.toLowerCase()+'" readonly>' +
+                                    '</div>'
+                                );
+
+                            }
+                        }
                     });
 
                     if ("{{ \Auth::user()->profile_id != 2 }}") {

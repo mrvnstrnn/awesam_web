@@ -3,7 +3,7 @@
         <button class="btn_switch_back_to_actions btn btn-shadow btn-secondary btn-sm mb-3">Back to Actions</button>                                            
     </div>
     <div class="col-6 align-right  text-right">
-        <button class="doc_maker_button btn btn-outline btn-outline-primary btn-sm mb-3">Document Maker</button>     
+        {{-- <button class="doc_maker_button btn btn-outline btn-outline-primary btn-sm mb-3">Document Maker</button> --}}
 
         <button class="doc_upload_button btn btn-outline btn-outline-primary btn-sm mb-3 d-none">Upload Document</button>                                            
     </div>

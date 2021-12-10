@@ -8,6 +8,7 @@ use Log;
 use PDF;
 use Carbon;
 use DateTime;
+use DataTables;
 use App\Models\User;
 use App\Models\SiteStageTracking;
 use App\Models\Site;
@@ -45,30 +46,27 @@ class RenewalController extends Controller
                     'lessor' => $request->input("lessor"),
                     'lessor_address' => $request->input("lessor_address"),
                     'cell_site_address' => $request->input("cell_site_address"),
-                    'from_date' => date('M d, Y', strtotime($request->input("from_date"))),
-                    'to_date' => date('M d, Y', strtotime($request->input("to_date"))),
+                    'terms_in_years' => $request->input("new_lease_terms_in_years"),
+                    'new_terms_start_date' => date('M d, Y', strtotime($request->input("new_terms_start_date"))),
+                    // 'new_terms_end_date' => date('M d, Y', strtotime('-1 day', strtotime($request->input("new_terms_end_date")))),
+                    'new_terms_end_date' => date('M d, Y', strtotime($request->input("new_terms_end_date"))),
                     // 'date_word' => $date_word,
-                    'expiration_date' => date('M d, Y', strtotime($request->input("expiration_date"))),
+                    'expiration_date' => date('M d, Y', strtotime($request->input("expiration"))),
                     'undersigned_number' => $request->input("undersigned_number"),
-                    'undersigned_email' => $request->input("undersigned_email")
+                    'undersigned_email' => $request->input("undersigned_email"),
+                    'salutation' => $request->input("salutation"),
+                    'lessor_position' => $request->input("lessor_position"),
+                    'company' => $request->input("company"),
+                    // 'signatory' => $request->input("signatory"),
+                    // 'signatory_position' => $request->input("signatory_position")
                 ];
 
-                // $view = \View::make('components.loi-pdf')
-                //     ->with([
-                //         'json_data' => json_encode($array)   
-                //     ])
-                //     ->render();
-
-                // $pdf = \App::make('dompdf.wrapper');
-                // $pdf = PDF::loadHTML($view);
-                // $pdf->setPaper('a4', 'portrait');
-                // $pdf->download();
-
-                $this->create_pdf($array, $samid, 'loi-pdf');
-
-                // \Storage::put(strtolower($samid)."-loi-renew.pdf", $pdf->output());
-
-                // Mail::to($request->input("undersigned_email"))->send(new LOIMail( 'pdf/'. strtolower($samid)."-loi-renew.pdf"));
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'pending')
+                                ->first();
 
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -85,45 +83,115 @@ class RenewalController extends Controller
                                 ->get();
 
                 $approvers_collect = collect();
+                $approvers_collect_no_data = collect();
 
                 foreach ($stage_activities_approvers as $stage_activities_approver) {
                     $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'rejected'
+                    ]);
+
+                    $approvers_collect_no_data->push([
                         'profile_id' => $stage_activities_approver->approver_profile_id,
                         'status' => 'pending'
                     ]);
                 }
 
+                $sub_activity_value_file = SubActivityValue::select('value')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->first();
+                                
+                $file_name = $this->rename_file( strtolower($samid)."-loi-pdf.pdf", "loi", $samid, "" );
+
+                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+
+                $this->create_pdf($array, $samid, 'loi-pdf', $file_name);
+                
+                // return response()->json(['error' => true, 'message' => $file_name]);
+
                 $array_data = [
-                    'file' => strtolower($request->input('sam_id'))."-loi-pdf.pdf",
+                    'file' => $new_file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                    'active_status' => 'pending',
-                    'validator' => count($approvers_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'active_status' => 'rejected',
+                    'validator' => 0,
+                    'validators' => $approvers_collect->all(),
+                    'type' => 'loi'
                 ];
 
-                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
-                                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                                        ->where('status', 'pending')
-                                                        ->first();
+                $array_data_no_data = [
+                    'file' => $file_name,
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect_no_data->all()),
+                    'validators' => $approvers_collect_no_data->all(),
+                    'type' => 'loi'
+                ];
 
                 if (!is_null($sub_activity_value)) {
-                    $sub_activity_value->update([
-                        'value' => json_encode($array_data),
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                    'approver_id' => \Auth::id(),
+                                ]);
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->whereIn('type', ['doc_upload', 'loi'])
+                                ->where('status', 'pending')
+                                ->update([
+                                    'status' => 'rejected',
+                                    'reason' => 'Old LOI'
+                                ]);
+
+                    
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data_no_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
                     ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'loi',
+                        'status' => 'pending',
+                    ]);
+
                 } else {
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
-                    ]);   
-                }
+                    ]);
 
-                // $asd = $this->move_site([$samid], $program_id, $action, [$site_category], [$activity_id]);
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'loi',
+                        'status' => 'pending',
+                    ]);
+                }
                 
-                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI." ]);
+                return response()->json(['error' => false, 'message' => "Successfully submitted an LOI." ]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
@@ -202,6 +270,11 @@ class RenewalController extends Controller
 
                 for ($i=0; $i < count($request->input('sam_id')); $i++) { 
 
+                    Site::where('sam_id', $request->input("sam_id")[$i])
+                        ->update([
+                            'site_po' => $request->get('po_number')
+                        ]);
+
                     PrMemoSite::create([
                         'sam_id' => $request->input("sam_id")[$i],
                         'pr_memo_id'=> $generated_pr
@@ -250,15 +323,14 @@ class RenewalController extends Controller
                 } else if ($request->get('lrn') == 'Escalation Rate') {
                     $component = 'escalation-rate-pdf';
                 } else if ($request->get('lrn') == 'Security Deposit') {
-                    $component = 'security-depost-pdf';
+                    $component = 'security-deposit-pdf';
                 } else if ($request->get('lrn') == 'Free of Charge') {
                     $component = 'free-of-charge-pdf';
                 } else if ($request->get('lrn') == 'One Time Payment') {
                     $component = 'one-time-payment-pdf';
                 }
 
-                $this->create_pdf($request->all(), $request->get('sam_id'), $component);
-
+                // return response()->json(['error' => true, 'message' => $request->all()]);
                 $stage_activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
@@ -274,40 +346,117 @@ class RenewalController extends Controller
                                 ->get();
 
                 $approvers_collect = collect();
+                $approvers_collect_no_data = collect();
 
                 foreach ($stage_activities_approvers as $stage_activities_approver) {
                     $approvers_collect->push([
+                        'profile_id' => $stage_activities_approver->approver_profile_id,
+                        'status' => 'rejected'
+                    ]);
+                    $approvers_collect_no_data->push([
                         'profile_id' => $stage_activities_approver->approver_profile_id,
                         'status' => 'pending'
                     ]);
                 }
 
+                $sub_activity_value_file = SubActivityValue::select('value')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('type', 'doc_upload')
+                                ->where('status', 'pending')
+                                ->first();
+                                
+                $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+
+                $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+
+                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+
+                // return response()->json(['error' => true, 'message' => $request->all()]);
                 $array_data = [
-                    'file' => strtolower($request->input('sam_id'))."-".$component.".pdf",
+                    'file' => $new_file_name,
                     'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
-                    'active_status' => 'pending',
-                    'validator' => count($approvers_collect->all()),
-                    'validators' => $approvers_collect->all()
+                    'active_status' => 'rejected',
+                    'validator' => 0,
+                    'validators' => $approvers_collect->all(),
+                    'type' => 'lrn'
                 ];
 
-                $sub_activity_value = SubActivityValue::where('sam_id', $request->input("sam_id"))
+                $array_data_no_data = [
+                    'file' => $file_name,
+                    'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                    'active_status' => 'pending',
+                    'validator' => count($approvers_collect_no_data->all()),
+                    'validators' => $approvers_collect_no_data->all(),
+                    'type' => 'lrn'
+                ];
+
+                $sub_activity_value = SubActivityValue::select('sam_id')
+                                                        ->where('sam_id', $request->input("sam_id"))
                                                         ->where('sub_activity_id', $request->input("sub_activity_id"))
                                                         ->where('status', 'pending')
+                                                        ->whereIn('type', ['doc_upload', 'lrn'])
                                                         ->first();
 
                 if (!is_null($sub_activity_value)) {
-                    $sub_activity_value->update([
-                        'value' => json_encode($array_data),
-                    ]);
-                } else {
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->where('type', 'doc_upload')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                    'approver_id' => \Auth::id(),
+                                ]);
+
+                    SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->whereIn('type', ['doc_upload', 'lrn'])
+                                ->update([
+                                    'status' => 'rejected',
+                                    'reason' => 'Old LRN',
+                                ]);
+
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
-                        'value' => json_encode($array_data),
+                        'value' => json_encode($array_data_no_data),
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => 'pending',
-                    ]);   
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'lrn',
+                        'status' => 'pending',
+                    ]);
+
+                } else {
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($array_data_no_data),
+                        'user_id' => \Auth::id(),
+                        'type' => 'doc_upload',
+                        'status' => 'pending',
+                    ]);
+
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'sub_activity_id' => $request->input("sub_activity_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'lrn',
+                        'status' => 'pending',
+                    ]);
                 }
 
                 return response()->json(['error' => false, 'message' => "Successfully submitted LRN." ]);
@@ -365,6 +514,261 @@ class RenewalController extends Controller
         }
     }
 
+    public function save_saving_computation (Request $request)
+    {
+        try {
+            if ( $request->get('form_generator_type') == "schedule of rental payment" ) {
+                $component = 'schedule-of-rental-payment-pdf';
+                $type = "schedule_of_rental_payment";
+            } else if ( $request->get('form_generator_type') == "savings computation" ) {
+                $component = 'savings-computation-generator-pdf';
+                $type = "saving_computation";
+            }
+            
+
+            $stage_activities = \DB::connection('mysql2')
+                                ->table('stage_activities')
+                                ->select('id', 'activity_type')
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('activity_id', $request->input('activity_id'))
+                                ->where('category', $request->input("site_category"))
+                                ->first();
+
+            $stage_activities_approvers = \DB::connection('mysql2')
+                            ->table('stage_activities_approvers')
+                            ->select('approver_profile_id')
+                            ->where('stage_activities_id', $stage_activities->id)
+                            ->get();
+
+            $approvers_collect = collect();
+            $approvers_collect_no_data = collect();
+
+            foreach ($stage_activities_approvers as $stage_activities_approver) {
+                $approvers_collect->push([
+                    'profile_id' => $stage_activities_approver->approver_profile_id,
+                    'status' => 'rejected'
+                ]);
+                
+                $approvers_collect_no_data->push([
+                    'profile_id' => $stage_activities_approver->approver_profile_id,
+                    'status' => 'pending'
+                ]);
+            }
+
+            $sub_activity_value_file = SubActivityValue::select('value')
+                            ->where('sam_id', $request->input("sam_id"))
+                            ->where('sub_activity_id', $request->input("sub_activity_id"))
+                            ->where('type', 'doc_upload')
+                            ->where('status', 'pending')
+                            ->first();
+
+            $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+
+            $this->create_savings_computation_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+
+            $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+            
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+            $array_data = [
+                'file' => $new_file_name,
+                'active_profile' => "",
+                'active_status' => 'rejected',
+                'validator' => 0,
+                'validators' => $approvers_collect->all(),
+                'type' => $type
+            ];
+
+            $array_data_no_data = [
+                'file' => $file_name,
+                'active_profile' => $stage_activities_approvers[0]->approver_profile_id,
+                'active_status' => 'pending',
+                'validator' => count($approvers_collect_no_data->all()),
+                'validators' => $approvers_collect_no_data->all(),
+                'type' => $type
+            ];
+
+            $sub_activity_value = SubActivityValue::select('sam_id')
+                                                    ->where('sam_id', $request->input("sam_id"))
+                                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                                    ->where('status', 'pending')
+                                                    ->whereIn('type', ['doc_upload', $type])
+                                                    ->first();
+
+            if ( !is_null($sub_activity_value) ) {
+
+                SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->where('type', 'doc_upload')
+                                ->update([
+                                    'value' => json_encode($array_data),
+                                ]);
+
+                SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                ->where('status', 'pending')
+                                ->whereIn('type', ['doc_upload', $type])
+                                ->update([
+                                    'status' => 'rejected',
+                                    'reason' => 'Old Savings Computation',
+                                ]);
+
+                SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($request->all()),
+                    'type' => $type,
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($array_data_no_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'pending',
+                ]);
+            } else {
+                                                        
+                SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($request->all()),
+                    'type' => $type,
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                ]);
+    
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'value' => json_encode($array_data_no_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'pending',
+                ]);
+            }
+            
+            return response()->json(['error' => false, 'message' => "Successfully save computation." ]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function elas_approval_confirm (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(),[
+                '*' => 'required',
+                'file' => 'required',
+            ]);
+
+            if ($validate->passes()) {
+
+                SubActivityValue::select('sam_id')
+                                    ->where('sam_id', $request->input("sam_id"))
+                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                    ->where('status', 'pending')
+                                    ->where('type', 'elas_renewal')
+                                    ->update([
+                                        'value' => json_encode($request->all()),
+                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved"
+                                    ]);
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action_file'), [$request->input('site_category')], [$request->input('activity_id')]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+
+            return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function elas_approval_confirm_sam_head (Request $request)
+    {
+        try {
+            // return response()->json(['error' => true, 'message' => $request->all()]);
+            $validate = \Validator::make($request->all(),[
+                '*' => 'required',
+                'file' => 'required',
+            ]);
+
+            if ($validate->passes()) {
+
+                SubActivityValue::select('sam_id')
+                                    ->where('sam_id', $request->input("sam_id"))
+                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                    ->where('type', 'elas_renewal')
+                                    ->update([
+                                        'value' => json_encode($request->all()),
+                                        'status' => "approved"
+                                    ]);
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+
+            return response()->json(['error' => false, 'message' => "Successfully routed eLAS."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_saving_computation_generated (Request $request)
+    {
+        try {
+            $this->create_pdf($request->all(), $request->get('sam_id'), 'renewal-saving-computation-pdf');
+            return response()->json(['error' => false, 'message' => $request->all()]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_endorsment_to_sts (Request $request)
+    {
+        try {
+            $validate = \Validator::make($request->all(), array(
+                '*' => 'required'
+            ));
+
+            if ($validate->passes()) {
+                $sub_activity_value = SubActivityValue::create([
+                    'sam_id' => $request->get('sam_id'),
+                    'type' => 'refx',
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                    'value' => json_encode($request->all())
+                ]);
+
+                $action = "true";
+
+                $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $action, [$request->input('site_category')], [$request->input('activity_id')]);
+
+                return response()->json(['error' => false, 'message' => "Successfull save the data."]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
     public function elas_approval($token, $sam_id, $program_id, $site_category, $activity_id, $action)
     {
         try {
@@ -390,7 +794,211 @@ class RenewalController extends Controller
             }
             
         } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return view('elas-approval', [ 'message' => $th->getMessage(), 'error' => true ]);
+        }
+    }
+
+    public  function approve_schedule_of_payment (Request $request)
+    {
+        try {
+            SubActivityValue::where('sam_id', $request->get('sam_id'))
+                            ->where('type', 'refx')
+                            ->where('status', 'pending')
+                            ->update([
+                                'status' => 'approved',
+                                'approver_id' => \Auth::id(),
+                                'date_approved' => \Carbon::now()->toDateString()
+                            ]);
+
+            $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+            return response()->json(['error' => false, 'message' => "Successfully confirm Application of Payment."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function save_commecial_negotiation(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                "*" => "required",
+            ));
+
+            if ($validate->passes()) {
+                $status = "";
+                if ( $request->input('approval') == "Approval not yet secured" ) {
+                    $status = "active";
+                } else if ( $request->input('approval') == "Approval Secured" ) {
+                    $status = "approved";
+                } else if ( $request->input('approval') == "Lessor Rejected" ) {
+                    $status = "denied";
+                }
+                
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'sub_activity_id' => $request->input("sub_activity_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'status' => $status,
+                    'type' => 'lessor_commercial_engagement',
+                ]);
+
+                if ( $status == "approved" ) {
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input('site_category')], [$request->input('activity_id')] );
+                }
+
+                return response()->json(['error' => false, 'message' => "Successfully saved engagement."]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_commercial_engagement($sub_activity_id, $sam_id)
+    {
+        try {
+
+            if (\Auth::user()->getUserProfile()->id == 3) {
+                $user_to_gets = UserDetail::where('IS_id', \Auth::id())->get();
+
+                $array_id = collect();
+
+                foreach ($user_to_gets as $user_to_get) {
+                    $array_id->push($user_to_get->user_id);
+                }
+            } else {
+                $array_id = collect(\Auth::id());
+            }
+            $sub_activity_files = SubActivityValue::where('sam_id', $sam_id)
+                                                        // ->where('sub_activity_id', $sub_activity_id)
+                                                        ->where('type', 'lessor_commercial_engagement')
+                                                        ->whereIn('user_id', $array_id)
+                                                        ->whereJsonContains("value", [
+                                                            "sub_activity_id" => $sub_activity_id
+                                                        ])
+                                                        ->orderBy('date_created', 'desc')
+                                                        ->get();
+
+            $dt = DataTables::of($sub_activity_files)
+                        ->addColumn('value', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['remarks'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('method', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['method'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_monthly_contract_amount', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_monthly_contract_amount'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_escalation_rate', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_escalation_rate'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_escalation_year', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_escalation_year'];
+                            } else {
+                                return $row->value;
+                            }
+                        })
+                        ->addColumn('lessor_demand_advance_rent_months', function($row){
+                            json_decode($row->value);
+                            if (json_last_error() == JSON_ERROR_NONE){
+                                $json = json_decode($row->value, true);
+
+                                return $json['lessor_demand_advance_rent_months'];
+                            } else {
+                                return $row->value;
+                            }
+                        });
+                        
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+    public function fileupload(Request $request)
+    {
+
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file' => 'required',
+            ));
+
+            if($validate->passes()){
+                if($request->hasFile('file')) {
+                    $destinationPath = 'files/';
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $fileName = time().$request->file('file')->getClientOriginalName();
+                    $request->file('file')->move($destinationPath, $fileName);
+
+                    return response()->json(['error' => false, 'message' => "Successfully uploaded a file.", "file" => $fileName]);
+
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors()->all()]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function upload_my_file(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'file_name' => 'required',
+            ));
+
+            $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"), $request->input("site_category"));
+
+            \Storage::move( $request->input("file_name"), $new_file );
+
+            return response()->json(['error' => false, 'message' => $new_file]);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 
@@ -419,13 +1027,13 @@ class RenewalController extends Controller
                                     ->where('activity_complete', 'false')
                                     ->get();
             }
-
+            
             $past_activities = collect();
 
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-
+            
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::connection('mysql2')
                                 ->table('stage_activities')
@@ -607,7 +1215,21 @@ class RenewalController extends Controller
 
     }
 
-    private function create_pdf ($array, $samid, $component)
+    private function create_savings_computation_pdf ($array, $samid, $component, $file_name)
+    {
+        $view = \View::make('components.'.$component)
+                    ->with($array)
+                    ->render();
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf = PDF::loadHTML($view);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->download();
+
+        \Storage::put( $file_name, $pdf->output() );
+    }
+
+    private function create_pdf ($array, $samid, $component, $file_name)
     {
         $view = \View::make('components.'.$component)
                     ->with([
@@ -617,9 +1239,57 @@ class RenewalController extends Controller
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf = PDF::loadHTML($view);
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('folio', 'portrait');
         $pdf->download();
 
-        \Storage::put(strtolower($samid)."-".$component.".pdf", $pdf->output());
+        \Storage::put( $file_name, $pdf->output() );
+    }
+
+    private function rename_file ($filename_data, $sub_activity_name, $sam_id, $site_category = null)
+    {
+        $ext = pathinfo($filename_data, PATHINFO_EXTENSION);
+
+        // return $file_name = strtolower($sam_id."-".str_replace(" ", "-", $sub_activity_name)).".".$ext;
+        $file_name = $filename_data;
+        
+        if (file_exists( public_path()."/files/".$file_name )) {
+
+            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file_name);
+
+            $exploaded_name = explode("-", $withoutExt);
+
+            if ( is_numeric( end( $exploaded_name) ) ) {
+                $counter =  end( $exploaded_name) + "01";
+            } else {
+                $counter =  strtolower(str_replace(" ", "-", $sub_activity_name))."-01";
+            }
+
+            $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+            $cat = $site_category == 'none' ? "-" : "-".$site_category."-";
+
+            $new_file = $imploded_name .$cat. $counter . "." .$ext;
+
+            while (file_exists( public_path()."/files/". $new_file)) {
+                $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $new_file);
+
+                $exploaded_name = explode("-", $withoutExt);
+
+                if ( is_numeric( end( $exploaded_name) ) ) {
+                    $counter =  end( $exploaded_name) + "01";
+                } else {
+                    $counter =  "01";
+                }
+
+                $imploded_name = implode("-", array_slice($exploaded_name, 0, -1));
+
+                $new_file = $imploded_name . "-" . $counter . "." .$ext;
+            }
+
+            return $new_file = $new_file;
+
+        } else {
+            return $new_file = $file_name;
+        }
     }
 }

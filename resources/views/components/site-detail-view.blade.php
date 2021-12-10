@@ -103,8 +103,8 @@ else {
             <x-site-issues :site="$site" />
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-files" role="tabpanel">
-            {{-- <x-site-files :site="$site" /> --}}
-            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+            <x-site-files :site="$site" />
+            {{-- <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
                         <div></div>
@@ -112,7 +112,7 @@ else {
                         <div></div>
                     </div>
                 </div>
-            </div>        
+            </div>         --}}
         </div>
         <div class="tab-pane tabs-animation fade" id="tab-content-site_chat" role="tabpanel">
             <x-site-chat :site="$site" />

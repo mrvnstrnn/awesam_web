@@ -17,96 +17,124 @@
 
 <div class="row file_lists">
     @php
-        // $datas = \DB::connection('mysql2')->select('call `files_dropzone`("' .  $site[0]->sam_id . '")');
-        $datas = \DB::connection('mysql2')
-                        ->table('sub_activity_value')
-                        ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation')
-                        ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                        ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                        ->where('sub_activity_value.type', 'doc_upload')
-                        ->orderBy('sub_activity_value.sub_activity_id')
+        if (\Auth::user()->profile_id == 30) {
+            $datas = \DB::connection('mysql2')
+                            ->table('sub_activity_value')
+                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                            ->where('sub_activity_value.type', 'doc_upload')
+                            ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
+                            ->orderBy('sub_activity_value.sub_activity_id')
+                            ->get();
+        } else {
+            $datas = \DB::connection('mysql2')
+                            ->table('sub_activity_value')
+                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                            ->where('sub_activity_value.type', 'doc_upload')
+                            // ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
+                            ->orderBy('sub_activity_value.sub_activity_id')
+                            ->get();
+        }
+
+        $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
+
+        $activities = \DB::connection('mysql2')
+                        ->table('stage_activities')
+                        ->select('activity_id', 'activity_name')
+                        ->where('program_id', $site[0]->program_id)
+                        ->where('category', $site[0]->site_category)
+                        ->whereIn('activity_id', $unique_activity_id )
+                        ->distinct()
                         ->get();
 
         $keys_datas = $datas->groupBy('sub_activity_id')->keys();
     @endphp
 
-    @forelse ($datas->groupBy('sub_activity_id') as $data)
-        @php
-            $status_collect = collect();
-            $status_docs_collect = collect();
-        @endphp
-        @for ($i = 0; $i < count($data); $i++)
-            @php
-                if ($data[$i]->status == 'rejected') {
-                    $status_collect->push( $data[$i]->status );
-                } else {
-                    $json_status = json_decode( $data[$i]->value );
-                    $json_status_first = json_decode( $data[0]->value );
+    @foreach ($activities as $activity)
+        <h5 class="w-100">{{ $activity->activity_name }}</h5>
+        @forelse ($datas->groupBy('sub_activity_id') as $data)
+            @if ($activity->activity_id == $data[0]->activity_id)
+                @php
+                    $status_collect = collect();
+                    $status_docs_collect = collect();
+                @endphp
+                @for ($i = 0; $i < count($data); $i++)
+                    @php
+                        if ($data[$i]->status == 'rejected') {
+                            $status_collect->push( $data[$i]->status );
+                        } else {
+                            $json_status = json_decode( $data[$i]->value );
+                            $json_status_first = json_decode( $data[0]->value );
 
-                    if ( isset($json_status->validators) ) {
-                        for ($j=0; $j < count($json_status->validators); $j++) { 
-                            $status_collect->push( $json_status->validators[$j]->status );
-                            $status_file = $json_status_first->validators[$j]->status;
+                            if ( isset($json_status->validators) ) {
+                                for ($j=0; $j < count($json_status->validators); $j++) { 
+                                    $status_collect->push( $json_status->validators[$j]->status );
+                                    $status_file = $json_status_first->validators[$j]->status;
+                                }
+                            } else {
+                                $status_collect->push( $data[$i]->status );
+                                $status_file = $data[0]->status;
+                            }
                         }
-                    } else {
-                        $status_collect->push( $data[$i]->status );
-                        $status_file = $data[0]->status;
-                    }
-                }
-                // $status_collect->push( $data[$i]->status );
-            @endphp
-        @endfor
-        @if ( count( $status_collect->all() ) > 0 )
-            @php
-                $json_file_status = json_decode( $data[0]->value );
-                
-                if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
-                    $extension = "fa-file-pdf";
-                } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
-                    $extension = "fa-file-image";
-                } else {
-                    $extension = "fa-file";
-                }
+                        // $status_collect->push( $data[$i]->status );
+                    @endphp
+                @endfor
+                @if ( count( $status_collect->all() ) > 0 )
+                    @php
+                        $json_file_status = json_decode( $data[0]->value );
+                        
+                        if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
+                            $extension = "fa-file-pdf";
+                        } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
+                            $extension = "fa-file-image";
+                        } else {
+                            $extension = "fa-file";
+                        }
 
-                $icon_color = "";
-                if ( in_array( 'approved', $status_collect->all() ) ) {
-                    $icon_color = "success";
-                    $border = "border-success";
-                } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
-                    $icon_color = "secondary";
-                    $border = "border-secondary";
-                } else if ( in_array( 'pending', $status_collect->all() ) ) {
-                    $icon_color = "secondary";
-                    $border = "border-secondary";
-                } else {
-                    $icon_color = "danger";
-                    $border = "border-danger";
-                }
-            @endphp
-            
-            {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
-                
-            <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
-                <div class="child_div_{{ $data[0]->sub_activity_id }}">
-                    <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
-                        <div>
-                        <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                        <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                        $icon_color = "";
+                        if ( in_array( 'approved', $status_collect->all() ) ) {
+                            $icon_color = "success";
+                            $border = "border-success";
+                        } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                            $icon_color = "secondary";
+                            $border = "border-secondary";
+                        } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                            $icon_color = "secondary";
+                            $border = "border-secondary";
+                        } else {
+                            $icon_color = "danger";
+                            $border = "border-danger";
+                        }
+                    @endphp
+                    
+                    {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
+                        
+                    <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
+                        <div class="child_div_{{ $data[0]->sub_activity_id }}">
+                            <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
+                                <div>
+                                <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                                <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                                </div>
+                            </div>
+                            @if($icon_color == "success")   
+                                <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                            @elseif($icon_color == "danger")   
+                                <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                            @endif
                         </div>
                     </div>
-                    @if($icon_color == "success")   
-                        <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                    @elseif($icon_color == "danger")   
-                        <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                    @endif
-                </div>
+                @endif
+            @endif
+        @empty
+            <div class="col-12 text-center">
+                <h3>No files here.</h3>
             </div>
-        @endif
-    @empty
-        <div class="col-12 text-center">
-            <h3>No files here.</h3>
-        </div>
-    @endforelse
+        @endforelse
+    @endforeach
 
     <input type="hidden" name="hidden_filename" id="hidden_filename">
 </div>

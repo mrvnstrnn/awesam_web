@@ -146,6 +146,10 @@
           @elseif($program->program_id == 7)
   
               <x-localcoop-dashboard />
+
+            @elseif($program->program_id == 8)
+
+              <x-coloc-dashboard />
           
           @endif
         @endif    

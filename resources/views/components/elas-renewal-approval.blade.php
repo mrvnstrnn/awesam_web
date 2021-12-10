@@ -1,31 +1,41 @@
 
+{{-- <div class="row">
+    <div class="col-12 approve_elas_div">
+        <button class="btn-sm btn-shadow btn btn-block btn-primary mark_as_complete">Approved eLAS</button>
+    </div>
+</div> --}}
+
 <div class="row">
     <div class="col-12">
-        <button class="btn-sm btn-shadow btn btn-block btn-primary mark_as_complete">Approved eLAS</button>
+        <div class="form_html"></div>
+        <form class="site_data_form">@csrf
+            <input type="hidden" name="sam_id" id="sam_id" value="{{ $site[0]->sam_id }}">
+            <input type="hidden" name="site_category" id="site_category" value="{{ $site[0]->site_category }}">
+            <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">
+            <input type="hidden" name="activity_id" id="activity_id" value="{{ $site[0]->activity_id }}">
+        </form>
     </div>
 </div>
 
-<script>
-    $(".mark_as_complete").on("click", function() {
-        $(this).attr("disabled", "disabled");
-        $(this).text("Processing...");
+{{-- <button class="btn-sm btn-shadow btn btn-block btn-primary mark_as_complete">Approved eLAS</button> --}}
 
-        var sam_id = ["{{ $site[0]->sam_id }}"];
-        var activity_name = "mark_as_complete";
-        var site_category = ["{{ $site[0]->site_category }}"];
-        var activity_id = ["{{ $site[0]->activity_id }}"];
-        var program_id = "{{ $site[0]->program_id }}";
+<script src="/js/dropzone/dropzone.js"></script>
+
+<script>
+    $(".form_html").on("click", ".save_elas_approval_btn, .cancel_elas_approval_btn", function(e) {
+        e.preventDefault();
+        $(".save_elas_approval_btn").attr("disabled", "disabled");
+        $(".save_elas_approval_btn").text("Processing...");
+
+        $(".cancel_elas_approval_btn").attr("disabled", "disabled");
+        $(".cancel_elas_approval_btn").text("Processing...");
+
+        $("#action_file").val($(this).attr("data-action"));
 
         $.ajax({
-            url: "/accept-reject-endorsement",
+            url: "/elas-approval-confirm",
             method: "POST",
-            data: {
-                sam_id : sam_id,
-                activity_name : activity_name,
-                site_category : site_category,
-                activity_id : activity_id,
-                program_id : program_id,
-            },
+            data: $(".elas_approval_form, .site_data_form").serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -39,21 +49,37 @@
                             'success'
                         )
 
-                        $("#submit_not_assds").removeAttr("disabled");
-                        $("#submit_not_assds").text("Approved eLAS");
+                        Dropzone.forElement(".dropzone_files_activities").removeAllFiles(true);
+
+                        $(".dropzone_files_activities input[name='file[]']").remove();
+
+                        $(".save_elas_approval_btn").removeAttr("disabled");
+                        $(".save_elas_approval_btn").text("Approved eLAS");
+
+                        $(".cancel_elas_approval_btn").removeAttr("disabled");
+                        $(".cancel_elas_approval_btn").text("Re-Negotiate eLAS");
 
                         $("#viewInfoModal").modal("hide");
 
                     });
                 } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".elas_approval_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
 
-                    $("#submit_not_assds").removeAttr("disabled");
-                    $("#submit_not_assds").text("Approved eLAS");
+                    $(".save_elas_approval_btn").removeAttr("disabled");
+                    $(".save_elas_approval_btn").text("Approved eLAS");
+
+                    $(".cancel_elas_approval_btn").removeAttr("disabled");
+                    $(".cancel_elas_approval_btn").text("Re-Negotiate eLAS");
                 }
             },
             error: function (resp) {
@@ -63,10 +89,141 @@
                     'error'
                 )
 
-                $("#submit_not_assds").removeAttr("disabled");
-                $("#submit_not_assds").text("Approved eLAS");
+                $(".save_elas_approval_btn").removeAttr("disabled");
+                $(".save_elas_approval_btn").text("Approved eLAS");
+
+                $(".cancel_elas_approval_btn").removeAttr("disabled");
+                $(".cancel_elas_approval_btn").text("Re-Negotiate eLAS");
             }
         });
 
+    });
+
+    $(document).ready(function(){
+        $.ajax({
+            url: "/get-form/" + "32" + "/" + "eLAS Approval",
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    $(".form_html").html(resp.message);
+
+                    var elas_renewal = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_refx($site[0]->sam_id, 'elas_renewal'))); }}".replace(/&quot;/g,'"'));
+
+                    $(".elas_approval_form").append(
+                        '<div class="dropzone dropzone_files_activities mt-0 mb-5">' +
+                            '<div class="dz-message">' +
+                                '<i class="fa fa-plus fa-3x"></i>' +
+                                '<p><small class="sub_activity_name">Drag and Drop files here</small></p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<small class="file-error text-danger"></small>'
+                    );
+
+                    $(".elas_approval_form").append(
+                        '<input type="hidden" name="action_file" id="action_file">'
+                    );
+
+                    $.each(elas_renewal, function(index, data) {
+                        $(".elas_approval_form #"+index).val(data);
+                    });
+
+                    Dropzone.autoDiscover = false;
+                    $(".dropzone_files_activities").dropzone({
+                        addRemoveLinks: true,
+                        // maxFiles: 1,
+                        paramName: "file",
+                        url: "/renewal-upload-file",
+                        // init: function() {
+                        //     this.on("maxfilesexceeded", function(file){
+                        //         this.removeFile(file);
+                        //     });
+                        // },
+                        removedfile: function(file) {
+                            file.previewElement.remove();
+                            $(".elas_approval_form input#"+file.upload.uuid).remove();
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (file, resp) {
+                            if (!resp.error){
+                                var _this = this;
+                                var file = file;
+                                var sam_id = "{{ $site[0]->sam_id }}";
+                                var sub_activity_name = "{{ $site[0]->activity_name }}";
+                                var file_name = resp.file;
+                                var site_category = "{{ $site[0]->site_category }}";
+                                var activity_id = "{{ $site[0]->activity_id }}";
+                                var program_id = "{{ $site[0]->program_id }}";
+
+                                var file_id = file.upload.uuid;
+
+                                $.ajax({
+                                    url: "/renewal-upload-my-file",
+                                    method: "POST",
+                                    data: {
+                                        sam_id : sam_id,
+                                        file_name : file_name,
+                                        sub_activity_name : sub_activity_name,
+                                        site_category : site_category,
+                                        activity_id : activity_id,
+                                        program_id : program_id,
+                                    },
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success: function (resp) {
+                                        if (!resp.error){
+                                            $(".elas_approval_form").append(
+                                                '<input value="'+resp.message+'" name="file[]" id="'+ file_id +'" type="hidden">'
+                                            );
+                                        } else {
+                                            Swal.fire(
+                                                'Error',
+                                                resp.message,
+                                                'error'
+                                            )
+                                        }
+                                    },
+                                    error: function (file, response) {
+                                        Swal.fire(
+                                            'Error',
+                                            resp,
+                                            'error'
+                                        )
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (file, resp) {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+                        }
+                    });
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
     });
 </script>

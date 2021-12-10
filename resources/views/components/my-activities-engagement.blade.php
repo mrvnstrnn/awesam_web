@@ -85,7 +85,7 @@
                                                             <option value="Text">Text</option>
                                                             <option value="Email">Email</option>
                                                             <option value="Site Visit">Site Visit</option>
-                                                            <option value="Upload Document">Upload Document</option>
+                                                            {{-- <option value="Upload Document">Upload Document</option> --}}
                                                         </select>
                                                         <small class="text-danger lessor_method-errors"></small>
 

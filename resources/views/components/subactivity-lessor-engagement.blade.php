@@ -4,6 +4,12 @@
     </div>
 </div>
 
+<div class="row pt-4">
+    <div class="col-md-12">
+        <H5 id="active_action">{{ $sub_activity }}</H5>
+    </div>
+</div>
+
 <div id="action_lessor_engagement" class=''>
     <div class="row py-5 px-4" id="control_box">
         <div class="col-md-3 col-sm-6 col-xs-6 my-3 text-center contact-lessor" data-value="Call">
@@ -57,9 +63,10 @@
                     <small class="text-danger lessor_approval-errors"></small>
                 </div>
             </div>
-            <div class="position-relative row form-group ">
+            <div class="position-relative row form-group">
                 <div class="col-sm-10 offset-sm-3">
-                    <button class="btn btn-secondary save_engagement" type="button">Save Engagement</button>
+                    <button class="btn btn-lg btn-shadow btn-secondary cancel_engagement" type="button">Cancel Engagement</button>
+                    <button class="btn btn-lg btn-shadow btn-primary save_engagement" type="button">Save Engagement</button>
                 </div>
             </div>
         </form>
@@ -95,7 +102,7 @@
     var yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
 
-    $(document).on("click", ".contact-lessor", function(){
+    $("#control_box").on("click", ".contact-lessor", function(){
         $('#control_box').addClass('d-none');
         $('#control_form').removeClass('d-none');
 
@@ -147,7 +154,7 @@
         $("#table_lessor_engage_"+sub_activity_id).DataTable().ajax.reload();
     }
 
-    $(".save_engagement").on("click",  function (e){
+    $(".engagement_form").on("click", ".save_engagement", function (e){
         // e.preventDefault();
         var lessor_method = $("#lessor_method").val();
         var lessor_approval = $("#lessor_approval").val();
@@ -199,6 +206,8 @@
                         $("#lessor_remarks").val("");
                         $(".save_engagement").removeAttr('disabled');
                         $(".save_engagement").text('Save Engagement');
+
+                        $(".cancel_engagement").trigger("click");
                     });
                     
                 } else {
@@ -227,6 +236,12 @@
                 $(".save_engagement").text('Save Engagement');
             }
         });
+    });
+
+
+    $(".engagement_form").on("click", ".cancel_engagement", function(){
+        $('#control_box').removeClass('d-none');
+        $('#control_form').addClass('d-none');
     });
 
 

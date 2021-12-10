@@ -42,7 +42,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="agent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.agent', $program->program_id) }}">
+                                    <table id="agent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.agent', $program->program_id) }}" data-program_id="{{$program->program_id}}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10%;">Photo</th>

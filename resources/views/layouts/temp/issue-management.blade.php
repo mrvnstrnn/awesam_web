@@ -106,8 +106,8 @@
                                     <div class="row">
                                         <div class="col-12 text-right border-top pt-3">
                                             {{-- <button type="button" class="mt-1 btn btn-outline-danger mr-1" data-dismiss="modal">Close</button> --}}
-                                            @if(\Auth::user()->profile_id==10)
-                                            <button class="btn btn-success btn-lg resolve_issue" type="button">Resolve Issue</button>
+                                            @if(\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8)
+                                                <button class="btn btn-success btn-lg resolve_issue" type="button">Resolve Issue</button>
                                             @endif
                                             <button class="btn btn-shadow btn-lg btn-primary add_update" type="button">Add Update</button>
                                         </div>

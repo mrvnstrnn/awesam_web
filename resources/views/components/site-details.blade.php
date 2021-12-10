@@ -41,31 +41,36 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                             <input name="details_site_name" id="details_site_name" type="text" value="{{ $site[0]->site_name }}" readonly class="form-control">
                         </div>
                     </div>
-                    <div class="form-row mb-2 pb-2 border-bottom">
+                    {{-- <div class="form-row mb-2 pb-2 border-bottom">
                         <div class="col-5">
                             <label for="details_address" class="mr-sm-2">Address</label>
                         </div>
                         <div class="col-7">
                             <textarea name="details_address" id="details_address" type="text" readonly class="form-control"></textarea>
                         </div>
-                    </div>
+                    </div> --}}
+                    @if (isset($site[0]->site_pr))
                     <div class="form-row mb-2 pb-2 border-bottom">
                         <div class="col-5">
                             <label for="details_site_pr" class="mr-sm-2">PR</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_site_pr" id="details_site_pr" type="text" value="" readonly class="form-control">
+                            <input name="details_site_pr" id="details_site_pr" type="text" value="{{ isset($site[0]->site_pr) ? $site[0]->site_pr : "" }}" readonly class="form-control">
                         </div>
                     </div>
+                    @endif
+
+                    @if (isset($site[0]->site_po))
                     <div class="form-row mb-2 pb-2 border-bottom">
                         <div class="col-5">
                             <label for="details_site_po" class="mr-sm-2">PO</label>
                         </div>
                         <div class="col-7">
-                            <input name="details_site_po" id="details_site_po" type="text" value="" readonly class="form-control">
+                            <input name="details_site_po" id="details_site_po" type="text" value="{{ isset($site[0]->site_po) ? $site[0]->site_po : "" }}" readonly class="form-control">
                         </div>
                     </div>
-                    <div class="form-row mb-2 pb-2 border-bottom">
+                    @endif
+                    {{-- <div class="form-row mb-2 pb-2 border-bottom">
                         <div class="col-5">
                             <label for="details_site_program" class="mr-sm-2">Program</label>
                         </div>
@@ -80,7 +85,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
                         <div class="col-7">
                             <input name="details_site_program" id="details_site_program" type="text" value="" readonly class="form-control">
                         </div>
-                    </div>
+                    </div> --}}
                 </form>                                                        
             </div>
         </div>
@@ -88,7 +93,7 @@ src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCqSt-k7Mbt8IPdnBZ_fkMV
     <div class="card">
         <div id="headingThree" class="card-header">
             <button type="button" data-toggle="collapse" data-target="#collapseSiteFields" aria-expanded="false" aria-controls="collapseThree" class="text-left m-0 p-0 btn btn-link btn-block">
-                <h5 class="m-0 p-0">
+                <h5 class="m-0 p-0 program_fields">
                     <i class="pe-7s-global"></i>
                         Program Fields
                 </h5>

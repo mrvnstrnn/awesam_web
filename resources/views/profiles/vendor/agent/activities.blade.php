@@ -71,7 +71,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-7">
-            <div class="main-card mb-3 card" style="overflow:hidden;">
+            <div class="main-card mb-3 card">
                 <div class="dropdown-menu-header py-4 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                     <div class="row px-4">
                         <div class="menu-header-content btn-pane-right">

@@ -17,7 +17,7 @@
             ->orderBy('date_added', 'desc')
             ->get();
 
-    if (isset($user_id)) {
+    if (isset($user_id) || isset($region_data)) {
         $users = App\Models\User::find(isset($agent_user_id) ? $agent_user_id : $user_id);
 
         if ($users->profile_id == 3) {
@@ -73,8 +73,16 @@
 
                                     <div class="col-12 col-md-3">
                                         <label for="region">Region</label>
-                                        <select class="mb-2 form-control" class="region">
-                                            <option>All</option>
+                                        <select class="mb-2 form-control" name="region">
+                                            @php
+                                                $regions = \DB::connection('mysql2')
+                                                                ->table('location_sam_regions')
+                                                                ->get();  
+                                            @endphp
+                                            <option value="">All</option>
+                                            @foreach ($regions as $region)
+                                            <option {{ isset($region_data) && $region->sam_region_name == $region_data ? "selected" : "" }} value="{{ $region->sam_region_name }}">{{ $region->sam_region_name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     
@@ -178,13 +186,22 @@
                                             @php
 
                                                 if (isset($user_id)) {
-
-                                                    $dars =  \DB::table('view_dar_agent')
-                                                            ->where('date_added', $date->date_added)
-                                                            ->where('type', '<>',  'work_plan')
-                                                            ->where('type', '<>',  'doc_upload')
-                                                            ->whereIn('user_id', $get_user_under_me)
-                                                            ->get();
+                                                    if (isset($region_data) && $region_data != 'All') {
+                                                        $dars =  \DB::table('view_dar_agent')
+                                                                ->where('date_added', $date->date_added)
+                                                                ->where('type', '<>',  'work_plan')
+                                                                ->where('type', '<>',  'doc_upload')
+                                                                ->whereIn('user_id', $get_user_under_me)
+                                                                ->where('sam_region_name', $region_data)
+                                                                ->get();
+                                                    } else {
+                                                        $dars =  \DB::table('view_dar_agent')
+                                                                ->where('date_added', $date->date_added)
+                                                                ->where('type', '<>',  'work_plan')
+                                                                ->where('type', '<>',  'doc_upload')
+                                                                ->whereIn('user_id', $get_user_under_me)
+                                                                ->get();
+                                                    }
 
                                                 } else {
 

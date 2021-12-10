@@ -17,34 +17,19 @@
     $get_user_under_me = $get_user_under_sup->pluck('user_id');
 
     if(isset($user_id) || isset($region_data)) {
-            $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
-        // if ($user_id != 'All') {
-            if ($region_data != 'All') {
-                $work_plans = \DB::connection('mysql2')
-                                    ->table('view_work_plans')
-                                    ->whereIn('user_id',  $user_to_search)
-                                    ->where('sam_region_name', $region_data)
-                                    ->get();
-            } else {
-                $work_plans = \DB::connection('mysql2')
-                                    ->table('view_work_plans')
-                                    ->whereIn('user_id',  $user_to_search)
-                                    ->get();
-            }
-        // } else {
-        //     if ($region_data != 'All') {
-        //         $work_plans = \DB::connection('mysql2')
-        //                             ->table('view_work_plans')
-        //                             ->whereIn('user_id',  $user_to_search)
-        //                             ->where('sam_region_name', $region_data)
-        //                             ->get();
-        //     } else {
-        //         $work_plans = \DB::connection('mysql2')
-        //                             ->table('view_work_plans')
-        //                             ->whereIn('user_id',  $user_to_search)
-        //                             ->get();
-        //     }
-        // }
+        $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
+        if ($region_data != 'All') {
+            $work_plans = \DB::connection('mysql2')
+                                ->table('view_work_plans')
+                                ->whereIn('user_id',  $user_to_search)
+                                ->where('sam_region_name', $region_data)
+                                ->get();
+        } else {
+            $work_plans = \DB::connection('mysql2')
+                                ->table('view_work_plans')
+                                ->whereIn('user_id',  $user_to_search)
+                                ->get();
+        }
     }
 @endphp
 

@@ -39,11 +39,11 @@
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-            if ($json->company == 'Bayantel') {
+            if ($json->company == 'BAYANTEL') {
                 $company_name = "BAYAN TELECOMMUNICATIONS, INC.";
-            } elseif ($json->company == 'Innove') {
+            } elseif ($json->company == 'INNOVE') {
                 $company_name = "INNOVE COMMUNICATIONS, INC.";
-            } else if ($json->company == 'Globe') {
+            } else if ($json->company == 'GLOBE') {
                 $company_name = "GLOBE TELECOM, INC.";
             }
         @endphp
@@ -61,9 +61,9 @@
                 <table style="width: 100%; margin-top: 0px;">
                     <tr>
                         <td style="width: 100%; text-align: left;">
-                            @if ($json->company == 'Bayantel')
+                            @if ($json->company == 'BAYANTEL')
                             <p style="margin-bottom: 0px; margin-top: 0px;">BAYAN TELECOMMUNICATIONS, INC.</p>
-                            @elseif ($json->company == 'Innove')
+                            @elseif ($json->company == 'INNOVE')
                             <p style="margin-bottom: 0px; margin-top: 0px;">INNOVE COMMUNICATIONS, INC.</p>
                             @endif
                         </td>
@@ -106,7 +106,8 @@
                     <td style="width: 30%; text-align: center; border: 1px solid black; padding: 10px;">
                         <p><b>LESSOR/S</b></p>
                     </td>
-                    <td style="width: 100%; text-align: center; border: 1px solid black; padding: 10px;">
+                    <td style="width: 100%; border: 1px solid black; padding: 10px;">
+                        <p>{{ $json->lessor }}</p>
                     </td>
                 </tr>
             </table>
@@ -116,7 +117,8 @@
                     <td style="width: 30%; text-align: center; border: 1px solid black; padding: 10px;">
                         <p><b>LEASED PREMISES</b></p>
                     </td>
-                    <td style="width: 100%; text-align: center; border: 1px solid black; padding: 10px;">
+                    <td style="width: 100%; border: 1px solid black; padding: 10px;">
+                        <p>{{ $json->lease_premises }}</p>
                     </td>
                 </tr>
             </table>
@@ -124,14 +126,12 @@
             <table border="0" cellspacing="0" cellpadding="0" style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 30%; text-align: center; border: 1px solid black; padding: 10px; margin: 0px;">
-                        <p><b>BASIC COMMERCIAL
-                            TERMS
-                            </b></p>
+                        <p><b>BASIC COMMERCIAL TERMS</b></p>
                     </td>
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
-                            Term: <span style="text-decoration: underline;">{{ $f->format( $json->lease_term ) }}</span> (<span style="text-decoration: underline;">{{ $json->lease_term }}</span>) years;
-                            Commencing on <span style="text-decoration: underline;">{{ $json->start_date }}</span> to <span style="text-decoration: underline;">{{ $json->start_date }}</span>.
+                            Term: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->new_lease_terms_in_years )) }}</span> (<span style="text-decoration: underline;">{{ $json->new_lease_terms_in_years }}</span>) years;
+                            Commencing on <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_start_date)) }}</span> to <span style="text-decoration: underline;">{{ date('M d, Y', strtotime('-1 day', strtotime($json->new_terms_end_date))) }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
@@ -139,7 +139,7 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>C.</b>
-                            GRANTOR warrants that he/she is the duly registered owner/legal possessor of the Assigned Premises. Further, GRANTOR shall hold {{ ucfirst($company_name) }} (“{{ $json->company }}”) free and harmless from any claims and suits related to the GRANTOR’s ownership and possession of the Assigned Premises.
+                            GRANTOR warrants that he/she is the duly registered owner/legal possessor of the Assigned Premises. Further, GRANTOR shall hold {{ ucwords($company_name) }} (“{{ $json->company }}”) free and harmless from any claims and suits related to the GRANTOR’s ownership and possession of the Assigned Premises.
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>D.</b>
@@ -147,9 +147,25 @@
                         </p>
 
                         <p style="text-align: justify; text-justify: inter-word;"><b>E.</b>
-                            GRANTOR agrees to the collection, processing, use, and sharing of the data that the GRANTOR provides to {{ ucfirst($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The GRANTOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2021 and the Privacy Policy of {{ ucfirst($company_name) }}
+                            GRANTOR agrees to the collection, processing, use, and sharing of the data that the GRANTOR provides to {{ ucwords($company_name) }} and its representatives through this Lease Renewal Notice for the requirements needed for the Renewal of the Contract of Lease. The GRANTOR understands and recognizes that the collection, processing, use, and sharing of such data, which may include Personal and Sensitive Personal Information, shall be in accordance with the Data Privacy Act of 2012 and the Privacy Policy of {{ ucwords($company_name) }}
                         </p>
 
+                    </td>
+                </tr>
+            </table>
+
+            <table style="width: 100%; margin-top: 40px; margin-bottom: 0px;">
+                <tr>
+                    <td style="width: 60%;">
+                        <p style="margin-bottom: 0px;">Approved by:</p>
+                        <p style="margin-top: 0px;"><b>{{ ucwords($company_name) }}</b></p>
+                        <p style="margin-top: 40px;">___________________________</p>
+                        <p style="margin-top: 0px; margin-top: 0px;"><b>Vincent L. Tempongko</b></p>
+                    </td>
+                    <td style="width: 40%;">
+                        <p style="margin-bottom: 0px;">Conforme:</p>
+                        <p style="margin-bottom: 0px; margin-top: 40px;"><span style="text-decoration: underline;">{{ $json->lessor }}</span></p>
+                        <p style="margin-top: 0px;"><b>Lessor/s</b></p>
                     </td>
                 </tr>
             </table>

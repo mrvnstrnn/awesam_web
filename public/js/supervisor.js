@@ -17,16 +17,22 @@ $(document).ready(() => {
     /////////////////////////////////////
 
     if(program_lists.length >= 1){
+
+        var program_id = $('#agent-'+program_lists[0]+'-table').attr('data-program_id');
+
         $('#agent-'+program_lists[0]+'-table').DataTable({
             processing: true,
             serverSide: true,
             // pageLength: 3,
             ajax: {
                 url: $('#agent-'+program_lists[0]+'-table').attr('data-href'),
-                type: 'GET',
+                type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+                data: {
+                    program_id : program_id
+                }
             },
             dataSrc: function(json){
                 return json.data;

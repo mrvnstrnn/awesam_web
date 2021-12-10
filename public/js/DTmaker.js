@@ -42,7 +42,7 @@ function makeDT(whatTable, whatCols, active_program) {
             },
             
             dataSrc: function(json){
-                console.log(json.data);
+                // console.log(json.data);
                 return json.data;
             },
 
@@ -65,8 +65,10 @@ function makeDT(whatTable, whatCols, active_program) {
                 // $(row).attr('data-main_activity', main_activity);
                 // $(row).attr('data-profile', data.profile_id);
                 $(row).attr('data-what_table', $(whatTable).attr('id'));
-                // $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
 
+                if ( data.issue_id != undefined || data.issue_id) {
+                    $(row).attr('data-issue_id', data.issue_id ? data.issue_id : "");
+                }
                 $(row).attr('data-program_id', data.program_id ? data.program_id : "");
                 // $(row).attr('data-vendor_id', data.vendor_id ? data.vendor_id : "");
                 $(row).attr('data-site_category', data.site_category);
@@ -107,15 +109,15 @@ function makeDT(whatTable, whatCols, active_program) {
                 else if(active_program == 8){
 
                     if(window.location.pathname != "/assigned-sites"){
-                        var filter_column = "contract_type";
+                        var filter_column = "classification";
                     } 
                     else {
-                        var filter_column = "contract_type";
+                        var filter_column = "classification";
 
                     }
                 }        
 
-                console.log(result);
+                // console.log(result);
 
                 var occurences = json.data.reduce(function (r, row) {
                     r[row[filter_column]] = ++r[row[filter_column]] || 1;

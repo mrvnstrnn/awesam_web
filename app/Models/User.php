@@ -243,7 +243,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $sub_act = SubActivityValue::select('id')
                                         ->where('sub_activity_id', $sub_activity_id)
                                         ->where('sam_id', $sam_id)
-                                        // ->whereNull('type')
+                                        ->where('type', 'doc_upload')
                                         ->first();
 
         return $sub_act;
@@ -367,6 +367,47 @@ class User extends Authenticatable implements MustVerifyEmail
         } else if ($type = "completed sites") {
             return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter;
         }
+    }
+
+    public function get_lrn ($sam_id, $type)
+    {
+        $lrn = SubActivityValue::where('sam_id', $sam_id)
+                                    ->where('status', 'approved')
+                                    ->where('type', $type)
+                                    ->first();
+
+        return $lrn->value;
+    }
+
+    public function get_refx ($sam_id, $type)
+    {
+        $lrn = SubActivityValue::where('sam_id', $sam_id)
+                                    ->where('status', 'pending')
+                                    ->where('type', $type)
+                                    ->first();
+
+        return $lrn->value;
+    }
+
+    public function get_program_renewal ($sam_id)
+    {
+        $get_program_renewal = \DB::connection('mysql2')
+                    ->table('program_renewal')
+                    ->where('sam_id', $sam_id)
+                    ->first();
+                    
+        return !is_null($get_program_renewal) ? $get_program_renewal : "";
+    }
+
+    public function get_program_renewal_old ($sam_id)
+    {
+        $get_program_renewal_old = \DB::connection('mysql2')
+                    ->table('program_renewal')
+                    ->select('rate_old', 'escalation_old', 'tco_old')
+                    ->where('sam_id', $sam_id)
+                    ->first();
+                    
+        return !is_null($get_program_renewal_old) ? $get_program_renewal_old : "";
     }
     
 }

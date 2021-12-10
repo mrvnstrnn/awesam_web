@@ -76,39 +76,39 @@
 
 <script>
 
-$(document).ready(() => {
+// $(document).ready(() => {
 
-    var programid = "{{ $programid }}";
+//     var programid = "{{ $programid }}";
 
-    $.ajax({
-    url: "/site-ajax",
-    method: "POST",
-    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    data: {
-        type: "home_widgets_stage_counters",
-        programid: programid
-    },
-    success: function (resp){
-      if(!resp.error){
+//     $.ajax({
+//     url: "/site-ajax",
+//     method: "POST",
+//     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+//     data: {
+//         type: "home_widgets_stage_counters",
+//         programid: programid
+//     },
+//     success: function (resp){
+//       if(!resp.error){
 
-        $.each(resp.message, function(k, v){
+//         $.each(resp.message, function(k, v){
 
-            $('#stage_counter_'+resp.message[k].stage_id).text(resp.message[k].counter)
+//             $('#stage_counter_'+resp.message[k].stage_id).text(resp.message[k].counter)
 
-        });
-
-
-      } else {
-        toastr.error(resp.message);
-      }
-    },
-    error: function (resp){
-      toastr.error(resp.message);
-    }
-  });
+//         });
 
 
-});
+//       } else {
+//         toastr.error(resp.message);
+//       }
+//     },
+//     error: function (resp){
+//       toastr.error(resp.message);
+//     }
+//   });
+
+
+// });
 
 
 </script>

@@ -46,28 +46,41 @@
                     padding-top: 30px;
                     margin-bottom: 0px;
                 }
+
+                p, li {
+                    font-size: 14px;
+                }
         </style>
     </head>
     <body>
         @php
             $json = json_decode($json_data);
 
-            $date = Carbon::parse($json->from_date);
+            $honorific = "";
+            if ( $json->salutation == 'Not Applicable' ) {
+                $honorific = "";
+                $lessor_surname = $json->lessor;
+            } else {
+                $surname = explode(" ", $json->lessor);
 
-            $diffDays = $date->diffInDays($json->to_date);
-            $diffMonths = $date->diffInMonths($json->to_date);
-            $diffYears = $date->diffInYears($json->to_date);
+                $honorific = $json->salutation;
+                $lessor_surname = $json->salutation . " " . end($surname);
+            }
 
             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-            if ( $diffYears > 0 ) {
-                $date_word = $f->format($diffYears) .' ('.$diffYears.') year/s';
-            } else if ( $diffYears < 1 && $diffMonths > 0 ) {
-                $date_word = $f->format($diffMonths) .' ('.$diffMonths.') month/s';
-            } else if ( $diffMonths < 1 && $diffDays > 0) {
-                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+            if ( $json->terms_in_years > 1 ) {
+                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') years';
             } else {
-                $date_word = $f->format($diffDays) .' ('.$diffDays.') day/s';
+                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') year';
+            }
+
+            if ($json->company == 'BAYANTEL') {
+                $company_name = "Bayan Telecommunications, Inc.";
+            } elseif ($json->company == 'INNOVE') {
+                $company_name = "Innove Communications, Inc";
+            } else if ($json->company == 'GLOBE') {
+                $company_name = "Globe Telecom, Inc.";
             }
         @endphp
         <div id="content">
@@ -83,11 +96,13 @@
                 </tr>
             </table>
             
-            <table style="width: 40%; margin-top: 0px;">
+            <table style="width: 50%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p><b>{{ $json->lessor }}</b></p>
-                        <p>{{ $json->lessor_address }}</p>
+                        <p>{{ \Carbon::now()->format('M d, Y') }}</p>
+                        <p style="margin-bottom: 0px;"><b>{{ $honorific . " " . $json->lessor }}</b></p>
+                        <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
+                        <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
                 </tr>
             </table>
@@ -95,11 +110,11 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
-                        <p>Dear <b>Mr. Mundala:</b>
+                        <p>Dear <b>{{ $lessor_surname }}</b>,
                         <p>
-                            We are writing on behalf of Globe Telecom, Inc. (Globe) in connection with the existing Contract of
-                            Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that Globe would like to signify its intent
-                            to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->from_date }}</b> to <b>{{ $json->to_date }}</b>. In
+                            We are writing on behalf of {{ $company_name }} ({{ ucfirst(strtolower($json->company)) }}) in connection with the existing Contract of
+                            Lease of their telecommunications facility located at <b>{{ $json->cell_site_address }}</b> which will expire on <b>{{ $json->expiration_date }}</b>. Please be informed that {{ ucfirst(strtolower($json->company)) }} would like to signify its intent
+                            to renew the said Contract of Lease for {{ $date_word }} or from <b>{{ $json->new_terms_start_date }}</b> to <b>{{ $json->new_terms_end_date }}</b>. In
                             line with this, we would like to request for the submission of the following documents which are
                             necessary in the processing of the contract renewal:</p>
                             <ul>
@@ -111,8 +126,8 @@
 
                             <p>
                             However, in case you have other plans for your property and will not consider renewing the contract
-                            anymore, we would like to request that Globe be given sufficient time to relocate their
-                            telecommunications facilities. Being a public utility company, Globe services are always imbued with
+                            anymore, we would like to request that {{ ucfirst(strtolower($json->company)) }} be given sufficient time to relocate their
+                            telecommunications facilities. Being a public utility company, {{ ucfirst(strtolower($json->company)) }} services are always imbued with
                             public interest wherein it needs to provide seamless coverage as mandated by the National
                             Telecommunications Commission. Thus, they would need at least <b>24 months</b> upon receipt of your
                             formal notification to facilitate the following activities:</p>
@@ -128,6 +143,11 @@
 
                             <p>Thank you.</p>
                             <p>Very truly yours,</p>
+                            {{-- <p style="margin-top: 60px;"><b>{{ $json->signatory }}</b></p>
+                            <p style="margin-top: 0px;">{{ $json->signatory_position }}</p> --}}
+                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>{{ \Auth::user()->name }}</b></p>
+                            {{-- <p style="margin-top: 0px;">{{ \Auth::user()->getUserProfile()->profile }}</p> --}}
+                            <p style="margin-top: 0px;">Contract Admin</p>
                     </td>
                 </tr>
             </table>

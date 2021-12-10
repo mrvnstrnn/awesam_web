@@ -16,37 +16,37 @@
     </div>
     <div class="row  border-bottom mb-3">
         <div class="col-12">
-            <ul class="tabs-animated body-tabs-animated nav">
+            <ul class="tabs-animated body-tabs-animated nav site_tabs">
                 <li class="nav-item">
-                    <a role="tab" class="nav-link active" id="tab-details" data-toggle="tab" href="#tab-content-details">
+                    <a role="tab" class="nav-link active" data-id="site-modal-site_fields" id="tab-details" data-toggle="tab" href="#tab-content-details">
                         <span>Details</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-activities">
+                    <a role="tab" class="nav-link" data-id="tab-content-activities" id="tab-files" data-toggle="tab" href="#tab-content-activities">
                         <span>Forecast</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-files" data-toggle="tab" href="#tab-content-files">
+                    <a role="tab" class="nav-link" data-id="tab-content-files" id="tab-files" data-toggle="tab" href="#tab-content-files">
                         <span>Files</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-issues" data-toggle="tab" href="#tab-content-issues">
+                    <a role="tab" class="nav-link" data-id="tab-content-issues" id="tab-issues" data-toggle="tab" href="#tab-content-issues">
                         <span>Issues</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-site_chat" data-toggle="tab" href="#tab-content-site_chat">
+                    <a role="tab" class="nav-link" data-id="tab-content-site_chat" id="tab-site_chat" data-toggle="tab" href="#tab-content-site_chat">
                         <span>Site Chat</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a role="tab" class="nav-link" id="tab-site_approval" data-toggle="tab" href="#tab-content-site_approval">
+                {{-- <li class="nav-item">
+                    <a role="tab" class="nav-link" data-id="tab-content-site_approval id="tab-site_approval" data-toggle="tab" href="#tab-content-site_approval">
                         <span>Site Approvals</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>
@@ -112,7 +112,7 @@
             <x-site-chat  :site="$site" />
         </div>
 
-        <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
+        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
             <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
@@ -122,8 +122,8 @@
                     </div>
                 </div>
             </div>        
-            {{-- <x-site-approval-details :site="$site" /> --}}
-        </div>
+            <x-site-approval-details :site="$site" />
+        </div> --}}
     </div>
 </div>
 
@@ -133,35 +133,62 @@
 
         var sam_id = "{{ $site[0]->sam_id }}";
 
-        $.ajax({
-            url: "/modal-view-site-component/" + sam_id + "/site-status",
-            method: "GET",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                $('#modal_site_right').html("");   
-                $('#modal_site_right').html(resp);
-            },
-            error: function (resp){
-                toastr.error(resp.message, "Error");
+        $(".site_tabs .nav-link").on("click", function (){
+            var id = $(this).attr("data-id");
+
+            if ( id == "site-status" ) {
+                div_id = "#modal_site_right";
+            } else if ( id == "tab-content-activities" ) {
+                div_id = "#tab-content-activities";
+            } else if ( id == "tab-content-files" ) {
+                div_id = "#tab-content-files";
             }
+
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/" + id,
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $(div_id).html("");   
+                    $(div_id).html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
         });
 
-        $.ajax({
-            url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
-            method: "GET",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                $('#tab-content-activities').html("");   
-                $('#tab-content-activities').html(resp);
-            },
-            error: function (resp){
-                toastr.error(resp.message, "Error");
-            }
-        });
+        // $.ajax({
+        //     url: "/modal-view-site-component/" + sam_id + "/site-status",
+        //     method: "GET",
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     success: function (resp){
+        //         $('#modal_site_right').html("");   
+        //         $('#modal_site_right').html(resp);
+        //     },
+        //     error: function (resp){
+        //         toastr.error(resp.message, "Error");
+        //     }
+        // });
+
+        // $.ajax({
+        //     url: "/modal-view-site-component/" + sam_id + "/tab-content-activities",
+        //     method: "GET",
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     success: function (resp){
+        //         $('#tab-content-activities').html("");   
+        //         $('#tab-content-activities').html(resp);
+        //     },
+        //     error: function (resp){
+        //         toastr.error(resp.message, "Error");
+        //     }
+        // });
 
         
         // $.ajax({
@@ -179,19 +206,21 @@
         //     }
         // });
 
-        $.ajax({
-            url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
-            method: "GET",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (resp){
-                $('#site-modal-site_fields').html("");   
-                $('#site-modal-site_fields').html(resp);
-            },
-            error: function (resp){
-                toastr.error(resp.message, "Error");
-            }
+        $("#headingThree .program_fields").on("click", function (){
+            $.ajax({
+                url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp){
+                    $('#site-modal-site_fields').html("");   
+                    $('#site-modal-site_fields').html(resp);
+                },
+                error: function (resp){
+                    toastr.error(resp.message, "Error");
+                }
+            });
         });
 
         $("#site_action_view_switch").on("click", function(){
