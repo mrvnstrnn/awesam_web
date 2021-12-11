@@ -36,6 +36,7 @@ class GTInvitationMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.gtinvitation')
+                        ->from('awesamtool@globe.com.ph', 'aweSAM Tool')
                         ->subject('Login invitation link');
     }
 }

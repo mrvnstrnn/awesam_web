@@ -289,7 +289,7 @@ class RenewalController extends Controller
                     $asd = $this->move_site([$request->input('sam_id')[$i]], $sites->program_id, $action, [$sites->site_category], [$sites->activity_id]);
                 }
 
-                return response()->json(['error' => false, 'message' => "Successfully submitted a LOI.", 'program_id' => $request->get('program_id') ]);
+                return response()->json(['error' => false, 'message' => "Successfully added PO deatils.", 'program_id' => $request->get('program_id') ]);
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
