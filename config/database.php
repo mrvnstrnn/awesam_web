@@ -43,7 +43,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'mysql' => [
+        'mysql2' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '104.199.219.205'),
@@ -62,15 +62,15 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        
-        'mysql2' => [
+
+        'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_SECOND', '104.199.219.205'),
-            'port' => env('DB_PORT_SECOND', '3306'),
+            'host' => env('DB_HOST_SECOND', '10.25.85.50'),
+            'port' => env('DB_PORT_SECOND', '1561'),
             'database' => env('DB_DATABASE_SECOND', 'samtool'),
-            'username' => env('DB_USERNAME_SECOND', 'liveserver'),
-            'password' => env('DB_PASSWORD_SECOND', 'P_U9*F)@f9&K5(W:'),
+            'username' => env('DB_USERNAME_SECOND', '10013335'),
+            'password' => env('DB_PASSWORD_SECOND', 'Samvm@123'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -166,3 +166,4 @@ return [
     ],
 
 ];
+
