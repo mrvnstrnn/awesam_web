@@ -205,62 +205,24 @@
         <div class="card mb-3">
             <div class="card-body">
                 <div class="row">
-                    <div class="col mb-2 mt-1" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                    @php
+                        $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
+                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                        ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                        ->where('user_details.IS_id', \Auth::id())
+                                                        ->get();    
+                    @endphp
+                    @foreach ($agents as $agent)
+                        <div class="col mb-2 mt-1" style="text-align: center;">
+                            <div>
+                                <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                            </div>
+                            <div style="text-align: center;">
+                                <div><small>{{ $agent->name }}</small></div>
+                                <div><small>{{ $agent->profile }}</small></div>
+                            </div>
                         </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2 mt-1" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2 mt-1" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle offline" src="images/avatars/3.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2 mt-1" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2 mt-1" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle offline" src="images/avatars/6.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
-                    <div class="col mb-2" style="text-align: center;">
-                        <div>
-                            <img class="rounded-circle" src="images/avatars/8.jpg" alt="" width="70">
-                        </div>
-                        <div style="text-align: center;">
-                            <small>Test</small>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
