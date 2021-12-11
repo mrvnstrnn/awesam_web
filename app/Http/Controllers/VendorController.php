@@ -114,12 +114,12 @@ class VendorController extends Controller
                         $vendor_program->save();
                     }
 
-                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                                        $name,
-                                        $request->input('vendor_admin_email'),
-                                        $request->input('vendor_sec_reg_name'),
-                                        $request->input('vendor_acronym')
-                                    ));
+                    // Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                    //                     $name,
+                    //                     $request->input('vendor_admin_email'),
+                    //                     $request->input('vendor_sec_reg_name'),
+                    //                     $request->input('vendor_acronym')
+                    //                 ));
 
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {

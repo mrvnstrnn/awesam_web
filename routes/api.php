@@ -21,7 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::any('/send-invitation-vendor', [ApiController::class, 'send_invitation_vendor'])->name('send_invitation_vendor');
+Route::any('/send-invitation-vendor-admin', [ApiController::class, 'send_invitation_vendor_admin'])->name('send_invitation_vendor_admin');
+Route::any('/for-vendor-invitation', [ApiController::class, 'for_vendor_invitation'])->name('for_vendor_invitation');
 Route::any('/for-invitation', [ApiController::class, 'for_invitation'])->name('for_invitation');
+
 Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
 Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'])->name('all.getWorkflow');
 
