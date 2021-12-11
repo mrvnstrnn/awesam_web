@@ -936,7 +936,7 @@ class GlobeController extends Controller
         return $sites;
     }
 
-    public function agents($program_id)
+    public function agents(Request $request)
     {
 
         try {
@@ -946,8 +946,9 @@ class GlobeController extends Controller
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
                                     ->join('users_areas', 'users_areas.user_id', 'users.id')
                                     ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->where('user_programs.program_id', $program_id)
+                                    ->where('user_programs.program_id', $request->program_id)
                                     ->get();
+
 
             $dt = DataTables::of($checkAgent)
                     ->addColumn('photo', function($row){
