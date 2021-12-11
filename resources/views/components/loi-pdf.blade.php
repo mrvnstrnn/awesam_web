@@ -85,7 +85,7 @@
         @endphp
         <div id="content">
 
-            <table style="width: 100%; margin-top: 0px;">
+            {{-- <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%">
                     </td>
@@ -94,7 +94,7 @@
                         <img src="globe-logo.png" width="200px">
                     </td>
                 </tr>
-            </table>
+            </table> --}}
             
             <table style="width: 50%; margin-top: 0px;">
                 <tr>

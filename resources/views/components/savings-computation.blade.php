@@ -194,7 +194,7 @@
 
                     lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
                     var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
-
+// console.log(get_program_renewal_old);
                     $("input[type=number]").val(0);
                     $.each(get_program_renewal_old, function(index, data) {
                         // console.log(index);
