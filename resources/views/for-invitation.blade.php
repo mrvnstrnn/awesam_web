@@ -1,4 +1,4 @@
-<table class="table table-hover table-responsive">
+<table border="1" cellspacing="0" cellpadding="0" class="table table-hover table-responsive">
     <thead>
         <tr>
             <th>Vendor</th>
