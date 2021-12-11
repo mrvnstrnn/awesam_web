@@ -315,7 +315,7 @@
     <script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/vendors/moment/moment.js"></script>
     <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
-    <script src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
 
         
 
