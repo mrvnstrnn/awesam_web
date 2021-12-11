@@ -58,6 +58,39 @@ $(document).ready(() => {
             ],
         });
 
+        $('#vendor-admin-'+program_lists[0]+'-table').DataTable({
+            processing: true,
+            serverSide: true,
+            // pageLength: 3,
+            ajax: {
+                url: $('#vendor-admin-'+program_lists[0]+'-table').attr('data-href'),
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    program_id : program_id
+                }
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).attr('data-id', data.id);
+            },
+            columnDefs: [{
+                "targets": 0,
+                "orderable": false
+            }],
+            columns: [
+                { data: "photo" },
+                { data: "firstname" },
+                { data: "lastname" },
+                { data: "email" },
+                { data: "areas" },
+            ],
+        });
+
         $('#newagent-'+program_lists[0]+'-table').DataTable({
             processing: true,
             serverSide: true,
@@ -117,6 +150,40 @@ $(document).ready(() => {
                         $(row).addClass('modalAssigAgentnSite');
                         $(row).attr('data-program', data_program);
                     }
+                    $(row).attr('style', "cursor: pointer");
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "photo" },
+                    { data: "firstname" },
+                    { data: "lastname" },
+                    { data: "email" },
+                    { data: "areas" },
+                ],
+            });
+        }
+
+        if ( ! $.fn.DataTable.isDataTable('#vendor-admin-'+$(this).attr("data-program")+'-table') ) {
+            var data_program = $(this).attr("data-program");
+            $('#vendor-admin-'+data_program+'-table').DataTable({
+                processing: true,
+                serverSide: true,
+                // pageLength: 3,
+                ajax: {
+                    url: $('#vendor-admin-'+data_program+'-table').attr('data-href'),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-id', data.id);
                     $(row).attr('style', "cursor: pointer");
                 },
                 columnDefs: [{
