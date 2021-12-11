@@ -32,6 +32,7 @@ class InvitationMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.invitation')
-                        ->subject('aweSAM Tool Registration Link');
+                    ->from('awesamtool@globe.com.ph', 'aweSAM Tool')
+                    ->subject('aweSAM Tool Registration Link');
     }
 }
