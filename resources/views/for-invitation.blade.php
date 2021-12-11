@@ -15,7 +15,7 @@
                     <td>{{ $invitation->mode }}</td>
                     <td>{{ $invitation->firstname }}</td>
                     <td>{{ $invitation->lastname }}</td>
-                    <td>{{ Request::root() }}/{{ $invitation->token }}/{{ $invitation->invitation_code }}</td>
+                    <td>{{ Request::root() }}/invitation-link/{{ $invitation->token }}/{{ $invitation->invitation_code }}</td>
                 </tr>
             @endforeach
         </tbody>
