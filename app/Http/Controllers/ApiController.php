@@ -64,7 +64,10 @@ class ApiController extends Controller
 
     public function for_vendor_invitation ()
     {
-        $invitations = \DB::table('vendor')->get();
+        $invitations = \DB::table('vendor')
+                                // ->join('users', 'users.email', 'vendor.vendor_admin_email')
+                                // ->join('user_details', 'user_details.user_id', 'users.id')
+                                ->get();
                             
         return view('for-vendor-invitation')
                 ->with('invitations', $invitations);

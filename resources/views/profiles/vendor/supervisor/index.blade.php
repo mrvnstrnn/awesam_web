@@ -212,17 +212,25 @@
                                                         ->where('user_details.IS_id', \Auth::id())
                                                         ->get();    
                     @endphp
-                    @foreach ($agents as $agent)
-                        <div class="col mb-2 mt-1" style="text-align: center;">
-                            <div>
-                                <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                    
+                    @if ($count($agent) > 0)
+                        @foreach ($agents as $agent)
+                            <div class="col mb-2 mt-1" style="text-align: center;">
+                                <div>
+                                    <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                                </div>
+                                <div style="text-align: center;">
+                                    <div><small>{{ $agent->name }}</small></div>
+                                    <div><small>{{ $agent->profile }}</small></div>
+                                </div>
                             </div>
-                            <div style="text-align: center;">
-                                <div><small>{{ $agent->name }}</small></div>
-                                <div><small>{{ $agent->profile }}</small></div>
-                            </div>
+                        @endforeach
+                    @else
+                        <div class="col-12 mb-2 mt-1" style="text-align: center;">
+                            <h6>No available agent/s.</h6>
                         </div>
-                    @endforeach
+                    @endif
+
                 </div>
             </div>
         </div>

@@ -77,53 +77,65 @@
                     @endphp
                     <div class="card mb-3">
                         <div class="card-body">
-                            @foreach ($supervisors as $supervisor)
-                                @php
-                                    $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
-                                                        ->join('users', 'users.id', 'user_details.user_id')
-                                                        ->join('profiles', 'profiles.id', 'users.profile_id')
-                                                        ->where('user_details.IS_id', $supervisor->id)
-                                                        ->get(); 
-                                @endphp
-                                <div class="row">
-                                    <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
-                                        <div>
-                                            @if (!is_null($supervisor->image))
-                                                <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$supervisor->image) }}" alt="">
-                                            @else
-                                                <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
-                                            @endif
+                            @if (count($supervisors) > 0)
+                                @foreach ($supervisors as $supervisor)
+                                    @php
+                                        $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
+                                                            ->join('users', 'users.id', 'user_details.user_id')
+                                                            ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                            ->where('user_details.IS_id', $supervisor->id)
+                                                            ->get(); 
+                                    @endphp
+                                    <div class="row">
+                                        <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
+                                            <div>
+                                                @if (!is_null($supervisor->image))
+                                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$supervisor->image) }}" alt="">
+                                                @else
+                                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                                @endif
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <div><small>{{ $supervisor->name }}</small></div>
+                                                <div><small>{{ $supervisor->profile }}</small></div>
+                                            </div>
                                         </div>
-                                        <div style="text-align: center;">
-                                            <div><small>{{ $supervisor->name }}</small></div>
-                                            <div><small>{{ $supervisor->profile }}</small></div>
+                                        <div class="col-9 mb-2 mt-1" style="text-align: center;">
+                                            <div class="row">
+                                                @if ($count($agent) > 0)
+                                                    @foreach ($agents as $agent)
+                                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                                            <div>
+                                                                @if (!is_null($agent->image))
+                                                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
+                                                                @else
+                                                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                                                @endif
+
+                                                                {{-- <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70"> --}}
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                <div><small>{{ $agent->name }}</small></div>
+                                                                <div><small>{{ $agent->profile }}</small></div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="col-12 mb-2 mt-1" style="text-align: center;">
+                                                        <h6>No available agent/s.</h6>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-9 mb-2 mt-1" style="text-align: center;">
-                                        <div class="row">
-
-                                            @foreach ($agents as $agent)
-                                                <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                                    <div>
-                                                        @if (!is_null($agent->image))
-                                                            <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
-                                                        @else
-                                                            <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
-                                                        @endif
-
-                                                        {{-- <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70"> --}}
-                                                    </div>
-                                                    <div style="text-align: center;">
-                                                        <div><small>{{ $agent->name }}</small></div>
-                                                        <div><small>{{ $agent->profile }}</small></div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-
-                                        </div>
+                                @endforeach
+                            @else
+                                <div class="row">
+                                    <div class="col-12 mb-2 mt-1" style="text-align: center;">
+                                        <h6>No available supervisor/s.</h6>
                                     </div>
                                 </div>
-                            @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
