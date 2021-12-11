@@ -61,7 +61,7 @@
 </ul>
 <div class="tab-content">
     @php
-        $activities = \DB::connection('mysql2')->select('call `agent_activities`('.\Auth::id().')');
+        $activities = \DB::select('call `agent_activities`('.\Auth::id().')');
         // dd($activities);
 
         function date_sort($a, $b) {

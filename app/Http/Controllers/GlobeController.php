@@ -56,7 +56,7 @@ class GlobeController extends Controller
 {
     public function clean_table ()
     {
-        return \DB::connection('mysql2')->statement('call `clean_variables`()');
+        return \DB::statement('call `clean_variables`()');
     }
 
     public function acceptRejectEndorsement(Request $request)
@@ -76,7 +76,7 @@ class GlobeController extends Controller
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     } else {
-                        \DB::connection('mysql2')->table("site")
+                        \DB::table("site")
                                         ->where("sam_id", $request->input("sam_id"))
                                         ->update([
                                             'site_po' => $request->input('po_number'),
@@ -298,16 +298,14 @@ class GlobeController extends Controller
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     } else {
 
-                        $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                        $activities = \DB::table('stage_activities')
                                 ->select('return_activity')
                                 ->where('activity_id', $activity_id[0])
                                 ->where('program_id', $program_id)
                                 ->where('category', $site_category[0])
                                 ->first();
 
-                        $sub_activities = \DB::connection('mysql2')
-                                                ->table('sub_activity')
+                        $sub_activities = \DB::table('sub_activity')
                                                 ->select('sub_activity_id')
                                                 ->where('program_id', $program_id)
                                                 ->where('category', $site_category[0])
@@ -372,8 +370,7 @@ class GlobeController extends Controller
                         'value' => json_encode($request->all())
                     ]);
 
-                    \DB::connection('mysql2')
-                        ->table('program_renewal')
+                    \DB::table('program_renewal')
                         ->where('sam_id', $request->input('sam_id'))
                         ->update([
                             'vendor' => $request->get('vendor_name')
@@ -486,7 +483,7 @@ class GlobeController extends Controller
 
                     if($request->input('program_id') == 1){
 
-                        \DB::connection('mysql2')->table("site")
+                        \DB::table("site")
                         ->where("sam_id", $site->sam_id)
                         ->update([
                             'site_pr' => $request->input('pr_number'),
@@ -498,7 +495,7 @@ class GlobeController extends Controller
 
                     } else {
 
-                        \DB::connection('mysql2')->table("site")
+                        \DB::table("site")
                         ->where("sam_id", $site->sam_id)
                         ->update([
                             'site_pr' => $request->input('pr_number'),
@@ -540,6 +537,24 @@ class GlobeController extends Controller
 
                 \Storage::put( $samid[0].'-renewal-hard-copy-site-management-pdf.pdf', $pdf->output() );
 
+                $array_data = [
+                    'file' => $samid[0].'-renewal-hard-copy-site-management-pdf.pdf',
+                    'active_profile' => '',
+                    'active_status' => 'approved',
+                    'validator' => 0,
+                    // 'validators' => $approvers_collect->all(),
+                    'type' => 'doc_upload'
+                ];
+
+                SubActivityValue::create([
+                    'sam_id' => $samid[0],
+                    'value' => json_encode($array_data),
+                    'user_id' => \Auth::id(),
+                    'type' => 'doc_upload',
+                    'status' => 'approved',
+                    'date_approved' => \Carbon::now()->toDate(),
+                ]);
+
                 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
             } else {
@@ -568,8 +583,7 @@ class GlobeController extends Controller
         for ($i=0; $i < count($sam_id); $i++) {
 
 
-            $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+            $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -581,8 +595,7 @@ class GlobeController extends Controller
                     'user_id' => \Auth::id()
                 ]);
 
-                $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+                $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -595,8 +608,7 @@ class GlobeController extends Controller
             }
 
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
-                $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
                                 ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
                                 ->where('program_id', $program_id)
@@ -605,8 +617,7 @@ class GlobeController extends Controller
                                      
                 if (!is_null($activities)) {
                     if ($action == "true") {
-                        $get_activitiess = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
                                                 ->where('program_id', $program_id)
@@ -624,8 +635,7 @@ class GlobeController extends Controller
                                                     'activity_complete' => "true"
                                                 ]);
 
-                        $check_if_added = \DB::connection('mysql2')
-                                            ->table('site_stage_tracking')
+                        $check_if_added = \DB::table('site_stage_tracking')
                                             ->select('sam_id')
                                             ->where('sam_id', $sam_id[$i])
                                             ->where('activity_id', $activity)
@@ -646,8 +656,7 @@ class GlobeController extends Controller
 
                         $activity = $activities->return_activity;
 
-                        $get_activitiess = \DB::connection('mysql2')
-                                        ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                         ->where('activity_id', $activity)
                                         ->where('program_id', $program_id)
@@ -669,16 +678,14 @@ class GlobeController extends Controller
                         ]);
                     }
 
-                    $get_stage_activity = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                    $get_stage_activity = \DB::table('stage_activities')
                                                 ->select('stage_id')
                                                 ->where('activity_id', $activity)
                                                 ->where('program_id', $program_id)
                                                 ->first();
 
                     if (!is_null($get_stage_activity)) {
-                        $get_program_stages = \DB::connection('mysql2')
-                                                ->table('program_stages')
+                        $get_program_stages = \DB::table('program_stages')
                                                 ->select('stage_name')
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
@@ -717,16 +724,14 @@ class GlobeController extends Controller
             $action_id = 0;
         }
 
-        $notification_settings = \DB::connection('mysql2')
-                                    ->table('notification_settings')
+        $notification_settings = \DB::table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
                                     ->where('action', $action_id)
                                     ->first();
 
         if (!is_null($notification_settings)) {
-            $notification_receiver_profiles = \DB::connection('mysql2')
-                        ->table('notification_receiver_profiles')
+            $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                         ->select('profile_id')
                         ->where('notification_settings_id', $notification_settings->notification_settings_id)
                         ->get();
@@ -792,7 +797,7 @@ class GlobeController extends Controller
 
     public function getWorkflow($program_id)
     {
-        return \DB::connection('mysql2')->select('call `stage_activites`('.$program_id. ')');
+        return \DB::select('call `stage_activites`('.$program_id. ')');
     }
 
     public function unassignedSites($profile_id, $program_id, $activity_id, $what_to_load)
@@ -801,7 +806,7 @@ class GlobeController extends Controller
 
             $vendor = \Auth::user()->getUserDetail()->first()->vendor_id;
 
-            $stored_procs = \DB::connection('mysql2')->select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
+            $stored_procs = \DB::select('call `a_pull_data`('.$vendor.', ' .  $program_id . ', ' .  $profile_id . ', "' . $activity_id .'", "' . $what_to_load .'", "' . \Auth::user()->id .'")');
 
             $dt = DataTables::of($stored_procs)
                             ->addColumn('photo', function($row){
@@ -835,7 +840,7 @@ class GlobeController extends Controller
     public function assign_agent(Request $request)
     {
         try {
-            $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+            $checkAgent = \DB::table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -864,7 +869,7 @@ class GlobeController extends Controller
     public function assign_supervisor(Request $request)
     {
         try {
-            $checkAgent = \DB::connection('mysql2')->table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+            $checkAgent = \DB::table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -894,13 +899,13 @@ class GlobeController extends Controller
     {
         if($mode == "vendor"){
             if((\Auth::user()->profile_id)==2){
-                $sites = \DB::connection('mysql2')->table('site')
+                $sites = \DB::table('site')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->where('program_id', "=", $program_id)
                             ->where('site_users.agent_id', "=", \Auth::user()->id)
                             ->get();
             } else {
-                $sites = \DB::connection('mysql2')->table('site')
+                $sites = \DB::table('site')
                             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
                             ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
                             ->where('program_id', "=", $program_id)
@@ -909,7 +914,7 @@ class GlobeController extends Controller
             }
         } else {
 
-            $sites = \DB::connection('mysql2')->table('site')
+            $sites = \DB::table('site')
             ->join('site_users', 'site_users.sam_id', 'site.sam_id')
             ->join('user_details', 'user_details.user_id', 'site_users.agent_id')
             ->where('program_id', "=", $program_id)
@@ -927,7 +932,7 @@ class GlobeController extends Controller
 
     public function agent_assigned_sites_columns()
     {
-        $sites = \Schema::connection('mysql2')->getColumnListing('site');
+        $sites = \Schema::getColumnListing('site');
         return $sites;
     }
 
@@ -935,8 +940,7 @@ class GlobeController extends Controller
     {
 
         try {
-            $checkAgent = \DB::connection('mysql2')
-                                    ->table('users')
+            $checkAgent = \DB::table('users')
                                     ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->join('user_programs', 'user_programs.user_id', 'users.id')
@@ -971,8 +975,7 @@ class GlobeController extends Controller
     public function newagent($program_id)
     {
         try {
-            $checkAgent = \DB::connection('mysql2')
-                                    ->table('users')
+            $checkAgent = \DB::table('users')
                                     ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
@@ -1120,8 +1123,7 @@ class GlobeController extends Controller
     public function get_region()
     {
         try {
-            $is_location = \DB::connection('mysql2')
-                                ->table('user_details')
+            $is_location = \DB::table('user_details')
                                 ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
                                 // ->where('user_details.user_id', \Auth::user()->id)
                                 ->where('user_details.IS_id', \Auth::user()->id)
@@ -1130,19 +1132,16 @@ class GlobeController extends Controller
                                 // dd($is_location);
 
             if(!is_null($is_location)){
-                $region = \DB::connection('mysql2')
-                                ->table('location_regions')
+                $region = \DB::table('location_regions')
                                 ->where('region_name', $is_location->region)
                                 ->get();
                 
                 if (count($region) < 1) {
-                    $region = \DB::connection('mysql2')
-                                    ->table('location_regions')
+                    $region = \DB::table('location_regions')
                                     ->get();
                 }
             } else {
-                $region = \DB::connection('mysql2')
-                                ->table('location_regions')
+                $region = \DB::table('location_regions')
                                 ->get();
             }
             return response()->json(['error' => false, 'message' => $region]);
@@ -1160,7 +1159,7 @@ class GlobeController extends Controller
             } else if($location_type == "province") {
                 $table = 'location_lgus';
             }
-            $location = \DB::connection('mysql2')->table($table)->where($location_type."_id", $location_id)->get();
+            $location = \DB::table($table)->where($location_type."_id", $location_id)->get();
 
             return response()->json(['error' => false, 'message' => $location]);
         } catch (\Throwable $th) {
@@ -1355,8 +1354,7 @@ class GlobeController extends Controller
                     $file_status = "approved";
                 }
 
-                $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
@@ -1365,8 +1363,7 @@ class GlobeController extends Controller
 
                 if ($stage_activities->activity_type == 'doc upload') {
 
-                    $stage_activities_approvers = \DB::connection('mysql2')
-                                ->table('stage_activities_approvers')
+                    $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
@@ -1400,7 +1397,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : NULL,
                     ]);
 
                 } else if ($stage_activities->activity_type != 'doc upload') {
@@ -1416,7 +1413,7 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'type' => 'doc_upload',
                         'status' => $file_status,
-                        // 'date_approved' => $file_status == 'approved' ? Carbon::now()->toDateString() : "",
+                        'date_approved' => $file_status == 'approved' ? \Carbon::now()->toDate() : NULL,
                     ]);
 
                     $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
@@ -1804,7 +1801,7 @@ class GlobeController extends Controller
                         'status' => "pending",
                     ]);
 
-                    \DB::connection('mysql2')->table("site")
+                    \DB::table("site")
                                                 ->where("sam_id", $request->input("sam_id"))
                                                 ->update([
                                                     'site_vendor_id' => $request->input('vendor'),
@@ -1812,12 +1809,12 @@ class GlobeController extends Controller
                                                 ]);
 
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
+                    $new_endorsements = \DB::statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
 
                     return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
                 } else {
 
-                    $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
+                    $new_endorsements = \DB::statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
 
                     return response()->json(['error' => false, 'message' => "Successfully created a PR."]);
                 }
@@ -1862,12 +1859,12 @@ class GlobeController extends Controller
     //                     'status' => "pending",
     //                 ]);
 
-    //                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+    //                 $new_endorsements = \DB::statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
     //                 return response()->json(['error' => false, 'message' => $message_info ]);
     //             } else {
 
-    //                 $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
+    //                 $new_endorsements = \DB::statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "true")');
 
     //                 return response()->json(['error' => false, 'message' => $message_info ]);
     //             }
@@ -2028,8 +2025,7 @@ class GlobeController extends Controller
     public function get_datatable_columns($program_id, $table_name, $profile_id)
     {
 
-        $cols = \DB::connection('mysql2')
-                    ->table("table_fields")
+        $cols = \DB::table("table_fields")
                     ->where('program_id', $program_id)
                     ->where('table_name', $table_name)
                     ->orderBy('field_sort', 'asc')
@@ -2044,8 +2040,7 @@ class GlobeController extends Controller
 
     public function get_doc_validations($program_id)
     {
-        $sites = \DB::connection('mysql2')
-                    ->table("view_doc_validation")
+        $sites = \DB::table("view_doc_validation")
                     ->get();
 
         $dt = DataTables::of($sites);
@@ -2069,8 +2064,7 @@ class GlobeController extends Controller
 
             if ($validate->passes()) {
                 
-                $activities_check = \DB::connection('mysql2')
-                                        ->table('stage_activities')
+                $activities_check = \DB::table('stage_activities')
                                         ->where('activity_id', $request->input("activity_id"))
                                         ->where('program_id', $request->input("program_id"))
                                         ->where('category', $request->input("site_category"))
@@ -2438,9 +2432,7 @@ class GlobeController extends Controller
 
     public function get_site_approvals($program_id, $profile_id)
     {
-        $sites = \DB::connection('mysql2')
-                    // ->table("site_milestone")
-                    ->table("milestone_tracking_2")
+        $sites = \DB::table("milestone_tracking_2")
                     ->select("program_id, sam_id, stage_name, activity_name, activity_type, activity_complete, profile_id, stage_id, pending_count, site_name, site_fields, site_agent")
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -2455,8 +2447,7 @@ class GlobeController extends Controller
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
         if($activity_type == 'all'){
-            $sites = \DB::connection('mysql2')
-                            ->table("view_site")
+            $sites = \DB::table("view_site")
                             ->where('program_id', $program_id)
                             ->whereNotNull('activity_name');
 
@@ -2476,9 +2467,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine'){
 
-            $sites = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("view_assigned_sites")
+            $sites = \DB::table("view_assigned_sites")
             ->where('program_id', $program_id)
             ->where('agent_id', \Auth::id());
 
@@ -2524,8 +2513,7 @@ class GlobeController extends Controller
             //                     ->where('activities->activity_id', $last_act->activity_id)
             //                     ->get();
 
-            $sites = \DB::connection('mysql2')
-                                ->table("view_site")
+            $sites = \DB::table("view_site")
                                 ->where('program_id', $program_id)
                                 ->where('activity_type', 'complete');
 
@@ -2549,8 +2537,7 @@ class GlobeController extends Controller
             //                                     ->get()
             //                                     ->pluck('id');
             
-            $sites = \DB::connection('mysql2')
-                        ->table("view_vendor_assigned_sites")
+            $sites = \DB::table("view_vendor_assigned_sites")
                         ->where('program_id', $program_id)
                         ->where('IS_id', \Auth::user()->id);
 
@@ -2572,9 +2559,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'vendor'){
 
-            $sites = \DB::connection('mysql2')
-            // ->table("site_milestone")
-            ->table("milestone_tracking_2")
+            $sites = \DB::table("milestone_tracking_2")
             ->distinct()
             ->where('program_id', $program_id)
             ->where('activity_complete', 'false')
@@ -2585,8 +2570,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'set site value'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("milestone_tracking_2")
+            $sites = \DB::table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_type', 'set site value')
@@ -2644,8 +2628,7 @@ class GlobeController extends Controller
 
             // } else if (\Auth::user()->profile_id == 6) {
 
-            $sites = \DB::connection('mysql2')
-                            ->table("view_site")
+            $sites = \DB::table("view_site")
                             ->whereIn('view_site.activity_type', ['rtb declaration'])
                             ->where('view_site.program_id', $program_id)
                             ->where('view_site.profile_id', \Auth::user()->profile_id);
@@ -2696,8 +2679,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site approval'){
 
-                $sites = \DB::connection('mysql2')
-                                ->table("view_site")
+                $sites = \DB::table("view_site")
                                 // ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
                                 ->where('view_site.program_id', $program_id)
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
@@ -2743,8 +2725,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'refx process'){
 
-                $sites = \DB::connection('mysql2')
-                                ->table("view_site")
+                $sites = \DB::table("view_site")
                                 ->where('view_site.program_id', $program_id)
                                 ->where('view_site.profile_id', \Auth::user()->profile_id)
                                 ->whereIn('view_site.activity_id', [32, 33])
@@ -2752,9 +2733,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'vendor awarding'){
-            $sites = \DB::connection('mysql2')
-                            // ->table("view_pr_memo")
-                            ->table("view_pr_memo_v2")
+            $sites = \DB::table("view_pr_memo_v2")
                             ->where('status', '!=', 'denied');
                             if ( $program_id == 1 ) {
                                 $sites->whereIn('activity_id', [6])
@@ -2766,8 +2745,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'elas_renewal'){
-            $sites = \DB::connection('mysql2')
-                    ->table('view_site')
+            $sites = \DB::table('view_site')
                     ->where('program_id',  $program_id)
                     ->where('activity_type', "elas renewal");
 
@@ -2781,8 +2759,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'renewal vendor awarding'){
-            $sites = \DB::connection('mysql2')
-                    ->table('view_site')
+            $sites = \DB::table('view_site')
                     ->where('program_id',  $program_id)
                     ->where('activity_type', "vendor awarding");
 
@@ -2796,8 +2773,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr issuance'){
-            $sites = \DB::connection('mysql2')
-                            ->table("view_pr_memo")
+            $sites = \DB::table("view_pr_memo")
                             ->where('status', '!=', 'denied');
                             if ( $program_id == 1 ) {
                                 $sites->whereIn('activity_id', [5])
@@ -2810,8 +2786,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr memo'){
-            $sites = \DB::connection('mysql2')
-                            ->table("view_pr_memo");
+            $sites = \DB::table("view_pr_memo");
                             // ->where('status', '!=', 'denied');
 
                             if ($program_id == 1) {
@@ -2843,8 +2818,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr memo pending approval'){
-            $sites = \DB::connection('mysql2')
-                            ->table("view_pr_memo")
+            $sites = \DB::table("view_pr_memo")
                             ->where('status', '!=', 'denied');
 
                             if ($program_id == 1) {
@@ -2879,8 +2853,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'pr memo approved'){
-            $sites = \DB::connection('mysql2')
-                            ->table("view_pr_memo_v2");
+            $sites = \DB::table("view_pr_memo_v2");
                             // ->whereIn('profile_id', [8, 9, 10]);
 
                             if (\Auth::user()->profile_id == 10) {
@@ -2908,8 +2881,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'new clp'){
-            $sites = \DB::connection('mysql2')
-                                ->table("view_sites_per_program")
+            $sites = \DB::table("view_sites_per_program")
                                 ->where('program_id', $program_id);
                                 if ($program_id == 1) {
                                     $sites->whereIn('activity_id', [2])
@@ -2922,8 +2894,7 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'site hunting validation'){
-            $sites = \DB::connection('mysql2')
-                                ->table("view_site_hunting")
+            $sites = \DB::table("view_site_hunting")
                                 ->get();
 
                                 // ->table("site")
@@ -2943,15 +2914,13 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'schedule jtss'){
-            $sites = \DB::connection('mysql2')
-                                ->table("view_newsites_jtss_schedule_requests")
+            $sites = \DB::table("view_newsites_jtss_schedule_requests")
                                 ->get();
         }
 
         elseif($activity_type == 'jtss'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_jtss_aepm")
+            $sites = \DB::table("view_jtss_aepm")
                     ->where('program_id', $program_id)
                     ->get();
 
@@ -2961,8 +2930,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'ssds'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("site")
+            $sites = \DB::table("site")
                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
@@ -2979,8 +2947,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'site-hunting'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("site")
+            $sites = \DB::table("site")
                     ->where('program_id', $program_id)
                     ->whereJsonContains('activities->activity_id', '11')
                     // ->orwhereJsonContains('activities->activity_id', '22')
@@ -2994,7 +2961,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')->table("view_site");
+            $sites = \DB::table("view_site");
                 // ->where('program_id', $program_id)
                 // ->where('active_profile', \Auth::user()->profile_id);
                 // ->whereNull('approver_id')
@@ -3017,7 +2984,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation 2'){
 
-            $sites = \DB::connection('mysql2')->table("view_doc_validation")
+            $sites = \DB::table("view_doc_validation")
                 ->where('program_id', $program_id)
                 ->whereNotNull('approver_id')
                 ->whereNull('approver_id2')
@@ -3028,7 +2995,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'doc validation 3'){
 
-            $sites = \DB::connection('mysql2')->table("view_doc_validation")
+            $sites = \DB::table("view_doc_validation")
                 ->where('program_id', $program_id)
                 ->whereNotNull('approver_id')
                 ->whereNotNull('approver_id2')
@@ -3038,8 +3005,7 @@ class GlobeController extends Controller
         }
         elseif($activity_type == 'set po'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_site")
+            $sites = \DB::table("view_site")
                     ->where('program_id', $program_id)
                     ->where('activity_type', "endorsement")
                     ->where('profile_id', \Auth::user()->profile_id);
@@ -3061,8 +3027,7 @@ class GlobeController extends Controller
             //         ->where('profile_id', \Auth::user()->profile_id)
             //         ->get();
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_site")
+            $sites = \DB::table("view_site")
                     ->where('program_id', $program_id)
                     ->where('activity_type', "endorsement")
                     ->where('profile_id', \Auth::user()->profile_id);
@@ -3112,8 +3077,7 @@ class GlobeController extends Controller
 
             if($program_id == 3){
 
-                $sites = \DB::connection('mysql2')
-                        ->table('program_coloc')
+                $sites = \DB::table('program_coloc')
                         ->join('view_site','view_site.sam_id', 'program_coloc.sam_id')
 
                         ->select(
@@ -3140,8 +3104,7 @@ class GlobeController extends Controller
                     ->get();
                 } elseif($program_id == 4){
 
-                    $sites = \DB::connection('mysql2')
-                            ->table('program_ibs')
+                    $sites = \DB::table('program_ibs')
                             ->join('view_site','view_site.sam_id', 'program_ibs.sam_id')
     
                             ->select(
@@ -3168,8 +3131,7 @@ class GlobeController extends Controller
 
                 } elseif($program_id == 8){
 
-                    $sites = \DB::connection('mysql2')
-                            ->table('program_renewal')
+                    $sites = \DB::table('program_renewal')
                             ->join('view_site','view_site.sam_id', 'program_renewal.sam_id')
     
                             ->select(
@@ -3200,8 +3162,7 @@ class GlobeController extends Controller
 
             if($program_id == 3){
 
-                $sites = \DB::connection('mysql2')
-                        ->table('program_coloc')
+                $sites = \DB::table('program_coloc')
                         ->join('view_site','view_site.sam_id', 'program_coloc.sam_id')
 
                         ->select(
@@ -3228,8 +3189,7 @@ class GlobeController extends Controller
                 }
                 elseif($program_id == 4){
 
-                    $sites = \DB::connection('mysql2')
-                            ->table('program_ibs')
+                    $sites = \DB::table('program_ibs')
                             ->join('view_site','view_site.sam_id', 'program_ibs.sam_id')
     
                             ->select(
@@ -3257,8 +3217,7 @@ class GlobeController extends Controller
         }        
         elseif($activity_type == 'new endorsements vendor'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
+            $sites = \DB::table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name')
                     ->where('program_id', $program_id);
 
@@ -3277,8 +3236,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'new endorsements vendor accept'){
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_site")
+            $sites = \DB::table("view_site")
                     // ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
                     // ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
                     // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
@@ -3312,8 +3270,7 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'unassigned sites'){
 
-            $sites = \DB::connection('mysql2')
-                ->table("view_site")
+            $sites = \DB::table("view_site")
                 ->where('program_id', $program_id);
 
                 if ($program_id == 1) {
@@ -3348,8 +3305,7 @@ class GlobeController extends Controller
                 $sites->get();
 
         } else if ($activity_type == 'all-site-issues') {
-            $sites = \DB::connection('mysql2')
-                            ->table("site_issue")
+            $sites = \DB::table("site_issue")
                             ->leftjoin('view_site', 'view_site.sam_id', 'site_issue.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('view_site.program_id', $program_id)
@@ -3373,8 +3329,7 @@ class GlobeController extends Controller
 
         else {
 
-            $sites = \DB::connection('mysql2')
-                    ->table("milestone_tracking_2")
+            $sites = \DB::table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -3390,9 +3345,7 @@ class GlobeController extends Controller
 
     public function get_site_doc_validation($program_id, $profile_id, $activity_type)
     {
-        $sites = \DB::connection('mysql2')
-                    // ->table("site_milestone")
-                    ->table("milestone_tracking_2")
+        $sites = \DB::table("milestone_tracking_2")
                     ->distinct()
                     ->where('program_id', $program_id)
                     ->where('activity_complete', 'false')
@@ -3723,8 +3676,7 @@ class GlobeController extends Controller
         }
         elseif($sub_activity == 'Create LOI to Renew'){
 
-            $program_renewal = \DB::connection('mysql2')
-                                ->table('program_renewal')
+            $program_renewal = \DB::table('program_renewal')
                                 ->select('site_address', 'lessor', 'expiration')
                                 ->where('sam_id', $sam_id)
                                 ->first();
@@ -3903,8 +3855,7 @@ class GlobeController extends Controller
                 //             ->where('activity_complete', 'false')
                 //             ->get();
 
-                $programs = \DB::connection('mysql2')
-                                ->table('site')
+                $programs = \DB::table('site')
                                 ->where('sam_id', $sam_id)
                                 ->first();
 
@@ -3922,8 +3873,7 @@ class GlobeController extends Controller
                     $table = 'program_renewal';
                 }
 
-                $sites = \DB::connection('mysql2')
-                            ->table($table)
+                $sites = \DB::table($table)
                             ->where('sam_id', $sam_id)
                             ->get();
 
@@ -3980,9 +3930,7 @@ class GlobeController extends Controller
 
         // dd( $request->all() );
         try {
-            $site = \DB::connection('mysql2')
-                    // ->table('site_milestone')
-                    ->table('view_site')
+            $site = \DB::table('view_site')
                     ->distinct()
                     ->where('sam_id', $request['sam_id'])
                     // ->where('activity_complete', "=", 'false')
@@ -4388,8 +4336,7 @@ class GlobeController extends Controller
     {
         try {
 
-            $site = \DB::connection('mysql2')
-                            ->table('site_issue')
+            $site = \DB::table('site_issue')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
                             ->where('site_issue.issue_id', $issue_id)
                             ->first();
@@ -4494,8 +4441,7 @@ class GlobeController extends Controller
             //     return response()->json(['error' => true, 'message' => "No data found."]);
             // }
 
-            $site = \DB::connection('mysql2')
-                            ->table('site_issue')
+            $site = \DB::table('site_issue')
                             ->where('issue_id', $issue_id)
                             ->update([
                                 'issue_status' => count($approvers_pending_collect->all()) < 1 ? "resolved" : "active",
@@ -4563,8 +4509,7 @@ class GlobeController extends Controller
             if($validate->passes()){
 
                 // if ( $request->input('hidden_program_id') == 3 || $request->input('hidden_program_id') == 4 ) {
-                    $stage_activities_approvers = \DB::connection('mysql2')
-                                    ->table('stage_activities_approvers')
+                    $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                     ->where('stage_activities_id', 0)
                                     ->get();
     
@@ -4923,8 +4868,7 @@ class GlobeController extends Controller
                     $request->input('lessor_approval') == "approved" && 
                     in_array($request->input("sub_activity_id"), [213, 255])
                     ) {
-                    $datas = \DB::connection('mysql2')
-                                    ->table('sub_activity')
+                    $datas = \DB::table('sub_activity')
                                     ->select('sub_activity_id')
                                     ->where('activity_id', $request->input('activity_id')[0])
                                     ->where('program_id', $request->input('program_id'))
@@ -4941,8 +4885,7 @@ class GlobeController extends Controller
                         $sub_activity_id_collect->push($data->sub_activity_id);
                     }
 
-                    $sub_activity_values = \DB::connection('mysql2')
-                                                ->table('sub_activity_value')
+                    $sub_activity_values = \DB::table('sub_activity_value')
                                                 ->where('sam_id', $request->input('sam_id'))
                                                 ->whereIn('sub_activity_id', $sub_activity_id_collect->all())
                                                 ->where('status', '!=', 'denied')
@@ -4985,12 +4928,10 @@ class GlobeController extends Controller
     public function get_agent_based_program($program_id)
     {
         try {
-            $site_users = \DB::connection('mysql2')
-                            ->table('site_users')
+            $site_users = \DB::table('site_users')
                             ->get();
 
-            $agents = \DB::connection('mysql2')
-                        ->table('users')
+            $agents = \DB::table('users')
                         ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
                         ->join('user_details', 'user_details.user_id', 'users.id')
                         ->join('user_programs', 'user_programs.user_id', 'users.id')
@@ -5008,8 +4949,7 @@ class GlobeController extends Controller
     public function agent_based_program($program_id)
     {
         try {
-            $agents = \DB::connection('mysql2')
-                                        ->table('users')
+            $agents = \DB::table('users')
                                         ->select('users.*')
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_programs.program_id', $program_id)
@@ -5055,7 +4995,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 38) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -5071,7 +5011,7 @@ class GlobeController extends Controller
                                             $json = json_decode($row->value, true);
 
                                             if ( isset($json['validators']) ) {
-                                                for ($i=0; $i < count($json['validators']); $i++) { 
+                                                for ($i=0; $i < count($json['validators']); $i++) {
                                                     if ( $json['validators'][$i]['profile_id'] == \Auth::user()->profile_id ) {
                                                         return $json['validators'][$i]['status'];
                                                     }
@@ -5085,7 +5025,7 @@ class GlobeController extends Controller
                                         }
 
                                     });
-                                } else if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 9) {
+                                } else if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 9 || \Auth::user()->profile_id == 38) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
@@ -5120,13 +5060,12 @@ class GlobeController extends Controller
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
 
-            $get_category = \DB::connection('mysql2')->table("site")
+            $get_category = \DB::table("site")
                                 ->select('site_category')
                                 ->where("sam_id", $request->input("sam_id"))
                                 ->first();
 
-            $activities = \DB::connection('mysql2')
-                    ->table('stage_activities')
+            $activities = \DB::table('stage_activities')
                     ->select('next_activity')
                     ->where('activity_id', $request->input("activity_id"))
                     ->where('program_id', $request->input('program_id'))
@@ -5147,14 +5086,13 @@ class GlobeController extends Controller
                 'user_id' => \Auth::id()
             ]);
 
-            \DB::connection('mysql2')->table("site")
+            \DB::table("site")
                                     ->where("sam_id", $request->input("sam_id"))
                                     ->update([
                                         'site_category' => $request->input('site_category'),
                                     ]);
 
-            $get_next_activities = \DB::connection('mysql2')
-                        ->table('stage_activities')
+            $get_next_activities = \DB::table('stage_activities')
                         ->select('activity_name', 'profile_id')
                         ->where('activity_id', $activities->next_activity)
                         ->where('program_id', $request->input('program_id'))
@@ -5265,8 +5203,7 @@ class GlobeController extends Controller
     public function get_site_issue_remarks($issue_id)
     {
         try {
-            $issue_remakrs = \DB::connection('mysql2')
-                                        ->table('site_issue_remarks')
+            $issue_remakrs = \DB::table('site_issue_remarks')
                                         ->where('site_issue_id', $issue_id)
                                         ->get();
 
@@ -5306,7 +5243,7 @@ class GlobeController extends Controller
     public function subactivity_step($sub_activity_id, $sam_id, $sub_activity)
     {
         try {
-            // $substeps = \DB::connection('mysql2')->table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
+            // $substeps = \DB::table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
             $substeps = \Auth::user()->subactivity_step($sub_activity_id);
 
             $what_component = "components.site-sub-step";
@@ -5368,8 +5305,7 @@ class GlobeController extends Controller
             $sites_fsa = collect();
 
             for ($i=0; $i < count($sam_id); $i++) {
-                $sites_data = \DB::connection('mysql2')
-                            ->table('site')
+                $sites_data = \DB::table('site')
                             ->where('sam_id', $sam_id[$i])
                             ->first();
 
@@ -5387,8 +5323,7 @@ class GlobeController extends Controller
                     //                 ]);
                 } else {
                 
-                    $fsa_data = \DB::connection('mysql2')
-                                    ->table('fsaq')
+                    $fsa_data = \DB::table('fsaq')
                                     ->where('vendor_id', $vendor)
                                     ->where('region_id', $sites_data->site_region_id)
                                     ->where('province_id', $sites_data->site_province_id)
@@ -5402,8 +5337,7 @@ class GlobeController extends Controller
                     if(count($fsa_data)>0){
                     } else {
 
-                        $fsa_data = \DB::connection('mysql2')
-                                            ->table('fsaq')
+                        $fsa_data = \DB::table('fsaq')
                                             ->where('vendor_id', $vendor)
                                             ->where('region_id', $sites_data->site_region_id)
                                             ->where('province_id', $sites_data->site_province_id)
@@ -5418,8 +5352,7 @@ class GlobeController extends Controller
 
                         } else {
 
-                            $fsa_data = \DB::connection('mysql2')
-                                                ->table('fsaq')
+                            $fsa_data = \DB::table('fsaq')
                                                 ->where('vendor_id', $vendor)
                                                 ->where('region_id', $sites_data->site_region_id)
                                                 ->whereNull('province_id')
@@ -5524,36 +5457,6 @@ class GlobeController extends Controller
     public function get_line_items($sam_id, $vendor)
     {
         try {
-            // $line_items = FsaLineItem::rightjoin('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-            //                                 ->where('site_line_items.sam_id', $sam_id)
-            //                                 ->get();
-
-            // $sites = \DB::connection('mysql2')
-            //                 ->table('site')
-            //                 ->where('sam_id', $sam_id)
-            //                 ->first();
-
-
-            // $line_items = \DB::connection('mysql2')
-            //                     ->table('fsaq')
-            //                     ->select('vendor_id')
-            //                     ->where('vendor_id', $vendor)
-            //                     ->where('region_id', $sites->site_region_id)
-            //                     ->where('province_id', $sites->site_province_id)
-            //                     ->where('lgu_id', $sites->site_lgu_id)
-            //                     ->where('site_type', '=', 'ROOFTOP')
-            //                     ->where('account_type', '=', 'BAU')
-            //                     ->where('solution_type', '=', 'MACRO')
-            //                     ->get();
-
-            // return response()->json([ 'error' => false, 'message' => $line_items ]);
-            // if(count($line_items) > 0){
-
-                // $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
-                // ->get();
-
-                // return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
-
                 
                 $line_items = FsaLineItem::join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                             ->where('site_line_items.sam_id', $sam_id)
@@ -5561,68 +5464,6 @@ class GlobeController extends Controller
                                             ->get();
 
                 return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category') ]);
-
-            // } else {
-
-            //     $fsaq_regions = \DB::connection('mysql2')
-            //                         ->table('fsaq')
-            //                         ->select('vendor', \DB::raw('count(`fsaq_id`) as counter'))
-            //                         ->groupBy('vendor')
-            //                         ->where('vendor_id', $vendor)
-            //                         ->where('region_id', $sites->site_region_id)
-            //                         ->where('fsaq.site_type', '=', 'ROOFTOP')
-            //                         ->where('fsaq.account_type', '=', 'BAU')
-            //                         ->where('fsaq.solution_type', '=', 'MACRO')
-            //                         ->get();
-
-            //     if(count($fsaq_regions) > 0){
-
-            //         $fsaq_provinces = \DB::connection('mysql2')
-            //                         ->table('fsaq')
-            //                         ->select('vendor', \DB::raw('count(`fsaq_id`) as counter'))
-            //                         ->groupBy('vendor')
-            //                         ->where('vendor_id', $vendor)
-            //                         ->where('region_id', $sites->site_region_id)
-            //                         ->where('province_id', $sites->site_province_id)
-            //                         ->whereNull('lgu_id')
-            //                         ->where('fsaq.site_type', '=', 'ROOFTOP')
-            //                         ->where('fsaq.account_type', '=', 'BAU')
-            //                         ->where('fsaq.solution_type', '=', 'MACRO')
-            //                     ->get();
-
-            //         if(count($fsaq_provinces) > 0){
-
-            //             $line_items = \DB::connection('mysql2')
-            //                             ->table('fsaq')
-            //                             ->where('vendor_id', 9)
-            //                             ->where('region_id', $sites->site_region_id)
-            //                             ->where('province_id', $sites->site_province_id)
-            //                             ->whereNull('lgu_id')
-            //                             ->where('fsaq.site_type', '=', 'ROOFTOP')
-            //                             ->where('fsaq.account_type', '=', 'BAU')
-            //                             ->where('fsaq.solution_type', '=', 'MACRO')
-            //                             ->get();
-
-            //             // return dd($line_items);
-
-            //             $site_items = FsaLineItem::where('sam_id', $sam_id)->where('status', '!=', 'denied')
-            //             ->get();
-
-            //             return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category'), 'site_items' => $site_items ]);
-
-            //         } else {
-
-            //             return response()->json(['error' => true, 'message' => "No FSAQ data in province: " . $sites->site_province_id . " lgu: " . $sites->site_lgu_id . " for vendor id: " . $vendor ]);
-
-            //         }
-
-            //     } else {
-            //         return response()->json(['error' => true, 'message' => "No FSAQ data in region: " . $sites->site_region_id . " for vendor id: " . $vendor ]);
-            //     }
-
-            // }
-
-
 
 
         } catch (\Throwable $th) {
@@ -5647,14 +5488,6 @@ class GlobeController extends Controller
                         ->update([
                             'is_include' => 1
                         ]);
-
-            // for ($i=0; $i < count($request->input('line_item_id')); $i++) {
-            //     FsaLineItem::create([
-            //         'sam_id' => $request->input('sam_id'),
-            //         'fsa_id' => $request->input('line_item_id')[$i],
-            //         'status' => 'pending',
-            //     ]);
-            // }
 
             return response()->json([ 'error' => false, 'message' => "Successfully saved line items." ]);
 
@@ -5692,8 +5525,7 @@ class GlobeController extends Controller
 
                 $file_name = 'create-pr-memo-'.$current.'.pdf';
 
-                $sites = \DB::connection('mysql2')
-                                ->table('site')
+                $sites = \DB::table('site')
                                 ->select('site_line_items.fsa_id', 'site.site_name', 'site.site_address', 'site.sam_id', 'location_regions.region_name', 'location_provinces.province_name', 'fsaq.amount')
                                 ->leftjoin('site_line_items', 'site_line_items.sam_id', 'site.sam_id')
                                 ->leftjoin('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
@@ -5777,7 +5609,7 @@ class GlobeController extends Controller
                         'pr_memo_id'=> $generated_pr
                     ]);
 
-                    \DB::connection('mysql2')->table("site")
+                    \DB::table("site")
                                     ->where("sam_id", $request->input("sam_id")[$i])
                                     ->update([
                                         'site_vendor_id' => $request->input('vendor'),
@@ -5807,16 +5639,14 @@ class GlobeController extends Controller
                         ]);
                     }
 
-                    $activities = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                    $activities = \DB::table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'return_activity')
                                                 ->where('activity_id', $request->input("activity_id"))
                                                 ->where('program_id', $request->input("program_id"))
                                                 ->where('category', $request->input("site_category"))
                                                 ->first();
 
-                    $get_activitiess = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                    $get_activitiess = \DB::table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
                                                 ->where('program_id', $request->input("program_id"))
@@ -5932,8 +5762,7 @@ class GlobeController extends Controller
     {
         try {
 
-            $sites = \DB::connection('mysql2')
-                            ->table('new_sites')
+            $sites = \DB::table('new_sites')
                             ->whereIn('sam_id', $request->input("sam_id"))
                             ->get();
 
@@ -6090,7 +5919,7 @@ class GlobeController extends Controller
                 }
 
                     // if ($request->input("data_action") == "false") {
-                        // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
+                        // $new_endorsements = \DB::statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
                     // }
                 $asd = $this->move_site( $sam_id->all(), $request->input("program_id"), $request->input("data_action"), $site_category->all(), $activity_id->all() );
                 // return response()->json([ 'error' => true, 'message' => $asd ]);
@@ -6130,7 +5959,7 @@ class GlobeController extends Controller
                 for ($i=0; $i < count($samid_collect); $i++) {
                     SiteEndorsementEvent::dispatch($samid_collect[$i]);
 
-                    \DB::connection('mysql2')->table("site")
+                    \DB::table("site")
                                         ->where("sam_id", $samid_collect[$i])
                                         ->update([
                                             'site_po' => $request->input('po_number'),
@@ -6142,7 +5971,7 @@ class GlobeController extends Controller
                         $activityid_collect->push(9);
                     }
                     $sitecategory_collect->push("none");
-                    // $new_endorsements = \DB::connection('mysql2')->statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
+                    // $new_endorsements = \DB::statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'.$request->input("data_action").'")');
                 }
                 // }
                 $sam_id = $samid_collect;
@@ -6249,7 +6078,7 @@ class GlobeController extends Controller
     {
         try {
             for ($i=0; $i < count($request->input('sam_id')); $i++) {
-                $activity = \DB::connection('mysql2')->table('stage_activities')
+                $activity = \DB::table('stage_activities')
                                         ->where('program_id', $request->input('data_program'))
                                         ->orderby('activity_id', 'desc')
                                         ->take(1)
@@ -6277,8 +6106,7 @@ class GlobeController extends Controller
     {
         try {
 
-            $sites = \DB::connection('mysql2')
-                    ->table("view_sites_activity")
+            $sites = \DB::table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
                     ->where('program_id', $program)
                     ->where('profile_id', \Auth::user()->profile_id);
@@ -6327,8 +6155,7 @@ class GlobeController extends Controller
                 $table = 'program_renewal';
             }
             
-            $datas = \DB::connection('mysql2')
-                            ->table($table)
+            $datas = \DB::table($table)
                             ->where('sam_id', $sam_id)
                             ->get();
 
@@ -6344,8 +6171,7 @@ class GlobeController extends Controller
         try {
 
             if ($value == 'PR Memo Creation') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6354,8 +6180,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '2')
                             ->get();
             } else if ($value == 'RAM Head Approval') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6364,8 +6189,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '3')
                             ->get();
             } else if ($value == 'NAM Approval') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6374,8 +6198,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '4')
                             ->get();
             } else if ($value == 'Arriba PR No Issuance') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6384,8 +6207,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '5')
                             ->get();
             } else if ($value == 'Vendor Awarding') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6394,8 +6216,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '6')
                             ->get();
             } else if ($value == 'Completed') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6404,8 +6225,7 @@ class GlobeController extends Controller
                             ->whereJsonContains('site.activities->activity_id', '7')
                             ->get();
             } else if ($value == 'Total Sites') {
-                $sites = \DB::connection('mysql2')
-                            ->table('site')
+                $sites = \DB::table('site')
                             ->select('site.site_name', 'location_regions.region_name', 'location_provinces.province_name', 'location_lgus.lgu_name')
                             ->join('location_regions', 'location_regions.region_id', 'site.site_region_id')
                             ->join('location_provinces', 'location_provinces.province_id', 'site.site_province_id')
@@ -6924,20 +6744,17 @@ class GlobeController extends Controller
 
             $json_new = json_decode($datas->value);
 
-            $location_regions = \DB::connection('mysql2')
-                                        ->table('location_regions')
+            $location_regions = \DB::table('location_regions')
                                         ->select('region_name')
                                         ->where('region_id', $json_new->region)
                                         ->first();
 
-            $location_provinces = \DB::connection('mysql2')
-                                        ->table('location_provinces')
+            $location_provinces = \DB::table('location_provinces')
                                         ->select('province_name')
                                         ->where('province_id', $json_new->province)
                                         ->first();
 
-            $location_lgus = \DB::connection('mysql2')
-                                        ->table('location_lgus')
+            $location_lgus = \DB::table('location_lgus')
                                         ->select('lgu_name')
                                         ->where('lgu_id', $json_new->lgu)
                                         ->first();
@@ -7264,8 +7081,7 @@ class GlobeController extends Controller
     public function get_DAR_dashboard($program_id)
     {
         try {
-            $data = \DB::connection('mysql2')
-                        ->table('view_DAR_dashboard')->skip(0)->take(100)
+            $data = \DB::table('view_DAR_dashboard')->skip(0)->take(100)
                         ->where('program_id', $program_id)
                         ->orderBy('date_created', 'desc')
                         ->get();
@@ -7282,34 +7098,30 @@ class GlobeController extends Controller
     public function get_new_clp_site ($vendor_id)
     {
         try {
-            // $sites = \DB::connection('mysql2')->select('call `get_fsaq`("'.$vendor_id.'")');
+            // $sites = \DB::select('call `get_fsaq`("'.$vendor_id.'")');
 
-            $regions = \DB::connection('mysql2')
-                            ->table('fsaq')
+            $regions = \DB::table('fsaq')
                             ->select('region_id')
                             ->where('vendor_id', $vendor_id)
                             ->distinct()
                             ->get()
                             ->pluck('region_id');
 
-            $provinces = \DB::connection('mysql2')
-                            ->table('fsaq')
+            $provinces = \DB::table('fsaq')
                             ->select('province_id')
                             ->whereIn('region_id', $regions)
                             ->distinct()
                             ->get()
                             ->pluck('province_id');
 
-            $lgus = \DB::connection('mysql2')
-                            ->table('fsaq')
+            $lgus = \DB::table('fsaq')
                             ->select('lgu_id')
                             ->whereIn('province_id', $provinces)
                             ->distinct()
                             ->get()
                             ->pluck('lgu_id');
 
-            $sites = \DB::connection('mysql2')
-                        ->table('view_site')
+            $sites = \DB::table('view_site')
                         ->select('sam_id', 'site_name')
                         ->whereIn('lgu_id', $lgus)
                         ->where('vendor_id', $vendor_id)
@@ -7371,8 +7183,7 @@ class GlobeController extends Controller
     public function get_form ($sub_activity_id, $form_name)
     {
         try {
-            $form_data = \DB::connection('mysql2')
-                        ->table('program_fields_map')
+            $form_data = \DB::table('program_fields_map')
                         ->join('program_fileds_map_profiles', 'program_fileds_map_profiles.program_fields_id', 'program_fields_map.program_fields_id')
                         ->where('program_fileds_map_profiles.sub_activity_id', $sub_activity_id)
                         ->where('program_fields_map.form_name', $form_name)
@@ -7415,6 +7226,7 @@ class GlobeController extends Controller
                 $button_name2 = "Back Commercial Negotiation";
             } else if ($form_name == "Routing of LRN for SAM Head Signature") {
                 $button_name = "Route eLAS";
+                $button_name2 = "Re-Negotiate eLAS";
             } else {
                 $button_name = "Save";
             }
@@ -7431,6 +7243,7 @@ class GlobeController extends Controller
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
                     }
                     $fields .= '</select>';
+                    $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 } else if ($form_data->type == 'textarea') {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";

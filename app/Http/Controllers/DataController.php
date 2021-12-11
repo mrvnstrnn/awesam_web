@@ -36,8 +36,7 @@ class DataController extends Controller
         // Document Validation Datatable
        if($activity_type == 'doc validation'){
 
-            $sites = \DB::connection('mysql2')
-                ->table("views_sites_with_document_validation")
+            $sites = \DB::table("views_sites_with_document_validation")
                 ->leftJoin('view_site', 'views_sites_with_document_validation.sam_id', 'view_site.sam_id')
                 ->where('program_id', $program_id)
                 ->where('active_status', 'pending   ')
@@ -52,8 +51,7 @@ class DataController extends Controller
        }
        elseif($activity_type == 'program sites'){
 
-            $sites = \DB::connection('mysql2')
-                ->table("view_site")
+            $sites = \DB::table("view_site")
                 ->where('program_id', $program_id)
                 // ->where('active_profile_id', \Auth::user()->profile_id)
                 ->get();
@@ -271,8 +269,7 @@ class DataController extends Controller
     {
         try {
             if (\Auth::user()->profile_id == 2) {
-                $sites = \DB::connection('mysql2')
-                        ->table("site_users")
+                $sites = \DB::table("site_users")
                         ->join("view_site", 'view_site.sam_id', 'site_users.sam_id')
                         ->select("view_site.site_name", "view_site.activity_name", "view_site.sam_id", "view_site.activity_id", "view_site.activity_name", "view_site.program_id", "view_site.site_category")
                         // ->whereJsonContains('site_agent', [
@@ -286,8 +283,7 @@ class DataController extends Controller
                                         ->get()
                                         ->pluck('user_id');
 
-                $sites = \DB::connection('mysql2')
-                        ->table("site_users")
+                $sites = \DB::table("site_users")
                         ->join("view_site", 'view_site.sam_id', 'site_users.sam_id')
                         ->select("view_site.site_name", "view_site.activity_name", "view_site.sam_id", "view_site.activity_id", "view_site.activity_name", "view_site.program_id", "view_site.site_category")
                         // ->whereJsonContains('site_agent', [

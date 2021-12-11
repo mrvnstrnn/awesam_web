@@ -123,7 +123,7 @@
 
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
-                                                $sites_pr = \DB::connection('mysql2')->table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
+                                                $sites_pr = \DB::table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
                                             @endphp
                                             {{-- <div class="form-row">
                                                 <div class="col-md-6 col-12">

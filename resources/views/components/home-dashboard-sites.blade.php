@@ -24,7 +24,7 @@
                                                 <span class="opacity-10 text-secondary pr-2">
                                                     <i class="fa fa-location-arrow"></i>
                                                 </span>
-                                                <span>{{ \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[0]->counter }}</span>
+                                                <span>{{ \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[0]->counter }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -49,7 +49,7 @@
                                                 <span class="opacity-10 text-danger pr-2">
                                                     <i class="fa fa-list-ol"></i>
                                                 </span>
-                                                <span>{{ \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[1]->counter }}</span>
+                                                <span>{{ \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[1]->counter }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@
                                                 <span class="opacity-10 text-warning pr-2">
                                                     <i class="fa fa-file-contract"></i>
                                                 </span>
-                                                <span>{{ \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[2]->counter }}</span>
+                                                <span>{{ \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[2]->counter }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                                 <span class="opacity-10 text-success pr-2">
                                                     <i class="fa fa-angle-double-right"></i>
                                                 </span>
-                                                <span>{{ \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter }}</span>
+                                                <span>{{ \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter }}</span>
                                             </div>
                                         </div>
                                     </div>

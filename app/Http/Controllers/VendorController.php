@@ -86,7 +86,7 @@ class VendorController extends Controller
                 );
 
                 if(is_null($request->input('vendor_id'))) {
-                    $vendor_id = \DB::connection('mysql2')->table('vendor')->insertGetId(
+                    $vendor_id = \DB::table('vendor')->insertGetId(
                         $arrayData
                     );
 
@@ -138,7 +138,7 @@ class VendorController extends Controller
                         ]);
                     }
                     
-                    \DB::connection('mysql2')->table('vendor')
+                    \DB::table('vendor')
                         ->where('vendor_id', $request->input('vendor_id'))
                         ->update(
                             $arrayData
@@ -201,7 +201,7 @@ class VendorController extends Controller
                 $arrayProgram = ['Complete Offboarding'];
             }
             
-            $vendors = \DB::connection('mysql2')->table('vendor')
+            $vendors = \DB::table('vendor')
                                     ->whereIn('vendor_status', $arrayProgram)
                                     ->get();
 
@@ -245,7 +245,7 @@ class VendorController extends Controller
                 $status = 'Complete Offboarding';
             }
 
-            $site = \DB::connection('mysql2')->table('site')
+            $site = \DB::table('site')
                                         ->where('site_vendor_id', $request->input('id'))
                                         ->get();
 
@@ -253,7 +253,7 @@ class VendorController extends Controller
                 return response()->json(['error' => true, 'message' => 'Unable to terminate this vendor. Transfer all '.count($site).' sites assigned to this vendor. <br><a href="'.route('site.vendor', $request->input('id')).'" target="_blank">View sites</a>']);
             }
 
-            \DB::connection('mysql2')->table('vendor')
+            \DB::table('vendor')
                         ->where('vendor_id', $request->input('id'))
                         ->update([
                             'vendor_status' => $status
@@ -305,7 +305,7 @@ class VendorController extends Controller
     public function site_vendor_table($vendor_id)
     {
         try {
-            $site_vendor = \DB::connection('mysql2')->table('site')->where('site_vendor_id', $vendor_id)->get();
+            $site_vendor = \DB::table('site')->where('site_vendor_id', $vendor_id)->get();
 
             $dt = DataTables::of($site_vendor)
                         ->addColumn('checkbox', function($row) {
@@ -347,7 +347,7 @@ class VendorController extends Controller
     public function transfer_vendor(Request $request)
     {
         try {
-            \DB::connection('mysql2')->table('site')
+            \DB::table('site')
                                         ->where('sam_id', $request->input('sam_id'))
                                         ->update(['site_vendor_id' => $request->input('vendor_id')]);
             return response()->json(['error' => false, 'message' => "Successfully transfer site."]);

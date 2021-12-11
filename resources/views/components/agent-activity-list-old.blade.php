@@ -12,8 +12,7 @@
 //     ->where('profile_id', "=", 2)
 //     ->get();
 
-$activities = \DB::connection('mysql2')
-                    ->table('view_sites_activity_2')
+$activities = \DB::table('view_sites_activity_2')
                     ->select('sam_id', 'site_name', 'site_address', 'site_category', 'activity_id', 'activity_name', 'start_date', 'end_date', 'program_id', 'profile_id', 'activity_complete')
                     ->whereJsonContains('site_agent', [
                         'user_id' => \Auth::id()
@@ -62,8 +61,7 @@ $activities = \DB::connection('mysql2')
             $activity_badge = "Upcoming";
         }
 
-        $datas = \DB::connection('mysql2')
-                        ->table('sub_activity')
+        $datas = \DB::table('sub_activity')
                         ->select('sub_activity_id')
                         // ->join('sub_activity_value', 'sub_activity_value.sub_activity_id', 'sub_activity_id')
                         ->where('activity_id', $activities[$i]->activity_id)
@@ -81,8 +79,7 @@ $activities = \DB::connection('mysql2')
             $sub_activity_id_collect->push($data->sub_activity_id);
         }
 
-        $sub_activity_values = \DB::connection('mysql2')
-                                    ->table('sub_activity_value')
+        $sub_activity_values = \DB::table('sub_activity_value')
                                     ->where('sam_id', $activities[$i]->sam_id)
                                     ->whereIn('sub_activity_id', $sub_activity_id_collect->all())
                                     ->where('status', '!=', 'denied')

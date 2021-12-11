@@ -10,7 +10,7 @@ class ToweCoFile extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     protected $table = 'towerco_files';
     protected $fillable = ['serial_number', 'file_name', 'type', 'user_id', 'date_uploaded'];
 }

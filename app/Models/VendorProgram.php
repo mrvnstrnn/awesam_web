@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VendorProgram extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     protected $table = 'vendor_programs';
 
     protected $fillable = [

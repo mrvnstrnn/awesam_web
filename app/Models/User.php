@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
 
     /**
      * The attributes that are mass assignable.
@@ -154,7 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUserProgram($vendor_id = null)
     {
         if (is_null($vendor_id)) {
-            return \DB::connection('mysql2')->table('program')
+            return \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
                     // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
                     ->where('user_programs.user_id', \Auth::user()->id)
@@ -172,7 +172,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getUserProgramEndorsement($route)
     {
-        return \DB::connection('mysql2')->table('program')
+        return \DB::table('program')
                         ->join('user_programs', 'program.program_id', 'user_programs.program_id')
                         ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
                         ->where('user_programs.user_id', \Auth::user()->id)
@@ -183,7 +183,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getUserProgramAct($activity, $program_id)
     {
-        return \DB::connection('mysql2')->table('page_route')
+        return \DB::table('page_route')
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->where('program_id', $program_id)
                             ->where('activity_id', $activity)
@@ -194,8 +194,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
 
         if(\Auth::user()->profile_id == 3){
-            return \DB::connection('mysql2')
-                            ->table('request')
+            return \DB::table('request')
                             ->select(
                                 'users.name',
                                 'users.email',
@@ -213,8 +212,7 @@ class User extends Authenticatable implements MustVerifyEmail
                             ->where('request.leave_status', $request_status)
                             ->get();
         } else {
-            return \DB::connection('mysql2')
-                            ->table('request')
+            return \DB::table('request')
                             ->join('users', 'users.id', 'request.agent_id')
                             ->where('request.agent_id', \Auth::user()->id)
                             ->where('request.leave_status', $request_status)
@@ -233,7 +231,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $arrayProgram = ['Complete Offboarding'];
         }
 
-        return $vendors = \DB::connection('mysql2')->table('vendor')
+        return $vendors = \DB::table('vendor')
                                     ->whereIn('vendor_status', $arrayProgram)
                                     ->get();
     }
@@ -286,10 +284,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function subactivity_step($sub_activity_id, $select = null)
     {
         if (is_null($select)) {
-            $sub_steps = \DB::connection('mysql2')->table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
+            $sub_steps = \DB::table('sub_activity_step')->where('sub_activity_id', $sub_activity_id)->get();
             return $sub_steps;
         } else {
-            $sub_steps = \DB::connection('mysql2')->table('sub_activity_step')->select('sub_activity_step_id')->where('sub_activity_id', $sub_activity_id)->get();
+            $sub_steps = \DB::table('sub_activity_step')->select('sub_activity_step_id')->where('sub_activity_id', $sub_activity_id)->get();
             return $sub_steps;
         }
     }
@@ -317,37 +315,32 @@ class User extends Authenticatable implements MustVerifyEmail
     public function newsite_count_site($activity = "", $program_id)
     {
         if ( $activity == "completed" ) {
-            $last_act = \DB::connection('mysql2') 
-                        ->table("stage_activities")
+            $last_act = \DB::table("stage_activities")
                         ->select('activity_id')
                         ->where('program_id', $program_id)
                         ->orderBy('activity_id', 'desc')
                         ->first();
 
-            $sites = \DB::connection('mysql2') 
-                        ->table("site")
+            $sites = \DB::table("site")
                         ->select('sam_id')
                         ->where('program_id', $program_id)
                         ->where('activities->activity_id', $last_act->activity_id)
                         ->get();
                         
         } else if ( $activity != "" ) {
-            $sites = \DB::connection('mysql2') 
-                            ->table("site")
+            $sites = \DB::table("site")
                             ->select('sam_id')
                             ->where('program_id', $program_id)
                             ->where('activities->activity_id', $activity)
                             ->get();
         } else if ( $activity == "" ) {
-            $last_act = \DB::connection('mysql2') 
-                                ->table("stage_activities")
+            $last_act = \DB::table("stage_activities")
                                 ->select('activity_id')
                                 ->where('program_id', $program_id)
                                 ->orderBy('activity_id', 'desc')
                                 ->first();
 
-            $sites = \DB::connection('mysql2') 
-                                ->table("site")
+            $sites = \DB::table("site")
                                 ->select('sam_id')
                                 ->where('program_id', $program_id)
                                 ->get();
@@ -359,13 +352,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function counter_vendor_agent_supervisor($type)
     {
         if ($type = "assigned sites") {
-            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[0]->counter;
+            return \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[0]->counter;
         } else if ($type = "sites with issues") {
-            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[1]->counter;
+            return \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[1]->counter;
         } else if ($type = "ongoing doc validation") {
-            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[2]->counter;
+            return \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[2]->counter;
         } else if ($type = "completed sites") {
-            return \DB::connection('mysql2')->select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter;
+            return \DB::select('call `counter_vendor_agent_supervisor`('. \Auth::id() .')')[3]->counter;
         }
     }
 
@@ -391,8 +384,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function get_program_renewal ($sam_id)
     {
-        $get_program_renewal = \DB::connection('mysql2')
-                    ->table('program_renewal')
+        $get_program_renewal = \DB::table('program_renewal')
                     ->where('sam_id', $sam_id)
                     ->first();
                     
@@ -401,9 +393,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function get_program_renewal_old ($sam_id)
     {
-        $get_program_renewal_old = \DB::connection('mysql2')
-                    ->table('program_renewal')
-                    ->select('rate_old', 'escalation_old', 'tco_old')
+        $get_program_renewal_old = \DB::table('program_renewal')
+                    ->select('rate_old', 'escalation_old')
                     ->where('sam_id', $sam_id)
                     ->first();
                     

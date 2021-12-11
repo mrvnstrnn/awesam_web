@@ -783,7 +783,7 @@
                                         <div class="position-relative row form-group">
                                             <label for="localcoop" class="col-sm-4 col-form-label">Local COOP</label>
                                         @php
-                                            $localcoops = \DB::connection('mysql2')->table('local_coop')->orderBy('coop_name')->get();
+                                            $localcoops = \DB::table('local_coop')->orderBy('coop_name')->get();
                                         @endphp
                             
                                             <div class="col-sm-8">

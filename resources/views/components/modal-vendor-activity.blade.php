@@ -117,8 +117,7 @@
                                     @php
                                         // dd($site);
 
-                                        $activity = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                                        $activity = \DB::table('stage_activities')
                                                 ->where("program_id", $site[0]->program_id)        
                                                 ->where("category", $site[0]->site_category)        
                                                 ->where("activity_id", $site[0]->activity_id)
@@ -126,8 +125,7 @@
 
                                         $subactivity_type = $activity->subactivities_type;
 
-                                        $sub_activities = \DB::connection('mysql2')
-                                                ->table('sub_activity')
+                                        $sub_activities = \DB::table('sub_activity')
                                                 ->where('program_id', $site[0]->program_id)
                                                 ->where('activity_id', $site[0]->activity_id)
                                                 ->where('category', $site[0]->site_category)
@@ -149,8 +147,14 @@
                                                         </li>
                                                         
                                                         <li class="nav-item">
-                                                            <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
+                                                            <a role="tab" class="nav-link" id="tab-file-google" data-toggle="tab" href="#tab-content-file-google">
                                                                 <span>Old Files From Google Drive</span>
+                                                            </a>
+                                                        </li>
+                                                        
+                                                        <li class="nav-item">
+                                                            <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
+                                                                <span>Files</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -186,13 +190,12 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
+                                                        <div class="tab-pane tabs-animation fade" id="tab-content-file-google" role="tabpanel">
                                                             <div class="row">
                                                                 <div class="col-12">
                                                                     @if ($site[0]->program_id == 8)
                                                                         @php
-                                                                            $sub_activity_value_file_id = \DB::connection('mysql2')
-                                                                                            ->table('sub_activity_value')
+                                                                            $sub_activity_value_file_id = \DB::table('sub_activity_value')
                                                                                             ->select('value')
                                                                                             ->where('sam_id', $site[0]->sam_id)
                                                                                             ->where('type', 'folder_url')
@@ -219,6 +222,11 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
+                                                            <img src="/images/construction.gif" width="100%"/>
+                                                            <h5>activity_source: File</h5>
+                                                            <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
                                                         </div>
                                                         {{-- <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
                                                             <div id="action_lessor_engagement" class=''>

@@ -17,8 +17,7 @@ class LocalCoopController extends Controller
     {
         if($activity_type == 'all'){
             
-            $sites = \DB::connection('mysql2')
-                                ->table("local_coop")
+            $sites = \DB::table("local_coop")
                                 ->select(
                                     'region', 
                                     'id', 
@@ -33,8 +32,7 @@ class LocalCoopController extends Controller
             if (\Auth::user()->profile_id == 18 || \Auth::user()->profile_id == 25) {
                 $sites->get();
             } else {
-                $sites_locations = \DB::connection('mysql2')
-                                ->table("local_coop_user_locations")
+                $sites_locations = \DB::table("local_coop_user_locations")
                                 ->where('user_id', \Auth::id())
                                 ->get();
 
@@ -82,8 +80,7 @@ class LocalCoopController extends Controller
         elseif (\Auth::user()->profile_id == 25) {
             $coop_issues->get();
         } else {
-            $sites_locations = \DB::connection('mysql2')
-                            ->table("local_coop_user_locations")
+            $sites_locations = \DB::table("local_coop_user_locations")
                             ->where('user_id', \Auth::id())
                             ->get();
 
@@ -118,8 +115,7 @@ class LocalCoopController extends Controller
 
     public function get_localcoop_details($coop)
     {
-        $coop_details = \DB::connection('mysql2')
-            ->table("local_coop")
+        $coop_details = \DB::table("local_coop")
             ->select(
                 'id', 
                 'coop_name',
@@ -137,8 +133,7 @@ class LocalCoopController extends Controller
 
     public function get_localcoop_values($coop, $type)
     {
-        $coop_values = \DB::connection('mysql2')
-                            ->table("local_coop_values")
+        $coop_values = \DB::table("local_coop_values")
                             ->join('users', 'local_coop_values.user_id', 'users.id')
                             ->where('coop', $coop)
                             ->where('type', $type)
@@ -149,8 +144,7 @@ class LocalCoopController extends Controller
 
     public function get_localcoop_values_data($coop, $type)
     {
-        $coop_values = \DB::connection('mysql2')
-                            ->table("local_coop_values")
+        $coop_values = \DB::table("local_coop_values")
                             ->join('users', 'local_coop_values.user_id', 'users.id')
                             ->where('coop', $coop)
                             ->where('type', $type)
@@ -404,8 +398,7 @@ class LocalCoopController extends Controller
 
         try {
 
-            $values = \DB::connection('mysql2')
-                                        ->table('local_coop_values')
+            $values = \DB::table('local_coop_values')
                                         ->where('type', 'update_details')
                                         ->whereJsonContains('value', [
                                             'status' => 'pending'
@@ -483,8 +476,7 @@ class LocalCoopController extends Controller
     public function approve_change_details ($id, $status) 
     {
         try {
-            $values = \DB::connection('mysql2')
-                                        ->table('local_coop_values')
+            $values = \DB::table('local_coop_values')
                                         ->where('type', 'update_details')
                                         ->where('ID', $id)
                                         ->first();

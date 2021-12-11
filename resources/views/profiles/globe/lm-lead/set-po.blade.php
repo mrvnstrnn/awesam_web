@@ -246,11 +246,6 @@
                             );
                         });
                         
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
                     } else {
                         Swal.fire(
                             'Error',
@@ -289,6 +284,12 @@
                         $(".save_create_pr_btn").removeAttr("disabled");
                         $(".save_create_pr_btn").text("Create PR");
                     });
+
+                    Swal.fire(
+                        'Success',
+                        resp.message,
+                        'success'
+                    )
                     
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {

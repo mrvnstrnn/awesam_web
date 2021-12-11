@@ -11,10 +11,12 @@ use DateTime;
 use DataTables;
 use App\Models\User;
 use App\Models\SiteStageTracking;
+use App\Models\StageActivities;
 use App\Models\Site;
 use App\Models\SubActivityValue;
 use App\Models\PrMemoTableRenewal;
 use App\Models\PrMemoSite;
+use App\Models\SubActivity;
 
 use Notification;
 use App\Notifications\SiteMoved;
@@ -57,6 +59,7 @@ class RenewalController extends Controller
                     'salutation' => $request->input("salutation"),
                     'lessor_position' => $request->input("lessor_position"),
                     'company' => $request->input("company"),
+                    'lessor_surname' => $request->input("lessor_surname"),
                     // 'signatory' => $request->input("signatory"),
                     // 'signatory_position' => $request->input("signatory_position")
                 ];
@@ -68,16 +71,14 @@ class RenewalController extends Controller
                                 ->where('status', 'pending')
                                 ->first();
 
-                $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-                $stage_activities_approvers = \DB::connection('mysql2')
-                                ->table('stage_activities_approvers')
+                $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
@@ -211,7 +212,7 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
                 // $url = asset('files/'.$request->input("file_name"));
-                Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name")));
+                Mail::to($request->input("email"))->send(new LOIMail( $request->input("file_name"), $request->input("file")));
 
                 return response()->json(['error' => false, 'message' => "Successfully emailed LOI to " .$request->input("email") ]);
             } else {
@@ -280,8 +281,7 @@ class RenewalController extends Controller
                         'pr_memo_id'=> $generated_pr
                     ]);
 
-                    $sites = \DB::connection('mysql2')
-                                ->table('view_site')
+                    $sites = \DB::table('view_site')
                                 ->select('program_id', 'site_category', 'activity_id')
                                 ->where('sam_id', $request->get('sam_id')[$i])
                                 ->first();
@@ -302,8 +302,32 @@ class RenewalController extends Controller
     public function save_lrn (Request $request)
     {
         try {
+            $required = '';
+            if ($request->get('lrn') == "One Time Payment") {
+                $required = 'required';
+            }
+
+            if ($request->get('lrn_type') == "Non Standard") {
+                $required = 'required';
+            }
+
             $validate = Validator::make($request->all(), [
-                '*' => 'required'
+                'lrn' => 'required',
+                'final_negotiated_amount' => 'required',
+                'final_negotiated_advance_rent_months' => 'required',
+                'final_negotiated_advance_rent_amount' => 'required',
+                'new_terms_tax_application' => 'required',
+                'new_lease_terms_in_years' => 'required',
+                'lessor_demand_monthly_contract_amount' => 'required',
+                'lessor_demand_advance_rent_months' => 'required',
+                'lessor_demand_advance_rent_amount' => 'required',
+                'lessor_demand_security_deposit_amount' => 'required',
+                'lessor_demand_escalation_rate' => 'required',
+                'lessor_demand_escalation_year' => 'required',
+                'to_be_applied_on' => 'required',
+                'number_of_months_advance' => 'required',
+                'consideration_for_otp_only' => $required,
+                'file' => $required,
             ]);
 
             if ($validate->passes()) {
@@ -331,16 +355,14 @@ class RenewalController extends Controller
                 }
 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
-                $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type', 'approver_profile_id_1')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-                $stage_activities_approvers = \DB::connection('mysql2')
-                                ->table('stage_activities_approvers')
+                $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
                                 ->get();
@@ -366,11 +388,16 @@ class RenewalController extends Controller
                                 ->where('status', 'pending')
                                 ->first();
                                 
-                $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
-
-                $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
-
-                $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+                if ($request->get('lrn_type') == "Non Standard") {
+                    $new_file_name = $request->get("file");
+                    $file_name = $request->get("file");
+                } else {
+                    $file_name = $this->rename_file( strtolower($request->input("sam_id"))."-" . $component . ".pdf", $component, $request->input("sam_id"), "" );
+    
+                    $this->create_pdf($request->all(), $request->get('sam_id'), $component, $file_name);
+    
+                    $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
+                }
 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
                 $array_data = [
@@ -479,8 +506,7 @@ class RenewalController extends Controller
 
             if ($validate->passes()) {
 
-                $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $activities = \DB::table('stage_activities')
                                 ->select('next_activity')
                                 ->where('activity_id', $request->input("activity_id"))
                                 ->where('program_id', $request->input("program_id"))
@@ -526,16 +552,14 @@ class RenewalController extends Controller
             }
             
 
-            $stage_activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+            $stage_activities = \DB::table('stage_activities')
                                 ->select('id', 'activity_type')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
                                 ->first();
 
-            $stage_activities_approvers = \DB::connection('mysql2')
-                            ->table('stage_activities_approvers')
+            $stage_activities_approvers = \DB::table('stage_activities_approvers')
                             ->select('approver_profile_id')
                             ->where('stage_activities_id', $stage_activities->id)
                             ->get();
@@ -664,30 +688,83 @@ class RenewalController extends Controller
     public function elas_approval_confirm (Request $request)
     {
         try {
+            if ( $request->input('action_file') == "false" ) {
+                $required = "";
+            } else {
+                $required = "required";
+            }
+
             $validate = \Validator::make($request->all(),[
                 '*' => 'required',
-                'file' => 'required',
+                'file' => $required,
             ]);
 
             if ($validate->passes()) {
 
-                SubActivityValue::select('sam_id')
-                                    ->where('sam_id', $request->input("sam_id"))
-                                    ->where('sub_activity_id', $request->input("sub_activity_id"))
-                                    ->where('status', 'pending')
-                                    ->where('type', 'elas_renewal')
-                                    ->update([
-                                        'value' => json_encode($request->all()),
-                                        'status' => $request->input('action_file') == "false" ? "rejected" : "approved"
-                                    ]);
+                if ( $request->input('action_file') == "false" ) {
+
+                    $stage_activity = StageActivities::select('return_activity')
+                                    ->where('activity_id', $request->input("activity_id"))
+                                    ->where('category', $request->get('site_category'))
+                                    ->where('program_id', $request->get('program_id'))
+                                    ->first();
+
+                    $sub_activity = SubActivity::select('sub_activity_id')
+                                    ->whereBetween('activity_id', [$stage_activity->return_activity, $request->input("activity_id")])
+                                    ->where('category', $request->get('site_category'))
+                                    ->where('program_id', $request->get('program_id'))
+                                    ->get()
+                                    ->pluck('sub_activity_id');
+
+                    if ( count($sub_activity) < 1 ) {
+                        return response()->json(['error' => true, 'message' => "No activity found."]);
+                    } else {
+
+                        
+                        SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->where('type', 'elas_renewal')
+                                ->update([
+                                    'reason' => $request->get('remarks'),
+                                    'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                    'date_approved' => \Carbon::now()->toDate(),
+                                    'approver_id' => \Auth::id(),
+                                ]);
+                                
+                        SubActivityValue::select('sam_id')
+                                ->where('sam_id', $request->input("sam_id"))
+                                ->whereIn('sub_activity_id', $sub_activity)
+                                ->whereIn('status', ['approved', 'pending'])
+                                ->whereIn('type', ['elas_renewal', 'doc_upload', 'saving_computation', 'lrn'])
+                                ->update([
+                                    'reason' => $request->get('remarks'),
+                                    'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                    'date_approved' => \Carbon::now()->toDate(),
+                                    'approver_id' => \Auth::id(),
+                                ]);
+                    }
+                } else {
+
+                    SubActivityValue::select('sam_id')
+                                        ->where('sam_id', $request->input("sam_id"))
+                                        ->where('sub_activity_id', $request->input("sub_activity_id"))
+                                        ->where('status', 'pending')
+                                        ->where('type', 'elas_renewal')
+                                        ->update([
+                                            'value' => json_encode($request->all()),
+                                            'status' => $request->input('action_file') == "false" ? "rejected" : "approved",
+                                            'date_approved' => \Carbon::now()->toDate(),
+                                        ]);
+                }
 
                 $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), $request->input('action_file'), [$request->input('site_category')], [$request->input('activity_id')]);
+
+                $message = $request->input('action_file') == "false" ? "rejected" : "confirmed";
+                return response()->json(['error' => false, 'message' => "Successfully " .$message." eLAS."]);
 
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors()]);
             }
-
-            return response()->json(['error' => false, 'message' => "Successfully confirmed eLAS."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -1007,8 +1084,7 @@ class RenewalController extends Controller
         for ($i=0; $i < count($sam_id); $i++) {
 
 
-            $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+            $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -1021,8 +1097,7 @@ class RenewalController extends Controller
                     'user_id' => !\Auth::guest() ? \Auth::id() : 0
                 ]);
 
-                $get_past_activities = \DB::connection('mysql2')
-                                    ->table('site_stage_tracking')
+                $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
@@ -1035,8 +1110,7 @@ class RenewalController extends Controller
             }
             
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
-                $activities = \DB::connection('mysql2')
-                                ->table('stage_activities')
+                $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
                                 ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
                                 ->where('program_id', $program_id)
@@ -1045,8 +1119,7 @@ class RenewalController extends Controller
                                      
                 if (!is_null($activities)) {
                     if ($action == "true") {
-                        $get_activitiess = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                                 ->where('activity_id', $activities->next_activity)
                                                 ->where('program_id', $program_id)
@@ -1064,8 +1137,7 @@ class RenewalController extends Controller
                                                     'activity_complete' => "true"
                                                 ]);
 
-                        $check_if_added = \DB::connection('mysql2')
-                                            ->table('site_stage_tracking')
+                        $check_if_added = \DB::table('site_stage_tracking')
                                             ->select('sam_id')
                                             ->where('sam_id', $sam_id[$i])
                                             ->where('activity_id', $activity)
@@ -1086,8 +1158,7 @@ class RenewalController extends Controller
 
                         $activity = $activities->return_activity;
 
-                        $get_activitiess = \DB::connection('mysql2')
-                                        ->table('stage_activities')
+                        $get_activitiess = \DB::table('stage_activities')
                                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
                                         ->where('activity_id', $activity)
                                         ->where('program_id', $program_id)
@@ -1109,16 +1180,14 @@ class RenewalController extends Controller
                         ]);
                     }
 
-                    $get_stage_activity = \DB::connection('mysql2')
-                                                ->table('stage_activities')
+                    $get_stage_activity = \DB::table('stage_activities')
                                                 ->select('stage_id')
                                                 ->where('activity_id', $activity)
                                                 ->where('program_id', $program_id)
                                                 ->first();
 
                     if (!is_null($get_stage_activity)) {
-                        $get_program_stages = \DB::connection('mysql2')
-                                                ->table('program_stages')
+                        $get_program_stages = \DB::table('program_stages')
                                                 ->select('stage_name')
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
@@ -1157,16 +1226,14 @@ class RenewalController extends Controller
             $action_id = 0;
         }
 
-        $notification_settings = \DB::connection('mysql2')
-                                    ->table('notification_settings')
+        $notification_settings = \DB::table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
                                     ->where('action', $action_id)
                                     ->first();
 
         if (!is_null($notification_settings)) {
-            $notification_receiver_profiles = \DB::connection('mysql2')
-                        ->table('notification_receiver_profiles')
+            $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                         ->select('profile_id')
                         ->where('notification_settings_id', $notification_settings->notification_settings_id)
                         ->get();

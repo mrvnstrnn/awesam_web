@@ -184,8 +184,7 @@
                                                 <label for="financial_analysis">Add Site</label>
                                                 @php
                                                     // $sites = \DB::connection('mysql2')->table('new_sites')->get();
-                                                    $sites = \DB::connection('mysql2')
-                                                                    ->table("milestone_tracking_2")
+                                                    $sites = \DB::table("milestone_tracking_2")
                                                                     ->leftjoin("new_sites", "new_sites.sam_id", "milestone_tracking_2.sam_id")
                                                                     ->where('milestone_tracking_2.program_id', 1)
                                                                     ->whereIn('milestone_tracking_2.activity_type', ['PR / PO', 'site approval'])

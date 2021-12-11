@@ -75,8 +75,7 @@
                                         <label for="region">Region</label>
                                         <select class="mb-2 form-control" name="region">
                                             @php
-                                                $regions = \DB::connection('mysql2')
-                                                                ->table('location_sam_regions')
+                                                $regions = \DB::table('location_sam_regions')
                                                                 ->get();  
                                             @endphp
                                             <option value="">All</option>

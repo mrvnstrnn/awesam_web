@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row data_form">
     <div class="col-12">
         <div class="form_html"></div>
         <form class="site_data_form">@csrf
@@ -8,7 +8,9 @@
             <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">
             <input type="hidden" name="activity_id" id="activity_id" value="{{ $site[0]->activity_id }}">
         </form>
-        <div class="file_html"></div>
+        <div class="file_html">
+            <div class="row"></div>
+        </div>
 
         <div class="row file_div d-none">
             <div class="col-12 file_viewer">
@@ -16,6 +18,25 @@
 
             <button class="btn btn-primary btn-shadow btn-lg bact_to_files m-2">Back to file list</button>
         </div>
+    </div>
+</div>
+
+<div class="row reject_remarks d-none">
+    <div class="col-12">
+        <p class="message_p">Are you sure you want to reject this eLAS?</p>
+        <form class="reject_form">
+            <input type="hidden" name="action_file" id="action_file">
+            <div class="form-group">
+                <label for="remarks">Remarks:</label>
+                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                <small class="text-danger remarks-error"></small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-sm btn-shadow confirm_reject" data-action="false" type="button">Re-Negotiate eLAS</button>
+                
+                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -84,6 +105,79 @@
 
     });
 
+    $(".form_html").on("click", ".cancel_routing_of_lrn_for_sam_head_signature_btn", function(e) {
+        $(".reject_remarks").removeClass("d-none");
+        $(".data_form").addClass("d-none");
+    });
+
+    $(".reject_form").on("click", ".cancel_reject", function(e) {
+        $(".reject_remarks").addClass("d-none");
+        $(".data_form").removeClass("d-none");
+    });
+
+    $(".reject_form").on("click", ".confirm_reject", function(e) {
+        e.preventDefault();
+        $(".confirm_reject").attr("disabled", "disabled");
+        $(".confirm_reject").text("Processing...");
+
+        $(".reject_form #action_file").val($(this).attr("data-action"));
+
+        $.ajax({
+            url: "/elas-approval-confirm",
+            method: "POST",
+            data: $(".reject_form, .site_data_form").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error){
+
+                    $("table[data-program_id="+"{{ $site[0]->program_id }}"+"]").DataTable().ajax.reload(function(){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".confirm_reject").removeAttr("disabled");
+                        $(".confirm_reject").text("Re-Negotiate eLAS");
+
+                        $("#viewInfoModal").modal("hide");
+
+                    });
+                } else {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".reject_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+
+                    $(".confirm_reject").removeAttr("disabled");
+                    $(".confirm_reject").text("Re-Negotiate eLAS");
+
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".confirm_reject").removeAttr("disabled");
+                $(".confirm_reject").text("Re-Negotiate eLAS");
+
+            }
+        });
+
+    });
+
     $(document).ready(function(){
         $.ajax({
             url: "/get-form/" + "833" + "/" + "Routing of LRN for SAM Head Signature",
@@ -98,7 +192,7 @@
                         $(".routing_of_lrn_for_sam_head_signature_form #"+index).val(data);
                     });
 
-                    $(".file_html div").remove();
+                    $(".file_html .row div").remove();
                     $(".routing_of_lrn_for_sam_head_signature_form input#file").remove();
 
                     for (let i = 0; i < elas_renewal.file.length; i++) {
@@ -117,13 +211,13 @@
                             var extension = "fa-file";
                         }
 
-                        $(".file_html").append(
-                            '<div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div" style="cursor: pointer;">' +
+                        $(".file_html .row").append(
+                            '<div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div" array-id="'+i+'" style="cursor: pointer;">' +
                                 '<div class="child_div">' +
                                     '<div class="dz-message text-center align-center border" style="padding: 25px 0px 15px 0px;">' +
                                         '<div>' +
                                         '<i class="fa ' + extension + ' fa-3x text-dark"></i><br>' +
-                                        '<p><small>' + elas_renewal.file[i] + '</small></p>' +
+                                        '<p><small class="file_name'+i+'">' + elas_renewal.file[i] + '</small></p>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
@@ -149,7 +243,8 @@
     });
 
     $(".file_html").on("click", ".dropzone_div", function () {
-        var file_name = $(".dropzone_div small").text();
+        var array_id = $(this).attr("array-id");
+        var file_name = $(".dropzone_div small.file_name"+array_id).text();
 
         var extensions = ["pdf", "jpg", "png"];
 

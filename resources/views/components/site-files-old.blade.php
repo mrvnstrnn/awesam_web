@@ -9,8 +9,7 @@
 </div>
 <div class="row file_lists">
     @php
-        $datas = \DB::connection('mysql2')
-                    ->table('sub_activity_value')
+        $datas = \DB::table('sub_activity_value')
                     ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id')
                     ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                     ->where('sub_activity_value.sam_id', $sam_id)

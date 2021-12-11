@@ -1,195 +1,194 @@
 
-
-<div class="row file_preview d-none">
-    <div class="col-12 mb-3">
-        <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
-        {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
-        <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
-    </div>
-    <div class="col-12 file_viewer">
-    </div>
-    <div class="col-12 my-3">
-        <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
-    </div>
-    <div class="col-12 file_viewer_list pt-3">
-    </div>
-</div>
-
-<div class="row file_lists">
-    @php
-        if (\Auth::user()->profile_id == 30) {
-            $datas = \DB::connection('mysql2')
-                            ->table('sub_activity_value')
-                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
-                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                            ->where('sub_activity_value.type', 'doc_upload')
-                            ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
-                            ->orderBy('sub_activity_value.sub_activity_id')
-                            ->get();
-        } else {
-            $datas = \DB::connection('mysql2')
-                            ->table('sub_activity_value')
-                            ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
-                            ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                            ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                            ->where('sub_activity_value.type', 'doc_upload')
-                            // ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
-                            ->orderBy('sub_activity_value.sub_activity_id')
-                            ->get();
-        }
-
-        $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
-
-        $activities = \DB::connection('mysql2')
-                        ->table('stage_activities')
-                        ->select('activity_id', 'activity_name')
-                        ->where('program_id', $site[0]->program_id)
-                        ->where('category', $site[0]->site_category)
-                        ->whereIn('activity_id', $unique_activity_id )
-                        ->distinct()
-                        ->get();
-
-        $keys_datas = $datas->groupBy('sub_activity_id')->keys();
-    @endphp
-
-    @foreach ($activities as $activity)
-        <h5 class="w-100">{{ $activity->activity_name }}</h5>
-        @forelse ($datas->groupBy('sub_activity_id') as $data)
-            @if ($activity->activity_id == $data[0]->activity_id)
-                @php
-                    $status_collect = collect();
-                    $status_docs_collect = collect();
-                @endphp
-                @for ($i = 0; $i < count($data); $i++)
-                    @php
-                        if ($data[$i]->status == 'rejected') {
-                            $status_collect->push( $data[$i]->status );
-                        } else {
-                            $json_status = json_decode( $data[$i]->value );
-                            $json_status_first = json_decode( $data[0]->value );
-
-                            if ( isset($json_status->validators) ) {
-                                for ($j=0; $j < count($json_status->validators); $j++) { 
-                                    $status_collect->push( $json_status->validators[$j]->status );
-                                    $status_file = $json_status_first->validators[$j]->status;
-                                }
-                            } else {
-                                $status_collect->push( $data[$i]->status );
-                                $status_file = $data[0]->status;
-                            }
-                        }
-                        // $status_collect->push( $data[$i]->status );
-                    @endphp
-                @endfor
-                @if ( count( $status_collect->all() ) > 0 )
-                    @php
-                        $json_file_status = json_decode( $data[0]->value );
-                        
-                        if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
-                            $extension = "fa-file-pdf";
-                        } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
-                            $extension = "fa-file-image";
-                        } else {
-                            $extension = "fa-file";
-                        }
-
-                        $icon_color = "";
-                        if ( in_array( 'approved', $status_collect->all() ) ) {
-                            $icon_color = "success";
-                            $border = "border-success";
-                        } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
-                            $icon_color = "secondary";
-                            $border = "border-secondary";
-                        } else if ( in_array( 'pending', $status_collect->all() ) ) {
-                            $icon_color = "secondary";
-                            $border = "border-secondary";
-                        } else {
-                            $icon_color = "danger";
-                            $border = "border-danger";
-                        }
-                    @endphp
-                    
-                    {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
-                        
-                    <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
-                        <div class="child_div_{{ $data[0]->sub_activity_id }}">
-                            <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
-                                <div>
-                                <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
-                                <p><small>{{ $data[0]->sub_activity_name }}</small></p>
-                                </div>
-                            </div>
-                            @if($icon_color == "success")   
-                                <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                            @elseif($icon_color == "danger")   
-                                <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-            @endif
-        @empty
-            <div class="col-12 text-center">
-                <h3>No files here.</h3>
-            </div>
-        @endforelse
-    @endforeach
-
-    <input type="hidden" name="hidden_filename" id="hidden_filename">
-</div>
-
-<div class="row confirmation_message text-center pt-2 pb-5 d-none">
-    <div class="col-12">
-        <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
-        <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
-
-        <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
-        <small class="reason-error text-danger"></small><br>
-        
-        <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
-        <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
-    </div>
-</div>
-{{-- @php
- dd($status_collect);
-@endphp --}}
-<div class="row reject_remarks d-none">
-    <div class="col-12">
-        <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
-        <form class="reject_form">
-            <input type="hidden" name="type" id="type" value="reject_site">
-            <div class="form-group">
-                <label for="remarks">Remarks:</label>
-                <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
-                <small class="text-danger remarks-error"></small>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-shadow btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}" type="button">Confirm</button>
-                
-                <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-@if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
-    <div class="row my-3">
-        <div class="col-12">
-            <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span><br>
-            <b>Approved By: </b><span>{{ \Auth::user()->getRtbApproved($site[0]->sam_id)->name }}</span>
+<div class="modal-body">
+    <div class="row file_preview d-none">
+        <div class="col-12 mb-3">
+            <button id="btn_back_to_file_list" class="mt-0 btn btn-secondary" type="button">Back to files</button>
+            {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
+            <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
+        </div>
+        <div class="col-12 file_viewer">
+        </div>
+        <div class="col-12 my-3">
+            <b>Remarks: </b><p class="remarks_paragraph">Sample remarks</p>
+        </div>
+        <div class="col-12 file_viewer_list pt-3">
         </div>
     </div>
-@endif
 
-<div class="row mb-3 border-top pt-3 button_area_div">
-    <div class="col-12 align-right">
-        {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
-        <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
-        
-        {{-- <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button> --}}
-        <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>
+    <div class="row file_lists">
+        @php
+            if (\Auth::user()->profile_id == 30) {
+                $datas = \DB::table('sub_activity_value')
+                                ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                ->where('sub_activity_value.type', 'doc_upload')
+                                ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
+                                ->orderBy('sub_activity_value.sub_activity_id')
+                                ->get();
+            } else {
+                $datas = \DB::table('sub_activity_value')
+                                ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+                                ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+                                ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+                                ->where('sub_activity_value.type', 'doc_upload')
+                                // ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
+                                ->orderBy('sub_activity_value.sub_activity_id')
+                                ->get();
+            }
+
+            $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
+
+            $activities = \DB::table('stage_activities')
+                            ->select('activity_id', 'activity_name')
+                            ->where('program_id', $site[0]->program_id)
+                            ->where('category', $site[0]->site_category)
+                            ->whereIn('activity_id', $unique_activity_id )
+                            ->distinct()
+                            ->get();
+
+            $keys_datas = $datas->groupBy('sub_activity_id')->keys();
+        @endphp
+
+        @foreach ($activities as $activity)
+            <h5 class="w-100">{{ $activity->activity_name }}</h5>
+            @forelse ($datas->groupBy('sub_activity_id') as $data)
+                @if ($activity->activity_id == $data[0]->activity_id)
+                    @php
+                        $status_collect = collect();
+                        $status_docs_collect = collect();
+                    @endphp
+                    @for ($i = 0; $i < count($data); $i++)
+                        @php
+                            if ($data[$i]->status == 'rejected') {
+                                $status_collect->push( $data[$i]->status );
+                            } else {
+                                $json_status = json_decode( $data[$i]->value );
+                                $json_status_first = json_decode( $data[0]->value );
+
+                                if ( isset($json_status->validators) ) {
+                                    for ($j=0; $j < count($json_status->validators); $j++) { 
+                                        $status_collect->push( $json_status->validators[$j]->status );
+                                        $status_file = $json_status_first->validators[$j]->status;
+                                    }
+                                } else {
+                                    $status_collect->push( $data[$i]->status );
+                                    $status_file = $data[0]->status;
+                                }
+                            }
+                            // $status_collect->push( $data[$i]->status );
+                        @endphp
+                    @endfor
+                    @if ( count( $status_collect->all() ) > 0 )
+                        @php
+                            $json_file_status = json_decode( $data[0]->value );
+                            
+                            if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "pdf") {
+                                $extension = "fa-file-pdf";
+                            } else if (pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "png" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpeg" || pathinfo($json_file_status->file, PATHINFO_EXTENSION) == "jpg") {
+                                $extension = "fa-file-image";
+                            } else {
+                                $extension = "fa-file";
+                            }
+
+                            $icon_color = "";
+                            if ( in_array( 'approved', $status_collect->all() ) ) {
+                                $icon_color = "success";
+                                $border = "border-success";
+                            } else if ( in_array( 'denied', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) ) {
+                                $icon_color = "secondary";
+                                $border = "border-secondary";
+                            } else if ( in_array( 'pending', $status_collect->all() ) ) {
+                                $icon_color = "secondary";
+                                $border = "border-secondary";
+                            } else {
+                                $icon_color = "danger";
+                                $border = "border-danger";
+                            }
+                        @endphp
+                        
+                        {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
+                            
+                        <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $data[0]->status }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}" data-requires_validation="{{ $data[0]->requires_validation }}">
+                            <div class="child_div_{{ $data[0]->sub_activity_id }}">
+                                <div class="dz-message text-center align-center border {{ $border }}" style='padding: 25px 0px 15px 0px;'>
+                                    <div>
+                                    <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
+                                    <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                                    </div>
+                                </div>
+                                @if($icon_color == "success")   
+                                    <i class="fa fa-check-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                @elseif($icon_color == "danger")   
+                                    <i class="fa fa-times-circle fa-lg text-{{ $icon_color }}" style="position: absolute; top:10px; right: 20px"></i><br>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                @endif
+            @empty
+                <div class="col-12 text-center">
+                    <h3>No files here.</h3>
+                </div>
+            @endforelse
+        @endforeach
+
+        <input type="hidden" name="hidden_filename" id="hidden_filename">
     </div>
+
+    <div class="row confirmation_message text-center pt-2 pb-5 d-none">
+        <div class="col-12">
+            <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
+            <p>Are you sure you want to <b></b> the document of <span class="sub_activity_name"></span>?</p>
+
+            <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
+            <small class="reason-error text-danger"></small><br>
+            
+            <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
+            <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
+        </div>
+    </div>
+    {{-- @php
+    dd($status_collect);
+    @endphp --}}
+    <div class="row reject_remarks d-none">
+        <div class="col-12">
+            <p class="message_p">Are you sure you want to reject this site <b></b>?</p>
+            <form class="reject_form">
+                <input type="hidden" name="type" id="type" value="reject_site">
+                <div class="form-group">
+                    <label for="remarks">Remarks:</label>
+                    <textarea style="width: 100%;" name="remarks" id="remarks" rows="5" cols="100" class="form-control"></textarea>
+                    <small class="text-danger remarks-error"></small>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-sm btn-shadow btn-accept-endorsement" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}" type="button">Confirm</button>
+                    
+                    <button class="btn btn-secondary btn-sm btn-shadow cancel_reject" type="button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!is_null(\Auth::user()->getRtbApproved($site[0]->sam_id)) )
+        <div class="row my-3">
+            <div class="col-12">
+                <b>RTB Approved Date: </b><span>{{ date('M d, Y h:m:s', strtotime(\Auth::user()->getRtbApproved($site[0]->sam_id)->date_approved)) }}</span><br>
+                <b>Approved By: </b><span>{{ \Auth::user()->getRtbApproved($site[0]->sam_id)->name }}</span>
+            </div>
+        </div>
+    @endif
+
+    <div class="row mb-3 border-top pt-3 button_area_div">
+        <div class="col-12 align-right">
+            {{-- {{ in_array('rejected', $status_collect->all()) ? "d-none" : "" }} --}}
+            <button class="float-right btn btn-shadow btn-success ml-1 btn-accept-endorsement" id="btn-true" data-complete="true" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Approve Site</button>
+            
+            {{-- <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation {{ in_array('rejected', $status_collect->all()) ? "" : "d-none" }}" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button> --}}
+            <button class="float-right btn btn-shadow btn-danger btn-accept-endorsement-confirmation" id="btn-false" data-complete="false" data-sam_id="{{ $site[0]->sam_id }}" data-site_category="{{ $site[0]->site_category }}" data-activity_id="{{ $site[0]->activity_id }}">Reject Site</button>
+        </div>
+    </div>
+
 </div>
 
 <script>

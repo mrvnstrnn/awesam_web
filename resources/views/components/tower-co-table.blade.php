@@ -60,8 +60,7 @@
                                     <label>TOWERCO</label>
                                     <select class="form-control mb-0" name="towerco">
                                         @php
-                                            $recs = \DB::connection('mysql2')
-                                                ->table('towerco')
+                                            $recs = \DB::table('towerco')
                                                 ->select('TOWERCO')
                                                 ->distinct()
                                                 ->where('TOWERCO', '!=', '')
@@ -83,8 +82,7 @@
                                     <label>REGION</label>
                                     <select class="form-control mb-0" name="region">
                                         @php
-                                            $recs = \DB::connection('mysql2')
-                                                ->table('towerco')
+                                            $recs = \DB::table('towerco')
                                                 ->select('REGION')
                                                 ->distinct()
                                                 ->where('REGION', '!=', '')
@@ -104,8 +102,7 @@
                                     <label>TSSR STATUS</label>
                                     <select class="form-control mb-0" name="tssr_status">
                                         @php
-                                            $recs = \DB::connection('mysql2')
-                                                ->table('towerco')
+                                            $recs = \DB::table('towerco')
                                                 ->select('TSSR STATUS')
                                                 ->distinct()
                                                 ->where('TSSR STATUS', '!=', '')
@@ -125,8 +122,7 @@
                                     <label>MILESTONE STATUS</label>
                                     <select class="form-control mb-0" name="milestone_status">
                                         @php
-                                            $recs = \DB::connection('mysql2')
-                                                ->table('towerco')
+                                            $recs = \DB::table('towerco')
                                                 ->select('MILESTONE STATUS')
                                                 ->distinct()
                                                 ->where('MILESTONE STATUS', '!=', '')

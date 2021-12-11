@@ -25,8 +25,7 @@ class TowerCoController extends Controller
 
         return dd($vendor);
 
-        $sites = \DB::connection('mysql2')
-                    ->table("towerco")
+        $sites = \DB::table("towerco")
                     ->where('TOWERCO', $vendor->vendor_acronym)
                     ->get();
 
@@ -121,8 +120,7 @@ class TowerCoController extends Controller
                 $user_detail = \Auth::user()->getUserDetail()->first();
                 $vendor = Vendor::where('vendor_id', $user_detail->vendor_id)->first();
                 
-                $sites = \DB::connection('mysql2')
-                    ->table("towerco");
+                $sites = \DB::table("towerco");
                 
                     if(!is_null($vendor)){
                         $sites = $sites->where('TOWERCO', $vendor->vendor_acronym);
@@ -132,8 +130,7 @@ class TowerCoController extends Controller
                 break;
                 
             default: 
-                $sites = \DB::connection('mysql2')
-                ->table("towerco")
+                $sites = \DB::table("towerco")
                 ->select("Search Ring", "TOWERCO", "PROJECT TAG", "MILESTONE STATUS", "PROVINCE", "TOWN", "REGION", "TSSR STATUS", "OFF-GRID/GOOD GRID", "Serial Number")
                 ->get();
     }
@@ -145,94 +142,81 @@ class TowerCoController extends Controller
 
     public function get_towerco_serial($serial, $who)
     {
-        $site = \DB::connection('mysql2')
-                    ->table("towerco")
+        $site = \DB::table("towerco")
                     ->where('Serial Number', $serial)
                     ->get();
 
         if($who == 'towerco'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
                     ->get();
 
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'TOWERCO')
                     ->get();
 
         }
         elseif($who == 'ram'){
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'RAM')
                     ->get();
                     
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'RAM')
                     ->get();
         }
         elseif($who == 'sts'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'STS')
                     ->get();
 
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'STS')
                     ->get();
         }
         elseif($who == 'agile'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'AGILE')
                     ->get();
 
                     
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'AGILE')
                     ->get();
         }
         elseif($who == 'aepm'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'AEPM')
                     ->get();
 
                     
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'AEPM')
                     ->get();
         }
         elseif($who == 'apmo-apm'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'APMO-APM')
                     ->get(); 
 
                     
-            $detail_alloweds = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $detail_alloweds = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.view_profile', 'APMO-APM')
                     ->get();
@@ -344,16 +328,14 @@ class TowerCoController extends Controller
     {
         if($who == 'towerco'){
 
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'TOWERCO')
                     ->get();
 
         }
         elseif($who == 'ram'){
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'RAM')
                     ->get();
@@ -361,8 +343,7 @@ class TowerCoController extends Controller
         elseif($who == 'sts'){
 
             
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'STS')
                     ->get();
@@ -370,8 +351,7 @@ class TowerCoController extends Controller
         elseif($who == 'agile'){
 
             
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'AGILE')
                     ->get(); 
@@ -379,8 +359,7 @@ class TowerCoController extends Controller
         elseif($who == 'aepm'){
 
             
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'AEPM')
                     ->get();
@@ -388,8 +367,7 @@ class TowerCoController extends Controller
         elseif($who == 'apmo-apm'){
 
             
-            $allowed_fields = \DB::connection('mysql2')
-                    ->table("tower_fields_map")
+            $allowed_fields = \DB::table("tower_fields_map")
                     ->join('tower_fields_map_profile', 'tower_fields_map_profile.column_id', 'tower_fields_map.id')
                     ->where('tower_fields_map_profile.edit_profile', 'AEPM-APM')
                     ->get(); 
@@ -539,8 +517,7 @@ class TowerCoController extends Controller
     {
 
         try {
-            $logs = \DB::connection('mysql2')
-            ->table("towerco_logs")
+            $logs = \DB::table("towerco_logs")
             ->join("users","users.id", "towerco_logs.user_id")
             ->where('Serial Number', $serial)
             ->orderBy('towerco_logs.add_timestamp', 'DESC')
@@ -568,9 +545,9 @@ class TowerCoController extends Controller
 
 
             // return response()->json(['error' => true, 'message' => $request['Serial_Number']]);
-            \DB::connection('mysql2')->enableQueryLog(); // Enable query log
+            \DB::enableQueryLog(); // Enable query log
 
-            \DB::connection('mysql2')->table('towerco')
+            \DB::table('towerco')
                 ->where('Serial Number', $request['Serial_Number'])
                 ->update(array_filter($data));
 
@@ -599,9 +576,9 @@ class TowerCoController extends Controller
             unset($data['Serial Number']);
 
 
-            \DB::connection('mysql2')->enableQueryLog(); // Enable query log
+            \DB::enableQueryLog(); // Enable query log
 
-            \DB::connection('mysql2')->table('towerco')
+            \DB::table('towerco')
                 ->whereIn('Serial Number', $request['Serial_Number'])
                 ->update(array_filter($data));
 
@@ -652,8 +629,7 @@ class TowerCoController extends Controller
         // }
 
 
-        $sites = \DB::connection('mysql2')
-                        ->table('towerco');
+        $sites = \DB::table('towerco');
 
         if($towerco != '-' && $actor != 'TowerCo'){
             $sites = $sites->where('TOWERCO', $towerco != '-' ? $towerco : "");
@@ -692,8 +668,7 @@ class TowerCoController extends Controller
     public function get_my_towerco_file ($serial_number, $type)
     {
         try {
-            $towerco_files = \DB::connection('mysql2')
-                        ->table("towerco_files")
+            $towerco_files = \DB::table("towerco_files")
                         ->join('users', 'users.id', 'towerco_files.user_id')
                         ->where('towerco_files.serial_number', $serial_number)
                         ->where('towerco_files.type', $type)

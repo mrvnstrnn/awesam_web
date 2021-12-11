@@ -99,7 +99,7 @@
                                 <div class="form-row">
                                     <div class="col-12">
                                         @php
-                                            $vendor_profiles = \DB::connection('mysql2')->table('vendor_profile')->get();
+                                            $vendor_profiles = \DB::table('vendor_profile')->get();
                                         @endphp
 
                                         @foreach ($vendor_profiles as $vendor_profile)

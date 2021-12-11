@@ -11,16 +11,14 @@
 @php
 
 if (\Auth::user()->profile_id == 2) {
-    $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $activities = \DB::table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
 
-    $uniques_stage = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $uniques_stage = \DB::table('view_assigned_sites')
                     ->select(
                         'stage_id', 
                         'stage_name'
@@ -31,15 +29,13 @@ if (\Auth::user()->profile_id == 2) {
                     ->distinct('stage_id')
                     ->get();
 } else {
-    $activities = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $activities = \DB::table('view_assigned_sites')
                     ->where('activity_profile_id', 38)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
 
-    $uniques_stage = \DB::connection('mysql2')
-                    ->table('view_assigned_sites')
+    $uniques_stage = \DB::table('view_assigned_sites')
                     ->select(
                         'stage_id',
                         'stage_name'
@@ -55,15 +51,15 @@ if (\Auth::user()->profile_id == 2) {
 @foreach ($uniques_stage as $unique_stage)
     <div id="accordion" class="accordion-wrapper mb-3">
         <div class="card">
-            <div id="heading{{ $unique_stage->stage_id }}" class="card-header">
+            <div id="heading{{ $unique_stage->stage_id }}" class="card-header bg-primary">
                 <button type="button" data-toggle="collapse" data-target="#collapse{{ $unique_stage->stage_id }}" aria-expanded="false" aria-controls="collapse{{ $unique_stage->stage_id }}" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
-                    <h5 class="m-0 p-0">{{ $unique_stage->stage_name }}</h5>
+                    <h5 class="m-0 p-0 text-white">{{ $unique_stage->stage_name }}</h5>
                 </button>
             </div>
             <div data-parent="#accordion" id="collapse{{ $unique_stage->stage_id }}" aria-labelledby="heading{{ $unique_stage->stage_id }}" class="collapse" style="">
                 <div class="card-body">
                     <div class="form-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search {{ $unique_stage->stage_name }} sites...">
+                        <input type="text" name="search" class="form-control" data-id="{{ $unique_stage->stage_id }}" placeholder="Search {{ $unique_stage->stage_name }} sites...">
                     </div>
                     @for ($i = 0; $i < count($activities); $i++)
                     
@@ -128,7 +124,7 @@ if (\Auth::user()->profile_id == 2) {
                                                 @endif
                                                 <span class="ml-1 px-2 py-1 badge badge-secondary">{{ $activities[$i]->stage_name }}</span>
                                             </div>
-                                            <div class="siteName name_to_search">
+                                            <div class="siteName siteName_to_search name_to_search{{ $unique_stage->stage_id }}">
                                                 {{ $activities[$i]->site_name }}
                                             </div>
                                             <div class="mt-1" style="font-size: 12px;">
@@ -178,10 +174,19 @@ if (\Auth::user()->profile_id == 2) {
     $(document).ready(function(){
         $("input[name=search]").on("keyup", function() {
             var value = $(this).val().toLowerCase();
-            $(".name_to_search").filter(function() {
+            var stage_id = $(this).attr("data-id");
+            $(".name_to_search"+stage_id).filter(function() {
+                $(this).parent().parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+        $("input[name=search_site]").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".siteName_to_search").filter(function() {
                 $(this).parent().parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
     });
+    
 </script>
 <script src="js/modal-loader.js"></script>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Chat extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'chat';
     protected $fillable = ['user_id', 'sam_id', 'comment'];

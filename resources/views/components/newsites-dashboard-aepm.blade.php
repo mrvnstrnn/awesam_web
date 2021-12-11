@@ -147,8 +147,7 @@
         AEPM
     </div>
     @php
-        $sites = \DB::connection('mysql2')
-                            ->table("view_newsites_jtss_schedule_requests")
+        $sites = \DB::table("view_newsites_jtss_schedule_requests")
                             ->leftjoin("view_newsites_jtss_schedule_requests_candidate_list", "view_newsites_jtss_schedule_requests_candidate_list.sam_id", "view_newsites_jtss_schedule_requests.sam_id")
                             ->select("view_newsites_jtss_schedule_requests.*", "view_newsites_jtss_schedule_requests_candidate_list.candidate_list")
                             ->get();
