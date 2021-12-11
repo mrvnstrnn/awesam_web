@@ -985,9 +985,8 @@ class GlobeController extends Controller
                             ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
                             ->join('user_details', 'user_details.user_id', 'users.id')
                             ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
-                            ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                            // ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                             ->where('user_details.vendor_id', $vendor->vendor_id)
-                            ->whereNull('users_areas.user_id')
                             ->where('user_programs.program_id', $program_id)
                             ->get();
 
@@ -1000,9 +999,6 @@ class GlobeController extends Controller
                         $photo .= "</div></div>";
 
                         return $photo;
-                    })
-                    ->addColumn('areas', function($row){
-                        return null;
                     });
 
             $dt->rawColumns(['photo']);

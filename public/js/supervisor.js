@@ -87,7 +87,6 @@ $(document).ready(() => {
                 { data: "firstname" },
                 { data: "lastname" },
                 { data: "email" },
-                { data: "areas" },
             ],
         });
 

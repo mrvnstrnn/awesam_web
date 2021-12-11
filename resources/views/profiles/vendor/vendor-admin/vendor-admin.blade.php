@@ -49,7 +49,6 @@
                                                 <th>Firstname</th>
                                                 <th>Lastname</th>
                                                 <th>Email</th>
-                                                <th>Areas</th>
                                             </tr>
                                         </thead>
                                         <tbody>
