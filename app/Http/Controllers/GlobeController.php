@@ -972,7 +972,7 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_admin (Request $request)
+    public function vendor_admin ($program_id)
     {
 
         try {
@@ -980,15 +980,16 @@ class GlobeController extends Controller
                             ->where('vendor_admin_email', \Auth::user()->email)
                             ->first();
 
+            
             $checkAgent = \DB::table('users')
-                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province')
-                                    ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->join('users_areas', 'users_areas.user_id', 'users.id')
-                                    ->where('user_details.vendor_id', $vendor->vendor_id)
-                                    ->where('user_programs.program_id', $request->program_id)
-                                    ->get();
-
+                            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
+                            ->join('user_details', 'user_details.user_id', 'users.id')
+                            ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
+                            ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
+                            ->where('user_details.vendor_id', $vendor->vendor_id)
+                            ->whereNull('users_areas.user_id')
+                            ->where('user_programs.program_id', $program_id)
+                            ->get();
 
             $dt = DataTables::of($checkAgent)
                     ->addColumn('photo', function($row){
@@ -1001,7 +1002,7 @@ class GlobeController extends Controller
                         return $photo;
                     })
                     ->addColumn('areas', function($row){
-                        return $row->region. " | " .$row->province;
+                        return null;
                     });
 
             $dt->rawColumns(['photo']);
