@@ -105,7 +105,7 @@ class InviteController extends Controller
 
                     $data = array($url, $name, $company->vendor_sec_reg_name);
 
-                    Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
+                    // Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
 
                     Invitation::create([
                         'invitation_code' => $randomString,
