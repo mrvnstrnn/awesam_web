@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="mt-3 position-relative form-check">
-                        <input name="check" id="exampleCheck" type="checkbox" class="form-check-input">
+                        <input name="check" id="exampleCheck" type="checkbox" class="form-check-input" required>
                         <label for="exampleCheck" class="form-check-label">Accept our
                             <a href="javascript:void(0);">Terms and Conditions</a>.
                         </label>

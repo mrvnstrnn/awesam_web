@@ -61,7 +61,17 @@
                             @else
                                 <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
                             @endif --}}
-                            <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="42">
+                            
+                            @if (!is_null(\Auth::user()->getUserDetail()->first()))
+                                @if (!is_null(\Auth::user()->getUserDetail()->first()->image))
+                                    <img width="42" height="42" class="rounded-circle offline" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
+                                @else
+                                    <img width="42" height="42" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                @endif
+                            @else
+                                <img width="42" height="42" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                            @endif
+                            {{-- <img class="rounded-circle offline" src="images/avatars/4.jpg" alt="" width="42"> --}}
                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                         </a>
 

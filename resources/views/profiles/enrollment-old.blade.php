@@ -45,21 +45,21 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="firstname">Firstname</label>
-                                                        <input name="firstname" id="firstname" type="text" class="form-control" readonly>
+                                                        <input name="firstname" id="firstname" placeholder="" value="{{ \Auth::user()->firstname }}" type="text" class="form-control" readonly>
                                                         <small class="firstname-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="middlename">Middlename</label>
-                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control">
+                                                        <input name="middlename" id="middlename" placeholder="Middle Name" type="text" class="form-control" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->middlename : "" }}">
                                                         <small class="middlename-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="lastname">Lastname</label>
-                                                        <input name="lastname" id="lastname" type="text" class="form-control" readonly>
+                                                        <input name="lastname" id="lastname" placeholder="" value="{{ \Auth::user()->lastname }}" type="text" class="form-control" readonly>
                                                         <small class="lastname-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -81,14 +81,14 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="nickname">Nickname</label>
-                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required>
+                                                        <input name="nickname" id="nickname" placeholder="Nickname" type="text" class="form-control" required value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->nickname : "" }}">
                                                         <small class="nickname-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="birthday">Birthday</label>
-                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required>
+                                                        <input name="birthday" id="birthday" placeholder="" type="text" class="flatpicker form-control" style="background-color: white;" required value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->birthday : "" }}">
                                                         <small class="birthday-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -116,21 +116,21 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="email">Email</label>
-                                                        <input name="email" id="email" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
+                                                        <input name="email" id="email" placeholder="" value="{{ \Auth::user()->email }}" type="email" class="form-control" data-toggle="tooltip" title="You're not be able to change the email." readonly required>
                                                         <small class="email-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="contact_no">Cellphone</label>
-                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX"  type="text" class="form-control" required>
+                                                        <input name="contact_no" id="contact_no" placeholder="0917-XXX-XXX"  type="text" class="form-control" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->contact_no : "" }}" required>
                                                         <small class="contact_no-error text-danger"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="landline">Landline</label>
-                                                        <input name="landline" id="landline" placeholder="Telephone Number"  type="text" class="form-control">
+                                                        <input name="landline" id="landline" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->landline : "" }}" placeholder="Telephone Number"  type="text" class="form-control">
                                                         <small class="landline-error text-danger"></small>
                                                     </div>
                                                 </div>
@@ -171,7 +171,7 @@
                                                 <div class="col-md-12">
                                                     <div class="position-relative form-group">
                                                         <label for="address">Address</label>
-                                                        <textarea name="address" id="address" class="form-control"></textarea>
+                                                        <textarea name="address" id="address" value="{{ !is_null(\Auth::user()->getUserDetail()->first()) ? \Auth::user()->getUserDetail()->first()->address : "" }}" class="form-control"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -197,7 +197,7 @@
                                                             @else
                                                                 <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
                                                                 <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->profile_id }}">
-                                                                {{-- <input type="hidden" name="mode" id="mode" value="{{ \Auth::user()->getUserProfile()->mode }}"> --}}
+                                                                <input type="hidden" name="designation" id="designation" value="{{ \Auth::user()->getUserProfile()->mode }}">
                                                             @endif
                                                         @else
                                                             <select name="designation" id="designation"  class="form-control" required>
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="divider"></div>
                                     <div class="clearfix">
-                                        {{-- <button type="button" id="reset-btn-1" class="btn-shadow float-left btn btn-link reset-btn">Reset</button> --}}
+                                        <button type="button" id="reset-btn-1" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
                                         <button type="button" id="next-btn-1" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Next</button>
                                     </div>
                                 </div>                                
@@ -295,7 +295,7 @@
                                     
                                     <div class="divider"></div>
                                     <div class="clearfix">
-                                        {{-- <button type="button" id="reset-btn-2" class="btn-shadow float-left btn btn-link reset-btn">Reset</button> --}}
+                                        <button type="button" id="reset-btn-2" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
                                         <button type="button" id="next-btn-2" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Next</button>
                                         <button type="button" id="prev-btn-2" class="btn-shadow btn-wide mr-2 float-right btn-pill btn-hover-shine btn btn-default">Previous</button>
                                     </div>
@@ -315,7 +315,7 @@
                                     </div>
                                     <div class="divider"></div>
                                     <div class="clearfix">
-                                        {{-- <button type="button" id="reset-btn-3" class="btn-shadow float-left btn btn-link reset-btn">Reset</button> --}}
+                                        <button type="button" id="reset-btn-3" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
                                         <button type="button" id="next-btn-3" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Next</button>
                                         <button type="button" id="prev-btn-3" class="btn-shadow btn-wide mr-2 float-right btn-pill btn-hover-shine btn btn-default">Previous</button>
                                     </div>
@@ -342,15 +342,15 @@
                                     </div>
                                     <div class="divider"></div>
                                     <div class="clearfix">
-                                        {{-- <button type="button" id="reset-btn-4" class="btn-shadow float-left btn btn-link reset-btn">Reset</button> --}}
+                                        <button type="button" id="reset-btn-4" class="btn-shadow float-left btn btn-link reset-btn">Reset</button>
                                         <button type="button" id="prev-btn-4" class="btn-shadow btn-wide mr-2 float-right btn-pill btn-hover-shine btn btn-default">Previous</button>
                                     </div>
                                 </div>
-                                {{-- <input type="hidden" name="hidden_route" id="hidden_route" value="{{ route('get.address') }}"> --}}
+                                <input type="hidden" name="hidden_route" id="hidden_route" value="{{ route('get.address') }}">
                                 <input type="hidden" name="hidden_region" id="hidden_region">
                                 <input type="hidden" name="hidden_province" id="hidden_province">
                                 <input type="hidden" name="hidden_lgu" id="hidden_lgu">
-                                {{-- <input type="hidden" id="hidden_mode" name="hidden_mode" > --}}
+                                <input type="hidden" id="hidden_mode" name="hidden_mode" >
                             </form>
                         </div>
                     </div>
@@ -359,8 +359,8 @@
         </div>
     </div>
 
-    {{-- <input type="hidden" name="firsttime_login" id="firsttime_login" value="{{ \Auth::user()->first_time_login }}"> --}}
-    {{-- <input type="hidden" name="user_detail" id="user_detail" value="{{ $user_details ? $user_details : '' }}"> --}}
+    <input type="hidden" name="firsttime_login" id="firsttime_login" value="{{ \Auth::user()->first_time_login }}">
+    <input type="hidden" name="user_detail" id="user_detail" value="{{ $user_details ? $user_details : '' }}">
 @endsection
 
 @section('modals')
@@ -409,7 +409,8 @@
     <script>
 
         $(document).ready(function(){
-            if ("{{ \Auth::user()->first_time_login }}" == "0" && "{{ \Auth::user()->getUserProfile()->mode }}" != "vendor" || "{{ !is_null(\Auth::user()->profile_id) }}") {
+            console.log("test");
+            if ("{{ \Auth::user()->first_time_login }}" == "0") {
                 $("#firsttimeModal").modal("show");
             }
         });
@@ -658,42 +659,9 @@
         });
     });
 
-    $(document).ready(function () {
+    // $(document).ready(function () {
 
-        var user_details_data = JSON.parse("{{ json_encode(\Auth::user()->getUserDetail()->first()); }}".replace(/&quot;/g,'"'));
-        var user_data = JSON.parse("{{ json_encode(\Auth::user()); }}".replace(/&quot;/g,'"'));
-
-        if (user_details_data != null) {
-            $(".step-1-li").addClass('done');
-            $(".step-2-li").addClass('done');
-            $(".step-3-li").addClass('done');
-            $(".step-4-li").addClass('active');
-
-            $("#step-1").addClass('d-none');
-            $("#step-2").addClass('d-none');
-            $("#step-3").addClass('d-none');
-            $("#step-4").removeClass('d-none');
-
-            $.each(user_details_data, function(index, data) {
-                if (index == "region_id") {
-                    $("#onboardingForm #region").val(data);
-                    $("#onboardingForm #hidden_region").val(data);
-                } else if (index == "province_id") {
-                    $("#onboardingForm #province").val(data);
-                    $("#onboardingForm #hidden_province").val(data);
-                } else if (index == "lgu_id") {
-                    $("#onboardingForm #lgu").val(data);
-                    $("#onboardingForm #hidden_lgu").val(data);
-                } else {
-                    $("#onboardingForm #"+index).val(data);
-                }
-            });
-        }
-        
-        $.each(user_data, function(index, data) {
-            $("#onboardingForm #"+index).val(data);
-        });
-    });
+    // });
 
     </script>
     <script src="{{ asset('/js/enrollment.js') }}"></script>

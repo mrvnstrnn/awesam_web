@@ -57,70 +57,72 @@
                 <div class="col-12">
                     <h3 class="mb-3">Teams</h3>
                     @php
-                        $supervisors_per_program = \DB::table('view_supervisors_per_vendor_per_program')
-                                            ->where('program_id', $program->program_id)
-                                            ->where('vendor_id', 1)
-                                            ->get();
+                        $vendor = \App\Models\Vendor::where('vendor_admin_email', \Auth::user()->email)
+                                                    ->first();
+
+                                                    
+
+                        // $supervisors_per_program = \DB::table('view_supervisors_per_vendor_per_program')
+                        //                     ->where('program_id', $program->program_id)
+                        //                     ->where('vendor_id', 1)
+                        //                     ->get();
+
+                        $supervisors = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'users.id', 'user_details.image')
+                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                        ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                        ->where('users.profile_id', 3)
+                                                        ->where('user_details.vendor_id', $vendor->vendor_id)
+                                                        ->get();
 
                     @endphp
                     <div class="card mb-3">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
-                                    <div>
-                                        <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
+                            @foreach ($supervisors as $supervisor)
+                                @php
+                                    $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
+                                                        ->join('users', 'users.id', 'user_details.user_id')
+                                                        ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                        ->where('user_details.IS_id', $supervisor->id)
+                                                        ->get(); 
+                                @endphp
+                                <div class="row">
+                                    <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
+                                        <div>
+                                            @if (!is_null($supervisor->image))
+                                                <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$supervisor->image) }}" alt="">
+                                            @else
+                                                <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                            @endif
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div><small>{{ $supervisor->name }}</small></div>
+                                            <div><small>{{ $supervisor->profile }}</small></div>
+                                        </div>
                                     </div>
-                                    <div style="text-align: center;">
-                                        <div><small>TEST SUPERVISOR</small></div>
-                                        <div><small>Supervisor</small></div>
-                                    </div>
-                                </div>
-                                <div class="col-9 mb-2 mt-1" style="text-align: center;">
-                                    <div class="row">
-                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                            <div>
-                                                <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70">
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <small>Test</small>
-                                            </div>
-                                        </div>
-                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                            <div>
-                                                <img class="rounded-circle" src="images/avatars/3.jpg" alt="" width="70">
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <small>Test</small>
-                                            </div>
-                                        </div>
-                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                            <div>
-                                                <img class="rounded-circle" src="images/avatars/4.jpg" alt="" width="70">
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <small>Test</small>
-                                            </div>
-                                        </div>
-                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                            <div>
-                                                <img class="rounded-circle" src="images/avatars/5.jpg" alt="" width="70">
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <small>Test</small>
-                                            </div>
-                                        </div>
-                                        <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
-                                            <div>
-                                                <img class="rounded-circle" src="images/avatars/6.jpg" alt="" width="70">
-                                            </div>
-                                            <div style="text-align: center;">
-                                                <small>Test</small>
-                                            </div>
-                                        </div>
+                                    <div class="col-9 mb-2 mt-1" style="text-align: center;">
+                                        <div class="row">
 
+                                            @foreach ($agents as $agent)
+                                                <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
+                                                    <div>
+                                                        @if (!is_null($agent->image))
+                                                            <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
+                                                        @else
+                                                            <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                                        @endif
+
+                                                        {{-- <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70"> --}}
+                                                    </div>
+                                                    <div style="text-align: center;">
+                                                        <small>{{ $agent->name }}</small>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

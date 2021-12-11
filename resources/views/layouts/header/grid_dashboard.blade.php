@@ -11,16 +11,6 @@ class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
 </div>
 <div class="grid-menu grid-menu-xl grid-menu-3col">
     <div class="no-gutters row">
-        {{-- <?php $roles = \Auth::user()->allRoles() ?> --}}
-
-        {{-- @foreach ($roles as $role)
-            <div class="col-sm-6 col-xl-4">
-                <a href='{{ route('profile.switcher', $role->id) }}' class="btn-icon-vertical btn-square btn-transition btn btn-outline-link {{ \Auth::user()->profile_id == $role->id ? 'disabled' : '' }}">
-                    <i class="pe-7s-{{ $role->mode == 'vendor' ? 'user' : 'global' }} icon-gradient bg-night-fade btn-icon-wrapper btn-icon-lg mb-3"></i>
-                    {{ ucfirst($role->mode) . ' : ' . $role->profile }}
-                </a>
-            </div>
-        @endforeach --}}
 
         <div class="col-sm-6 col-xl-4">
             <a href='#' class="btn-icon-vertical btn-square btn-transition btn btn-outline-link">

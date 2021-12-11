@@ -34,20 +34,14 @@
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                     @if (!is_null(\Auth::user()->getUserDetail()->first()))
-                                        @if (\Auth::user()->getUserDetail()->first()->image != "")
-                                            <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
+                                        @if (!is_null(\Auth::user()->getUserDetail()->first()->image))
+                                            <img width="42" height="42" class="rounded-circle offline" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                         @else
-                                            <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
+                                            <img width="42" height="42" class="rounded-circle offline" src="images/no-image.jpg" alt="">
                                         @endif
                                     @else
-                                        <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
+                                        <img width="42" height="42" class="rounded-circle offline" src="images/no-image.jpg" alt="">
                                     @endif
-
-                                    {{-- @if (\Auth::user()->getUserDetail()->first()->image == "")
-                                        <img width="42" class="rounded-circle" src="/images/avatars/4.jpg" alt="">
-                                    @else
-                                        <img width="42" class="rounded-circle" src="{{ asset('files/' + \Auth::user()->getUserDetail()->first()->image) }}" alt="">
-                                    @endif --}}
                                     <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                 </a>
         
@@ -59,6 +53,9 @@
                         
                         {{-- HEADER : USER DETAILS --}}
                         <div class="widget-content-left  ml-3 header-user-info">
+                            <div class="widget-content-left mr-3">
+                                <img class="rounded-circle" src="assets/images/avatars/1.jpg" alt="" width="42">
+                            </div>
                             <div class="widget-heading"> {{ ucwords(Auth::user()->name) }}</div>
                             <div class="widget-subheading"> {{ ucwords(Auth::user()->profile) }}</div>
                         </div>

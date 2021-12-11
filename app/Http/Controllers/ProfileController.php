@@ -182,7 +182,7 @@ class ProfileController extends Controller
     {
         try {
 
-            if($request->input('profile_id') == 2){
+            if($request->input('profile_id') == 2 || $request->input('profile_id') == 3){
                 $required = 'required';
             } else {
                 $required = '';
@@ -190,7 +190,6 @@ class ProfileController extends Controller
             $validate = \Validator::make($request->all(), array(
                 'checkbox_id' => $required,
             ));
-            // return response()->json(['error' => true, 'message' => $request->all()]);
 
             if($validate->passes()){
                 User::where('id', $request->input('user_id'))

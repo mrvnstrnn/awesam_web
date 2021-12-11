@@ -48,7 +48,7 @@ class UserController extends Controller
     public function onboarding()
     {
         $locations = \DB::table('location_regions')->get();
-        if(count(\Auth::user()->getUserDetail()->get()) < 1){
+        if(is_null(\Auth::user()->getUserDetail()->first())){
             // $locate = Location::select('region');
             // $locations = $locate->groupBy('region')->get();
 
@@ -140,11 +140,6 @@ class UserController extends Controller
                 $imageName = $request->input('capture_image');
             }
 
-
-            if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
-                return response()->json(['error' => true, 'message' => 'Address field id required.' ]);
-            }
-
             $validate = \Validator::make($request->all(), array(
                 'firstname' => 'required',
                 // 'middlename' => 'required',
@@ -164,18 +159,17 @@ class UserController extends Controller
                 'hiring_date' => 'required',
             ));
 
-            if($validate->passes()){
-                $mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "" : "globe";
+            if($validate->passes()) {
+
+                if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
+                    return response()->json(['error' => true, 'message' => 'Address field id required.' ]);
+                }
+
+                // $mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "" : "globe";
                 // $address = Location::where('province', $request->input('hidden_province'))
                 //                         ->where('lgu', $request->input('hidden_lgu'))
                 //                         ->where('region', $request->input('hidden_region'))
                 //                         ->first();
-
-                $address = \DB::table('location_lgus')
-                                ->where('lgu_id', $request->input('hidden_lgu'))
-                                ->where('region_id', $request->input('hidden_region'))
-                                ->where('province_id', $request->input('hidden_province'))
-                                ->first();
                                         
                 $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
     
@@ -189,7 +183,8 @@ class UserController extends Controller
                 if(!is_null($user_details)){
                     UserDetail::where('user_id', \Auth::id())
                                 ->update([
-                                    'mode' => $mode,
+                                    // 'address_id' => $address->lgu_id,
+                                    'mode' => \Auth::user()->getUserProfile()->mode == "vendor" ? "vendor" : "globe",
                                     'birthday' => $request->get('birthday'),
                                     'gender' => $request->get('gender'),
                                     'contact_no' => $request->get('contact_no'),
@@ -199,7 +194,10 @@ class UserController extends Controller
                                     'employment_classification' => $request->get('employment_classification'),
                                     'employment_status' => $request->get('employment_status'),
                                     'hiring_date' => $request->get('hiring_date'),
-                                    'address_id' => $address->lgu_id,
+                                    'address_id' => $request->input('hidden_lgu'),
+                                    'lgu_id' => $request->input('hidden_lgu'),
+                                    'province_id' => $request->input('hidden_province'),
+                                    'region_id' => $request->input('hidden_region'),
                                     'image' => $imageName,
                                 ]);
 
@@ -207,8 +205,8 @@ class UserController extends Controller
                 } else {
 
                     $detail = new UserDetail();
-                    $detail->address_id = $address->lgu_id;
-                    $detail->mode = $mode;
+                    $detail->address_id = $request->input('hidden_lgu');
+                    $detail->mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "vendor" : "globe";
                     $detail->user_id = \Auth::user()->id;
                     $detail->birthday = $request->get('birthday');
                     $detail->gender = $request->get('gender');
@@ -219,6 +217,9 @@ class UserController extends Controller
                     $detail->employment_classification = $request->get('employment_classification');
                     $detail->employment_status = $request->get('employment_status');
                     $detail->hiring_date = $request->get('hiring_date');
+                    $detail->lgu_id = $request->get('hidden_lgu');
+                    $detail->province_id = $request->get('hidden_province');
+                    $detail->region_id = $request->get('hidden_region');
                     $detail->image = $imageName;
 
                     $detail->save();
