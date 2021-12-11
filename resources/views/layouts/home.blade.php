@@ -49,8 +49,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
         {{-- <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> --}}
-        {{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> --}}
-        <script type="text/javascript" src="{{ asset('css/jquery-ui.css') }}"></script>
+        <link rel="stylesheet" href="/js/jquery-ui.css">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -251,9 +250,7 @@
     <script type="text/javascript" src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/vendors/moment/moment.js"></script>
     <script type="text/javascript" src="/vendors/metismenu/dist/metisMenu.js"></script>
-    {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
-
-    <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.slim.min.js') }}"></script>
+    <script src="/js/jquery-ui.min.js"></script>
 
     {{-- <script type="text/javascript" src="/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> --}}
     {{-- <script type="text/javascript" src="/vendors/jquery-circle-progress/dist/circle-progress.min.js"></script> --}}
