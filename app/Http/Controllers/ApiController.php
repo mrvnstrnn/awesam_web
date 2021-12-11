@@ -9,7 +9,7 @@ use App\Mail\InvitationMail;
 
 class ApiController extends Controller
 {
-    public function send_invitation (Request $request)
+    public function send_invitation_vendor (Request $request)
     {
         // Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
