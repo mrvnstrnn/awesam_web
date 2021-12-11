@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\InvitationMail;
+use App\Models\Invitation;
 
 class ApiController extends Controller
 {
@@ -27,5 +28,13 @@ class ApiController extends Controller
         Mail::to($email)->send(new InvitationMail($url, $name, $company));
 
         return "Success";
+    }
+
+    public function for_invitation ()
+    {
+        $invitation = Invitation::join('vendor', 'vendor.vendor_id', 'invitations.company_id')
+                            ->where('invitations.use', 0)->get();
+                            
+        return view('for-invitation', compact('invitations'));
     }
 }

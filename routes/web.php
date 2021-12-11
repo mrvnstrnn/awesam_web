@@ -553,9 +553,13 @@ Route::view('/team', 'team');
 //ROUTE TO SLUG
 //USERCONTROLLER WILL TAKE OVER THE ROUTING
 
-// Route::get('/{slug}', [UserController::class, 'show'])
-//     ->where('slug', '.*')
-//     ->middleware(['auth', 'verified']);
+$uri = Request::path();
+
+if ($uri != 'api/send-invitation-vendor') {
+    Route::get('/{slug}', [UserController::class, 'show'])
+        ->where('slug', '.*')
+        ->middleware(['auth', 'verified']);
+}
 
 
 
