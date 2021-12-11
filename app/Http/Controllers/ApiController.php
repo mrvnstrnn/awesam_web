@@ -32,6 +32,9 @@ class ApiController extends Controller
 
     public function for_invitation ()
     {
-        return Invitation::where('use', 0)->get();
+        $invitation = Invitation::join('vendor', 'vendor.vendor_id', 'invitations.company_id')
+                            ->where('invitations.use', 0)->get();
+                            
+        return view('for-invitation', compact('invitations'));
     }
 }
