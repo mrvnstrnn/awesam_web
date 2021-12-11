@@ -259,8 +259,8 @@
                                                     <div class="position-relative form-group">
 
                                                         <div class="justify-content-center mb-3 upload-take-button">
-                                                            {{-- <button id="take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
-                                                             or  --}}
+                                                            <button id="take_photo" type="button" class="btn-shadow mt-3 btn-wide btn btn-primary btn-sm">Take Photo</button>
+                                                             or 
                                                             <button id="upload_phto" type="button" class="btn-shadow mt-3 btn-wide btn btn-secondary btn-sm">Upload photo</button>
                                                         </div>
 
@@ -415,16 +415,74 @@
         });
 
         $("#take_photo, #drop_take_photo").on("click", function(){
-            console.log("take photo");
+            // console.log("take photo");
             
             $("input[name=capture_image]").val("");
             $(".webcam-div").removeClass("d-none");
             $(".upload-photo-div").addClass("d-none");
             $(".upload-take-button").addClass("d-none");
+
+            const player = document.getElementById('player');
+
+            var btnCapture = document.getElementById( "shoot_camera" );
+            var stream = document.getElementById( "player" );
+
+            btnCapture.addEventListener( "click", captureSnapshot );
+
+            var capture = document.getElementById( "canvas" );
+
+            const constraints = {
+                video: true,
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+                player.srcObject = stream;
+            });
+
+            function captureSnapshot() {
+                var ctx = capture.getContext( '2d' );
+                var img = new Image();
+
+                ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+
+                var dataUrl = capture.toDataURL( "image/png" );
+                img.src = capture.toDataURL( "image/png" );
+                // img.width = 240;
+                img.setAttribute("class", "w-100 h-auto");
+
+                snapshot.innerHTML = '';
+
+                snapshot.appendChild( img );
+
+                $("input[name=capture_image]").val(dataUrl);
+
+                $("#snapshot").removeClass("d-none");
+                $("#player").addClass("d-none");
+                $("#shoot_camera").addClass("d-none");
+
+                $("#change_photo").removeClass("d-none");
+            }
         });
 
         $("#upload_phto, #web_upload_phto").on("click", function(){
-            console.log("upload photo");
+            
+            const player = document.getElementById('player');
+
+            var btnCapture = document.getElementById( "shoot_camera" );
+            var stream = document.getElementById( "player" );
+
+            var capture = document.getElementById( "canvas" );
+
+            const constraints = {
+                video: false,
+            };
+
+            stream.stop = function(){         
+                this.getTracks().forEach(function (track) {
+                    track.stop();
+                });
+            };
             
             $("input[name=capture_image]").val("");
             $(".webcam-div").addClass("d-none");
@@ -465,48 +523,6 @@
     });
             
     $("#change_photo").addClass("d-none");
-
-    const player = document.getElementById('player');
-
-    var btnCapture = document.getElementById( "shoot_camera" );
-    var stream = document.getElementById( "player" );
-
-    // btnCapture.addEventListener( "click", captureSnapshot );
-
-    // var capture = document.getElementById( "canvas" );
-
-    // const constraints = {
-    //     video: true,
-    // };
-
-    // navigator.mediaDevices.getUserMedia(constraints)
-    // .then((stream) => {
-    //     player.srcObject = stream;
-    // });
-
-    // function captureSnapshot() {
-    //     var ctx = capture.getContext( '2d' );
-    //     var img = new Image();
-
-    //     ctx.drawImage( stream, 0, 0, capture.width, capture.height );
-
-    //     var dataUrl = capture.toDataURL( "image/png" );
-    //     img.src = capture.toDataURL( "image/png" );
-    //     // img.width = 240;
-    //     img.setAttribute("class", "w-100 h-auto");
-
-    //     snapshot.innerHTML = '';
-
-    //     snapshot.appendChild( img );
-
-    //     $("input[name=capture_image]").val(dataUrl);
-
-    //     $("#snapshot").removeClass("d-none");
-    //     $("#player").addClass("d-none");
-    //     $("#shoot_camera").addClass("d-none");
-
-    //     $("#change_photo").removeClass("d-none");
-    // }
 
     $("#change_photo").on("click", function(){
         $("#snapshot").addClass("d-none");

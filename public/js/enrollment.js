@@ -72,7 +72,7 @@ $(document).ready(() => {
         }
 
         $.ajax({
-            url:  $("#hidden_route").val(),
+            url:  "/address",
             method: 'POST',
             data: {
                 id : id,
@@ -100,11 +100,19 @@ $(document).ready(() => {
                         }
                     }
                 } else {
-                    toastr.error(resp.message, 'Error');
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
                 }
             },
             error: function(resp) {
-                toastr.error(resp, 'Error');
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
             }
         });
     });

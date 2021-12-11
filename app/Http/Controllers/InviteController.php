@@ -78,10 +78,10 @@ class InviteController extends Controller
                         'password' => Hash::make($password)
                     ]);
 
-                    UserDetail::create([
-                        'user_id' => $user->id,
-                        'mode' => $request->input('mode'),
-                    ]);
+                    // UserDetail::create([
+                    //     'user_id' => $user->id,
+                    //     'mode' => $request->input('mode'),
+                    // ]);
 
                     Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
 

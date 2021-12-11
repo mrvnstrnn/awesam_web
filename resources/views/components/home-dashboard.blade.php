@@ -114,7 +114,8 @@
                                                         {{-- <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70"> --}}
                                                     </div>
                                                     <div style="text-align: center;">
-                                                        <small>{{ $agent->name }}</small>
+                                                        <div><small>{{ $agent->name }}</small></div>
+                                                        <div><small>{{ $agent->profile }}</small></div>
                                                     </div>
                                                 </div>
                                             @endforeach

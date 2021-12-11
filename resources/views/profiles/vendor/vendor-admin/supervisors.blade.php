@@ -19,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>User ID</th>
+                        <th>Profile</th>
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>

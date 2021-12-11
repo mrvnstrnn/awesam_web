@@ -19,6 +19,7 @@ $(document).ready(() => {
         },
         columns: [
             { data: "user_id" },
+            { data: "profile" },
             { data: "firstname" },
             { data: "lastname" },
             { data: "email" },
