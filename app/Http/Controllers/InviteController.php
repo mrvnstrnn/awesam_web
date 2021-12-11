@@ -100,6 +100,11 @@ class InviteController extends Controller
                                             ->first();
 
                 if(is_null($useCheck)){
+
+                    $url = route('invite.link', [ $token, $randomString]);
+
+                    Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
+                    
                     Invitation::create([
                         'invitation_code' => $randomString,
                         'mode' => $request->input('mode'),
@@ -109,10 +114,6 @@ class InviteController extends Controller
                         'email' => $email,
                         'token' => $token
                     ]);
-
-                    $url = route('invite.link', [ $token, $randomString]);
-
-                    Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
                     
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 } else {
