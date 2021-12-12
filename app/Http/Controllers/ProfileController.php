@@ -232,9 +232,14 @@ class ProfileController extends Controller
     {
         try {
 
+            $vendor = UserDetail::select('user_details.vendor_id')
+                                            ->where('user_id', \Auth::id())
+                                            ->first();
+
             $supervisors = UserDetail::join('users', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::id())
+                                    // ->where('user_details.IS_id', \Auth::id())
                                     ->where('users.profile_id', 3)
+                                    ->where('user_details.vendor_id', $vendor->vendor_id)
                                     ->get();
 
             return response()->json(['error' => false, 'message' => $supervisors ]);
