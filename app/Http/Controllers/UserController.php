@@ -1116,4 +1116,64 @@ class UserController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function update_profile_data (Request $request)
+    {
+        try {
+            if ($request->input('form_type') == 'security') {
+
+                $validate = Validator::make($request->all(), array(
+                    'old_password' => 'required',
+                    'password' => ['required', 'min:8', 'confirmed:confirm-password', 'different:old_password'],
+                ));
+
+                if ($request->input('old_password') && !Hash::check($request->input('old_password'), \Auth::user()->password)) {
+                    $validate->errors()->add('old_password', 'Old password not valid');
+                    return response()->json(['error' => true, 'message' => $validate->errors()->add('old_password', 'Old password not valid') ]);
+                }
+
+                if ($validate->passes()) {
+                    User::where('id', \Auth::user()->id)
+                        ->update([
+                            'password' => Hash::make($request->input('password')),
+                        ]);
+                
+                    return response()->json(['error' => false, 'message' => "Successfully updated password." ]);
+                } else {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                }
+            } else if ($request->input('form_type') == 'personal') {
+                $validate = Validator::make($request->all(), array(
+                    'birthday' => 'required',
+                    'firstname' => 'required',
+                    'lastname' => 'required',
+                    'contact_no' => 'required',
+                    'landline' => 'required',
+                ));
+
+                if ($validate->passes()) {
+                    User::where('id', \Auth::user()->id)
+                        ->update([
+                            'name' => $request->input('firstname') . " " .$request->input('lastname'),
+                            'firstname' => $request->input('firstname'),
+                            'lastname' => $request->input('lastname'),
+                        ]);
+
+                    UserDetail::where('user_id', \Auth::user()->id)
+                    ->update([
+                        'birthday' => $request->input('birthday'),
+                        'contact_no' => $request->input('contact_no'),
+                        'landline' => $request->input('landline'),
+                    ]);
+                
+                    return response()->json(['error' => false, 'message' => "Successfully updated personal details." ]);
+                } else {
+                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }

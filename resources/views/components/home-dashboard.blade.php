@@ -53,9 +53,9 @@
                                         <div class="col-3 mb-2 mt-1  border-right" style="text-align: center;">
                                             <div>
                                                 @if (!is_null($supervisor->image))
-                                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$supervisor->image) }}" alt="">
+                                                    <img width="70" height="70" class="rounded-circle border border-dark" src="{{ asset('files/'.$supervisor->image) }}" alt="">
                                                 @else
-                                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                                    <img width="70" height="70" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">
                                                 @endif
                                             </div>
                                             <div style="text-align: center;">
@@ -70,9 +70,9 @@
                                                         <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
                                                             <div>
                                                                 @if (!is_null($agent->image))
-                                                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
+                                                                    <img width="70" height="70" class="rounded-circle border border-dark" src="{{ asset('files/'.$agent->image) }}" alt="">
                                                                 @else
-                                                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                                                    <img width="70" height="70" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">
                                                                 @endif
 
                                                                 {{-- <img class="rounded-circle" src="images/avatars/2.jpg" alt="" width="70"> --}}

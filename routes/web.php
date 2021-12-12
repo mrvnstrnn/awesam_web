@@ -39,6 +39,8 @@ use App\Http\Controllers\RenewalController;
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
+    Route::post('/update-profile-data', [UserController::class, 'update_profile_data']);
+
     Route::post('/daily-activity', [UserController::class, 'daily_activity'])->name('daily_activity');
     Route::post('/work-plan', [UserController::class, 'work_plan'])->name('work_plan');
     Route::get('/onboarding', [UserController::class, 'onboarding']);

@@ -1,6 +1,11 @@
 @extends('layouts.enrollment')
 
 @section('content')
+<style>
+    .nda_div p {
+        text-align: justify;
+    }
+</style>
     <div class="row  vw-100 mt-4">
         <div class="col-lg-8 col-md-10 offset-md-1 offset-lg-2">
             <div class="main-card mb-3 card">
@@ -324,14 +329,627 @@
                                 </div>
                                 <div id="step-3" class="tab-pane step-content d-none">
                                     <div class="col-12">
-                                        <iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/nda/2020GlobeMutualConfidentialityandNon-DisclosureAgreementTemplate-fillable.pdf" allowfullscreen></iframe>
-                                        {{-- <p style="height: 400px !important; overflow: auto;">
-                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo iusto voluptate inventore tempore obcaecati delectus itaque nostrum sapiente veritatis. Numquam commodi repellendus iste, eligendi aperiam blanditiis, aspernatur deleniti delectus ipsum eum debitis totam maxime perspiciatis impedit quo. Eveniet optio, necessitatibus nihil atque quia neque sit autem iste iusto cum! Facere placeat suscipit enim beatae. Possimus repellendus obcaecati a ad, atque illum adipisci reprehenderit cupiditate. Cumque, qui at. Assumenda velit maxime aliquam et incidunt eaque in repudiandae ullam architecto eum alias enim fugiat commodi, iure deleniti cum veritatis aliquid nihil, sapiente minima, adipisci dicta voluptates! Blanditiis quos fuga id. Voluptatem temporibus natus ipsa atque neque nobis corporis officia. Quaerat, perferendis. Culpa inventore ab laborum id praesentium voluptatum, maxime natus quibusdam autem consequatur ipsam tempore laudantium? Numquam, id? Ad eaque consequuntur eos tenetur similique praesentium voluptatibus ut modi quasi unde! Provident maiores magni consectetur qui, minima porro vitae quam quae obcaecati, maxime explicabo libero praesentium quia alias officia dolore ea aliquam in molestiae quod. Hic, enim. Reprehenderit fugit, quasi officiis distinctio velit esse voluptates eum commodi atque. Cupiditate sint nihil, quas dolores, natus voluptates, ea aut laborum aliquid sed sequi placeat neque unde? Voluptates asperiores voluptatem nisi iusto placeat delectus deleniti dolorum sit enim voluptatum sunt illo sint modi expedita eaque vel fugit, earum nemo nam cupiditate officia recusandae? Commodi odit non adipisci in dolore quia officiis voluptatem corporis architecto quibusdam obcaecati explicabo molestias at aperiam, aliquam nihil veritatis sunt facilis tenetur sequi provident porro rem. Itaque fugit sapiente repellat eaque consequuntur, tenetur impedit incidunt officia soluta consequatur quod dicta? Ullam veritatis nam facere error ad ut totam quis cum adipisci, obcaecati reprehenderit! Officia nemo quaerat distinctio asperiores sint, repellat nihil. Dicta doloremque deserunt, quo rerum iusto cupiditate in nam, veritatis dolores quod asperiores, amet laudantium dolor autem illum dignissimos doloribus temporibus corporis perspiciatis odit provident dolorum repellat! Aspernatur, magnam? Tempora repellat nihil consequatur asperiores necessitatibus ea deleniti temporibus sint harum, quia provident pariatur porro corrupti mollitia recusandae inventore iusto nobis! Ipsam voluptas modi corporis, quae consequuntur quia repudiandae beatae, pariatur totam provident adipisci dolore impedit consequatur quas amet, voluptatum doloribus similique soluta. Sit, ad distinctio amet veniam magnam eligendi nemo, impedit ea ipsam quibusdam tempora aut a exercitationem autem, placeat id esse magni odit architecto accusamus eum quos quaerat qui! Voluptatibus sapiente, perferendis nisi eos, nobis sit quidem adipisci impedit optio, consectetur porro est aut eligendi natus quod aspernatur ipsum quas sint dolore recusandae distinctio totam qui. Dolorum nam, quasi, corporis corrupti ea nihil, dolor iure laudantium quisquam earum harum quia recusandae qui praesentium illum ex ratione animi provident dolore? Tenetur ipsa ea quis reiciendis eos? Dignissimos provident distinctio unde officiis eius corporis, consequatur veritatis molestiae dolorem perferendis, eveniet laboriosam dolorum. Architecto commodi minima consequatur porro doloribus aut, repudiandae eum, dolores vero voluptatum amet eos qui vitae, officia eaque corrupti molestiae! Pariatur explicabo dignissimos voluptas nihil numquam autem quibusdam ipsam laudantium qui alias fugiat quis doloribus hic, ea expedita? Excepturi, natus aliquid ratione beatae cumque possimus asperiores doloribus voluptate quos assumenda?
-                                        </p> --}}
+                                        <div style="height: 400px !important; overflow: auto;" class="nda_div">
+                                            <div class="row border p-3 m-3">
+                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
+                                                <div class="col-md-6 col-12">
+                                                    <p><b>
+                                                        This Mutual Confidentiality and Non-Disclosure Agreement
+                                                        (the “Agreement”) is entered into by Globe Telecom, Inc.
+                                                        and the Second Party named hereunder (individually the
+                                                        “Party” a
+                                                    </b></p>
+
+                                                    <p><b>A. Globe</b></p>
+                                                    <p>
+                                                        <b>GLOBE TELECOM, INC.,</b>a corporation duly organized and
+                                                        existing under the laws of the Republic of the Philippines, with
+                                                        principal address at The Globe Tower, 32nd Street corner 7th
+                                                        Avenue, Bonif
+                                                    </p>
+
+                                                    <p><b>B. Second Party</b></p>
+
+                                                    <p>
+                                                        __________________________________________________,
+                                                        a corporation/partnership/ single proprietorship duly organized
+                                                        and existing under the laws of the _______________ with
+                                                        address at __________________________________________
+                                                        __________________________________________________
+                                                        ,
+                                                    </p>
+
+                                                    <p><b>C. Description of Potential Transaction</b></p>
+
+                                                    <p>
+                                                        __________________________________________________
+                                                        __________________________________________________
+                                                        (the “<b>Potential Transaction</b>”) 
+                                                    </p>
+
+                                                    <p><b>D. Term</b></p>
+
+                                                    <p>
+                                                        This Agreement shall expire either three (3) years from the date
+                                                        hereof, or upon the termination of the evaluation or pursuit of the
+                                                        Potential Transaction, whichever occurs later; provided,
+                                                        however, that the Receiving Party’s obligations with respect to
+                                                        the Confidential Information shall survive for three (3) years
+                                                        following the date of such termination of this Agreement (the
+                                                        “Term”) and with respect to Trade Secrets, for as long as such
+                                                        Confidential Information is considered a trade secret under the
+                                                        applicable law.
+                                                    </p>
+
+                                                    <p><b>E. Contract</b></p>
+
+                                                    <p>
+                                                        This Agreement and Terms and Conditions stated below
+                                                        constitute the entire agreement of the Parties and shall govern
+                                                        their relationship.
+                                                    </p>
+
+                                                    <p class="text-center"><b>TERMS AND CONDITIONS</b></p>
+                                                    
+                                                    <p><b>ARTICLE 1 CONFIDENTIAL INFORMATION</b></p>
+
+                                                    <p>
+                                                        All communications or data, in any form, whether tangible or
+                                                        intangible, which are disclosed or furnished by any director,
+                                                        employee, agent, consultant, successor, or assign of any
+                                                        department or business area of any Party hereto, including their
+                                                        affiliates and subsidiaries, (hereinafter “Disclosing Party”) to the
+                                                        other Party, including their affiliates and subsidiaries,
+                                                        (hereinafter “Receiving Party”) and which are to be protected
+                                                        hereunder against unrestricted disclosure or competitive use by
+                                                        the Receiving Party shall be deemed to be “Confidential
+                                                        Information”.
+                                                    </p>
+
+                                                    
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <p>
+                                                        As used herein, the term "Confidential Information" shall mean
+                                                        all non-public, confidential or proprietary information disclosed
+                                                        hereunder, in any tangible or intangible form, such as but not
+                                                        limited to written, oral, visual, audio, those produced by
+                                                        electronic media, or through any other means, that is designated
+                                                        as confidential or that by its nature or circumstances surrounding
+                                                        its disclosure, should be reasonably considered as confidential.
+                                                        Confidential Information shall include but not be limited to
+                                                        products or planned products, processes and/or procedures,
+                                                        technological achievements and interests, customers and
+                                                        potential customers, business prospects, financial statements
+                                                        and information, financial situation and corporate plans, internal
+                                                        activities, future plans of both Parties, and other information
+                                                        deemed proprietary or confidential by the Disclosing Party or any
+                                                        other matter in which the Disclosing Party may have any interest
+                                                        whatsoever.
+                                                        Confidential Information shall also include any materials,
+                                                        information, processes, plans, and procedures treated by the
+                                                        Disclosing Party as, and deemed under applicable law to be,
+                                                        trade secrets (“Trade Secrets”).
+                                                        Each Disclosing Party hereby represents and warrants to the
+                                                        Receiving Party that it has lawful rights to provide the
+                                                        Confidential Information. Confidential Information will be
+                                                        disclosed either:
+                                                        
+                                                        <ol style="list-style-type: lower-alpha;">
+                                                            <li>in writing,</li>
+                                                            <li>by delivery of items,</li>
+                                                            <li>by initiation of access to Information, such as
+                                                                may be in a database, or</li>
+                                                            <li>by oral or visual presentation.</li>
+                                                        </ol>
+                                                    </p>
+
+                                                    <p>
+                                                        Confidential Information should be marked with a restrictive
+                                                        legend of the Disclosing Party. If information is not marked with
+                                                        such legend or is disclosed orally, the information will be
+                                                        identified as confidential at the time of disclosure. Nevertheless,
+                                                        if the information is not clearly marked or no disclosure is made,
+                                                        the information will be considered confidential if these are clearly
+                                                        recognizable as confidential information to a prudent person with
+                                                        no special knowledge of the Disclosing Party’s industry.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 2 EXCEPTIONS TO THE SCOPE OF CONFIDENTIAL INFORMATION</b></p>
+
+                                                    <p>The term Confidential Information does not include information which:</p>
+
+                                                    <p>
+                                                        <ol style="list-style-type: lower-alpha;">
+                                                            <li>has been or becomes now or in the future
+                                                                published in the public domain without breach of this
+                                                                Agreement or breach of a similar agreement by a third
+                                                                party; or</li>
+                                                            <li>prior to disclosure hereunder, is properly
+                                                                within the legitimate possession of the Receiving Party,
+                                                                which fact can be proven or verified by independent
+                                                                evidence; or</li>
+
+                                                            <li>
+                                                                subsequent to disclosure hereunder, is
+                                                                lawfully received from a third party having rights therein
+                                                                without restriction on the third party's or the Receiving
+                                                                Party's rights to disseminate the information and
+                                                                without notice of any restriction against its further
+                                                                disclosure; or
+                                                            </li>
+                                                            <li>
+                                                                is independently developed by the Receiving
+                                                                Party through persons who have not had, either directly
+                                                                or indirectly, access to or knowledge of such
+                                                                information which can be verified by independent
+                                                                evidence; or
+                                                            </li>
+                                                            <li>
+                                                                is disclosed with the written approval of the
+                                                                Disclosing Party or after the applicable peri
+                                                            </li>
+                                                        </ol>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row border p-3 m-3">
+                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
+                                                <div class="col-md-6 col-12">
+                                                    <p><b>ARTICLE 3 DURATION OF THIS AGREEMENT</b></p>
+
+                                                    <p>
+                                                        This Agreement is intended to cover Confidential Information
+                                                        received by the Receiving Party, both prior to and subsequent to
+                                                        the execution of this Agreement and shall be valid for the Term
+                                                        stated in Clause D. 
+                                                    </p>
+
+                                                    <p><b>ARTICLE 4 RESTRICTIONS ON USE: NO GRANT OF RIGHTS</b></p>
+
+                                                    <p>
+                                                        Each Party agrees to use the Confidential Information received
+                                                        from the other Party only for the purpose of the Potential
+                                                        Transaction stated in Clause C.
+                                                    </p>
+
+                                                    <p>
+                                                        The Receiving Party agrees, for itself, its subsidiaries, and
+                                                        affiliates, and its and their respective directors, employees,
+                                                        agents, consultants, successors, and assigns, to (a) hold all
+                                                        Confidential Information (regardless of whether it is specifically
+                                                        marked confidential or not) in strict confidence; (b) transmit the
+                                                        Confidential Information only to its director, employee, agent,
+                                                        consultant, successor, and assign on a need to know basis and
+                                                        after each one of them has agreed to be bound by confidentiality
+                                                        obligations substantially equivalent to the terms and conditions
+                                                        of this Agreement and not to disclose the same except as
+                                                        provided herein; (c) not to directly or indirectly use, copy, digest,
+                                                        or summarize any Confidential Information except as provided
+                                                        in this Agreement, and (d) not to disclose any Confidential
+                                                        Information to any other party without the prior written consent
+                                                        of the Disclosing Party. The Disclosing Party may grant its
+                                                        consent for the disclosure of the Confidential Information in its
+                                                        sole discretion and on a case-by-case basis. The Receiving
+                                                        Party expressly agrees not to use the Confidential Information to
+                                                        gain or attempt to gain a competitive advantage over the
+                                                        Disclosing Party.
+                                                    </p>
+
+                                                    <p>
+                                                        If requested by the Disclosing Party, the Receiving Party shall
+                                                        acknowledge receipt of any Confidential Information by signing
+                                                        receipts, initialing documents, or any other means that the
+                                                        Disclosing Party may reasonably request.
+                                                    </p>
+
+                                                    <p>
+                                                        Except for purposes of the Potential Transaction stated in
+                                                        Clause C, the Receiving Party will not permit copies of the
+                                                        Confidential Information to be made without the express written
+                                                        consent of the Disclosing Party. Copies shall be deemed
+                                                        confidential and in all respects subject to the terms and
+                                                        conditions of this Agreement.
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <p>
+                                                        No other rights, and particularly no license and no assignment
+                                                        of intellectual property right including copyrights, patent rights,
+                                                        design rights, trademarks, and mask work, protection, rights are
+                                                        implied or granted under this Agreement. Neither Party shall
+                                                        make use of the existence of any bilateral business relationship
+                                                        between them for the purpose of their own advertisement.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 5 PROPERTY OF DISCLOSING PARTY</b></p>
+
+                                                    <p>
+                                                        All Confidential Information, unless otherwise specified in
+                                                        writing, shall remain the sole and exclusive property of the
+                                                        Disclosing Party and shall be used by the Receiving Party only
+                                                        for the purpose intended herein, except as may be required by
+                                                        applicable law or legal process.  
+                                                    </p>
+
+                                                    <p>
+                                                        The Receiving Party shall not disclose, reproduce, or
+                                                        disseminate such Confidential Information to anyone, except to
+                                                        those directors, employees, agents, consultants, successors,
+                                                        and assigns (including those of its parent, subsidiaries and
+                                                        affiliates) on a need to know basis for purposes of the Potential
+                                                        Transaction stated in Clause C. 
+                                                    </p>
+
+                                                    <p>
+                                                        If the Receiving Party is requested by a government entity or
+                                                        other third party to disclose any Confidential Information, it will
+                                                        promptly notify the Disclosing Party to allow the latter to seek a
+                                                        protective order or take other appropriate action, at the sole cost
+                                                        and expense of the Disclosing Party. The Receiving Party will
+                                                        also cooperate in the Disclosing Party's efforts to obtain a
+                                                        protective order or other reasonable assurance that confidential
+                                                        treatment will be afforded the Confidential Information. If in the
+                                                        absence of a protective order the Receiving Party is compelled
+                                                        as a matter of law to disclose the Confidential Information based
+                                                        upon the written opinion of the Receiving Party’s counsel, the
+                                                        Receiving Party may disclose to the government entity or other
+                                                        third party compelling the disclosure only the part of the
+                                                        Confidential Information as required by law to be disclosed.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 6 SAFEKEEPING</b></p>
+
+                                                    <p>
+                                                        The Receiving Party shall use the same care to avoid disclosure
+                                                        or unauthorized use of the Confidential Information as it uses to
+                                                        protect its own confidential information, but in no event less than
+                                                        reasonable care. It is agreed that:
+
+                                                        
+                                                        <ol style="list-style-type: lower-alpha;">
+                                                            <li>all Confidential Information shall be retained
+                                                                by the Receiving Party in a secure place, and</li>
+                                                            <li>
+                                                                <p>Confidential Information will be disclosed only
+                                                                to each Party’s employees who are involved in the
+                                                                Potential Transaction and to agents, consultants,
+                                                                successors, and assigns (but not including vendors,
+                                                                who shall not be receiving Confidential Information in
+                                                                any event) who have been engaged for the purpose of
+                                                                discussing the Potential Transaction, which the
+                                                                Disclosing Party has prior notice of such engagement;
+                                                                provided that in the event of such disclosure to any
+                                                                third person or entity not employed or retained by the
+                                                                Receiving Party, the Receiving Party shall nonetheless
+                                                                remain liable for any unauthorized disclosure by such
+                                                                person or entity. 
+                                                                </p>
+                                                                <p>
+                                                                    It is further agreed that the Receiving Party shall ensure that all
+                                                                    of its directors, employees, agents, consultants, successors, and
+                                                                    assigns (including those of its parent, subsidiaries and affiliates)
+                                                                    having access to Confidential Information agree to be bound by
+                                                                    confidentiality obligations substantially equivalent to the terms
+                                                                    and conditions as set out in this Agreement.
+                                                                </p>
+                                                            </li>
+                                                        </ol>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row border p-3 m-3">
+                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
+                                                <div class="col-md-6 col-12">
+                                                    <p><b>ARTICLE 7 RETURN OF CONFIDENTIAL INFORMATION</b></p>
+
+                                                    <p>
+                                                        All Confidential Information, including but not limited to copies,
+                                                        summaries, excerpts, extracts or other reproduction thereof,
+                                                        shall be returned to the Disclosing Party or destroyed after the
+                                                        Receiving Party’s need for it has expired or upon request of the
+                                                        Disclosing Party, and in any event, upon termination of this
+                                                        Agreement
+                                                    </p>
+
+                                                    <p>
+                                                        Further, in any event at any time a Receiving Party ceases to
+                                                        have an active interest in the Potential Transaction, it will
+                                                        immediately return to the Disclosing Party all copies of written,
+                                                        taped or audio-visual recorded Confidential Information in its
+                                                        possession and shall not retain any such copies.
+                                                    </p>
+
+                                                    <p>
+                                                        Notwithstanding anything to the contrary contained in this
+                                                        Agreement, the Receiving Party may retain a copy of any
+                                                        materials (together with necessary supporting documents) that
+                                                        the Receiving Party develops for the Disclosing Party for archival
+                                                        purposes, provided that the Receiving Party will continue to keep
+                                                        such materials and documents confidential in accordance with
+                                                        the terms and conditions of this Agreement. 
+                                                    </p>
+
+                                                    <p>
+                                                        For the avoidance of doubt, the Receiving Party will not be
+                                                        required to destroy electronic records automatically backed up in
+                                                        the ordinary course of business for disaster recovery purposes.
+                                                        Such electronic records shall be kept confidential in accordance
+                                                        with the terms and conditions of this Agreement until the time
+                                                        these electronic records are destroyed. 
+                                                    </p>
+
+                                                    <p><b>ARTICLE 8 NO OBLIGATION TO CONTRACT</b></p>
+
+                                                    <p>
+                                                        This Agreement does not constitute a proposal or offer for any
+                                                        specific business whatsoever between the Parties, and is only
+                                                        intended to bind the Parties to the confidentiality and limited use
+                                                        of the Confidential Information.
+                                                    </p>
+
+                                                    <p>
+                                                        Nothing in this Agreement shall impose any obligation upon
+                                                        either Party to consummate a transaction, to enter into any
+                                                        discussion or negotiations with respect thereto, or to take any
+                                                        other action not expressly agreed to herein. Neither Party shall
+                                                        have any obligation to the other Party for any such action the
+                                                        other Party may take or refrain from taking based on or otherwise
+                                                        attributable to any information (whether or not constituting
+                                                        Confidential Information) furnished to such other Party
+                                                        hereunder.                                                        
+                                                    </p>
+
+                                                    <p><b>ARTICLE 9 REMEDY AGAINST DEFAULTING PARTY</b></p>
+
+                                                    <p>
+                                                        The Parties acknowledge and agree that disclosure, divulgence,
+                                                        or unauthorized use of the Confidential Information could
+                                                        damage the Disclosing Party and that such Disclosing Party,
+                                                        therefore, has a strong interest in protecting the Confidential
+                                                        Information by all legal means.
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-md-6 col-12">
+                                                    <p>
+                                                        A Party violating its obligations under this Agreement shall be
+                                                        responsible to the other Party for all damages directly caused by
+                                                        such breach. Moreover, because money damages may not be a
+                                                        sufficient remedy for any breach of the foregoing covenants and
+                                                        agreements, the Disclosing Party shall be entitled to resort to
+                                                        specific performance and injunctive and other equitable relief as
+                                                        a remedy for any such breach of this Agreement in addition to all
+                                                        monetary or other remedies available at law or in equity.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 10 NO REPRESENTATION OR WARRANTY</b></p>
+
+                                                    <p>
+                                                        The Disclosing Party makes no representation or warranty as to
+                                                        the accuracy or completeness of the Confidential Information
+                                                        and the Receiving Party agrees that the Disclosing Party and its
+                                                        employees and agents shall have no liability to the Receiving
+                                                        Party resulting from any use of the Confidential Information.
+                                                    </p>
+                                                    
+                                                    <p>
+                                                        However, this disclaimer shall, in and of itself, not apply to or limit
+                                                        any specific warranties that the Disclosing Party may expressly
+                                                        give in other agreements between the Disclosing Party and the
+                                                        Receiving Party. The Receiving Party agrees that it will form its
+                                                        own conclusions as to the reliability of any Confidential
+                                                        Information and as to any conclusions to be drawn therefrom,
+                                                        and will not charge the Disclosing Party with liability for any
+                                                        damages resulting from mistakes, inaccuracies or
+                                                        misinformation contained therein. The Receiving Party
+                                                        understands and acknowledges that the Disclosing Party does
+                                                        not undertake any obligation to provide any party with access to
+                                                        any specific or additional information.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 11 NON-WAIVER; REMEDIES CUMULATIVE</b></p>
+
+                                                    <p>
+                                                        Any failure of either Party to insist upon the strict performance of
+                                                        any term or condition of this Agreement shall not be deemed a
+                                                        waiver of any of the Party's rights or remedies, including the right
+                                                        to insist on the strict performance of the same. No waiver or other
+                                                        modification to this Agreement shall be valid unless it is in writing
+                                                        and is signed by the Parties.
+                                                    </p>
+                                                    
+                                                    <p>
+                                                        The rights and remedies herein expressly provided are
+                                                        cumulative and not exclusive of any rights or remedies, which
+                                                        any of the Parties would otherwise have.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 12 NO PUBLICITY</b></p>
+                                                    
+                                                    <p>
+                                                        Neither Party hereto shall in any way or in any form disclose,
+                                                        publicize, or advertise in any manner the discussions that give
+                                                        rise to this Agreement nor the discussions or negotiations
+                                                        covered by this Agreement without the prior written consent of
+                                                        the other Party.                                                        
+                                                    </p>
+
+                                                    <p><b>ARTICLE 13 INTERPRETATION AND AMENDMENT</b></p>
+                                                    
+                                                    <p>
+                                                        This Agreement constitutes the entire agreement between the
+                                                        Parties with respect to the subject matter hereof. It excludes and
+                                                        supersedes everything else which has occurred between the
+                                                        Parties whether written or verbal, including all other
+                                                        communications with respect to the subject matter hereof. The
+                                                        headings of Clauses or Articles are for reference and shall not
+                                                        affect their interpretation.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row border p-3 m-3">
+                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
+                                                <div class="col-md-6 col-12">
+                                                    <p>
+                                                        This Agreement may not be amended or modified except in writing.
+                                                    </p>
+
+                                                    <p>
+                                                        This Agreement shall not be construed in favor or against any Party, but shall be construed equally as to both Parties
+                                                    </p>
+
+                                                    <p><b>ARTICLE 14 PERSONAL INFORMATION</b></p>
+
+                                                    <p>
+                                                        In the interest of both Parties, the Disclosing Party agrees not to
+                                                        send the Receiving Party any information that can identify an
+                                                        individual (“Personal Information”) unless both Parties otherwise
+                                                        mutually agree. In such circumstances, the Receiving Party shall
+                                                        comply with the obligations imposed on the Receiving Party by
+                                                        this Agreement, the applicable data privacy laws, including, but
+                                                        not limited to, Republic Act 10173 or the Data Privacy Act of 2012
+                                                        and its Implementing Rules and Regulations. 
+                                                    </p>
+
+                                                    <p>
+                                                        If sending Personal Information to the Receiving Party is required under this Agreement, the Receiving Party agrees to:
+                                                    </p>
+
+                                                    <p>
+                                                        <ol style="list-style-type: lower-alpha;">
+                                                            <li>
+                                                                only process such Personal Information in
+                                                                accordance with the Disclosing Party’s written
+                                                                instructions, and only for purposes of evaluating the
+                                                                Potential Transaction;
+                                                            </li>
+                                                            <li>
+                                                                ensure that it implements and maintains
+                                                                technical and organizational measures at a level
+                                                                appropriate to the security of the Personal Information
+                                                                shared by the Disclosing Party;
+                                                            </li>
+                                                            <li>
+                                                                notify the Disclosing Party promptly (where
+                                                                permitted under applicable law) if the Receiving Party
+                                                                receives any request for access to the Personal
+                                                                Information shared by the Disclosing Party by an
+                                                                individual, regulator, or government authority, and
+                                                                provide reasonable assistance to the Disclosing Party to
+                                                                help the Disclosing Party comply with any such request;
+                                                            </li>
+                                                            <li>
+                                                                notify the Disclosing Party within twenty-four
+                                                                (24) hours upon knowledge or reasonable belief of the
+                                                                Receiving Party that it has suffered any incident that
+                                                                may impact the Personal Information shared by the
+                                                                Disclosing Party;
+                                                            </li>
+
+                                                            <li>
+                                                                not disclose the Personal Information shared
+                                                                by the Disclosing Party to any third party without the
+                                                                Disclosing Party’s prior written consent, save as
+                                                                required by applicable law or in accordance with this
+                                                                Agreement;
+                                                            </li>
+
+                                                            <li>
+                                                                upon written request, provide the Disclosing
+                                                                Party with details of the Receiving Party’s processing
+                                                                of the Personal Information shared by the Disclosing
+                                                                Party, including the technical and organizational
+                                                                measures the Receiving Party has employed to protect
+                                                                the said Personal Information; and
+                                                            </li>
+
+                                                            <li>
+                                                                delete the Personal Information shared by the
+                                                                Disclosing Party at the end, expiration, or early
+                                                                termination of this Agreement.
+                                                            </li>
+                                                        </ol>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-md-6 col-12">
+                                                    <p><b>ARTICLE 15 SEPARABILITY CLAUSE</b></p>
+
+                                                    <p>
+                                                        If any provision of this Agreement is illegal or unenforceable, its
+                                                        invalidity shall not affect the other provisions of this Agreement
+                                                        that can be given effect without the invalid provision. If any
+                                                        provision of this Agreement does not comply with any law,
+                                                        ordinance or regulation, such provision to the extent possible
+                                                        shall be interpreted in such a manner to comply with such law,
+                                                        ordinance or regulation, or if such interpretation is not possible,
+                                                        it shall be deemed to satisfy the minimum requirements thereof
+                                                    </p>
+
+                                                    <p><b>ARTICLE 16 LEGAL CAPACITY OF REPRESENTATIVES</b></p>
+
+                                                    <p>
+                                                        Each Party represents and warrants to the other Party that its
+                                                        representative executing this Agreement on its behalf is its duly
+                                                        appointed and acting representative and has the legal capacity
+                                                        required under applicable law to enter into this Agreement and
+                                                        bind it.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 17 GOVERNING LAW AND DISPUTE RESOLUTION</b></p>
+
+                                                    <p>
+                                                        This Agreement shall be governed by and construed in
+                                                        accordance with the laws of the Republic of the Philippines,
+                                                        without regard to any conflicts of law rules. Exclusive jurisdiction
+                                                        over and venue of any suit arising out of or relating to this
+                                                        Agreement will be in Taguig City, at the option of the
+                                                        complaining Party. The Parties hereby consent and submit to
+                                                        the exclusive jurisdiction and venue of those courts.
+                                                    </p>
+
+                                                    <p>
+                                                        The Parties hereby waive all defenses of lack of personal
+                                                        jurisdiction and forum non-convenience. Process may be served
+                                                        on either Party in the manner authorized by applicable law or
+                                                        court rule.
+                                                    </p>
+
+                                                    <p><b>ARTICLE 18 COUNTERPARTS; ELECTRONIC SIGNATURE</b></p>
+
+                                                    <p>
+                                                        This Agreement may be executed in any number of
+                                                        counterparts, each of which is an original, but all of which
+                                                        together constitute one and the same agreement.
+                                                    </p>
+
+                                                    <p>
+                                                        This Agreement may be executed electronically or by way of
+                                                        electronic signature and such electronic signatures shall be
+                                                        deemed original signatures, have the same force and effect as
+                                                        manual signatures and binding upon the Parties. If this
+                                                        Agreement shall be executed electronically, the best evidence
+                                                        of this Agreement shall be a copy of this Agreement bearing an
+                                                        electronic signature, in portable document format (.pdf) form, or
+                                                        in any other electronic format intended to preserve the original
+                                                        graphic and pictorial appearance of a document.
+                                                    </p>
+
+                                                    <p><b>IN WITNESS WHEREOF, </b>the Parties have hereunto affixed their
+                                                        signatures this _____________________________________at
+                                                        __________________________________________________</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                         <div class="form-check">
                                           <label class="form-check-label">
                                             <input type="checkbox" class="form-check-input" name="check-non-disclosure" id="check-non-disclosure">
-                                                By checking this it means you agree to the <b>Non-Disclosure Agreement.</b>
+                                            By checking this it means you agree to the <b><a href="/files/nda/2020GlobeMutualConfidentialityandNon-DisclosureAgreementTemplate-fillable.pdf" download="2020GlobeMutualConfidentialityandNon-DisclosureAgreementTemplate-fillable.pdf">Non-Disclosure Agreement.</a></b>
                                           </label>
                                         </div>
                                     </div>

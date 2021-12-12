@@ -218,9 +218,9 @@
                         @foreach ($agents as $agent)
                             <div class="col mb-2 mt-1" style="text-align: center;">
                                 @if (!is_null($agent->image))
-                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
+                                    <img width="70" height="70" class="rounded-circle border border-dark" src="{{ asset('files/'.$agent->image) }}" alt="">
                                 @else
-                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                    <img width="70" height="70" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">
                                 @endif
                                 <div style="text-align: center;">
                                     <div><small>{{ $agent->name }}</small></div>

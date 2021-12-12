@@ -1,4 +1,9 @@
 @php
+
+    $user_detail = \Auth::user()->getUserDetail()->first();
+
+    $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
     $site_status = \DB::table('view_sites_activity_progress')
         ->select('site_name', 'sam_id', 'site_category','activity_name', 'progress', 'agent_id')
         // ->whereJsonContains('site_agent', [
@@ -6,6 +11,7 @@
         // ])
         ->where('progress','<', 1)
         ->where('agent_id', \Auth::id())
+        ->where('site_vendor_id', $vendor)
         ->distinct()
         ->orderBy('sam_id', 'asc')
         ->get();

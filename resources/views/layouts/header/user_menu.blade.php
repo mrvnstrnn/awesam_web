@@ -9,16 +9,16 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                         <div class="widget-content-left mr-3" id="avatar">
                             @if (!is_null(\Auth::user()->getUserDetail()->first()))
                                 @if (!is_null(\Auth::user()->getUserDetail()->first()->image))
-                                    <img width="42" height="42" class="rounded-circle" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
+                                    <img width="42" height="42" class="rounded-circle border border-dark" src="{{ asset('files/'.\Auth::user()->getUserDetail()->first()->image) }}" alt="">
                                 @else
-                                <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
+                                <img width="42" height="42" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">
                                 @endif
                             @else
-                                <img width="42" height="42" class="rounded-circle" src="images/no-image.jpg" alt="">
+                                <img width="42" height="42" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">
                             @endif
                         </div>
                         <div class="widget-content-left">
-                            <div class="widget-heading"><a class="text-white" href="{{ route('my_profile') }}">{{ ucwords(Auth::user()->name) }}</a></div>
+                            <div class="widget-heading">{{ ucwords(Auth::user()->name) }}</div>
                             <div class="widget-subheading">{{ is_null(\Auth::user()->profile_id) ? "" : ucwords(Auth::user()->user_position) }}</div>
                         </div>
                         <div class="widget-content-right mr-2">
@@ -37,17 +37,16 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
             </div>
         </div>
     </div>
-    {{-- <div class="scroll-area-xs" style="height: 150px;">
+    <div class="scroll-area-xs" style="height: 100px;">
         <div class="scrollbar-container ps">
             <ul class="nav flex-column">
                 <li class="nav-item-header nav-item">Activity</li>
                 <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        Chat
-                        <div class="ml-auto badge badge-pill badge-info">8</div>
+                    <a class="nav-link" href="{{ route('my_profile') }}">
+                        Profile
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">Recover Password</a>
                 </li>
                 <li class="nav-item-header nav-item">
@@ -67,10 +66,10 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                 </li>
                 <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">Logs</a>
-                </li>
+                </li> --}}
             </ul>
         </div>
-    </div> --}}
+    </div>
     {{-- <ul class="nav flex-column">
         <li class="nav-item-divider mb-0 nav-item"></li>
     </ul>
