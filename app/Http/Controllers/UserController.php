@@ -664,12 +664,16 @@ class UserController extends Controller
     public function forverification_list()
     {
         try {
+            $vendor = UserDetail::select('user_details.vendor_id')
+                        ->where('user_id', \Auth::id())
+                        ->first();
 
             $user_details = \DB::table('users')
                 ->join('user_details', 'user_details.user_id', 'users.id')
                 ->join('profiles', 'user_details.designation', 'profiles.id')
                 ->where('users.profile_id', null)
-                ->where('user_details.IS_id', \Auth::id())
+                ->where('user_details.vendor_id', $vendor->vendor_id)
+                // ->where('user_details.IS_id', \Auth::id())
                 ->get();
 
             $dt = DataTables::of($user_details);
@@ -688,7 +692,7 @@ class UserController extends Controller
     public function forpendingonboarding_list()
     {
         try {
-            $is_vendor = UserDetail::where('user_id', \Auth::id())->first();
+            $is_vendor = UserDetail::select('user_details.vendor_id')->where('user_id', \Auth::id())->first();
 
             $user_details = \DB::table('invitations')
                 ->select('invitations.firstname', 'invitations.lastname', 'invitations.email')
