@@ -736,12 +736,12 @@ class UserController extends Controller
                 $is = User::where('email', $request->input('is_hidden'))->first();
                 $vendor = Vendor::where('vendor_id', $request->input('company_hidden'))->first();
 
-                $user_details = new UserDetail();
-                $user_details->user_id = $user->id;
-                $user_details->mode = $request->input('mode');
-                $user_details->IS_id = $is->id;
-                $user_details->vendor_id = $vendor->vendor_id;
-                $user_details->save();
+                // $user_details = new UserDetail();
+                // $user_details->user_id = $user->id;
+                // $user_details->mode = $request->input('mode');
+                // $user_details->IS_id = $is->id;
+                // $user_details->vendor_id = $vendor->vendor_id;
+                // $user_details->save();
 
                 \Auth::login($user);
                 return redirect('/');
