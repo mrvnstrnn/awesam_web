@@ -205,7 +205,7 @@
                                                                                         ->where('user_id', \Auth::id()) 
                                                                                         ->first();
                                                             @endphp
-                                                            @if (!is_null($designation))
+                                                            @if (!is_null($designation->designation))
                                                                 @php
                                                                     $profile_name = \App\Models\Profile::find($designation->designation);   
                                                                 @endphp
