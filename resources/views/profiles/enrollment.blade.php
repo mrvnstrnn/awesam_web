@@ -695,7 +695,7 @@
 
         if (user_details_data != null) {
 
-            if (user_details_data.designation != null) {
+            if (user_details_data.birthday != null) {
                 $(".step-1-li").addClass('done');
                 $(".step-2-li").addClass('done');
                 $(".step-3-li").addClass('done');
