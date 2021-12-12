@@ -187,7 +187,7 @@
                                                 <div class="col-md-6">
                                                     <div class="position-relative form-group">
                                                         <label for="designation">Designation</label>
-                                                        @if (\Auth::user()->getUserProfile() != null)
+                                                        @if (\Auth::user()->profile_id != null)
                                                             @if (\Auth::user()->getUserProfile()->mode == "vendor")
                                                                 <select name="designation" id="designation"  class="form-control" required>
                                                                     <option  disabled selected>Designation</option>
@@ -205,7 +205,7 @@
                                                                                         ->where('user_id', \Auth::id()) 
                                                                                         ->first();
                                                             @endphp
-                                                            @if (is_null($designation))
+                                                            @if (!is_null($designation))
                                                                 @php
                                                                     $profile_name = \App\Models\Profile::find($designation->designation);   
                                                                 @endphp
