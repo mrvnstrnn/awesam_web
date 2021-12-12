@@ -1103,8 +1103,13 @@ class GlobeController extends Controller
     public function vendor_supervisors()
     {
         try {
+            $vendor = \App\Models\UserDetail::select('user_details.vendor_id')
+                                                            ->where('user_id', \Auth::id())
+                                                            ->first();
+
             $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::id())
+                                    // ->where('user_details.IS_id', \Auth::id())
+                                    ->where('user_details.vendor_id', $vendor->vendor_id)
                                     ->where('users.profile_id', 3)
                                     ->get();
 
@@ -5003,12 +5008,17 @@ class GlobeController extends Controller
             $site_users = \DB::table('site_users')
                             ->get();
 
+            $vendor = \App\Models\UserDetail::select('user_details.vendor_id')
+                                            ->where('user_id', \Auth::id())
+                                            ->first();
+
             $agents = \DB::table('users')
                         ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
                         ->join('user_details', 'user_details.user_id', 'users.id')
                         ->join('user_programs', 'user_programs.user_id', 'users.id')
-                        ->where('user_details.IS_id', \Auth::user()->id)
+                        // ->where('user_details.IS_id', \Auth::user()->id)
                         ->where('user_programs.program_id', $program_id)
+                        ->where('user_details.vendor_id', $vendor->vendor_id)
                         ->get();
 
             return response()->json(['error' => false, 'message' => $agents ]);
