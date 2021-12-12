@@ -329,9 +329,9 @@
                                 </div>
                                 <div id="step-3" class="tab-pane step-content d-none">
                                     <div class="col-12">
+                                        <p class="text-center"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
                                         <div style="height: 400px !important; overflow: auto;" class="nda_div">
                                             <div class="row border p-3 m-3">
-                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
                                                 <div class="col-md-6 col-12">
                                                     <p><b>
                                                         This Mutual Confidentiality and Non-Disclosure Agreement
@@ -495,7 +495,6 @@
                                             </div>
 
                                             <div class="row border p-3 m-3">
-                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
                                                 <div class="col-md-6 col-12">
                                                     <p><b>ARTICLE 3 DURATION OF THIS AGREEMENT</b></p>
 
@@ -641,7 +640,6 @@
                                             </div>
 
                                             <div class="row border p-3 m-3">
-                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
                                                 <div class="col-md-6 col-12">
                                                     <p><b>ARTICLE 7 RETURN OF CONFIDENTIAL INFORMATION</b></p>
 
@@ -792,7 +790,6 @@
                                             </div>
 
                                             <div class="row border p-3 m-3">
-                                                <p class="text-center" style="margin: 0 auto;"><b>MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</b></p>
                                                 <div class="col-md-6 col-12">
                                                     <p>
                                                         This Agreement may not be amended or modified except in writing.
