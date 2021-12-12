@@ -200,11 +200,25 @@
                                                                 {{-- <input type="hidden" name="mode" id="mode" value="{{ \Auth::user()->getUserProfile()->mode }}"> --}}
                                                             @endif
                                                         @else
-                                                            <select name="designation" id="designation"  class="form-control" required>
-                                                                <option  disabled selected>Designation</option>
-                                                                <option value="2">Agent</option>
-                                                                <option value="3">Supervisor</option>
-                                                            </select>
+                                                            @php
+                                                                $designation = \App\Models\UserDetail::select('designation')
+                                                                                        ->where('user_id', \Auth::id()) 
+                                                                                        ->first();
+                                                            @endphp
+                                                            @if (is_null($designation))
+                                                                @php
+                                                                    $profile_name = \App\Models\Profile::find($designation->designation);   
+                                                                @endphp
+
+                                                                <input type="text" class="form-control" value="{{ $profile_name->profile }}" readonly>
+                                                                <input type="hidden" name="designation" id="designation" value="{{ $designation->designation }}">
+                                                            @else
+                                                                <select name="designation" id="designation"  class="form-control" required>
+                                                                    <option  disabled selected>Designation</option>
+                                                                    <option value="2">Agent</option>
+                                                                    <option value="3">Supervisor</option>
+                                                                </select>
+                                                            @endif
                                                         @endif
                                                         <small class="designation-error text-danger"></small>
                                                     </div>
