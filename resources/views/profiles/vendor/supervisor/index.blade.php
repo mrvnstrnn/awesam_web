@@ -213,7 +213,7 @@
                                                         ->get();    
                     @endphp
                     
-                    @if ($count($agent) > 0)
+                    @if (count($agent) > 0)
                         @foreach ($agents as $agent)
                             <div class="col mb-2 mt-1" style="text-align: center;">
                                 <div>

@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="col-9 mb-2 mt-1" style="text-align: center;">
                                             <div class="row">
-                                                @if ($count($agent) > 0)
+                                                @if (count($agent) > 0)
                                                     @foreach ($agents as $agent)
                                                         <div class="col mb-4" style="min-width: 150px; max-width: 150px;">
                                                             <div>
