@@ -10,10 +10,15 @@
 </style>
 @php
 
+$user_detail = \Auth::user()->getUserDetail()->first();
+
+$vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
 if (\Auth::user()->profile_id == 2) {
     $activities = \DB::table('view_assigned_sites')
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
+                    ->where('site_vendor_id', $vendor)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
@@ -25,12 +30,14 @@ if (\Auth::user()->profile_id == 2) {
                         )
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
+                    ->where('site_vendor_id', $vendor)
                     ->orderBy('stage_id', 'ASC')
                     ->distinct('stage_id')
                     ->get();
 } else {
     $activities = \DB::table('view_assigned_sites')
                     ->where('activity_profile_id', 38)
+                    ->where('site_vendor_id', $vendor)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
@@ -41,6 +48,7 @@ if (\Auth::user()->profile_id == 2) {
                         'stage_name'
                     )
                     // ->where('agent_id', \Auth::id())
+                    ->where('site_vendor_id', $vendor)
                     ->where('activity_profile_id', 38)
                     ->orderBy('stage_id', 'ASC')
                     ->distinct('stage_id')
@@ -48,7 +56,7 @@ if (\Auth::user()->profile_id == 2) {
 }
 @endphp
 
-@foreach ($uniques_stage as $unique_stage)
+@forelse ($uniques_stage as $unique_stage)
     <div id="accordion" class="accordion-wrapper mb-3">
         <div class="card">
             <div id="heading{{ $unique_stage->stage_id }}" class="card-header bg-primary">
@@ -168,7 +176,9 @@ if (\Auth::user()->profile_id == 2) {
             </div>
         </div>
     </div>
-@endforeach
+@empty
+    <h6 class="text-center">Nothing to see in here.</h6>
+@endforelse
 
 <script>
     $(document).ready(function(){

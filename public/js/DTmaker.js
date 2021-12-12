@@ -47,6 +47,8 @@ function makeDT(whatTable, whatCols, active_program) {
             },
 
             createdRow: function (row, data, dataIndex) {
+
+                console.log(data);
                 // if (data.activities != undefined) {
                 //     var activity_names = JSON.parse( JSON.stringify(data.activities.replace(/&quot;/g,'"')) );
 

@@ -3271,10 +3271,15 @@ class GlobeController extends Controller
         }        
         elseif($activity_type == 'new endorsements vendor'){
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
             $sites = \DB::table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name')
+                    ->where('site_vendor_id', $vendor)
                     ->where('program_id', $program_id);
-
+            
                     if ($program_id == 1) {
                         $sites->where('activity_id', 7);
                     } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
@@ -3290,7 +3295,12 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'new endorsements vendor accept'){
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
             $sites = \DB::table("view_site")
+                    ->where('site_vendor_id', $vendor)
                     // ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
                     // ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
                     // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
@@ -3324,6 +3334,10 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'unassigned sites'){
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
             $sites = \DB::table("view_site")
                 ->where('program_id', $program_id);
 
@@ -3344,9 +3358,11 @@ class GlobeController extends Controller
                 $sites->where('profile_id', \Auth::user()->profile_id);
 
                 if ( $program_id == 3 ) {
-                                    
+                    
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
+                        ->where('vendor_id', $vendor)
+                    ;
     
                 }
     
@@ -3357,6 +3373,8 @@ class GlobeController extends Controller
     
 
                 $sites->get();
+
+                // dd($sites); 
 
         } else if ($activity_type == 'all-site-issues') {
             $sites = \DB::table("site_issue")
