@@ -80,6 +80,7 @@ $(document).ready(() => {
             return json.data;
         },
         'createdRow': function(row, data) {
+            console.log("test");
             $(row).addClass('getListAgent');
             $(row).attr('data-id', data.user_id);
         },

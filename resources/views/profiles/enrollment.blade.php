@@ -679,7 +679,7 @@
         var user_details_data = JSON.parse("{{ json_encode(\Auth::user()->getUserDetail()->first()); }}".replace(/&quot;/g,'"'));
         var user_data = JSON.parse("{{ json_encode(\Auth::user()); }}".replace(/&quot;/g,'"'));
 
-        if (user_details_data != null) {
+        if (user_details_data.designation != null) {
             $(".step-1-li").addClass('done');
             $(".step-2-li").addClass('done');
             $(".step-3-li").addClass('done');
