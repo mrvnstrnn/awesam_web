@@ -72,18 +72,18 @@
             </div>
         </div>        
         <div class="text-center">
-            <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
+            <a href="/work-plan" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
                 <span class="mr-1">{{ $view_work_plan }}</span>
-            </button>
-            <button class="btn-pill ml-2 btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
+            </a>
+            <a href="/daily-activity" class="btn-pill ml-2 btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
                 <span class="mr-1">{{ $view_dar }}</span>
-            </button>
+            </a>
         </div>
     </div>        
 </div> 

@@ -144,7 +144,7 @@ $(document).ready(() => {
                                 $('.supervisor-data').removeClass("d-none");
                                 $('.supervisor_select select').append("<option value=''>Select supervisor</option>");
                                 resp.message.forEach(element => {
-                                    $('.supervisor_select select').append("<option value="+element.id+">"+element.email+"</option>");
+                                    $('.supervisor_select select').append("<option value="+element.id+">"+element.name+"</option>");
                                 });
                             } else {
                                 toastr.error(resp.message, "Error");

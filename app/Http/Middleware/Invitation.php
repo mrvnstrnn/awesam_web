@@ -18,7 +18,7 @@ class Invitation
     public function handle(Request $request, Closure $next)
     {
         if(\Auth::check()) {
-            abort(403, 'There is user already login.');
+            abort(403, 'There is a user already logged in.');
         } else {
         $invitations = InvitationModel::where('token', $request->route('token'))
                                         ->where('invitation_code', $request->route('invitation_code'))

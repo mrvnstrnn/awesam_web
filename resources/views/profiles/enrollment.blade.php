@@ -679,31 +679,34 @@
         var user_details_data = JSON.parse("{{ json_encode(\Auth::user()->getUserDetail()->first()); }}".replace(/&quot;/g,'"'));
         var user_data = JSON.parse("{{ json_encode(\Auth::user()); }}".replace(/&quot;/g,'"'));
 
-        if (user_details_data.designation != null) {
-            $(".step-1-li").addClass('done');
-            $(".step-2-li").addClass('done');
-            $(".step-3-li").addClass('done');
-            $(".step-4-li").addClass('active');
+        if (user_details_data != null) {
 
-            $("#step-1").addClass('d-none');
-            $("#step-2").addClass('d-none');
-            $("#step-3").addClass('d-none');
-            $("#step-4").removeClass('d-none');
+            if (user_details_data.designation != null) {
+                $(".step-1-li").addClass('done');
+                $(".step-2-li").addClass('done');
+                $(".step-3-li").addClass('done');
+                $(".step-4-li").addClass('active');
 
-            $.each(user_details_data, function(index, data) {
-                if (index == "region_id") {
-                    $("#onboardingForm #region").val(data);
-                    $("#onboardingForm #hidden_region").val(data);
-                } else if (index == "province_id") {
-                    $("#onboardingForm #province").val(data);
-                    $("#onboardingForm #hidden_province").val(data);
-                } else if (index == "lgu_id") {
-                    $("#onboardingForm #lgu").val(data);
-                    $("#onboardingForm #hidden_lgu").val(data);
-                } else {
-                    $("#onboardingForm #"+index).val(data);
-                }
-            });
+                $("#step-1").addClass('d-none');
+                $("#step-2").addClass('d-none');
+                $("#step-3").addClass('d-none');
+                $("#step-4").removeClass('d-none');
+
+                $.each(user_details_data, function(index, data) {
+                    if (index == "region_id") {
+                        $("#onboardingForm #region").val(data);
+                        $("#onboardingForm #hidden_region").val(data);
+                    } else if (index == "province_id") {
+                        $("#onboardingForm #province").val(data);
+                        $("#onboardingForm #hidden_province").val(data);
+                    } else if (index == "lgu_id") {
+                        $("#onboardingForm #lgu").val(data);
+                        $("#onboardingForm #hidden_lgu").val(data);
+                    } else {
+                        $("#onboardingForm #"+index).val(data);
+                    }
+                });
+            }
         }
         
         $.each(user_data, function(index, data) {

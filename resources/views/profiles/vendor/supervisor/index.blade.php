@@ -32,6 +32,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -216,9 +217,11 @@
                     @if (count($agents) > 0)
                         @foreach ($agents as $agent)
                             <div class="col mb-2 mt-1" style="text-align: center;">
-                                <div>
-                                    <img class="rounded-circle" src="images/avatars/1.jpg" alt="" width="70">
-                                </div>
+                                @if (!is_null($agent->image))
+                                    <img width="70" height="70" class="rounded-circle offline" src="{{ asset('files/'.$agent->image) }}" alt="">
+                                @else
+                                    <img width="70" height="70" class="rounded-circle offline" src="images/no-image.jpg" alt="">
+                                @endif
                                 <div style="text-align: center;">
                                     <div><small>{{ $agent->name }}</small></div>
                                     <div><small>{{ $agent->profile }}</small></div>
