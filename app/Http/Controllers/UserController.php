@@ -30,6 +30,51 @@ class UserController extends Controller
     // Main View For User
     // Should be profile dependent
 
+    public function my_profile()
+    {
+        try {
+            if(is_null(\Auth::user()->profile_id)){
+                return redirect('/onboarding');
+            } else {
+                
+                $role = \Auth::user()->getUserProfile();
+    
+                $mode = $role->mode;
+                $profile = $role->profile;
+    
+                
+                $title = ucwords(Auth::user()->name);
+                $title_subheading  = ucwords($mode . " : " . $profile);
+                $title_icon = 'monitor';
+        
+                $active_slug = "my-profile";
+        
+                $profile_menu = self::getProfileMenuLinks();
+    
+                $profile_direct_links = self::getProfileMenuDirectLinks();
+                    
+                $program_direct_links = self::getProgramMenuDirectLinks();
+                
+                return view('my-profile', 
+                    compact(
+                        'mode',
+                        'profile',
+                        'active_slug',
+                        'profile_menu',
+                        'profile_direct_links',
+                        'program_direct_links',
+                        'title', 
+                        'title_subheading', 
+                        'title_icon',
+                    )
+                );
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
     public function profile_switcher($profile_id)
     {
         try {

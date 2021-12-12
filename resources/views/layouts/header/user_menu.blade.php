@@ -18,7 +18,7 @@ class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
                             @endif
                         </div>
                         <div class="widget-content-left">
-                            <div class="widget-heading">{{ ucwords(Auth::user()->name) }}</div>
+                            <div class="widget-heading"><a href="{{ route('my_profile') }}">{{ ucwords(Auth::user()->name) }}</a></div>
                             <div class="widget-subheading">{{ is_null(\Auth::user()->profile_id) ? "" : ucwords(Auth::user()->user_position) }}</div>
                         </div>
                         <div class="widget-content-right mr-2">
