@@ -209,7 +209,7 @@ class UserController extends Controller
                 if (is_null($request->input('hidden_province')) || is_null($request->input('hidden_lgu')) || is_null($request->input('hidden_region'))) {
                     return response()->json(['error' => true, 'message' => 'Address field id required.' ]);
                 }
-
+                
                 // $mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "" : "globe";
                 // $address = Location::where('province', $request->input('hidden_province'))
                 //                         ->where('lgu', $request->input('hidden_lgu'))
@@ -218,6 +218,13 @@ class UserController extends Controller
                                         
                 $user_details = UserDetail::where('user_id', \Auth::user()->id)->first();
     
+                if ($request->input('designation') == 1) {
+                    User::where('id', \Auth::user()->id)
+                            ->update([
+                                'profile_id' => $request->input('designation'),
+                            ]);
+                }
+
                 User::where('id', \Auth::user()->id)
                         ->update([
                             'middlename' => $request->input('middlename'),
