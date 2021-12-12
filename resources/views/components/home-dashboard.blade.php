@@ -13,7 +13,7 @@
 
         @if( \Auth::user()->profile_id == 1)
 
-            @php
+            {{-- @php
                 $sites_per_region = \DB::table('view_site_totals_per_vendor_per_region')
                                     ->where('program_id', $program->program_id)
                                     ->where('site_vendor_id', 1)
@@ -51,7 +51,7 @@
                 @endforeach
             </div>
 
-            <div class="divider"></div>
+            <div class="divider"></div> --}}
 
             <div class="row" style="margin-top: 20px;">
                 <div class="col-12">
