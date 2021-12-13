@@ -6195,18 +6195,19 @@ class GlobeController extends Controller
 
             if ($validate->passes()) {
                 for ($i=0; $i < count($request->input('sam_id')); $i++) {
-                    $activity = \DB::table('stage_activities')
-                                            ->where('program_id', $request->input('data_program'))
-                                            ->orderby('activity_id', 'desc')
-                                            ->take(1)
-                                            ->get();
+                    // $activity = \DB::table('stage_activities')
+                    //                         ->where('program_id', $request->input('data_program'))
+                    //                         ->orderby('activity_id', 'desc')
+                    //                         ->take(1)
+                    //                         ->get();
 
                     SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
                                         ->update(['activity_complete' => 'true']);
 
                     SiteStageTracking::create([
                         'sam_id' => $request->input('sam_id')[$i],
-                        'activity_id' => $activity[0]->activity_id,
+                        // 'activity_id' => $activity[0]->activity_id,
+                        'activity_id' => 29,
                         'activity_complete' => 'true',
                         'user_id' => \Auth::id(),
                     ]);
