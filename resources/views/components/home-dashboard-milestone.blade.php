@@ -22,24 +22,40 @@
                                     ->where('user_id', \Auth::id())
                                     ->first();
 
-    $milestones_data = \DB::table("view_site")
-                    ->select('stage_id', 'stage_name')
-                    ->where('program_id', $programid)
-                    ->where('view_site.site_vendor_id', $vendor->vendor_id)
-                    ->groupBy('stage_id', 'stage_name')
-                    ->get();
+    if (is_null($vendor->vendor_id)) {
+
+        $milestones_data = \DB::table("view_site")
+                        ->select('stage_id', 'stage_name')
+                        ->where('program_id', $programid)
+                        ->groupBy('stage_id', 'stage_name')
+                        ->get();
+
+                        
+        $milestones = \DB::table("program_stages")
+            ->select('stage_id', 'stage_name')
+            ->where('program_id', $programid)
+            ->get();
+    } else {
+
+        $milestones_data = \DB::table("view_site")
+                        ->select('stage_id', 'stage_name')
+                        ->where('program_id', $programid)
+                        ->where('view_site.site_vendor_id', $vendor->vendor_id)
+                        ->groupBy('stage_id', 'stage_name')
+                        ->get();
+                        
+        $milestones = \DB::table("program_stages")
+            ->select('stage_id', 'stage_name', 
+            \DB::raw('(SELECT COUNT(*) FROM view_site WHERE view_site.stage_id = program_stages.stage_id
+            AND view_site.site_vendor_id = '.$vendor->vendor_id.'
+            ) as program_stages_count
+            ')
+            )
+            ->where('program_id', $programid)
+            ->get();
+    }
 
 
-    $milestones = \DB::table("program_stages")
-        ->select('stage_id', 'stage_name', 
-        \DB::raw('(SELECT COUNT(*) FROM view_site 
-        WHERE view_site.stage_id = program_stages.stage_id
-        AND view_site.site_vendor_id = '.$vendor->vendor_id.'
-        ) as program_stages_count
-        ')
-        )
-        ->where('program_id', $programid)
-        ->get();
 
                     // dd($milestones);
     $i = 0;
@@ -72,7 +88,7 @@
 
                     <div class="widget-chart widget-chart-hover milestone_sites">
                         {{-- <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">- -</div> --}}
-                        <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">{{ $milestone->program_stages_count }}</div>
+                        <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">{{ isset($milestone->program_stages_count) ? $milestone->program_stages_count : 0 }}</div>
                         <div class="widget-subheading" id="stage_counter_label_{{ $milestone->stage_id }}">{{ $milestone->stage_name}}</div>
                     </div>
                 </div>
