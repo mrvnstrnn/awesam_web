@@ -6227,26 +6227,38 @@ class GlobeController extends Controller
     {
         try {
 
-            $sites = \DB::table("view_sites_activity")
-                    ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-                    ->where('program_id', $program)
-                    ->where('profile_id', \Auth::user()->profile_id);
+            $sites = \DB::table("view_site")
+                            ->where('program_id', $program_id)
+                            ->where('profile_id', \Auth::user()->profile_id)
+                            ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                            ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type");
+
+            // $sites = \DB::table("view_sites_activity")
+            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
+            //         ->where('program_id', $program)
+            //         ->where('profile_id', \Auth::user()->profile_id);
 
             if($site_type != '-'){
-                $sites = $sites->whereJsonContains("site_fields", [
-                    "field_name" => 'site_type',
-                    "value" => $site_type,
-                ]);
+                // $sites = $sites->whereJsonContains("site_fields", [
+                //     "field_name" => 'site_type',
+                //     "value" => $site_type,
+                // ]);
+
+                $sites->where('site_type', $site_type);
             } else if($program != '-') {
-                $sites = $sites->whereJsonContains("site_fields", [
-                    "field_name" => 'program',
-                    "value" => $program,
-                ]);
+                // $sites = $sites->whereJsonContains("site_fields", [
+                //     "field_name" => 'program',
+                //     "value" => $program,
+                // ]);
+
+                $sites->where('program', $program);
             } else if($technology != '-') {
-                $sites = $sites->whereJsonContains("site_fields", [
-                    "field_name" => 'technology',
-                    "value" => $technology,
-                ]);
+                // $sites = $sites->whereJsonContains("site_fields", [
+                //     "field_name" => 'technology',
+                //     "value" => $technology,
+                // ]);
+
+                $sites->where('technology', $technology);
             }
 
             $sites->get();
