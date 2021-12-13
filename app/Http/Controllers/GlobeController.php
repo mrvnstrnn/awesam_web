@@ -2527,8 +2527,8 @@ class GlobeController extends Controller
     {
         if($activity_type == 'all'){
             $sites = \DB::table("view_site")
-                            ->where('program_id', $program_id)
-                            ->whereNotNull('activity_name');
+                            ->where('program_id', $program_id);
+                            // ->whereNotNull('activity_name');
 
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
