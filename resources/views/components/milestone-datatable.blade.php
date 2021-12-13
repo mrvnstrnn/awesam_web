@@ -98,23 +98,24 @@
                                 @php
                                     $li_ctr++;
 
-                                    if($program->program_id == 1){
-                                        $MiniDashComponent = "datatable-mini-dashboard-newsites";
-                                    }
-                                    elseif($program->program_id == 3){
+                                    // if($program->program_id == 1){
+                                    //     $MiniDashComponent = "datatable-mini-dashboard-newsites";
+                                    // }
+                                    // else
+                                    if($program->program_id == 3){
                                         $MiniDashComponent = "datatable-mini-dashboard-coloc";
                                     }
-                                    elseif($program->program_id == 4){
-                                        $MiniDashComponent = "datatable-mini-dashboard-ibs";
-                                    }
-                                    else {
-                                        $MiniDashComponent = "";
-                                    }
+                                    // elseif($program->program_id == 4){
+                                    //     $MiniDashComponent = "datatable-mini-dashboard-ibs";
+                                    // }
+                                    // else {
+                                    //     $MiniDashComponent = "";
+                                    // }
 
                                 @endphp
 
                                 @if($MiniDashComponent != "")
-                                    {{-- <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/> --}}
+                                    <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
                                 @endif
 
                                 <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 

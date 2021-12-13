@@ -606,9 +606,11 @@
         //     ($('#filters-box input[name="technology"]').val().toUpperCase() == 'CARRIER UPGRADE' || $('#filters-box input[name="technology"]').val().toUpperCase() == 'L21 ACTIVATION' || $('#filters-box input[name="technology"]').val().toUpperCase() == 'FE TO GE')
         //     ) {
 
-            $(".button_endorsement_area").prepend(
-                "<button class='btn btn-sm btn-success btn-shadow bulk-btn-accept-endorsement-artb' data-what_table='assigned-sites-coloc-table    ' data-complete='true' data-program_id='3' data-activity_name>Available for Auto RTB</button>"
-            );
+            if ($('#coloc-filters-form select[name="site_type"]').val() != '' || $('#coloc-filters-form select[name="program"]').val() != '' || $('#coloc-filters-form select[name="technology"]').val() != '') {
+                $(".button_endorsement_area").prepend(
+                    "<button class='btn btn-sm btn-success btn-shadow bulk-btn-accept-endorsement-artb' data-what_table='assigned-sites-coloc-table    ' data-complete='true' data-program_id='3' data-activity_name>Available for Auto RTB</button>"
+                );
+            }
         // }
 
         $(".filter_text").removeClass("d-none");

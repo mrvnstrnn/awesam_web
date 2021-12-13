@@ -6189,25 +6189,34 @@ class GlobeController extends Controller
     public function endorse_atrb(Request $request)
     {
         try {
-            for ($i=0; $i < count($request->input('sam_id')); $i++) {
-                $activity = \DB::table('stage_activities')
-                                        ->where('program_id', $request->input('data_program'))
-                                        ->orderby('activity_id', 'desc')
-                                        ->take(1)
-                                        ->get();
+            $validate = \Validator::make($request->all(), array(
+                'sam_id' => 'required',
+            ));
 
-                SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
-                                    ->update(['activity_complete' => 'true']);
+            if ($validate->passes()) {
+                for ($i=0; $i < count($request->input('sam_id')); $i++) {
+                    $activity = \DB::table('stage_activities')
+                                            ->where('program_id', $request->input('data_program'))
+                                            ->orderby('activity_id', 'desc')
+                                            ->take(1)
+                                            ->get();
 
-                SiteStageTracking::create([
-                    'sam_id' => $request->input('sam_id')[$i],
-                    'activity_id' => $activity[0]->activity_id,
-                    'activity_complete' => 'true',
-                    'user_id' => \Auth::id(),
-                ]);
+                    SiteStageTracking::where('sam_id', $request->input('sam_id')[$i])
+                                        ->update(['activity_complete' => 'true']);
+
+                    SiteStageTracking::create([
+                        'sam_id' => $request->input('sam_id')[$i],
+                        'activity_id' => $activity[0]->activity_id,
+                        'activity_complete' => 'true',
+                        'user_id' => \Auth::id(),
+                    ]);
+                }
+
+                return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => "No data selected."]);
             }
-
-            return response()->json(['error' => false, 'message' => "This ARTB site move to completed."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
