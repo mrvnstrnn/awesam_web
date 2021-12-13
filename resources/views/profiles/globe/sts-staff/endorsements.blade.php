@@ -634,10 +634,10 @@
                 '<button class="btn btn-sm btn-outline-primary filter_button m-r1" id="technology">'+$('#coloc-filters-form select[name="technology"]').val()+' x</button>'
             )
         }
-
-        var site_type = $('#filters-box select[name="site_type"]').val() != '' ? $('#filters-box select[name="site_type"]').val() : "-";
-        var program = $('#filters-box select[name="program"]').val() != '' ? $('#filters-box select[name="program"]').val() : "-";
-        var technology = $('#filters-box select[name="technology"]').val() != '' ? $('#filters-box select[name="technology"]').val() : "-";
+        
+        var site_type = $('#coloc-filters-form select[name="site_type"]').val() != '' ? $('#coloc-filters-form select[name="site_type"]').val() : "-";
+        var program = $('#coloc-filters-form select[name="program"]').val() != '' ? $('#coloc-filters-form select[name="program"]').val() : "-";
+        var technology = $('#coloc-filters-form select[name="technology"]').val() != '' ? $('#coloc-filters-form select[name="technology"]').val() : "-";
 
         var table = $('#assigned-sites-coloc-table').DataTable();
 
