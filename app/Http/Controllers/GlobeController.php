@@ -6228,7 +6228,7 @@ class GlobeController extends Controller
         try {
 
             $sites = \DB::table("view_site")
-                            ->where('program_id', $program_id)
+                            // ->where('program_id', $program_id)
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                             ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type");
