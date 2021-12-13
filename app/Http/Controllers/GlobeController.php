@@ -6245,14 +6245,18 @@ class GlobeController extends Controller
                 // ]);
 
                 $sites->where('site_type', $site_type);
-            } else if($program != '-') {
+            } 
+            
+            if($program != '-') {
                 // $sites = $sites->whereJsonContains("site_fields", [
                 //     "field_name" => 'program',
                 //     "value" => $program,
                 // ]);
 
                 $sites->where('program', $program);
-            } else if($technology != '-') {
+            } 
+            
+            if($technology != '-') {
                 // $sites = $sites->whereJsonContains("site_fields", [
                 //     "field_name" => 'technology',
                 //     "value" => $technology,
