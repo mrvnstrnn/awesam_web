@@ -2615,7 +2615,10 @@ class GlobeController extends Controller
             //                                     ->where('user_details.IS_id', \Auth::id())
             //                                     ->get()
             //                                     ->pluck('id');
-            
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
             $sites = \DB::table("view_vendor_assigned_sites")
                         ->where('program_id', $program_id)
                         ->where('IS_id', \Auth::user()->id);
@@ -2623,11 +2626,20 @@ class GlobeController extends Controller
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
+                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
+
+            }                       
+            else if($program_id == 4){
+
+                $sites->leftJoin('program_ibs', 'view_vendor_assigned_sites.sam_id', 'program_ibs.sam_id')
+                ->select("view_vendor_assigned_sites.*", "program_ibs.*")
+                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
 
             }                       
             elseif($program_id == 8){
-                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id')
+                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
             }
 
 
