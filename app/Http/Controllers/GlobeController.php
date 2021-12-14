@@ -1881,11 +1881,11 @@ class GlobeController extends Controller
                     ]);
 
                     \DB::table("site")
-                                                ->where("sam_id", $request->input("sam_id"))
-                                                ->update([
-                                                    'site_vendor_id' => $request->input('vendor'),
-                                                    'site_pr' => $request->input('reference_number'),
-                                                ]);
+                            ->where("sam_id", $request->input("sam_id"))
+                            ->update([
+                                'site_vendor_id' => $request->input('vendor'),
+                                'site_pr' => $request->input('reference_number'),
+                            ]);
 
                     // a_update_data(SAM_ID, PROFILE_ID, USER_ID, true/false)
                     $new_endorsements = \DB::statement('call `a_update_data`("'.$request->input('sam_id').'", '.\Auth::user()->profile_id.', '.\Auth::id().', "'."true".'")');
@@ -3325,7 +3325,7 @@ class GlobeController extends Controller
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
             $sites = \DB::table("view_site")
-                    ->where('site_vendor_id', $vendor)
+                    ->where('vendor_id', $vendor)
                     // ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
                     // ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
                     // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
@@ -3386,14 +3386,15 @@ class GlobeController extends Controller
                     
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                     ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
-                        ->where('vendor_id', $vendor)
+                        ->where('view_site.vendor_id', $vendor)
                     ;
     
                 }
     
                 elseif($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
-                          ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                          ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
+                          ->where('view_site.vendor_id', $vendor);
                 }
     
 

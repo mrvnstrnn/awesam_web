@@ -1,16 +1,16 @@
 @php
-    if(\Auth::user()->profile_id == 2){
-        $title = "My Site Milestones";
-        $table = 'view_milestone_stages_globe';
-    }
-    elseif(\Auth::user()->profile_id == 3){
-        $title = "My Team's Site Milestones";
-        $table = 'view_milestone_stages_globe';
-    }
-    else{
-        $title = "Site Milestones";
-        $table = 'view_milestone_stages_globe';
-    }
+    // if(\Auth::user()->profile_id == 2){
+    //     $title = "My Site Milestones";
+    //     $table = 'view_milestone_stages_globe';
+    // }
+    // elseif(\Auth::user()->profile_id == 3){
+    //     $title = "My Team's Site Milestones";
+    //     $table = 'view_milestone_stages_globe';
+    // }
+    // else{
+    //     $title = "Site Milestones";
+    //     $table = 'view_milestone_stages_globe';
+    // }
 
     // $milestones = \DB::table($table)
     //                 ->select('stage_id', 'stage_name', DB::raw("SUM(counter) as counter"))
@@ -40,14 +40,14 @@
         $milestones_data = \DB::table("view_site")
                         ->select('stage_id', 'stage_name')
                         ->where('program_id', $programid)
-                        ->where('view_site.site_vendor_id', $vendor->vendor_id)
+                        ->where('view_site.vendor_id', $vendor->vendor_id)
                         ->groupBy('stage_id', 'stage_name')
                         ->get();
                         
         $milestones = \DB::table("program_stages")
             ->select('stage_id', 'stage_name', 
             \DB::raw('(SELECT COUNT(*) FROM view_site WHERE view_site.stage_id = program_stages.stage_id
-            AND view_site.site_vendor_id = '.$vendor->vendor_id.'
+            AND view_site.vendor_id = '.$vendor->vendor_id.'
             ) as program_stages_count
             ')
             )
