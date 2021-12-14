@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\UserDetail;
+use App\Models\Profile;
 use App\Models\Vendor;
 use DataTables;
 use Carbon\Carbon;
@@ -185,6 +186,11 @@ class UserController extends Controller
                 $imageName = $request->input('capture_image');
             }
 
+            $profiles = Profile::find($request->input('designation'));
+
+            
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
+
             $validate = \Validator::make($request->all(), array(
                 'firstname' => 'required',
                 // 'middlename' => 'required',
@@ -230,13 +236,14 @@ class UserController extends Controller
                             'middlename' => $request->input('middlename'),
                             'nickname' => $request->input('nickname'),
                             'suffix' => $request->input('suffix'),
+                            'profile_id' => $profiles->mode == "vendor" ? null : $request->get('designation'),
                         ]);
 
                 if(!is_null($user_details)){
                     UserDetail::where('user_id', \Auth::id())
                                 ->update([
                                     // 'address_id' => $address->lgu_id,
-                                    'mode' => \Auth::user()->getUserProfile()->mode == "vendor" ? "vendor" : "globe",
+                                    'mode' => $profiles->mode == "vendor" ? "vendor" : "globe",
                                     'birthday' => $request->get('birthday'),
                                     'gender' => $request->get('gender'),
                                     'contact_no' => $request->get('contact_no'),
