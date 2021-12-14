@@ -28,6 +28,8 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
+
+        <meta property="og:image" content="{{ asset('images/awesam.png') }}" />
                 
         <!-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
         <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css">
