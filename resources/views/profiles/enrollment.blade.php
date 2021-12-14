@@ -1045,11 +1045,11 @@
 
     <script>
 
-        $(document).ready(function(){
-            if ("{{ \Auth::user()->first_time_login }}" == "0" && "{{ \Auth::user()->getUserProfile()->mode }}" != "vendor" || "{{ !is_null(\Auth::user()->profile_id) }}") {
-                $("#firsttimeModal").modal("show");
-            }
-        });
+        // $(document).ready(function(){
+        //     if ("{{ \Auth::user()->first_time_login }}" == "0" && "{{ \Auth::user()->getUserProfile()->mode }}" != "vendor" || "{{ !is_null(\Auth::user()->profile_id) }}") {
+        //         $("#firsttimeModal").modal("show");
+        //     }
+        // });
 
         $("#take_photo, #drop_take_photo").on("click", function(){
             // console.log("take photo");
@@ -1267,6 +1267,8 @@
                         'success'
                     )
 
+                    location.reload();
+
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
@@ -1319,6 +1321,8 @@
         if (user_details_data != null) {
 
             if (user_details_data.birthday != null) {
+                $("#finish-btn").attr("disabled", "disabled");
+
                 $(".step-1-li").addClass('done');
                 $(".step-2-li").addClass('done');
                 $(".step-3-li").addClass('done');
