@@ -1267,7 +1267,12 @@
                         'success'
                     )
 
-                    location.reload();
+                    $("#finish-btn").attr("disabled", "disabled");
+                    $("#finish-btn").text('Onboarded');
+                    if (resp.mode == 'globe') {
+                        location.reload();
+                    }
+
 
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
@@ -1322,6 +1327,7 @@
 
             if (user_details_data.birthday != null) {
                 $("#finish-btn").attr("disabled", "disabled");
+                $("#finish-btn").text('Onboarded');
 
                 $(".step-1-li").addClass('done');
                 $(".step-2-li").addClass('done');

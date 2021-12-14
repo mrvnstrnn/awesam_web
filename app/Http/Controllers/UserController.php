@@ -243,7 +243,7 @@ class UserController extends Controller
                     UserDetail::where('user_id', \Auth::id())
                                 ->update([
                                     // 'address_id' => $address->lgu_id,
-                                    'mode' => $profiles->mode == "vendor" ? "vendor" : "globe",
+                                    'mode' => $profiles->mode,
                                     'birthday' => $request->get('birthday'),
                                     'gender' => $request->get('gender'),
                                     'contact_no' => $request->get('contact_no'),
@@ -260,12 +260,12 @@ class UserController extends Controller
                                     'image' => $imageName,
                                 ]);
 
-                    return response()->json(['error' => false, 'message' => 'Success updated details.' ]);
+                    return response()->json(['error' => false, 'message' => 'Success updated details.', 'mode' => $profiles->mode ]);
                 } else {
 
                     $detail = new UserDetail();
                     $detail->address_id = $request->input('hidden_lgu');
-                    $detail->mode = \Auth::user()->getUserProfile()->mode == "vendor" ? "vendor" : "globe";
+                    $detail->mode = $profiles->mode;
                     $detail->user_id = \Auth::user()->id;
                     $detail->birthday = $request->get('birthday');
                     $detail->gender = $request->get('gender');
@@ -283,7 +283,7 @@ class UserController extends Controller
 
                     $detail->save();
 
-                    return response()->json(['error' => false, 'message' => 'Success added details.' ]);
+                    return response()->json(['error' => false, 'message' => 'Success added details.', 'mode' => $profiles->mode ]);
                 }
 
             } else {
