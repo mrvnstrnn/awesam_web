@@ -2532,7 +2532,9 @@ class GlobeController extends Controller
 
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type");
+                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type",                             
+                      "program_coloc.gt_saq_milestone",  
+                      "program_coloc.gt_saq_milestone_category");
             }
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
@@ -2553,13 +2555,16 @@ class GlobeController extends Controller
             if ( $program_id == 3 ) {
                                     
                 $sites->leftJoin('program_coloc', 'view_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+                ->select("view_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
+                "program_coloc.gt_saq_milestone_category");
 
             }
 
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_assigned_sites.sam_id')
-                      ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                      ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
+                      "program_ibs.saq_milestone",
+                      "program_ibs.saq_submilestone");
             }
 
             $sites->get();
@@ -2599,7 +2604,8 @@ class GlobeController extends Controller
             if ( $program_id == 3 ) {
                                     
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type");
+                ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
+                "program_coloc.gt_saq_milestone_category");
 
             }
 
@@ -2626,7 +2632,8 @@ class GlobeController extends Controller
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
+                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
+                "program_coloc.gt_saq_milestone_category")
                 ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
 
             }                       
@@ -2727,7 +2734,8 @@ class GlobeController extends Controller
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
-                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type");
+                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
+                "program_coloc.gt_saq_milestone_category");
 
             }
                 
@@ -2788,7 +2796,9 @@ class GlobeController extends Controller
                                     
                                     $sites->whereIn('view_site.activity_id', [15, 21, 22, 26, 27]);
                                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type")              
+                                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type",                             
+                                    "program_coloc.gt_saq_milestone",  
+                                    "program_coloc.gt_saq_milestone_category")              
                                             ->get();
 
                                     // return dd($sites->get());
@@ -3126,17 +3136,21 @@ class GlobeController extends Controller
 
                     if($program_id == 3){
                         $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
-                              ->select('view_site.*', 'program_coloc.nomination_id', 'program_coloc.pla_id', 'program_coloc.highlevel_tech',  'program_coloc.technology', 'program_coloc.site_type');
+                              ->select('view_site.*', 'program_coloc.nomination_id', 'program_coloc.pla_id', 'program_coloc.highlevel_tech',  'program_coloc.technology', 'program_coloc.site_type',                             
+                              "program_coloc.gt_saq_milestone",  
+                              "program_coloc.gt_saq_milestone_category");
                     }
 
                     else if($program_id == 4){
                         $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
-                              ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program');
+                              ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
+                              "program_ibs.saq_milestone",
+                              "program_ibs.saq_submilestone");
                     }
                     
                     else if($program_id == 8){
                         $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
-                              ->select('view_site.*', 'program_renewal.wireless_project_code', 'program_renewal.pla_id', 'program_renewal.program');
+                              ->select('view_site.*', 'program_renewal.wireless_project_code', 'program_renewal.pla_id', 'program_renewal.program', 'program_renewal.mar_status');
                     }
 
 
@@ -3188,8 +3202,9 @@ class GlobeController extends Controller
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
                             "program_coloc.technology", 
-                            "program_coloc.site_type"
-                            )
+                            "program_coloc.site_type",
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category")
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
                     ->get();
@@ -3214,7 +3229,11 @@ class GlobeController extends Controller
                                 "view_site.site_category",
                                 "view_site.aging",
                                 "program_ibs.wireless_project_code",
-                                "program_ibs.program"
+                                "program_ibs.program",
+                                "program_ibs.saq_milestone",
+                                "program_ibs.saq_submilestone"
+
+
                                 )
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('view_site.activity_id')
@@ -3272,7 +3291,9 @@ class GlobeController extends Controller
                             "program_coloc.highlevel_tech",  
                             "program_coloc.technology", 
                             "program_coloc.site_type",
-                            "program_coloc.address"
+                            "program_coloc.address",
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
                             )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
@@ -3298,7 +3319,9 @@ class GlobeController extends Controller
                                 "view_site.aging",
                                 "program_ibs.wireless_project_code",
                                 "program_ibs.program",
-                                "program_ibs.address"
+                                "program_ibs.address",
+                                "program_ibs.saq_milestone",
+                                "program_ibs.saq_submilestone"                                
                                 )
                             ->where('view_site.program_id', $program_id)
                             ->whereNull('view_site.activity_id')
@@ -3397,7 +3420,12 @@ class GlobeController extends Controller
                 if ( $program_id == 3 ) {
                     
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
+                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  
+                    "program_coloc.site_type",
+                    "program_coloc.gt_saq_milestone",  
+                    "program_coloc.gt_saq_milestone_category"
+
+                    )
                         ->where('view_site.vendor_id', $vendor)
                     ;
     
@@ -3405,7 +3433,9 @@ class GlobeController extends Controller
     
                 elseif($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
-                          ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
+                          ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
+                          "program_ibs.saq_milestone",
+                          "program_ibs.saq_submilestone")
                           ->where('view_site.vendor_id', $vendor);
                 }
     
@@ -6245,7 +6275,9 @@ class GlobeController extends Controller
                             // ->where('program_id', $program_id)
                             ->where('profile_id', \Auth::user()->profile_id)
                             ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                            ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type");
+                            ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type",                             
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category");
 
             // $sites = \DB::table("view_sites_activity")
             //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'site_fields', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
