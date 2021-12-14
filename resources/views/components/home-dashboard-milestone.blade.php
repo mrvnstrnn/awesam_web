@@ -1,16 +1,16 @@
 @php
-    // if(\Auth::user()->profile_id == 2){
-    //     $title = "My Site Milestones";
-    //     $table = 'view_milestone_stages_globe';
-    // }
-    // elseif(\Auth::user()->profile_id == 3){
-    //     $title = "My Team's Site Milestones";
-    //     $table = 'view_milestone_stages_globe';
-    // }
-    // else{
-    //     $title = "Site Milestones";
-    //     $table = 'view_milestone_stages_globe';
-    // }
+    if(\Auth::user()->profile_id == 2){
+        $title = "My Site Milestones";
+        $table = 'view_milestone_stages_globe';
+    }
+    elseif(\Auth::user()->profile_id == 3){
+        $title = "My Team's Site Milestones";
+        $table = 'view_milestone_stages_globe';
+    }
+    else{
+        $title = "Site Milestones";
+        $table = 'view_milestone_stages_globe';
+    }
 
     // $milestones = \DB::table($table)
     //                 ->select('stage_id', 'stage_name', DB::raw("SUM(counter) as counter"))
