@@ -93,7 +93,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "gt_saq_milestone";
                     } 
                     else {
-                        var filter_column = "highlevel_tech";
+                        var filter_column = "gt_saq_milestone";
 
                     }
                 }        
@@ -110,8 +110,8 @@ function makeDT(whatTable, whatCols, active_program) {
                 
                 else if(active_program == 8){
 
-                    if(window.location.pathname != "/assigned-sites"){
-                        var filter_column = "classification";
+                    if(window.location.pathname == "/program-sites"){
+                        var filter_column = "mar_status";
                     } 
                     else {
                         var filter_column = "classification";
