@@ -90,10 +90,13 @@ function makeDT(whatTable, whatCols, active_program) {
                 if(active_program == 3){
 
                     if(window.location.pathname != "/assigned-sites"){
-                        var filter_column = "highlevel_tech";
+                        var filter_column = "gt_saq_milestone";
+                    } 
+                    else if(window.location.pathname != "/assigned-sites"){
+                        var filter_column = "gt_saq_milestone";
                     } 
                     else {
-                        var filter_column = "highlevel_tech";
+                        var filter_column = "gt_saq_milestone";
 
                     }
                 }        
