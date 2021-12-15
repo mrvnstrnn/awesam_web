@@ -840,7 +840,11 @@ class GlobeController extends Controller
     public function assign_agent(Request $request)
     {
         try {
-            $checkAgent = \DB::table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+            $checkAgent = \DB::table('site_users')
+                            ->where('sam_id', $request
+                            ->input('sam_id'))
+                            ->where('agent_id', $request->input('agent_id'))
+                            ->first();
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -852,11 +856,30 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                if ( 
+                    ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
+                    ($request->input('data_program') == 3 && $profile_id == 3 && $request->input('activity_id') == 7)
+                ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                }
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
             } else {
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+
+                if ( 
+                    ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
+                    ($request->input('data_program') == 3 && $profile_id == 3 && $request->input('activity_id') == 7)
+                ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                }
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
             }
@@ -869,7 +892,10 @@ class GlobeController extends Controller
     public function assign_supervisor(Request $request)
     {
         try {
-            $checkAgent = \DB::table('site_users')->where('sam_id', $request->input('sam_id'))->where('agent_id', $request->input('agent_id'))->first();
+            $checkAgent = \DB::table('site_users')
+                        ->where('sam_id', $request->input('sam_id'))
+                        ->where('agent_id', $request->input('agent_id'))
+                        ->first();
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -881,12 +907,31 @@ class GlobeController extends Controller
                     'sam_id' => $request->input('sam_id'),
                 ]);
 
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                if ( 
+                    ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
+                    ($request->input('data_program') == 3 && $profile_id == 3 && $request->input('activity_id') == 7)
+                ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                }
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
             } else {
-                $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
-
+                
+                if ( 
+                    ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
+                    ($request->input('data_program') == 3 && $profile_id == 3 && $request->input('activity_id') == 7)
+                ) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                }
+                
                 return response()->json(['error' => false, 'message' => "Successfully assigned supervisor."]);
             }
         } catch (\Throwable $th) {
@@ -3375,42 +3420,72 @@ class GlobeController extends Controller
 
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
-            $sites = \DB::table("view_site")
-                ->where('program_id', $program_id);
+            $sites = \DB::table("view_site");
 
-                if ($program_id == 1) {
-                    $sites->where('activity_id', 8);
-                } else if ($program_id == 3 && \Auth::user()->profile_id == 1) {
-                    $sites->where('activity_id', 6);
-                } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
-                    $sites->where('activity_id', 7);
-                } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
-                    $sites->where('activity_id', 6);
-                } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
-                    $sites->where('activity_id', 5);
-                } else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
-                    $sites->where('activity_id', 5);
+                // if ($program_id == 1) {
+                //     $sites->where('activity_id', 8);
+                // } else if ($program_id == 3 && \Auth::user()->profile_id == 1) {
+                //     $sites->where('activity_id', 6);
+                // } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
+                //     $sites->where('activity_id', 7);
+                // } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
+                //     $sites->where('activity_id', 6);
+                // } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
+                //     $sites->where('activity_id', 5);
+                // } else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
+                //     $sites->where('activity_id', 5);
+                // }
+
+                // $sites->where('view_site.profile_id', \Auth::user()->profile_id);
+
+                
+                if (\Auth::user()->profile_id == 1) {
+                    $supervisors_agents_id = UserDetail::select('user_id')
+                                                ->where('vendor_id', $vendor)
+                                                ->get()
+                                                ->pluck('user_id');
+
+                    $site_user_samid = \DB::table("site_users")
+                                    ->select('sam_id')
+                                    ->whereIn('agent_id', $supervisors_agents_id)
+                                    ->get()
+                                    ->pluck('sam_id');
+
+                    $activity_id = 6;
+                } else {
+                    $supervisors_agents_id = UserDetail::select('user_id')
+                                            ->where('vendor_id', $vendor)
+                                            ->where('IS_id', \Auth::id())
+                                            ->get()
+                                            ->pluck('user_id');
+
+                    $site_user_samid = \DB::table("site_users")
+                                            ->select('sam_id')
+                                            ->whereIn('agent_id', $supervisors_agents_id)
+                                            ->get()
+                                            ->pluck('sam_id');
+
+                    $activity_id = 7;
                 }
-
-                $sites->where('profile_id', \Auth::user()->profile_id);
 
                 if ( $program_id == 3 ) {
-                    
+
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                     ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
+                        ->where('activity_id', '>=', $activity_id)
                         ->where('view_site.vendor_id', $vendor)
-                    ;
-    
-                }
-    
-                elseif($program_id == 4){
+                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                        // dd($sites->get());
+                } else if($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
                           ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
-                          ->where('view_site.vendor_id', $vendor);
+                        ->where('activity_id', '>=', $activity_id)
+                        ->where('view_site.vendor_id', $vendor)
+                        ->whereNotIn('view_site.sam_id', $site_user_samid);
                 }
     
 
-                $sites->get();
+                $sites->where('view_site.program_id', $program_id)->get();
 
                 // dd($sites); 
 
@@ -5041,16 +5116,22 @@ class GlobeController extends Controller
             $site_users = \DB::table('site_users')
                             ->get();
 
-            $vendor = \App\Models\UserDetail::select('user_details.vendor_id')
+            $vendor = UserDetail::select('user_details.vendor_id')
                                             ->where('user_id', \Auth::id())
                                             ->first();
+
+            if (\Auth::user()->profile_id == 1) {
+                $profile_id = 3;
+            } else {
+                $profile_id = 2;
+            }
 
             if (isset($vendor->vendor_id)) {
                 $agents = \DB::table('users')
                             ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
                             ->join('user_details', 'user_details.user_id', 'users.id')
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                            // ->where('user_details.IS_id', \Auth::user()->id)
+                            ->where('users.profile_id', $profile_id)
                             ->where('user_programs.program_id', $program_id)
                             ->where('user_details.vendor_id', $vendor->vendor_id)
                             ->get();
@@ -5059,7 +5140,7 @@ class GlobeController extends Controller
                             ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
                             ->join('user_details', 'user_details.user_id', 'users.id')
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                            // ->where('user_details.IS_id', \Auth::user()->id)
+                            ->where('users.profile_id', $profile_id)
                             ->where('user_programs.program_id', $program_id)
                             ->get();
             }
