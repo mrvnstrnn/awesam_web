@@ -96,7 +96,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "gt_saq_milestone";
                     } 
                     else {
-                        var filter_column = "highlevel_tech";
+                        var filter_column = "gt_saq_milestone";
 
                     }
                 }        
