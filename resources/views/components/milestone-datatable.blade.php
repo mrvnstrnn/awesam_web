@@ -114,7 +114,7 @@
 
                                 @endphp
 
-                                @if($MiniDashComponent != "")
+                                @if($MiniDashComponent != "" && $program->program_id == 3)
                                     <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
                                 @endif
 
