@@ -97,6 +97,7 @@
 
                                 @php
                                     $li_ctr++;
+                                    $MiniDashComponent = ""
 
                                     // if($program->program_id == 1){
                                     //     $MiniDashComponent = "datatable-mini-dashboard-newsites";
