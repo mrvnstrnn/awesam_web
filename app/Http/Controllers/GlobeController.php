@@ -3494,14 +3494,12 @@ class GlobeController extends Controller
                 if ( $program_id == 3 ) {
 
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                    ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type")
-                        ->where('activity_id', '>=', $activity_id)
                     ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  
                     "program_coloc.site_type",
                     "program_coloc.gt_saq_milestone",  
                     "program_coloc.gt_saq_milestone_category"
-
                     )
+                        ->where('activity_id', '>=', $activity_id)
                         ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                         // dd($sites->get());
