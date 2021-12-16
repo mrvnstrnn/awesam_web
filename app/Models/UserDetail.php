@@ -11,5 +11,5 @@ class UserDetail extends Model
 
     // protected $connection = 'mysql2';
 
-    protected $fillable = ['user_id', 'mode', 'company_id', 'program_id', 'address_id'];
+    protected $fillable = ['user_id', 'mode', 'vendor_id', 'program_id', 'address_id', 'designation'];
 }

@@ -1193,4 +1193,104 @@ class UserController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function get_all_users ()
+    {
+        try {
+            $users = User::select('users.email', 'users.name', 'users.id')
+                        ->join('user_details', 'user_details.user_id', 'users.id')
+                        // ->join('profiles', 'profiles.id', 'users.profile_id')
+                        // ->join('vendor', 'vendor.vendor_id', 'user_details.vendor_id')
+                        ->get();
+
+            $dt = DataTables::of($users)
+                    ->addColumn('action', function($row){
+                        $btn = '<button class="btn btn-lg btn-primary edit_user" type="button" data-id="'.$row->id.'">Edit</button>';
+                        return $btn;                        
+                    });
+                            
+            $dt->rawColumns(['action']);
+            return $dt->make(true);
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function add_new_user (Request $request)
+    {
+        try {
+
+            $required_unique = "";
+                
+            if (is_null($request->get('id'))) {
+                $required_unique = "unique:users";
+            }
+            
+            $validate = Validator::make($request->all(), array(
+                'firstname' => ['required'],
+                'lastname' => ['required'],
+                'email' => ['required', $required_unique],
+                'profile' => ['required'],
+            ));
+
+            if ($validate->passes()) {
+
+                $profile = Profile::find($request->get('profile'));
+
+                $user = User::updateOrCreate([
+                            'id'   => $request->get('id'),
+                        ], [
+                            'firstname' => $request->get('firstname'),
+                            'lastname' => $request->get('lastname'),
+                            'name' => $request->get('firstname') . " " .$request->get('lastname'),
+                            'email' => $request->get('email'),
+                            'password' => Hash::make("12345678"),
+                            'email_verified_at' => Carbon::now(),
+                        ]);
+
+                if (is_null($request->get('id'))) {
+
+                    UserDetail::create([
+                        'vendor_id' => $request->get('vendor'),
+                        'user_id' => $user->id,
+                        'mode' => $profile->mode,
+                        'designation' => $profile->id,
+                    ]);
+                } else {
+                    
+                    UserDetail::where('user_id', $request->get('id'))
+                    ->update([
+                        'vendor_id' => $request->get('vendor'),
+                        'user_id' => $user->id,
+                        'mode' => $profile->mode,
+                        'designation' => $profile->id,
+                    ]);
+                }
+
+                
+                return response()->json(['error' => false, 'message' => "Successfully added user." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_data_user (Request $request)
+    {
+        try {
+            $users = UserDetail::join('users', 'users.id', 'user_details.user_id')
+                ->where('users.id', $request->get('id'))
+                ->first();
+
+            return response()->json(['error' => false, 'message' => $users ]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
 }

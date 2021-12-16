@@ -40,6 +40,9 @@ use App\Http\Controllers\RenewalController;
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/update-profile-data', [UserController::class, 'update_profile_data']);
+    Route::any('/get-all-users', [UserController::class, 'get_all_users']);
+    Route::post('/add-new-user', [UserController::class, 'add_new_user']);
+    Route::post('/get-data-user', [UserController::class, 'get_data_user']);
 
     Route::post('/daily-activity', [UserController::class, 'daily_activity'])->name('daily_activity');
     Route::post('/work-plan', [UserController::class, 'work_plan'])->name('work_plan');
