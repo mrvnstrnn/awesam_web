@@ -14,6 +14,7 @@ use App\Models\Location;
 use App\Models\UserDetail;
 use App\Models\Profile;
 use App\Models\Vendor;
+use App\Models\UserProgram;
 use DataTables;
 use Carbon\Carbon;
 use Log;
@@ -236,6 +237,7 @@ class UserController extends Controller
                             'middlename' => $request->input('middlename'),
                             'nickname' => $request->input('nickname'),
                             'suffix' => $request->input('suffix'),
+                            'onboarded' => 1,
                             'profile_id' => $profiles->mode == "vendor" ? null : $request->get('designation'),
                         ]);
 
@@ -1197,7 +1199,7 @@ class UserController extends Controller
     public function get_all_users ()
     {
         try {
-            $users = User::select('users.email', 'users.name', 'users.id')
+            $users = User::select('users.email', 'users.name', 'users.id', 'users.onboarded')
                         ->join('user_details', 'user_details.user_id', 'users.id')
                         // ->join('profiles', 'profiles.id', 'users.profile_id')
                         // ->join('vendor', 'vendor.vendor_id', 'user_details.vendor_id')
@@ -1206,7 +1208,10 @@ class UserController extends Controller
             $dt = DataTables::of($users)
                     ->addColumn('action', function($row){
                         $btn = '<button class="btn btn-lg btn-primary edit_user" type="button" data-id="'.$row->id.'">Edit</button>';
-                        return $btn;                        
+                        return $btn;
+                    })
+                    ->addColumn('status', function($row){
+                        return $row->onboarded == 0 ? "Not yet onboard" : "Onboarded";              
                     });
                             
             $dt->rawColumns(['action']);
@@ -1251,6 +1256,13 @@ class UserController extends Controller
                         ]);
 
                 if (is_null($request->get('id'))) {
+                    
+                    for ($i=0; $i < count($request->get('program')); $i++) { 
+                        UserProgram::create([
+                            'user_id' => $user->id,
+                            'program_id' => $request->get('program')[$i],
+                        ]);
+                    }
 
                     UserDetail::create([
                         'vendor_id' => $request->get('vendor'),

@@ -206,7 +206,7 @@
                                                             @endif
                                                         @else
                                                             @php
-                                                                $designation = \App\Models\UserDetail::select('designation')
+                                                                $designation = \App\Models\UserDetail::select('designation', 'mode')
                                                                                         ->where('user_id', \Auth::id()) 
                                                                                         ->first();
                                                             @endphp
@@ -1267,6 +1267,7 @@
                         'success'
                     )
 
+                    $("#prev-btn-4").attr("disabled", "disabled");
                     $("#finish-btn").attr("disabled", "disabled");
                     $("#finish-btn").text('Onboarded');
                     if (resp.mode == 'globe') {
@@ -1320,13 +1321,15 @@
 
     $(document).ready(function () {
 
-        var user_details_data = JSON.parse("{{ json_encode(\Auth::user()->getUserDetail()->first()); }}".replace(/&quot;/g,'"'));
         var user_data = JSON.parse("{{ json_encode(\Auth::user()); }}".replace(/&quot;/g,'"'));
 
-        if (user_details_data != null) {
+        var user_details_data = JSON.parse("{{ json_encode(\Auth::user()->getUserDetail()->first()); }}".replace(/&quot;/g,'"'));
 
-            if (user_details_data.birthday != null) {
+        if (user_data.onboarded != 0) {
+
+            // if (user_details_data.birthday != null) {
                 $("#finish-btn").attr("disabled", "disabled");
+                $("#prev-btn-4").attr("disabled", "disabled");
                 $("#finish-btn").text('Onboarded');
 
                 $(".step-1-li").addClass('done');
@@ -1353,7 +1356,9 @@
                         $("#onboardingForm #"+index).val(data);
                     }
                 });
-            }
+
+        
+            // }
         }
         
         $.each(user_data, function(index, data) {

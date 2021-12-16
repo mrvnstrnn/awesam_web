@@ -3,7 +3,7 @@
 @section('content')
 <div class="main-card mb-3 card">
     <div class="card-body">
-        <button class="btn btn-lg btn-primary add_user" type="button" data-action="true">Add User</button>
+        <button class="btn btn-lg btn-primary add_user pull-right" type="button" data-action="true">Add User</button>
         <table style="width: 100%;" id="users-table" class="table table-hover table-striped table-bordered">
             <thead>
                 <tr>
@@ -11,6 +11,7 @@
                     <th>Email</th>
                     {{-- <th>Profile</th>
                     <th>Vendor</th> --}}
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -37,7 +38,7 @@
                 <div class="container-fluid">
                     <form class="add_user_form">
                         <div class="form-group">
-                            <input type="text" name="id" id="id" class="form-control">
+                            <input type="hidden" name="id" id="id" class="form-control">
                             <label for="firstname">Firstname</label>
                             <input type="text" name="firstname" id="firstname" class="form-control">
                             <small class="firstname-error text-danger"></small>
@@ -84,6 +85,22 @@
                             <small class="vendor-error text-danger"></small>
                         </div>
 
+                        <div class="form-group">
+                            <label for="program">Program</label>
+                            @php
+                                $programs  = \App\Models\Program::orderBy('program')->get();  
+                            @endphp
+                            @foreach ($programs as $program)
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="program[]" id="program{{ $program->program_id }}" value="{{ $program->program_id }}">
+                                        {{ $program->program }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <small class="program-error text-danger"></small>
+                        </div>
+
                         
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary save_user">Save</button>
@@ -125,6 +142,7 @@
                 { data: 'email', name: 'email' },
                 // { data: 'profile', name: 'profile' },
                 // { data: 'vendor', name: 'vendor' },
+                { data: 'status', name: 'status' },
                 { data: 'action', name: 'action' },
             ],
             columnDefs: [ {
