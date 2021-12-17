@@ -146,6 +146,10 @@
                 padding: 2px 1rem 1rem !important;
             } */
 
+            table tr td, table tr th {
+                font-size: 12px !important;
+            }
+
     .loader .modal-dialog{
         display: table;
         position: relative;
