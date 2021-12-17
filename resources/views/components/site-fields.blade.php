@@ -44,7 +44,7 @@
                 $what = str_replace(' ', '_', $index);
             @endphp
 
-            @if ( !in_array( $site_field, $site_not_allowed ) )
+            {{-- @if ( !in_array( $site_field, $site_not_allowed ) ) --}}
             {{-- @if ( !is_null($site_field) || $site_field != '' || $site_field != 'null' || $site_field != 'NULL') --}}
                 <div class="form-row mb-2 pb-2 border-bottom">
                     <div class="col-5">
@@ -54,7 +54,7 @@
                         <input name="{{ $what }}" id="{{ $what }}" type="text" value="{{ $site_field }}" class="form-control" readonly>
                     </div>
                 </div>
-            @endif
+            {{-- @endif --}}
         @endif
     @endforeach
 </form>
