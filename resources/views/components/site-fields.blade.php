@@ -28,7 +28,10 @@
                 // "contract_completed_month",
                 // "challenges",
                 "sam_region_id",
-                "vendor_id"
+                "vendor_id",
+                "region_id",
+                "province_id",
+                "lgu_id",
             );
 
             // $site_not_allowed = array(
