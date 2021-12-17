@@ -31,12 +31,12 @@
                 "vendor_id"
             );
 
-            $site_not_allowed = array(
-                'null',
-                'NULL',
-                NULL,
-                '',
-            );
+            // $site_not_allowed = array(
+            //     'null',
+            //     'NULL',
+            //     NULL,
+            //     '',
+            // );
         @endphp
 
         @if ( !in_array( $index, $array_not_allowed ) )
