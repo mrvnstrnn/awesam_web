@@ -21,12 +21,12 @@
                 "id",
                 "sam_id",
                 "load_date",
-                "mar_status",
-                "las_completed_date",
-                "las_completed_month",
-                "contract_completed_date",
-                "contract_completed_month",
-                "challenges",
+                // "mar_status",
+                // "las_completed_date",
+                // "las_completed_month",
+                // "contract_completed_date",
+                // "contract_completed_month",
+                // "challenges",
                 "sam_region_id",
                 "vendor_id"
             );
