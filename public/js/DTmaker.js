@@ -111,7 +111,7 @@ function makeDT(whatTable, whatCols, active_program) {
                 else if(active_program == 8){
 
                     if(window.location.pathname == "/program-sites"){
-                        var filter_column = "milestone";
+                        var filter_column = "mar_status";
                     } 
                     else {
                         var filter_column = "classification";
