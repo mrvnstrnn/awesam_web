@@ -148,6 +148,7 @@
         });
 
         $("button.add_user").on("click", function () {
+            $(".add_user_form")[0].reset();
             $("#add_user_modal").modal("show");
         });
 
@@ -228,7 +229,6 @@
                             $(".add_user_form #" + index).val(data);
                         });
 
-console.log(resp.programs);
                         $.each(resp.programs, function(index, data) {
                             console.log(index);
                             $(".add_user_form #" + index).val(data);
