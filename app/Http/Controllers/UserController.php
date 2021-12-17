@@ -238,7 +238,7 @@ class UserController extends Controller
                             'nickname' => $request->input('nickname'),
                             'suffix' => $request->input('suffix'),
                             'onboarded' => 1,
-                            'profile_id' => $profiles->mode == "vendor" ? null : $request->get('designation'),
+                            'profile_id' => $profiles->mode == "vendor" && $request->get('designation') != 1 ? null : $request->get('designation'),
                         ]);
 
                 if(!is_null($user_details)){
@@ -1199,7 +1199,8 @@ class UserController extends Controller
     public function get_all_users ()
     {
         try {
-            $users = User::select('users.email', 'users.name', 'users.id', 'users.onboarded')
+            $users = User::select(
+                'users.email', 'users.name', 'users.id', 'users.onboarded')
                         ->join('user_details', 'user_details.user_id', 'users.id')
                         // ->join('profiles', 'profiles.id', 'users.profile_id')
                         // ->join('vendor', 'vendor.vendor_id', 'user_details.vendor_id')
@@ -1210,6 +1211,13 @@ class UserController extends Controller
                         $btn = '<button class="btn btn-lg btn-primary edit_user" type="button" data-id="'.$row->id.'">Edit</button>';
                         return $btn;
                     })
+                    // ->addColumn('program', function($row){
+                    //     $programs = UserProgram::select('program.program')
+                    //                         ->join('program', 'program.program_id', 'user_programs.program_id')
+                    //                         ->where('user_programs.user_id', $row->id)
+                    //                         ->get();
+                    //     return $programs;              
+                    // })
                     ->addColumn('status', function($row){
                         return $row->onboarded == 0 ? "Not yet onboard" : "Onboarded";              
                     });
@@ -1299,7 +1307,12 @@ class UserController extends Controller
                 ->where('users.id', $request->get('id'))
                 ->first();
 
-            return response()->json(['error' => false, 'message' => $users ]);
+            $programs = UserProgram::select('program.program_id')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_programs.user_id', $request->get('id'))
+                                ->get();
+
+            return response()->json(['error' => false, 'message' => $users, 'programs' => $programs ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

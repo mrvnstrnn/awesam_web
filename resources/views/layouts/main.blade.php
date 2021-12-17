@@ -36,7 +36,7 @@
 
         {{-- <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> --}}
         {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> --}}
-        <link rel="stylesheet" href="/js/jquery-ui.css">
+        <link type="text/html" rel="stylesheet" href="/js/jquery-ui.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>

@@ -120,11 +120,6 @@
         $('#users-table').DataTable({
             processing: true,
             serverSide: false,
-            filter: true,
-            searching: true,
-            lengthChange: true,
-            responsive: true,
-            stateSave: true,
             regex: true,
                 ajax: {
                 url: '/get-all-users',
@@ -230,6 +225,12 @@
                             if (index == 'profile_id') {
                                 $(".add_user_form #profile").val(data);
                             }
+                            $(".add_user_form #" + index).val(data);
+                        });
+
+console.log(resp.programs);
+                        $.each(resp.programs, function(index, data) {
+                            console.log(index);
                             $(".add_user_form #" + index).val(data);
                         });
                     } else {

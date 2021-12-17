@@ -1270,7 +1270,7 @@
                     $("#prev-btn-4").attr("disabled", "disabled");
                     $("#finish-btn").attr("disabled", "disabled");
                     $("#finish-btn").text('Onboarded');
-                    if (resp.mode == 'globe') {
+                    if (resp.mode == 'globe' || $("#designation").val() == 1) {
                         location.reload();
                     }
 

@@ -26,7 +26,9 @@
                 "las_completed_month",
                 "contract_completed_date",
                 "contract_completed_month",
-                "challenges"
+                "challenges",
+                "sam_region_id",
+                "vendor_id"
             );
 
             $site_not_allowed = array(
