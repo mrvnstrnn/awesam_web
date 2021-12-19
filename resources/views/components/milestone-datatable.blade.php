@@ -88,7 +88,7 @@
 
                                     <div class="card">
                                         <div class="card-body p-0">                                        
-                                            <div class="no-gutters row w-100" style="" id="dashboard_counters_options">
+                                            <div class="no-gutters row" style="" id="dashboard_counters_options">
                                             </div>
                                         </div>
                                     </div>
