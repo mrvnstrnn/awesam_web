@@ -2577,8 +2577,10 @@ class GlobeController extends Controller
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
             $user_area = \DB::table('users_areas')
+                            ->select('region')
                             ->where('user_id', \Auth::id())
-                            ->first();
+                            ->get()
+                            ->pluck('region');
                             
             $sites = \DB::table("view_site")
                             ->where('program_id', $program_id)
@@ -2596,8 +2598,8 @@ class GlobeController extends Controller
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
-                if (!is_null($user_area)) {
-                    $sites->where('program_renewal.region', $user_area->region);
+                if (count($user_area) > 0) {
+                    $sites->whereIn('program_renewal.region', $user_area);
                 }
             }
             
@@ -4098,7 +4100,12 @@ class GlobeController extends Controller
                     $table = 'program_renewal';
                 }
 
-                $sites = \DB::table($table)
+                $sites_fields = \DB::table('program_mapping')
+                            // ->where('sam_id', $sam_id)
+                            ->where('program_id', $programs->program_id)
+                            ->get();
+
+                $sites_data = \DB::table($table)
                             ->where('sam_id', $sam_id)
                             ->get();
 
@@ -4108,7 +4115,8 @@ class GlobeController extends Controller
                         ->with([
                             'sam_id' => $sam_id,
                             // 'sitefields' => json_decode($sites[0]->site_fields),
-                            'sitefields' => $sites,
+                            'sitefields' => $sites_fields,
+                            'sites_data' => $sites_data,
                         ])
                         ->render();
 

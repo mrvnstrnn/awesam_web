@@ -8,7 +8,7 @@
         font-size: .9em !important;
     }
 </style> 
-<ul class="tabs-animated body-tabs-animated nav">
+<ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
 
     @php
         if (\Request::path() == 'endorsements') {
@@ -55,20 +55,20 @@
     <div class="col-md-12">
 
         <div class="main-card mb-3 card">
-            <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+            <div class="card-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                 {{-- <div class="dropdown-menu-header">  --}}
     
                 {{-- <div class="dropdown-menu-header-inner px-2 p-3 bg-primary"> --}}
                     {{-- <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div> --}}
-                    <div class="menu-header-content btn-pane-right d-flex justify-content-between button_header_area">
-                        <h5 class="menu-header-title text-dark pl-1">
+                    {{-- <div class="menu-header-content btn-pane-right d-flex justify-content-between button_header_area"> --}}
+                        {{-- <h5 class="menu-header-title text-dark pl-1"> --}}
                             <i class="header-icon lnr-layers icon-gradient bg-dark"></i>
                             {{ $tableheader }}
-                        </h5>
+                        {{-- </h5> --}}
                         @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
                         <button class="btn btn-warning btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
                         @endif
-                    </div>
+                    {{-- </div> --}}
                 {{-- </div> --}}
             </div> 
 
@@ -88,7 +88,7 @@
 
                                     <div class="card">
                                         <div class="card-body p-0">
-                                            <div class="no-gutters d-flex" style="overflow-y: hidden;" id="dashboard_counters_options">
+                                            <div class="no-gutters row" id="dashboard_counters_options">
                                             </div>
                                         </div>
                                     </div>
