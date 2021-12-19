@@ -2,11 +2,11 @@
     <div class="chat_div p-2">
         <div class="chat-wrapper p-1">
             @php
-                $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.timesptamp')
+                $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.created_at')
                                             ->join('users', 'users.id', 'chat.user_id')
                                             ->join('profiles', 'profiles.id', 'users.profile_id')
                                             ->where('chat.sam_id', $site[0]->sam_id)
-                                            ->orderBy("chat.timesptamp", "asc")
+                                            ->orderBy("chat.created_at", "asc")
                                             ->get();
             @endphp
 
@@ -54,7 +54,7 @@
                                     <small class="opacity-6">
                                         {{ $chat->profile }} : {{ $chat->name }}<br>
                                         <i class="fa fa-calendar-alt mr-1"></i>
-                                        {{ $chat->timesptamp }}
+                                        {{ $chat->created_at }}
                                     </small>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                         '<small class="opacity-6">' +
                                             resp.chat.profile + " : " + resp.chat.name + '<br>' +
                                             '<i class="fa fa-calendar-alt mr-1"></i>' +
-                                            resp.chat.timesptamp +
+                                            resp.chat.created_at +
                                         '</small>' +
                                     '</div>' +
                                     '<div>' +
