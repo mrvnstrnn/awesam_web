@@ -175,9 +175,9 @@ function makeDT(whatTable, whatCols, active_program) {
                 // console.log(result);
 
                 // console.log();
-                var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);
+                // var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);
 
-                var occurences = object_data.reduce(function (r, row) {
+                var occurences = json.data.reduce(function (r, row) {
                     r[row[filter_column]] = ++r[row[filter_column]] || 1;
                     return r;
                 }, {});
@@ -186,9 +186,10 @@ function makeDT(whatTable, whatCols, active_program) {
                     return { key: key, value: occurences[key] };
                 });
 
+                // console.log(result);
                 var i = 0;
                 var bg = 1;
-                $.each(result, function(){
+                $.each(result.sort((a, b) => (a.key > b.key) ? 1 : -1), function(){
 
                     var xx =    '<div class="col-2 border">' +          
                                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +

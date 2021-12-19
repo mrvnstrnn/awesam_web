@@ -84,10 +84,10 @@
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif
 
-                                <div class="mini_dashboard_counters mb-3">
+                                <div class="mini_dashboard_counters mb-3" style="width: 1200px">
 
                                     <div class="card">
-                                        <div class="card-body p-0">                                        
+                                        <div class="card-body p-0">
                                             <div class="no-gutters d-flex" style="overflow-y: hidden;" id="dashboard_counters_options">
                                             </div>
                                         </div>

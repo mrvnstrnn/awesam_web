@@ -2576,6 +2576,10 @@ class GlobeController extends Controller
 
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
+            $user_area = \DB::table('users_areas')
+                            ->where('user_id', \Auth::id())
+                            ->first();
+                            
             $sites = \DB::table("view_site")
                             ->where('program_id', $program_id)
                             ->where('view_site.vendor_id', $vendor);
@@ -2592,6 +2596,9 @@ class GlobeController extends Controller
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+                if (!is_null($user_area)) {
+                    $sites->where('program_renewal.region', $user_area->region);
+                }
             }
             
             $sites->get();
