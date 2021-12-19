@@ -54,17 +54,6 @@
 <div class="row">
     <div class="col-md-12">
 
-        <div class="mini_dashboard_counters mb-3">
-
-            <div class="card">
-                <div class="card-body p-0">                                        
-                    <div class="no-gutters row" id="dashboard_counters_options">
-                    </div>                            
-                </div>
-            </div>
-
-        </div>
-
         <div class="main-card mb-3 card">
             <div class="dropdown-menu-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                 {{-- <div class="dropdown-menu-header">  --}}
@@ -94,6 +83,17 @@
                         @else
                             <div class="tab-pane tabs-animation fade" id="tab-content-{{ $program->program_id  }}" role="tabpanel">
                         @endif
+
+                                <div class="mini_dashboard_counters mb-3">
+
+                                    <div class="card">
+                                        <div class="card-body p-0">                                        
+                                            <div class="no-gutters row w-100" style="" id="dashboard_counters_options">
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                </div>
 
                                 @php
                                     $li_ctr++;

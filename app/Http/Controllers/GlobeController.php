@@ -2571,8 +2571,14 @@ class GlobeController extends Controller
     public function get_site_milestones($program_id, $profile_id, $activity_type)
     {
         if($activity_type == 'all'){
+
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
             $sites = \DB::table("view_site")
-                            ->where('program_id', $program_id);
+                            ->where('program_id', $program_id)
+                            ->where('view_site.vendor_id', $vendor);
                             // ->whereNotNull('activity_name');
 
             if($program_id == 3){                
@@ -2585,7 +2591,7 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
             }
             elseif($program_id == 8){
-                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+                $sites->select("program_renewal.*", "view_site.sam_id")->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
             }
             
             $sites->get();

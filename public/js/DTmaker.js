@@ -31,7 +31,6 @@ function makeDT(whatTable, whatCols, active_program) {
                 'excelHtml5',
                 'csvHtml5',
                 'pdfHtml5'
-    
             ],
     
             ajax: {
@@ -92,11 +91,10 @@ function makeDT(whatTable, whatCols, active_program) {
             "fnInitComplete": function(oSettings, json) {
 
                 // Filter
-
                 var api = this.api();
  
-            // For each column
-            api
+                // For each column
+                api
                 .columns()
                 .eq(0)
                 .each(function (colIdx) {
@@ -113,44 +111,32 @@ function makeDT(whatTable, whatCols, active_program) {
                         'input',
                         $('.filters th').eq($(api.column(colIdx).header()).index())
                     )
-                        .off('keyup change')
-                        .on('keyup change', function (e) {
-                            e.stopPropagation();
- 
-                            // Get the search value
-                            $(this).attr('title', $(this).val());
-                            var regexr = '({search})'; //$(this).parents('th').find('select').val();
- 
-                            var cursorPosition = this.selectionStart;
-                            // Search the column for that value
-                            api
-                                .column(colIdx)
-                                .search(
-                                    this.value != ''
-                                        ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                        : '',
-                                    this.value != '',
-                                    this.value == ''
-                                )
-                                .draw();
- 
-                            $(this)
-                                .focus()[0]
-                                .setSelectionRange(cursorPosition, cursorPosition);
-                        });
-                });
+                    .off('keyup change')
+                    .on('keyup change', function (e) {
+                        e.stopPropagation();
 
-                // this.api().columns().every( function () {
-                //     var that = this;
-     
-                //     $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                //         if ( that.search() !== this.value ) {
-                //             that
-                //                 .search( this.value )
-                //                 .draw();
-                //         }
-                //     } );
-                // } );
+                        // Get the search value
+                        $(this).attr('title', $(this).val());
+                        var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                        var cursorPosition = this.selectionStart;
+                        // Search the column for that value
+                        api
+                            .column(colIdx)
+                            .search(
+                                this.value != ''
+                                    ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                    : '',
+                                this.value != '',
+                                this.value == ''
+                            )
+                            .draw();
+
+                        $(this)
+                            .focus()[0]
+                            .setSelectionRange(cursorPosition, cursorPosition);
+                    });
+                });
 
 
                 // MINIDASHBOARD FILTER MAKER
@@ -164,7 +150,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "gt_saq_milestone";
 
                     }
-                }        
+                }
                 else if(active_program == 4){
 
                     if(window.location.pathname == "/program-sites"){
@@ -174,8 +160,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "program";
 
                     }
-                }        
-                
+                }
                 else if(active_program == 8){
 
                     if(window.location.pathname == "/program-sites"){
@@ -188,6 +173,8 @@ function makeDT(whatTable, whatCols, active_program) {
                 }        
 
                 // console.log(result);
+
+                // console.log(json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1));
 
                 var occurences = json.data.reduce(function (r, row) {
                     r[row[filter_column]] = ++r[row[filter_column]] || 1;
@@ -222,6 +209,16 @@ function makeDT(whatTable, whatCols, active_program) {
 
 
                 });
+
+                var total_site =    '<div class="col border">' +          
+                                    '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
+                                    '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
+                                        '<div class="widget-numbers mt-1">'+ json.data.length + '</div>' +
+                                        '<div class="widget-subheading">Total Site</div>' +
+                                    '</div>' +
+                                '</div>';
+
+                $(document).find('#dashboard_counters_options').prepend(total_site);
 
             }
               
