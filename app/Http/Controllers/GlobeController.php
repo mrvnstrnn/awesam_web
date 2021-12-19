@@ -2594,7 +2594,7 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
             }
             
-            $sites->take(500)->get();
+            $sites->get();
         }
 
         elseif($activity_type == 'mine'){

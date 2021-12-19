@@ -174,9 +174,10 @@ function makeDT(whatTable, whatCols, active_program) {
 
                 // console.log(result);
 
-                // console.log(json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1));
+                // console.log();
+                var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);
 
-                var occurences = json.data.reduce(function (r, row) {
+                var occurences = object_data.reduce(function (r, row) {
                     r[row[filter_column]] = ++r[row[filter_column]] || 1;
                     return r;
                 }, {});
@@ -189,7 +190,7 @@ function makeDT(whatTable, whatCols, active_program) {
                 var bg = 1;
                 $.each(result, function(){
 
-                    var xx =    '<div class="col border">' +          
+                    var xx =    '<div class="col-2 border">' +          
                                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
                                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
                                         '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
@@ -210,7 +211,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
                 });
 
-                var total_site =    '<div class="col border">' +          
+                var total_site =    '<div class="col-2 border">' +          
                                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
                                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
                                         '<div class="widget-numbers mt-1">'+ json.data.length + '</div>' +
@@ -218,7 +219,7 @@ function makeDT(whatTable, whatCols, active_program) {
                                     '</div>' +
                                 '</div>';
 
-                $(document).find('#dashboard_counters_options').prepend(total_site);
+                $(document).find('#dashboard_counters_options').append(total_site);
 
             }
               
