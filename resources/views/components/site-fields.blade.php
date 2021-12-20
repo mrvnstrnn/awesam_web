@@ -4,7 +4,7 @@
         $program_mappings = \DB::table('program_mapping')
                             ->where('program_id', $program_id)
                             ->get();
-                            dd($program_mappings);
+                            
     @endphp
 
     @foreach ( $program_mappings as $site_field )
