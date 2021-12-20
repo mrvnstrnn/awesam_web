@@ -4,11 +4,10 @@
     @endphp --}}
 
     @foreach ( $sitefields as $site_field )
+        @php
+            $what = str_replace(' ', '_', $site_field->label);
+        @endphp
         @foreach ($sites_data[0] as $index => $site)
-            @php
-            dd($sites_data[0]);
-                $what = str_replace(' ', '_', $site_field->label);
-            @endphp
 
             @if ($what == $index)
                 <div class="form-row mb-2 pb-2 border-bottom form_data">
