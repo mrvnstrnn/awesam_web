@@ -18,7 +18,11 @@
                         @if ($site_field->field_type == 'text')
                             <input name="{{ $what }}" id="{{ $what }}" value="{{ $site }}" type="text" class="form-control" readonly>
                         @elseif ($site_field->field_type == 'url')
+                            @if ( is_null($site) )
+                            <input name="{{ $what }}" id="{{ $what }}" value="{{ $site }}" type="text" class="form-control" readonly>
+                            @else
                             <a href="{{ $site }}">https://sam.local/program-sites</a>
+                            @endif
                         @endif
                     </div>
                 </div>
