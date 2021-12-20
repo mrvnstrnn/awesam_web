@@ -1,7 +1,10 @@
 <form>
-    {{-- @php
-        $obj = json_decode($sitefields, TRUE);
-    @endphp --}}
+    @php
+        // $obj = json_decode($sitefields, TRUE);
+        $program_mappings = \DB::table('program_mapping')
+                            ->where('program_id', $program_id)
+                            ->get();
+    @endphp
 
     @foreach ( $program_mappings as $site_field )
         @php
