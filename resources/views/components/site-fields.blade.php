@@ -18,10 +18,14 @@
                         @if ($site_field->field_type == 'text')
                             <input name="{{ $what }}" id="{{ $what }}" value="{{ $site }}" type="text" class="form-control" readonly>
                         @elseif ($site_field->field_type == 'url')
-                            @if ( is_null($site) )
+                            @if ( is_null($site) || $site == 'NULL' )
                             <input name="{{ $what }}" id="{{ $what }}" value="{{ $site }}" type="text" class="form-control" readonly>
                             @else
-                            <a href="{{ $site }}">https://sam.local/program-sites</a>
+                                @if ( filter_var($site, FILTER_VALIDATE_URL) )
+                                <a href="{{ $site }}" target="_blank">{{ $site }}</a>
+                                @else
+                                <input name="{{ $what }}" id="{{ $what }}" value="{{ $site }}" type="text" class="form-control" readonly>
+                                @endif
                             @endif
                         @endif
                     </div>
