@@ -5,6 +5,7 @@
             <th>Mode</th>
             <th>Firstname</th>
             <th>Lastname</th>
+            <th>Email</th>
             <th>URL</th>
         </tr>
         </thead>
@@ -15,6 +16,7 @@
                     <td>{{ $invitation->mode }}</td>
                     <td>{{ $invitation->firstname }}</td>
                     <td>{{ $invitation->lastname }}</td>
+                    <td>{{ $invitation->email }}</td>
                     <td>{{ Request::root() }}/invitation-link/{{ $invitation->token }}/{{ $invitation->invitation_code }}</td>
                 </tr>
             @endforeach
