@@ -24,6 +24,7 @@ use App\Models\PrMemoTable;
 use App\Models\FsaLineItem;
 use App\Models\Site;
 use App\Models\SubActivity;
+use App\Models\ProgramMapping;
 
 use Notification;
 use App\Notifications\SiteMoved;
@@ -4083,31 +4084,30 @@ class GlobeController extends Controller
                 //             ->get();
 
                 $programs = \DB::table('site')
+                                ->select('sam_id', 'program_id')
                                 ->where('sam_id', $sam_id)
                                 ->first();
 
-                if ($programs->program_id == 3) {
-                    $table = 'program_coloc';
-                } else if ($programs->program_id == 4) {
-                    $table = 'program_ibs';
-                } else if ($programs->program_id == 2) {
-                    $table = 'program_ftth';
-                } else if ($programs->program_id == 1) {
-                    $table = 'program_newsites';
-                } else if ($programs->program_id == 5) {
-                    $table = 'program_mwan';
-                } else if ($programs->program_id == 8) {
-                    $table = 'program_renewal';
-                }
+                // if ($programs->program_id == 3) {
+                //     $table = 'program_coloc';
+                // } else if ($programs->program_id == 4) {
+                //     $table = 'program_ibs';
+                // } else if ($programs->program_id == 2) {
+                //     $table = 'program_ftth';
+                // } else if ($programs->program_id == 1) {
+                //     $table = 'program_newsites';
+                // } else if ($programs->program_id == 5) {
+                //     $table = 'program_mwan';
+                // } else if ($programs->program_id == 8) {
+                //     $table = 'program_renewal';
+                // }
 
-                $sites_fields = \DB::table('program_mapping')
-                            // ->where('sam_id', $sam_id)
-                            ->where('program_id', $programs->program_id)
-                            ->get();
-                            
-                $sites_data = \DB::table($table)
-                            ->where('sam_id', $sam_id)
-                            ->get();
+                $sites_fields = ProgramMapping::where('program_id', $programs->program_id)
+                                                ->get();
+                                
+                // $sites_data = \DB::table($table)
+                //             ->where('sam_id', $sam_id)
+                //             ->get();
 
                 $what_modal = "components.site-fields";
                 
@@ -4117,7 +4117,7 @@ class GlobeController extends Controller
                             'program_id' => $programs->program_id,
                             // 'sitefields' => json_decode($sites[0]->site_fields),
                             'sitefields' => $sites_fields,
-                            'sites_data' => $sites_data,
+                            // 'sites_data' => $sites_data,
                         ])
                         ->render();
 
