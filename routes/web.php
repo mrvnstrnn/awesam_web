@@ -316,6 +316,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //Form get
     Route::get('/get-form/{sub_activity_id}/{form_name}', [GlobeController::class, 'get_form'])->name('get_form');
 
+    
+    Route::post('/get-form-fields', [GlobeController::class, 'get_form_fields'])->name('get_form_fields');
+
 
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
 

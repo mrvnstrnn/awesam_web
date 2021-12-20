@@ -4114,6 +4114,7 @@ class GlobeController extends Controller
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $sam_id,
+                            'program_id' => $programs->program_id,
                             // 'sitefields' => json_decode($sites[0]->site_fields),
                             'sitefields' => $sites_fields,
                             'sites_data' => $sites_data,
@@ -7556,6 +7557,28 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return $th->getMessage();
+        }
+    }
+
+    public function get_form_fields (Request $request)
+    {
+        try {
+            if ($request->get('program_id') == 3) {
+                $table = 'program_coloc';
+            } else if ($request->get('program_id') == 4) {
+                $table = 'program_ibs';
+            } else if ($request->get('program_id') == 8) {
+                $table = 'program_renewal';
+            } 
+
+            $form_fields = \DB::table($table)
+                        ->where('sam_id', $request->get('sam_id'))
+                        ->get();
+
+            return response()->json(['error' => false, 'message' => $form_fields ]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
         }
     }
 
