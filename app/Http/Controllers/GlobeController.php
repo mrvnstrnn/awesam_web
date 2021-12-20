@@ -4104,7 +4104,7 @@ class GlobeController extends Controller
 
                 $sites_fields = ProgramMapping::where('program_id', $programs->program_id)
                                                 ->get();
-                                
+                                dd($sites_fields);
                 // $sites_data = \DB::table($table)
                 //             ->where('sam_id', $sam_id)
                 //             ->get();
