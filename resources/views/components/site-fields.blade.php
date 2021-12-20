@@ -4,6 +4,7 @@
     @endphp --}}
 
     @foreach ( $sitefields as $site_field )
+    {{ dd($sitefields); }}
         @php
             $what = str_replace(' ', '_', $site_field->label);
         @endphp
