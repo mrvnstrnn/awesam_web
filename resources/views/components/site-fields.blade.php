@@ -6,6 +6,7 @@
     @foreach ( $sitefields as $site_field )
         @foreach ($sites_data[0] as $index => $site)
             @php
+            dd($sites_data[0]);
                 $what = str_replace(' ', '_', $site_field->label);
             @endphp
 
