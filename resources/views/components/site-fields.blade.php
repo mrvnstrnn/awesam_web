@@ -49,7 +49,7 @@
                                     );
                                 } else {
                                     $(".form_data p#"+index).append(
-                                        '<span>"'+ data +'"</span>'
+                                        '<span>'+ data +'</span>'
                                     );
                                 }
                             }
