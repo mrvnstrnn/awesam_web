@@ -3,7 +3,7 @@
         $obj = json_decode($sitefields, TRUE);
     @endphp --}}
 
-    @foreach ( $sitefields as $site_field )
+    @foreach ( $program_mappings as $site_field )
         @php
             $what = str_replace(' ', '_', $site_field->label);
         @endphp

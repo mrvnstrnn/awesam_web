@@ -4102,9 +4102,9 @@ class GlobeController extends Controller
                 //     $table = 'program_renewal';
                 // }
 
-                $sites_fields = ProgramMapping::where('program_id', $programs->program_id)
+                $program_mappings = ProgramMapping::where('program_id', $programs->program_id)
                                                 ->get();
-                                dd($sites_fields);
+                                dd($program_mappings);
                 // $sites_data = \DB::table($table)
                 //             ->where('sam_id', $sam_id)
                 //             ->get();
@@ -4116,7 +4116,7 @@ class GlobeController extends Controller
                             'sam_id' => $sam_id,
                             'program_id' => $programs->program_id,
                             // 'sitefields' => json_decode($sites[0]->site_fields),
-                            'sitefields' => $sites_fields,
+                            'program_mapping' => $program_mappings,
                             // 'sites_data' => $sites_data,
                         ])
                         ->render();
