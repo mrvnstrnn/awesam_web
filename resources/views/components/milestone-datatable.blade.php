@@ -92,7 +92,7 @@
 
                                     <div class="card">
                                         <div class="card-body p-0">
-                                            <div class="no-gutters row flex-nowrap" style="overflow-y: hidden;" id="dashboard_counters_options">
+                                            <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #FFDD55;" id="dashboard_counters_options">
                                             </div>
                                         </div>
                                     </div>

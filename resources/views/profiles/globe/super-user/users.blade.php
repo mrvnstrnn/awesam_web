@@ -9,8 +9,8 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    {{-- <th>Profile</th>
-                    <th>Vendor</th> --}}
+                    {{-- <th>Profile</th> --}}
+                    <th>Program</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -119,7 +119,7 @@
     $(document).ready(() => {
         $('#users-table').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             regex: true,
                 ajax: {
                 url: '/get-all-users',
@@ -136,7 +136,7 @@
                 { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
                 // { data: 'profile', name: 'profile' },
-                // { data: 'vendor', name: 'vendor' },
+                { data: 'program', name: 'program' },
                 { data: 'status', name: 'status' },
                 { data: 'action', name: 'action' },
             ],
@@ -229,9 +229,9 @@
                             $(".add_user_form #" + index).val(data);
                         });
 
-                        $.each(resp.programs, function(index, data) {
-                            console.log(index);
-                            $(".add_user_form #" + index).val(data);
+                        console.log(resp.programs[0]);
+                        $.each(resp.programs[0], function(index, data) {
+                            $("input#program"+data).attr("checked", "checked");
                         });
                     } else {
                         Swal.fire(

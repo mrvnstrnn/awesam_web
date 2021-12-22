@@ -1199,11 +1199,11 @@ class UserController extends Controller
     public function get_all_users ()
     {
         try {
-            $users = User::select(
-                'users.email', 'users.name', 'users.id', 'users.onboarded')
+            
+                // 'users.email', 'users.name', 'users.id', 'users.onboarded', \DB::raw('(SELECT user_programs.program_id FROM user_programs WHERE user_programs.user_id = users.id) as user_id_programs'))
+
+            $users = User::select('users.email', 'users.name', 'users.id', 'users.onboarded')
                         ->join('user_details', 'user_details.user_id', 'users.id')
-                        // ->join('profiles', 'profiles.id', 'users.profile_id')
-                        // ->join('vendor', 'vendor.vendor_id', 'user_details.vendor_id')
                         ->get();
 
             $dt = DataTables::of($users)
@@ -1211,13 +1211,15 @@ class UserController extends Controller
                         $btn = '<button class="btn btn-lg btn-primary edit_user" type="button" data-id="'.$row->id.'">Edit</button>';
                         return $btn;
                     })
-                    // ->addColumn('program', function($row){
-                    //     $programs = UserProgram::select('program.program')
-                    //                         ->join('program', 'program.program_id', 'user_programs.program_id')
-                    //                         ->where('user_programs.user_id', $row->id)
-                    //                         ->get();
-                    //     return $programs;              
-                    // })
+                    ->addColumn('program', function($row){
+                        $programs = UserProgram::select('program.program')
+                                            ->join('program', 'program.program_id', 'user_programs.program_id')
+                                            ->where('user_programs.user_id', $row->id)
+                                            ->get()
+                                            ->pluck('program');
+                        
+                        return $programs;
+                    })
                     ->addColumn('status', function($row){
                         return $row->onboarded == 0 ? "Not yet onboard" : "Onboarded";              
                     });
@@ -1303,9 +1305,8 @@ class UserController extends Controller
     public function get_data_user (Request $request)
     {
         try {
-            $users = UserDetail::join('users', 'users.id', 'user_details.user_id')
-                ->where('users.id', $request->get('id'))
-                ->first();
+            $users = User::where('id', $request->get('id'))
+                        ->first();
 
             $programs = UserProgram::select('program.program_id')
                                 ->join('program', 'program.program_id', 'user_programs.program_id')

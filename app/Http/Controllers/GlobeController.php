@@ -588,6 +588,7 @@ class GlobeController extends Controller
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
+                                    
             if (count($get_past_activities) < 1) {
                 SiteStageTracking::create([
                     'sam_id' => $sam_id[$i],
@@ -1025,17 +1026,18 @@ class GlobeController extends Controller
             //                 ->first();
 
             $user_detail = \Auth::user()->getUserDetail()->first();
-            
-            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
-            if (isset($vendor->vendor_id)) {
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
+                
                 $checkAgent = \DB::table('users')
                                 ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'user_details.image')
                                 ->join('user_details', 'user_details.user_id', 'users.id')
                                 ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
                                 // ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                                 ->where('users.profile_id', 1)
-                                ->where('user_details.vendor_id', $vendor->vendor_id)
+                                ->where('user_details.vendor_id', $vendor)
                                 ->where('user_programs.program_id', $program_id)
                                 ->get();
             } else {
@@ -2575,17 +2577,21 @@ class GlobeController extends Controller
 
             $user_detail = \Auth::user()->getUserDetail()->first();
 
-            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-
-            $user_area = \DB::table('users_areas')
-                            ->select('region')
-                            ->where('user_id', \Auth::id())
-                            ->get()
-                            ->pluck('region');
-                            
             $sites = \DB::table("view_site")
-                            ->where('program_id', $program_id)
-                            ->where('view_site.vendor_id', $vendor);
+                            ->where('program_id', $program_id);
+
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                
+                $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
+                $sites->where('view_site.vendor_id', $vendor);
+            }
+
                             // ->whereNotNull('activity_name');
 
             if($program_id == 3){                
@@ -2599,7 +2605,7 @@ class GlobeController extends Controller
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
-                if (count($user_area) > 0) {
+                if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->whereIn('program_renewal.region', $user_area);
                 }
             }
@@ -2684,33 +2690,32 @@ class GlobeController extends Controller
             //                                     ->pluck('id');
             $user_detail = \Auth::user()->getUserDetail()->first();
 
-            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-
             $sites = \DB::table("view_vendor_assigned_sites")
                         ->where('program_id', $program_id)
                         ->where('IS_id', \Auth::user()->id);
+
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                $sites->where('vendor_id', $vendor);
+            }
 
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
                 ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
-                "program_coloc.gt_saq_milestone_category")
-                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
+                "program_coloc.gt_saq_milestone_category");
 
             }                       
             else if($program_id == 4){
 
                 $sites->leftJoin('program_ibs', 'view_vendor_assigned_sites.sam_id', 'program_ibs.sam_id')
-                ->select("view_vendor_assigned_sites.*", "program_ibs.*")
-                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
+                ->select("view_vendor_assigned_sites.*", "program_ibs.*");
 
             }                       
             elseif($program_id == 8){
-                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id')
-                ->where('view_vendor_assigned_sites.site_vendor_id', $vendor);
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
+                
             }
-
-
 
             $sites->get();
 
@@ -3394,12 +3399,14 @@ class GlobeController extends Controller
 
             $user_detail = \Auth::user()->getUserDetail()->first();
 
-            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-
             $sites = \DB::table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name')
-                    ->where('site_vendor_id', $vendor)
                     ->where('program_id', $program_id);
+                    
+                    if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                        $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                        $sites->where('vendor_id', $vendor);
+                    }
             
                     if ($program_id == 1) {
                         $sites->where('activity_id', 7);
@@ -3418,10 +3425,7 @@ class GlobeController extends Controller
 
             $user_detail = \Auth::user()->getUserDetail()->first();
 
-            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-
             $sites = \DB::table("view_site")
-                    ->where('vendor_id', $vendor)
                     // ->leftjoin("location_regions", "view_sites_activity.site_region_id", "location_regions.region_id")
                     // ->leftjoin("location_sam_regions", "location_regions.region_id", "location_sam_regions.sam_region_id")
                     // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
@@ -3429,6 +3433,11 @@ class GlobeController extends Controller
                     
                     ->where('program_id', $program_id);
 
+                    if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                        $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                        $sites->where('vendor_id', $vendor);
+                    }
+                    
                     if ($program_id == 1) {
                         $sites->where('activity_id', 7);
                     } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
@@ -3516,15 +3525,19 @@ class GlobeController extends Controller
                     "program_coloc.gt_saq_milestone_category"
                     )
                         ->where('activity_id', '>=', $activity_id)
-                        ->where('view_site.vendor_id', $vendor)
+                        // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                         // dd($sites->get());
                 } else if($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
                           ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
                         ->where('activity_id', '>=', $activity_id)
-                        ->where('view_site.vendor_id', $vendor)
+                        // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
+                }
+
+                if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->where('view_site.vendor_id', $vendor);
                 }
     
 

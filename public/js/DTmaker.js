@@ -191,7 +191,7 @@ function makeDT(whatTable, whatCols, active_program) {
                 var bg = 1;
                 $.each(result.sort((a, b) => (a.key > b.key) ? 1 : -1), function(){
 
-                    var xx =    '<div class="col-3 border">' +          
+                    var xx =    '<div class="col-3 border" style="max-width: 22% !important;">' +          
                                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
                                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
                                         '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
@@ -212,7 +212,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
                 });
 
-                var total_site =    '<div class="col-3 border">' +          
+                var total_site =    '<div class="col-3 border" style="max-width: 22% !important;">' +          
                                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
                                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
                                         '<div class="widget-numbers mt-1">'+ json.data.length + '</div>' +
