@@ -1486,11 +1486,11 @@ class GlobeController extends Controller
                 }
 
                 $stage_activities = \DB::table('stage_activities')
-                                ->select('id', 'activity_type', 'approver_profile_id_1')
+                                ->select('id', 'activity_type')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
-                                ->first();
+                                ->first();       
 
                 if ($stage_activities->activity_type == 'doc upload') {
 
