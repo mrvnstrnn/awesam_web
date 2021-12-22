@@ -9,7 +9,7 @@
     }
 
     thead input {
-        width: 100%;
+        width: 100% !important;
     }
 </style> 
 <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
