@@ -145,12 +145,13 @@
                                                                 <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
                                                             </a>
                                                         </li>
-                                                        
+                                                        @if ($site[0]->program_id == 8)
                                                         <li class="nav-item">
                                                             <a role="tab" class="nav-link" id="tab-file-google" data-toggle="tab" href="#tab-content-file-google">
                                                                 <span>Old Files From Google Drive</span>
                                                             </a>
                                                         </li>
+                                                        @endif
                                                         
                                                         <li class="nav-item">
                                                             <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
@@ -190,6 +191,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @if ($site[0]->program_id == 8)
                                                         <div class="tab-pane tabs-animation fade" id="tab-content-file-google" role="tabpanel">
                                                             <div class="row">
                                                                 <div class="col-12">
@@ -223,6 +225,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @endif
                                                         <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
                                                             <img src="/images/construction.gif" width="100%"/>
                                                             <h5>activity_source: File</h5>

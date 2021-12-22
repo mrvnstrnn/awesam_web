@@ -27,7 +27,7 @@ if (\Auth::user()->profile_id == 2) {
                     ->select(
                         'stage_id', 
                         'stage_name'
-                        )
+                    )
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->where('site_vendor_id', $vendor)
@@ -47,7 +47,6 @@ if (\Auth::user()->profile_id == 2) {
                         'stage_id',
                         'stage_name'
                     )
-                    // ->where('agent_id', \Auth::id())
                     ->where('site_vendor_id', $vendor)
                     ->where('activity_profile_id', 38)
                     ->orderBy('stage_id', 'ASC')

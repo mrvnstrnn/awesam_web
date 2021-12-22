@@ -684,6 +684,7 @@ class GlobeController extends Controller
                                                 ->select('stage_id')
                                                 ->where('activity_id', $activity)
                                                 ->where('program_id', $program_id)
+                                                ->where('category', $site_category[0])
                                                 ->first();
 
                     if (!is_null($get_stage_activity)) {
@@ -3559,6 +3560,11 @@ class GlobeController extends Controller
                 } else if($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
                           ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
+                        ->where('activity_id', '>=', $activity_id)
+                        // ->where('view_site.vendor_id', $vendor)
+                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                } else if($program_id == 2){
+                    $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
                         ->where('activity_id', '>=', $activity_id)
                         // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
