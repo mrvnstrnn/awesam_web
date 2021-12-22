@@ -60,7 +60,7 @@
                             <label for="profile">Profile</label>
                             <select name="profile" id="profile" class="form-control">
                                 @php
-                                    $profiles  = \App\Models\Profile::orderBy('profile')->get();  
+                                    $profiles  = \App\Models\Profile::where('id', '!=', '1')->orderBy('profile')->get();  
                                 @endphp
 
                                 @foreach ($profiles as $profile)

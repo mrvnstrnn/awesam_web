@@ -843,8 +843,7 @@ class GlobeController extends Controller
     {
         try {
             $checkAgent = \DB::table('site_users')
-                            ->where('sam_id', $request
-                            ->input('sam_id'))
+                            ->where('sam_id', $request->input('sam_id'))
                             ->where('agent_id', $request->input('agent_id'))
                             ->first();
 
@@ -853,10 +852,10 @@ class GlobeController extends Controller
 
             if(is_null($checkAgent)) {
 
-                SiteAgent::create([
-                    'agent_id' => $request->input('agent_id'),
-                    'sam_id' => $request->input('sam_id'),
-                ]);
+                // SiteAgent::create([
+                //     'agent_id' => $request->input('agent_id'),
+                //     'sam_id' => $request->input('sam_id'),
+                // ]);
 
                 if ( 
                     ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
@@ -866,6 +865,8 @@ class GlobeController extends Controller
                 } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 2 && $profile_id == 3 && $request->input('activity_id') == 5) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 }
 
@@ -880,6 +881,8 @@ class GlobeController extends Controller
                 } else if ($request->input('data_program') == 4 && $profile_id == 3 && $request->input('activity_id') == 6) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 2 && $profile_id == 3 && $request->input('activity_id') == 5) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 }
 
