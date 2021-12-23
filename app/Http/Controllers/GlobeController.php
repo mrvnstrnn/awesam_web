@@ -5376,17 +5376,17 @@ class GlobeController extends Controller
 
             $activities = \DB::table('stage_activities')
                     ->select('next_activity')
-                    ->where('activity_id', $request->input("activity_id"))
+                    ->where('activity_id', $request->input("activity_id")[0])
                     ->where('program_id', $request->input('program_id'))
                     ->where('category', $get_category->site_category)
                     ->first();
 
             SiteStageTracking::where('sam_id', $request->input('sam_id'))
-                                                ->where('activity_complete', 'false')
-                                                ->where('activity_id', $request->input("activity_id")[0])
-                                                ->update([
-                                                    'activity_complete' => "true"
-                                                ]);
+                            ->where('activity_complete', 'false')
+                            ->where('activity_id', $request->input("activity_id")[0])
+                            ->update([
+                                'activity_complete' => "true"
+                            ]);
 
             SiteStageTracking::create([
                 'sam_id' => $request->input('sam_id'),
@@ -5396,19 +5396,29 @@ class GlobeController extends Controller
             ]);
 
             \DB::table("site")
-                                    ->where("sam_id", $request->input("sam_id"))
-                                    ->update([
-                                        'site_category' => $request->input('site_category'),
-                                    ]);
+                ->where("sam_id", $request->input("sam_id"))
+                ->update([
+                    'site_category' => $request->input('site_category'),
+                ]);
 
             $get_next_activities = \DB::table('stage_activities')
-                        ->select('activity_name', 'profile_id')
+                        ->select('activity_name', 'profile_id', 'stage_id')
                         ->where('activity_id', $activities->next_activity)
                         ->where('program_id', $request->input('program_id'))
                         ->where('category', $request->input('site_category'))
                         ->first();
+
+            if (!is_null($get_next_activities)) {
+                $get_program_stages = \DB::table('program_stages')
+                                        ->select('stage_name')
+                                        ->where('stage_id', $get_next_activities->stage_id)
+                                        ->where('program_id', $request->input('program_id'))
+                                        ->first();
+            }
                         
             $array = array(
+                'stage_id' => !is_null($get_next_activities) ? $get_next_activities->stage_id : "",
+                'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
                 'activity_id' => $activities->next_activity,
                 'activity_name' => $get_next_activities->activity_name,
                 'profile_id' => $get_next_activities->profile_id,
