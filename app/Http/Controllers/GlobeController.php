@@ -2801,8 +2801,6 @@ class GlobeController extends Controller
                             ->where('view_site.program_id', $program_id)
                             ->where('view_site.profile_id', \Auth::user()->profile_id);
 
-                            dd($program_id);
-
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
