@@ -2801,11 +2801,16 @@ class GlobeController extends Controller
                             ->where('view_site.program_id', $program_id)
                             ->where('view_site.profile_id', \Auth::user()->profile_id);
 
+                            dd($program_id);
+
             if($program_id == 3){
 
                 $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
-                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
-                "program_coloc.gt_saq_milestone_category");
+                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type", "program_coloc.gt_saq_milestone", "program_coloc.gt_saq_milestone_category");
+
+            } else if($program_id == 4){
+
+                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id');
 
             }
                 
@@ -3147,6 +3152,10 @@ class GlobeController extends Controller
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                    ->get();
             }
 
 
@@ -3565,7 +3574,7 @@ class GlobeController extends Controller
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                 } else if($program_id == 2){
                     $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
-                        ->where('activity_id', '>=', $activity_id)
+                        ->where('activity_id', '>=', 5)
                         // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                 }
