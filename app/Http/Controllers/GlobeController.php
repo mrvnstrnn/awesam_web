@@ -7633,7 +7633,7 @@ class GlobeController extends Controller
                 $table = 'program_ibs';
             } else if ($request->get('program_id') == 8) {
                 $table = 'program_renewal';
-            } else if ($request->get('program_id') == 8) {
+            } else if ($request->get('program_id') == 2) {
                 $table = 'program_ftth';
             }
 
