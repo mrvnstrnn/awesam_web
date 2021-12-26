@@ -170,7 +170,17 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "classification";
 
                     }
-                }        
+                }    
+                else if(active_program == 2){
+
+                    if(window.location.pathname == "/program-sites"){
+                        var filter_column = "sam_milestone";
+                    } 
+                    else {
+                        var filter_column = "sam_milestone";
+
+                    }
+                }    
 
                 // console.log(result);
 
