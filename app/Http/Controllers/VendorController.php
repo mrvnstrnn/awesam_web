@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\Models\Vendor;
 use App\Models\AddVendorProfile;
 use App\Models\UserDetail;
 use App\Models\VendorProgram;
+use App\Models\User;
+use App\Models\UserProgram;
 use App\Models\Request as RequestTable;
 use DataTables;
 use Log;
@@ -59,7 +62,7 @@ class VendorController extends Controller
             $validate = Validator::make($request->all(), array(
                 'vendor_firstname' => 'required',
                 'vendor_lastname' => 'required',
-                'vendor_admin_email' => ['required', 'unique:mysql2.users,email', 'unique:mysql2.vendor,vendor_admin_email'],
+                'vendor_admin_email' => ['required', 'unique:users,email', 'unique:vendor,vendor_admin_email'],
                 'vendor_program_id' => 'required',
                 'vendor_sec_reg_name' => 'required',
                 'vendor_acronym' => 'required',
@@ -90,24 +93,29 @@ class VendorController extends Controller
                         $arrayData
                     );
 
-                    for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
-                        // VendorProgram::create([
-                        //     'vendors_id' => $vendor_id,
-                        //     'programs' => $request->input('vendor_program_id')[$i],
-                        // ]);
+                    $users = new User();
+                    $users->firstname = $request->input('vendor_firstname');
+                    $users->lastname = $request->input('vendor_lastname');
+                    $users->name = $name;
+                    $users->email = $request->input('vendor_admin_email');
+                    $users->email_verified_at = \Carbon::now();
+                    $users->password = Hash::make(12345678);
+                    $users->profile_id = 1;
+                    $users->save();
 
+                    for ($i=0; $i < count($request->input('vendor_program_id')); $i++) {
                         $vendor_program = new VendorProgram();
                         $vendor_program->vendors_id = $vendor_id;
                         $vendor_program->programs = $request->input('vendor_program_id')[$i];
                         $vendor_program->save();
+
+                        $user_program = new UserProgram();
+                        $user_program->user_id = $users->id;
+                        $user_program->program_id = $request->input('vendor_program_id')[$i];
+                        $user_program->save();
                     }
 
-                    for ($j=0; $j < count($request->input('vendor_profile_id')); $j++) { 
-                        // AddVendorProfile::create([
-                        //     'vendor_id' => $vendor_id,
-                        //     'vendor_profile' => $request->input('vendor_profile_id')[$j],
-                        // ]);
-
+                    for ($j=0; $j < count($request->input('vendor_profile_id')); $j++) {
                         $vendor_program = new AddVendorProfile();
                         $vendor_program->vendor_id = $vendor_id;
                         $vendor_program->vendor_profile = $request->input('vendor_profile_id')[$j];
@@ -144,12 +152,12 @@ class VendorController extends Controller
                             $arrayData
                         );
 
-                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                        $name,
-                        $request->input('vendor_admin_email'),
-                        $request->input('vendor_sec_reg_name'),
-                        $request->input('vendor_acronym')
-                    ));
+                    // Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                    //     $name,
+                    //     $request->input('vendor_admin_email'),
+                    //     $request->input('vendor_sec_reg_name'),
+                    //     $request->input('vendor_acronym')
+                    // ));
                 
                     return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
@@ -167,7 +175,7 @@ class VendorController extends Controller
     {
         try {
             $vendors = Vendor::join('vendor_programs', 'vendor_programs.vendor_program_id', 'vendors.vendor_program_id')
-                                    ->whereNot('vendors', 'HT')
+                                    // ->whereNot('vendors', 'HT')
                                     ->get();
             return response()->json([ 'error' => false, 'message' => $vendors ]);
         } catch (\Throwable $th) {
