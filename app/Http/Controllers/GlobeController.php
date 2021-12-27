@@ -2613,6 +2613,13 @@ class GlobeController extends Controller
                     $sites->whereIn('program_renewal.region', $user_area);
                 }
             }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.sam_milestone", "program_ftth.odn_vendor");
+                if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_ftth.region', $user_area);
+                }
+            }
             
             $sites->get();
         }

@@ -17,25 +17,24 @@
 
     <div class="row file_lists">
         @php
-            if (\Auth::user()->profile_id == 30) {
+            // if (\Auth::user()->profile_id == 30) {
+            //     $datas = \DB::table('sub_activity_value')
+            //                     ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
+            //                     ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
+            //                     ->where('sub_activity_value.sam_id', $site[0]->sam_id)
+            //                     ->where('sub_activity_value.type', 'doc_upload')
+            //                     ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
+            //                     ->orderBy('sub_activity_value.sub_activity_id')
+            //                     ->get();
+            // } else {
                 $datas = \DB::table('sub_activity_value')
                                 ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
                                 ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
                                 ->where('sub_activity_value.sam_id', $site[0]->sam_id)
                                 ->where('sub_activity_value.type', 'doc_upload')
-                                ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
                                 ->orderBy('sub_activity_value.sub_activity_id')
                                 ->get();
-            } else {
-                $datas = \DB::table('sub_activity_value')
-                                ->select('sub_activity_value.*', 'sub_activity.sub_activity_name', 'sub_activity.sub_activity_id', 'sub_activity.requires_validation', 'sub_activity.activity_id')
-                                ->join('sub_activity', 'sub_activity_value.sub_activity_id', 'sub_activity.sub_activity_id')
-                                ->where('sub_activity_value.sam_id', $site[0]->sam_id)
-                                ->where('sub_activity_value.type', 'doc_upload')
-                                // ->whereNotIn('sub_activity.activity_id', ['6', '8', '11'])
-                                ->orderBy('sub_activity_value.sub_activity_id')
-                                ->get();
-            }
+            // }
 
             $unique_activity_id = array_unique( array_column($datas->all(), 'activity_id') );
 
