@@ -2673,29 +2673,6 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'mine_completed'){
-            // $sites = \DB::connection('mysql2')
-            //                 ->table("completed_sites")
-            //                 ->where('program_id', $program_id)
-            //                 ->distinct()
-            //                 ->get();
-                            
-            // $last_act = \DB::connection('mysql2')
-            //                 ->table("stage_activities")
-            //                 ->select('activity_id')
-            //                 ->where('program_id', $program_id)
-            //                 ->orderBy('activity_id', 'desc')
-            //                 ->first();
-
-            // $sites = \DB::connection('mysql2')
-            //                     ->table("site")
-            //                     ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-            //                     ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-            //                     ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-            //                     ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-            //                     ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-            //                     ->where('site.program_id', $program_id)
-            //                     ->where('activities->activity_id', $last_act->activity_id)
-            //                     ->get();
 
             $sites = \DB::table("view_site")
                                 ->where('program_id', $program_id)
@@ -2706,6 +2683,10 @@ class GlobeController extends Controller
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                 ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
                 "program_coloc.gt_saq_milestone_category");
+
+            } else if ( $program_id == 2 ) {
+                                    
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id');
 
             }
 
