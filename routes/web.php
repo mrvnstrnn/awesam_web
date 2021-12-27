@@ -192,6 +192,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
 
+    // FTTH
+    Route::post('/tag-artb', [GlobeController::class, 'tag_artb'])->name('tag_artb');
 
     Route::get('/all-profile', [ProfileController::class, 'all_profile'])->name('all.profile');
     Route::get('/edit-profile/{id}', [ProfileController::class, 'edit_profile'])->name('edit.profile');

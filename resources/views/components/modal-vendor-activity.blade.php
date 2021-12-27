@@ -1,6 +1,3 @@
-
-
-
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
 <style>
@@ -162,9 +159,15 @@
                                                     <div class="tab-content">
                                                         <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
                                                             <div class="row border-bottom">
-                                                                <div class="col-12">
+                                                                <div class="col-md-8 col-12">
                                                                     <H5>Actions to Complete</H5>
                                                                 </div>
+                                                                
+                                                                @if ($site[0]->program_id == 2 && $site[0]->activity_name == 'Documents Application')
+                                                                <div class="col-md-4 col-12">
+                                                                    <button class="float-right p-2 pt-1 btn btn-outline btn-primary btn-xs for_artb_btn" type="button"><small>For ARTB</small></button>                                            
+                                                                </div>
+                                                                @endif
                                                                 {{-- <div class="col-4">
                                                                     <button class="float-right p-2 pt-1 -mt-4 btn btn-outline btn-outline-dark btn-xs "><small>MARK AS COMPLETED</small></button>                                            
                                                                 </div> --}}
@@ -374,6 +377,20 @@
                                                 @endif
                                             </div>
                                         </div>
+                                    </div>
+                                    <div id="for_artb_div" class="d-none text-center py-3">
+                                        <form class="artb_form">
+                                            <input type="hidden" name="sam_id" id="sam_id" value="{{ $site[0]->sam_id }}">
+                                            <input type="hidden" name="site_category" id="site_category" value="{{ $site[0]->site_category }} ARTB">
+                                            <input type="hidden" name="program_id" id="program_id" value="{{ $site[0]->program_id }}">
+                                            <input type="hidden" name="activity_id" id="activity_id" value="{{ $site[0]->activity_id }}">
+                                            <input type="hidden" name="activity_name" id="activity_name" value="artb_declaration">
+
+                                            <div class="swal2-icon swal2-question swal2-animate-question-icon" style="display: flex;"><span class="swal2-icon-text">?</span></div>
+                                            <p>Are you sure you want to tag this site for ARTB?</p>
+                                            <button type="button" class="btn btn-secondary btn-shadow btn-sm cancel_for_artb_btn">Cancel</button>
+                                            <button type="button" class="btn btn-sm btn-primary btn-shadow confirm_for_artb_btn">Confirm</button>
+                                        </form>
                                     </div>
                                     <div class="row loading_div"></div>
                                     <div id="actions_box" class="d-none">
@@ -709,6 +726,64 @@
             });
         });
 
+        $("#tab-content-action-to-complete .for_artb_btn").on("click", function () {
+            $("#actions_list").addClass("d-none");
+            $("#for_artb_div").removeClass("d-none");
+        });
+
+        $(".artb_form .cancel_for_artb_btn").on("click", function () {
+            $("#actions_list").removeClass("d-none");
+            $("#for_artb_div").addClass("d-none");
+        });
+
+        $(".artb_form").on("click", ".confirm_for_artb_btn", function () {
+            $(this).attr("disabled", "disabled");
+            $(this).text("Processing...");
+
+            $.ajax({
+                url: "/tag-artb",
+                method: "POST",
+                data: $(".artb_form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error){
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".confirm_for_artb_btn").removeAttr("disabled");
+                        $(".confirm_for_artb_btn").text("Confirm");
+
+                        $("#viewInfoModal").modal("hide");
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+
+                        $(".confirm_for_artb_btn").removeAttr("disabled");
+                        $(".confirm_for_artb_btn").text("Confirm");
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+
+                    $(".confirm_for_artb_btn").removeAttr("disabled");
+                    $(".confirm_for_artb_btn").text("Confirm");
+                }
+            });
+
+        });
+        
     });
 
     </script>

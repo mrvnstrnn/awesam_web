@@ -63,7 +63,6 @@ class GlobeController extends Controller
     public function acceptRejectEndorsement(Request $request)
     {
         try {
-            // return response()->json(['error' => true, 'message' => $request->all()]);
             if(is_null($request->input('sam_id'))){
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
@@ -116,6 +115,29 @@ class GlobeController extends Controller
                         ]);
                     }
                 }
+
+            } else if ($request->input('activity_name') == "artb_declaration") {
+
+                $notification = "Successfully tagged a site for ARTB.";
+                $action = "true";
+                $program_id = $request->input('program_id');
+                $site_category = [$request->input('site_category')];
+                $activity_id = [$request->input('activity_id')];
+
+                $samid = [$request->input('sam_id')];
+
+                $array_data = array(
+                    'artb' => 'yes',
+                    'artb_date' => Carbon::now()->toDateString()
+                );
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input('sam_id'),
+                    'type' => 'artb_declaration',
+                    'status' => 'pending',
+                    'user_id' => \Auth::id(),
+                    'value' => json_encode($array_data)
+                ]);
 
             } else if ($request->input('activity_name') == "submit_elas") {
 
@@ -2757,52 +2779,6 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'rtb declaration'){
 
-            // $sites = \DB::connection('mysql2')
-            //         ->table("milestone_tracking")
-            //         ->distinct()
-            //         ->where('program_id', $program_id)
-            //         ->where('activity_type', 'rtb declaration')
-            //         ->where('activity_complete', 'false')
-            //         ->where('profile_id', \Auth::user()->profile_id)
-            //         ->get();
-
-            // if ($program_id == 1 && \Auth::user()->profile_id == 6) {
-            //     $sites = \DB::connection('mysql2')
-            //         ->table("view_sites_activity")
-            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date', 'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-            //         ->where('program_id', $program_id)
-            //         ->where('activity_id', 22)
-            //         ->where('profile_id', \Auth::user()->profile_id)
-            //         ->get();
-            // } else if ($program_id == 1 && \Auth::user()->profile_id == 7) {
-            //     $sites = \DB::connection('mysql2')
-            //         ->table("view_sites_activity")
-            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-            //         ->where('program_id', $program_id)
-            //         ->where('activity_id', 23)
-            //         ->where('profile_id', \Auth::user()->profile_id)
-            //         ->get();
-
-            // } else if ($program_id == 3 && \Auth::user()->profile_id == 9) {
-            //     $sites = \DB::connection('mysql2')
-            //         ->table("view_sites_activity")
-            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-            //         ->where('program_id', $program_id)
-            //         ->where('activity_id', 17)
-            //         ->where('profile_id', \Auth::user()->profile_id)
-            //         ->get();
-
-            // } else if ($program_id == 4 && \Auth::user()->profile_id == 7) {
-            //     $sites = \DB::connection('mysql2')
-            //         ->table("view_sites_activity")
-            //         ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', 'program_endorsement_date')
-            //         ->where('program_id', $program_id)
-            //         ->where('activity_id', 18)
-            //         ->where('profile_id', \Auth::user()->profile_id)
-            //         ->get();
-
-            // } else if (\Auth::user()->profile_id == 6) {
-
             $sites = \DB::table("view_site")
                             ->whereIn('view_site.activity_type', ['rtb declaration'])
                             ->where('view_site.program_id', $program_id)
@@ -2815,44 +2791,41 @@ class GlobeController extends Controller
 
             } else if($program_id == 4){
 
+                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
+
+            } else if($program_id == 2){
+
                 $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id');
 
             }
                 
             $sites->get();
 
+        }
 
-            // } 
-            // else {
-            //     if ($program_id == 2) {
-            //         $sites = \DB::connection('mysql2')
-            //                     ->table("view_sites_per_program")
-            //                     ->where('view_sites_per_program.program_id', $program_id)
-            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-            //                     ->whereIn('view_sites_per_program.activity_id', [13, 14, 10, 11])
-            //                     ->distinct()
-            //                     ->get();
-            //     }                            
-            //     elseif ($program_id == 4) {
-            //         $sites = \DB::connection('mysql2')
-            //                     ->table("view_sites_per_program")
-            //                     ->where('view_sites_per_program.program_id', $program_id)
-            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-            //                     ->whereIn('view_sites_per_program.activity_id', [14])
-            //                     ->distinct()
-            //                     ->get();
-            //     } else {
-            //         $sites = \DB::connection('mysql2')
-            //                     ->table("view_sites_per_program")
-            //                     ->leftjoin('stage_activities', 'stage_activities.activity_id', 'view_sites_per_program.activity_id')
-            //                     ->where('view_sites_per_program.program_id', $program_id)
-            //                     ->whereIn('stage_activities.activity_type', ['rtb declaration'])
-            //                     ->where('view_sites_per_program.profile_id', \Auth::user()->profile_id)
-            //                     // ->whereIn('view_sites_per_program.activity_id', [16])
-            //                     ->distinct()
-            //                     ->get();
-            //     }
-            // }
+        elseif($activity_type == 'artb declaration'){
+
+            $sites = \DB::table("view_site")
+                            ->whereIn('view_site.activity_type', ['artb declaration'])
+                            ->where('view_site.program_id', $program_id)
+                            ->where('view_site.profile_id', \Auth::user()->profile_id);
+
+            if($program_id == 3){
+
+                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
+                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type", "program_coloc.gt_saq_milestone", "program_coloc.gt_saq_milestone_category");
+
+            } else if($program_id == 4){
+
+                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
+
+            } else if($program_id == 2){
+
+                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id');
+
+            }
+                
+            $sites->get();
 
         }
 
@@ -5439,6 +5412,95 @@ class GlobeController extends Controller
                     ]);
 
             return response()->json(['error' => false, 'message' => "Successfully set site category."]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function tag_artb(Request $request)
+    {
+        try {
+
+            $array_data = array(
+                'artb' => 'yes',
+                'artb_date' => Carbon::now()->toDateString()
+            );
+        
+            SubActivityValue::create([
+                'sam_id' => $request->input('sam_id'),
+                'type' => 'artb_declaration',
+                'status' => 'pending',
+                'user_id' => \Auth::id(),
+                'value' => json_encode($array_data)
+            ]);
+
+            $profile_id = \Auth::user()->profile_id;
+            $id = \Auth::id();
+
+            $get_category = \DB::table("site")
+                                ->select('site_category')
+                                ->where("sam_id", $request->input("sam_id"))
+                                ->first();
+
+            $activities = \DB::table('stage_activities')
+                    ->select('next_activity')
+                    ->where('activity_id', $request->input("activity_id"))
+                    ->where('program_id', $request->input('program_id'))
+                    ->where('category', $get_category->site_category)
+                    ->first();
+
+            SiteStageTracking::where('sam_id', $request->input('sam_id'))
+                            ->where('activity_complete', 'false')
+                            ->where('activity_id', $request->input("activity_id"))
+                            ->update([
+                                'activity_complete' => "true"
+                            ]);
+
+            SiteStageTracking::create([
+                'sam_id' => $request->input('sam_id'),
+                'activity_id' => $activities->next_activity,
+                'activity_complete' => 'false',
+                'user_id' => \Auth::id()
+            ]);
+
+            \DB::table("site")
+                ->where("sam_id", $request->input("sam_id"))
+                ->update([
+                    'site_category' => $request->input('site_category'),
+                ]);
+
+            $get_next_activities = \DB::table('stage_activities')
+                        ->select('activity_name', 'profile_id', 'stage_id')
+                        ->where('activity_id', $activities->next_activity)
+                        ->where('program_id', $request->input('program_id'))
+                        ->where('category', $request->input('site_category'))
+                        ->first();
+
+            if (!is_null($get_next_activities)) {
+                $get_program_stages = \DB::table('program_stages')
+                                        ->select('stage_name')
+                                        ->where('stage_id', $get_next_activities->stage_id)
+                                        ->where('program_id', $request->input('program_id'))
+                                        ->first();
+            }
+                        
+            $array = array(
+                'stage_id' => !is_null($get_next_activities) ? $get_next_activities->stage_id : "",
+                'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
+                'activity_id' => $activities->next_activity,
+                'activity_name' => $get_next_activities->activity_name,
+                'profile_id' => $get_next_activities->profile_id,
+                'category' => $request->input('site_category'),
+                'activity_created' => Carbon::now()->toDateString(),
+            );
+
+            Site::where('sam_id', $request->input("sam_id"))
+                    ->update([
+                        'activities' => json_encode($array)
+                    ]);
+
+            return response()->json(['error' => false, 'message' => "Successfully tagged a site for ARTB."]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

@@ -22,7 +22,7 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="rtb_declaration">RTB Declaration</label>
+                        <label for="rtb_declaration">ARTB Declaration</label>
                         {{-- <select name="rtb_declaration" id="rtb_declaration" class="form-control">
                             <option>1</option>
                             <option>2</option>
@@ -48,7 +48,7 @@
 </div>
 <div class="row mb-3 border-top pt-3">
     <div class="col-12 align-right">
-        <button class="float-right btn btn-shadow btn-success declaration_approve_reject" id="declaration_approve" data-action="true" data-sam_id="{{ $rtbdeclaration->sam_id }}">Approve RTB Declaration</button>                                            
+        <button class="float-right btn btn-shadow btn-success declaration_approve_reject" id="declaration_approve" data-action="true" data-sam_id="{{ $rtbdeclaration->sam_id }}">Approve ARTB Declaration</button>                                            
         <button class="float-right btn btn-shadow btn-danger mr-2 declaration_approve_reject" id="declaration_reject" data-action="false" data-sam_id="{{ $rtbdeclaration->sam_id }}">Reject</button>                                            
     </div>
 </div>
@@ -73,7 +73,7 @@
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
 
-            var message = action == "false" ? "Reject" : "Approve RTB Declaration";
+            var message = action == "false" ? "Reject" : "Approve ARTB Declaration";
             var button_id = action == "false" ? "declaration_reject" : "declaration_approve";
             
             $("form small").text("");

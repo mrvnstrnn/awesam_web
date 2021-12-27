@@ -135,8 +135,8 @@
             <textarea placeholder="Please enter your reason..." name="text_area_reason" id="text_area_reason" cols="30" rows="5" class="form-control mb-3"></textarea>
             <small class="reason-error text-danger"></small><br>
             
-            <button type="button" class="btn btn-secondary btn-sm cancel_reject_approve">Cancel</button>
-            <button type="button" class="btn btn-sm approve_reject_doc_btns_final">Confirm</button>
+            <button type="button" class="btn btn-secondary btn-shadow btn-sm cancel_reject_approve">Cancel</button>
+            <button type="button" class="btn btn-sm btn-shadow btn-primary approve_reject_doc_btns_final">Confirm</button>
         </div>
     </div>
 
