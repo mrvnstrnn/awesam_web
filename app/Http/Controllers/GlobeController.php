@@ -2672,6 +2672,14 @@ class GlobeController extends Controller
 
             }
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
+                $sites->where('site_vendor_id', $vendor);
+            }
+
             $sites->get();
 
 
