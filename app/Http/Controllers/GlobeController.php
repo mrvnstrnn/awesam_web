@@ -2637,7 +2637,7 @@ class GlobeController extends Controller
             }
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
-                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.sam_milestone", "program_ftth.odn_vendor");
+                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
                 if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->whereIn('program_ftth.region', $user_area);
                 }
@@ -2665,6 +2665,11 @@ class GlobeController extends Controller
                       ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
                       "program_ibs.saq_milestone",
                       "program_ibs.saq_submilestone");
+            } else if ( $program_id == 2 ) {
+                                    
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
+
             }
 
             $sites->get();
@@ -2686,7 +2691,8 @@ class GlobeController extends Controller
 
             } else if ( $program_id == 2 ) {
                                     
-                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id');
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
 
             }
 
@@ -5326,7 +5332,6 @@ class GlobeController extends Controller
     public function set_site_category(Request $request)
     {
         try {
-
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::id();
 

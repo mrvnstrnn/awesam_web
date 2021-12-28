@@ -378,6 +378,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($site[0]->activity_name == 'Documents Application' && $site[0]->program_id == 2)
                                     <div id="for_artb_div" class="d-none text-center py-3">
                                         <form class="artb_form">
                                             <input type="hidden" name="sam_id" id="sam_id" value="{{ $site[0]->sam_id }}">
@@ -392,6 +393,7 @@
                                             <button type="button" class="btn btn-sm btn-primary btn-shadow confirm_for_artb_btn">Confirm</button>
                                         </form>
                                     </div>
+                                    @endif
                                     <div class="row loading_div"></div>
                                     <div id="actions_box" class="d-none">
 
