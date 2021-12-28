@@ -198,7 +198,7 @@
                 if(!resp.error){
 
                     $(".card-body .position-relative.form-group").remove();
-                    $(".main-card.mb-3.card .modal-footer").remove();
+                    $("#viewInfoModal .main-card.mb-3.card .modal-footer").remove();
 
                     var array_not_allowed = [
                         "id",

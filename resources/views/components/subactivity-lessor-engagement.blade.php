@@ -45,6 +45,31 @@
                     <input type="text" class="form-control" id="lessor_method" name="lessor_method" readonly>
                 </div>
             </div>
+            
+            <div class="position-relative row form-group">
+                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="name" name="name">
+                    <small class="text-danger name-errors"></small>
+                </div>
+            </div>
+
+            <div class="position-relative row form-group email_div d-none">
+                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control" id="email" name="email">
+                    <small class="text-danger email-errors"></small>
+                </div>
+            </div>
+
+            <div class="position-relative row form-group">
+                <label for="contact_no" class="col-sm-3 col-form-label">Contact Number</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="contact_no" name="contact_no">
+                    <small class="text-danger contact_no-errors"></small>
+                </div>
+            </div>
+
             <div class="position-relative row form-group">
                 <label for="lessor_remarks" class="col-sm-3 col-form-label">Remarks</label>
                 <div class="col-sm-9">
@@ -108,6 +133,12 @@
 
         $("#lessor_method").val($(this).attr("data-value"));
         $("#lessor_date").val(today);
+
+        if ( $(this).attr("data-value") == 'Email' ) {
+            $(".email_div").removeClass('d-none');
+        } else {
+            $(".email_div").addClass('d-none');
+        }
     });
 
     var sub_activity_id = "{{ $sub_activity_id }}";
@@ -119,7 +150,10 @@
                             '<th style="width: 5%">#</th>' +
                             '<th>Method</th>' +
                             '<th style="width: 35%">Remarks</th>' +
-                            '<th style="width: 35%">Status</th>' +
+                            '<th style="width: 20%">Name</th>' +
+                            '<th style="width: 15%">Email</th>' +
+                            '<th style="width: 15%">Contact No</th>' +
+                            '<th style="width: 10%">Status</th>' +
                             '<th>Date Approved</th>' +
                         '</tr>' +
                     '</thead>' +
@@ -146,6 +180,9 @@
                 { data: "id" },
                 { data: "method" },
                 { data: "value" },
+                { data: "name" },
+                { data: "email" },
+                { data: "contact_no" },
                 { data: "status" },
                 { data: "date_created" },
             ],
@@ -159,6 +196,9 @@
         var lessor_method = $("#lessor_method").val();
         var lessor_approval = $("#lessor_approval").val();
         var lessor_remarks = $("#lessor_remarks").val();
+        var name = $("#name").val();
+        var contact_no = $("#contact_no").val();
+        var email = $("#email").val();
         var site_vendor_id = $("#modal_site_vendor_id").val();
         var program_id = "{{ $program_id }}";
         var sam_id = "{{ $sam_id }}";
@@ -188,6 +228,9 @@
                 program_id : program_id,
                 activity_id : activity_id,
                 site_category : site_category,
+                name : name,
+                contact_no : contact_no,
+                email : email,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

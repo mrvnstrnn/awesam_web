@@ -2637,7 +2637,28 @@ class GlobeController extends Controller
             }
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
-                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
+                ->select(
+                    "view_site.site_name", 
+                    // "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    // "view_site.activity_id", 
+                    // "view_site.program_id", 
+                    // "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    // "view_site.sam_region_name", 
+                    // "view_site.region_name", 
+                    // "view_site.province_name", 
+                    // "view_site.lgu_name", 
+                    // "view_site.site_category",
+                    "view_site.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
                 if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->whereIn('program_ftth.region', $user_area);
                 }
@@ -3336,7 +3357,10 @@ class GlobeController extends Controller
                             "view_site.lgu_name", 
                             "view_site.site_category",
                             "view_site.aging",
-                            // "program_ftth.*"
+                            "program_ftth.cluster_id",
+                            "program_ftth.sam_milestone",
+                            "program_ftth.submilestone",
+                            "program_ftth.afi_lines",
                         )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
@@ -4916,11 +4940,14 @@ class GlobeController extends Controller
     public function declare_rtb(Request $request)
     {
         try {
-
-            // return response()->json(['error' => true, 'message' => $request->all() ]);
+            $required_afi = "";
+            if ($request->get('program_id') == 2) {
+                $required_afi = "required";
+            }
             $validate = \Validator::make($request->all(), array(
                 'rtb_declaration_date' => 'required',
                 'rtb_declaration' => 'required',
+                'afi_lines' => [$required_afi, 'min:0'],
             ));
 
             if ($validate->passes()){
@@ -4930,6 +4957,14 @@ class GlobeController extends Controller
                                         ->where('status', "pending")
                                         ->where('type', "rtb_declaration")
                                         ->first();
+
+                if ($request->get('program_id') == 2) {
+                    \DB::table('program_ftth')
+                        ->where('sam_id', $request->input('sam_id'))
+                        ->update([
+                            'afi_lines' => $request->input('afi_lines')
+                        ]);
+                }
 
                 if (is_null($rtb)){
 
@@ -5095,6 +5130,36 @@ class GlobeController extends Controller
                                     } else {
                                         return $row->value;
                                     }
+                                })
+                                ->addColumn('name', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['name'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('email', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['email'];
+                                    } else {
+                                        return $row->value;
+                                    }
+                                })
+                                ->addColumn('contact_no', function($row){
+                                    json_decode($row->value);
+                                    if (json_last_error() == JSON_ERROR_NONE){
+                                        $json = json_decode($row->value, true);
+
+                                        return $json['contact_no'];
+                                    } else {
+                                        return $row->value;
+                                    }
                                 });
             return $dt->make(true);
 
@@ -5107,9 +5172,20 @@ class GlobeController extends Controller
     public function save_engagement(Request $request)
     {
         try {
+
+            $email_required = '';
+
+            if ($request->input("lessor_method") == 'Email') {
+                $email_required = "required";
+            }
+
             $validate = Validator::make($request->all(), array(
                 "lessor_approval" => "required",
                 "lessor_remarks" => "required",
+                "lessor_remarks" => "required",
+                "email" => [$email_required, 'email'],
+                "name" => "required",
+                "contact_no" => "required"
             ));
 
             // return response()->json(['error' => true, 'message' => $request->all() ]);

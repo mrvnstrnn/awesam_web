@@ -90,12 +90,14 @@
 
                                 <div class="mini_dashboard_counters mb-3">
 
-                                    <div class="card">
-                                        <div class="card-body p-0">
-                                            <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #f1f1f1;" id="dashboard_counters_options">
+                                    {{-- <div class="card"> --}}
+                                        {{-- <div class="card-body p-0"> --}}
+                                            <div class="container">
+                                                <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #f1f1f1;" id="dashboard_counters_options">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        {{-- </div> --}}
+                                    {{-- </div> --}}
                         
                                 </div>
 
