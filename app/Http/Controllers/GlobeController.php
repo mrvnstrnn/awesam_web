@@ -2655,20 +2655,20 @@ class GlobeController extends Controller
             if ( $program_id == 3 ) {
                                     
                 $sites->leftJoin('program_coloc', 'view_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
+                ->select("view_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type", "program_coloc.gt_saq_milestone",  
                 "program_coloc.gt_saq_milestone_category");
 
             }
 
-            elseif($program_id == 4){
+            elseif($program_id == 4) {
                 $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_assigned_sites.sam_id')
                       ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
                       "program_ibs.saq_milestone",
                       "program_ibs.saq_submilestone");
             } else if ( $program_id == 2 ) {
                                     
-                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
-                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
+                $sites->leftJoin('program_ftth', 'view_assigned_sites.sam_id', 'program_ftth.sam_id')
+                ->select("view_assigned_sites.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
 
             }
 

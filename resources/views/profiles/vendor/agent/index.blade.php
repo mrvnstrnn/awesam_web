@@ -6,7 +6,7 @@
 
     <x-home-dashboard-productivity />
 
-    <x-home-dashboard-milestone :programid=3 />
+    <x-home-dashboard-milestone :programid=2 />
 
     <div class="divider"></div>
     <div class="row">
