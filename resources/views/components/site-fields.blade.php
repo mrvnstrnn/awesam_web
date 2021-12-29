@@ -9,7 +9,7 @@
 
     @foreach ( $program_mappings as $site_field )
         @php
-            $what = str_replace(' ', '_', $site_field->label);
+            $what = strtolower(str_replace(' ', '_', $site_field->label));
         @endphp
         <div class="form-row mb-2 pb-2 border-bottom form_data">
             <div class="col-5">

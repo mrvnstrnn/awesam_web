@@ -22,18 +22,21 @@
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
+                        <label for="afi_lines">AFI Lines</label>
+                        <input type="text" id="afi_lines" name="afi_lines" value="{{ $json['afi_lines'] }}" class="form-control" readonly />
+                    </div>        
+                </div>
+            </div>
+            @if ( $site[0]->program_id == 2 )
+            <div class="form-row"> 
+                <div class="col-md-12">
+                    <div class="position-relative form-group">
                         <label for="rtb_declaration">RTB Declaration</label>
-                        {{-- <select name="rtb_declaration" id="rtb_declaration" class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select> --}}
                         <input type="text" name="rtb_declaration" id="rtb_declaration" value="{{ $json['rtb_declaration'] }}" class="form-control" readonly>
                     </div>        
                 </div>
             </div>
+            @endif
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">

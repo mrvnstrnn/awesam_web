@@ -47,27 +47,26 @@
         @foreach ($activities as $activity)
             <h5 class="w-100">{{ $activity->activity_name }}</h5>
             @forelse ($datas->groupBy('sub_activity_id') as $data)
-            {{-- {{ dd($datas->groupBy('sub_activity_id')); }} --}}
                 @if ($activity->activity_id == $data[0]->activity_id)
                     @php $status_collect = collect(); @endphp
-                        @for ($i = 0; $i < count($data); $i++)
-                            @php
-                                $json_status = json_decode( $data[$i]->value );
-                                $json_status_first = json_decode( $data[0]->value );
+                    @for ($i = 0; $i < count($data); $i++)
+                        @php
+                            $json_status = json_decode( $data[$i]->value );
+                            $json_status_first = json_decode( $data[0]->value );
 
-                                if ( isset($json_status->validators) ) {
-                                    for ($j=0; $j < count($json_status->validators); $j++) { 
-                                        // if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
-                                            $status_collect->push( $json_status->validators[$j]->status );
-                                            $status_file = $json_status_first->validators[$j]->status;
-                                        // }
+                            if ( isset($json_status->validators) ) {
+                                for ($j=0; $j < count($json_status->validators); $j++) {
+                                    if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                        $status_collect->push( $json_status->validators[$j]->status );
+                                        $status_file = $json_status_first->validators[$j]->status;
                                     }
-                                } else {
-                                    $status_collect->push( $data[$i]->status );
-                                    $status_file = $data[0]->status;
                                 }
-                            @endphp
-                        @endfor
+                            } else {
+                                $status_collect->push( $data[$i]->status );
+                                $status_file = $data[0]->status;
+                            }
+                        @endphp
+                    @endfor
 
                     @if ( count( $status_collect->all() ) > 0 )
                         @php

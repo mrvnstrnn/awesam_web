@@ -2689,7 +2689,28 @@ class GlobeController extends Controller
             } else if ( $program_id == 2 ) {
                                     
                 $sites->leftJoin('program_ftth', 'view_assigned_sites.sam_id', 'program_ftth.sam_id')
-                ->select("view_assigned_sites.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
+                ->select(
+                    "view_assigned_sites.site_name", 
+                    // "view_assigned_sites.vendor_acronym", 
+                    "view_assigned_sites.sam_id", 
+                    // "view_assigned_sites.activity_id", 
+                    // "view_assigned_sites.program_id", 
+                    // "view_assigned_sites.site_category", 
+                    "view_assigned_sites.activity_type", 
+                    "view_assigned_sites.activity_name", 
+                    // "view_assigned_sites.sam_region_name", 
+                    // "view_assigned_sites.region_name", 
+                    // "view_assigned_sites.province_name", 
+                    // "view_assigned_sites.lgu_name", 
+                    "view_assigned_sites.site_category",
+                    "view_assigned_sites.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
 
             }
 
@@ -2721,7 +2742,28 @@ class GlobeController extends Controller
             } else if ( $program_id == 2 ) {
                                     
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
-                ->select("view_site.*", "program_ftth.sam_milestone", "program_ftth.submilestone", "program_ftth.odn_vendor");
+                ->select(
+                    "view_site.site_name", 
+                    // "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    // "view_site.activity_id", 
+                    // "view_site.program_id", 
+                    // "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    // "view_site.sam_region_name", 
+                    // "view_site.region_name", 
+                    // "view_site.province_name", 
+                    // "view_site.lgu_name", 
+                    "view_site.site_category",
+                    "view_site.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
 
             }
 
@@ -2857,7 +2899,30 @@ class GlobeController extends Controller
                                     ->get();
                                 } else if ( $program_id == 2 ) {
 
-                                    $sites->whereIn('view_site.activity_id', [17, 20, 14, 18, 21])
+                                    $sites->whereIn('view_site.activity_id', [17, 20, 14, 18, 21, 27, 34, 30, 23])
+                                            ->join('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                                    ->select(
+                                        "view_site.site_name", 
+                                        // "view_site.vendor_acronym", 
+                                        "view_site.sam_id", 
+                                        // "view_site.activity_id", 
+                                        // "view_site.program_id", 
+                                        // "view_site.site_category", 
+                                        "view_site.activity_type", 
+                                        "view_site.activity_name", 
+                                        // "view_site.sam_region_name", 
+                                        // "view_site.region_name", 
+                                        // "view_site.province_name", 
+                                        // "view_site.lgu_name", 
+                                        "view_site.site_category",
+                                        "view_site.aging",
+                                        "program_ftth.cluster_id",
+                                        "program_ftth.sam_milestone",
+                                        "program_ftth.submilestone",
+                                        "program_ftth.afi_lines",
+                                        "program_ftth.odn_vendor",
+                                        "program_ftth.region"
+                                    )
               
                                     ->get();
 
@@ -3226,6 +3291,31 @@ class GlobeController extends Controller
                               ->select('view_site.*', 'program_renewal.wireless_project_code', 'program_renewal.pla_id', 'program_renewal.program', 'program_renewal.mar_status');
                     }
 
+                    else if($program_id == 2){
+                        $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                                ->select(
+                                    "view_site.site_name", 
+                                    "view_site.vendor_acronym", 
+                                    "view_site.sam_id", 
+                                    "view_site.activity_id", 
+                                    "view_site.program_id", 
+                                    "view_site.site_category", 
+                                    "view_site.activity_type", 
+                                    "view_site.activity_name", 
+                                    "view_site.sam_region_name", 
+                                    "view_site.region_name", 
+                                    "view_site.province_name", 
+                                    "view_site.lgu_name", 
+                                    "view_site.site_category",
+                                    "view_site.aging",
+                                    "program_ftth.cluster_id",
+                                    "program_ftth.sam_milestone",
+                                    "program_ftth.submilestone",
+                                    "program_ftth.afi_lines",
+                                    "program_ftth.region",
+                                );
+                    }
+
 
                     // if ($program_id == 3 && \Auth::user()->profile_id == 1) {
                     //     $sites->where('activity_id', 5);
@@ -3466,11 +3556,11 @@ class GlobeController extends Controller
                     // ->leftjoin("location_provinces", "view_sites_activity.site_province_id", "location_provinces.province_id")
                     // ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name', "site_region_id", "location_regions.region_name", "location_sam_regions.sam_region_name", "location_provinces.province_name")
                     
-                    ->where('program_id', $program_id);
+                    ->where('view_site.program_id', $program_id);
 
                     if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                         $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-                        $sites->where('vendor_id', $vendor);
+                        $sites->where('view_site.vendor_id', $vendor);
                     }
                     
                     if ($program_id == 1) {
@@ -3480,7 +3570,29 @@ class GlobeController extends Controller
                     } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 5);
                     } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
-                        $sites->where('activity_id', 4);
+                        $sites->join('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                        ->where('view_site.activity_id', 4)
+                        ->select(
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
+                            "view_site.site_category",
+                            "view_site.aging",
+                            "program_ftth.cluster_id",
+                            "program_ftth.sam_milestone",
+                            "program_ftth.submilestone",
+                            "program_ftth.afi_lines",
+                            "program_ftth.region",
+                        );
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 10);
                     }  else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
@@ -5176,14 +5288,14 @@ class GlobeController extends Controller
             $email_required = '';
 
             if ($request->input("lessor_method") == 'Email') {
-                $email_required = "required";
+                $email_required = ["required", "email"];
             }
 
             $validate = Validator::make($request->all(), array(
                 "lessor_approval" => "required",
                 "lessor_remarks" => "required",
                 "lessor_remarks" => "required",
-                "email" => [$email_required, 'email'],
+                "email" => $email_required,
                 "name" => "required",
                 "contact_no" => "required"
             ));
@@ -5355,7 +5467,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 42) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
