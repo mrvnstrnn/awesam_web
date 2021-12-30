@@ -5486,7 +5486,7 @@ class GlobeController extends Controller
                                             if ( isset($json['validators']) ) {
                                                 for ($i=0; $i < count($json['validators']); $i++) {
                                                     if ( $json['validators'][$i]['profile_id'] == \Auth::user()->profile_id ) {
-                                                        return $json['validators'][$i]['status'];
+                                                        return ucfirst($json['validators'][$i]['status']);
                                                     }
                                                 }
                                             } else {
@@ -5512,7 +5512,7 @@ class GlobeController extends Controller
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
                     
-                                            return isset($json['status']) ? $json['status'] : $row->status;
+                                            return isset($json['status']) ? ucfirst($json['status']) : ucfirst($row->status);
                                         } else {
                                             return $row->value;
                                         }

@@ -55,17 +55,29 @@
                             $json_status_first = json_decode( $data[0]->value );
 
                             if ( isset($json_status->validators) ) {
-                                for ($j=0; $j < count($json_status->validators); $j++) {
-                                    if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
-                                        $status_collect->push( $json_status->validators[$j]->status );
-                                        $status_file = $json_status_first->validators[$j]->status;
+                                if ($json_status->active_profile == \Auth::user()->profile_id) {
+                                    for ($j=0; $j < count($json_status->validators); $j++) {
+                                // dd($json_status->validators[$j]->status);
+                                        if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                            $status_collect->push( $json_status->validators[$j]->status );
+                                            $status_file = $json_status_first->validators[$j]->status;
+                                        }
+                                    }
+                                } else {
+                                    for ($j=0; $j < count($json_status->validators); $j++) {
+                                        if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                            if ($json_status->validators[$j]->status == 'approved') {
+                                                $status_collect->push( $json_status->validators[$j]->status );
+                                                $status_file = $json_status_first->validators[$j]->status;
+                                            }
+                                        }
                                     }
                                 }
                             } else {
                                 $status_collect->push( $data[$i]->status );
                                 $status_file = $data[0]->status;
                             }
-                            
+
                         @endphp
                     @endfor
 

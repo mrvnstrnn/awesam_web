@@ -382,7 +382,7 @@ class LocalCoopController extends Controller
                             return json_decode($row->value)->remarks;
                         })
                         ->addColumn('status', function($row){
-                            return json_decode($row->value)->status_of_issue;
+                            return ucfirst(json_decode($row->value)->status_of_issue);
                         });
             
             // $dt->rawColumns(['checkbox', 'technology']);
@@ -413,7 +413,7 @@ class LocalCoopController extends Controller
                                     return json_decode($row->value)->endorsement_tagging;
                                 })
                                 ->addColumn('status', function($row){
-                                    return json_decode($row->value)->status;
+                                    return ucfirst(json_decode($row->value)->status);
                                 })
                                 ->addColumn('action', function($row){
                                     $btn = "<button class='btn btn-sm btn-shadow btn-primary approve_disapprove_coop_detail' data-endorsement_tagging='".json_decode($row->value)->endorsement_tagging."' data-prioritization_tagging='".json_decode($row->value)->prioritization_tagging."' data-id='".$row->ID."' data-coop='".$row->coop."' data-action='approved'>Approve</button>";
