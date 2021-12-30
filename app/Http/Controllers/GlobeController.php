@@ -1519,7 +1519,7 @@ class GlobeController extends Controller
                     $stage_activities_approvers = \DB::table('stage_activities_approvers')
                                 ->select('approver_profile_id')
                                 ->where('stage_activities_id', $stage_activities->id)
-                                // ->orderBy('approver_stage', 'asc')
+                                ->orderBy('approver_stage', 'asc')
                                 ->get();
 
                     if ( count($stage_activities_approvers) < 1 ) {

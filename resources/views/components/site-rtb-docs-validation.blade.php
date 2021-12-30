@@ -65,6 +65,7 @@
                                 $status_collect->push( $data[$i]->status );
                                 $status_file = $data[0]->status;
                             }
+                            
                         @endphp
                     @endfor
 
