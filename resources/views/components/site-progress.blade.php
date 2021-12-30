@@ -28,7 +28,7 @@
   
 </style>
 <div id="progress_list">
-@foreach ($site_status as $site_)
+@forelse ($site_status as $site_)
     <div class="pl-3 py-2 border-bottom mx-1 site_progress_row" data-activity_source="" data-sam_id="{{ $site_->sam_id }}" data-main_activity="assigned site" data-site="{{ $site_->site_name }}">
         <div class="row">
             <div class="col-3 ml-1" style="max-width: 55px; padding:0">
@@ -45,7 +45,9 @@
             </div>
         </div>
     </div>
-@endforeach
+@empty
+    <h6 class="text-center">Nothing to see in here.</h6>
+@endforelse
 </div>
 
 <script>
