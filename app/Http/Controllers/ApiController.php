@@ -56,6 +56,7 @@ class ApiController extends Controller
     public function for_invitation ()
     {
         $invitations = Invitation::join('vendor', 'vendor.vendor_id', 'invitations.company_id')
+                            ->select('vendor.vendor_sec_reg_name', 'invitations.*')
                             ->where('invitations.use', 0)
                             ->orderBy('invitations.created_at', 'asc')
                             ->get();
