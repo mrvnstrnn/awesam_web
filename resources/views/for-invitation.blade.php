@@ -20,7 +20,6 @@
                     <td>{{ $invitation->firstname }}</td>
                     <td>{{ $invitation->lastname }}</td>
                     <td>{{ $invitation->email }}</td>
-                    <td>{{ $invitation->sent_email }}</td>
                     <td>
                         @php
                             $users = \App\Models\User::select('id')->where('email', $invitation->email)->first();

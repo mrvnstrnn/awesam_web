@@ -69,7 +69,7 @@ class ApiController extends Controller
         $invitations = \DB::table('vendor')
                                 // ->join('users', 'users.email', 'vendor.vendor_admin_email')
                                 // ->join('user_details', 'user_details.user_id', 'users.id')
-                                ->orderBy('created_at', 'asc')
+                                ->orderBy('vendor.created_at', 'asc')
                                 ->get();
                             
         return view('for-vendor-invitation')
