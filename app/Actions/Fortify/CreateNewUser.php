@@ -44,7 +44,7 @@ class CreateNewUser implements CreatesNewUsers
             'lastname' => $input['lastname'],
             'name' => $input['firstname'] . ' ' . $input['lastname'],
             'email' => $input['email'],
-            'role_id' => 7,
+            // 'role_id' => 7,
             'email_verified_at' => Carbon::now()->toDate(),
             'password' => Hash::make($input['password']),
         ]);
