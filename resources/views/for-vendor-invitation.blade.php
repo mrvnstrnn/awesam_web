@@ -7,7 +7,9 @@
             <th>Firstname</th>
             <th>Lastname</th>
             <th>Programs</th>
-            <th>URL</th>
+            <th>Invited</th>
+            <th>Invited Date</th>
+            {{-- <th>URL</th> --}}
         </tr>
         </thead>
         <tbody>
@@ -36,7 +38,9 @@
                             {{ $user_programs }}
                         @endif
                     </td>
-                    <td>{{ route('login') }}</td>
+                    <td>{{ $invitation->sent_email }}</td>
+                    <td>{{ date('M d, Y', strtotime($invitation->created_at)) }}</td>
+                    {{-- <td>{{ route('login') }}</td> --}}
                 </tr>
             @endforeach
         </tbody>
