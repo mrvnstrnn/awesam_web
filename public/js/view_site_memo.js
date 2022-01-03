@@ -20,7 +20,7 @@ $(document).ready(function (){
                     $.unblockUI();
                     Swal.fire(
                         'Error',
-                        resp.messag,
+                        resp.message,
                         'error'
                     )
                 }

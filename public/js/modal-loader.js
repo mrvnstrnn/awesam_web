@@ -1,5 +1,4 @@
 $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
-
     e.preventDefault();
 
 
@@ -19,7 +18,6 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
             var activity_source = $(this).parent().parent().attr("data-type");
             
             var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
-
 
             $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
 
@@ -70,21 +68,19 @@ $('.assigned-sites-table').on( 'click', 'tbody tr', function (e) {
         else {
 
 
-            var activity = $(this).attr('data-activity');
-            var all = $(this).attr('data-site_all');
-            var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
-
+            // var activity = $(this).attr('data-activity');
+            var generated_pr_memo = $(this).attr('data-generated_pr_memo');
+            // var program_id =  $("#"+$(this).attr('data-what_table')).attr("data-program_id");
 
             $("#viewInfoModal .modal-title").text($(this).attr("data-site") + " : " + activity);
-
 
                 $.ajax({
                     url: "/get-pr-memo",
                     method: "POST",
                     data: {
-                        pr_memo : all,
-                        activity : activity,
-                        program_id : program_id,
+                        generated_pr_memo : generated_pr_memo,
+                        // activity : activity,
+                        // program_id : program_id,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -164,11 +160,6 @@ $('.show_activity_modal').on( 'click', function (e) {
 
 
 });
-
-
-
-
-
 
 
 $(document).on('click', '.show_action_modal', function(e){

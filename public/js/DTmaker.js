@@ -1,6 +1,6 @@
 
 function makeDT(whatTable, whatCols, active_program) {
-
+    
         var table_id = $(whatTable).attr("id");
 
         $('#' + table_id + ' thead tr')
@@ -62,11 +62,15 @@ function makeDT(whatTable, whatCols, active_program) {
                 // } else {
                 //     var activity_name = data.activity_name;
                 // }
+                
+                if (data.generated_pr_memo != undefined) {
+                    $(row).attr('data-generated_pr_memo', data.generated_pr_memo);
+                } 
 
                 // $(row).attr('data-site_all', JSON.stringify(data));
-                // // $(row).attr('data-activity', data.activity_name);
+                // $(row).attr('data-activity', activity_name);
                 $(row).attr('data-id', data.id);
-                // // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
+                // $(row).attr('data-activity', JSON.parse(activity_name) != null ? JSON.parse(activity_name).activity_name : "");
                 $(row).attr('data-site', data.site_name);
                 $(row).attr('data-sam_id', data.sam_id);
                 // console.log(data);
@@ -182,8 +186,6 @@ function makeDT(whatTable, whatCols, active_program) {
                     }
                 }    
 
-                // console.log(result);
-
                 // console.log();
                 // var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);
 
@@ -251,8 +253,6 @@ function makeDT(whatTable, whatCols, active_program) {
 
 
 $(document).ready(() => {
-
-
 
     $('.assigned-sites-table').each(function(i, obj) {
 

@@ -22,7 +22,7 @@
         }
         $li_ctr = 0;
     @endphp
-    <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
+    <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}"> 
 
     @foreach ($programs as $program)
             @php

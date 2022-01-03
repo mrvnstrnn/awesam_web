@@ -254,10 +254,10 @@
                                     for (let i = 0; i < element.length; i++) {
                                         // sum_fsa = Number(sum_fsa) + Number(element[i].price);
 
-                                        
                                         if (element[i] != undefined) {
-                                            if (element[i].amount != '-') {
-                                                sum_fsa += parseFloat(element[i].amount.replace(/,/g,''));
+                                            if (element[i].amount != '-' && element[i].amount != null) {
+                                                // sum_fsa += parseFloat(element[i].amount.replace(/,/g,''));
+                                                sum_fsa += parseFloat(element[i].amount);
                                             }
                                         }
                                     }

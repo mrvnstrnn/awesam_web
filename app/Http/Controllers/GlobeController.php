@@ -104,7 +104,9 @@ class GlobeController extends Controller
                 $action = $request->input('data_complete');
                 $program_id = $request->input('data_program');
                 $site_category = $request->input('site_category');
-                $activity_id = $request->input('activity_id');
+                $activity_id = is_null($request->input('activity_id')) ? [""] : $request->input('activity_id');
+
+                // return response()->json(['error' => true, 'message' => $activity_id ]);
 
                 $samid = $request->input('sam_id');
 
@@ -630,7 +632,7 @@ class GlobeController extends Controller
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-
+            
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
@@ -3456,6 +3458,30 @@ class GlobeController extends Controller
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
                         ->get();
+            } elseif($program_id == 1){
+
+                $sites = \DB::table('program_newsites')
+                        ->join('view_site','view_site.sam_id', 'program_newsites.sam_id')
+
+                        ->select(
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
+                            "view_site.site_category",
+                            "view_site.aging"
+                        )
+                        ->where('view_site.program_id', $program_id)
+                        ->whereNull('view_site.activity_id')
+                        ->get();
             }
     
         }
@@ -4304,11 +4330,21 @@ class GlobeController extends Controller
 
             $what_modal = "components.pr-memo-approval";
 
+            $pr_memo = \DB::table('pr_memo_site')
+                            ->select('sam_id')
+                            ->where('pr_memo_id', $request->input('generated_pr_memo'))
+                            ->first();
+
+            $site = \DB::table('view_site')
+                    ->select('program_id', 'activity_name')
+                    ->where('sam_id', $pr_memo->sam_id)
+                    ->first();
+
             return \View::make($what_modal)
             ->with([
-                'pr_memo' => $request->input('pr_memo'),
-                'activity' => $request->input('activity'),
-                'program_id' => $request->input('program_id')
+                'generated_pr_memo' => $request->input('generated_pr_memo'),
+                'activity' => $site->activity_name,
+                'program_id' => $site->program_id
             ])
             ->render();
 
@@ -5903,20 +5939,21 @@ class GlobeController extends Controller
                                     ->where('account_type', "BAU")
                                     ->where('solution_type', "MACRO")
                                     ->get();
-
+                                    
                     // Works up to LGU
                     if(count($fsa_data)>0){
                     } else {
 
                         $fsa_data = \DB::table('fsaq')
-                                            ->where('vendor_id', $vendor)
-                                            ->where('region_id', $sites_data->site_region_id)
-                                            ->where('province_id', $sites_data->site_province_id)
-                                            ->whereNull('lgu_id')
-                                            ->where('site_type', "ROOFTOP")
-                                            ->where('account_type', "BAU")
-                                            ->where('solution_type', "MACRO")
-                                            ->get();
+                                        ->select('fsaq_id')
+                                        ->where('vendor_id', $vendor)
+                                        ->where('region_id', $sites_data->site_region_id)
+                                        ->where('province_id', $sites_data->site_province_id)
+                                        ->whereNull('lgu_id')
+                                        ->where('site_type', "ROOFTOP")
+                                        ->where('account_type', "BAU")
+                                        ->where('solution_type', "MACRO")
+                                        ->get();
 
                         // Works up to province
                         if(count($fsa_data)>0){
@@ -5924,14 +5961,15 @@ class GlobeController extends Controller
                         } else {
 
                             $fsa_data = \DB::table('fsaq')
-                                                ->where('vendor_id', $vendor)
-                                                ->where('region_id', $sites_data->site_region_id)
-                                                ->whereNull('province_id')
-                                                ->whereNull('lgu_id')
-                                                ->where('site_type', "ROOFTOP")
-                                                ->where('account_type', "BAU")
-                                                ->where('solution_type', "MACRO")
-                                                ->get();
+                                            ->select('fsaq_id')
+                                            ->where('vendor_id', $vendor)
+                                            ->where('region_id', $sites_data->site_region_id)
+                                            ->whereNull('province_id')
+                                            ->whereNull('lgu_id')
+                                            ->where('site_type', "ROOFTOP")
+                                            ->where('account_type', "BAU")
+                                            ->where('solution_type', "MACRO")
+                                            ->get();
 
                             if(count($fsa_data)>0){
 
@@ -6028,7 +6066,6 @@ class GlobeController extends Controller
     public function get_line_items($sam_id, $vendor)
     {
         try {
-                
                 $line_items = FsaLineItem::join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                             ->where('site_line_items.sam_id', $sam_id)
                                             ->where('site_line_items.status', '!=', 'denied')
