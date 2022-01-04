@@ -25,10 +25,10 @@ class Invitation
                                         ->first();
 
             if (is_null($invitations)){
-                abort(403, 'Link is no longer valid.');
+                abort(403, 'Link is no longer valid. Please try to login.');
             } else {
                 if ($invitations->use) {
-                    abort(403, 'Link is already used.');
+                    abort(403, 'Link is already used. Please try to login.');
                 }
             }
         }

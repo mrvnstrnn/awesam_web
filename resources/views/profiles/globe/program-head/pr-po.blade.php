@@ -70,9 +70,7 @@
     //////////////////////////////////////
 </script>
 
-<script type="text/javascript" src="/js/getCols.js"></script>
-<script type="text/javascript" src="/js/DTmaker.js"></script>
-<script type="text/javascript" src="/js/modal-loader.js"></script>
+@include('layouts.js.js_script')
 
 <!-- PR PO Counter -->
 <script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>  

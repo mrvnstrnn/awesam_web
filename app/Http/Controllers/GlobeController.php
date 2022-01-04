@@ -67,31 +67,33 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => "No data selected."]);
             }
 
-            if ($request->input('activity_name') == "Vendor Awarding" || $request->input('activity_name') == "Set Ariba PR Number to Sites") {
+            // if ($request->input('activity_name') == "Vendor Awarding" || $request->input('activity_name') == "Set Ariba PR Number to Sites") {
                 if ($request->input('activity_name') == "Vendor Awarding") {
                     $validate = Validator::make($request->all(), array(
                         'po_number' => 'required',
+                        'po_date' => 'required',
                     ));
 
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     } else {
                         \DB::table("site")
-                                        ->where("sam_id", $request->input("sam_id"))
-                                        ->update([
-                                            'site_po' => $request->input('po_number'),
-                                        ]);
+                            ->where("sam_id", $request->input("sam_id"))
+                            ->update([
+                                'site_po' => $request->input('po_number'),
+                            ]);
                     }
 
-                } else {
+                } else if ($request->input('activity_name') == "Set Ariba PR Number to Sites") {
                     $validate = Validator::make($request->all(), array(
                         'pr_number' => 'required',
+                        'pr_date' => 'required',
                     ));
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     }
                 }
-            }
+            // }
 
             $profile_id = \Auth::user()->profile_id;
             $id = \Auth::user()->id;
@@ -893,6 +895,8 @@ class GlobeController extends Controller
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 } else if ($request->input('data_program') == 2 && $profile_id == 3 && $request->input('activity_id') == 5) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 1 && $profile_id == 3 && $request->input('activity_id') == 8) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 }
 
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent."]);
@@ -908,6 +912,8 @@ class GlobeController extends Controller
                 } else if ($request->input('data_program') == 8 && $profile_id == 3 && $request->input('activity_id') == 5) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 } else if ($request->input('data_program') == 2 && $profile_id == 3 && $request->input('activity_id') == 5) {
+                    $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
+                } else if ($request->input('data_program') == 1 && $profile_id == 3 && $request->input('activity_id') == 8) {
                     $this->move_site([$request->input('sam_id')], $request->input('data_program'), "true", [$request->input('site_category')], [$request->input('activity_id')]);
                 }
 
@@ -3711,6 +3717,11 @@ class GlobeController extends Controller
                 } else if($program_id == 2){
                     $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
                         ->where('activity_id', '>=', 5)
+                        // ->where('view_site.vendor_id', $vendor)
+                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                } else if($program_id == 1){
+                    $sites->leftJoin('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
+                        ->where('activity_id', '>=', 7)
                         // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                 }
@@ -6549,7 +6560,8 @@ class GlobeController extends Controller
     {
         try {
             $validate = \Validator::make($request->all(), array(
-                'po_number' => 'required'
+                'po_number' => 'required',
+                'po_date' => 'required',
             ));
 
             if ($validate->passes()) {

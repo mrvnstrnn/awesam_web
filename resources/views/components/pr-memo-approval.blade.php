@@ -165,8 +165,8 @@
                                                             <div class="col-md-6 col-lg-6 col-12">
                                                                 <div class="form-group">
                                                                     <label for="to">PR Date</label>
-                                                                    <input type="date" name="pr_date" id="pr_date" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}>
-                                                                    <small class="text-danger to-error"></small>
+                                                                    <input type="date" name="pr_date" id="pr_date" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                                                                    <small class="text-danger pr_date-error"></small>
                                                                 </div>
                                                             </div>
                                                                 <div class="col-md-6">
@@ -183,7 +183,7 @@
                                                                 <div class="form-group">
                                                                     <label for="po_date">PO Date</label>
                                                                     <input type="date" name="po_date" id="po_date" autofocus class="form-control" {{ $po_enable }}>
-                                                                    <small class="text-danger to-error"></small>
+                                                                    <small class="text-danger po_date-error"></small>
                                                                 </div>
                                                             </div>    
                                                             <div class="col-md-6 col-12">
@@ -520,6 +520,7 @@
             $("#create_pr_form small").text("");
             var sam_id = [sam_id];
             var pr_number = $("#pr_number").val();
+            var pr_date = $("#pr_date").val();
 
             var button_text = "Set PR Number";
 
@@ -529,6 +530,7 @@
                 data_action : data_action,
                 pr_number : pr_number,
                 pr_id : pr_id,
+                pr_date : pr_date,
                 program_id : program_id
             }
         } else if (activity_name == "Vendor Awarding of Sites") {
@@ -538,6 +540,7 @@
             var sam_id = sam_id;
             var vendor = $("#vendor").val();
             var po_number = $("#po_number").val();
+            var po_date = $("#po_date").val();
 
             var button_text = "Award to vendor";
 
@@ -546,6 +549,7 @@
                 activity_name : activity_name,
                 data_action : data_action,
                 po_number : po_number,
+                po_date : po_date,
                 pr_id : pr_id,
                 program_id : program_id
                 // vendor : vendor
