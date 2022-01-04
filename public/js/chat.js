@@ -43,7 +43,7 @@ $(".send_message").on("click", function (e){
                                         '<small class="opacity-6">' +
                                             resp.chat.profile + " : " + resp.chat.name + '<br>' +
                                             '<i class="fa fa-calendar-alt mr-1"></i>' +
-                                            resp.chat.timesptamp +
+                                            resp.chat.created_at +
                                         '</small>' +
                                     '</div>' +
                                     '<div>' +

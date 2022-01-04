@@ -151,8 +151,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (resp){
-                    $(div_id).html("");   
-                    $(div_id).html(resp);
+                    if ( id != "tab-content-site_chat" ) {
+                        $(div_id).html("");   
+                        $(div_id).html(resp);
+                    }
                 },
                 error: function (resp){
                     toastr.error(resp.message, "Error");

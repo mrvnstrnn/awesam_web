@@ -2612,17 +2612,17 @@ class GlobeController extends Controller
 
             $user_detail = \Auth::user()->getUserDetail()->first();
 
+            $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
             $sites = \DB::table("view_site")
                             ->where('program_id', $program_id);
 
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-                
-                $user_area = \DB::table('users_areas')
-                                ->select('region')
-                                ->where('user_id', \Auth::id())
-                                ->get()
-                                ->pluck('region');
 
                 $sites->where('view_site.vendor_id', $vendor);
             }
@@ -2640,9 +2640,9 @@ class GlobeController extends Controller
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
-                if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->whereIn('program_renewal.region', $user_area);
-                }
+                // }
             }
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
@@ -2668,9 +2668,9 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-                if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->whereIn('program_ftth.region', $user_area);
-                }
+                // }
             }
             
             $sites->get();
@@ -5086,9 +5086,16 @@ class GlobeController extends Controller
             ]);
 
             $chat_data = Chat::join('users', 'users.id', 'chat.user_id')
-                                ->join('profiles', 'profiles.id', 'users.profile_id')
-                                ->where('chat.id', $chat->id)
-                                ->first();
+                            ->join('profiles', 'profiles.id', 'users.profile_id')
+                            ->where('chat.id', $chat->id)
+                            ->first();
+
+            // $chat_data = Chat::select('users.name', 'profiles.profile', 'profiles.profile', 'chat.comment', 'chat.created_at', 'user_details.image')
+            //                 ->join('users', 'users.id', 'chat.user_id')
+            //                 ->join('profiles', 'profiles.id', 'users.profile_id')
+            //                 ->join('user_details', 'user_details.user_id', 'users.id')
+            //                 ->where('chat.id', $chat->id)
+            //                 ->first();
 
             return response()->json(['error' => false, 'message' => "Successfully send a message.", "chat" => $chat_data ]);
         } catch (\Throwable $th) {
