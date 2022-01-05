@@ -9,24 +9,30 @@
     </div>
 </div>
 <div class="row pt-4">
-    <div class="col-lg-6">
-        <div id="datepicker" class=""></div>
-    </div>
-    <div class="col-lg-6">
+    <div class="col-12">
         <form>
             <div class="form-row"> 
-                <div class="col-md-12">
+                <div class="col-md-5 col-12">
                     <div class="position-relative form-group">
                         <label for="site_schedule">Site Schedule</label>
-                        <input type="text" id="site_schedule" name="site_schedule" value="" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-md-7 col-12">
+                    <div class="position-relative form-group">
+                        <input type="text" id="site_schedule" name="site_schedule" class="flatpicker form-control" style="background-color: white;" />
                         <small class="site_schedule-error text-danger"></small>
                     </div>        
                 </div>
             </div>
             <div class="form-row"> 
-                <div class="col-md-12">
+                <div class="col-md-5 col-12">
                     <div class="position-relative form-group">
                         <label for="remarks" class="">Remarks</label>
+                    </div>
+                </div>
+                
+                <div class="col-md-7 col-12">
+                    <div class="position-relative form-group">
                         <textarea class="form-control"  rows="10" id="remarks" name="remarks" style="height: 175px;"></textarea>
                         <small class="remarks-error text-danger"></small>
                     </div>        
@@ -45,6 +51,14 @@
 <script>
 
     $(document).ready(function(){
+
+        $(".flatpicker").flatpickr();
+
+        $("input[name=site_schedule]").flatpickr(
+            { 
+            minDate: new Date()
+            }
+        );
 
         $(".btn_switch_back_to_actions").on("click", function(){
             $("#actions_box").addClass('d-none');

@@ -3,7 +3,7 @@
         <form class="elas_form row">
             <div class="form-group col-12">
                 <label for="elas_approval_date">Approval Date</label>
-                <input type="date" name="elas_approval_date" id="elas_approval_date" class="form-control" placeholder="eLas Approval Date">
+                <input type="date" name="elas_approval_date" id="elas_approval_date" class="flatpicker form-control" placeholder="eLas Approval Date" style="background-color: white;">
                 <small class="elas_approval_date-errors text-danger"></small>
             </div>
 
@@ -46,6 +46,8 @@
 
 <script>
     $(document).ready(function() {
+
+        $(".flatpicker").flatpickr();
 
         Dropzone.autoDiscover = false;
         $(".dropzone_files_activities").dropzone({

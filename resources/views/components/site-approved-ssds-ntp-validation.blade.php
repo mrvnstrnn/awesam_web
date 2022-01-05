@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div class="row mt-3 pb-3 pt-3 border-bottom border-top">
+<div class="row mt-3 pb-3 pt-3 border-bottom border-top mark_as_complete_div">
     <div class="col-12 text-right">
         <button class="btn btn-lg btn-shadow btn-primary mark_as_complete">Mark as Complete</button>
     </div>
@@ -273,7 +273,7 @@
 
         });
 
-        $(".mark_as_complete").on("click", function() {
+        $(".mark_as_complete_div .mark_as_complete").on("click", function() {
             $(".mark_as_complete").attr("disabled", "disabled");
             $(".mark_as_complete").text("Processing...");
 

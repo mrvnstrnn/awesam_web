@@ -1,23 +1,30 @@
 <div class="row">
-    <div class="col-lg-6">
-        <div id="datepicker"></div>
-    </div>
-    <div class="col-lg-6">
+    <div class="col-12">
         <form id="declare_rtb_form">
             <div class="form-row"> 
-                <div class="col-md-12">
+                <div class="col-md-4 col-12">
                     <div class="position-relative form-group">
                         <label for="rtb_declaration_date">Date Declaration</label>
-                        <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-12">
+                    <div class="position-relative form-group">
+                        <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" class="flatpicker form-control" style="background-color: white;" />
                         <small class="rtb_declaration_date-error text-danger"></small>
                     </div>        
                 </div>
             </div>
-            @if ($site[0]->program_id)
+            @if ($site[0]->program_id == 2)
             <div class="form-row"> 
-                <div class="col-md-12">
+                <div class="col-md-4 col-12">
                     <div class="position-relative form-group">
                         <label for="afi_lines">AFI Lines</label>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-12">
+                    <div class="position-relative form-group">
                         <input type="number" min="0" id="afi_lines" name="afi_lines" class="form-control" />
                         <small class="afi_lines-error text-danger"></small>
                     </div>        
@@ -25,9 +32,14 @@
             </div>
             @endif
             <div class="form-row"> 
-                <div class="col-md-12">
+                <div class="col-md-4 col-12">
                     <div class="position-relative form-group">
                         <label for="rtb_declaration" class="">RTB Declaration</label>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-12">
+                    <div class="position-relative form-group">
                         <select name="rtb_declaration" id="rtb_declaration" class="form-control">
                             <option>1</option>
                             <option>2</option>
@@ -58,13 +70,18 @@
 
 <script>
     $(function() {
-        $("#datepicker").datepicker({
-            minDate : 0
-        });
-        $("#datepicker").on("change",function(){
-            var selected = $(this).val();
-            $("#rtb_declaration_date").val(selected);
-        });
+
+        $(".flatpicker").flatpickr();
+
+        $("input[name=rtb_declaration_date]").flatpickr(
+            { 
+            minDate: new Date()
+            }
+        );
+        // $("#datepicker").on("change",function(){
+        //     var selected = $(this).val();
+        //     $("#rtb_declaration_date").val(selected);
+        // });
 
 
         $(".declare_rtb").on("click", function (e){

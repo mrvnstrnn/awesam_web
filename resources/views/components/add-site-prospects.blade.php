@@ -470,7 +470,7 @@
                             <div class="position-relative row form-group">
                                 <label for="distance_from_national_road" class="col-sm-4 col-form-label">Distance from National Road</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="distance_from_national_road" name="distance_from_national_road" placeholder="Distance from National Road">
+                                    <input type="number" class="form-control" id="distance_from_national_road" name="distance_from_national_road" placeholder="Distance from National Road">
                                     <small class="text-danger distance_from_national_road-errors"></small>
                                 </div>
                             </div>
@@ -715,15 +715,13 @@ function initMap(markers) {
     $(".btn_switch_back_to_actions").on("click", function(){
         $("#actions_box").addClass('d-none');
         $("#actions_list").removeClass('d-none');
-
         $("#actions_box").html('');
-
     });
 
     $('.add_site_button').on("click", function(){
         $(".add_site_button").addClass('d-none');
         $('#ssds_table').addClass('d-none');
-        // $('#ssds_form').removeClass('d-none');
+        $('#ssds_form').removeClass('d-none');
     });
 
     $('#btn_cancel_ssds').on("click", function(){
@@ -734,8 +732,6 @@ function initMap(markers) {
     });
 
     $(document).ready(function () {
-
-
         if (! $.fn.DataTable.isDataTable("#dtTable") ){
              $("#dtTable").DataTable({
                 processing: true,
@@ -929,8 +925,6 @@ function initMap(markers) {
         var site_category = ["{{ $site_category }}"];
         var activity_id = ["{{ $activity_id }}"];
         var program_id = "{{ $program_id }}";
-
-        // alert("{{ $sub_activity }}")
 
         $.ajax({
             url: "/accept-reject-endorsement",

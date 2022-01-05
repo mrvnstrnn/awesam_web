@@ -3,9 +3,9 @@
     <hr>
     <input type="hidden" name="sam_id" id="sam_id" value="{{ isset($sam_id) ? $sam_id : $site[0]->sam_id }}">
     <input type="hidden" name="sub_activity_id" id="sub_activity_id" value="{{ isset($sub_activity_id) ? $sub_activity_id : '' }}">
-    <input type="hidden" name="sam_id" id="sam_id" value="{{ isset($program_id) ? $program_id : $site[0]->program_id }}">
-    <input type="hidden" name="sam_id" id="sam_id" value="{{ isset($site_category) ? $site_category : $site[0]->site_category }}">
-    <input type="hidden" name="sam_id" id="sam_id" value="{{ isset($activity_id) ? $activity_id : $site[0]->activity_id }}">
+    <input type="hidden" name="program_id" id="program_id" value="{{ isset($program_id) ? $program_id : $site[0]->program_id }}">
+    <input type="hidden" name="site_category" id="site_category" value="{{ isset($site_category) ? $site_category : $site[0]->site_category }}">
+    <input type="hidden" name="activity_id" id="activity_id" value="{{ isset($activity_id) ? $activity_id : $site[0]->activity_id }}">
     <input type="hidden" name="id" id="id">
     <div class="position-relative row form-group">
         <label for="lessor" class="col-sm-4 col-form-label">Name of Owner</label>

@@ -8,7 +8,7 @@
             </div>
             <div class="form-group col-md-6 col-12">
                 <label for="elas_filing_date">Filing Date</label>
-                <input type="date" name="elas_filing_date" id="elas_filing_date" class="form-control" placeholder="eLas Filing Date">
+                <input type="date" name="elas_filing_date" id="elas_filing_date" class="flatpicker form-control" placeholder="eLas Filing Date" style="background-color: white;">
                 <small class="elas_filing_date-errors text-danger"></small>
             </div>
             {{-- <div class="form-group col">
@@ -36,6 +36,8 @@
 
 <script>
     $(document).ready(function() {
+
+        $(".flatpicker").flatpickr();
 
         $(".submit_elas").on("click", function() {
             $(".submit_elas").attr("disabled", "disabled");

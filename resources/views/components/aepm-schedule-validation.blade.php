@@ -50,22 +50,38 @@ use App\Models\SubActivityValue;
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div id="datepicker" style="width:100% !important;"></div>
-                                    </div>
-                                    <div class="col-6">
+                                <div class="row py-2">
+                                    <div class="col-12">
                                         <form class="set_schedule_form">
-                                            <div class="position-relative form-group">
-                                                <label for="jtss_schedule" class="col-sm-12 col-form-label">JTSS Date</label>
-                                                <input type="input" class="form-control" name="jtss_schedule" id="jtss_schedule" readonly>
-                                                <small class="text-danger jtss_schedule-error"></small>
+                                            
+                                            <div class="form-row"> 
+                                                <div class="col-md-4 col-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="jtss_schedule" class="col-sm-12 col-form-label">JTSS Date</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-12">
+                                                    <div class="position-relative form-group">
+                                                        <input type="text" id="jtss_schedule" name="jtss_schedule" class="flatpicker form-control" style="background-color: white;" />
+                                                        <small class="jtss_schedule-error text-danger"></small>
+                                                    </div>        
+                                                </div>
                                             </div>
-                                            <div class="position-relative form-group">
-                                                <label for="remarks" class="">Remarks</label>
-                                                <textarea name="remarks" id="remarks" class="form-control"></textarea>                                                                        
-                                                <small class="text-danger remarks-error"></small>
+
+                                            <div class="form-row"> 
+                                                <div class="col-md-4 col-12">
+                                                    <div class="position-relative form-group">
+                                                        <label for="remarks" class="col-sm-12 col-form-label">Remarks</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 col-12">
+                                                    <div class="position-relative form-group">
+                                                        <textarea name="remarks" id="remarks" class="form-control"></textarea>                                                                        
+                                                        <small class="text-danger remarks-error"></small>
+                                                    </div>        
+                                                </div>
                                             </div>
+
                                             <button class="btn btn-sm btn-shadow btn-success set_schedule pull-right" id="single_btn" data-value="single" type="button">Set Schedule</button>
                                             <button class="btn btn-sm btn-shadow btn-primary set_schedule pull-right mr-1" id="all_btn" data-value="all" type="button">Set Schedule to all</button>
                                         </form>
@@ -677,13 +693,22 @@ use App\Models\SubActivityValue;
 <script>
     $(document).ready(function() {
 
-        $("#datepicker").datepicker({
-            minDate : 0
-        });
-        $("#datepicker").on("change",function(){
-            var selected = $(this).val();
-            $("#jtss_schedule").val(selected);
-        });
+        // $("#datepicker").datepicker({
+        //     minDate : 0
+        // });
+
+        $(".flatpicker").flatpickr();
+
+        $("input[name=jtss_schedule]").flatpickr(
+            { 
+            minDate: new Date()
+            }
+        );
+
+        // $("#datepicker").on("change",function(){
+        //     var selected = $(this).val();
+        //     $("#jtss_schedule").val(selected);
+        // });
 
         $('#aepm_table').DataTable({
             processing: true,

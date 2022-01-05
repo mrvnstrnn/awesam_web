@@ -2669,7 +2669,7 @@ class GlobeController extends Controller
                     "program_ftth.region"
                 );
                 // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    $sites->whereIn('program_ftth.region', $user_area);
+                    // $sites->whereIn('program_ftth.region', $user_area);
                 // }
             }
             
@@ -2904,7 +2904,7 @@ class GlobeController extends Controller
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_site.activity_id', [16, 17, 26, 28])
+                                    $sites->whereIn('view_site.activity_id', [16, 17, 25, 27])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
 
@@ -3158,8 +3158,13 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'schedule jtss'){
-            $sites = \DB::table("view_newsites_jtss_schedule_requests")
-                                ->get();
+            // $sites = \DB::table("view_newsites_jtss_schedule_requests")
+            //                     ->get();
+
+                                
+            $sites = \DB::table('view_site')
+                            ->where('program_id',  $program_id)
+                            ->where('activity_type', "sched validation");
         }
 
         elseif($activity_type == 'jtss'){
@@ -7693,8 +7698,9 @@ class GlobeController extends Controller
                                         ->where('status', 'pending')
                                         ->first();
 
+                                        return response()->json(['error' => false, 'message' => $request->all() ]);
                 if (is_null($datas)) {
-                    SubActivityValue::create([
+                    $jtss_approved = SubActivityValue::create([
                         'sam_id' => $request->get('sam_id'),
                         'sub_activity_id' => $request->get('sub_activity_id'),
                         'type' => 'jtss_approved',
@@ -7702,6 +7708,20 @@ class GlobeController extends Controller
                         'user_id' => \Auth::id(),
                         'status' => 'pending',
                     ]);
+
+                    if ($request->get('assds') == 'yes') {
+                        SubActivityValue::where('id', $jtss_approved->id)
+                                            ->update([
+                                                'value' => json_encode($request->all()),
+                                                'status' => 'pending'
+                                            ]);
+                    } else {
+                        SubActivityValue::where('id', $jtss_approved->id)
+                                            ->update([
+                                                'value' => json_encode($request->all()),
+                                                'status' => 'rejected'
+                                            ]);
+                    }
 
                     return response()->json(['error' => false, 'message' => "ASSDS Configured" ]);
                 } else {

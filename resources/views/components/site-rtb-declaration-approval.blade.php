@@ -19,6 +19,7 @@
                     </div>        
                 </div>
             </div>
+            @if ( isset($json['afi_lines']) && $site[0]->program_id == 2 )
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
@@ -27,7 +28,7 @@
                     </div>        
                 </div>
             </div>
-            @if ( $site[0]->program_id == 2 )
+            @endif
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
@@ -36,7 +37,6 @@
                     </div>        
                 </div>
             </div>
-            @endif
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
