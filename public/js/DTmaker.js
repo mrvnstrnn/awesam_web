@@ -185,6 +185,16 @@ function makeDT(whatTable, whatCols, active_program) {
 
                     }
                 }    
+                else if(active_program == 1){
+
+                    if(window.location.pathname == "/program-sites"){
+                        var filter_column = "saq_milestone";
+                    } 
+                    else {
+                        var filter_column = "saq_milestone";
+
+                    }
+                }    
 
                 // console.log();
                 // var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);

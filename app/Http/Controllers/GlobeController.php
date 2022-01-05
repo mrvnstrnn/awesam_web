@@ -2610,8 +2610,6 @@ class GlobeController extends Controller
     {
         if($activity_type == 'all'){
 
-            $user_detail = \Auth::user()->getUserDetail()->first();
-
             $user_area = \DB::table('users_areas')
                                 ->select('region')
                                 ->where('user_id', \Auth::id())
@@ -2620,6 +2618,8 @@ class GlobeController extends Controller
 
             $sites = \DB::table("view_site")
                             ->where('program_id', $program_id);
+
+            $user_detail = \Auth::user()->getUserDetail()->first();
 
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
@@ -2631,12 +2631,41 @@ class GlobeController extends Controller
 
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                      ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech",  "program_coloc.technology", "program_coloc.site_type",                             
-                      "program_coloc.gt_saq_milestone",  
-                      "program_coloc.gt_saq_milestone_category");
+                      ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
             }
             elseif($program_id == 4){
-                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id');
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
@@ -2647,19 +2676,10 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.site_name", 
-                    // "view_site.vendor_acronym", 
-                    "view_site.sam_id", 
-                    // "view_site.activity_id", 
-                    // "view_site.program_id", 
-                    // "view_site.site_category", 
-                    "view_site.activity_type", 
-                    "view_site.activity_name", 
-                    // "view_site.sam_region_name", 
-                    // "view_site.region_name", 
-                    // "view_site.province_name", 
-                    // "view_site.lgu_name", 
-                    // "view_site.site_category",
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
                     "view_site.aging",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -2672,6 +2692,23 @@ class GlobeController extends Controller
                     // $sites->whereIn('program_ftth.region', $user_area);
                 // }
             }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
             
             $sites->get();
         }
@@ -2679,39 +2716,57 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine'){
 
             $sites = \DB::table("view_assigned_sites")
-            ->where('program_id', $program_id)
-            ->where('agent_id', \Auth::id());
+                    ->where('program_id', $program_id)
+                    ->where('agent_id', \Auth::id());
 
-            if ( $program_id == 3 ) {
-                                    
+            if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type", "program_coloc.gt_saq_milestone",  
-                "program_coloc.gt_saq_milestone_category");
-
+                        ->select(
+                            "view_assigned_sites.sam_id",
+                            "view_assigned_sites.activity_name",
+                            "view_assigned_sites.site_name",
+                            "view_assigned_sites.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
             }
-
-            elseif($program_id == 4) {
-                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_assigned_sites.sam_id')
-                      ->select('view_assigned_sites.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program', 
-                      "program_ibs.saq_milestone",
-                      "program_ibs.saq_submilestone");
-            } else if ( $program_id == 2 ) {
-                                    
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'view_assigned_sites.sam_id', 'program_ibs.sam_id')
+                        ->select(
+                            "view_assigned_sites.sam_id",
+                            "view_assigned_sites.activity_name",
+                            "view_assigned_sites.site_name",
+                            "view_assigned_sites.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
+            }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_assigned_sites.sam_id', 'program_renewal.sam_id');
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_renewal.region', $user_area);
+                // }
+            }
+            elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_assigned_sites.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_assigned_sites.site_name", 
-                    // "view_assigned_sites.vendor_acronym", 
-                    "view_assigned_sites.sam_id", 
-                    // "view_assigned_sites.activity_id", 
-                    // "view_assigned_sites.program_id", 
-                    // "view_assigned_sites.site_category", 
-                    "view_assigned_sites.activity_type", 
-                    "view_assigned_sites.activity_name", 
-                    // "view_assigned_sites.sam_region_name", 
-                    // "view_assigned_sites.region_name", 
-                    // "view_assigned_sites.province_name", 
-                    // "view_assigned_sites.lgu_name", 
-                    "view_assigned_sites.site_category",
+                    "view_assigned_sites.sam_id",
+                    "view_assigned_sites.activity_name",
+                    "view_assigned_sites.site_name",
                     "view_assigned_sites.aging",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -2720,7 +2775,25 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_assigned_sites.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_assigned_sites.sam_id",
+                    "view_assigned_sites.activity_name",
+                    "view_assigned_sites.site_name",
+                    "view_assigned_sites.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
             }
 
             $user_detail = \Auth::user()->getUserDetail()->first();
@@ -2742,29 +2815,57 @@ class GlobeController extends Controller
                                 ->where('program_id', $program_id)
                                 ->where('activity_type', 'complete');
 
-            if ( $program_id == 3 ) {
-                                    
+            if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                ->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
-                "program_coloc.gt_saq_milestone_category");
-
-            } else if ( $program_id == 2 ) {
-                                    
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
+            }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_renewal.region', $user_area);
+                // }
+            }
+            elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.site_name", 
-                    // "view_site.vendor_acronym", 
-                    "view_site.sam_id", 
-                    // "view_site.activity_id", 
-                    // "view_site.program_id", 
-                    // "view_site.site_category", 
-                    "view_site.activity_type", 
-                    "view_site.activity_name", 
-                    // "view_site.sam_region_name", 
-                    // "view_site.region_name", 
-                    // "view_site.province_name", 
-                    // "view_site.lgu_name", 
-                    "view_site.site_category",
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
                     "view_site.aging",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -2773,7 +2874,34 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+
+                $sites->where('view_site.vendor_id', $vendor);
             }
 
             $sites->get();
@@ -2782,12 +2910,6 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'is'){
             
-            // $getAgentOfSupervisor = UserDetail::select('users.id')
-            //                                     ->join('users', 'user_details.user_id', 'users.id')
-            //                                     ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
-            //                                     ->where('user_details.IS_id', \Auth::id())
-            //                                     ->get()
-            //                                     ->pluck('id');
             $user_detail = \Auth::user()->getUserDetail()->first();
 
             $sites = \DB::table("view_vendor_assigned_sites")
@@ -2799,22 +2921,81 @@ class GlobeController extends Controller
                 $sites->where('vendor_id', $vendor);
             }
 
-            if($program_id == 3){
-
+            if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_vendor_assigned_sites.sam_id', 'program_coloc.sam_id')
-                ->select("view_vendor_assigned_sites.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology",  "program_coloc.site_type",                             "program_coloc.gt_saq_milestone",  
-                "program_coloc.gt_saq_milestone_category");
-
-            }                       
-            else if($program_id == 4){
-
+                        ->select(
+                            "view_vendor_assigned_sites.sam_id",
+                            "view_vendor_assigned_sites.activity_name",
+                            "view_vendor_assigned_sites.site_name",
+                            "view_vendor_assigned_sites.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
+            }
+            elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_vendor_assigned_sites.sam_id', 'program_ibs.sam_id')
-                ->select("view_vendor_assigned_sites.*", "program_ibs.*");
-
-            }                       
+                        ->select(
+                            "view_vendor_assigned_sites.sam_id",
+                            "view_vendor_assigned_sites.activity_name",
+                            "view_vendor_assigned_sites.site_name",
+                            "view_vendor_assigned_sites.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
+            }
             elseif($program_id == 8){
-                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_vendor_assigned_sites.sam_id');
-                
+                $sites->leftJoin('program_renewal', 'view_vendor_assigned_sites.sam_id', 'program_renewal.sam_id');
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_renewal.region', $user_area);
+                // }
+            }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'view_vendor_assigned_sites.sam_id', 'program_ftth.sam_id')
+                ->select(
+                    "view_vendor_assigned_sites.sam_id",
+                    "view_vendor_assigned_sites.activity_name",
+                    "view_vendor_assigned_sites.site_name",
+                    "view_vendor_assigned_sites.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_vendor_assigned_sites.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_vendor_assigned_sites.sam_id",
+                    "view_vendor_assigned_sites.activity_name",
+                    "view_vendor_assigned_sites.site_name",
+                    "view_vendor_assigned_sites.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
             }
 
             $sites->get();
@@ -2851,19 +3032,85 @@ class GlobeController extends Controller
                             ->where('view_site.program_id', $program_id)
                             ->where('view_site.profile_id', \Auth::user()->profile_id);
 
-            if($program_id == 3){
-
-                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
-                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type", "program_coloc.gt_saq_milestone", "program_coloc.gt_saq_milestone_category");
-
-            } else if($program_id == 4){
-
-                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
-
-            } else if($program_id == 2){
-
-                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id');
-
+            if($program_id == 3){                
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
+            }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_renewal.region', $user_area);
+                // }
+            }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
             }
                 
             $sites->get();
@@ -2877,19 +3124,85 @@ class GlobeController extends Controller
                             ->where('view_site.program_id', $program_id)
                             ->where('view_site.profile_id', \Auth::user()->profile_id);
 
-            if($program_id == 3){
-
-                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id');
-                $sites->select("view_site.*", "program_coloc.nomination_id", "program_coloc.pla_id", "program_coloc.highlevel_tech", "program_coloc.technology", "program_coloc.site_type", "program_coloc.gt_saq_milestone", "program_coloc.gt_saq_milestone_category");
-
-            } else if($program_id == 4){
-
-                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
-
-            } else if($program_id == 2){
-
-                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id');
-
+            if($program_id == 3){                
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                        ->select(
+                            "view_site.sam_id",
+                            "view_site.activity_name",
+                            "view_site.activity_type",
+                            "view_site.site_name",
+                            "view_site.aging",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
+                            "program_ibs.wireless_project_code",
+                            "program_ibs.wireless_solutiom",
+                            "program_ibs.saq_milestone",
+                            "program_ibs.saq_submilestone",
+                        );
+            }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id');
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    $sites->whereIn('program_renewal.region', $user_area);
+                // }
+            }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_ftth.cluster_id",
+                    "program_ftth.sam_milestone",
+                    "program_ftth.submilestone",
+                    "program_ftth.afi_lines",
+                    "program_ftth.odn_vendor",
+                    "program_ftth.region"
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
+            }
+            elseif($program_id == 1){
+                $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
+                ->select(
+                    "view_site.sam_id",
+                    "view_site.activity_name",
+                    "view_site.activity_type",
+                    "view_site.site_name",
+                    "view_site.aging",
+                    "program_newsites.saq_milestone",
+                    "program_newsites.serial_number",
+                    "program_newsites.saq_bucket",
+                    "program_newsites.region",
+                );
+                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                    // $sites->whereIn('program_ftth.region', $user_area);
+                // }
             }
                 
             $sites->get();
@@ -3164,6 +3477,7 @@ class GlobeController extends Controller
                                 
             $sites = \DB::table('view_site')
                             ->where('program_id',  $program_id)
+                            ->where('profile_id',  \Auth::user()->profile_id)
                             ->where('activity_type', "sched validation");
         }
 
@@ -3740,7 +4054,9 @@ class GlobeController extends Controller
 
                 // dd($sites); 
 
-        } else if ($activity_type == 'all-site-issues') {
+        } 
+        
+        else if ($activity_type == 'all-site-issues') {
             $sites = \DB::table("site_issue")
                             ->leftjoin('view_site', 'view_site.sam_id', 'site_issue.sam_id')
                             ->join('issue_type', 'issue_type.issue_type_id', 'site_issue.issue_type_id')
@@ -7698,7 +8014,6 @@ class GlobeController extends Controller
                                         ->where('status', 'pending')
                                         ->first();
 
-                                        return response()->json(['error' => false, 'message' => $request->all() ]);
                 if (is_null($datas)) {
                     $jtss_approved = SubActivityValue::create([
                         'sam_id' => $request->get('sam_id'),

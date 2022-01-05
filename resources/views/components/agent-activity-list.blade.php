@@ -59,11 +59,11 @@ if (\Auth::user()->profile_id == 2) {
     <div id="accordion" class="accordion-wrapper mb-3">
         <div class="card">
             <div id="heading{{ $unique_stage->stage_id }}" class="card-header bg-primary">
-                <button type="button" data-toggle="collapse" data-target="#collapse{{ $unique_stage->stage_id }}" aria-expanded="false" aria-controls="collapse{{ $unique_stage->stage_id }}" class="text-left m-0 p-0 btn btn-link btn-block collapsed">
+                <button type="button" data-toggle="collapse" data-target="#collapse{{ $unique_stage->stage_id }}" aria-expanded="false" aria-controls="collapse{{ $unique_stage->stage_id }}" class="text-left m-0 p-0 btn btn-link btn-block {{ $loop->first ? "collapsed" : "" }}">
                     <h5 class="m-0 p-0 text-white">{{ $unique_stage->stage_name }}</h5>
                 </button>
             </div>
-            <div data-parent="#accordion" id="collapse{{ $unique_stage->stage_id }}" aria-labelledby="heading{{ $unique_stage->stage_id }}" class="collapse" style="">
+            <div data-parent="#accordion" id="collapse{{ $unique_stage->stage_id }}" aria-labelledby="heading{{ $unique_stage->stage_id }}" class="{{ $loop->first ? "collapsed" : "" }}" style="">
                 <div class="card-body">
                     <div class="form-group">
                         <input type="text" name="search" class="form-control" data-id="{{ $unique_stage->stage_id }}" placeholder="Search {{ $unique_stage->stage_name }} sites...">
