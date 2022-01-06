@@ -2627,8 +2627,6 @@ class GlobeController extends Controller
                 $sites->where('view_site.vendor_id', $vendor);
             }
 
-                            // ->whereNotNull('activity_name');
-
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                       ->select(
@@ -2708,6 +2706,10 @@ class GlobeController extends Controller
                 // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     // $sites->whereIn('program_ftth.region', $user_area);
                 // }
+            }
+
+            if ( count($user_area) > 0 ) {
+                $sites->whereIn('view_site.sam_region_name', $user_area);
             }
             
             $sites->get();
@@ -2802,6 +2804,16 @@ class GlobeController extends Controller
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
                 $sites->where('site_vendor_id', $vendor);
+            }
+
+            $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
+            if ( count($user_area) > 0 ) {
+                $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
             }
 
             $sites->get();
@@ -2904,6 +2916,16 @@ class GlobeController extends Controller
                 $sites->where('view_site.vendor_id', $vendor);
             }
 
+            $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
+            if ( count($user_area) > 0 ) {
+                $sites->whereIn('view_site.sam_region_name', $user_area);
+            }
+
             $sites->get();
 
         }
@@ -2996,6 +3018,16 @@ class GlobeController extends Controller
                 // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     // $sites->whereIn('program_ftth.region', $user_area);
                 // }
+            }
+
+            $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
+            if ( count($user_area) > 0 ) {
+                $sites->whereIn('view_vendor_assigned_sites.sam_region_name', $user_area);
             }
 
             $sites->get();
@@ -3893,6 +3925,16 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 11);
                     }
 
+                    $user_area = \DB::table('users_areas')
+                                        ->select('region')
+                                        ->where('user_id', \Auth::id())
+                                        ->get()
+                                        ->pluck('region');
+
+                    if ( count($user_area) > 0 ) {
+                        $sites->whereIn('view_sites_activity.sam_region_name', $user_area);
+                    }
+
                     $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
 
@@ -3969,22 +4011,6 @@ class GlobeController extends Controller
 
             $sites = \DB::table("view_site");
 
-                // if ($program_id == 1) {
-                //     $sites->where('activity_id', 8);
-                // } else if ($program_id == 3 && \Auth::user()->profile_id == 1) {
-                //     $sites->where('activity_id', 6);
-                // } else if ($program_id == 3 && \Auth::user()->profile_id == 3) {
-                //     $sites->where('activity_id', 7);
-                // } else if ($program_id == 4 && \Auth::user()->profile_id == 3) {
-                //     $sites->where('activity_id', 6);
-                // } else if ($program_id == 2 && \Auth::user()->profile_id == 3) {
-                //     $sites->where('activity_id', 5);
-                // } else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
-                //     $sites->where('activity_id', 5);
-                // }
-
-                // $sites->where('view_site.profile_id', \Auth::user()->profile_id);
-
                 
                 if (\Auth::user()->profile_id == 1) {
                     $supervisors_agents_id = UserDetail::select('user_id')
@@ -4047,6 +4073,16 @@ class GlobeController extends Controller
 
                 if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                     $sites->where('view_site.vendor_id', $vendor);
+                }
+
+                $user_area = \DB::table('users_areas')
+                                    ->select('region')
+                                    ->where('user_id', \Auth::id())
+                                    ->get()
+                                    ->pluck('region');
+
+                if ( count($user_area) > 0 ) {
+                    $sites->whereIn('view_site.sam_region_name', $user_area);
                 }
     
 
