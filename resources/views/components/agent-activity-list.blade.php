@@ -60,9 +60,9 @@ $user_area = \DB::table('users_areas')
                     ->get()
                     ->pluck('region');
 
-// if ( count($user_area) > 0 ) {
+if ( count($user_area) > 0 ) {
     $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
-// }
+}
 
 @endphp
 
