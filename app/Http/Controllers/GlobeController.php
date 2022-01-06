@@ -2708,9 +2708,9 @@ class GlobeController extends Controller
                 // }
             }
 
-            if ( count($user_area) > 0 ) {
+            // if ( count($user_area) > 0 ) {
                 $sites->whereIn('view_site.sam_region_name', $user_area);
-            }
+            // }
             
             $sites->get();
         }
@@ -2812,9 +2812,9 @@ class GlobeController extends Controller
                                 ->get()
                                 ->pluck('region');
 
-            if ( count($user_area) > 0 ) {
+            // if ( count($user_area) > 0 ) {
                 $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
-            }
+            // }
 
             $sites->get();
 
@@ -2922,9 +2922,9 @@ class GlobeController extends Controller
                                 ->get()
                                 ->pluck('region');
 
-            if ( count($user_area) > 0 ) {
+            // if ( count($user_area) > 0 ) {
                 $sites->whereIn('view_site.sam_region_name', $user_area);
-            }
+            // }
 
             $sites->get();
 
@@ -3026,9 +3026,9 @@ class GlobeController extends Controller
                                 ->get()
                                 ->pluck('region');
 
-            if ( count($user_area) > 0 ) {
+            // if ( count($user_area) > 0 ) {
                 $sites->whereIn('view_vendor_assigned_sites.sam_region_name', $user_area);
-            }
+            // }
 
             $sites->get();
 
@@ -3931,9 +3931,9 @@ class GlobeController extends Controller
                                         ->get()
                                         ->pluck('region');
 
-                    if ( count($user_area) > 0 ) {
+                    // if ( count($user_area) > 0 ) {
                         $sites->whereIn('view_sites_activity.sam_region_name', $user_area);
-                    }
+                    // }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
                             ->get();
@@ -4081,9 +4081,9 @@ class GlobeController extends Controller
                                     ->get()
                                     ->pluck('region');
 
-                if ( count($user_area) > 0 ) {
+                // if ( count($user_area) > 0 ) {
                     $sites->whereIn('view_site.sam_region_name', $user_area);
-                }
+                // }
     
 
                 $sites->where('view_site.program_id', $program_id)->get();

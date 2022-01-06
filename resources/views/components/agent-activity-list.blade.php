@@ -53,6 +53,17 @@ if (\Auth::user()->profile_id == 2) {
                     ->distinct('stage_id')
                     ->get();
 }
+
+$user_area = \DB::table('users_areas')
+                    ->select('region')
+                    ->where('user_id', \Auth::id())
+                    ->get()
+                    ->pluck('region');
+
+// if ( count($user_area) > 0 ) {
+    $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
+// }
+
 @endphp
 
 @forelse ($uniques_stage as $unique_stage)
