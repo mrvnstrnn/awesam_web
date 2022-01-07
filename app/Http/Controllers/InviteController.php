@@ -83,7 +83,7 @@ class InviteController extends Controller
                     //     'mode' => $request->input('mode'),
                     // ]);
 
-                    Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
+                    // Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
 
                     return response()->json(['error' => false, 'message' => 'Invitation link has been sent.']);
                 }
@@ -105,7 +105,7 @@ class InviteController extends Controller
 
                     $data = array($url, $name, $company->vendor_sec_reg_name);
 
-                    Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
+                    // Mail::to($email)->send(new InvitationMail($url, $name, $company->vendor_sec_reg_name));
 
                     Invitation::create([
                         'invitation_code' => $randomString,
