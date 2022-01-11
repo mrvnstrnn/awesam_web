@@ -745,8 +745,19 @@ class UserController extends Controller
                     'email',
                     'max:255',
                 ],
-                'password' => ['required', 'min:8'],
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'regex:/[a-z]/',      // must contain at least one lowercase letter
+                    'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                    'regex:/[0-9]/',      // must contain at least one digit
+                    'regex:/[@$!%*#?&]/', 
+                    'confirmed'
+                ],
             ));
+
+            // dd($request->all());
 
             if($validate->passes()){
                 Invitation::where('token', $request->input('token_hidden'))
@@ -775,6 +786,10 @@ class UserController extends Controller
 
                 \Auth::login($user);
                 return redirect('/');
+            } else {
+                return redirect('/invitation-link/' .$request->get('token_hidden'). '/' .$request->get('invitationcode_hidden'))
+                            ->withErrors($validate)
+                            ->withInput();
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -1143,7 +1158,16 @@ class UserController extends Controller
 
                 $validate = Validator::make($request->all(), array(
                     'old_password' => 'required',
-                    'password' => ['required', 'min:8', 'confirmed:confirm-password', 'different:old_password'],
+                    'password' => [
+                        'required', 
+                        'min:8', 
+                        'confirmed:confirm-password', 
+                        'different:old_password', 
+                        'regex:/[a-z]/',
+                        'regex:/[A-Z]/',
+                        'regex:/[0-9]/',
+                        'regex:/[@$!%*#?&]/', 
+                    ],
                 ));
 
                 if ($request->input('old_password') && !Hash::check($request->input('old_password'), \Auth::user()->password)) {
