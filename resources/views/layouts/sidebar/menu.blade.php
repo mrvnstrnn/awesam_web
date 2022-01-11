@@ -74,7 +74,7 @@
         @endif
     @endforeach
 </ul>    
-@if(\Auth::user()->profile_id == 2)
+{{-- @if(\Auth::user()->profile_id == 2)
 <ul class="vertical-nav-menu">
     @php
         $programs = \Auth::user()->getUserProgram();    
@@ -95,5 +95,5 @@
         @endforeach
         @endforeach
 </ul>    
-@endif
+@endif --}}
 
