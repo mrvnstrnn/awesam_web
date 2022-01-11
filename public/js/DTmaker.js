@@ -93,7 +93,6 @@ function makeDT(whatTable, whatCols, active_program) {
             // ],
 
             "fnInitComplete": function(oSettings, json) {
-
                 // Filter
                 var api = this.api();
  
@@ -221,7 +220,7 @@ function makeDT(whatTable, whatCols, active_program) {
                                     '</div>' +
                                 '</div>';         
 
-                    $(document).find('#dashboard_counters_options').append(xx);
+                    $(document).find('#dashboard_counters_options'+active_program).append(xx);
 
                     i = i+1;
                     
@@ -242,7 +241,7 @@ function makeDT(whatTable, whatCols, active_program) {
                                     '</div>' +
                                 '</div>';
 
-                $(document).find('#dashboard_counters_options').append(total_site);
+                $(document).find('#dashboard_counters_options'+active_program).append(total_site);
 
             }
               

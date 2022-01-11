@@ -59,7 +59,7 @@
     <div class="col-md-12">
 
         <div class="main-card mb-3 card">
-            <div class="card-header py-3 bg-warning border-bottom"   style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+            <div class="card-header py-3 bg-warning border-bottom" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                 {{-- <div class="dropdown-menu-header">  --}}
     
                 {{-- <div class="dropdown-menu-header-inner px-2 p-3 bg-primary"> --}}
@@ -92,8 +92,8 @@
 
                                     {{-- <div class="card"> --}}
                                         {{-- <div class="card-body p-0"> --}}
-                                            <div class="container" style="max-width: 100% !important">
-                                                <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #f1f1f1;" id="dashboard_counters_options">
+                                            <div class="container" style="max-width: 1400px !important">
+                                                <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #f1f1f1;" id="dashboard_counters_options{{ $program->program_id  }}">
                                                 </div>
                                             </div>
                                         {{-- </div> --}}
