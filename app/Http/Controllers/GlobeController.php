@@ -2630,12 +2630,20 @@ class GlobeController extends Controller
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                       ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
@@ -2652,12 +2660,20 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -2678,12 +2694,20 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -2696,12 +2720,20 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
@@ -2838,12 +2870,20 @@ class GlobeController extends Controller
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
@@ -2860,12 +2900,20 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -2886,12 +2934,20 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -2904,12 +2960,20 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
@@ -3076,12 +3140,20 @@ class GlobeController extends Controller
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
@@ -3098,12 +3170,20 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -3124,12 +3204,20 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -3142,12 +3230,20 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
@@ -3177,12 +3273,20 @@ class GlobeController extends Controller
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
@@ -3199,12 +3303,20 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -3225,12 +3337,20 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -3243,12 +3363,20 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
@@ -3342,11 +3470,11 @@ class GlobeController extends Controller
                                 ->where('view_site.profile_id', \Auth::user()->profile_id)
                                 ->whereIn('view_site.activity_id', [32, 33]);
                                 
-                                if (\Auth::user()->profile_id != 1) {
-                                $sites->whereIn('view_site.sam_region_name', $user_area);
-                                }
-                                
-                                $sites->get();
+                if (\Auth::user()->profile_id != 1) {
+                    $sites->whereIn('view_site.sam_region_name', $user_area);
+                }
+                
+                $sites->get();
         }
 
         elseif($activity_type == 'vendor awarding'){
@@ -3527,21 +3655,7 @@ class GlobeController extends Controller
                 $sites->whereIn('view_site_hunting.region_name', $user_area);
             }
 
-                                $sites->get();
-
-                                // ->table("site")
-                                // ->leftjoin("vendor", "site.site_vendor_id", "vendor.vendor_id")
-                                // ->leftjoin("location_regions", "site.site_region_id", "location_regions.region_id")
-                                // ->leftjoin("location_provinces", "site.site_province_id", "location_provinces.province_id")
-                                // ->leftjoin("location_lgus", "site.site_lgu_id", "location_lgus.lgu_id")
-                                // ->leftjoin("location_sam_regions", "location_regions.sam_region_id", "location_sam_regions.sam_region_id")
-                                // ->where('site.program_id', $program_id)
-                                // ->where('activities->activity_id', '11')
-                                // ->where('activities->profile_id', '8')
-
-                            // -leftjoin("pr_memo_site", 'pr_memo_site.sam_id', 'site.site_id')
-                            // ->select('pr_memo_site.*', 'site.site_pr', 'site.sam_id', 'site.site_province_id', 'site.site_region_id', 'site.site_lgu_id', 'site.site_vendor_id')
-                            // ->get();
+            $sites->get();
 
         }
 
@@ -3686,12 +3800,20 @@ class GlobeController extends Controller
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
@@ -3708,12 +3830,20 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_site.sam_id",
-                            "view_site.activity_name",
-                            "view_site.activity_type",
-                            "view_site.site_name",
-                            "view_site.aging",
+                            "view_site.site_name", 
+                            "view_site.vendor_acronym", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_type", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name", 
+                            "view_site.region_name", 
+                            "view_site.province_name", 
+                            "view_site.lgu_name", 
                             "view_site.site_category",
+                            "view_site.aging",
                             "view_site.site_address",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -3734,12 +3864,20 @@ class GlobeController extends Controller
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
@@ -3752,12 +3890,20 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.sam_id",
-                    "view_site.activity_name",
-                    "view_site.activity_type",
-                    "view_site.site_name",
-                    "view_site.aging",
+                    "view_site.site_name", 
+                    "view_site.vendor_acronym", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_type", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name", 
+                    "view_site.region_name", 
+                    "view_site.province_name", 
+                    "view_site.lgu_name", 
                     "view_site.site_category",
+                    "view_site.aging",
                     "view_site.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
@@ -3797,6 +3943,8 @@ class GlobeController extends Controller
                             "view_site.region_name", 
                             "view_site.province_name", 
                             "view_site.lgu_name", 
+                            "view_site.site_category",
+                            "view_site.aging",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -3910,7 +4058,7 @@ class GlobeController extends Controller
                             "view_site.province_name", 
                             "view_site.lgu_name", 
                             "view_site.site_category",
-                            "view_site.aging"
+                            "view_site.aging",
                         )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
