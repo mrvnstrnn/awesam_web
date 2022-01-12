@@ -3826,12 +3826,15 @@ class GlobeController extends Controller
             }
 
             if($program_id == 3){
-
-                $site->get();
+                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
+                ->get();
 
             }
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
             }
             elseif($program_id == 2){
                 $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
@@ -3911,6 +3914,7 @@ class GlobeController extends Controller
                             "view_site.site_category",
                             "view_site.aging",
                             "view_site.site_address",
+                            "view_site.program_endorsement_date",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -3941,6 +3945,7 @@ class GlobeController extends Controller
                             "view_site.site_category",
                             "view_site.aging",
                             "view_site.site_address",
+                            "view_site.program_endorsement_date",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -3975,6 +3980,7 @@ class GlobeController extends Controller
                     "view_site.site_category",
                     "view_site.aging",
                     "view_site.site_address",
+                    "view_site.program_endorsement_date",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -4001,6 +4007,7 @@ class GlobeController extends Controller
                     "view_site.site_category",
                     "view_site.aging",
                     "view_site.site_address",
+                    "view_site.program_endorsement_date",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",
@@ -4367,7 +4374,11 @@ class GlobeController extends Controller
                                             ->get()
                                             ->pluck('sam_id');
 
-                    $activity_id = 7;
+                    if ( $program_id == 3 ) {
+                        $activity_id = 7;
+                    } else {
+                        $activity_id = 6;
+                    }
                 }
 
                 if ( $program_id == 3 ) {
@@ -4385,7 +4396,7 @@ class GlobeController extends Controller
                 } else if($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
                           ->select('view_site.*', 'program_ibs.wireless_project_code', 'program_ibs.pla_id', 'program_ibs.program')
-                        ->where('activity_id', '>=', $activity_id)
+                        ->where('activity_id', '>=', 6)
                         // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                 } else if($program_id == 2){
@@ -6128,7 +6139,19 @@ class GlobeController extends Controller
             }
 
             if (isset($vendor->vendor_id)) {
-                $agents = \DB::table('users')
+
+                if (\Auth::user()->profile_id == 3) {
+                    $agents = \DB::table('users')
+                            ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
+                            ->join('user_details', 'user_details.user_id', 'users.id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->where('users.profile_id', $profile_id)
+                            ->where('user_programs.program_id', $program_id)
+                            ->where('user_details.vendor_id', $vendor->vendor_id)
+                            ->where('user_details.IS_id', \Auth::id())
+                            ->get();
+                } else {
+                    $agents = \DB::table('users')
                             ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
                             ->join('user_details', 'user_details.user_id', 'users.id')
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
@@ -6136,6 +6159,8 @@ class GlobeController extends Controller
                             ->where('user_programs.program_id', $program_id)
                             ->where('user_details.vendor_id', $vendor->vendor_id)
                             ->get();
+                }
+                            
             } else {
                 $agents = \DB::table('users')
                             ->select('users.*', \DB::raw('(SELECT COUNT(*) FROM site_users WHERE site_users.agent_id = users.id) as user_id_count'))
