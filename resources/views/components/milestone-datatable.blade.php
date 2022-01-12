@@ -15,16 +15,16 @@
 <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
 
     @php
-        if (\Request::path() == 'endorsements') {
-            $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
-        }
+        // if (\Request::path() == 'endorsements') {
+        //     $programs = \Auth::user()->getUserProgramEndorsement(\Request::path());
+        // }
 
-        if (\Auth::user()->profile_id == 1) {
-            $user_details = \Auth::user()->getUserDetail()->first();
-            $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
-        } else {
+        // if (\Auth::user()->profile_id == 1) {
+        //     $user_details = \Auth::user()->getUserDetail()->first();
+        //     $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
+        // } else {
             $programs = \Auth::user()->getUserProgram();
-        }
+        // }
     
         $li_ctr = 0;
 

@@ -3,16 +3,16 @@
 <ul class="vertical-nav-menu">
     <li class="app-sidebar__heading">{{ Auth::user()->getUserProfile()->profile }}</li>
     <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
-        <form action="">
+        <form action="{{ route('change_active_program'); }}" method="POST" id="change_active_program">@csrf
             @php
                 $programs = \DB::table('user_programs')
                                 ->join('program', 'program.program_id', 'user_programs.program_id')
                                 ->where('user_programs.user_id', \Auth::id())
                                 ->get();
             @endphp
-            <select name="program_id" id="program_id" class="form-control">
+            <select name="program_id" id="program_id" class="form-control" onchange="this.form.submit()">
                 @foreach ($programs as $program)
-                <option value="{{ $program->program_id }}">{{ $program->program }}</option>
+                <option value="{{ $program->program_id }}" {{ $program->active == 1 ? "selected" : "" }}>{{ $program->program }}</option>
                 @endforeach
             </select>
         </form>

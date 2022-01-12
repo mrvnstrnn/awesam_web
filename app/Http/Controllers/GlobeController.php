@@ -8675,5 +8675,29 @@ class GlobeController extends Controller
         }
     }
 
+    public function change_active_program (Request $request)
+    {
+        try {
+            \DB::table('user_programs')
+                    ->where('user_id', \Auth::id())
+                    ->where('program_id', '!=', $request->get('program_id'))
+                    ->update([
+                        'active' => 0
+                    ]);
+
+            \DB::table('user_programs')
+                    ->where('user_id', \Auth::id())
+                    ->where('program_id', $request->get('program_id'))
+                    ->update([
+                        'active' => 1
+                    ]);
+
+            return redirect('/');
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 }
 

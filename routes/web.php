@@ -39,6 +39,9 @@ use App\Http\Controllers\RenewalController;
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
+    
+    Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
+
     Route::post('/update-profile-data', [UserController::class, 'update_profile_data']);
     Route::any('/get-all-users', [UserController::class, 'get_all_users']);
     Route::post('/add-new-user', [UserController::class, 'add_new_user']);

@@ -1,11 +1,11 @@
 
     @php
-        if (\Auth::user()->profile_id == 1) {
-            $user_details = \Auth::user()->getUserDetail()->first();
-            $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
-        } else {
+        // if (\Auth::user()->profile_id == 1) {
+        //     $user_details = \Auth::user()->getUserDetail()->first();
+        //     $programs = \Auth::user()->getUserProgram($user_details->vendor_id);
+        // } else {
             $programs = \Auth::user()->getUserProgram();
-        }
+        // }
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
   
