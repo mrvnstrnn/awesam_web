@@ -2680,9 +2680,9 @@ class GlobeController extends Controller
                             "program_ibs.region",
                             "program_ibs.pla_id",
                             "program_ibs.wireless_project_code",
-                            "program_ibs.wireless_solutiom",
+                            "program_ibs.wireless_solution",
                             "program_ibs.saq_milestone",
-                            "program_ibs.saq_submilestone",
+                            "program_ibs.sub_saq_milestone",
                         );
             }
             elseif($program_id == 8){
