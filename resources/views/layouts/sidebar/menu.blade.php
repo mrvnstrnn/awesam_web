@@ -1,16 +1,26 @@
 {{-- PROFILE MENU --}}
 
-{{-- <ul class="vertical-nav-menu">
+<ul class="vertical-nav-menu">
+    <li class="app-sidebar__heading">{{ Auth::user()->getUserProfile()->profile }}</li>
     <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
-        <a class="{{ $active_slug == "" ? 'mm-active' : '' }}" href="/">
-            <i class="metismenu-icon pe-7s-home"></i>
-            Home
-        </a>
+        <form action="">
+            @php
+                $programs = \DB::table('user_programs')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_programs.user_id', \Auth::id())
+                                ->get();
+            @endphp
+            <select name="program_id" id="program_id" class="form-control">
+                @foreach ($programs as $program)
+                <option value="{{ $program->program_id }}">{{ $program->program }}</option>
+                @endforeach
+            </select>
+        </form>
     </li>
-</ul> --}}
+</ul>
 
 <ul class="vertical-nav-menu">
-    <li class="app-sidebar__heading">{{ Auth::user()->user_position }}</li>
+    <li class="app-sidebar__heading">Main Menu</li>
     
     <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
         <a class="{{ $active_slug == "" ? 'mm-active' : '' }}" href="/">

@@ -92,7 +92,7 @@
 
                                     {{-- <div class="card"> --}}
                                         {{-- <div class="card-body p-0"> --}}
-                                            <div class="container" style="max-width: 1400px !important">
+                                            <div class="container">
                                                 <div class="no-gutters row flex-nowrap" style="overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #3F6AD8 #f1f1f1;" id="dashboard_counters_options{{ $program->program_id  }}">
                                                 </div>
                                             </div>
