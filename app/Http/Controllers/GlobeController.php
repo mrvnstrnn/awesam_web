@@ -4041,11 +4041,15 @@ class GlobeController extends Controller
                             "view_site.lgu_name", 
                             "view_site.site_category",
                             "view_site.aging",
+                            "view_site.site_address",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
                             "program_coloc.technology", 
                             "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
                             "program_coloc.gt_saq_milestone",  
                             "program_coloc.gt_saq_milestone_category")
                         ->where('view_site.program_id', $program_id)
@@ -4071,12 +4075,15 @@ class GlobeController extends Controller
                             "view_site.lgu_name", 
                             "view_site.site_category",
                             "view_site.aging",
+                            "view_site.site_address",
+                            "program_ibs.vendor_tw_build",
+                            "program_ibs.address",
+                            "program_ibs.region",
+                            "program_ibs.pla_id",
                             "program_ibs.wireless_project_code",
-                            "program_ibs.program",
+                            "program_ibs.wireless_solution",
                             "program_ibs.saq_milestone",
-                            "program_ibs.saq_submilestone"
-
-
+                            "program_ibs.sub_saq_milestone",
                             )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
@@ -4127,10 +4134,13 @@ class GlobeController extends Controller
                             "view_site.lgu_name", 
                             "view_site.site_category",
                             "view_site.aging",
+                            "view_site.site_address",
                             "program_ftth.cluster_id",
                             "program_ftth.sam_milestone",
                             "program_ftth.submilestone",
                             "program_ftth.afi_lines",
+                            "program_ftth.odn_vendor",
+                            "program_ftth.region"
                         )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
@@ -4155,6 +4165,11 @@ class GlobeController extends Controller
                             "view_site.lgu_name", 
                             "view_site.site_category",
                             "view_site.aging",
+                            "view_site.site_address",
+                            "program_newsites.saq_milestone",
+                            "program_newsites.serial_number",
+                            "program_newsites.saq_bucket",
+                            "program_newsites.region",
                         )
                         ->where('view_site.program_id', $program_id)
                         ->whereNull('view_site.activity_id')
