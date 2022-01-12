@@ -36,19 +36,37 @@ class DataController extends Controller
         // Document Validation Datatable
        if($activity_type == 'doc validation'){
 
+            $user_area = \DB::table('users_areas')
+                                ->select('region')
+                                ->where('user_id', \Auth::id())
+                                ->get()
+                                ->pluck('region');
+
             $sites = \DB::table("views_sites_with_document_validation")
                 ->leftJoin('view_site', 'views_sites_with_document_validation.sam_id', 'view_site.sam_id')
                 ->where('program_id', $program_id)
                 ->where('active_status', 'pending')
                 ->where('active_profile_id', \Auth::user()->profile_id);
-            
+        
+            if (\Auth::user()->profile_id != 1) {
+                $sites->whereIn('view_site.region_id', $user_area);
+            }
+
             if($program_id == 3){
-                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id');
-                $sites->get();
-            } else if($program_id == 2){
-                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id');
-                $sites->get();
-            }                
+                $sites->leftJoin('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
+                ->get();
+
+            }
+            elseif($program_id == 8){
+                $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id');
+            }
+            elseif($program_id == 4){
+                $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id');
+            }
+            elseif($program_id == 2){
+                $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                    ->get();
+            }              
 
        }
        elseif($activity_type == 'program sites'){

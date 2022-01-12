@@ -160,7 +160,7 @@ function makeDT(whatTable, whatCols, active_program) {
                         var filter_column = "saq_milestone";
                     } 
                     else {
-                        var filter_column = "program";
+                        var filter_column = "saq_milestone";
 
                     }
                 }
