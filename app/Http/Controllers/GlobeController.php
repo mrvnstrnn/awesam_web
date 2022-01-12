@@ -2635,6 +2635,7 @@ class GlobeController extends Controller
                             "view_site.activity_type",
                             "view_site.site_name",
                             "view_site.aging",
+                            "view_site.site_category",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -2655,6 +2656,7 @@ class GlobeController extends Controller
                             "view_site.activity_type",
                             "view_site.site_name",
                             "view_site.aging",
+                            "view_site.site_category",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -2679,6 +2681,7 @@ class GlobeController extends Controller
                     "view_site.activity_type",
                     "view_site.site_name",
                     "view_site.aging",
+                    "view_site.site_category",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -2686,9 +2689,6 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
@@ -2698,6 +2698,7 @@ class GlobeController extends Controller
                     "view_site.activity_type",
                     "view_site.site_name",
                     "view_site.aging",
+                    "view_site.site_category",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",
@@ -2729,6 +2730,7 @@ class GlobeController extends Controller
                             "view_assigned_sites.activity_name",
                             "view_assigned_sites.site_name",
                             "view_assigned_sites.aging",
+                            "view_assigned_sites.site_category",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -2748,6 +2750,7 @@ class GlobeController extends Controller
                             "view_assigned_sites.activity_name",
                             "view_assigned_sites.site_name",
                             "view_assigned_sites.aging",
+                            "view_assigned_sites.site_category",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -2771,6 +2774,7 @@ class GlobeController extends Controller
                     "view_assigned_sites.activity_name",
                     "view_assigned_sites.site_name",
                     "view_assigned_sites.aging",
+                    "view_assigned_sites.site_category",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -2789,6 +2793,7 @@ class GlobeController extends Controller
                     "view_assigned_sites.activity_name",
                     "view_assigned_sites.site_name",
                     "view_assigned_sites.aging",
+                    "view_assigned_sites.site_category",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",
@@ -2830,6 +2835,7 @@ class GlobeController extends Controller
                             "view_site.activity_type",
                             "view_site.site_name",
                             "view_site.aging",
+                            "view_site.site_category",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -2850,6 +2856,7 @@ class GlobeController extends Controller
                             "view_site.activity_type",
                             "view_site.site_name",
                             "view_site.aging",
+                            "view_site.site_category",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -2874,6 +2881,7 @@ class GlobeController extends Controller
                     "view_site.activity_type",
                     "view_site.site_name",
                     "view_site.aging",
+                    "view_site.site_category",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -2881,9 +2889,6 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
@@ -2893,6 +2898,7 @@ class GlobeController extends Controller
                     "view_site.activity_type",
                     "view_site.site_name",
                     "view_site.aging",
+                    "view_site.site_category",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",

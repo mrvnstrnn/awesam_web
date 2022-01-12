@@ -1,5 +1,14 @@
 {{-- PROFILE MENU --}}
 
+{{-- <ul class="vertical-nav-menu">
+    <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
+        <a class="{{ $active_slug == "" ? 'mm-active' : '' }}" href="/">
+            <i class="metismenu-icon pe-7s-home"></i>
+            Home
+        </a>
+    </li>
+</ul> --}}
+
 <ul class="vertical-nav-menu">
     <li class="app-sidebar__heading">{{ Auth::user()->user_position }}</li>
     

@@ -5,7 +5,7 @@ function makeDT(whatTable, whatCols, active_program) {
 
         $('#' + table_id + ' thead tr')
             .clone(true)
-            .addClass('filters')
+            .addClass('filters'+active_program)
             .prependTo('#' + table_id + ' thead');
 
         if (typeof main_activity === 'undefined') {
@@ -102,7 +102,7 @@ function makeDT(whatTable, whatCols, active_program) {
                 .eq(0)
                 .each(function (colIdx) {
                     // Set the header cell to contain the input element
-                    var cell = $('.filters th').eq(
+                    var cell = $('.filters'+active_program+ ' th').eq(
                         $(api.column(colIdx).header()).index()
                     );
 
@@ -112,7 +112,7 @@ function makeDT(whatTable, whatCols, active_program) {
                     // On every keypress in this input
                     $(
                         'input',
-                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                        $('.filters'+active_program+ ' th').eq($(api.column(colIdx).header()).index())
                     )
                     .off('keyup change')
                     .on('keyup change', function (e) {
