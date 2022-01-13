@@ -2796,8 +2796,6 @@ class GlobeController extends Controller
                                 "view_assigned_sites.sam_region_name",
                                 "view_assigned_sites.site_category",
                                 "view_assigned_sites.aging",
-                                "view_assigned_sites.program_endorsement_date",
-                                "view_assigned_sites.aging",
                                 "program_coloc.nomination_id", 
                                 "program_coloc.pla_id", 
                                 "program_coloc.highlevel_tech",  
@@ -2813,7 +2811,6 @@ class GlobeController extends Controller
             elseif($program_id == 4){
                 $sites->leftJoin('program_ibs', 'view_assigned_sites.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_assigned_sites.vendor_acronym", 
                             "view_assigned_sites.site_name", 
                             "view_assigned_sites.sam_id", 
                             "view_assigned_sites.activity_id", 
@@ -2822,8 +2819,6 @@ class GlobeController extends Controller
                             "view_assigned_sites.activity_name", 
                             "view_assigned_sites.sam_region_name",
                             "view_assigned_sites.site_category",
-                            "view_assigned_sites.aging",
-                            "view_assigned_sites.program_endorsement_date",
                             "view_assigned_sites.aging",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
@@ -2838,7 +2833,6 @@ class GlobeController extends Controller
             elseif($program_id == 8){
                 $sites->leftJoin('program_renewal', 'view_assigned_sites.sam_id', 'program_renewal.sam_id')
                 ->select(
-                    "view_assigned_sites.vendor_acronym", 
                     "view_assigned_sites.site_name", 
                     "view_assigned_sites.sam_id", 
                     "view_assigned_sites.activity_id", 
@@ -2847,8 +2841,6 @@ class GlobeController extends Controller
                     "view_assigned_sites.activity_name", 
                     "view_assigned_sites.sam_region_name",
                     "view_assigned_sites.site_category",
-                    "view_assigned_sites.aging",
-                    "view_assigned_sites.program_endorsement_date",
                     "view_assigned_sites.aging",
                     "program_renewal.*"
                 );
