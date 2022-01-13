@@ -2796,7 +2796,6 @@ class GlobeController extends Controller
                                 "view_assigned_sites.sam_region_name",
                                 "view_assigned_sites.site_category",
                                 "view_assigned_sites.aging",
-                                "view_assigned_sites.site_address",
                                 "view_assigned_sites.program_endorsement_date",
                                 "view_assigned_sites.aging",
                                 "program_coloc.nomination_id", 
@@ -2824,7 +2823,6 @@ class GlobeController extends Controller
                             "view_assigned_sites.sam_region_name",
                             "view_assigned_sites.site_category",
                             "view_assigned_sites.aging",
-                            "view_assigned_sites.site_address",
                             "view_assigned_sites.program_endorsement_date",
                             "view_assigned_sites.aging",
                             "program_ibs.vendor_tw_build",
@@ -2850,7 +2848,6 @@ class GlobeController extends Controller
                     "view_assigned_sites.sam_region_name",
                     "view_assigned_sites.site_category",
                     "view_assigned_sites.aging",
-                    "view_assigned_sites.site_address",
                     "view_assigned_sites.program_endorsement_date",
                     "view_assigned_sites.aging",
                     "program_renewal.*"
@@ -2864,7 +2861,6 @@ class GlobeController extends Controller
                     "view_assigned_sites.site_name",
                     "view_assigned_sites.aging",
                     "view_assigned_sites.site_category",
-                    "view_assigned_sites.site_address",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -2889,7 +2885,6 @@ class GlobeController extends Controller
                     "view_assigned_sites.sam_region_name",
                     "view_assigned_sites.site_category",
                     "view_assigned_sites.aging",
-                    "view_assigned_sites.site_address",
                     "view_assigned_sites.program_endorsement_date",
                     "view_assigned_sites.aging",
                     "program_newsites.saq_milestone",
@@ -3523,7 +3518,8 @@ class GlobeController extends Controller
                                         "program_newsites.region",
                                     )
                                     >join('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
-                                    ->whereIn('view_site.activity_id', [16, 17, 25, 27])
+                                    // ->whereIn('view_site.activity_id', [16, 17, 25, 27])
+                                    ->where('view_site.activity_type', 'site approval')
                                     ->get();
                                 } else if ( $program_id == 2 ) {
 
@@ -3551,7 +3547,8 @@ class GlobeController extends Controller
                                         "program_ftth.region"
                                     )
                                     ->join('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
-                                    ->whereIn('view_site.activity_id', [17, 20, 14, 18, 21, 27, 34, 30, 23])
+                                    // ->whereIn('view_site.activity_id', [17, 20, 14, 18, 21, 27, 34, 30, 23])
+                                    ->where('view_site.activity_type', 'site approval')
                                     ->get();
 
                                 } else if ( $program_id == 3 ) {
@@ -3582,12 +3579,43 @@ class GlobeController extends Controller
                                         "program_coloc.gt_saq_milestone_category"
                                     )
                                     ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                                    ->whereIn('view_site.activity_id', [15, 21, 22, 26, 27])
+                                    // ->whereIn('view_site.activity_id', [15, 21, 22, 26, 27])
+                                    ->where('view_site.activity_type', 'site approval')
                                     ->get();
 
                                     // return dd($sites->get());
                                 } else if ( $program_id == 4 ) {
-                                    if(\Auth::user()->profile_id == 8){
+                                    // if(\Auth::user()->profile_id == 8){
+
+                                    //     $sites->select(
+                                    //         "view_site.vendor_acronym", 
+                                    //         "view_site.site_name", 
+                                    //         "view_site.sam_id", 
+                                    //         "view_site.activity_id", 
+                                    //         "view_site.program_id", 
+                                    //         "view_site.site_category", 
+                                    //         "view_site.activity_name", 
+                                    //         "view_site.sam_region_name",
+                                    //         "view_site.site_category",
+                                    //         "view_site.aging",
+                                    //         "view_site.site_address",
+                                    //         "view_site.program_endorsement_date",
+                                    //         "view_site.aging",
+                                    //         "program_ibs.vendor_tw_build",
+                                    //         "program_ibs.address",
+                                    //         "program_ibs.region",
+                                    //         "program_ibs.pla_id",
+                                    //         "program_ibs.wireless_project_code",
+                                    //         "program_ibs.wireless_solution",
+                                    //         "program_ibs.saq_milestone",
+                                    //         "program_ibs.sub_saq_milestone",
+                                    //     )
+                                    //     ->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                                    //     ->whereIn('view_site.activity_id', [8, 11, 16, 19, 22, 25])
+                                    //     ->get();
+
+                                    // }
+                                    // elseif(\Auth::user()->profile_id == 10){
 
                                         $sites->select(
                                             "view_site.vendor_acronym", 
@@ -3613,42 +3641,14 @@ class GlobeController extends Controller
                                             "program_ibs.sub_saq_milestone",
                                         )
                                         ->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
-                                        ->whereIn('view_site.activity_id', [8, 11, 16, 19, 22, 25])
+                                        // ->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39, 29])
+                                        ->where('view_site.activity_type', 'site approval')
                                         ->get();
 
-                                    }
-                                    elseif(\Auth::user()->profile_id == 10){
-
-                                        $sites->select(
-                                            "view_site.vendor_acronym", 
-                                            "view_site.site_name", 
-                                            "view_site.sam_id", 
-                                            "view_site.activity_id", 
-                                            "view_site.program_id", 
-                                            "view_site.site_category", 
-                                            "view_site.activity_name", 
-                                            "view_site.sam_region_name",
-                                            "view_site.site_category",
-                                            "view_site.aging",
-                                            "view_site.site_address",
-                                            "view_site.program_endorsement_date",
-                                            "view_site.aging",
-                                            "program_ibs.vendor_tw_build",
-                                            "program_ibs.address",
-                                            "program_ibs.region",
-                                            "program_ibs.pla_id",
-                                            "program_ibs.wireless_project_code",
-                                            "program_ibs.wireless_solution",
-                                            "program_ibs.saq_milestone",
-                                            "program_ibs.sub_saq_milestone",
-                                        )
-                                        ->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
-                                        ->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39])
-                                        ->get();
-
-                                    }
+                                    // }
                                 } else if ( $program_id == 5 ) {
-                                    $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
+                                    // $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
+                                    $sites->where('view_site.activity_type', 'site approval')
                                     ->get();
                                 } else if ( $program_id == 8 ) {
                                     $sites
@@ -3669,7 +3669,8 @@ class GlobeController extends Controller
                                         "program_renewal.*"
                                     )
                                     ->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id')
-                                    ->whereIn('view_site.activity_id', [19, 20, 21, 24, 25, 26, 29, 30, 34])
+                                    // ->whereIn('view_site.activity_id', [19, 20, 21, 24, 25, 26, 29, 30, 34])
+                                    ->where('view_site.activity_type', 'site approval')
                                     ->get();
                                 }
         }

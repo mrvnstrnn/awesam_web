@@ -14,7 +14,6 @@ class ActivityController extends Controller
     {
         try {
 
-            // dd($request->all());
             if(!isset($request->direct_mode)){
 
 

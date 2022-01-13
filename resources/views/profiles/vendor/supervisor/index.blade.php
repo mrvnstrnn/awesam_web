@@ -28,7 +28,7 @@
                             <span class="opacity-10 text-secondary pr-2">
                                 <i class="fa fa-upload"></i>
                             </span>
-                            <span>-</span>
+                            <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[0]->COUNT }}</span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                             <span class="opacity-10 text-info">
                                 <i class="fa fa-list-ol"></i>
                             </span>
-                            <span>-</span>
+                            <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[2]->COUNT }}</span>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                                     <span class="opacity-10 text-warning pr-2">
                                         <i class="fa fa-file-contract"></i>
                                     </span>
-                                    <span>-</span>
+                                    <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[1]->COUNT }}</span>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                                     <span class="opacity-10 text-success pr-2">
                                         <i class="fa fa-angle-double-right"></i>
                                     </span>
-                                    <span>-</span>
+                                    <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[3]->COUNT }}</span>
                                 </div>
                             </div>
                         </div>

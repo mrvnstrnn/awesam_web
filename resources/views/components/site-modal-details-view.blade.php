@@ -145,8 +145,12 @@
             }
 
             $.ajax({
-                url: "/modal-view-site-component/" + sam_id + "/" + id,
-                method: "GET",
+                url: "/modal-view-site-component",
+                method: "POST",
+                data: {
+                    sam_id : sam_id,
+                    component : id,
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -209,9 +213,14 @@
         // });
 
         $("#headingThree .program_fields").on("click", function (){
+            var site_modal_site_fields = 'site-modal-site_fields';
             $.ajax({
-                url: "/modal-view-site-component/" + sam_id + "/site-modal-site_fields",
-                method: "GET",
+                url: "/modal-view-site-component",
+                method: "POST",
+                data: {
+                    sam_id : sam_id,
+                    component : site_modal_site_fields,
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
