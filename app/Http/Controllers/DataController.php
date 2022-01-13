@@ -36,6 +36,8 @@ class DataController extends Controller
         // Document Validation Datatable
        if($activity_type == 'doc validation'){
 
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
             $user_area = \DB::table('users_areas')
                                 ->select('region')
                                 ->where('user_id', \Auth::id())
@@ -47,6 +49,11 @@ class DataController extends Controller
                 ->where('program_id', $program_id)
                 ->where('active_status', 'pending')
                 ->where('active_profile_id', \Auth::user()->profile_id);
+                
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                $sites->where('view_site.vendor_id', $vendor);
+            }
         
             if (\Auth::user()->profile_id != 1) {
                 $sites->whereIn('view_site.region_id', $user_area);

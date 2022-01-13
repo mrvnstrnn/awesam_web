@@ -57,8 +57,14 @@
                             if ( isset($json_status->validators) ) {
                                 if ($json_status->active_profile == \Auth::user()->profile_id) {
                                     for ($j=0; $j < count($json_status->validators); $j++) {
-                                // dd($json_status->validators[$j]->status);
                                         if (\Auth::user()->profile_id == $json_status->validators[$j]->profile_id) {
+                                            $status_collect->push( $json_status->validators[$j]->status );
+                                            $status_file = $json_status_first->validators[$j]->status;
+                                        }
+                                    }
+                                } else if ( $json_status->active_profile == "" ) {
+                                    for ($j=0; $j < count($json_status->validators); $j++) {
+                                        if ($json_status->validators[$j]->status == 'approved') {
                                             $status_collect->push( $json_status->validators[$j]->status );
                                             $status_file = $json_status_first->validators[$j]->status;
                                         }
@@ -108,8 +114,6 @@
                                 $border = "border-danger";
                             }
                         @endphp
-                        
-                        {{-- <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sam_id="{{ $site[0]->sam_id }}" data-activity_id="{{ $site[0]->activity_id }}" data-site_category="{{ $site[0]->site_category }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}"> --}}
 
                         <div class="col-md-4 col-sm-4 view_file col-12 mb-2 dropzone_div_{{ $data[0]->sub_activity_id }}" style="cursor: pointer;" data-value="{{ json_encode($data) }}" data-sub_activity_name="{{ $data[0]->sub_activity_name }}" data-id="{{ $data[0]->id }}" data-status="{{ $status_file }}" data-sub_activity_id="{{ $data[0]->sub_activity_id }}">
                             <div class="child_div_{{ $data[0]->sub_activity_id }}">
@@ -177,17 +181,11 @@
 
         var values = JSON.parse($(this).attr('data-value'));
 
-        if ($(this).attr('data-status') == "pending"){
+        if ($(this).attr('data-status') == "pending") {
             $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
         }
-
-        // if( extensions.includes(values[0].value.split('.').pop()) == true) {     
-        //     htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + values[0].value + '" allowfullscreen></iframe>';
-        // } else {
-        //   htmltoload = '<div class="text-center my-5"><a href="/files/' + values[0].value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
-        // }
 
         if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
             htmltoload = '<iframe class="embed-responsive-item" style="width:100%; min-height: 400px; height: 100%" src="/ViewerJS/#../files/' + JSON.parse(values[0].value).file + '" allowfullscreen></iframe>';
@@ -304,7 +302,7 @@
         $(".approve_reject_doc_btns").attr("data-sub_activity_id", sub_activity_id);
         $(".approve_reject_doc_btns").attr("data-id", id);
 
-        if ($(this).attr("data-status") == "pending"){
+        if ($(this).attr("data-status") == "pending" || $(this).attr("data-status") == "Pending"){
             $(".approve_reject_doc_btns").removeClass("d-none");
         } else {
             $(".approve_reject_doc_btns").addClass("d-none");
