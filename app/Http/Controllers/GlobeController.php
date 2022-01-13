@@ -2765,9 +2765,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             if (\Auth::user()->profile_id != 1) {
@@ -2860,9 +2857,6 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_assigned_sites.sam_id', 'program_newsites.sam_id')
@@ -2884,10 +2878,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             $user_detail = \Auth::user()->getUserDetail()->first();
@@ -3034,9 +3024,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             $user_detail = \Auth::user()->getUserDetail()->first();
@@ -3065,7 +3052,7 @@ class GlobeController extends Controller
 
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-                $sites->where('vendor_id', $vendor);
+                $sites->where('view_vendor_assigned_sites.vendor_id', $vendor);
             }
 
             if($program_id == 3){                
@@ -3136,9 +3123,6 @@ class GlobeController extends Controller
                     "program_ftth.odn_vendor",
                     "program_ftth.region"
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_vendor_assigned_sites.sam_id', 'program_newsites.sam_id')
@@ -3161,9 +3145,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             if (\Auth::user()->profile_id != 1) {
@@ -3325,9 +3306,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             if (\Auth::user()->profile_id != 1) {
@@ -3465,9 +3443,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             if (\Auth::user()->profile_id != 1) {
@@ -4124,9 +4099,6 @@ class GlobeController extends Controller
                     "program_newsites.saq_bucket",
                     "program_newsites.region",
                 );
-                // if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
-                    // $sites->whereIn('program_ftth.region', $user_area);
-                // }
             }
 
             if (\Auth::user()->profile_id != 1) {
@@ -4366,7 +4338,7 @@ class GlobeController extends Controller
                     
                     if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                         $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
-                        $sites->where('vendor_id', $vendor);
+                        $sites->where('view_sites_activity.site_vendor_id', $vendor);
                     }
             
                     if ($program_id == 1) {
