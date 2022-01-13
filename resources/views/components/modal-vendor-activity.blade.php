@@ -504,8 +504,17 @@
         {
 
             $.ajax({
-                url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id + "/" + site_category + "/" + activity_id,
-                method: "GET",
+                // url: "/subactivity-view/" + active_sam_id + "/" + active_subactivity + "/" + sub_activity_id + "/" + program_id + "/" + site_category + "/" + activity_id,
+                url: "/subactivity-view",
+                method: "POST",
+                data: {
+                    active_sam_id : active_sam_id,
+                    active_subactivity : active_subactivity,
+                    sub_activity_id : sub_activity_id,
+                    program_id : program_id,
+                    site_category : site_category,
+                    activity_id : activity_id
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

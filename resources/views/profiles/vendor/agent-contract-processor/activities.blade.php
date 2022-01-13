@@ -214,10 +214,16 @@ $(document).ready(() => {
     
 
     var sam_id = $('#modal_sam_id').val();
+    var agent_activities = "agent-activities";
+    var agent_progress = "agent-progress";
 
     $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/agent-activities",
-        method: "GET",
+        url: "/modal-view-site-component",
+        method: "POST",
+        data: {
+            sam_id : sam_id,
+            component : agent_activities,
+        },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
@@ -231,8 +237,12 @@ $(document).ready(() => {
     });
 
     $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/agent-progress",
-        method: "GET",
+        url: "/modal-view-site-component",
+        method: "POST",
+        data: {
+            sam_id : sam_id,
+            component : agent_progress,
+        },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
@@ -270,8 +280,12 @@ $(document).on('hidden.bs.modal', '#viewInfoModal', function (event) {
     var sam_id = $('#modal_sam_id').val();
 
     $.ajax({
-        url: "/modal-view-site-component/" + sam_id + "/agent-activities",
-        method: "GET",
+        url: "/modal-view-site-component",
+        method: "POST",
+        data: {
+            sam_id : sam_id,
+            component : agent_activities,
+        },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

@@ -3503,8 +3503,7 @@ class GlobeController extends Controller
                 $sites->whereIn('view_site.region_id', $user_area);
             }
                                 if ( $program_id == 1 ) {
-                                    $sites->whereIn('view_site.activity_id', [16, 17, 25, 27])
-                                    ->select(
+                                    $sites->select(
                                         "view_site.vendor_acronym", 
                                         "view_site.site_name", 
                                         "view_site.sam_id", 
@@ -3523,73 +3522,74 @@ class GlobeController extends Controller
                                         "program_newsites.saq_bucket",
                                         "program_newsites.region",
                                     )
+                                    >join('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
+                                    ->whereIn('view_site.activity_id', [16, 17, 25, 27])
                                     ->get();
                                 } else if ( $program_id == 2 ) {
 
-                                    $sites->whereIn('view_site.activity_id', [17, 20, 14, 18, 21, 27, 34, 30, 23])
-                                            ->join('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
-                                            ->select(
-                                                "view_site.site_name", 
-                                                "view_site.vendor_acronym", 
-                                                "view_site.sam_id", 
-                                                "view_site.activity_id", 
-                                                "view_site.program_id", 
-                                                "view_site.site_category", 
-                                                "view_site.activity_type", 
-                                                "view_site.activity_name", 
-                                                "view_site.sam_region_name", 
-                                                "view_site.region_name", 
-                                                "view_site.province_name", 
-                                                "view_site.lgu_name", 
-                                                "view_site.site_category",
-                                                "view_site.aging",
-                                                "view_site.site_address",
-                                                "program_ftth.cluster_id",
-                                                "program_ftth.sam_milestone",
-                                                "program_ftth.submilestone",
-                                                "program_ftth.afi_lines",
-                                                "program_ftth.odn_vendor",
-                                                "program_ftth.region"
-                                            )
-                                            ->get();
+                                    $sites->select(
+                                        "view_site.site_name", 
+                                        "view_site.vendor_acronym", 
+                                        "view_site.sam_id", 
+                                        "view_site.activity_id", 
+                                        "view_site.program_id", 
+                                        "view_site.site_category", 
+                                        "view_site.activity_type", 
+                                        "view_site.activity_name", 
+                                        "view_site.sam_region_name", 
+                                        "view_site.region_name", 
+                                        "view_site.province_name", 
+                                        "view_site.lgu_name", 
+                                        "view_site.site_category",
+                                        "view_site.aging",
+                                        "view_site.site_address",
+                                        "program_ftth.cluster_id",
+                                        "program_ftth.sam_milestone",
+                                        "program_ftth.submilestone",
+                                        "program_ftth.afi_lines",
+                                        "program_ftth.odn_vendor",
+                                        "program_ftth.region"
+                                    )
+                                    ->join('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                                    ->whereIn('view_site.activity_id', [17, 20, 14, 18, 21, 27, 34, 30, 23])
+                                    ->get();
 
                                 } else if ( $program_id == 3 ) {
                                     
-                                    $sites->whereIn('view_site.activity_id', [15, 21, 22, 26, 27]);
-                                    $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
-                                            ->select(
-                                                "view_site.vendor_acronym", 
-                                                "view_site.site_name", 
-                                                "view_site.sam_id", 
-                                                "view_site.activity_id", 
-                                                "view_site.program_id", 
-                                                "view_site.site_category", 
-                                                "view_site.activity_name", 
-                                                "view_site.sam_region_name",
-                                                "view_site.site_category",
-                                                "view_site.aging",
-                                                "view_site.site_address",
-                                                "view_site.program_endorsement_date",
-                                                "view_site.aging",
-                                                "program_coloc.nomination_id", 
-                                                "program_coloc.pla_id", 
-                                                "program_coloc.highlevel_tech",  
-                                                "program_coloc.technology", 
-                                                "program_coloc.site_type",
-                                                "program_coloc.address",  
-                                                "program_coloc.vendor",  
-                                                "program_coloc.region",  
-                                                "program_coloc.gt_saq_milestone",  
-                                                "program_coloc.gt_saq_milestone_category"
-                                            )        
-                                        ->get();
+                                    $sites->select(
+                                        "view_site.vendor_acronym", 
+                                        "view_site.site_name", 
+                                        "view_site.sam_id", 
+                                        "view_site.activity_id", 
+                                        "view_site.program_id", 
+                                        "view_site.site_category", 
+                                        "view_site.activity_name", 
+                                        "view_site.sam_region_name",
+                                        "view_site.site_category",
+                                        "view_site.aging",
+                                        "view_site.site_address",
+                                        "view_site.program_endorsement_date",
+                                        "view_site.aging",
+                                        "program_coloc.nomination_id", 
+                                        "program_coloc.pla_id", 
+                                        "program_coloc.highlevel_tech",  
+                                        "program_coloc.technology", 
+                                        "program_coloc.site_type",
+                                        "program_coloc.address",  
+                                        "program_coloc.vendor",  
+                                        "program_coloc.region",  
+                                        "program_coloc.gt_saq_milestone",  
+                                        "program_coloc.gt_saq_milestone_category"
+                                    )
+                                    ->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                                    ->whereIn('view_site.activity_id', [15, 21, 22, 26, 27])
+                                    ->get();
 
                                     // return dd($sites->get());
                                 } else if ( $program_id == 4 ) {
                                     if(\Auth::user()->profile_id == 8){
 
-                                        $sites->whereIn('view_site.activity_id', [8, 11, 16, 19, 22, 25])
-                                        ->select(
+                                        $sites->select(
                                             "view_site.vendor_acronym", 
                                             "view_site.site_name", 
                                             "view_site.sam_id", 
@@ -3612,13 +3612,14 @@ class GlobeController extends Controller
                                             "program_ibs.saq_milestone",
                                             "program_ibs.sub_saq_milestone",
                                         )
+                                        ->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                                        ->whereIn('view_site.activity_id', [8, 11, 16, 19, 22, 25])
                                         ->get();
 
                                     }
                                     elseif(\Auth::user()->profile_id == 10){
 
-                                        $sites->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39])
-                                        ->select(
+                                        $sites->select(
                                             "view_site.vendor_acronym", 
                                             "view_site.site_name", 
                                             "view_site.sam_id", 
@@ -3641,6 +3642,8 @@ class GlobeController extends Controller
                                             "program_ibs.saq_milestone",
                                             "program_ibs.sub_saq_milestone",
                                         )
+                                        ->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
+                                        ->whereIn('view_site.activity_id', [9, 12, 17, 20, 23, 26, 39])
                                         ->get();
 
                                     }
@@ -3648,7 +3651,7 @@ class GlobeController extends Controller
                                     $sites->whereIn('view_site.activity_id', [19, 24, 27, 30])
                                     ->get();
                                 } else if ( $program_id == 8 ) {
-                                    $sites->whereIn('view_site.activity_id', [19, 20, 21, 24, 25, 26, 29, 30, 34])
+                                    $sites
                                     ->select(
                                         "view_site.vendor_acronym", 
                                         "view_site.site_name", 
@@ -3665,6 +3668,8 @@ class GlobeController extends Controller
                                         "view_site.aging",
                                         "program_renewal.*"
                                     )
+                                    ->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id')
+                                    ->whereIn('view_site.activity_id', [19, 20, 21, 24, 25, 26, 29, 30, 34])
                                     ->get();
                                 }
         }
@@ -4787,172 +4792,159 @@ class GlobeController extends Controller
 
     }
 
-    public function sub_activity_view($sam_id, $sub_activity, $sub_activity_id, $program_id, $site_category, $activity_id)
+    public function sub_activity_view(Request $request)
     {
-    // dd($sub_activity);
-        if($sub_activity == 'SSDS'){
+        // $request->get('sub_activity'), $request->get('sub_activity_id'), $request->get('program_id'), $request->get('site_category'), $request->get('activity_id')
+        // dd($request->get('sub_activity'));
+        if($request->get('sub_activity') == 'SSDS'){
 
-            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+            $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                     ->where('type', 'jtss_add_site')
                                                     ->get();
 
             $what_component = "components.subactivity-ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'check_if_added' => $jtss_add_site,
             ])
             ->render();
 
         }
 
-        else if($sub_activity == 'Set Approved Site'){
+        else if($request->get('sub_activity') == 'Set Approved Site'){
 
-            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+            $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                     ->where('type', 'jtss_add_site')
                                                     ->get();
 
             $what_component = "components.set-approved-site";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'check_if_added' => $jtss_add_site,
             ])
             ->render();
 
         }
 
-        else if($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement' || $sub_activity == 'Lessor Renewal Negotiation'){ 
-            // elseif($sub_activity == 'Lessor Negotiation' || $sub_activity == 'LESSOR ENGAGEMENT' || $sub_activity == 'Lessor Engagement'){
+        else if($request->get('sub_activity') == 'Lessor Negotiation' || $request->get('sub_activity') == 'LESSOR ENGAGEMENT' || $request->get('sub_activity') == 'Lessor Engagement' || $request->get('sub_activity') == 'Lessor Renewal Negotiation'){ 
+            // elseif($request->get('sub_activity') == 'Lessor Negotiation' || $request->get('sub_activity') == 'LESSOR ENGAGEMENT' || $request->get('sub_activity') == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
 
-        else if($sub_activity == 'Commercial Negotiation'){
+        else if($request->get('sub_activity') == 'Commercial Negotiation'){
 
             $what_component = "components.renewal-commercial-negotiation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        // elseif($sub_activity == 'LESSOR ENGAGEMENT'){
 
-        //     $what_component = "components.subactivity-lessor-engagement";
-        //     return \View::make($what_component)
-        //     ->with([
-        //         'sub_activity' => $sub_activity,
-        //         'sam_id' => $sam_id,
-        //         'sub_activity_id' => $sub_activity_id,
-        //         'program_id' => $program_id,
-        //         'site_category' => $site_category,
-        //         'activity_id' => $activity_id,
-        //     ])
-        //     ->render();
-
-        // }
-        elseif($sub_activity == 'Set Site Category'){
+        elseif($request->get('sub_activity') == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Schedule Advanced Site Hunting'){
+        elseif($request->get('sub_activity') == 'Schedule Advanced Site Hunting'){
 
             $what_component = "components.schedule-advance-site-hunting";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Set Survey Representatives'){
+        elseif($request->get('sub_activity') == 'Set Survey Representatives'){
 
-            $datas = SubActivityValue::where('sam_id', $sam_id)
+            $datas = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                         ->where('type', 'jtss_representative')
                                         ->get();
 
             $site = Site::select('site_name')
-                            ->where('sam_id', $sam_id)
+                            ->where('sam_id', $request->get('sam_id'))
                             ->first();
 
             $what_component = "components.set-survey-representatives";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'site_name' => $site->site_name,
                 'is_done' => count($datas) > 0 ? 'done' : 'not_done',
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Add Site Candidates'){
+        elseif($request->get('sub_activity') == 'Add Site Candidates'){
 
-            $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+            $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                     ->where('type', 'jtss_add_site')
                                                     ->get();
 
             $site_np = Site::select('NP_latitude', 'NP_longitude', 'site_region_id', 'site_province_id', 'site_lgu_id')
-                        ->where('sam_id', $sam_id)
+                        ->where('sam_id', $request->get('sam_id'))
                         ->first();
 
             $what_component = "components.add-site-prospects";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'check_if_added' => $jtss_add_site,
                 'NP_latitude' => $site_np->NP_latitude,
                 'NP_longitude' => $site_np->NP_longitude,
@@ -4963,10 +4955,10 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($sub_activity == 'JTSS Sched Confirmation'){
+        elseif($request->get('sub_activity') == 'JTSS Sched Confirmation'){
 
             $np = \DB::table('site')
-                ->where('sam_id', $sam_id)
+                ->where('sam_id', $request->get('sam_id'))
                 ->select('NP_latitude', 'NP_longitude')
                 ->get();
 
@@ -4974,228 +4966,228 @@ class GlobeController extends Controller
             $what_component = "components.jtss-sched-confirmation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Site Survey Deliberation Sheet'){
+        elseif($request->get('sub_activity') == 'Site Survey Deliberation Sheet'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $what_component = "components.ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'SSDS Ranking'){
+        elseif($request->get('sub_activity') == 'SSDS Ranking'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $what_component = "components.ssds-ranking";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
                 'count_ssds' => count($jtss_ssds),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Approved SSDS'){
+        elseif($request->get('sub_activity') == 'Approved SSDS'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $what_component = "components.approved-ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'SSDS NTP'){
+        elseif($request->get('sub_activity') == 'SSDS NTP'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $what_component = "components.ssds-ntp";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Lease Details'){
+        elseif($request->get('sub_activity') == 'Lease Details'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                        ->where('sam_id', $sam_id)
+                                        ->where('sam_id', $request->get('sam_id'))
                                         ->get();
 
             $what_component = "components.lease-details";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
             ])
             ->render();
         }
-        elseif($sub_activity == 'Create LOI to Renew'){
+        elseif($request->get('sub_activity') == 'Create LOI to Renew'){
 
             $program_renewal = \DB::table('program_renewal')
                                 ->select('site_address', 'lessor', 'expiration')
-                                ->where('sam_id', $sam_id)
+                                ->where('sam_id', $request->get('sam_id'))
                                 ->first();
 
             $what_component = "components.loi-maker";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'program_renewal' => $program_renewal,
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Savings Computation'){
+        elseif($request->get('sub_activity') == 'Savings Computation'){
 
             $what_component = "components.savings-computation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Create Lease Renewal Notice'){
+        elseif($request->get('sub_activity') == 'Create Lease Renewal Notice'){
 
             $what_component = "components.lease-renewal-notice";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Schedule of Rental Payment'){
+        elseif($request->get('sub_activity') == 'Schedule of Rental Payment'){
 
             $what_component = "components.renewal-schedule-of-rental-payment";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
 
         }
-        elseif($sub_activity == 'Get Send Approved LOI' || $sub_activity == 'Get Send Approved LRN'){
+        elseif($request->get('sub_activity') == 'Get Send Approved LOI' || $request->get('sub_activity') == 'Get Send Approved LRN'){
 
-            if ($sub_activity == 'Get Send Approved LOI') {
+            if ($request->get('sub_activity') == 'Get Send Approved LOI') {
                 $what_component = "components.get-send-approved-loi";
 
                 $files = SubActivityValue::select('value')
                                 ->where('sub_activity_id', 423)
-                                ->where('sam_id', $sam_id)
+                                ->where('sam_id', $request->get('sam_id'))
                                 ->first();
 
-            } else if ($sub_activity == 'Get Send Approved LRN') {
+            } else if ($request->get('sub_activity') == 'Get Send Approved LRN') {
                 $what_component = "components.get-send-approved-lrn";
 
                 $files = SubActivityValue::select('value')
                                 ->where('sub_activity_id', 424)
-                                ->where('sam_id', $sam_id)
+                                ->where('sam_id', $request->get('sam_id'))
                                 ->first();
             }
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
                 'files' => $files,
             ])
             ->render();
@@ -5206,69 +5198,72 @@ class GlobeController extends Controller
             $what_component = "components.subactivity-doc-upload";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $sub_activity,
-                'sam_id' => $sam_id,
-                'sub_activity_id' => $sub_activity_id,
-                'program_id' => $program_id,
-                'site_category' => $site_category,
-                'activity_id' => $activity_id,
+                'sub_activity' => $request->get('sub_activity'),
+                'sam_id' => $request->get('sam_id'),
+                'sub_activity_id' => $request->get('sub_activity_id'),
+                'program_id' => $request->get('program_id'),
+                'site_category' => $request->get('site_category'),
+                'activity_id' => $request->get('activity_id'),
             ])
             ->render();
         }
 
+        /////////////////////////////////////////////////////////////
+
     }
 
-    public function modal_view_site_components($sam_id, $component)
+    // public function modal_view_site_components($sam_id, $component)
+    public function modal_view_site_components(Request $request)
     {
         try{
 
-            if($component == 'site-status'){
+            if($request->get('component') == 'site-status'){
 
                 $what_modal = "components.site-status";
                 return \View::make($what_modal)
                         ->with([
-                            'sam_id' => $sam_id,
+                            'sam_id' => $request->get('sam_id'),
                             'site_name' => "test",
                         ])
                         ->render();
 
             }
-            elseif($component == 'agent-activities'){
+            elseif($request->get('component') == 'agent-activities'){
 
                 $what_modal = "components.agent-activity-list";
                 return \View::make($what_modal)
                         ->render();
 
             }
-            elseif($component == 'agent-progress'){
+            elseif($request->get('component') == 'agent-progress'){
 
                 $what_modal = "components.site-progress";
                 return \View::make($what_modal)
                         ->render();
 
             }
-            elseif($component == 'tab-content-activities'){
+            elseif($request->get('component') == 'tab-content-activities'){
 
                 $what_modal = "components.site-activities";
                 return \View::make($what_modal)
                         ->with([
-                            'sam_id' => $sam_id,
+                            'sam_id' => $request->get('sam_id'),
                             'site_name' => "test",
                         ])
                         ->render();
 
             }
-            elseif($component == 'tab-content-files'){
+            elseif($request->get('component') == 'tab-content-files'){
 
                 $what_modal = "components.site-files";
                 return \View::make($what_modal)
                         ->with([
-                            'sam_id' => $sam_id,
+                            'sam_id' => $request->get('sam_id'),
                         ])
                         ->render();
 
             }
-            elseif($component == 'site-modal-site_fields'){
+            elseif($request->get('component') == 'site-modal-site_fields'){
 
                 // $sites = \DB::connection('mysql2')
                 // ->table("site_milestone")
@@ -5287,7 +5282,7 @@ class GlobeController extends Controller
 
                 $programs = \DB::table('site')
                                 ->select('sam_id', 'program_id')
-                                ->where('sam_id', $sam_id)
+                                ->where('sam_id', $request->get('sam_id'))
                                 ->first();
 
                 // if ($programs->program_id == 3) {
@@ -5315,7 +5310,7 @@ class GlobeController extends Controller
                 
                 return \View::make($what_modal)
                         ->with([
-                            'sam_id' => $sam_id,
+                            'sam_id' => $request->get('sam_id'),
                             'program_id' => $programs->program_id,
                             // 'sitefields' => json_decode($sites[0]->site_fields),
                             // 'program_mapping' => $program_mappings,
