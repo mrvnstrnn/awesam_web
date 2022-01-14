@@ -56,7 +56,7 @@ class DataController extends Controller
             }
         
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             if($program_id == 3){

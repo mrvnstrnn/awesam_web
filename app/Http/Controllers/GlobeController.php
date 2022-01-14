@@ -2768,7 +2768,7 @@ class GlobeController extends Controller
             }
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
                 // $sites->whereIn('view_site.sam_region_name', $user_area);
             }
             
@@ -3035,7 +3035,7 @@ class GlobeController extends Controller
             }
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             $sites->get();
@@ -3309,7 +3309,7 @@ class GlobeController extends Controller
             }
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
                 
             $sites->get();
@@ -3446,7 +3446,7 @@ class GlobeController extends Controller
             }
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
             
             $sites->get();
@@ -3462,7 +3462,7 @@ class GlobeController extends Controller
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
                                 if ( $program_id == 1 ) {
                                     $sites->select(
@@ -3650,7 +3650,7 @@ class GlobeController extends Controller
                                 ->whereIn('view_site.activity_id', [32, 33]);
                                 
                 if (\Auth::user()->profile_id != 1) {
-                    $sites->whereIn('view_site.region_id', $user_area);
+                    $sites->whereIn('view_site.sam_region_id', $user_area);
                 }
                 
                 $sites->get();
@@ -3675,7 +3675,7 @@ class GlobeController extends Controller
                     ->where('activity_type', "elas renewal");
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
 
@@ -3694,7 +3694,7 @@ class GlobeController extends Controller
                     ->where('activity_type', "vendor awarding");
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             $sites->leftJoin('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
@@ -3831,7 +3831,7 @@ class GlobeController extends Controller
             $sites = \DB::table("view_site_hunting");
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site_hunting.site_region_id', $user_area);
+                $sites->whereIn('view_site_hunting.site_sam_region_id', $user_area);
             }
 
             $sites->get();
@@ -3855,7 +3855,7 @@ class GlobeController extends Controller
                     ->where('program_id', $program_id);
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_jtss_aepm.region_id', $user_area);
+                $sites->whereIn('view_jtss_aepm.sam_region_id', $user_area);
             }
                     $sites->get();
 
@@ -3905,7 +3905,7 @@ class GlobeController extends Controller
                 // ->whereNot('status', 'rejected')
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             if($program_id == 3){
@@ -4102,7 +4102,7 @@ class GlobeController extends Controller
             }
 
             if (\Auth::user()->profile_id != 1) {
-                $sites->whereIn('view_site.region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             $sites->get();
@@ -4398,27 +4398,7 @@ class GlobeController extends Controller
                     }
 
                     if (\Auth::user()->profile_id != 1) {
-                        $sites
-                        ->select(
-                            "view_site.vendor_acronym", 
-                            "view_site.site_name", 
-                            "view_site.sam_id", 
-                            "view_site.activity_id", 
-                            "view_site.program_id", 
-                            "view_site.site_category", 
-                            "view_site.activity_name", 
-                            "view_site.sam_region_name",
-                            "view_site.site_category",
-                            "view_site.aging",
-                            "view_site.site_address",
-                            "view_site.program_endorsement_date",
-                            "view_site.aging",
-                            "program_newsites.saq_milestone",
-                            "program_newsites.serial_number",
-                            "program_newsites.saq_bucket",
-                            "program_newsites.region",
-                        )
-                        ->whereIn('view_sites_activity.site_region_id', $user_area);
+                        $sites->whereIn('view_sites_activity.site_sam_region_id', $user_area);
                     }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -4538,7 +4518,7 @@ class GlobeController extends Controller
                     }   
 
                     if (\Auth::user()->profile_id != 1) {
-                        $sites->whereIn('view_site.region_id', $user_area);
+                        $sites->whereIn('view_site.sam_region_id', $user_area);
                     }
 
                     $sites->where('profile_id', \Auth::user()->profile_id)
@@ -4706,7 +4686,7 @@ class GlobeController extends Controller
                 }
 
                 if (\Auth::user()->profile_id != 1) {
-                    $sites->whereIn('view_site.region_id', $user_area);
+                    $sites->whereIn('view_site.sam_region_id', $user_area);
                 }
     
 
