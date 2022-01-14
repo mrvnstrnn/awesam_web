@@ -4760,7 +4760,7 @@ class GlobeController extends Controller
     public function sub_activity_view(Request $request)
     {
         // $request->get('sub_activity'), $request->get('sub_activity_id'), $request->get('program_id'), $request->get('site_category'), $request->get('activity_id')
-        if($request->get('sub_activity') == 'SSDS'){
+        if($request->get('active_subactivity') == 'SSDS'){
 
             $jtss_add_site = SubActivityValue::where('sam_id', $request->get('active_sam_id'))
                                                     ->where('type', 'jtss_add_site')
@@ -4769,7 +4769,7 @@ class GlobeController extends Controller
             $what_component = "components.subactivity-ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4781,7 +4781,7 @@ class GlobeController extends Controller
 
         }
 
-        else if($request->get('sub_activity') == 'Set Approved Site'){
+        else if($request->get('active_subactivity') == 'Set Approved Site'){
 
             $jtss_add_site = SubActivityValue::where('sam_id', $request->get('active_sam_id'))
                                                     ->where('type', 'jtss_add_site')
@@ -4790,7 +4790,7 @@ class GlobeController extends Controller
             $what_component = "components.set-approved-site";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4802,13 +4802,13 @@ class GlobeController extends Controller
 
         }
 
-        else if($request->get('sub_activity') == 'Lessor Negotiation' || $request->get('sub_activity') == 'LESSOR ENGAGEMENT' || $request->get('sub_activity') == 'Lessor Engagement' || $request->get('sub_activity') == 'Lessor Renewal Negotiation'){ 
+        else if($request->get('active_subactivity') == 'Lessor Negotiation' || $request->get('active_subactivity') == 'LESSOR ENGAGEMENT' || $request->get('active_subactivity') == 'Lessor Engagement' || $request->get('active_subactivity') == 'Lessor Renewal Negotiation'){ 
             // elseif($request->get('sub_activity') == 'Lessor Negotiation' || $request->get('sub_activity') == 'LESSOR ENGAGEMENT' || $request->get('sub_activity') == 'Lessor Engagement'){
 
             $what_component = "components.subactivity-lessor-engagement";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4819,12 +4819,12 @@ class GlobeController extends Controller
 
         }
 
-        else if($request->get('sub_activity') == 'Commercial Negotiation'){
+        else if($request->get('active_subactivity') == 'Commercial Negotiation'){
 
             $what_component = "components.renewal-commercial-negotiation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4835,12 +4835,12 @@ class GlobeController extends Controller
 
         }
 
-        elseif($request->get('sub_activity') == 'Set Site Category'){
+        elseif($request->get('active_subactivity') == 'Set Site Category'){
 
             $what_component = "components.set-site-category";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4850,12 +4850,12 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Schedule Advanced Site Hunting'){
+        elseif($request->get('active_subactivity') == 'Schedule Advanced Site Hunting'){
 
             $what_component = "components.schedule-advance-site-hunting";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4865,7 +4865,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Set Survey Representatives'){
+        elseif($request->get('active_subactivity') == 'Set Survey Representatives'){
 
             $datas = SubActivityValue::where('sam_id', $request->get('active_sam_id'))
                                         ->where('type', 'jtss_representative')
@@ -4878,7 +4878,7 @@ class GlobeController extends Controller
             $what_component = "components.set-survey-representatives";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4890,7 +4890,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Add Site Candidates'){
+        elseif($request->get('active_subactivity') == 'Add Site Candidates'){
 
             $jtss_add_site = SubActivityValue::where('sam_id', $request->get('active_sam_id'))
                                                     ->where('type', 'jtss_add_site')
@@ -4903,7 +4903,7 @@ class GlobeController extends Controller
             $what_component = "components.add-site-prospects";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4919,7 +4919,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'JTSS Sched Confirmation'){
+        elseif($request->get('active_subactivity') == 'JTSS Sched Confirmation'){
 
             $np = \DB::table('site')
                 ->where('sam_id', $request->get('active_sam_id'))
@@ -4930,7 +4930,7 @@ class GlobeController extends Controller
             $what_component = "components.jtss-sched-confirmation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4940,7 +4940,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Site Survey Deliberation Sheet'){
+        elseif($request->get('active_subactivity') == 'Site Survey Deliberation Sheet'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('active_sam_id'))
@@ -4953,7 +4953,7 @@ class GlobeController extends Controller
             $what_component = "components.ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4964,7 +4964,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'SSDS Ranking'){
+        elseif($request->get('active_subactivity') == 'SSDS Ranking'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('active_sam_id'))
@@ -4977,7 +4977,7 @@ class GlobeController extends Controller
             $what_component = "components.ssds-ranking";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -4989,7 +4989,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Approved SSDS'){
+        elseif($request->get('active_subactivity') == 'Approved SSDS'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('active_sam_id'))
@@ -5002,7 +5002,7 @@ class GlobeController extends Controller
             $what_component = "components.approved-ssds";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5013,7 +5013,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'SSDS NTP'){
+        elseif($request->get('active_subactivity') == 'SSDS NTP'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('active_sam_id'))
@@ -5026,7 +5026,7 @@ class GlobeController extends Controller
             $what_component = "components.ssds-ntp";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5037,7 +5037,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Lease Details'){
+        elseif($request->get('active_subactivity') == 'Lease Details'){
 
             $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
                                         ->where('sam_id', $request->get('active_sam_id'))
@@ -5050,7 +5050,7 @@ class GlobeController extends Controller
             $what_component = "components.lease-details";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5060,7 +5060,7 @@ class GlobeController extends Controller
             ])
             ->render();
         }
-        elseif($request->get('sub_activity') == 'Create LOI to Renew'){
+        elseif($request->get('active_subactivity') == 'Create LOI to Renew'){
 
             $program_renewal = \DB::table('program_renewal')
                                 ->select('site_address', 'lessor', 'expiration')
@@ -5070,7 +5070,7 @@ class GlobeController extends Controller
             $what_component = "components.loi-maker";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5081,12 +5081,12 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Savings Computation'){
+        elseif($request->get('active_subactivity') == 'Savings Computation'){
 
             $what_component = "components.savings-computation";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5096,12 +5096,12 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Create Lease Renewal Notice'){
+        elseif($request->get('active_subactivity') == 'Create Lease Renewal Notice'){
 
             $what_component = "components.lease-renewal-notice";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5111,12 +5111,12 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Schedule of Rental Payment'){
+        elseif($request->get('active_subactivity') == 'Schedule of Rental Payment'){
 
             $what_component = "components.renewal-schedule-of-rental-payment";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -5126,9 +5126,9 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('sub_activity') == 'Get Send Approved LOI' || $request->get('sub_activity') == 'Get Send Approved LRN'){
+        elseif($request->get('active_subactivity') == 'Get Send Approved LOI' || $request->get('sub_activity') == 'Get Send Approved LRN'){
 
-            if ($request->get('sub_activity') == 'Get Send Approved LOI') {
+            if ($request->get('active_subactivity') == 'Get Send Approved LOI') {
                 $what_component = "components.get-send-approved-loi";
 
                 $files = SubActivityValue::select('value')
@@ -5136,7 +5136,7 @@ class GlobeController extends Controller
                                 ->where('sam_id', $request->get('active_sam_id'))
                                 ->first();
 
-            } else if ($request->get('sub_activity') == 'Get Send Approved LRN') {
+            } else if ($request->get('active_subactivity') == 'Get Send Approved LRN') {
                 $what_component = "components.get-send-approved-lrn";
 
                 $files = SubActivityValue::select('value')
