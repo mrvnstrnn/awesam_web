@@ -5126,7 +5126,7 @@ class GlobeController extends Controller
             ->render();
 
         }
-        elseif($request->get('active_subactivity') == 'Get Send Approved LOI' || $request->get('sub_activity') == 'Get Send Approved LRN'){
+        elseif($request->get('active_subactivity') == 'Get Send Approved LOI' || $request->get('active_subactivity') == 'Get Send Approved LRN'){
 
             if ($request->get('active_subactivity') == 'Get Send Approved LOI') {
                 $what_component = "components.get-send-approved-loi";
@@ -5146,7 +5146,7 @@ class GlobeController extends Controller
             }
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
