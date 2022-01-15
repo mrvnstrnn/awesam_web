@@ -4583,9 +4583,9 @@ class GlobeController extends Controller
                                                 ->get()
                                                 ->pluck('user_id');
 
-                    $site_user_samid = \DB::table("site_users")
+                    $site_user_samid = \DB::table("user_details")
                                             ->select('sam_id')
-                                            ->leftJoin('user_details', 'user_details.user_id', 'site_users.agent_id')
+                                            ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
                                             ->whereIn('user_details.IS_id', $supervisors_agents_id)
                                             ->get()
                                             ->pluck('sam_id');
@@ -4598,24 +4598,24 @@ class GlobeController extends Controller
 
                     $activity_id = 6;
                 } else {
-                    // $supervisors_agents_id = UserDetail::select('user_id')
-                    //                         ->where('vendor_id', $vendor)
-                    //                         ->where('IS_id', \Auth::id())
-                    //                         ->get()
-                    //                         ->pluck('user_id');
-
-                    // $site_user_samid = \DB::table("site_users")
-                    //                         ->select('sam_id')
-                    //                         ->whereIn('agent_id', $supervisors_agents_id)
-                    //                         ->get()
-                    //                         ->pluck('sam_id');
+                    $supervisors_agents_id = UserDetail::select('user_id')
+                                            ->where('vendor_id', $vendor)
+                                            ->where('IS_id', \Auth::id())
+                                            ->get()
+                                            ->pluck('user_id');
 
                     $site_user_samid = \DB::table("site_users")
                                             ->select('sam_id')
-                                            ->leftJoin('user_details', 'user_details.user_id', 'site_users.agent_id')
-                                            ->where('user_details.IS_id', \Auth::id())
+                                            ->whereIn('agent_id', $supervisors_agents_id)
                                             ->get()
                                             ->pluck('sam_id');
+
+                    // $site_user_samid = \DB::table("user_details")
+                    //                         ->select('sam_id')
+                    //                         ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
+                    //                         ->where('user_details.IS_id', \Auth::id())
+                    //                         ->get()
+                    //                         ->pluck('sam_id');
 
                     if ( $program_id == 3 ) {
                         $activity_id = 7;
@@ -4623,7 +4623,7 @@ class GlobeController extends Controller
                         $activity_id = 6;
                     }
                 }
-                
+                dd($site_user_samid);
                 if ( $program_id == 3 ) {
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
