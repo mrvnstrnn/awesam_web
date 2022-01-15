@@ -4575,7 +4575,10 @@ class GlobeController extends Controller
 
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
-            $sites = \DB::table("view_site");
+            $sites = \DB::table("view_site")
+                    ->leftJoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
+                    ->where('view_site.vendor_id', $vendor)
+                    ->whereNull('site_users.sam_id');
                 
                 if (\Auth::user()->profile_id == 1) {
                     $supervisors_agents_id = UserDetail::select('user_id')
@@ -4598,24 +4601,31 @@ class GlobeController extends Controller
 
                     $activity_id = 6;
                 } else {
-                    $supervisors_agents_id = UserDetail::select('user_id')
-                                            ->where('vendor_id', $vendor)
-                                            ->where('IS_id', \Auth::id())
-                                            ->get()
-                                            ->pluck('user_id');
+                    // $supervisors_agents_id = UserDetail::select('user_id')
+                    //                         ->where('vendor_id', $vendor)
+                    //                         ->where('IS_id', \Auth::id())
+                    //                         ->get()
+                    //                         ->pluck('user_id');
 
-                    $site_user_samid = \DB::table("site_users")
-                                            ->select('sam_id')
-                                            ->whereIn('agent_id', $supervisors_agents_id)
-                                            ->get()
-                                            ->pluck('sam_id');
-
-                    // $site_user_samid = \DB::table("user_details")
+                    // $site_user_samid = \DB::table("site_users")
                     //                         ->select('sam_id')
-                    //                         ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
-                    //                         ->where('user_details.IS_id', \Auth::id())
+                    //                         ->whereIn('agent_id', $supervisors_agents_id)
                     //                         ->get()
                     //                         ->pluck('sam_id');
+
+                    // select view_site.* from view_site 
+                    //     left join site_users 
+                    //     on site_users.sam_id = view_site.sam_id
+                    // where 
+                    //     view_site.program_id = 3 
+                    //     and view_site.vendor_id = 86 
+                    //     and site_users.sam_id is null
+
+                    // $site_user_samid = \DB::table("view_site")
+                    //                         ->leftJoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
+                    //                         ->where('view_site.program_id', 3)
+                    //                         ->where('view_site.vendor_id', $vendor)
+                    //                         ->whereNull('view_site.site_users')
 
                     if ( $program_id == 3 ) {
                         $activity_id = 7;
@@ -4623,7 +4633,7 @@ class GlobeController extends Controller
                         $activity_id = 6;
                     }
                 }
-                
+
                 if ( $program_id == 3 ) {
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
@@ -4651,8 +4661,8 @@ class GlobeController extends Controller
                             "program_coloc.gt_saq_milestone",  
                             "program_coloc.gt_saq_milestone_category"
                         )
-                        ->where('activity_id', '>=', $activity_id)
-                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                        ->where('activity_id', '>=', $activity_id);
+                        // ->whereNotIn('view_site.sam_id', $site_user_samid);
                         // dd($sites->get());
                 } else if($program_id == 4){
                     $sites->leftJoin('program_ibs', 'program_ibs.sam_id', 'view_site.sam_id')
