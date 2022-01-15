@@ -1042,28 +1042,47 @@ class GlobeController extends Controller
 
         try {
             $checkAgent = \DB::table('users')
-                                    ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province', 'user_details.image')
-                                    ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                    ->join('users_areas', 'users_areas.user_id', 'users.id')
-                                    ->where('user_details.IS_id', \Auth::user()->id)
-                                    ->where('user_programs.program_id', $request->program_id)
-                                    ->get();
-
+                            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province', 'user_details.image', 'location_sam_regions.sam_region_name')
+                            ->join('user_details', 'user_details.user_id', 'users.id')
+                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                            ->join('users_areas', 'users_areas.user_id', 'users.id')
+                            ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
+                            ->where('user_details.IS_id', \Auth::user()->id)
+                            ->where('user_programs.program_id', $request->program_id)
+                            ->get()
+                            ->groupBy('users.id');
 
             $dt = DataTables::of($checkAgent)
+                    ->addColumn('firstname', function($row){
+                        return $row[0]->firstname;
+                    })
+                    ->addColumn('lastname', function($row){
+                        return $row[0]->lastname;
+                    })
+                    ->addColumn('email', function($row){
+                        return $row[0]->email;
+                    })
                     ->addColumn('photo', function($row){
-                        if (is_null($row->image)) {
+                        if (is_null($row[0]->image)) {
                             return '<img width="42" height="42" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">';
                         } else {
-                            return '<img width="42" height="42" class="rounded-circle border border-dark" src="'.asset('files/'.$row->image).'" alt="">';
+                            return '<img width="42" height="42" class="rounded-circle border border-dark" src="'.asset('files/'.$row[0]->image).'" alt="">';
                         }
                     })
                     ->addColumn('areas', function($row){
-                        return $row->region. " | " .$row->province;
-                    });
+                        $collect_areas = collect();
+                        foreach ($row as $areas) {
+                            $collect_areas->push($areas->sam_region_name);
+                        }
+                        return $collect_areas->all();
+                    })
+                    ->addColumn('action', function($row){
+                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row[0]->id.'" title="Update" type="button">Update</button>';
 
-            $dt->rawColumns(['photo']);
+                        return $btn;
+                    });;
+
+            $dt->rawColumns(['photo', 'action']);
             return $dt->make(true);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -1306,11 +1325,8 @@ class GlobeController extends Controller
         try {
             $is_location = \DB::table('user_details')
                                 ->join('users_areas', 'users_areas.user_id', 'user_details.IS_id')
-                                // ->where('user_details.user_id', \Auth::user()->id)
                                 ->where('user_details.IS_id', \Auth::user()->id)
                                 ->first();
-
-                                // dd($is_location);
 
             if(!is_null($is_location)){
                 $region = \DB::table('location_regions')
@@ -1326,6 +1342,47 @@ class GlobeController extends Controller
                                 ->get();
             }
             return response()->json(['error' => false, 'message' => $region]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_sam_region()
+    {
+        try {
+            $user_detail = \DB::table('user_details')
+                                ->select('vendor_id')
+                                ->where('user_id', \Auth::user()->id)
+                                ->first();
+
+                                
+            $user_programs = \DB::table('user_programs')
+                                ->select('program_id')
+                                ->where('user_id', \Auth::user()->id)
+                                ->get()
+                                ->pluck('program_id');
+
+            if( count($user_programs) > 0){
+                $sites = \DB::table('view_site')
+                            ->select('sam_region_id')
+                            ->where('vendor_id', $user_detail->vendor_id)
+                            ->whereIn('program_id', $user_programs)
+                            ->get()
+                            ->groupBy('sam_region_id');
+
+                if( !is_null($sites) ){
+                    $location_sam_regions = \DB::table('location_sam_regions')
+                                ->whereIn('sam_region_id', $sites->keys())
+                                ->get();
+
+                    return response()->json(['error' => false, 'message' => $location_sam_regions]);
+                } else {
+                    return response()->json(['error' => true, 'message' => "No region found."]);
+                }
+            } else {
+                return response()->json(['error' => true, 'message' => "No user program found."]);
+            }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -1352,44 +1409,32 @@ class GlobeController extends Controller
     public function assign_agent_site(Request $request)
     {
         try {
-            $provinces = collect();
-            $lgus = collect();
-
             $validate = Validator::make($request->all(), array(
                 'region' => 'required',
-                'province' => 'required'
+                // 'province' => 'required'
             ));
 
             if (!$validate->passes()) {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             } else {
-                $region = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('region')));
-    
-                $province = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('province')));
-    
-                $lgus = preg_replace("/[\[\]']+/m", "", preg_replace('/(?:\[[^][]*])(*SKIP)(*F)|[^][(){}]+/m', '', $request->input('lgu')));
-    
-    
-                $lgu_validator = in_array('all', $province) ? '' : 'required';
-                $lgu = in_array('all', $province) ? ['all'] : $lgus;
-    
-                $validate = Validator::make($request->all(), array(
-                    'region' => 'required',
-                    'province' => 'required',
-                    'lgu' => $lgu_validator
-                ));
-    
-                if($validate->passes()){
-                    UsersArea::create([
-                        'user_id' => $request->input('user_id'),
-                        'region' => $region,
-                        'province' => in_array('all', $province) ? '%' : implode(", ", $province),
-                        'lgu' => in_array('all', $lgu) ? '%' : implode(", ", $lgu),
-                    ]);
-                    return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
-                } else {
-                    return response()->json(['error' => true, 'message' => $validate->errors() ]);
+
+                for ($i=0; $i < count($request->get('region')); $i++) {
+                    $user_check = UsersArea::where('user_id', $request->get('user_id'))
+                                    ->where('region', $request->get('region')[$i])
+                                    ->first();
+
+                    if ( is_null($user_check) ) {
+                        UsersArea::create([
+                            'user_id' => $request->input('user_id'),
+                            'region' => $request->get('region')[$i],
+                            'province' => '%',
+                            'lgu' => '%',
+                        ]);
+                    } else {
+                        return response()->json(['error' => true, 'message' => "Agent already assigned."]);
+                    }
                 }
+                return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
             }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);

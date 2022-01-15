@@ -229,8 +229,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/assign-supervisor', [GlobeController::class, 'assign_supervisor'])->name('assign.supervisor');
 
     Route::get('/get-region', [GlobeController::class, 'get_region'])->name('get.region');
+    Route::post('/get-sam-region', [GlobeController::class, 'get_sam_region']);
 
-    Route::get('/get-location/{location_id}/{location_type}', [GlobeController::class, 'get_location'])->name('get.location');
+    // Route::get('/get-location/{location_id}/{location_type}', [GlobeController::class, 'get_location'])->name('get.location');
 
     Route::post('/assign-agent-site', [GlobeController::class, 'assign_agent_site'])->name('assign.agent_site');
 

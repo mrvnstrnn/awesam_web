@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-card mb-3 card">
-                        <div class="card-header-tab card-header">
+                        <div class="card-header-tab card-header" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                             <div class="card-header-title font-size-lg text-capitalize font-weight-normal d-flex justify-content-between">
                                 <i class="header-icon {{$table_list[array_keys($table_list)[$i]]}} icon-gradient bg-ripe-malin"></i>
                                 {{ ucfirst(array_keys($table_list)[$i]) }} Requests 

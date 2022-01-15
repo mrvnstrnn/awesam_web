@@ -55,6 +55,7 @@ $(document).ready(() => {
                 { data: "lastname" },
                 { data: "email" },
                 { data: "areas" },
+                { data: "action" },
             ],
         });
 
@@ -234,7 +235,6 @@ $(document).ready(() => {
                     { data: "firstname" },
                     { data: "lastname" },
                     { data: "email" },
-                    // { data: "areas" },
                 ],
             });
         }
@@ -242,55 +242,29 @@ $(document).ready(() => {
 
     $('.assign-agent-site-table').on('click', 'tr td:not(:first-child)', function (e) {
         e.preventDefault();
-        $(".lgu_check div").remove();
-        $(".province_check div").remove();
+        // $(".lgu_check div").remove();
+        // $(".province_check div").remove();
         $(".assign-agent-div select#region option").remove();
         $("#user_id").val($(this).parent().attr('data-id'));
         $("#assign-agent-site-btn").attr("data-program", $(this).parent().attr('data-program'));
         $.ajax({
-            url: "/get-region",
-            method: "GET",
+            url: "/get-sam-region",
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function(resp){
                 if(!resp.error){
                     $("#assign-agent-site-modal").modal("show");
-                    $(".assign-agent-div select#region").append(
-                        '<option value="">Please select region</option>'
-                    );
-                    resp.message.forEach(element => {
-                        $(".assign-agent-div select#region").append(
-                            '<option value="['+ element.region_name +']'+element.region_id+'"> ' + element.region_name +
-                            '</option>'
-                        );
-                    });
-                } else {
-                    toastr.error(resp.message, 'Error');
-                }
-            },
-            error: function(resp){
-                toastr.error(resp.message, 'Error');
-            }
-        });
-    });
 
-    $("select#region").on("change", function(e){
-        e.preventDefault();
-        var val = $(this).val();
-        var location_type = $(this).attr("data-location-type");
-        $(".province_check div").remove();
-        $.ajax({
-            url: "/get-location/"+val.replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
-            method: "GET",
-            success: function(resp){
-                if(!resp.error){
-                    $(".province_check").append(
-                        '<div class="col-4"><input name="province[]" id="provinceAll" type="checkbox" class="provinceInput" value="[all]" ><label style="margin-left: 20px;" for="provinceAll">All </label></div>'
-                    );
+                    $(".assign-agent-div #region_div div").remove();
+
                     resp.message.forEach(element => {
-                        $(".province_check").append(
+                        $(".assign-agent-div #region_div").append(
                             '<div class="col-4">'+
-                                '<input name="province[]" data-location-type="province" class="provinceInput" id="province'+element.province_id+'" type="checkbox" class="" value="['+element.province_name+']'+element.province_id+'" >' + 
-                                '<label style="margin-left: 20px;" for="province'+element.province_id+'">' + element.province_name+'</label>' +
-                                '</div>'
+                            '<input name="region[]" class="regionInput" id="region'+element.sam_region_id+'" type="checkbox" class="" value="'+element.sam_region_id+'" >' + 
+                            '<label style="margin-left: 20px;" for="region'+element.sam_region_name+'">' + element.sam_region_name+'</label>' +
+                            '</div>'
                         );
                     });
                 } else {
@@ -303,82 +277,113 @@ $(document).ready(() => {
         });
     });
 
-    $(document).on("change", ".provinceInput", function(e){
-        e.preventDefault();
+    // $("select#region").on("change", function(e){
+    //     e.preventDefault();
+    //     var val = $(this).val();
+    //     var location_type = $(this).attr("data-location-type");
+    //     $(".province_check div").remove();
+    //     $.ajax({
+    //         url: "/get-location/"+val.replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
+    //         method: "GET",
+    //         success: function(resp){
+    //             if(!resp.error){
+    //                 $(".province_check").append(
+    //                     '<div class="col-4"><input name="province[]" id="provinceAll" type="checkbox" class="provinceInput" value="[all]" ><label style="margin-left: 20px;" for="provinceAll">All </label></div>'
+    //                 );
+    //                 resp.message.forEach(element => {
+    //                     $(".province_check").append(
+    //                         '<div class="col-4">'+
+    //                             '<input name="province[]" data-location-type="province" class="provinceInput" id="province'+element.province_id+'" type="checkbox" class="" value="['+element.province_name+']'+element.province_id+'" >' + 
+    //                             '<label style="margin-left: 20px;" for="province'+element.province_id+'">' + element.province_name+'</label>' +
+    //                             '</div>'
+    //                     );
+    //                 });
+    //             } else {
+    //                 toastr.error(resp.message, 'Error');
+    //             }
+    //         },
+    //         error: function(resp){
+    //             toastr.error(resp.message, 'Error');
+    //         }
+    //     });
+    // });
 
-        var val = $(this).val();
-        var checkedProvinces = [];
-        var location_type = $(this).attr("data-location-type");
-        $(".lgu_check div").remove();
+    // $(document).on("change", ".provinceInput", function(e){
+    //     e.preventDefault();
 
-        if(this.checked) {
-            if(val != "[all]") {
-                $.each($(".provinceInput:checked"), function(){
-                    if($(this).val() != "[all]"){
-                        checkedProvinces.push($(this).val());
-                    }
-                });
+    //     var val = $(this).val();
+    //     var checkedProvinces = [];
+    //     var location_type = $(this).attr("data-location-type");
+    //     $(".lgu_check div").remove();
 
-                getLocation(checkedProvinces, location_type);
+    //     if(this.checked) {
+    //         if(val != "[all]") {
+    //             $.each($(".provinceInput:checked"), function(){
+    //                 if($(this).val() != "[all]"){
+    //                     checkedProvinces.push($(this).val());
+    //                 }
+    //             });
+
+    //             getLocation(checkedProvinces, location_type);
                 
-            } else {
-                $('.provinceInput:checkbox').each(function() {
-                    this.checked = true;                        
-                });
-            }
-        } else {
-            if($('#provinceAll:checkbox:checked').length < 1){
-                $('.provinceInput:checkbox').each(function() {
-                    this.checked = false;                        
-                });
-                $(".lgu_check div").remove();
+    //         } else {
+    //             $('.provinceInput:checkbox').each(function() {
+    //                 this.checked = true;                        
+    //             });
+    //         }
+    //     } else {
+    //         if($('#provinceAll:checkbox:checked').length < 1){
+    //             $('.provinceInput:checkbox').each(function() {
+    //                 this.checked = false;                        
+    //             });
+    //             $(".lgu_check div").remove();
                 
-                $.each($(".provinceInput:checked"), function(){
-                    if($(this).val() != "[all]"){
-                        checkedProvinces.push($(this).val());
-                    }
-                });
+    //             $.each($(".provinceInput:checked"), function(){
+    //                 if($(this).val() != "[all]"){
+    //                     checkedProvinces.push($(this).val());
+    //                 }
+    //             });
 
-                getLocation(checkedProvinces, location_type);
-            }
+    //             getLocation(checkedProvinces, location_type);
+    //         }
 
-            if ($('.provinceInput:checkbox').length != $('.provinceInput:checkbox:checked').length){
-                $('#provinceAll:checkbox').each(function() {
-                    this.checked = false;                        
-                });
-            }
-        }
-    });
+    //         if ($('.provinceInput:checkbox').length != $('.provinceInput:checkbox:checked').length){
+    //             $('#provinceAll:checkbox').each(function() {
+    //                 this.checked = false;                        
+    //             });
+    //         }
+    //     }
+    // });
 
-    function getLocation(checkedProvinces, location_type){
-        for (let i = 0; i < checkedProvinces.length; i++) {
-            $.ajax({
-                url: "/get-location/"+checkedProvinces[i].replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
-                method: "GET",
-                success: function(resp){
-                    if(!resp.error){
-                        $(".lgu_check").append(
-                            '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label style="margin-left:20px;" for="lguAll">All</label></div>'
-                        );
-                        resp.message.forEach(element => {
-                            $(".lgu_check").append(
-                                '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label style="margin-left:20px;" for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
-                            );
-                        });
+    // function getLocation(checkedProvinces, location_type){
+    //     for (let i = 0; i < checkedProvinces.length; i++) {
+    //         $.ajax({
+    //             url: "/get-location/"+checkedProvinces[i].replace(/ *\[[^)]*\] */g, "")+"/"+location_type,
+    //             method: "GET",
+    //             success: function(resp){
+    //                 if(!resp.error){
+    //                     $(".lgu_check").append(
+    //                         '<div class="col-4"><input name="lgu[]" id="lguAll" class="lgu" type="checkbox" value="[all]" ><label style="margin-left:20px;" for="lguAll">All</label></div>'
+    //                     );
+    //                     resp.message.forEach(element => {
+    //                         $(".lgu_check").append(
+    //                             '<div class="col-4"><input name="lgu[]" class="lgu" id="lgu'+element.lgu_id+'" type="checkbox" class="mr-1" value="['+element.lgu_name+']'+element.lgu_id+'" ><label style="margin-left:20px;" for="lgu'+element.lgu_id+'"> '+element.lgu_name+'</label></div>'
+    //                         );
+    //                     });
 
-                        $(".lgu_check").append(
-                            '<div class="col-12"><hr></div>'
-                        );
-                    } else {
-                        toastr.error(resp.message, 'Error');
-                    }
-                },
-                error: function(resp){
-                    toastr.error(resp.message, 'Error');
-                }
-            });
-        }
-    }
+    //                     $(".lgu_check").append(
+    //                         '<div class="col-12"><hr></div>'
+    //                     );
+    //                 } else {
+    //                     toastr.error(resp.message, 'Error');
+    //                 }
+    //             },
+    //             error: function(resp){
+    //                 toastr.error(resp.message, 'Error');
+    //             }
+    //         });
+    //     }
+    // }
 
     $(document).on('click', "#assign-agent-site-btn", function(e){
         $(this).text("Assigning...");
@@ -388,7 +393,7 @@ $(document).ready(() => {
         $("#assign-agent-site-form small").text("");
 
         $.ajax({
-            url: $(this).attr('data-href'),
+            url: '/assign-agent-site',
             method: "POST",
             data: $("#assign-agent-site-form").serialize(),
             headers: {
@@ -397,8 +402,6 @@ $(document).ready(() => {
             success: function(resp){
                 if(!resp.error){
                     $("#newagent-"+data_program+"-table").DataTable().ajax.reload(function(){
-                        $(".lgu_check div").remove();
-                        $(".province_check div").remove();
                         $(".assign-agent-div select#region option").remove();
                         $("#assign-agent-site-form")[0].reset();
                         $("#assign-agent-site-modal").modal("hide");
@@ -411,19 +414,17 @@ $(document).ready(() => {
                         $.each(resp.message, function(index, data) {
                             $("#" + index + "-error").text(data);
                         });
-                        $("#assign-agent-site-btn").text("Assign agent");
-                        $("#assign-agent-site-btn").removeAttr("disabled");
                     } else {
                         toastr.error(resp.message, 'Error');
-                        $("#assign-agent-site-btn").text("Assign agent");
-                        $("#assign-agent-site-btn").removeAttr("disabled");
                     }
+                    $("#assign-agent-site-btn").text("Assign agent");
+                    $("#assign-agent-site-btn").removeAttr("disabled");
                 }
             },
             error: function(resp){
                 $("#assign-agent-site-btn").text("Assign agent");
                 $("#assign-agent-site-btn").removeAttr("disabled");
-                toastr.error(resp.message, 'Error');
+                toastr.error(resp, 'Error');
             }
         });
     });

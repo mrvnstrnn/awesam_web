@@ -34,12 +34,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
-                            <div class="card-header-tab card-header">
+                            {{-- <div class="card-header-tab card-header">
                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
                                 {{ strtoupper($program->program)  }} Agents
                                 </div>      
-                            </div>
+                            </div> --}}
+                            
+                            <div class="card-header py-3 bg-warning border-bottom" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+                                <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
+                                {{ strtoupper($program->program)  }} Agents
+                            </div> 
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="agent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('all.agent', $program->program_id) }}" data-program_id="{{$program->program_id}}">
@@ -50,6 +55,7 @@
                                                 <th>Lastname</th>
                                                 <th>Email</th>
                                                 <th>Areas</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -27,15 +27,14 @@
             // dd($user_detail->IS_id);
         @endphp
 
-<input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
-
-        @foreach ($programs as $program)
-            <li class="nav-item">
-                <a role="tab" class="nav-link newagent {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
-                    <span>{{ $program->program }}</span>
-                </a>
-            </li>
-        @endforeach
+    <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
+    @foreach ($programs as $program)
+        <li class="nav-item">
+            <a role="tab" class="nav-link newagent {{ $loop->first ? 'active' : '' }}" id="tab-{{ $program->program_id  }}" data-toggle="tab" href="#tab-content-{{ $program->program_id  }}" data-program="{{ strtolower(str_replace(" ", "-", $program->program))  }}">
+                <span>{{ $program->program }}</span>
+            </a>
+        </li>
+    @endforeach
     </ul>
     <div class="tab-content">
         @foreach ($programs as $program)
@@ -43,12 +42,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="main-card mb-3 card">
-                            <div class="card-header-tab card-header">
-                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <div class="card-header py-3 bg-warning border-bottom" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
                                 <i class="header-icon lnr-layers icon-gradient bg-ripe-malin"></i>
-                                {{ strtoupper($program->program)  }} New Agents
-                                </div>      
-                            </div>
+                                {{ strtoupper($program->program)  }} New Agents without Areas
+                            </div> 
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="newagent-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover assign-agent-site-table" data-href="{{ route('all.newagent', $program->program_id) }}" data-page="new-agent">
@@ -58,7 +55,6 @@
                                                 <th>Firstname</th>
                                                 <th>Lastname</th>
                                                 <th>Email</th>
-                                                {{-- <th>Areas</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -97,25 +93,10 @@
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <label for="region">Region</label>
-                                <select name="region" id="region" class="form-control" data-location-type="region"><select>
+                                {{-- <select name="region" id="region" class="form-control"><select> --}}
+                                <div class="row" id="region_div"></div>
                             </div>
                             <small class="text-danger" id="region-error"></small>
-                        </div>
-                        <div class="divider"></div>
-
-                        <div class="form-row">
-                            <div class="form-group col-12">
-                                <label for="province">Province</label>
-                                <div class="form-row province_check"></div>
-                            </div>
-                            <small class="text-danger" id="province-error"></small>
-                        </div>
-                        <div class="divider"></div>
-
-                        <div class="form-group">
-                            <label for="lgu">LGU</label>
-                            <div class="form-row lgu_check"></div>
-                            <small class="text-danger" id="lgu-error"></small>
                         </div>
                     </div>
                 </form>
