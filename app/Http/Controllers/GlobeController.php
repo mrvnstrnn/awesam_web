@@ -4583,9 +4583,9 @@ class GlobeController extends Controller
                                                 ->get()
                                                 ->pluck('user_id');
 
-                    $site_user_samid = \DB::table("user_details")
+                    $site_user_samid = \DB::table("site_users")
                                             ->select('sam_id')
-                                            ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
+                                            ->leftJoin('user_details', 'user_details.user_id', 'site_users.agent_id')
                                             ->whereIn('user_details.IS_id', $supervisors_agents_id)
                                             ->get()
                                             ->pluck('sam_id');
@@ -4612,7 +4612,7 @@ class GlobeController extends Controller
 
                     $site_user_samid = \DB::table("site_users")
                                             ->select('sam_id')
-                                            ->leftJoin('user_details', 'site_users.agent_id', 'user_details.user_id')
+                                            ->leftJoin('user_details', 'user_details.user_id', 'site_users.agent_id')
                                             ->where('user_details.IS_id', \Auth::id())
                                             ->get()
                                             ->pluck('sam_id');
