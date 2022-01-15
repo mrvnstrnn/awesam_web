@@ -4581,52 +4581,8 @@ class GlobeController extends Controller
                     ->whereNull('site_users.sam_id');
                 
                 if (\Auth::user()->profile_id == 1) {
-                    $supervisors_agents_id = UserDetail::select('user_id')
-                                                ->where('vendor_id', $vendor)
-                                                ->get()
-                                                ->pluck('user_id');
-
-                    $site_user_samid = \DB::table("user_details")
-                                            ->select('sam_id')
-                                            ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
-                                            ->whereIn('user_details.IS_id', $supervisors_agents_id)
-                                            ->get()
-                                            ->pluck('sam_id');
-
-                    // $site_user_samid = \DB::table("site_users")
-                    //                 ->select('sam_id')
-                    //                 ->whereIn('agent_id', $supervisors_agents_id)
-                    //                 ->get()
-                    //                 ->pluck('sam_id');
-
                     $activity_id = 6;
                 } else {
-                    // $supervisors_agents_id = UserDetail::select('user_id')
-                    //                         ->where('vendor_id', $vendor)
-                    //                         ->where('IS_id', \Auth::id())
-                    //                         ->get()
-                    //                         ->pluck('user_id');
-
-                    // $site_user_samid = \DB::table("site_users")
-                    //                         ->select('sam_id')
-                    //                         ->whereIn('agent_id', $supervisors_agents_id)
-                    //                         ->get()
-                    //                         ->pluck('sam_id');
-
-                    // select view_site.* from view_site 
-                    //     left join site_users 
-                    //     on site_users.sam_id = view_site.sam_id
-                    // where 
-                    //     view_site.program_id = 3 
-                    //     and view_site.vendor_id = 86 
-                    //     and site_users.sam_id is null
-
-                    // $site_user_samid = \DB::table("view_site")
-                    //                         ->leftJoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
-                    //                         ->where('view_site.program_id', 3)
-                    //                         ->where('view_site.vendor_id', $vendor)
-                    //                         ->whereNull('view_site.site_users')
-
                     if ( $program_id == 3 ) {
                         $activity_id = 7;
                     } else {
@@ -4689,9 +4645,7 @@ class GlobeController extends Controller
                             "program_ibs.saq_milestone",
                             "program_ibs.sub_saq_milestone",
                         )
-                        ->where('activity_id', '>=', 6)
-                        // ->where('view_site.vendor_id', $vendor)
-                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                        ->where('activity_id', '>=', 6);
                 } else if($program_id == 2){
                     $sites->leftJoin('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
                         ->select(
@@ -4717,9 +4671,7 @@ class GlobeController extends Controller
                             "program_ftth.odn_vendor",
                             "program_ftth.region"
                         )
-                        ->where('activity_id', '>=', 5)
-                        // ->where('view_site.vendor_id', $vendor)
-                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                        ->where('activity_id', '>=', 5);
                 } else if($program_id == 1){
                     $sites->leftJoin('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
                         ->select(
@@ -4741,9 +4693,7 @@ class GlobeController extends Controller
                             "program_newsites.saq_bucket",
                             "program_newsites.region",
                         )
-                        ->where('activity_id', '>=', 7)
-                        // ->where('view_site.vendor_id', $vendor)
-                        ->whereNotIn('view_site.sam_id', $site_user_samid);
+                        ->where('activity_id', '>=', 7);
                 }
 
                 if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
