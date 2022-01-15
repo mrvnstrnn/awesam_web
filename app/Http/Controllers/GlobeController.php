@@ -1430,8 +1430,6 @@ class GlobeController extends Controller
                             'province' => '%',
                             'lgu' => '%',
                         ]);
-                    } else {
-                        return response()->json(['error' => true, 'message' => "Agent already assigned."]);
                     }
                 }
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
@@ -3194,7 +3192,7 @@ class GlobeController extends Controller
 
             if (\Auth::user()->profile_id != 1) {
                 // $sites->whereIn('view_vendor_assigned_sites.sam_region_name', $user_area);
-                $sites->whereIn('view_vendor_assigned_sites.region_id', $user_area);
+                $sites->whereIn('view_vendor_assigned_sites.sam_region_id', $user_area);
             }
 
             $sites->get();
@@ -4585,23 +4583,37 @@ class GlobeController extends Controller
                                                 ->get()
                                                 ->pluck('user_id');
 
-                    $site_user_samid = \DB::table("site_users")
-                                    ->select('sam_id')
-                                    ->whereIn('agent_id', $supervisors_agents_id)
-                                    ->get()
-                                    ->pluck('sam_id');
+                    $site_user_samid = \DB::table("user_details")
+                                            ->select('sam_id')
+                                            ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
+                                            ->whereIn('user_details.IS_id', $supervisors_agents_id)
+                                            ->get()
+                                            ->pluck('sam_id');
+
+                    // $site_user_samid = \DB::table("site_users")
+                    //                 ->select('sam_id')
+                    //                 ->whereIn('agent_id', $supervisors_agents_id)
+                    //                 ->get()
+                    //                 ->pluck('sam_id');
 
                     $activity_id = 6;
                 } else {
-                    $supervisors_agents_id = UserDetail::select('user_id')
-                                            ->where('vendor_id', $vendor)
-                                            ->where('IS_id', \Auth::id())
-                                            ->get()
-                                            ->pluck('user_id');
+                    // $supervisors_agents_id = UserDetail::select('user_id')
+                    //                         ->where('vendor_id', $vendor)
+                    //                         ->where('IS_id', \Auth::id())
+                    //                         ->get()
+                    //                         ->pluck('user_id');
 
-                    $site_user_samid = \DB::table("site_users")
+                    // $site_user_samid = \DB::table("site_users")
+                    //                         ->select('sam_id')
+                    //                         ->whereIn('agent_id', $supervisors_agents_id)
+                    //                         ->get()
+                    //                         ->pluck('sam_id');
+
+                    $site_user_samid = \DB::table("user_details")
                                             ->select('sam_id')
-                                            ->whereIn('agent_id', $supervisors_agents_id)
+                                            ->leftJoin('site_users', 'site_users.agent_id', 'user_details.user_id')
+                                            ->where('user_details.IS_id', \Auth::id())
                                             ->get()
                                             ->pluck('sam_id');
 
@@ -4611,9 +4623,8 @@ class GlobeController extends Controller
                         $activity_id = 6;
                     }
                 }
-
+                // dd($site_user_samid);
                 if ( $program_id == 3 ) {
-
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
                             "view_site.vendor_acronym", 
@@ -4641,7 +4652,6 @@ class GlobeController extends Controller
                             "program_coloc.gt_saq_milestone_category"
                         )
                         ->where('activity_id', '>=', $activity_id)
-                        // ->where('view_site.vendor_id', $vendor)
                         ->whereNotIn('view_site.sam_id', $site_user_samid);
                         // dd($sites->get());
                 } else if($program_id == 4){
@@ -9009,6 +9019,37 @@ class GlobeController extends Controller
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function update_agent_site (Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), array(
+                'region' => 'required',
+                // 'province' => 'required'
+            ));
+
+            if (!$validate->passes()) {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            } else {
+
+                
+                $user_check = UsersArea::where('user_id', $request->get('user_id'))->delete();
+
+                for ($i=0; $i < count($request->get('region')); $i++) {
+                    UsersArea::create([
+                        'user_id' => $request->input('user_id'),
+                        'region' => $request->get('region')[$i],
+                        'province' => '%',
+                        'lgu' => '%',
+                    ]);
+                }
+                return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
 

@@ -78,7 +78,6 @@
 
     <script>
         $("table").on("click", ".update-data", function () {
-            $("#update-agent-modal").modal("show");
 
             var user_id = $(this).attr("data-value");
 
@@ -95,6 +94,7 @@
                 },
                 success: function (resp) {
                     if (!resp.error) {
+                        $("#update-agent-modal").modal("show");
                         $.each(resp.message, function(index, data) {
                             $("#assign-agent-site-form #"+index).val(data);
                         });
@@ -111,6 +111,61 @@
                     }
                 },
                 error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        });
+
+        $("#udpate-agent-btn").on('click', function(e){
+            $(this).text("Assigning...");
+            $(this).attr("disabled", "disabled");
+            var data_program = $(this).attr('data-program');
+
+            $("#assign-agent-site-form small").text("");
+
+            $.ajax({
+                url: '/update-agent-site',
+                method: "POST",
+                data: $("#assign-agent-site-form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if(!resp.error){
+                        $(".new-endorsement-table").DataTable().ajax.reload(function(){
+                            $("#assign-agent-site-form")[0].reset();
+                            $("#update-agent-modal").modal("hide");
+                                Swal.fire(
+                                    'Success',
+                                    resp.message,
+                                    'success'
+                                )
+                            $("#udpate-agent-btn").text("Update");
+                            $("#udpate-agent-btn").removeAttr("disabled");
+                        });
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("#" + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+                        }
+                        $("#udpate-agent-btn").text("Update");
+                        $("#udpate-agent-btn").removeAttr("disabled");
+                    }
+                },
+                error: function(resp){
+                    $("#udpate-agent-btn").text("Update");
+                    $("#udpate-agent-btn").removeAttr("disabled");
                     Swal.fire(
                         'Error',
                         resp,
