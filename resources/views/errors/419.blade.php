@@ -8,4 +8,10 @@
         <div>redirecting...</div>
     </div>
 </div>
+
+<script>
+    window.setTimeout(function(){
+        window.location.href = "/login";
+    }, 0);
+</script>
 @endsection

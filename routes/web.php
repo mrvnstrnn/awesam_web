@@ -222,6 +222,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'getDataNewEndorsement'])->name('all.getDataNewEndorsement');
 
     Route::post('/all-agent', [GlobeController::class, 'agents'])->name('all.agent');
+    Route::post('/get-user-details', [GlobeController::class, 'get_user_details']);
     Route::post('/all-vendor-admin/{program_id}', [GlobeController::class, 'vendor_admin'])->name('vendor_admin');
     Route::get('/all-newagent/{program_id}', [GlobeController::class, 'newagent'])->name('all.newagent');
 

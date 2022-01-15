@@ -8991,5 +8991,26 @@ class GlobeController extends Controller
         }
     }
 
+    public function get_user_details (Request $request)
+    {
+        try {
+            $user_data = \DB::table('users')
+            ->select('firstname', 'lastname', 'email')
+                            ->where('id', $request->get('user_id'))
+                            ->first();
+                            
+            $user_areas = \DB::table('users_areas')
+                            ->select('region')
+                            ->where('user_id', $request->get('user_id'))
+                            ->get();
+                            
+            return response()->json(['error' => false, 'message' => $user_data, 'user_areas' => $user_areas ]);
+            
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
 }
 
