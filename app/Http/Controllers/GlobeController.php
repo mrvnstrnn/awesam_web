@@ -4623,7 +4623,7 @@ class GlobeController extends Controller
                         $activity_id = 6;
                     }
                 }
-                dd($site_user_samid);
+                
                 if ( $program_id == 3 ) {
                     $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
                         ->select(
