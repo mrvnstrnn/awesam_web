@@ -2,11 +2,15 @@
 
 @section('content')
 
+    @php
+        $user_program = \Auth::user()->getUserProgram()[0]->program_id;
+    @endphp
+
     <x-home-dashboard-sites />
 
     <x-home-dashboard-productivity />
 
-    <x-home-dashboard-milestone :programid=2 />
+    <x-home-dashboard-milestone :programid="$user_program" />
 
     <div class="divider"></div>
     <div class="row">

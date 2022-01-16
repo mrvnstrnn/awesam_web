@@ -198,6 +198,10 @@
 
 <div class="divider"></div>
 
+@php
+    $user_program = \Auth::user()->getUserProgram()[0]->program_id;
+@endphp
+
 <x-home-dashboard-productivity />
 
 <div class="row" style="">
@@ -210,8 +214,10 @@
                         $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
                                                         ->join('users', 'users.id', 'user_details.user_id')
                                                         ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
                                                         ->where('user_details.IS_id', \Auth::id())
-                                                        ->get();    
+                                                        ->where('user_programs.program_id', $user_program)
+                                                        ->get();
                     @endphp
                     
                     @if (count($agents) > 0)
@@ -242,7 +248,7 @@
 
 <div class="divider"></div>
 
-<x-home-dashboard-milestone :programid=3 />
+<x-home-dashboard-milestone :programid="$user_program" />
 
 <div class="divider"></div>
 

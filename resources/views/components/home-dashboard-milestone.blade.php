@@ -69,17 +69,17 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        @if($programid == 4)
+        {{-- @if($programid == 4)
         <div class=" my-2">
             <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark active">ALL</button>
             <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">BAU</button>
             <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">REFARM</button>
             <button class="btn-wide mr-2 btn-pill btn btn-sm btn-outline-dark">RETROFIT</button>
         </div>
-        @endif
+        @endif --}}
         <div class="main-card mb-3 card">            
             <div class="no-gutters row border">
-                @foreach ($milestones as $milestone)    
+                @foreach ($milestones as $milestone)
                 @php
                     $i ++;
                 @endphp                    
@@ -96,12 +96,12 @@
             </div>
         </div>
         <div class="text-center">
-            <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
+            <a href="/program-sites" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
                 <span class="mr-2 opacity-7">
                     <i class="fa fa-cog fa-spin"></i>
                 </span>
                 <span class="">View Sites</span>
-            </button>
+            </a>
         </div>
     </div>
 
