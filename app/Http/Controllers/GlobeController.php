@@ -4630,7 +4630,6 @@ class GlobeController extends Controller
                             "view_site.aging",
                             "view_site.site_address",
                             "view_site.program_endorsement_date",
-                            "view_site.aging",
                             "program_coloc.nomination_id", 
                             "program_coloc.pla_id", 
                             "program_coloc.highlevel_tech",  
@@ -4642,7 +4641,10 @@ class GlobeController extends Controller
                             "program_coloc.gt_saq_milestone",  
                             "program_coloc.gt_saq_milestone_category"
                         )
-                        ->where('activity_id', '>=', $activity_id);
+                        ->where('view_site.activity_id', '>=', $activity_id);
+                        if (\Auth::user()->profile_id == 1) {
+                            $sites->where('view_site.profile_id', \Auth::user()->profile_id);
+                        }
                         // ->whereNotIn('view_site.sam_id', $site_user_samid);
                         // dd($sites->get());
                 } else if($program_id == 4){
@@ -4660,7 +4662,6 @@ class GlobeController extends Controller
                             "view_site.aging",
                             "view_site.site_address",
                             "view_site.program_endorsement_date",
-                            "view_site.aging",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -4712,7 +4713,6 @@ class GlobeController extends Controller
                             "view_site.aging",
                             "view_site.site_address",
                             "view_site.program_endorsement_date",
-                            "view_site.aging",
                             "program_newsites.saq_milestone",
                             "program_newsites.serial_number",
                             "program_newsites.saq_bucket",
@@ -4731,8 +4731,6 @@ class GlobeController extends Controller
     
 
                 $sites->where('view_site.program_id', $program_id)->get();
-
-                // dd($sites);
 
         } 
         
