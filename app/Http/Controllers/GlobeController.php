@@ -958,10 +958,12 @@ class GlobeController extends Controller
 
             if(is_null($checkAgent)) {
 
-                SiteAgent::create([
-                    'agent_id' => $request->input('agent_id'),
-                    'sam_id' => $request->input('sam_id'),
-                ]);
+                if ($profile_id != 1) {
+                    SiteAgent::create([
+                        'agent_id' => $request->input('agent_id'),
+                        'sam_id' => $request->input('sam_id'),
+                    ]);
+                }
 
                 if ( 
                     ($request->input('data_program') == 3 && $profile_id == 1 && $request->input('activity_id') == 6) ||
