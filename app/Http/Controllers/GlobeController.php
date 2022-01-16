@@ -2810,10 +2810,9 @@ class GlobeController extends Controller
                 );
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
-                $sites->whereIn('view_site.sam_region_id', $user_area);
-                // $sites->whereIn('view_site.sam_region_name', $user_area);
-            }
+            // if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
+            //     $sites->whereIn('view_site.sam_region_id', $user_area);
+            // }
             
             $sites->get();
         }
@@ -2962,7 +2961,7 @@ class GlobeController extends Controller
                 $sites->where('view_site.vendor_id', $vendor);
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 // $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
@@ -3115,7 +3114,7 @@ class GlobeController extends Controller
                 $sites->where('view_site.vendor_id', $vendor);
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
@@ -3228,7 +3227,7 @@ class GlobeController extends Controller
                 );
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 // $sites->whereIn('view_vendor_assigned_sites.sam_region_name', $user_area);
                 $sites->whereIn('view_vendor_assigned_sites.sam_region_id', $user_area);
             }
@@ -3389,7 +3388,7 @@ class GlobeController extends Controller
                 );
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
                 
@@ -3526,7 +3525,7 @@ class GlobeController extends Controller
                 );
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
             
@@ -3542,7 +3541,7 @@ class GlobeController extends Controller
                                 // ->whereIn('stage_activities.activity_type', ['doc approval', 'site approval'])
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
 
-                                if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                                if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
                                 if ( $program_id == 1 ) {
@@ -3730,7 +3729,7 @@ class GlobeController extends Controller
                                 ->where('view_site.profile_id', \Auth::user()->profile_id)
                                 ->whereIn('view_site.activity_id', [32, 33]);
                                 
-                                if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                                if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                     $sites->whereIn('view_site.sam_region_id', $user_area);
                 }
                 
@@ -3755,7 +3754,7 @@ class GlobeController extends Controller
                     ->where('program_id',  $program_id)
                     ->where('activity_type', "elas renewal");
 
-                    if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                    if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
@@ -3774,7 +3773,7 @@ class GlobeController extends Controller
                     ->where('program_id',  $program_id)
                     ->where('activity_type', "vendor awarding");
 
-                    if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                    if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
@@ -3911,7 +3910,7 @@ class GlobeController extends Controller
         elseif($activity_type == 'site hunting validation'){
             $sites = \DB::table("view_site_hunting");
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site_hunting.site_sam_region_id', $user_area);
             }
 
@@ -3935,7 +3934,7 @@ class GlobeController extends Controller
             $sites = \DB::table("view_jtss_aepm")
                     ->where('program_id', $program_id);
 
-                    if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                    if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_jtss_aepm.sam_region_id', $user_area);
             }
                     $sites->get();
@@ -3985,7 +3984,7 @@ class GlobeController extends Controller
                 // ->whereNull('approver_id3')
                 // ->whereNot('status', 'rejected')
 
-                if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
@@ -4182,7 +4181,7 @@ class GlobeController extends Controller
                 );
             }
 
-            if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
@@ -4478,7 +4477,7 @@ class GlobeController extends Controller
                         $sites->where('activity_id', 11);
                     }
 
-                    if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                    if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                         $sites->whereIn('view_sites_activity.site_sam_region_id', $user_area);
                     }
 
@@ -4598,7 +4597,7 @@ class GlobeController extends Controller
                         ->where('activity_id', 4);
                     }   
 
-                    if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                    if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                         $sites->whereIn('view_site.sam_region_id', $user_area);
                     }
 
@@ -4738,7 +4737,7 @@ class GlobeController extends Controller
                     $sites->where('view_site.vendor_id', $vendor);
                 }
 
-                if (\Auth::user()->profile_id != 1 || $user_detail->mode == 'globe') {
+                if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                     $sites->whereIn('view_site.sam_region_id', $user_area);
                 }
     
