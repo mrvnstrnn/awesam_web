@@ -1553,6 +1553,7 @@ class GlobeController extends Controller
             $validate = Validator::make($request->all(), array(
                 'file_name' => 'required',
             ));
+            // return response()->json(['error' => true, 'message' => $request->all() ]);
 
             $new_file = $this->rename_file($request->input("file_name"), $request->input("sub_activity_name"), $request->input("sam_id"), $request->input("site_category"));
 
@@ -5180,7 +5181,7 @@ class GlobeController extends Controller
             $what_component = "components.subactivity-doc-upload";
             return \View::make($what_component)
             ->with([
-                'sub_activity' => $request->get('sub_activity'),
+                'sub_activity' => $request->get('active_subactivity'),
                 'sam_id' => $request->get('active_sam_id'),
                 'sub_activity_id' => $request->get('sub_activity_id'),
                 'program_id' => $request->get('program_id'),
@@ -6512,7 +6513,7 @@ class GlobeController extends Controller
                                         ->get();
 
             $dt = DataTables::of($sub_activity_ids);
-                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 42) {
+                                if (\Auth::user()->profile_id == 3 || \Auth::user()->profile_id == 28 || \Auth::user()->profile_id == 8 || \Auth::user()->profile_id == 31 || \Auth::user()->profile_id == 37 || \Auth::user()->profile_id == 29 || \Auth::user()->profile_id == 32 || \Auth::user()->profile_id == 42 || \Auth::user()->profile_id == 6) {
                                     $dt->addColumn('value', function($row) {
                                         if (json_last_error() == JSON_ERROR_NONE){
                                             $json = json_decode($row->value, true);
