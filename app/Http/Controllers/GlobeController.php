@@ -1098,8 +1098,6 @@ class GlobeController extends Controller
             //                 ->where('vendor_admin_email', \Auth::user()->email)
             //                 ->first();
 
-            $user_detail = \Auth::user()->getUserDetail()->first();
-
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
@@ -2677,12 +2675,12 @@ class GlobeController extends Controller
                                 ->get()
                                 ->pluck('region');
 
+        $user_detail = \Auth::user()->getUserDetail()->first();
+
         if($activity_type == 'all'){
 
             $sites = \DB::table("view_site")
                             ->where('program_id', $program_id);
-
-            $user_detail = \Auth::user()->getUserDetail()->first();
 
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
@@ -2953,8 +2951,6 @@ class GlobeController extends Controller
                 );
             }
 
-            $user_detail = \Auth::user()->getUserDetail()->first();
-
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
@@ -3106,8 +3102,6 @@ class GlobeController extends Controller
                 );
             }
 
-            $user_detail = \Auth::user()->getUserDetail()->first();
-
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
@@ -3123,8 +3117,6 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'is'){
-            
-            $user_detail = \Auth::user()->getUserDetail()->first();
 
             $sites = \DB::table("view_vendor_assigned_sites")
                         ->where('program_id', $program_id)
@@ -4410,8 +4402,6 @@ class GlobeController extends Controller
         }        
         elseif($activity_type == 'new endorsements vendor'){
 
-            $user_detail = \Auth::user()->getUserDetail()->first();
-
             $sites = \DB::table("view_sites_activity")
                     ->select('site_name', 'sam_id', 'site_category', 'activity_id', 'program_id', 'site_endorsement_date',  'id', 'site_vendor_id', 'activity_name')
                     ->where('program_id', $program_id);
@@ -4487,8 +4477,6 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'new endorsements vendor accept'){
-
-            $user_detail = \Auth::user()->getUserDetail()->first();
 
             $sites = \DB::table("view_site")
                     ->where('view_site.program_id', $program_id);
@@ -4607,8 +4595,6 @@ class GlobeController extends Controller
         }
 
         elseif($activity_type == 'unassigned sites'){
-
-            $user_detail = \Auth::user()->getUserDetail()->first();
 
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
