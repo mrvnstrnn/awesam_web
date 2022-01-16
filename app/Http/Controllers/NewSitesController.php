@@ -201,12 +201,39 @@ class NewSitesController extends Controller
                                     ->get();
                                     
             if (count($get_past_activities) < 1) {
-                SiteStageTracking::create([
-                    'sam_id' => $sam_id[$i],
-                    'activity_id' => 1,
-                    'activity_complete' => 'false',
-                    'user_id' => \Auth::id()
-                ]);
+                // SiteStageTracking::create([
+                //     'sam_id' => $sam_id[$i],
+                //     'activity_id' => 1,
+                //     'activity_complete' => 'false',
+                //     'user_id' => \Auth::id()
+                // ]);
+                
+                $site_check = \DB::table('site')
+                                ->where('sam_id',  $sam_id[$i])
+                                ->first();
+
+                if ( is_null($site_check->activities) ) {
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => 1,
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                } else {
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => 1,
+                        'activity_complete' => 'true',
+                        'user_id' => \Auth::id()
+                    ]);
+                    
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => $activity_id[$i],
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                }
 
                 $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
