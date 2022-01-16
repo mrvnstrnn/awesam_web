@@ -2820,46 +2820,64 @@ class GlobeController extends Controller
 
         elseif($activity_type == 'mine'){
 
-            $sites = \DB::table("view_assigned_sites")
-                    ->where('program_id', $program_id)
-                    ->where('agent_id', \Auth::id());
+            // $sites = \DB::table("view_assigned_sites")
+            //         ->where('program_id', $program_id)
+            //         ->where('agent_id', \Auth::id());
+
+            $sites = \DB::table("view_site")
+                        ->leftjoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
+                        ->where('view_site.activity_type', '!=', 'complete');
+
+            if (\Auth::user()->profile_id == 2) {
+                $sites->where('site_users.agent_id', \Auth::id());
+            } else if (\Auth::user()->profile_id == 3) {
+                // all agent
+            }
 
             if($program_id == 3){                
-                $sites->leftJoin('program_coloc', 'view_assigned_sites.sam_id', 'program_coloc.sam_id')
-                            ->select(
-                                "view_assigned_sites.site_name", 
-                                "view_assigned_sites.sam_id", 
-                                "view_assigned_sites.activity_id", 
-                                "view_assigned_sites.program_id", 
-                                "view_assigned_sites.site_category", 
-                                "view_assigned_sites.activity_name", 
-                                "view_assigned_sites.sam_region_name",
-                                "view_assigned_sites.site_category",
-                                "view_assigned_sites.aging",
-                                "program_coloc.nomination_id", 
-                                "program_coloc.pla_id", 
-                                "program_coloc.highlevel_tech",  
-                                "program_coloc.technology", 
-                                "program_coloc.site_type",
-                                "program_coloc.address",  
-                                "program_coloc.vendor",  
-                                "program_coloc.region",  
-                                "program_coloc.gt_saq_milestone",  
-                                "program_coloc.gt_saq_milestone_category"
-                            );
+                $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
+                        ->select(
+                            "view_site.vendor_acronym", 
+                            "view_site.site_name", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name",
+                            "view_site.site_category",
+                            "view_site.aging",
+                            "view_site.site_address",
+                            "view_site.program_endorsement_date",
+                            "view_site.aging",
+                            "program_coloc.nomination_id", 
+                            "program_coloc.pla_id", 
+                            "program_coloc.highlevel_tech",  
+                            "program_coloc.technology", 
+                            "program_coloc.site_type",
+                            "program_coloc.address",  
+                            "program_coloc.vendor",  
+                            "program_coloc.region",  
+                            "program_coloc.gt_saq_milestone",  
+                            "program_coloc.gt_saq_milestone_category"
+                        );
             }
             elseif($program_id == 4){
-                $sites->leftJoin('program_ibs', 'view_assigned_sites.sam_id', 'program_ibs.sam_id')
+                $sites->leftJoin('program_ibs', 'view_site.sam_id', 'program_ibs.sam_id')
                         ->select(
-                            "view_assigned_sites.site_name", 
-                            "view_assigned_sites.sam_id", 
-                            "view_assigned_sites.activity_id", 
-                            "view_assigned_sites.program_id", 
-                            "view_assigned_sites.site_category", 
-                            "view_assigned_sites.activity_name", 
-                            "view_assigned_sites.sam_region_name",
-                            "view_assigned_sites.site_category",
-                            "view_assigned_sites.aging",
+                            "view_site.vendor_acronym", 
+                            "view_site.site_name", 
+                            "view_site.sam_id", 
+                            "view_site.activity_id", 
+                            "view_site.program_id", 
+                            "view_site.site_category", 
+                            "view_site.activity_name", 
+                            "view_site.sam_region_name",
+                            "view_site.site_category",
+                            "view_site.aging",
+                            "view_site.site_address",
+                            "view_site.program_endorsement_date",
+                            "view_site.aging",
                             "program_ibs.vendor_tw_build",
                             "program_ibs.address",
                             "program_ibs.region",
@@ -2871,28 +2889,40 @@ class GlobeController extends Controller
                         );
             }
             elseif($program_id == 8){
-                $sites->leftJoin('program_renewal', 'view_assigned_sites.sam_id', 'program_renewal.sam_id')
+                $sites->leftJoin('program_renewal', 'view_site.sam_id', 'program_renewal.sam_id')
                 ->select(
-                    "view_assigned_sites.site_name", 
-                    "view_assigned_sites.sam_id", 
-                    "view_assigned_sites.activity_id", 
-                    "view_assigned_sites.program_id", 
-                    "view_assigned_sites.site_category", 
-                    "view_assigned_sites.activity_name", 
-                    "view_assigned_sites.sam_region_name",
-                    "view_assigned_sites.site_category",
-                    "view_assigned_sites.aging",
+                    "view_site.vendor_acronym", 
+                    "view_site.site_name", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name",
+                    "view_site.site_category",
+                    "view_site.aging",
+                    "view_site.site_address",
+                    "view_site.program_endorsement_date",
+                    "view_site.aging",
                     "program_renewal.*"
                 );
             }
             elseif($program_id == 2){
-                $sites->leftJoin('program_ftth', 'view_assigned_sites.sam_id', 'program_ftth.sam_id')
+                $sites->leftJoin('program_ftth', 'view_site.sam_id', 'program_ftth.sam_id')
                 ->select(
-                    "view_assigned_sites.sam_id",
-                    "view_assigned_sites.activity_name",
-                    "view_assigned_sites.site_name",
-                    "view_assigned_sites.aging",
-                    "view_assigned_sites.site_category",
+                    "view_site.vendor_acronym", 
+                    "view_site.site_name", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name",
+                    "view_site.site_category",
+                    "view_site.aging",
+                    "view_site.site_address",
+                    "view_site.program_endorsement_date",
+                    "view_site.aging",
                     "program_ftth.cluster_id",
                     "program_ftth.sam_milestone",
                     "program_ftth.submilestone",
@@ -2902,20 +2932,21 @@ class GlobeController extends Controller
                 );
             }
             elseif($program_id == 1){
-                $sites->leftJoin('program_newsites', 'view_assigned_sites.sam_id', 'program_newsites.sam_id')
+                $sites->leftJoin('program_newsites', 'view_site.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_assigned_sites.vendor_acronym", 
-                    "view_assigned_sites.site_name", 
-                    "view_assigned_sites.sam_id", 
-                    "view_assigned_sites.activity_id", 
-                    "view_assigned_sites.program_id", 
-                    "view_assigned_sites.site_category", 
-                    "view_assigned_sites.activity_name", 
-                    "view_assigned_sites.sam_region_name",
-                    "view_assigned_sites.site_category",
-                    "view_assigned_sites.aging",
-                    "view_assigned_sites.program_endorsement_date",
-                    "view_assigned_sites.aging",
+                    "view_site.vendor_acronym", 
+                    "view_site.site_name", 
+                    "view_site.sam_id", 
+                    "view_site.activity_id", 
+                    "view_site.program_id", 
+                    "view_site.site_category", 
+                    "view_site.activity_name", 
+                    "view_site.sam_region_name",
+                    "view_site.site_category",
+                    "view_site.aging",
+                    "view_site.site_address",
+                    "view_site.program_endorsement_date",
+                    "view_site.aging",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",
@@ -2928,12 +2959,12 @@ class GlobeController extends Controller
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
-                $sites->where('site_vendor_id', $vendor);
+                $sites->where('view_site.vendor_id', $vendor);
             }
 
             if (\Auth::user()->profile_id != 1) {
                 // $sites->whereIn('view_assigned_sites.sam_region_name', $user_area);
-                $sites->whereIn('view_assigned_sites.site_region_id', $user_area);
+                $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
             $sites->get();
@@ -2944,8 +2975,15 @@ class GlobeController extends Controller
         elseif($activity_type == 'mine_completed'){
 
             $sites = \DB::table("view_site")
-                                ->where('program_id', $program_id)
-                                ->where('activity_type', 'complete');
+                        ->leftjoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
+                        ->where('view_site.program_id', $program_id)
+                        ->where('view_site.activity_type', 'complete');
+
+            if (\Auth::user()->profile_id == 2) {
+                $sites->where('site_users.agent_id', \Auth::id());
+            }  else if (\Auth::user()->profile_id == 3) {
+                // all agent
+            }
 
             if($program_id == 3){                
                 $sites->leftJoin('program_coloc', 'view_site.sam_id', 'program_coloc.sam_id')
