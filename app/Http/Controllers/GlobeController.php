@@ -4180,6 +4180,11 @@ class GlobeController extends Controller
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
+            if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
+                $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+                $sites->where('view_site.vendor_id', $vendor);
+            }
+
             $sites->get();
 
         }
