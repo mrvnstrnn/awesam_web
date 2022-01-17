@@ -162,7 +162,8 @@ $('.show_activity_modal').on( 'click', function (e) {
 });
 
 
-$(document).on('click', '.show_action_modal', function(e){
+$(".agent_engagement").on('click', '.show_action_modal', function(e){
+// $(document).on('click', '.show_action_modal', function(e){
     e.preventDefault();
 
     loader = "<img src='/images/awesam_loader.png' width='200px;' alt-text='Loading...'/>";

@@ -163,7 +163,7 @@ $user_area = \DB::table('users_areas')
                         
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="d-inline-block dropdown">
+                                            <div class="d-inline-block dropdown agent_engagement">
                                                 <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="border-0 btn-transition btn btn-link">
                                                     <i class="fa fa-ellipsis-v fa-lg"></i>
                                                 </button>

@@ -366,9 +366,9 @@
                                                             <H5 class="p-0 m-0">{{ $xdate }}<H5>
                                                         </div>
                                                         <div class="col-6 text-right">
-                                                            <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
+                                                            {{-- <button type="button" data-activity_source="work_plan_add" data-json='{"planned_date" : "{{ $zdate }}"}' class="show_action_modal btn-dark border btn-sm text-white btn px-2 mr-2 my-0">
                                                                 Add Work Plan
-                                                            </button>
+                                                            </button> --}}
                                                         </div>
                                                     </div>
                                                 </td>
