@@ -127,17 +127,20 @@
                                     <option value="2">Agent</option>
                                     <option value="3">Supervisor</option>
                                 </select>
+                                <small class="text-danger profile-error"></small>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-12 supervisor_div d-none">
                                 <label for="supervisor">Supervisor</label>
                                 <select name="supervisor" id="supervisor" class="form-control"></select>
+                                <small class="text-danger is_id-error"></small>
                             </div>
                         </div>
                         <div class="form-row col-12">
                             <label for="">Program</label>
                             <div class="col-12 vendor_program_div"></div>
+                            <small class="text-danger program-error"></small>
                         </div>
                         <div class="form-row col-12">
                             <label for="region">Region</label>
@@ -180,6 +183,7 @@
                                         <label style="margin-left: 20px;" for="region{{ $location_sam_region->sam_region_id }}">{{ $location_sam_region->sam_region_name }}</label>
                                         </div>
                                 @endforeach
+                                <small class="text-danger region-error"></small>
                             </div>
                         </div>
                     </form>

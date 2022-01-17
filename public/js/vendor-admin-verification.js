@@ -290,7 +290,8 @@ $(document).ready(() => {
         });
     });
 
-    $("button.change-data").on("click", function(){
+    // $("button.change-data").on("click", function(){
+    $(document).on("click", ".change-data", function(){
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
@@ -338,7 +339,7 @@ $(document).ready(() => {
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $(".pr_po_form ." + index + "-error").text(data);
+                            $(".agent_info_form ." + index + "-error").text(data);
                         });
                     } else {
                         Swal.fire(

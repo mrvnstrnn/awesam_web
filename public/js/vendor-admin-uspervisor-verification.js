@@ -197,22 +197,23 @@ $(document).ready(() => {
         $("#offboard_employee_modal").modal("show");
     });
 
-    $("button.change-data").on("click", function(){
+    // $(".supervisor_info_form .change-data").on("click", function(){
+    $(document).on("click", ".change-data", function(){
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 
         var user_id = $(this).attr('data-user_id');
-        var is_id = $(".supervisor_info_form #supervisor").val();
-        var profile = $(".supervisor_info_form #profile").val();
+        var is_id = $("#supervisor").val();
+        var profile = $("#profile").val();
 
         var program = [];
         var region = [];
-        $.each($(".supervisor_info_form input[type='checkbox'][name='program[]']:checked"), function(){
+        $.each($("input[type='checkbox'][name='program[]']:checked"), function(){
             program.push($(this).val());
         });
 
-        $.each($(".supervisor_info_form input[type='checkbox'][name='region[]']:checked"), function(){
+        $.each($("input[type='checkbox'][name='region[]']:checked"), function(){
             region.push($(this).val());
         });
 
@@ -245,7 +246,7 @@ $(document).ready(() => {
                 } else {
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $(".pr_po_form ." + index + "-error").text(data);
+                            $(".supervisor_info_form ." + index + "-error").text(data);
                         });
                     } else {
                         Swal.fire(

@@ -86,11 +86,13 @@
                             <div class="col-12 supervisor_div">
                                 <label for="supervisor">Supervisor</label>
                                 <select name="supervisor" id="supervisor" class="form-control"></select>
+                                <small class="text-danger is_id-error"></small>
                             </div>
                         </div>
                         <div class="form-row col-12">
                             <label for="">Program</label>
                             <div class="col-12 vendor_program_div"></div>
+                            <small class="text-danger program-error"></small>
                         </div>
                         <div class="form-row col-12">
                             <label for="region">Region</label>
@@ -133,6 +135,7 @@
                                         <label style="margin-left: 20px;" for="region{{ $location_sam_region->sam_region_id }}">{{ $location_sam_region->sam_region_name }}</label>
                                         </div>
                                 @endforeach
+                                <small class="text-danger region-error"></small>
                             </div>
                         </div>
                     </form>
@@ -188,11 +191,11 @@
     </div>
 
     <script>
-        $(".agent_info_form .profile_div").on("change", "#profile", function () {
+        $(".profile_div").on("change", "#profile", function () {
             if ($(this).val() == 3) {
-                $(".agent_info_form .supervisor_div").addClass("d-none");
+                $(".supervisor_div").addClass("d-none");
             } else {
-                $(".agent_info_form .supervisor_div").removeClass("d-none");
+                $(".supervisor_div").removeClass("d-none");
             }
         });
     </script>
