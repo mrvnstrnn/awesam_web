@@ -1043,11 +1043,12 @@ class GlobeController extends Controller
     {
 
         try {
-            $checkAgent = \DB::table('users')
+            $checkAgent = \DB::table('users_areas')
                             ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province', 'user_details.image', 'location_sam_regions.sam_region_name')
+                            ->join('users', 'users.id', 'users_areas.user_id')
                             ->join('user_details', 'user_details.user_id', 'users.id')
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                            ->join('users_areas', 'users_areas.user_id', 'users.id')
+                            // ->join('users_areas', 'users_areas.user_id', 'users.id')
                             ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
                             ->where('user_details.IS_id', \Auth::user()->id)
                             ->where('user_programs.program_id', $request->program_id)
@@ -6500,6 +6501,11 @@ class GlobeController extends Controller
                                     $json = json_decode($row->value, true);
 
                                     return $json['file'];
+                                })
+                                ->addColumn('is_temp', function($row) {
+                                    $json = json_decode($row->value, true);
+
+                                    return $json['is_temp'];
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
@@ -9023,8 +9029,8 @@ class GlobeController extends Controller
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);
             } else {
 
-                
-                $user_check = UsersArea::where('user_id', $request->get('user_id'))->delete();
+                UsersArea::where('user_id', $request->get('user_id'))
+                        ->delete();
 
                 for ($i=0; $i < count($request->get('region')); $i++) {
                     UsersArea::create([
@@ -9036,6 +9042,21 @@ class GlobeController extends Controller
                 }
                 return response()->json(['error' => false, 'message' => "Successfully assigned agent site."]);
             }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_link_old_data (Request $request)
+    {
+        try {
+            $link_data = \DB::table('tbl_coloc_files_joined_mapping')
+                            ->where('sam_id', $request->get('sam_id'))
+                            ->where('sub_activity_id', $request->get('sub_activity_id'))
+                            ->first();
+
+            return response()->json(['error' => false, 'message' => $link_data]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

@@ -71,112 +71,6 @@
     </div>
 @endsection
 
-@section('js_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('js/supervisor.js') }}"></script>
-
-    <script>
-        $("table").on("click", ".update-data", function () {
-
-            var user_id = $(this).attr("data-value");
-
-            $("#assign-agent-site-form #user_id").val(user_id);
-
-            $.ajax({
-                url: "/get-user-details",
-                method: "POST",
-                data: {
-                    user_id : user_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp) {
-                    if (!resp.error) {
-                        $("#update-agent-modal").modal("show");
-                        $.each(resp.message, function(index, data) {
-                            $("#assign-agent-site-form #"+index).val(data);
-                        });
-
-                        resp.user_areas.forEach(element => {
-                            $("#assign-agent-site-form #region"+element.region).attr("checked", "checkek");
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
-                    }
-                },
-                error: function (resp) {
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                }
-            });
-        });
-
-        $("#udpate-agent-btn").on('click', function(e){
-            $(this).text("Assigning...");
-            $(this).attr("disabled", "disabled");
-            var data_program = $(this).attr('data-program');
-
-            $("#assign-agent-site-form small").text("");
-
-            $.ajax({
-                url: '/update-agent-site',
-                method: "POST",
-                data: $("#assign-agent-site-form").serialize(),
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(resp){
-                    if(!resp.error){
-                        $(".new-endorsement-table").DataTable().ajax.reload(function(){
-                            $("#assign-agent-site-form")[0].reset();
-                            $("#update-agent-modal").modal("hide");
-                                Swal.fire(
-                                    'Success',
-                                    resp.message,
-                                    'success'
-                                )
-                            $("#udpate-agent-btn").text("Update");
-                            $("#udpate-agent-btn").removeAttr("disabled");
-                        });
-                    } else {
-                        if (typeof resp.message === 'object' && resp.message !== null) {
-                            $.each(resp.message, function(index, data) {
-                                $("#" + index + "-error").text(data);
-                            });
-                        } else {
-                            Swal.fire(
-                                'Error',
-                                resp,
-                                'error'
-                            )
-                        }
-                        $("#udpate-agent-btn").text("Update");
-                        $("#udpate-agent-btn").removeAttr("disabled");
-                    }
-                },
-                error: function(resp){
-                    $("#udpate-agent-btn").text("Update");
-                    $("#udpate-agent-btn").removeAttr("disabled");
-                    Swal.fire(
-                        'Error',
-                        resp,
-                        'error'
-                    )
-                }
-            });
-        });
-    </script>
-@endsection
-
 @section('modals')
 <div class="modal fade" id="update-agent-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -196,7 +90,7 @@
                                 <label for="firstname">Firstname</label>
                             </div>
                             <div class="form-group col-md-8 col-12">
-                                <input type="text" class="form-control" name="firstname" id="firstname">
+                                <input type="text" class="form-control" name="firstname" id="firstname" readonly>
                             </div>
                         </div>
                         <div class="form-row">
@@ -204,7 +98,7 @@
                                 <label for="lastname">Lastname</label>
                             </div>
                             <div class="form-group col-md-8 col-12">
-                                <input type="text" class="form-control" name="lastname" id="lastname">
+                                <input type="text" class="form-control" name="lastname" id="lastname" readonly>
                             </div>
                         </div>
                         <div class="form-row">
@@ -267,10 +161,117 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="udpate-agent-btn">Update</button>
+                <button type="button" class="btn btn-secondary btn-shadow" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-shadow update-agent-btn">Update</button>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('js_script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('js/supervisor.js') }}"></script>
+
+    <script>
+        $("table").on("click", ".update-data", function () {
+
+            var user_id = $(this).attr("data-value");
+
+            $("#assign-agent-site-form #user_id").val(user_id);
+
+            $.ajax({
+                url: "/get-user-details",
+                method: "POST",
+                data: {
+                    user_id : user_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+                        $("#update-agent-modal").modal("show");
+                        $.each(resp.message, function(index, data) {
+                            $("#assign-agent-site-form #"+index).val(data);
+                        });
+
+                        resp.user_areas.forEach(element => {
+                            $("#assign-agent-site-form #region"+element.region).attr("checked", "checkek");
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        });
+
+        $(document).on('click', ".update-agent-btn", function(e){
+            $(this).text("Assigning...");
+            $(this).attr("disabled", "disabled");
+            var data_program = $(this).attr('data-program');
+
+            $("#assign-agent-site-form small").text("");
+
+            $.ajax({
+                url: '/update-agent-site',
+                method: "POST",
+                data: $("#assign-agent-site-form").serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if(!resp.error){
+                        $(".new-endorsement-table").DataTable().ajax.reload(function(){
+                            $("#assign-agent-site-form")[0].reset();
+                            $("#update-agent-modal").modal("hide");
+                                Swal.fire(
+                                    'Success',
+                                    resp.message,
+                                    'success'
+                                )
+                            $(".update-agent-btn").text("Update");
+                            $(".update-agent-btn").removeAttr("disabled");
+                        });
+                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("#" + index + "-error").text(data);
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+                        }
+                        $(".update-agent-btn").text("Update");
+                        $(".update-agent-btn").removeAttr("disabled");
+                    }
+                },
+                error: function(resp){
+                    $(".update-agent-btn").text("Update");
+                    $(".update-agent-btn").removeAttr("disabled");
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        });
+    </script>
 @endsection

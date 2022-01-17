@@ -331,6 +331,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 
     Route::get('/get-my-sub_act_value/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_my_sub_act_value']);
+    Route::post('/get-link-old-data', [GlobeController::class, 'get_link_old_data']);
 
     Route::get('/get-uploaded-files/{get_my_sub_act_value}/{sam_id}', [GlobeController::class, 'get_uploaded_files']);
 

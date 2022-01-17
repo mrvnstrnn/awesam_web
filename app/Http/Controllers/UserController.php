@@ -711,7 +711,7 @@ class UserController extends Controller
     public function forpendingonboarding_list()
     {
         try {
-            $is_vendor = UserDetail::select('user_details.vendor_id')->where('user_id', \Auth::id())->first();
+            $is_vendor = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
             $user_details = \DB::table('invitations')
                 ->select('invitations.firstname', 'invitations.lastname', 'invitations.email')

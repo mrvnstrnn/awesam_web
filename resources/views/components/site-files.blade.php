@@ -3,14 +3,29 @@
         <div class="col-12 mb-3">
             <button id="btn_back_to_file_list_file_2" class="mt-0 btn btn-secondary" type="button">Back to files</button>
         </div>
+        
+        <div class="col-12 link_url">
+            @php
+                $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
+
+                
+            @endphp
+
+            {{-- @if ( !is_null($link_data) )
+                <a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName={{ $link_data->link }}&appVersion=1.000699&signature=8278929bb83de2e6558c5f4f088f048ef78fb2dbcf13f4545b6c36c3cd6c5722e6b49614504e2a76a85831192396c318">Link here.</a>
+            @endif --}}
+        </div>
+
         <div class="col-12 file_viewers">
         </div>
+        
         <div class="col-12 file_viewer_lists pt-3">
         </div>
     </div>
+
     <div class="row file_lists">
         @php
-            $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
+            // $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
 
             $unique_activity_id = array_unique(array_column($datas, 'activity_id'));
 
@@ -91,6 +106,43 @@
 
         var extensions = ["pdf", "jpg", "png"];
 
+        var sub_activity_id = $(this).attr("data-sub_activity_id");
+        var sam_id = "{{ $sam_id }}";
+
+        $.ajax({
+            url: "/get-link-old-data",
+            method: "POST",
+            data : {
+                sub_activity_id : sub_activity_id,
+                sam_id : sam_id
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function ( resp ) {
+                if ( !resp.error ) {
+                    if (resp.message != null) {
+                        $(".link_url").html(
+                            '<a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName='+resp.message.UPLOAD_FILE+'" class="mb-2 mr-2 btn-icon btn-shadow btn-outline-2x btn btn-outline-link pull-right pull-right"><i class="lnr-link btn-icon-wrapper"> </i>Appsheet File Link</a>'
+                        );
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            },
+            error: function ( resp ) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
+
         var values = JSON.parse($(this).attr('data-value'));
 
         if( extensions.includes(JSON.parse(values[0].value).file.split('.').pop()) == true) {     
@@ -103,8 +155,6 @@
         $('.file_viewers').html(htmltoload);
 
         var sam_id = $(this).attr('data-sam_id');
-
-        console.log(sam_id);
 
         $('.file_viewer_lists').html('');
 
@@ -143,6 +193,8 @@
                 'createdRow': function( row, data, dataIndex ) {
                     $(row).attr('data-value', data.value);
                     $(row).attr('data-status', data.status);
+                    $(row).attr('data-is_temp', data.is_temp);
+                    // $(row).attr('data-status', data.status);
                     $(row).attr('data-id', data.id);
                     $(row).attr('data-sub_activity_id', data.sub_activity_id);
                     $(row).attr('style', 'cursor: pointer');
@@ -183,6 +235,40 @@
         } else {
           htmltoload = '<div class="text-center my-5"><a href="/files/' + value + '"><i class="fa fa-fw display-1" aria-hidden="true" title="Copy to use file-excel-o"></i><H5>Download Document</H5></a><small>No viewer available; download the file to check.</small></div>';
         }
+
+        // $.ajax({
+        //     url: "/get-link-old-data",
+        //     method: "POST",
+        //     data : {
+        //         sub_activity_id : sub_activity_id,
+        //         sam_id : sam_id
+        //     },
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     success: function ( resp ) {
+        //         if ( !resp.error ) {
+        //             if (resp.message != null) {
+        //                 $(".link_url").html(
+        //                    '<a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName='+resp.message.UPLOAD_FILE+'" class="mb-2 mr-2 btn-icon btn-shadow btn-outline-2x btn btn-outline-link pull-right pull-right"><i class="lnr-link btn-icon-wrapper"> </i>Appsheet File Link</a>'
+        //                 );
+        //             }
+        //         } else {
+        //             Swal.fire(
+        //                 'Error',
+        //                 resp,
+        //                 'error'
+        //             )
+        //         }
+        //     },
+        //     error: function ( resp ) {
+        //         Swal.fire(
+        //             'Error',
+        //             resp,
+        //             'error'
+        //         )
+        //     }
+        // });
 
         $("#hidden_filename").val(value);
                 
