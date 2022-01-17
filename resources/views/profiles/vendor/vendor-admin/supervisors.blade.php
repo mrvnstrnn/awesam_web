@@ -40,9 +40,156 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/vendor-admin-uspervisor-verification.js') }}"></script>
+
+    <script>
+
+        $(document).on("click", ".update-data-supervisor", function () {
+            var user_id = $(this).attr("data-value");
+            var vendor_id = $(this).attr("data-vendor_id");
+            var is_id = $(this).attr("data-is_id");
+
+            $(".change-data").attr("data-user_id", user_id);
+            $(".supervisor_info_form")[0].reset();
+            
+            $("#modal-info-supervisor #supervisor option").remove();
+            $("#modal-info-supervisor .vendor_program_div div").remove();
+
+            $.ajax({
+                // url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
+                url: "/get-user-data",
+                method: "POST",
+                data : {
+                    user_id : user_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+                        $("#modal-info-supervisor").modal("show");
+
+                        resp.supervisor.forEach(element => {
+                            $("#modal-info-supervisor .supervisor_info_form  #supervisor").append(
+                                '<option value="'+element.id+'">'+element.name+'</option>'
+                            );
+                        });
+                        
+                        resp.vendor_program.forEach(element => {
+                            $(".supervisor_info_form .vendor_program_div").append(
+                                '<div class="col-4">' +
+                                '<input class="form-check-input" type="checkbox" value="'+element.program_id+'" name="program[]" id="checkbox'+element.program_id+'">' +
+                                '<label class="form-check-label" for="checkbox'+element.program_id+'">' +
+                                    element.program +
+                                '</label>' +
+                                '</div>'
+                            );
+                        });
+
+                        
+                        $('.supervisor_info_form #supervisor').val(is_id).trigger('change');
+                        $('.supervisor_info_form #profile').val("3").trigger('change');
+
+                        resp.user_data.forEach(element => {
+                            $(".supervisor_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                        });
+                        
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp, "Error");
+                }
+            });
+        });
+
+    </script>
 @endsection
 
 @section('modals')
+
+    <div class="modal fade" id="modal-info-supervisor" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vendor Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
+
+                    <form class="supervisor_info_form">
+                        <div class="form-row">
+                            <div class="col-12 profile_div">
+                                <label for="profile">Profile</label>
+                                <select name="profile" id="profile" class="form-control">
+                                    <option value="2">Agent</option>
+                                    <option value="3">Supervisor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-12 supervisor_div d-none">
+                                <label for="supervisor">Supervisor</label>
+                                <select name="supervisor" id="supervisor" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-row col-12">
+                            <label for="">Program</label>
+                            <div class="col-12 vendor_program_div"></div>
+                        </div>
+                        <div class="form-row col-12">
+                            <label for="region">Region</label>
+                            <div class="row" id="region_div">
+                                @php
+                                    $user_detail = \DB::table('user_details')
+                                                    ->select('vendor_id')
+                                                    ->where('user_id', \Auth::user()->id)
+                                                    ->first();
+                                                        
+                                    $user_programs = \DB::table('user_programs')
+                                                        ->select('program_id')
+                                                        ->where('user_id', \Auth::user()->id)
+                                                        ->get()
+                                                        ->pluck('program_id');
+
+                                    if( count($user_programs) > 0){
+                                        $sites = \DB::table('view_site')
+                                                    ->select('sam_region_id')
+                                                    ->where('vendor_id', $user_detail->vendor_id)
+                                                    ->whereIn('program_id', $user_programs)
+                                                    ->get()
+                                                    ->groupBy('sam_region_id');
+
+                                        if( !is_null($sites) ){
+                                            $location_sam_regions = \DB::table('location_sam_regions')
+                                                        ->whereIn('sam_region_id', $sites->keys())
+                                                        ->get();
+                                        } else {
+                                            echo '<p>No region found.</p>';
+                                        }
+                                    } else {
+                                        echo '<p>No user programs available.</p>';
+                                    }
+                                @endphp
+
+                                @foreach ($location_sam_regions as $location_sam_region)
+                                    <div class="col-4">
+                                        <input name="region[]" class="regionInput" id="region{{ $location_sam_region->sam_region_id }}" type="checkbox" class="" value="{{ $location_sam_region->sam_region_id }}" >
+                                        <label style="margin-left: 20px;" for="region{{ $location_sam_region->sam_region_id }}">{{ $location_sam_region->sam_region_name }}</label>
+                                        </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-change-info change-data">Update Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -108,6 +255,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="offboard_employee_modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -129,4 +277,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(".supervisor_info_form .profile_div").on("change", "#profile", function () {
+            console.log($(this).val());
+            if ($(this).val() == 3) {
+                $(".supervisor_info_form .supervisor_div").addClass("d-none");
+            } else {
+                $(".supervisor_info_form .supervisor_div").removeClass("d-none");
+            }
+        });
+    </script>
 @endsection

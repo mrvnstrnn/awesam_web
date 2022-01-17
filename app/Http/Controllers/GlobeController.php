@@ -1093,13 +1093,14 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_admin ($program_id)
+    public function vendor_admin (Request $request)
     {
-
         try {
             // $vendor = Vendor::select('vendor_id')
             //                 ->where('vendor_admin_email', \Auth::user()->email)
             //                 ->first();
+
+            $user_detail = \Auth::user()->getUserDetail()->first();
 
             if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
                 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
@@ -1112,7 +1113,7 @@ class GlobeController extends Controller
                                 // ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                                 ->where('users.profile_id', 1)
                                 ->where('user_details.vendor_id', $vendor)
-                                ->where('user_programs.program_id', $program_id)
+                                ->where('user_programs.program_id', $request->get('program_id'))
                                 ->get();
             } else {
                 $checkAgent = \DB::table('users')
@@ -1121,7 +1122,7 @@ class GlobeController extends Controller
                                 ->join('user_programs', 'user_programs.user_id', 'user_details.user_id')
                                 // ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                                 ->where('users.profile_id', 1)
-                                ->where('user_programs.program_id', $program_id)
+                                ->where('user_programs.program_id', $request->get('program_id'))
                                 ->get();
             }
 
@@ -1268,7 +1269,9 @@ class GlobeController extends Controller
                                     }
                                 })
                                 ->addColumn('action', function($row){
-                                    $btn = '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
+                                    
+                                    $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data-supervisor" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update">Edit</button> ';
+                                    $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
                                     $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
 
                                     return $btn;
@@ -6746,18 +6749,23 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_user_data ($user_id, $vendor_id, $is)
+    public function get_user_data (Request $request)
     {
+        // $user_id, $vendor_id, $is
+
+        // $request->get('is')
         try {
+            $user_detail = \Auth::user()->getUserDetail()->first();
             $vendor_program = VendorProgram::join('program', 'program.program_id', 'vendor_programs.programs')
-                                                ->where('vendor_programs.vendors_id', $vendor_id)
+                                                ->where('vendor_programs.vendors_id', $user_detail->vendor_id)
                                                 ->get();
 
-            $user_data = UserProgram::select('program_id')->where('user_id', $user_id)->get();
+            $user_data = UserProgram::select('program_id')->where('user_id', $request->get('user_id'))->get();
 
             $supervisor = User::select('users.*')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
-                                    ->where('vendor_id', $vendor_id)
+                                    ->where('vendor_id', $user_detail->vendor_id)
+                                    ->where('user_details.user_id', '!=', $request->get('user_id'))
                                     ->where('designation', 3)
                                     ->get();
 
@@ -6772,24 +6780,55 @@ class GlobeController extends Controller
     {
         try {
 
-            // return response()->json(['error' => true, 'message' => $request->all()]);
+            $required = "";
 
-            UserProgram::where('user_id', $request->input('user_id'))
-                                                ->delete();
-
-            for ($i=0; $i < count($request->input('program')); $i++) {
-                UserProgram::create([
-                    'user_id' => $request->input('user_id'),
-                    'program_id' => $request->input('program')[$i],
-                ]);
+            if ($request->get("profile") == 2) {
+                $required = "required";
             }
 
-            $supervisor = UserDetail::where('user_id', $request->input('user_id'))
-                                    ->update([
-                                        'IS_id' => $request->input('is_id')
-                                    ]);
+            $validate = \Validator::make($request->all(), array(
+                'region' => 'required',
+                'program' => 'required',
+                'is_id' => $required,
+            ));
 
-            return response()->json(['error' => false, 'message' => "Successfully updated data." ]);
+            if ($validate->passes()) {
+
+                UserProgram::where('user_id', $request->input('user_id'))
+                                                    ->delete();
+
+                for ($i=0; $i < count($request->input('program')); $i++) {
+                    $active = $i == 0 ? 1 : 0; 
+                    UserProgram::create([
+                        'user_id' => $request->input('user_id'),
+                        'program_id' => $request->input('program')[$i],
+                        'active' => $active,
+                    ]);
+                }
+
+                for ($i=0; $i < count($request->input('region')); $i++) {
+                    UsersArea::create([
+                        'user_id' => $request->input('user_id'),
+                        'region' => $request->input('region')[$i],
+                    ]);
+                }
+
+                User::where('id', $request->input('user_id'))
+                    ->update([
+                        'profile_id' => $request->input('profile')
+                    ]);
+
+                $supervisor = UserDetail::where('user_id', $request->input('user_id'))
+                                        ->update([
+                                            'IS_id' => $request->input('profile') == 3 ? NULL : $request->input('is_id'),
+                                            'designation' => $request->input('profile')
+                                        ]);
+
+                return response()->json(['error' => false, 'message' => "Successfully updated data." ]);
+
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

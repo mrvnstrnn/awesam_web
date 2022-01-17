@@ -42,7 +42,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="vendor-admin-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-href="{{ route('vendor_admin', $program->program_id) }}" data-program_id="{{ $program->program_id }}">
+                                    <table id="vendor-admin-table" class="align-middle mb-0 table table-borderless table-striped table-hover unasigned-table new-endorsement-table" data-program_id="{{ $program->program_id }}">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10%;">Photo</th>
@@ -68,6 +68,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/supervisor.js') }}"></script>
+
+    <script>
+        $(document).ready(() => {
+            var program_id = $('#vendor-admin-table').attr('data-program_id');
+
+            $('#vendor-admin-table').DataTable({
+                processing: true,
+                serverSide: true,
+                // pageLength: 3,
+                ajax: {
+                    url: "/all-vendor-admin",
+                    type: 'POST',
+                    data: {
+                        program_id : program_id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                dataSrc: function(json){
+                    return json.data;
+                },
+                'createdRow': function( row, data, dataIndex ) {
+                    $(row).attr('data-id', data.id);
+                },
+                columnDefs: [{
+                    "targets": 0,
+                    "orderable": false
+                }],
+                columns: [
+                    { data: "photo" },
+                    { data: "firstname" },
+                    { data: "lastname" },
+                    { data: "email" },
+                ],
+            });
+        });
+    </script>
 @endsection
 
 @section('modals')

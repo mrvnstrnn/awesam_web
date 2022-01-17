@@ -112,7 +112,6 @@
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <label for="region">Region</label>
-                                {{-- <select name="region" id="region" class="form-control"><select> --}}
                                 <div class="row" id="region_div">
                                     @php
                                         $user_detail = \DB::table('user_details')

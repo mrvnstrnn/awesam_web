@@ -197,5 +197,79 @@ $(document).ready(() => {
         $("#offboard_employee_modal").modal("show");
     });
 
+    $("button.change-data").on("click", function(){
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+
+        var user_id = $(this).attr('data-user_id');
+        var is_id = $(".supervisor_info_form #supervisor").val();
+        var profile = $(".supervisor_info_form #profile").val();
+
+        var program = [];
+        var region = [];
+        $.each($(".supervisor_info_form input[type='checkbox'][name='program[]']:checked"), function(){
+            program.push($(this).val());
+        });
+
+        $.each($(".supervisor_info_form input[type='checkbox'][name='region[]']:checked"), function(){
+            region.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/update-user-data",
+            method: "POST",
+            data: {
+                user_id : user_id,
+                is_id : is_id,
+                program : program,
+                region : region,
+                profile : profile,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (resp) {
+                if (!resp.error) {
+                    $("#employee-agents-table").DataTable().ajax.reload(function () {
+                        $("#modal-info-supervisor").modal("hide");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".change-data").removeAttr("disabled");
+                        $(".change-data").text("Update Data");
+                    });
+                } else {
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".pr_po_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+
+                    $(".change-data").removeAttr("disabled");
+                    $(".change-data").text("Update Data");
+                }
+            },
+            error: function (resp) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".change-data").removeAttr("disabled");
+                $(".change-data").text("Update Data");
+            }
+        });
+    });
 
 });

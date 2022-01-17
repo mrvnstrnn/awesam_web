@@ -231,62 +231,39 @@ $(document).ready(() => {
         });
     });
 
-    // $('#employee-agents-table tbody').on('click', 'tr', function () {
-    //     $("#modal-employee-verification").modal("show");
-
-    //     $(".content-data ul").remove();
-
-    //     var data_id = $(this).attr("data-id");
-
-    //     // $(".modal-footer.assign-profile-footer").addClass("d-none");
-    //     $.ajax({
-    //         url: "/get-agent-of-supervisor/"+data_id,
-    //         method: "GET",
-    //         success: function(resp) {
-    //             if(!resp.error) {
-    //                 $(".content-data").append(
-    //                     '<ul class="list-group"></ul>'
-    //                 );
-    //                 resp.message.forEach(element => {
-    //                     $(".content-data ul").append(
-    //                         '<li class="list-group-item"><i class="fa-2x pe-7s-user icon-gradient bg-malibu-beach"></i> '+element.firstname+ " "+element.lastname+ ' | '+element.region+' '+element.province+' '+element.lgu+'</span></li>'
-    //                     );
-    //                 });
-    //             } else {
-    //                 toastr.error(resp.message, "Error");
-    //             }
-    //         },
-    //         error: function(resp) {
-    //             toastr.error(resp.message, "Error");
-    //         }
-    //     });
-    // });
-
     $(document).on("click", ".update-data", function () {
         var user_id = $(this).attr("data-value");
         var vendor_id = $(this).attr("data-vendor_id");
         var is_id = $(this).attr("data-is_id");
 
         $(".change-data").attr("data-user_id", user_id);
+        $(".agent_info_form")[0].reset();
         
         $("#modal-info #supervisor option").remove();
         $("#modal-info .vendor_program_div div").remove();
 
         $.ajax({
-            url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
-            method: "GET",
+            // url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
+            url: "/get-user-data",
+            method: "POST",
+            data : {
+                user_id : user_id
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (resp) {
                 if (!resp.error) {
                     $("#modal-info").modal("show");
-;
+
                     resp.supervisor.forEach(element => {
-                        $("#modal-info #supervisor").append(
+                        $("#modal-info .agent_info_form #supervisor").append(
                             '<option value="'+element.id+'">'+element.name+'</option>'
                         );
                     });
                     
                     resp.vendor_program.forEach(element => {
-                        $(".vendor_program_div").append(
+                        $(".agent_info_form .vendor_program_div").append(
                             '<div class="col-4">' +
                             '<input class="form-check-input" type="checkbox" value="'+element.program_id+'" name="program[]" id="checkbox'+element.program_id+'">' +
                             '<label class="form-check-label" for="checkbox'+element.program_id+'">' +
@@ -297,10 +274,10 @@ $(document).ready(() => {
                     });
 
                     
-                    $('#supervisor').val(is_id).trigger('change');
+                    $('.agent_info_form #supervisor').val(is_id).trigger('change');
 
                     resp.user_data.forEach(element => {
-                        $("input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                        $(".agent_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
                     });
                     
                 } else {
@@ -313,13 +290,23 @@ $(document).ready(() => {
         });
     });
 
-    $(document).on("click", ".change-data", function(){
+    $("button.change-data").on("click", function(){
+
+        $(this).attr("disabled", "disabled");
+        $(this).text("Processing...");
+        
         var user_id = $(this).attr('data-user_id');
         var is_id = $("#supervisor").val();
+        var profile = $("#profile").val();
 
         var program = [];
-        $.each($("input[type='checkbox']:checked"), function(){
+        var region = [];
+        $.each($("input[type='checkbox'][name='program[]']:checked"), function(){
             program.push($(this).val());
+        });
+
+        $.each($("input[type='checkbox'][name='region[]']:checked"), function(){
+            region.push($(this).val());
         });
 
         $.ajax({
@@ -329,6 +316,8 @@ $(document).ready(() => {
                 user_id : user_id,
                 is_id : is_id,
                 program : program,
+                region : region,
+                profile : profile,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -337,14 +326,41 @@ $(document).ready(() => {
                 if (!resp.error) {
                     $("#employee-agents-table").DataTable().ajax.reload(function () {
                         $("#modal-info").modal("hide");
-                        toastr.success(resp.message, "Success");
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
+
+                        $(".change-data").removeAttr("disabled");
+                        $(".change-data").text("Update Data");
                     });
                 } else {
-                    toastr.error(resp.message, "Error");
+                    if (typeof resp.message === 'object' && resp.message !== null) {
+                        $.each(resp.message, function(index, data) {
+                            $(".pr_po_form ." + index + "-error").text(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+
+                    $(".change-data").removeAttr("disabled");
+                    $(".change-data").text("Update Data");
                 }
             },
             error: function (resp) {
-                toastr.error(resp, "Error");
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+
+                $(".change-data").removeAttr("disabled");
+                $(".change-data").text("Update Data");
             }
         });
     });

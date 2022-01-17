@@ -223,7 +223,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/all-agent', [GlobeController::class, 'agents'])->name('all.agent');
     Route::post('/get-user-details', [GlobeController::class, 'get_user_details']);
-    Route::post('/all-vendor-admin/{program_id}', [GlobeController::class, 'vendor_admin'])->name('vendor_admin');
+    Route::post('/all-vendor-admin', [GlobeController::class, 'vendor_admin'])->name('vendor_admin');
     Route::get('/all-newagent/{program_id}', [GlobeController::class, 'newagent'])->name('all.newagent');
 
     Route::post('/assign-agent', [GlobeController::class, 'assign_agent'])->name('assign.agent');
@@ -412,7 +412,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/set-site-category', [GlobeController::class, 'set_site_category']);
 
     //Agent - Supervisor
-    Route::get('/get-user-data/{user_id}/{vendor_id}/{is_id}', [GlobeController::class, 'get_user_data']);
+    // Route::get('/get-user-data/{user_id}/{vendor_id}/{is_id}', [GlobeController::class, 'get_user_data']);
+    Route::post('/get-user-data', [GlobeController::class, 'get_user_data']);
     Route::post('/update-user-data', [GlobeController::class, 'update_user_data']);
 
 
