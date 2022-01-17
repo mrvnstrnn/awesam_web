@@ -36,76 +36,6 @@
 
 @endsection
 
-@section('js_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('js/vendor-admin-uspervisor-verification.js') }}"></script>
-
-    <script>
-
-        $(document).on("click", ".update-data-supervisor", function () {
-            var user_id = $(this).attr("data-value");
-            var vendor_id = $(this).attr("data-vendor_id");
-            var is_id = $(this).attr("data-is_id");
-
-            $(".change-data").attr("data-user_id", user_id);
-            $(".supervisor_info_form")[0].reset();
-            
-            $("#modal-info-supervisor #supervisor option").remove();
-            $("#modal-info-supervisor .vendor_program_div div").remove();
-
-            $.ajax({
-                // url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
-                url: "/get-user-data",
-                method: "POST",
-                data : {
-                    user_id : user_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp) {
-                    if (!resp.error) {
-                        $("#modal-info-supervisor").modal("show");
-
-                        resp.supervisor.forEach(element => {
-                            $("#modal-info-supervisor .supervisor_info_form  #supervisor").append(
-                                '<option value="'+element.id+'">'+element.name+'</option>'
-                            );
-                        });
-                        
-                        resp.vendor_program.forEach(element => {
-                            $(".supervisor_info_form .vendor_program_div").append(
-                                '<div class="col-4">' +
-                                '<input class="form-check-input" type="checkbox" value="'+element.program_id+'" name="program[]" id="checkbox'+element.program_id+'">' +
-                                '<label class="form-check-label" for="checkbox'+element.program_id+'">' +
-                                    element.program +
-                                '</label>' +
-                                '</div>'
-                            );
-                        });
-
-                        
-                        $('.supervisor_info_form #supervisor').val(is_id).trigger('change');
-                        $('.supervisor_info_form #profile').val("3").trigger('change');
-
-                        resp.user_data.forEach(element => {
-                            $(".supervisor_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
-                        });
-                        
-                    } else {
-                        toastr.error(resp.message, "Error");
-                    }
-                },
-                error: function (resp) {
-                    toastr.error(resp, "Error");
-                }
-            });
-        });
-
-    </script>
-@endsection
-
 @section('modals')
 
     <div class="modal fade" id="modal-info-supervisor" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -291,5 +221,75 @@
                 $(".supervisor_info_form .supervisor_div").removeClass("d-none");
             }
         });
+    </script>
+@endsection
+
+@section('js_script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.10.24/dataTables.bootstrap4.min.js" integrity="sha512-NQ2u+QUFbhI3KWtE0O4rk855o+vgPo58C8vvzxdHXJZu6gLu2aLCCBMdudH9580OmLisCC1lJg2zgjcJbnBMOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('js/vendor-admin-uspervisor-verification.js') }}"></script>
+
+    <script>
+
+        $(document).on("click", ".update-data-supervisor", function () {
+            var user_id = $(this).attr("data-value");
+            var vendor_id = $(this).attr("data-vendor_id");
+            var is_id = $(this).attr("data-is_id");
+
+            $(".change-data").attr("data-user_id", user_id);
+            $(".supervisor_info_form")[0].reset();
+            
+            $("#modal-info-supervisor #supervisor option").remove();
+            $("#modal-info-supervisor .vendor_program_div div").remove();
+
+            $.ajax({
+                // url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
+                url: "/get-user-data",
+                method: "POST",
+                data : {
+                    user_id : user_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    if (!resp.error) {
+                        $("#modal-info-supervisor").modal("show");
+
+                        resp.supervisor.forEach(element => {
+                            $("#modal-info-supervisor .supervisor_info_form  #supervisor").append(
+                                '<option value="'+element.id+'">'+element.name+'</option>'
+                            );
+                        });
+                        
+                        resp.vendor_program.forEach(element => {
+                            $(".supervisor_info_form .vendor_program_div").append(
+                                '<div class="col-4">' +
+                                '<input class="form-check-input" type="checkbox" value="'+element.program_id+'" name="program[]" id="checkbox'+element.program_id+'">' +
+                                '<label class="form-check-label" for="checkbox'+element.program_id+'">' +
+                                    element.program +
+                                '</label>' +
+                                '</div>'
+                            );
+                        });
+
+                        
+                        $('.supervisor_info_form #supervisor').val(is_id).trigger('change');
+                        $('.supervisor_info_form #profile').val("3").trigger('change');
+
+                        resp.user_data.forEach(element => {
+                            $(".supervisor_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                        });
+                        
+                    } else {
+                        toastr.error(resp.message, "Error");
+                    }
+                },
+                error: function (resp) {
+                    toastr.error(resp, "Error");
+                }
+            });
+        });
+
     </script>
 @endsection
