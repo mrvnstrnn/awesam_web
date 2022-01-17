@@ -290,15 +290,14 @@ $(document).ready(() => {
         });
     });
 
-    // $("button.change-data").on("click", function(){
-    $(document).on("click", ".change-data", function(){
+    $("button.change-data").on("click", function(){
 
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
         
         var user_id = $(this).attr('data-user_id');
-        var is_id = $("#supervisor").val();
-        var profile = $("#profile").val();
+        var is_id = $(".agent_info_form .supervisor_info_form #supervisor").val();
+        var profile = $(".agent_info_form .supervisor_info_form #profile").val();
 
         var program = [];
         var region = [];
