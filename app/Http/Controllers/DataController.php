@@ -55,7 +55,7 @@ class DataController extends Controller
                 $sites->where('view_site.vendor_id', $vendor);
             }
         
-            if (\Auth::user()->profile_id != 1) {
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                 $sites->whereIn('view_site.sam_region_id', $user_area);
             }
 
