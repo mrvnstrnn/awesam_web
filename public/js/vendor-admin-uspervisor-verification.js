@@ -204,16 +204,16 @@ $(document).ready(() => {
         $(this).text("Processing...");
 
         var user_id = $(this).attr('data-user_id');
-        var is_id = $(".supervisor_info_form #supervisor").val();
-        var profile = $(".supervisor_info_form #profile").val();
+        var is_id = $("#supervisor").val();
+        var profile = $("#profile").val();
 
         var program = [];
         var region = [];
-        $.each($(".supervisor_info_form input[type='checkbox'][name='program[]']:checked"), function(){
+        $.each($("input[type='checkbox'][name='program[]']:checked"), function(){
             program.push($(this).val());
         });
 
-        $.each($(".supervisor_info_form input[type='checkbox'][name='region[]']:checked"), function(){
+        $.each($("input[type='checkbox'][name='region[]']:checked"), function(){
             region.push($(this).val());
         });
 
