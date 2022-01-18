@@ -6,6 +6,7 @@
         // } else {
             $programs = \Auth::user()->getUserProgram();
         // }
+            $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
     @endphp
     <input type="hidden" name="program_lists" id="program_lists" value="{{ json_encode($programs) }}">
   
@@ -34,6 +35,10 @@
                         $supervisors = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'users.id', 'user_details.image')
                                                         ->join('users', 'users.id', 'user_details.user_id')
                                                         ->join('profiles', 'profiles.id', 'users.profile_id')
+
+                                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                                        ->where('user_programs.program_id', $get_user_program_active)
+
                                                         ->where('users.profile_id', 3)
                                                         ->where('user_details.vendor_id', $vendor->vendor_id)
                                                         ->get();
@@ -46,6 +51,11 @@
                                         $agents = \App\Models\UserDetail::select('profiles.profile', 'users.name', 'user_details.image')
                                                             ->join('users', 'users.id', 'user_details.user_id')
                                                             ->join('profiles', 'profiles.id', 'users.profile_id')
+                                                            
+
+                                                            ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                                            ->where('user_programs.program_id', $get_user_program_active)
+                                                        
                                                             ->where('user_details.IS_id', $supervisor->id)
                                                             ->get(); 
                                     @endphp

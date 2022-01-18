@@ -1343,4 +1343,18 @@ class UserController extends Controller
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
     }
+
+    public function get_users_report()
+    {
+        try {
+            $users_report = \DB::table('view_users_per_vendor')->get();
+
+            $dt = DataTables::of($users_report);
+            
+            return $dt->make(true);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
 }

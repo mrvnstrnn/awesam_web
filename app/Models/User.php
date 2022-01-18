@@ -402,5 +402,15 @@ class User extends Authenticatable implements MustVerifyEmail
                     
         return !is_null($get_program_renewal_old) ? $get_program_renewal_old : "";
     }
+
+    public function get_user_program_active ()
+    {
+        $get_user_program_active = \DB::table('user_programs')
+                    ->where('user_id', \Auth::id())
+                    ->where('active', 1)
+                    ->first();
+                    
+        return $get_user_program_active;
+    }
     
 }

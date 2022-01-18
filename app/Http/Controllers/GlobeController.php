@@ -1181,13 +1181,17 @@ class GlobeController extends Controller
 
         try {
 
+            $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
+
             if (is_null($user_id)) {
 
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
                 $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
                                         ->where('users.profile_id', 2)
+                                        ->where('user_programs.program_id', $get_user_program_active)
                                         ->get();
 
                 $dt = DataTables::of($checkAgent)
@@ -1209,9 +1213,11 @@ class GlobeController extends Controller
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
                 $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
                                         ->where('users.profile_id', 2)
                                         ->where('user_details.IS_id', $user_id)
+                                        ->where('user_programs.program_id', $get_user_program_active)
                                         ->get();
 
                 $dt = DataTables::of($checkAgent)
@@ -1243,11 +1249,15 @@ class GlobeController extends Controller
                                                             ->where('user_id', \Auth::id())
                                                             ->first();
 
+            $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
+
             if (isset($vendor->vendor_id)) {
                 $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
+                                        ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         // ->where('user_details.IS_id', \Auth::id())
                                         ->where('user_details.vendor_id', $vendor->vendor_id)
                                         ->where('users.profile_id', 3)
+                                        ->where('user_programs.program_id', $get_user_program_active)
                                         ->get();
             } else {
                 $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')

@@ -186,6 +186,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/', [UserController::class, 'index']);
 
+    Route::post('/get-users-report', [UserController::class, 'get_users_report']);
 
     //Notifications
     Route::get('/notifications', [UserController::class, 'notifications'])->name('notifications');
