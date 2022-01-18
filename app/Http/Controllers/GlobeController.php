@@ -1200,8 +1200,8 @@ class GlobeController extends Controller
                                 })
                                 ->addColumn('action', function($row){
                                     $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update">Edit</button> ';
-                                    $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
-                                    $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
+                                    // $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
+                                    // $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
 
                                     return $btn;
                                 });
@@ -1271,8 +1271,8 @@ class GlobeController extends Controller
                                 ->addColumn('action', function($row){
                                     
                                     $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data-supervisor" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Update">Edit</button> ';
-                                    $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
-                                    $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
+                                    // $btn .= '<button class="btn btn-sm btn-shadow btn-danger disable_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Disable</button> ';
+                                    // $btn .= '<button class="btn btn-sm btn-shadow btn-secondary offboard_btn" data-name="'.$row->name.'" data-value="'.$row->user_id.'" data-is_id="'.$row->IS_id.'" data-vendor_id="'.$row->vendor_id.'" title="Disable">Offboard</button>';
 
                                     return $btn;
                                 });
