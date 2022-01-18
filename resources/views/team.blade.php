@@ -10,7 +10,7 @@
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="images/team/mykee-nodalo.jpg" alt="Mykel Nodalo" width="200" class="rounded-circle">
+                <img src="images/team/mykee-nodalo.jpg" alt="Mykel Nodalo" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
                     <h4>Mykee</h4>
@@ -19,19 +19,19 @@
                 </div>
 
                 <div class="text-center bio-social">
-                    <a href="mailto:" target="_blank" title="Whatsapp">
+                    {{-- <a href="mailto:" target="_blank" title="Whatsapp">
                         <i class="fa fa-2x fa-fw fa-whatsapp icon-gradient bg-tempting-azure"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="mailto:" target="_blank" title="Gmail">
+                    <a href="mailto:mykel.nodalo@globe.com.ph" target="_blank" title="Gmail">
                         <i class="fa fa-2x fa-fw fa-envelope icon-gradient bg-love-kiss"></i>
                     </a>
 
-                    <a href="#" target="_blank" title="Github">
+                    {{-- <a href="#" target="_blank" title="Github">
                         <i class="fa fa-2x fa-fw fa-github icon-gradient bg-heavy-rain"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="#" target="_blank" title="Viber">
+                    <a href="viber://chat?number=09176884665" target="_blank" title="Viber">
                         <i class="fab fa-viber fa-2x fa-fw icon-gradient bg-plum-plate"></i>
                     </a>
                 </div>
@@ -41,7 +41,7 @@
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="/images/team/fernando-salvador.jpg" alt="Fernando Salvador" width="200" class="rounded-circle">
+                <img src="/images/team/fernando-salvador.jpg" alt="Fernando Salvador" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
                     <h4>Aris</h4>
@@ -50,17 +50,17 @@
                 </div>
 
                 <div class="text-center bio-social">
-                    <a href="mailto:" target="_blank" title="Whatsapp">
+                    {{-- <a href="#" target="_blank" title="Whatsapp">
                         <i class="fa fa-2x fa-fw fa-whatsapp icon-gradient bg-tempting-azure"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="mailto:" target="_blank" title="Gmail">
+                    <a href="mailto:zfdsalvador@globe.com.ph " target="_blank" title="Gmail">
                         <i class="fa fa-2x fa-fw fa-envelope icon-gradient bg-love-kiss"></i>
                     </a>
 
-                    <a href="#" target="_blank" title="Github">
+                    {{-- <a href="#" target="_blank" title="Github">
                         <i class="fa fa-2x fa-fw fa-github icon-gradient bg-heavy-rain"></i>
-                    </a>
+                    </a> --}}
 
                     <a href="#" target="_blank" title="Viber">
                         <i class="fab fa-viber fa-2x fa-fw icon-gradient bg-plum-plate"></i>
@@ -72,28 +72,28 @@
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="/images/team/jeffrey-bulatao.jpg" alt="Jeffrey  Bulatao" width="200" class="rounded-circle">
+                <img src="/images/team/france-dulay.jpg" alt="Francis Rafael Dulay" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
-                    <h4>Jeff</h4>
-                    <p class="menu-header-subtitle">Jeffrey  Bulatao</p>
+                    <h4>EL</h4>
+                    <p class="menu-header-subtitle">Francis Rafael Dulay</p>
                     <small>SQL Developer</small>
                 </div>
 
                 <div class="text-center bio-social">
-                    <a href="mailto:" target="_blank" title="Whatsapp">
+                    {{-- <a href="mailto:" target="_blank" title="Whatsapp">
                         <i class="fa fa-2x fa-fw fa-whatsapp icon-gradient bg-tempting-azure"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="mailto:" target="_blank" title="Gmail">
+                    <a href="mailto:fdulay@absi.ph" target="_blank" title="Gmail">
                         <i class="fa fa-2x fa-fw fa-envelope icon-gradient bg-love-kiss"></i>
                     </a>
 
-                    <a href="#" target="_blank" title="Github">
+                    {{-- <a href="#" target="_blank" title="Github">
                         <i class="fa fa-2x fa-fw fa-github icon-gradient bg-heavy-rain"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="#" target="_blank" title="Viber">
+                    <a href="viber://chat?number=09679959460" target="_blank" title="Viber">
                         <i class="fab fa-viber fa-2x fa-fw icon-gradient bg-plum-plate"></i>
                     </a>
                 </div>
@@ -102,28 +102,28 @@
 
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="/images/team/romark-limtingco.jpg" alt="Romark Limtingco" width="200" class="rounded-circle">
+                <img src="/images/team/romark-limtingco.jpg" alt="Romark Limtingco" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
-                    <h4>DOC</h4>
+                    <h4>Dok</h4>
                     <p class="menu-header-subtitle">Romark Limtingco</p>
                     <small>ETL Developer</small>
                 </div>
 
                 <div class="text-center bio-social">
-                    <a href="mailto:" target="_blank" title="Whatsapp">
+                    {{-- <a href="mailto:" target="_blank" title="Whatsapp">
                         <i class="fa fa-2x fa-fw fa-whatsapp icon-gradient bg-tempting-azure"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="mailto:" target="_blank" title="Gmail">
+                    <a href="mailto:zrrlimtingco@globe.com.ph" target="_blank" title="Gmail">
                         <i class="fa fa-2x fa-fw fa-envelope icon-gradient bg-love-kiss"></i>
                     </a>
 
-                    <a href="#" target="_blank" title="Github">
+                    {{-- <a href="#" target="_blank" title="Github">
                         <i class="fa fa-2x fa-fw fa-github icon-gradient bg-heavy-rain"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="#" target="_blank" title="Viber">
+                    <a href="viber://chat?number=09275144130" target="_blank" title="Viber">
                         <i class="fab fa-viber fa-2x fa-fw icon-gradient bg-plum-plate"></i>
                     </a>
                 </div>
@@ -132,7 +132,7 @@
 
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="../images/team/marvin-esternon.jpg" alt="Marvin Esternon" width="200" class="rounded-circle">
+                <img src="../images/team/marvin-esternon.jpg" alt="Marvin Esternon" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">                    
                     <h4>Ben</h4>
@@ -141,19 +141,19 @@
                 </div>
 
                 <div class="text-center bio-social">
-                    <a href="mailto:" target="_blank" title="Whatsapp">
+                    {{-- <a href="mailto:" target="_blank" title="Whatsapp">
                         <i class="fa fa-2x fa-fw fa-whatsapp icon-gradient bg-tempting-azure"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="mailto:mrvnstrnn@gmail.com" target="_blank" title="Gmail">
+                    <a href="mailto:maesternon@absi.ph" target="_blank" title="Gmail">
                         <i class="fa fa-2x fa-fw fa-envelope icon-gradient bg-love-kiss"></i>
                     </a>
 
-                    <a href="https://github.com/mrvnstrnn" target="_blank">
+                    {{-- <a href="https://github.com/mrvnstrnn" target="_blank">
                         <i class="fa fa-2x fa-fw fa-github icon-gradient bg-heavy-rain"></i>
-                    </a>
+                    </a> --}}
 
-                    <a href="#" target="_blank" title="Viber">
+                    <a href="viber://chat?number=09760431505" target="_blank" title="Viber">
                         <i class="fab fa-viber fa-2x fa-fw fa-viber icon-gradient bg-plum-plate"></i>
                     </a>
                 </div>

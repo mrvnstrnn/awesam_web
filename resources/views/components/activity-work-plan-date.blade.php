@@ -272,7 +272,7 @@ elseif($activity_source == 'work_plan_activity_add'){
                                                             <option value="Text">Text</option>
                                                             <option value="Email">Email</option>
                                                             <option value="Site Visit">Site Visit</option>
-                                                            <option value="Call">Upload Document</option>
+                                                            {{-- <option value="Upload Document">Upload Document</option> --}}
                                                         </select>
                                                         <small class="text-danger method-errors"></small>
 
