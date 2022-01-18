@@ -72,7 +72,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ls-2">
             <div class="text-center my-3">
-                <img src="/images/team/france-dulay.jpg" alt="Francis Rafael Dulay" width="200" height="200" class="rounded-circle">
+                <img src="/images/team/france-rafael-dulay.jpg" alt="Francis Rafael Dulay" width="200" height="200" class="rounded-circle">
 
                 <div class="m-3 text-white text-uppercase">
                     <h4>EL</h4>
