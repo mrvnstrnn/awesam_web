@@ -562,7 +562,7 @@
         });
     });
 </script>
-<script src="\js\modal-loader.js"> </script>
+<script src="\js\modal-loader.js?{{ time() }}"> </script>
 
 @endsection
 
