@@ -66,7 +66,7 @@
                             <form action="{{ route('daily_activity') }}" method="POST">@csrf
                                 <div class="form-row">
 
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-4">
                                         <label for="region">Region</label>
                                         <select class="mb-2 form-control" name="region">
                                             @php
@@ -80,7 +80,7 @@
                                         </select>
                                     </div>
                                     
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-4">
                                         <label for="user_id">Supervisor</label>
                                         
                                         <select class="mb-2 form-control" name="user_id" id="user_id">
@@ -106,7 +106,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-4">
                                         <label for="agent_user_id">Agent</label>
                                         
                                         <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
