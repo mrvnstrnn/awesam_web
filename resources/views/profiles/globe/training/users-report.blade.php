@@ -80,15 +80,15 @@
             processing: true,
             serverSide: true,
             // pageLength: 3,
-            // lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 
-            // dom: 'Bfrtip',
-            // buttons: [
-            //     'pageLength', 
-            //     'excelHtml5',
-            //     'csvHtml5',
-            //     'pdfHtml5'
-            // ],
+            dom: 'Bfrtip',
+            buttons: [
+                'pageLength', 
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
 
             ajax: {
                 url: "/get-users-report",

@@ -8,6 +8,7 @@
     }
 </style>
 @php
+    $user_detail = \Auth::user()->getUserDetail()->first();
     $dates = \DB::table('view_dar_agent')
             ->distinct()
             ->select('date_added')
@@ -17,18 +18,30 @@
             ->orderBy('date_added', 'desc')
             ->get();
 
-    $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
-                                                ->join('users', 'users.id', 'user_details.user_id')
-                                                ->where('IS_id', \Auth::id())
-                                                ->get();
+    if (isset($user_id) || isset($region_data)) {
+        $users = App\Models\User::find(isset($agent_user_id) ? $agent_user_id : $user_id);
 
-    $get_user_under_me = $get_user_under_sup->pluck('user_id');
-                                                
-    if(isset($user_id) || isset($region_data)) {
-        $users = App\Models\User::find($user_id);
-        $user_to_search = $user_id == "All" ? $get_user_under_me : [$user_id];
+        if ($users->profile_id == 3) {
+            $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                ->join('users', 'users.id', 'user_details.user_id')
+                                ->where('IS_id', $user_id)
+                                ->get();
+
+            $get_user_under_me = $get_user_under_sup;
+                
+            $get_user_under_me = $get_user_under_me->pluck('user_id');
+        } else {
+
+            $get_user_under_sup = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                ->join('users', 'users.id', 'user_details.user_id')
+                                ->where('IS_id', $user_id)
+                                ->get();
+                                
+            $get_user_under_me = [$agent_user_id];
+        }
     }
     $date_ctr = 0;
+
 @endphp
 
 <div id="workplan-list" class='mt-5'>
@@ -40,7 +53,7 @@
                         <div class="menu-header-content btn-pane-right">
                             <h5 class="menu-header-title text-dark">
                                 <i class="header-icon pe-7s-date pe-lg font-weight-bold mr-1"></i>
-                                 My Team's Activities
+                                 Daily Activity Report
                             </h5>
                         </div>
                         <div class="btn-actions-pane-right py-0">
@@ -52,7 +65,8 @@
                         <div class="col-12">
                             <form action="{{ route('daily_activity') }}" method="POST">@csrf
                                 <div class="form-row">
-                                    <div class="col-12 col-md-6">
+
+                                    <div class="col-12 col-md-3">
                                         <label for="region">Region</label>
                                         <select class="mb-2 form-control" name="region">
                                             @php
@@ -65,14 +79,21 @@
                                             @endforeach
                                         </select>
                                     </div>
-
                                     
-                                    <div class="col-12 col-md-6">
-                                        <label for="user_id">Agent</label>
+                                    <div class="col-12 col-md-3">
+                                        <label for="user_id">Supervisor</label>
                                         
-                                        <select class="mb-2 form-control" name="user_id">
-                                            <option value="All">All</option>
-                                            @foreach ($get_user_under_sup as $user)
+                                        <select class="mb-2 form-control" name="user_id" id="user_id">
+                                            @php
+                                                $get_supervisor = App\Models\UserDetail::select('user_details.user_id', 'users.name')
+                                                                                ->join('users', 'users.id', 'user_details.user_id')
+                                                                                ->where('vendor_id', $user_detail->vendor_id)
+                                                                                ->where('users.profile_id', 3)
+                                                                                ->get();
+                                            @endphp
+
+                                            <option value="">Please select user.</option>
+                                            @foreach ($get_supervisor as $user)
                                                 @php
                                                     if (isset($user_id)) {
                                                         $selected = $user_id == $user->user_id ? 'selected': '';
@@ -85,6 +106,27 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-12 col-md-3">
+                                        <label for="agent_user_id">Agent</label>
+                                        
+                                        <select class="mb-2 form-control" name="agent_user_id" id="agent_user_id">
+                                            <option value="">Please select agent.</option>
+                                            @if ( isset($users) )
+                                                {{-- @if ( $users->profile_id == 3 ) --}}
+                                                    @foreach ($get_user_under_sup as $item)
+                                                        @php
+                                                            $selected = "";    
+                                                            if ( isset($agent_user_id) && $item->user_id == $agent_user_id ) {
+                                                                $selected = "selected";
+                                                            }
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $item->user_id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                {{-- @endif --}}
+                                            @endif
+                                        </select>
+                                    </div>
+
                                     <button class="btn btn-primary btn-shadow" type="submit">Filter</button>
                                 
                                 </div>
@@ -92,11 +134,36 @@
                             </form>
                         </div>
                     </div>
+                    {{-- <div class="row mb-3">
+                        <div class="col-2">
+                            Region
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>All</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            Agent
+                        </div>
+                        <div class="col-4">
+                            <select class="mb-2 form-control">
+                                <option>All</option>
+                            </select>
+                        </div>
+                    </div> --}}
+
                     @if (isset($user_id))
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             <div id="accordion" class="accordion-wrapper mb-3">
-                                <h1>{{ isset($users) ? $users->name : "" }}</h1>
+                                @if (isset($users))
+                                    @if ($users->profile_id == 3)
+                                    <h1>DAR of Agents under {{ $users->name }}</h1>
+                                    @else
+                                    <h1>{{ $users->name }}</h1>
+                                    @endif  
+                                @endif
                                 @foreach ($dates as $date)
                                 @php
                                     $date_ctr++;
@@ -112,14 +179,13 @@
                                         <div class="card-body p-0">
                                             @php
 
-                                                if(isset($user_id) || isset($region_data)) {
-                                                    // dd(isset($region_data));
+                                                if (isset($user_id)) {
                                                     if (isset($region_data) && $region_data != 'All') {
                                                         $dars =  \DB::table('view_dar_agent')
                                                                 ->where('date_added', $date->date_added)
                                                                 ->where('type', '<>',  'work_plan')
                                                                 ->where('type', '<>',  'doc_upload')
-                                                                ->whereIn('user_id', $user_to_search)
+                                                                ->whereIn('user_id', $get_user_under_me)
                                                                 ->where('sam_region_name', $region_data)
                                                                 ->get();
                                                     } else {
@@ -127,36 +193,25 @@
                                                                 ->where('date_added', $date->date_added)
                                                                 ->where('type', '<>',  'work_plan')
                                                                 ->where('type', '<>',  'doc_upload')
-                                                                ->whereIn('user_id', $user_to_search)
+                                                                ->whereIn('user_id', $get_user_under_me)
                                                                 ->get();
                                                     }
-                                                }
 
-                                                // if (isset($user_id) != 'All') {
-                                                //     if (isset($region_data) && $region_data != 'All') {
-                                                //         $dars =  \DB::table('view_dar_agent')
-                                                //                 ->where('date_added', $date->date_added)
-                                                //                 ->where('type', '<>',  'work_plan')
-                                                //                 ->where('type', '<>',  'doc_upload')
-                                                //                 ->whereIn('user_id', $user_to_search)
-                                                //                 ->where('sam_region_name', $user_to_search)
-                                                //                 ->get();
-                                                //     } else {
-                                                //         $dars =  \DB::table('view_dar_agent')
-                                                //                 ->where('date_added', $date->date_added)
-                                                //                 ->where('type', '<>',  'work_plan')
-                                                //                 ->where('type', '<>',  'doc_upload')
-                                                //                 ->whereIn('user_id', $user_to_search)
-                                                //                 ->get();
-                                                //     }
-                                                // } else {     
-                                                //     $dars =  \DB::table('view_dar_agent')
-                                                //             ->where('date_added', $date->date_added)
-                                                //             ->where('type', '<>',  'work_plan')
-                                                //             ->where('type', '<>',  'doc_upload')
-                                                //             ->whereIn('user_id', $user_to_search)
-                                                //             ->get();
-                                                // }
+                                                } else {
+
+                                                    $get_user = App\Models\UserDetail::select('user_id')
+                                                                    ->where('IS_id', \Auth::id())
+                                                                    ->get()
+                                                                    ->pluck('user_id');
+
+                                                                    
+                                                    $dars =  \DB::table('view_dar_agent')
+                                                            ->where('date_added', $date->date_added)
+                                                            ->where('type', '<>',  'work_plan')
+                                                            ->where('type', '<>',  'doc_upload')
+                                                            ->whereIn('user_id', $get_user)
+                                                            ->get();
+                                                }
 
                                             @endphp
                                             <div id="accordion-sites{{ $date_ctr }}" class="p-0 m-0 ">
@@ -195,8 +250,7 @@
                                                             </td>
                                                             <td>
                                                                 @php
-                                                                    $v = json_decode($dar->value);
-                                                                    dd($v);
+                                                                    $v = json_decode($dar->value);    
                                                                     if(isset($v->saq_objective)){
                                                                         $saq = $v->saq_objective;
                                                                     } else {
@@ -237,7 +291,51 @@
 
 @section('js_script')
 
+<script>
+
+    $("select#user_id").on("change", function() {
+
+        var user_id = $(this).val();
+        
+        if ( user_id != '') {
+            $.ajax({
+                url: "/get-agent-of-supervisor/" + user_id,
+                method: "GET",
+                success: function (resp) {
+
+                    console.log(resp);
+                    $("#agent_user_id option").remove();
+
+                    if (resp.message.length < 1) {
+                        $("#agent_user_id").append(
+                            '<option value="">No agent available.</option>'
+                        );
+                    } else {
+                        $("#agent_user_id").append(
+                            '<option value="">Please select agent.</option>'
+                        );
+
+                        resp.message.forEach(element => {
+                            $("#agent_user_id").append(
+                                '<option value="'+ element.id +'">' + element.firstname + ' ' + element.lastname + '</option>'
+                            );
+                        });
+                    }
+                },
+                error: function (resp) {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            });
+        }
+    });
+</script>
+
 <script src="\js\modal-loader.js"> </script>
+
 
 @endsection
 
