@@ -60,7 +60,12 @@ $json = json_decode($json);
 if($activity_source == 'work_plan_view'){
 
 
-    $wp_db = \DB::table('sub_activity_value')->where('id', $json->work_plan_id)->first();
+    // $wp_db = \DB::table('sub_activity_value')->where('id', $json->work_plan_id)->first();
+    $wp_db = \DB::table('sub_activity_value')
+                ->join('view_site', 'view_site.sam_id', 'sub_activity_value.sam_id')
+                ->where('sub_activity_value.id', $json->work_plan_id)
+                ->where('view_site.activity_type', "!=", "complete")
+                ->first();
 
     $wp_db_value = json_decode($wp_db->value);
 
@@ -81,7 +86,13 @@ if($activity_source == 'work_plan_view'){
 }
 elseif($activity_source == 'work_plan_add'){
 
-    $sites = \DB::table('view_assigned_sites')->where('agent_id', \Auth::user()->id)->get();
+    // $sites = \DB::table('view_assigned_sites')->where('agent_id', \Auth::user()->id)->get();
+    $sites = \DB::table('view_assigned_sites')
+                ->join('view_site', 'view_site.sam_id', 'view_assigned_sites.sam_id')
+                ->select('view_assigned_sites.*')
+                ->where('view_assigned_sites.agent_id', \Auth::user()->id)
+                ->where('view_site.activity_type', "!=", "complete")
+                ->get();
 
     if(!isset($json->planned_date)){
         $planned_date = "";

@@ -123,7 +123,7 @@
                 if ( !resp.error ) {
                     if (resp.message != null) {
                         $(".link_url").html(
-                            '<a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName='+resp.message.UPLOAD_FILE+'" class="mb-2 mr-2 btn-icon btn-shadow btn-outline-2x btn btn-outline-link pull-right pull-right"><i class="lnr-link btn-icon-wrapper"> </i>Appsheet File Link</a>'
+                            '<a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName='+resp.message.UPLOAD_FILE+'" target="_blank" class="mb-2 mr-2 btn-icon btn-shadow btn-outline-2x btn btn-outline-link pull-right pull-right"><i class="lnr-link btn-icon-wrapper"> </i>Appsheet File Link</a>'
                         );
                     }
                 } else {
