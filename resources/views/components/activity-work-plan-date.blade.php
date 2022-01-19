@@ -430,69 +430,71 @@ $(document).ready(() => {
 
         e.preventDefault();
 
-        var sam_id = $(this).val();   
-        
-        $.ajax({
+        var sam_id = $(this).val();
 
-            url: '/site-ajax',
-            method: 'POST',
-            data: {
-                sam_id : sam_id,
-                type: 'work_plan_stage_activities'
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
+        if ( sam_id != "" ) {
+            $.ajax({
+                url: '/site-ajax',
+                method: 'POST',
+                data: {
+                    sam_id : sam_id,
+                    type: 'work_plan_stage_activities'
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if(!resp.error){
 
-                    $('#activity_id')
-                        .find('option')
-                        .remove()
-                        .end()
-                    ;
-                    
-                    $('#sub_activity_id')
-                        .find('option')
-                        .remove()
-                        .end()
-                    ;
+                        $('#activity_id')
+                            .find('option')
+                            .remove()
+                            .end()
+                        ;
+                        
+                        $('#sub_activity_id')
+                            .find('option')
+                            .remove()
+                            .end()
+                        ;
 
-                    $('#site_name').val($('#sam_id').children("option:selected").text());    
+                        $('#site_name').val($('#sam_id').children("option:selected").text());    
 
 
-                    $("#activity_id").append(new Option("Select  Activity",  ""));
+                        $("#activity_id").append(new Option("Select  Activity",  ""));
 
-                    $.each(resp.message, function(k, v) 
-                    {
-                        $("#activity_id").append(new Option(v.activity_name,  v.activity_id));
-                    });                    
+                        $.each(resp.message, function(k, v) 
+                        {
+                            $("#activity_id").append(new Option(v.activity_name,  v.activity_id));
+                        });                    
 
-                } else {            
+                    } else {            
 
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
-                        });
-                    } else {
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("#" + index + "-error").text(data);
+                            });
+                        } else {
 
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
                     }
-                }
-            },
-            error: function(resp){
+                },
+                error: function(resp){
 
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
-        });
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        }
+        
 
 
 
@@ -503,66 +505,69 @@ $(document).ready(() => {
         e.preventDefault();
 
         var sam_id = $("#sam_id").val();       
-        var activity_id = $(this).val();       
-        
-        $.ajax({
+        var activity_id = $(this).val();
 
-            url: '/site-ajax',
-            method: 'POST',
-            data: {
-                sam_id : sam_id,
-                activity_id : activity_id,
-                type: 'work_plan_sub_activities'
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp){
-                if(!resp.error){
+        if ( activity_id != "" ) {
+            $.ajax({
 
-
-                    $('#sub_activity_id')
-                        .find('option')
-                        .remove()
-                        .end()
-                    ;
-
-                    $('#activity_name').val($('#activity_id').children("option:selected").text());    
+                url: '/site-ajax',
+                method: 'POST',
+                data: {
+                    sam_id : sam_id,
+                    activity_id : activity_id,
+                    type: 'work_plan_sub_activities'
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp){
+                    if(!resp.error){
 
 
-                    $("#sub_activity_id").append(new Option("Select Sub Activity",  ""));
+                        $('#sub_activity_id')
+                            .find('option')
+                            .remove()
+                            .end()
+                        ;
 
-                    $.each(resp.message, function(k, v) 
-                    {
-                        $("#sub_activity_id").append(new Option(v.sub_activity_name,  v.sub_activity_id));
-                        console.log(v.sub_activity_name);
-                    });                    
+                        $('#activity_name').val($('#activity_id').children("option:selected").text());    
 
-                } else {            
 
-                    if (typeof resp.message === 'object' && resp.message !== null) {
-                        $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
-                        });
-                    } else {
+                        $("#sub_activity_id").append(new Option("Select Sub Activity",  ""));
 
-                        Swal.fire(
-                            'Error',
-                            resp.message,
-                            'error'
-                        )
+                        $.each(resp.message, function(k, v) 
+                        {
+                            $("#sub_activity_id").append(new Option(v.sub_activity_name,  v.sub_activity_id));
+                            console.log(v.sub_activity_name);
+                        });                    
+
+                    } else {            
+
+                        if (typeof resp.message === 'object' && resp.message !== null) {
+                            $.each(resp.message, function(index, data) {
+                                $("#" + index + "-error").text(data);
+                            });
+                        } else {
+
+                            Swal.fire(
+                                'Error',
+                                resp.message,
+                                'error'
+                            )
+                        }
                     }
-                }
-            },
-            error: function(resp){
+                },
+                error: function(resp){
 
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
-        });
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            });
+        }
+        
 
 
 
