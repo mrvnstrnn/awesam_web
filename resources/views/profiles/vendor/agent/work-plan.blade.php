@@ -234,7 +234,7 @@
                                             @endphp
                                             <tr>
             
-                                                <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                <td  class="bg-secondary text-white text-bold agent_engagement" colspan="6">
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <H5 class="p-0 m-0">{{ $xdate }}<H5>
@@ -360,7 +360,7 @@
                                             @endphp
                                             <tr>
             
-                                                <td  class="bg-secondary text-white text-bold" colspan="6">
+                                                <td  class="bg-secondary text-white text-bold agent_engagement" colspan="6">
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <H5 class="p-0 m-0">{{ $xdate }}<H5>
