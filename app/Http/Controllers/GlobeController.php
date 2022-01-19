@@ -1052,6 +1052,7 @@ class GlobeController extends Controller
                             ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
                             ->where('user_details.IS_id', \Auth::user()->id)
                             ->where('user_programs.program_id', $request->program_id)
+                            ->where('users.is_test', 0)
                             ->get()
                             ->groupBy('users.id');
 
@@ -1114,6 +1115,7 @@ class GlobeController extends Controller
                                 ->where('users.profile_id', 1)
                                 ->where('user_details.vendor_id', $vendor)
                                 ->where('user_programs.program_id', $request->get('program_id'))
+                                ->where('users.is_test', 0)
                                 ->get();
             } else {
                 $checkAgent = \DB::table('users')
@@ -1176,14 +1178,14 @@ class GlobeController extends Controller
         }
     }
 
-    public function vendor_agents($user_id = null)
+    public function vendor_agents(Request $request)
     {
 
         try {
 
             $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
 
-            if (is_null($user_id)) {
+            if (is_null($request->get('user_id'))) {
 
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();
 
@@ -1192,6 +1194,7 @@ class GlobeController extends Controller
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
                                         ->where('users.profile_id', 2)
                                         ->where('user_programs.program_id', $get_user_program_active)
+                                        ->where('users.is_test', 0)
                                         ->get();
 
                 $dt = DataTables::of($checkAgent)
@@ -1216,8 +1219,9 @@ class GlobeController extends Controller
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
                                         ->where('users.profile_id', 2)
-                                        ->where('user_details.IS_id', $user_id)
+                                        ->where('user_details.IS_id', $request->get('user_id'))
                                         ->where('user_programs.program_id', $get_user_program_active)
+                                        ->where('users.is_test', 0)
                                         ->get();
 
                 $dt = DataTables::of($checkAgent)
@@ -1258,11 +1262,13 @@ class GlobeController extends Controller
                                         ->where('user_details.vendor_id', $vendor->vendor_id)
                                         ->where('users.profile_id', 3)
                                         ->where('user_programs.program_id', $get_user_program_active)
+                                        ->where('users.is_test', 0)
                                         ->get();
             } else {
                 $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
                                         // ->where('user_details.IS_id', \Auth::id())
                                         ->where('users.profile_id', 3)
+                                        ->where('users.is_test', 0)
                                         ->get();
             }
 
@@ -1302,6 +1308,7 @@ class GlobeController extends Controller
             $checkSupervisor = UserDetail::join('users', 'user_details.user_id', 'users.id')
                                     ->where('user_details.IS_id', \Auth::id())
                                     ->where('users.profile_id', 1)
+                                    ->where('users.is_test', 0)
                                     ->get();
 
             $dt = DataTables::of($checkSupervisor)
@@ -1324,6 +1331,7 @@ class GlobeController extends Controller
                                     ->join('users', 'user_details.user_id', 'users.id')
                                     ->leftJoin('users_areas', 'users_areas.user_id', 'users.id')
                                     ->where('user_details.IS_id', $user_id)
+                                    ->where('users.is_test', 0)
                                     // ->where('users.profile_id', 3)
                                     ->get();
 
@@ -2289,159 +2297,7 @@ class GlobeController extends Controller
     }
 
     // public function doc_validation_approvals($id, $action)
-    public function doc_validation_approvals_old(Request $request)
-    {
-        try {
-            
-            $required = "";
-            if ($request->input('action') == "rejected") {
-                $required = "required";
-            }
-
-            $validate = Validator::make($request->all(), array(
-                'reason' => $required
-            ));
-
-            if ($validate->passes()) {
-                
-                $activities_check = \DB::table('stage_activities')
-                                        ->where('activity_id', $request->input("activity_id"))
-                                        ->where('program_id', $request->input("program_id"))
-                                        ->where('category', $request->input("site_category"))
-                                        ->first();
-
-                $sub_activity_value_check = SubActivityValue::where('id', $request->input('id'))->first();
-                                        
-                SubActivityValue::where('id', $request->input('id'))
-                                ->update([
-                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                ]);
-
-                if ( is_null($sub_activity_value_check->approver_id) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'approver_id' => \Auth::id(),
-                                        'date_approved' => Carbon::now()->toDate(),
-                                    ]);
-                } else if ( !is_null($sub_activity_value_check->approver_id) && is_null($sub_activity_value_check->approver_id2) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'approver_id2' => \Auth::id(),
-                                        'date_approved2' => Carbon::now()->toDate(),
-                                    ]);
-                } else if ( !is_null($sub_activity_value_check->approver_id2) && is_null($sub_activity_value_check->approver_id3) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                        ->update([
-                                            'approver_id3' => \Auth::id(),
-                                            'date_approved3' => Carbon::now()->toDate(),
-                                        ]);
-                }  else if ( !is_null($sub_activity_value_check->approver_id3) && is_null($sub_activity_value_check->approver_id4) ) {
-                    SubActivityValue::where('id', $request->input('id'))
-                                        ->update([
-                                            'approver_id4' => \Auth::id(),
-                                            'date_approved4' => Carbon::now()->toDate(),
-                                        ]);
-                }
-
-                if ( !is_null($activities_check->approver_profile_id_1) && !is_null($sub_activity_value_check->approver_id) ) {
-
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-
-                } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_1) && is_null($activities_check->approver_profile_id_2) ) &&
-                    ( !is_null($sub_activity_value_check->approver_id) && !is_null($sub_activity_value_check->approver_id2) )
-                    ) {
-
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-
-                } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) &&
-                    ( !is_null($sub_activity_value_check->approver_id2) && !is_null($sub_activity_value_check->approver_id3) )
-                    ) {
-
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-                            
-                } else if ( 
-                    ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) &&
-                    ( !is_null($sub_activity_value_check->approver_id3) && !is_null($sub_activity_value_check->approver_id4) )
-                    ) {
-
-                    SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'status' => $request->input('action') == "rejected" ? "denied" : "approved"
-                                    ]);
-                            
-                }
-
-                $sub_activity_files = SubActivityValue::find($request->input('id'));
-                $user = User::find($sub_activity_files->user_id);
-
-                $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
-                                                ->where('program_id', $request->input("program_id"))
-                                                ->where('category', $request->input("site_category"))
-                                                ->where('requires_validation', '1')
-                                                ->get();
-
-                $array_sub_activity = collect();
-
-                foreach ($sub_activities as $sub_activity) {
-                    $array_sub_activity->push($sub_activity->sub_activity_id);
-                }
-
-                if ( is_null($activities_check->approver_profile_id_2) ) {
-
-                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
-                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'approved')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->whereNotNull('approver_id')
-                                                        ->groupBy('sub_activity_id')
-                                                        ->get();
-                } else if ( !is_null($activities_check->approver_profile_id_2) && is_null($activities_check->approver_profile_id_3) ) {
-                    
-                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
-                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'approved')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->whereNotNull('approver_id2')
-                                                        ->groupBy('sub_activity_id')
-                                                        ->get();
-                } else if ( !is_null($activities_check->approver_profile_id_3) && is_null($activities_check->approver_profile_id_4) ) {
-                    
-                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
-                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('status', 'approved')
-                                                        ->where('sam_id', $request->input("sam_id"))
-                                                        ->whereNotNull('approver_id3')
-                                                        ->groupBy('sub_activity_id')
-                                                        ->get();
-                }
-
-                if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                }
-
-                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
-            } else {
-                return response()->json(['error' => true, 'message' => $validate->errors() ]);
-            }
-
-        } catch (\Throwable $th) {
-            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function doc_validation_approvals(Request $request)
+    public function doc_validation_approvals_old (Request $request)
     {
         try {
             $required = "";
@@ -2465,7 +2321,7 @@ class GlobeController extends Controller
                 $approvers_pending_collect = collect();
 
                 foreach ($validators as $validator) {
-                    if ( $validator->profile_id == \Auth::user()->profile_id ) {
+                    if ( $request->input('action') == "rejected" ) {
                         $new_array = array(
                             'profile_id' => $validator->profile_id,
                             'status' => $request->get('action'),
@@ -2475,25 +2331,36 @@ class GlobeController extends Controller
 
                         $approvers_collect->push($new_array);
                     } else {
-                        if ( isset($validator->user_id) ) {
+                        if ( $validator->profile_id == \Auth::user()->profile_id ) {
                             $new_array = array(
                                 'profile_id' => $validator->profile_id,
-                                'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
-                                'user_id' => $validator->user_id,
-                                'approved_date' => $validator->approved_date,
+                                'status' => $request->get('action'),
+                                'user_id' => \Auth::id(),
+                                'approved_date' => Carbon::now()->toDateString(),
                             );
-                        } else {
-                            $new_array = array(
-                                'profile_id' => $validator->profile_id,
-                                'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
-                            );
-                            $approvers_pending_collect->push($validator->profile_id);
-                        }
 
-                        $approvers_collect->push($new_array);
+                            $approvers_collect->push($new_array);
+                        } else {
+                            if ( isset($validator->user_id) ) {
+                                $new_array = array(
+                                    'profile_id' => $validator->profile_id,
+                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                                    'user_id' => $validator->user_id,
+                                    'approved_date' => $validator->approved_date,
+                                );
+                            } else {
+                                $new_array = array(
+                                    'profile_id' => $validator->profile_id,
+                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                                );
+                                $approvers_pending_collect->push($validator->profile_id);
+                            }
+
+                            $approvers_collect->push($new_array);
+                        }
                     }
                 }
-
+                
                 $array_data = [
                     'file' => $file,
                     'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
@@ -2595,6 +2462,195 @@ class GlobeController extends Controller
 
                     SubActivityValue::where('sam_id', $request->input('sam_id'))
                                 ->where('type', $validators_type)
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    'status' => $current_status,
+                                ]);
+                }
+
+                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
+            } else {
+                return response()->json(['error' => true, 'message' => $validate->errors() ]);
+            }
+
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function doc_validation_approvals(Request $request)
+    {
+        try {
+            $required = "";
+            if ($request->input('action') == "rejected") {
+                $required = "required";
+            }
+
+            $validate = Validator::make($request->all(), array(
+                'reason' => $required
+            ));
+
+            if ($validate->passes()) {
+
+                $sub_activity_files = SubActivityValue::find($request->input('id'));
+
+                $validators_type = json_decode($sub_activity_files->value)->type;
+                $validators = json_decode($sub_activity_files->value)->validators;
+                $file = json_decode($sub_activity_files->value)->file;
+
+                $approvers_collect = collect();
+                $approvers_pending_collect = collect();
+
+                foreach ($validators as $validator) {
+                    if ( $request->input('action') == "rejected" ) {
+                        $new_array = array(
+                            'profile_id' => $validator->profile_id,
+                            'status' => $request->get('action'),
+                            'user_id' => \Auth::id(),
+                            'approved_date' => Carbon::now()->toDateString(),
+                        );
+
+                        $approvers_collect->push($new_array);
+                    } else {
+                        if ( $validator->profile_id == \Auth::user()->profile_id ) {
+                            $new_array = array(
+                                'profile_id' => $validator->profile_id,
+                                'status' => $request->get('action'),
+                                'user_id' => \Auth::id(),
+                                'approved_date' => Carbon::now()->toDateString(),
+                            );
+
+                            $approvers_collect->push($new_array);
+                        } else {
+                            if ( isset($validator->user_id) ) {
+                                $new_array = array(
+                                    'profile_id' => $validator->profile_id,
+                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                                    'user_id' => $validator->user_id,
+                                    'approved_date' => $validator->approved_date,
+                                );
+                            } else {
+                                $new_array = array(
+                                    'profile_id' => $validator->profile_id,
+                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
+                                );
+                                $approvers_pending_collect->push($validator->profile_id);
+                            }
+
+                            $approvers_collect->push($new_array);
+                        }
+                    }
+                }
+                if ( $request->get('action') == "rejected" ) {
+                    $active_file_status = "rejected";
+                } else {
+                    $active_file_status = count($approvers_pending_collect->all()) < 1 ? "approved" : "pending";
+                }
+
+                $array_data = [
+                    'file' => $file,
+                    'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
+                    // 'active_status' => count($approvers_pending_collect->all()) < 1 ? "approved" : "pending",
+                    'active_status' => $active_file_status,
+                    'validator' => count($approvers_pending_collect->all()),
+                    'validators' => $approvers_collect->all(),
+                    'type' => $validators_type
+                ];
+
+                if ($request->input('action') != "rejected") {
+                                                            
+                    if ( !is_null($sub_activity_files) ) {
+                        // return response()->json(['error' => true, 'message' => $array_data]);
+
+                        if ( count($approvers_pending_collect) < 1 ) {
+                            $current_status = $request->input('action') == "rejected" ? "rejected" : "approved";
+
+                            SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                        'status' => $current_status,
+                                    ]);
+
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
+                        } else {
+                            $current_status = $sub_activity_files->status;
+
+                            SubActivityValue::where('id', $request->input('id'))
+                                    ->update([
+                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    ]);
+
+                            if ($validators_type != 'doc_upload') {
+                                SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('type', $validators_type)
+                                        ->update([
+                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                            'status' => $current_status,
+                                        ]);
+                            }
+                        }
+
+                        $sub_activity_files->update([
+                            'value' => json_encode($array_data),
+                            'status' => $current_status
+                        ]);
+
+                    } else {
+                        return response()->json(['error' => true, 'message' => "No data found."]);
+                    }
+
+                    $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
+                                                ->where('program_id', $request->input("program_id"))
+                                                ->where('category', $request->input("site_category"))
+                                                ->where('requires_validation', '1')
+                                                ->get();
+
+                    $array_sub_activity = collect();
+
+                    foreach ($sub_activities as $sub_activity) {
+                        $array_sub_activity->push($sub_activity->sub_activity_id);
+                    }
+
+                    
+                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
+                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
+                                                        ->where('sam_id', $request->input('sam_id'))
+                                                        // ->where('status', 'pending')
+                                                        ->where('status', 'approved')
+                                                        ->where('type', 'doc_upload')
+                                                        ->groupBy('sub_activity_id')
+                                                        ->get();
+
+                    if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
+                        $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
+                    }
+
+                } else {
+                    $current_status = $request->input('action') == "rejected" ? "rejected" : "approved";
+
+                    $sub_activity_files->update([
+                        'value' => json_encode($array_data),
+                        'status' => $current_status,
+                        'remarks' => $request->input('reason')
+                    ]);
+
+                    SubActivityValue::where('id', $request->input('id'))
+                                ->update([
+                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
+                                    'status' => $current_status,
+                                ]);
+
+                    SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                ->where('type', $validators_type)
+                                ->where('id', $request->input('id'))
                                 ->update([
                                     'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
                                     'status' => $current_status,

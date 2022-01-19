@@ -217,6 +217,7 @@
                                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                                         ->where('user_details.IS_id', \Auth::id())
                                                         ->where('user_programs.program_id', $user_program)
+                                                        ->where('users.is_test', 0)
                                                         ->get();
                     @endphp
                     

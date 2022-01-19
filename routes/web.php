@@ -249,7 +249,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/requests/approve-reject', [VendorController::class, 'approvereject_agent_request'])->name('approvereject_agent_request');
 
 
-    Route::get('/vendor-agents/{user_id?}', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
+    Route::post('/vendor-agents', [GlobeController::class, 'vendor_agents'])->name('vendor_agents');
     Route::get('/vendor-supervisors', [GlobeController::class, 'vendor_supervisors'])->name('vendor_supervisors');
     Route::get('/vendor-employees', [GlobeController::class, 'vendor_employees'])->name('vendor_employees');
 

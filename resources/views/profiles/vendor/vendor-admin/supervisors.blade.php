@@ -239,31 +239,21 @@
     <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Agents</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="dropdown-menu-header" style="paddng:0px !important;">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <div>
+                                <h5 class="menu-header-title">
+                                    Agents
+                                </h5>                                        
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
                     
-                    <div class="form-row">
-                        <div class="form-group col-md-4 col-12">
-                            <label for="firstname">Firstname</label>
-                        </div>
-                        <div class="form-group col-md-8 col-12">
-                            <input type="text" class="form-control" name="firstname" id="firstname" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-4 col-12">
-                            <label for="lastname">Lastname</label>
-                        </div>
-                        <div class="form-group col-md-8 col-12">
-                            <input type="text" class="form-control" name="lastname" id="lastname" readonly>
-                        </div>
-                    </div>
+                    <div class="content-data"></div>
 
                     <div class="supervisor-data d-none">
                         

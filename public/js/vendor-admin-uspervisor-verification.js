@@ -59,8 +59,12 @@ $(document).ready(() => {
                 serverSide: true,
                 // pageLength: 3,
                 ajax: {
-                    url: "/vendor-agents/"+data_id,
-                    type: 'GET',
+                    // url: "/vendor-agents/"+data_id,
+                    url: "/vendor-agents",
+                    data : {
+                        data_id : data_id
+                    },
+                    type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

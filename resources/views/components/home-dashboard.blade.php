@@ -41,6 +41,7 @@
 
                                                         ->where('users.profile_id', 3)
                                                         ->where('user_details.vendor_id', $vendor->vendor_id)
+                                                        ->where('users.is_test', 0)
                                                         ->get();
                     @endphp
                     <div class="card mb-3">
@@ -57,6 +58,7 @@
                                                             ->where('user_programs.program_id', $get_user_program_active)
                                                         
                                                             ->where('user_details.IS_id', $supervisor->id)
+                                                            ->where('users.is_test', 0)
                                                             ->get(); 
                                     @endphp
                                     <div class="row">
