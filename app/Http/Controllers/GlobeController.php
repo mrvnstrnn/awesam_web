@@ -6779,7 +6779,7 @@ class GlobeController extends Controller
                                     ->where('designation', 3)
                                     ->get();
 
-            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor ]);
+            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor, 'user_detail' => $user_detail ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -6848,13 +6848,16 @@ class GlobeController extends Controller
     public function get_supervisor ($user_id, $vendor_id)
     {
         try {
+            
+            $user_detail = \Auth::user()->getUserDetail()->first();
+
             $supervisor = User::select('users.*')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->where('vendor_id', $vendor_id)
                                     ->where('designation', 3)
                                     ->get();
 
-            return response()->json(['error' => false, 'supervisor' => $supervisor ]);
+            return response()->json(['error' => false, 'supervisor' => $supervisor, 'user_detail' => $user_detail ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

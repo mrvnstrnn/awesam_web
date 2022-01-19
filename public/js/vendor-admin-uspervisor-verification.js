@@ -124,6 +124,9 @@ $(document).ready(() => {
                     });
 
                     $('.supervisor-data #supervisor').val(is_id).trigger('change');
+                    
+                    // $('.supervisor_info_form #firstname').val(resp.user_detail.firstname);
+                    // $('.supervisor_info_form #lastname').val(resp.user_detail.lastname);
 
                     $(".change_supervisor").attr("data-user_id", user_id);
 

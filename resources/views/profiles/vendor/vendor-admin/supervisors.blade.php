@@ -74,6 +74,9 @@
                             );
                         });
                         
+                        $('.supervisor_info_form #firstname').val(resp.user_detail.firstname);
+                        $('.supervisor_info_form #lastname').val(resp.user_detail.lastname);
+                        
                         resp.vendor_program.forEach(element => {
                             $(".supervisor_info_form .vendor_program_div").append(
                                 '<div class="col-4">' +
@@ -111,18 +114,43 @@
     <div class="modal fade" id="modal-info-supervisor" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Vendor Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                <div class="dropdown-menu-header" style="paddng:0px !important;">
+                    <div class="dropdown-menu-header-inner bg-dark">
+                        <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                        <div class="menu-header-content btn-pane-right">
+                            <div>
+                                <h5 class="menu-header-title">
+                                    User Edit
+                                </h5>                                        
+                            </div>
+                        </div>
+                    </div>
+                </div> 
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
 
                     <form class="supervisor_info_form">
                         <div class="form-row">
-                            <div class="col-12 profile_div">
+                            <div class="form-group col-md-4 col-12">
+                                <label for="firstname">Firstname</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
+                                <input type="text" class="form-control" name="firstname" id="firstname" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-12">
+                                <label for="lastname">Lastname</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
+                                <input type="text" class="form-control" name="lastname" id="lastname" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row profile_div">
+                            <div class="form-group col-md-4 col-12">
                                 <label for="profile">Profile</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
                                 <select name="profile" id="profile" class="form-control">
                                     <option value="2">Agent</option>
                                     <option value="3">Supervisor</option>
@@ -130,21 +158,32 @@
                                 <small class="text-danger profile-error"></small>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-12 supervisor_div d-none">
+                        
+                        <div class="form-row supervisor_div">
+                            <div class="form-group col-md-4 col-12">
                                 <label for="supervisor">Supervisor</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
                                 <select name="supervisor" id="supervisor" class="form-control"></select>
                                 <small class="text-danger is_id-error"></small>
                             </div>
                         </div>
-                        <div class="form-row col-12">
-                            <label for="">Program</label>
-                            <div class="col-12 vendor_program_div"></div>
-                            <small class="text-danger program-error"></small>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-12">
+                                <label for="">Program</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
+                                <div class="col-12 vendor_program_div"></div>
+                                <small class="text-danger program-error"></small>
+                            </div>
                         </div>
-                        <div class="form-row col-12">
-                            <label for="region">Region</label>
-                            <div class="row" id="region_div">
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-12">
+                                <label for="region">Region</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
                                 @php
                                     $user_detail = \DB::table('user_details')
                                                     ->select('vendor_id')
@@ -186,16 +225,18 @@
                                 <small class="text-danger region-error"></small>
                             </div>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary btn-change-info change-data">Update Data</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="modal-employee-verification" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -205,17 +246,32 @@
                     </button>
                 </div>
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
-                    <div class="content-data">
-                        {{-- <select name="profile" id="profile" class="form-control">
-                            <option value="2">Agent</option>
-                            <option value="3">Supervisor</option>
-                        </select> --}}
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-4 col-12">
+                            <label for="firstname">Firstname</label>
+                        </div>
+                        <div class="form-group col-md-8 col-12">
+                            <input type="text" class="form-control" name="firstname" id="firstname" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4 col-12">
+                            <label for="lastname">Lastname</label>
+                        </div>
+                        <div class="form-group col-md-8 col-12">
+                            <input type="text" class="form-control" name="lastname" id="lastname" readonly>
+                        </div>
                     </div>
 
                     <div class="supervisor-data d-none">
+                        
                         <div class="form-row">
-                            <div class="col-12">
-                                <label for="supervisor">Supervisor</label>
+                            <div class="form-group col-md-4 col-12">
+                                <label for="supervisor">Lastname</label>
+                            </div>
+                            <div class="form-group col-md-8 col-12">
                                 <select name="supervisor" id="supervisor" class="form-control"></select>
                             </div>
                         </div>

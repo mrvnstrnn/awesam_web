@@ -72,15 +72,21 @@
 @endsection
 
 @section('modals')
-<div class="modal fade" id="update-agent-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="update-agent-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Agent Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <div class="dropdown-menu-header" style="paddng:0px !important;">
+                <div class="dropdown-menu-header-inner bg-dark">
+                    <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div>
+                    <div class="menu-header-content btn-pane-right">
+                        <div>
+                            <h5 class="menu-header-title">
+                                Agents Details
+                            </h5>                                        
+                        </div>
+                    </div>
+                </div>
+            </div> 
             <div class="modal-body">
                 <form id="assign-agent-site-form">
                     <div class="container-fluid assign-agent-div">

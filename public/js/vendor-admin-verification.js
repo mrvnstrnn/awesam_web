@@ -241,6 +241,8 @@ $(document).ready(() => {
         
         $("#modal-info #supervisor option").remove();
         $("#modal-info .vendor_program_div div").remove();
+        
+        $("#modal-info").modal("show");
 
         $.ajax({
             // url: "/get-user-data/" + user_id + "/" + vendor_id + "/" + is_id,
@@ -254,7 +256,6 @@ $(document).ready(() => {
             },
             success: function (resp) {
                 if (!resp.error) {
-                    $("#modal-info").modal("show");
 
                     resp.supervisor.forEach(element => {
                         $("#modal-info .agent_info_form #supervisor").append(
@@ -275,6 +276,9 @@ $(document).ready(() => {
 
                     
                     $('.agent_info_form #supervisor').val(is_id).trigger('change');
+
+                    $('.agent_info_form #firstname').val(resp.user_detail.firstname);
+                    $('.agent_info_form #lastname').val(resp.user_detail.lastname);
 
                     resp.user_data.forEach(element => {
                         $(".agent_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
