@@ -52,7 +52,7 @@
                             <span class="opacity-10 text-info">
                                 <i class="fa fa-list-ol"></i>
                             </span>
-                            <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[2]->COUNT }}</span>
+                            <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[1]->COUNT }}</span>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                                     <span class="opacity-10 text-warning pr-2">
                                         <i class="fa fa-file-contract"></i>
                                     </span>
-                                    <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[1]->COUNT }}</span>
+                                    <span>{{ \DB::select('call `proc_agent_supervisor_site`('. \Auth::id() .')')[2]->COUNT }}</span>
                                 </div>
                             </div>
                         </div>
