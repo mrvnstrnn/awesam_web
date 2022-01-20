@@ -1185,6 +1185,7 @@ class GlobeController extends Controller
 
             $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
 
+
             if (is_null($request->get('user_id'))) {
 
                 $vendors = UserDetail::select('vendor_id')->where('user_id', \Auth::id())->first();

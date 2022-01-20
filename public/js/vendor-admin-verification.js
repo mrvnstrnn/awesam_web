@@ -70,8 +70,8 @@ $(document).ready(() => {
         serverSide: true,
         // pageLength: 3,
         ajax: {
-            url: $('#employee-agents-table').attr('data-href'),
-            type: 'GET',
+            url: "/vendor-agents",
+            type: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
