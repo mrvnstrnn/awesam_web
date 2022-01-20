@@ -18,7 +18,7 @@ class VendorMail extends Mailable
      */
     public $name, $vendor_admin_email, $vendor_sec_reg_name, $vendor_acronym, $password, $url;
 
-    public function __construct($name, $vendor_admin_email, $vendor_sec_reg_name, $vendor_acronym, $password)
+    public function __construct($name, $vendor_admin_email, $vendor_sec_reg_name, $vendor_acronym)
     {
         $this->name = $name;
         $this->vendor_admin_email = $vendor_admin_email;
