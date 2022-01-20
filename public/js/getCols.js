@@ -250,7 +250,7 @@ function getCols(active_program, active_table, active_profile){
                                     data : field['source_field'], 
                                     name: field['field_name'],
                                     render: function ( data, type, row ) {
-                                        return '<div class="font-weight-bold">' + data +'</div><small>'+ row['sam_id'] + '</small><br><small>'+ row['activity_name'] + ' : ' + row['activity_type'] + '</small>';
+                                        return '<div class="font-weight-bold">' + data +'</div><small>'+ row['sam_id'] + '</small><br><small>'+ row['activity_name'] + '</small>';
 
                                     },
         
