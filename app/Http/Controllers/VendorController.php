@@ -75,14 +75,8 @@ class VendorController extends Controller
 
                 // return response()->json(['error' => true, 'message' => $request->all() ]);
 
-                Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                    $name,
-                    $request->input('vendor_admin_email'),
-                    $request->input('vendor_sec_reg_name'),
-                    $request->input('vendor_acronym')
-                ));
-
                 $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
+
 
                 $arrayData = array(
                     'vendor_firstname' => $request->input('vendor_firstname'),
@@ -95,7 +89,15 @@ class VendorController extends Controller
                     'vendor_profile_id' => $request->input('vendor_profile_id')[0],
                 );
 
+                Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                    $name,
+                    $request->input('vendor_admin_email'),
+                    $request->input('vendor_sec_reg_name'),
+                    $request->input('vendor_acronym')
+                ));
+
                 if(is_null($request->input('vendor_id'))) {
+
                     $vendor_id = \DB::table('vendor')->insertGetId(
                         $arrayData
                     );
@@ -131,13 +133,6 @@ class VendorController extends Controller
 
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
-
-                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                        $name,
-                        $request->input('vendor_admin_email'),
-                        $request->input('vendor_sec_reg_name'),
-                        $request->input('vendor_acronym')
-                    ));
 
                     for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
                         VendorProgram::create([
