@@ -75,6 +75,13 @@ class VendorController extends Controller
 
                 // return response()->json(['error' => true, 'message' => $request->all() ]);
 
+                Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                    $name,
+                    $request->input('vendor_admin_email'),
+                    $request->input('vendor_sec_reg_name'),
+                    $request->input('vendor_acronym')
+                ));
+
                 $name = $request->input('vendor_firstname')." ".$request->input('vendor_lastname');
 
                 $arrayData = array(
@@ -122,15 +129,15 @@ class VendorController extends Controller
                         $vendor_program->save();
                     }
 
-                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                                        $name,
-                                        $request->input('vendor_admin_email'),
-                                        $request->input('vendor_sec_reg_name'),
-                                        $request->input('vendor_acronym')
-                                    ));
-
                     return response()->json(['error' => false, 'message' => "Successfully added vendor." ]);
                 } else {
+
+                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
+                        $name,
+                        $request->input('vendor_admin_email'),
+                        $request->input('vendor_sec_reg_name'),
+                        $request->input('vendor_acronym')
+                    ));
 
                     for ($i=0; $i < count($request->input('vendor_program_id')); $i++) { 
                         VendorProgram::create([
@@ -151,13 +158,6 @@ class VendorController extends Controller
                         ->update(
                             $arrayData
                         );
-
-                    Mail::to($request->input('vendor_admin_email'))->send(new VendorMail(
-                        $name,
-                        $request->input('vendor_admin_email'),
-                        $request->input('vendor_sec_reg_name'),
-                        $request->input('vendor_acronym')
-                    ));
                 
                     return response()->json(['error' => false, 'message' => "Successfully updated vendor." ]);
                 }
