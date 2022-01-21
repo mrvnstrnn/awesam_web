@@ -3812,6 +3812,9 @@ class GlobeController extends Controller
                             } else if ( $program_id == 5 ) {
                                 $sites->whereIn('activity_id', [9])
                                     ->get();
+                            } else if ( $program_id == 8 ) {
+                                $sites->whereIn('activity_id', [3])
+                                    ->get();
                             }
         }
 
@@ -9012,12 +9015,13 @@ class GlobeController extends Controller
             }
             $fields = '<form class="'.str_replace(" ", "_", strtolower($form_name) ).'_form">';
             foreach ($form_datas as $form_data) {
+                $read_only = isset($form_data->readonly) ? $form_data->readonly : "";
                 $fields .= '<div class="row border-bottom mb-1 pb-1">';
                 $fields .= '<div class="col-md-4"><label for="'.str_replace(" ", "_", strtolower($form_data->program_fields) ).'">' .$form_data->program_fields. '</label></div>';
 
                 if ($form_data->type == 'selection') {
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" '.$form_data->readonly.'>';
+                    $fields .= '<select class="form-control" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" '.$read_only.'>';
                     $new_array = explode("(,)",$form_data->selection);
                     for ($i=0; $i < count($new_array); $i++) { 
                         $fields .= '<option value="'.$new_array[$i].'">'.$new_array[$i].'</option>';
@@ -9028,13 +9032,13 @@ class GlobeController extends Controller
                 } else if ($form_data->type == 'textarea') {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<textarea type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'></textarea>';
+                    $fields .= '<textarea type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$read_only.'></textarea>';
                     $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 } else {
                     $class_add = $form_data->type == "date" ? "flatpicker" : "";
                     $fields .= '<div class="col-md-8">';
-                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$form_data->readonly.'>';
+                    $fields .= '<input type="'. $form_data->type. '" name="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" id="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '" value="" class="'.$class_add.' form-control" '.$read_only.'>';
                     $fields .= '<small class="' .str_replace(" ", "_", strtolower($form_data->program_fields) ). '-error text-danger"></small>';
                     $fields .= '</div>';
                 }

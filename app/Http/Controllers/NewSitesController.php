@@ -194,20 +194,12 @@ class NewSitesController extends Controller
     {
         for ($i=0; $i < count($sam_id); $i++) {
 
-
             $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
-                                    
+
             if (count($get_past_activities) < 1) {
-                // SiteStageTracking::create([
-                //     'sam_id' => $sam_id[$i],
-                //     'activity_id' => 1,
-                //     'activity_complete' => 'false',
-                //     'user_id' => \Auth::id()
-                // ]);
-                
                 $site_check = \DB::table('site')
                                 ->where('sam_id',  $sam_id[$i])
                                 ->first();
@@ -239,6 +231,7 @@ class NewSitesController extends Controller
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
+                
             }
 
             $past_activities = collect();
@@ -246,7 +239,7 @@ class NewSitesController extends Controller
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-            
+
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')

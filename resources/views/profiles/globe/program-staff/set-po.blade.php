@@ -136,7 +136,8 @@
         }
     });
 
-    $(".form_html").on("click", ".save_create_pr_btn", function (){
+    // $(".form_html").on("click", ".save_create_pr_btn", function (){
+    $(document).on("click", ".save_create_pr_btn", function (){
         $(this).attr("disabled", "disabled");
         $(this).text("Processing...");
 

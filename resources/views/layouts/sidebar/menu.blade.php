@@ -1,7 +1,7 @@
 {{-- PROFILE MENU --}}
 
 <ul class="vertical-nav-menu">
-    <li class="app-sidebar__heading">{{ Auth::user()->getUserProfile()->profile }}</li>
+    <li class="app-sidebar__heading">{{ Auth::user()->getUserProfile()->profile_alias }}</li>
     <li class="{{ $active_slug == "" ? 'mm-active' : '' }}">
         <form action="{{ route('change_active_program'); }}" method="POST" id="change_active_program">@csrf
             @php

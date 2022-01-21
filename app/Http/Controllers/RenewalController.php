@@ -1082,27 +1082,46 @@ class RenewalController extends Controller
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
-
-
             $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
 
             if (count($get_past_activities) < 1) {
-                SiteStageTracking::create([
-                    'sam_id' => $sam_id[$i],
-                    'activity_id' => 1,
-                    'activity_complete' => 'false',
-                    'user_id' => !\Auth::guest() ? \Auth::id() : 0
-                ]);
+                $site_check = \DB::table('site')
+                                ->where('sam_id',  $sam_id[$i])
+                                ->first();
+
+                if ( is_null($site_check->activities) ) {
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => 1,
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                } else {
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => 1,
+                        'activity_complete' => 'true',
+                        'user_id' => \Auth::id()
+                    ]);
+                    
+                    SiteStageTracking::create([
+                        'sam_id' => $sam_id[$i],
+                        'activity_id' => $activity_id[$i],
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+                }
 
                 $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
                                     ->get();
+                
             }
-            
+
             $past_activities = collect();
 
             for ($j=0; $j < count($get_past_activities); $j++) {
@@ -1116,7 +1135,7 @@ class RenewalController extends Controller
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
-                                     
+                                               
                 if (!is_null($activities)) {
                     if ($action == "true") {
                         $get_activitiess = \DB::table('stage_activities')
@@ -1149,7 +1168,7 @@ class RenewalController extends Controller
                                 'sam_id' => $sam_id[$i],
                                 'activity_id' => $activity,
                                 'activity_complete' => 'false',
-                                'user_id' => !\Auth::guest() ? \Auth::id() : 0
+                                'user_id' => \Auth::id()
                             ]);
                         }
 
@@ -1184,6 +1203,7 @@ class RenewalController extends Controller
                                                 ->select('stage_id')
                                                 ->where('activity_id', $activity)
                                                 ->where('program_id', $program_id)
+                                                ->where('category', $site_category[0])
                                                 ->first();
 
                     if (!is_null($get_stage_activity)) {
@@ -1193,7 +1213,7 @@ class RenewalController extends Controller
                                                 ->where('program_id', $program_id)
                                                 ->first();
                     }
-
+                    
                     $array = array(
                         'stage_id' => !is_null($get_stage_activity) ? $get_stage_activity->stage_id : "",
                         'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
@@ -1256,18 +1276,18 @@ class RenewalController extends Controller
 
             foreach($userSchema as $user){
 
-                $notifData = [
-                'user_id' => $user->id,
-                'program_id' => $program_id,                
-                'site_count' => $site_count,
-                'action' => $action,
-                'activity_id' => $activity_id,
-                'title' => $title,	
-                'body' => $body,
-                'goUrl' => url('/'),
-                ];
+            $notifData = [
+            'user_id' => $user->id,
+            'program_id' => $program_id,                
+            'site_count' => $site_count,
+            'action' => $action,
+            'activity_id' => $activity_id,
+            'title' => $title,	
+            'body' => $body,
+            'goUrl' => url('/'),
+            ];
 
-                Notification::send($user, new SiteMoved($notifData));
+            Notification::send($user, new SiteMoved($notifData));
 
             }   
         }
