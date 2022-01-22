@@ -79,25 +79,34 @@
                                                     <label for="lessor_method" class="col-sm-3 col-form-label">Method</label>
                                                     <div class="col-sm-9">
 
-                                                        <select class="form-control" name="lessor_method">
+                                                        <select class="form-control" id="lessor_method" name="lessor_method">
                                                             <option value="">Select Method</option>
                                                             <option value="Call">Call</option>
                                                             <option value="Text">Text</option>
                                                             <option value="Email">Email</option>
                                                             <option value="Site Visit">Site Visit</option>
-                                                            {{-- <option value="Upload Document">Upload Document</option> --}}
                                                         </select>
                                                         <small class="text-danger lessor_method-errors"></small>
 
                                                     </div>
                                                 </div>
-                                                {{-- <div class="position-relative row form-group">
-                                                    <label for="planned_date" class="col-sm-3 col-form-label">Planned Date</label>
+
+                                                <div class="position-relative row form-group d-none name_wp">
+                                                    <label for="name" class="col-sm-3 col-form-label">Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" id="planned_date" name="planned_date" class="form-control datepicker flatpicker bg-white">
-                                                        <small class="text-danger planned_date-errors"></small>
+                                                        <input type="text" id="name" name="name" class="form-control">
+                                                        <small class="text-danger name-errors"></small>
                                                     </div>
-                                                </div> --}}
+                                                </div>
+    
+                                                <div class="position-relative row form-group d-none contact_no_wp">
+                                                    <label for="contact_no" class="col-sm-3 col-form-label">Contact No.</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" id="contact_no" name="contact_no" class="form-control">
+                                                        <small class="text-danger contact_no-errors"></small>
+                                                    </div>
+                                                </div>
+                                                
                                                 <div class="position-relative row form-group">
                                                     <label for="saq_objective" class="col-sm-3 col-form-label">SAQ Objective</label>
                                                     <div class="col-sm-9">
@@ -109,7 +118,7 @@
                                                     <label for="lessor_remarks" class="col-sm-3 col-form-label">Remarks</label>
                                                     <div class="col-sm-9">
                                                         <textarea name="lessor_remarks" id="lessor_remarks" class="form-control"></textarea>
-                                                        <small class="text-danger remarks-errors"></small>
+                                                        <small class="text-danger lessor_remarks-errors"></small>
                                                     </div>
                                                 </div>
                                         </div>
@@ -169,7 +178,7 @@ $(document).ready(function () {
 
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
+                            $("#add_engagement_form ." + index + "-errors").text(data);
                         });
                     } else {
 
@@ -198,6 +207,17 @@ $(document).ready(function () {
             }
         });
         
+    });
+
+    $("#add_engagement_form #lessor_method").on("change", function () {
+        
+        if ( $(this).val() == "Call") {
+            $(".name_wp").removeClass("d-none");
+            $(".contact_no_wp").removeClass("d-none");
+        } else {
+            $(".name_wp").addClass("d-none");
+            $(".contact_no_wp").addClass("d-none");
+        }
     });
 
     $('#sub_activity_id').on('change', function(e){

@@ -82,6 +82,8 @@ if($activity_source == 'work_plan_view'){
     $planned_date = $wp_db_value->planned_date;
     $saq_objective = $wp_db_value->saq_objective;
     $remarks = $wp_db_value->remarks;
+    $name = isset($wp_db_value->name) ? $wp_db_value->name : "";
+    $contact_no = isset($wp_db_value->contact_no) ? $wp_db_value->contact_no : "";
 
 }
 elseif($activity_source == 'work_plan_add'){
@@ -277,7 +279,7 @@ elseif($activity_source == 'work_plan_activity_add'){
                                                     
                                                     @elseif($activity_source == "work_plan_add" || $activity_source == "work_plan_activity_add")
 
-                                                        <select class="form-control" name="method">
+                                                        <select class="form-control" name="method" id="method">
                                                             <option value="">Select Method</option>
                                                             <option value="Call">Call</option>
                                                             <option value="Text">Text</option>
@@ -290,6 +292,25 @@ elseif($activity_source == 'work_plan_activity_add'){
                                                     @endif
                                                 </div>
                                             </div>
+
+                                            @if($activity_source == "work_plan_view" && $method == "Call")
+                                            <div class="position-relative row form-group {{ $activity_source == "work_plan_view" ? "" : "d-none" }} name_wp">
+                                                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="name" name="name" value="{{ $name }}" class="form-control" {{ $activity_source == "work_plan_view" ? "readonly" : "" }}>
+                                                    <small class="text-danger name-errors"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="position-relative row form-group {{ $activity_source == "work_plan_view" ? "" : "d-none" }} contact_no_wp">
+                                                <label for="contact_no" class="col-sm-3 col-form-label">Contact No.</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="contact_no" name="contact_no" value="{{ $contact_no }}" class="form-control" {{ $activity_source == "work_plan_view" ? "readonly" : "" }}>
+                                                    <small class="text-danger contact_no-errors"></small>
+                                                </div>
+                                            </div>
+                                            @endif
+
                                             <div class="position-relative row form-group">
                                                 <label for="planned_date" class="col-sm-3 col-form-label">Planned Date</label>
                                                 <div class="col-sm-9">
@@ -305,6 +326,7 @@ elseif($activity_source == 'work_plan_activity_add'){
                                                     @endif
                                                 </div>
                                             </div>
+
                                             <div class="position-relative row form-group">
                                                 <label for="saq_objective" class="col-sm-3 col-form-label">SAQ Objective</label>
                                                 <div class="col-sm-9">
@@ -347,7 +369,7 @@ elseif($activity_source == 'work_plan_activity_add'){
                         <div class="card-footer">
                             <div class="col-12  text-right p-0">
                                 @if($activity_source == "work_plan_view")
-                                    <button class="btn btn-primary btn-lg add_activity_work_plan" data-log="true" type="button">Log Engagement</button>
+                                    {{-- <button class="btn btn-primary btn-lg add_activity_work_plan" data-log="true" type="button">Log Engagement</button> --}}
                                 @elseif($activity_source == "work_plan_add" || $activity_source == "work_plan_activity_add")
                                     <button class="btn btn-primary btn-lg save_activity_work_plan add_activity_work_plan" data-log="true" type="button">Save Work Plan</button>
                                 @endif
@@ -399,7 +421,7 @@ $(document).ready(() => {
 
                     if (typeof resp.message === 'object' && resp.message !== null) {
                         $.each(resp.message, function(index, data) {
-                            $("#" + index + "-error").text(data);
+                            $("#add_worplan_form ." + index + "-errors").text(data);
                         });
                     } else {
 
@@ -426,6 +448,17 @@ $(document).ready(() => {
         
     });
 
+    $("#add_worplan_form #method").on("change", function () {
+        
+        if ( $(this).val() == "Call") {
+            $(".name_wp").removeClass("d-none");
+            $(".contact_no_wp").removeClass("d-none");
+        } else {
+            $(".name_wp").addClass("d-none");
+            $(".contact_no_wp").addClass("d-none");
+        }
+    });
+    
     $('#sam_id').on('change', function(e){
 
         e.preventDefault();

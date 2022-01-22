@@ -26,12 +26,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3 border-bottom pb-3">
+                    {{-- <div class="row mb-3 border-bottom pb-3">
                         <div class="col-sm-4">
                             <label>Start Date</label>
                             <input class="form-control" />
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row mb-3">
                         <div id="work_plan_this_week" class="col-12 table-responsive">
                             @php 

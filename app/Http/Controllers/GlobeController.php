@@ -776,6 +776,7 @@ class GlobeController extends Controller
         $notification_settings = \DB::table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
+                                    ->where('category', $site_category[0])
                                     ->where('action', $action_id)
                                     ->first();
 
@@ -803,18 +804,18 @@ class GlobeController extends Controller
 
             foreach($userSchema as $user){
 
-            $notifData = [
-            'user_id' => $user->id,
-            'program_id' => $program_id,                
-            'site_count' => $site_count,
-            'action' => $action,
-            'activity_id' => $activity_id,
-            'title' => $title,	
-            'body' => $body,
-            'goUrl' => url('/'),
-            ];
+                $notifData = [
+                'user_id' => $user->id,
+                'program_id' => $program_id,                
+                'site_count' => $site_count,
+                'action' => $action,
+                'activity_id' => $activity_id,
+                'title' => $title,	
+                'body' => $body,
+                'goUrl' => url('/'),
+                ];
 
-            Notification::send($user, new SiteMoved($notifData));
+                Notification::send($user, new SiteMoved($notifData));
 
             }   
         }

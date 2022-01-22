@@ -107,6 +107,12 @@ class DataController extends Controller
 
             $notification = "Successfully Added Work Plan";
 
+            $required = "";
+
+            if ( $request->get('method') == "Call" ) {
+                $required = "required";
+            }
+
             $validate = Validator::make($request->all(), array(              
                 'sam_id' => 'required',
                 'site_name' => 'required',
@@ -118,6 +124,8 @@ class DataController extends Controller
                 'planned_date' => 'required',
                 'saq_objective' => 'required',
                 'remarks' => 'required',
+                'name' => $required,
+                'contact_no' => $required,
             ));
 
             if ($validate->passes()) {
@@ -154,6 +162,12 @@ class DataController extends Controller
 
             $notification = "Successfully Added Engagement";
 
+            $required = "";
+
+            if ( $request->get('lessor_method') == "Call" ) {
+                $required = "required";
+            }
+
             $validate = Validator::make($request->all(), array(              
                 'sam_id' => 'required',
                 'site_name' => 'required',
@@ -164,6 +178,8 @@ class DataController extends Controller
                 'lessor_method' => 'required',
                 'saq_objective' => 'required',
                 'lessor_remarks' => 'required',
+                'name' => $required,
+                'contact_no' => $required,
             ));
 
             if ($validate->passes()) {
@@ -194,10 +210,6 @@ class DataController extends Controller
 
                 SubActivityValue::create([
                     'sam_id' => $request->get('sam_id'),
-                    // 'site_name' => $request->site_name,
-                    // 'activity_id' => $request->activity_id,
-                    // 'activity_name' => $request->activity_name,
-                    // 'sub_activity_name' => $request->sub_activity_name,
                     'sub_activity_id' => $request->get('sub_activity_id'),
                     'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
