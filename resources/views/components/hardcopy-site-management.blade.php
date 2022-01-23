@@ -5,7 +5,7 @@
         <li class="nav-item">
             <a role="tab" class="nav-link active" id="tab-action-to-complete" data-toggle="tab" href="#tab-content-action-to-complete">
                 <span>Checklists</span>
-                <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span>
+                {{-- <span class="badge badge-pill badge-success">{{ count($sub_activities) }}</span> --}}
             </a>
         </li>
         
@@ -89,7 +89,7 @@
                                             </td>
                                             <td>{{ $file_name->file }}</td>
                                             <td>{{ date('M d, Y', strtotime($data_file->date_created) ) }}</td>
-                                            <td>{{ isset($data_file->date_update) ? date('M d, Y', strtotime($data_file->date_update) ) : "No Data" }}</td>
+                                            <td>{{ isset($data_file->date_approved) ? date('M d, Y', strtotime($data_file->date_approved) ) : "No Data" }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

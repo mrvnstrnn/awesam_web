@@ -396,7 +396,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function get_program_renewal_old ($sam_id)
     {
         $get_program_renewal_old = \DB::table('program_renewal')
-                    ->select('rate_old', 'escalation_old')
+                    ->select('old_terms_rate', 'old_terms_escalation')
                     ->where('sam_id', $sam_id)
                     ->first();
                     

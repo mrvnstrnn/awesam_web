@@ -194,15 +194,15 @@
 
                     lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
                     var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
-// console.log(get_program_renewal_old);
+
                     $("input[type=number]").val(0);
                     $.each(get_program_renewal_old, function(index, data) {
                         // console.log(index);
-                        if (index == 'rate_old') {
-                            $(".savings_computation_form #old_terms_monthly_contract_amount").val(data == null || data == "" || data == "NULL" ? 0 : data);
-                        } else if (index == 'escalation_old') {
-                            $(".savings_computation_form #old_terms_escalation_rate").val(data == null || data == "" || data == "NULL" ? 0 : data);
-                        }
+                        // if (index == 'rate_old') {
+                        //     $(".savings_computation_form #old_terms_monthly_contract_amount").val(data == null || data == "" || data == "NULL" ? 0 : data);
+                        // } else if (index == 'escalation_old') {
+                        //     $(".savings_computation_form #old_terms_escalation_rate").val(data == null || data == "" || data == "NULL" ? 0 : data);
+                        // }
                     });
 
                     $(".savings_computation_form #old_exdeal_amount").val(1);
