@@ -68,7 +68,7 @@ class ActivityController extends Controller
                                 ])
                                 ->render();
                         }
-
+                        
                         if (\Auth::user()->profile_id == 2 || \Auth::user()->profile_id == 38) {
                             return \View::make('components.' . $get_component->activity_component)
                                     ->with([

@@ -134,8 +134,8 @@
                     $(".form_html").html(resp.message);
 
                     // var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
-
-                    var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'lessor_commercial_engagement'))); }}".replace(/&quot;/g,'"'));
+                    // lessor_commercial_engagement
+                    var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
 
                     $(".create_lease_renewal_notice_form #representative").val("{{ \Auth::user()->name }}");
 

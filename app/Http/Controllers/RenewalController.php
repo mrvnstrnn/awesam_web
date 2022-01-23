@@ -104,14 +104,12 @@ class RenewalController extends Controller
                                 ->where('type', 'doc_upload')
                                 ->where('status', 'pending')
                                 ->first();
-                                
+                           
                 $file_name = $this->rename_file( strtolower($samid)."-loi-pdf.pdf", "loi", $samid, "" );
 
                 $new_file_name = !is_null($sub_activity_value_file) ? json_decode($sub_activity_value_file->value)->file : $file_name;
 
                 $this->create_pdf($array, $samid, 'loi-pdf', $file_name);
-                
-                // return response()->json(['error' => true, 'message' => $file_name]);
 
                 $array_data = [
                     'file' => $new_file_name,
@@ -356,7 +354,7 @@ class RenewalController extends Controller
 
                 // return response()->json(['error' => true, 'message' => $request->all()]);
                 $stage_activities = \DB::table('stage_activities')
-                                ->select('id', 'activity_type', 'approver_profile_id_1')
+                                ->select('id', 'activity_type')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
