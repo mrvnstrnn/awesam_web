@@ -16,7 +16,6 @@ class ActivityController extends Controller
 
             if(!isset($request->direct_mode)){
 
-
                 $site = \DB::table('view_site')
                                 ->where('sam_id', $request['sam_id'])
                                 ->get();
@@ -36,7 +35,7 @@ class ActivityController extends Controller
                                     ->where('stage_activities.activity_id', $get_current_act->activity_id)
                                     ->where('stage_activities_profiles.activity_source', $request->get('activity_source'))
                                     ->first();
-                                    
+                                      
                     if ( is_null($get_component) ) {
 
                         // return \View::make('components.activity-error')

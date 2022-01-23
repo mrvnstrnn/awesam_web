@@ -57,6 +57,12 @@
 <script type="text/javascript" src="/js/DTmaker.js"></script>  
 
 <script>
+    $("input[name=po_date]").flatpickr(
+        { 
+        minDate: new Date()
+        }
+    );
+
     $(document).on("click", ".checkAll", function(e){
         e.preventDefault();
         var val = $(this).val();
@@ -70,7 +76,6 @@
     });
 
     $(document).on("click", ".create_pr_po", function (){
-        var data_program = $(this).attr('data-program');
         var data_program_id = $(this).attr('data-program_id');
 
         var inputElements = document.getElementsByName('program'+data_program_id);
@@ -105,7 +110,7 @@
                         }
 
                         $(".form_html form").append(
-                            "<input type='hidden' name='program_id' value='"+ data_program +"'>"
+                            "<input type='hidden' name='program_id' value='"+ data_program_id +"'>"
                         );
 
                         var vendors = JSON.parse("{{ \Auth::user()->vendor_list_based_program(8) }}".replace(/&quot;/g,'"'));
@@ -150,7 +155,7 @@
             },
             success: function (resp) {
                 if (!resp.error) {
-                    $("#assigned-sites-"+resp.program_id+"-table").DataTable().ajax.reload(function(){
+                    $(".assigned-sites-table[data-program_id="+resp.program_id+"]").DataTable().ajax.reload(function(){
                         $("#create_pr_renewal_modal").modal("hide");
 
                         Swal.fire(

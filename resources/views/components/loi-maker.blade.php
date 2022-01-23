@@ -208,25 +208,52 @@
         $.ajax({
             url: "/get-form/" + "{{ $sub_activity_id }}" + "/" + "{{ $sub_activity }}",
             method: "GET",
-            // headers: {
-            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            // },
             success: function (resp) {
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
-                    var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
 
-                    $.each(get_program_renewal, function(index, data) {
-                        $(".create_loi_to_renew_form #"+index).val(data);
-                        
-                        if (index == 'site_address') {
-                            $(".create_loi_to_renew_form #facility_site_address").val(data);
+                    var sam_id = "{{ $sam_id }}";
+                    var program_id = "{{ $program_id }}";
+                    $.ajax({
+                        url: "/get-form-program-data",
+                        method: "POST",
+                        data : {
+                            sam_id : sam_id,
+                            program_id : program_id,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error) {
+                                $.each(resp.message, function(index, data) {
+                                    $(".create_loi_to_renew_form #"+index).val(data);
+                                    if (index == 'expiration') {
+                                        $(".create_loi_to_renew_form #expiration_date").val(data);
+                                    }
+                                    if (index == 'site_address') {
+                                        $(".create_loi_to_renew_form #facility_site_address").val(data);
+                                    }
+                                });
+                                
+                                $(".create_loi_to_renew_form #undersigned_email").val("{{ \Auth::user()->getUserDetail()->first()->email }}");
+                                $(".create_loi_to_renew_form #undersigned_number").val("{{ \Auth::user()->getUserDetail()->first()->contact_no }}");
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (resp) {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
                         }
                     });
-
-                    
-                    $(".create_loi_to_renew_form #undersigned_email").val("{{ \Auth::user()->getUserDetail()->first()->email }}");
-                    $(".create_loi_to_renew_form #undersigned_number").val("{{ \Auth::user()->getUserDetail()->first()->contact_no }}");
 
                 } else {
                     Swal.fire(
@@ -260,9 +287,12 @@
             new_new_terms_start_date.setDate(new_new_terms_start_date.getDate() - 1);
 
             date_day = ( new_new_terms_start_date.getDate() ) < 10 ? "0" + (new_new_terms_start_date.getDate() ) : new_new_terms_start_date.getDate();
-            let formatted_new_date =  new_new_terms_start_date.getFullYear() + "-" + ( new_new_terms_start_date.getMonth() + 1 ) + "-" + date_day;
 
-            $("#new_terms_end_date").val(formatted_new_date);
+            var new_month = ( new_new_terms_start_date.getMonth() + 1 ) < 10 ?  "0" + ( new_new_terms_start_date.getMonth() + 1 ) : ( new_new_terms_start_date.getMonth() + 1 );
+            let formatted_new_date =  new_new_terms_start_date.getFullYear() + "-" + new_month + "-" + date_day;
+
+            $(".form_html #new_terms_end_date").val(formatted_new_date);
+
         }
     });
 </script>

@@ -72,7 +72,7 @@ class RenewalController extends Controller
                                 ->first();
 
                 $stage_activities = \DB::table('stage_activities')
-                                ->select('id', 'activity_type', 'approver_profile_id_1')
+                                ->select('id', 'activity_type')
                                 ->where('program_id', $request->input('program_id'))
                                 ->where('activity_id', $request->input('activity_id'))
                                 ->where('category', $request->input("site_category"))
@@ -285,7 +285,7 @@ class RenewalController extends Controller
                                 ->select('program_id', 'site_category', 'activity_id')
                                 ->where('sam_id', $request->get('sam_id')[$i])
                                 ->first();
-
+                                
                     $asd = $this->move_site([$request->input('sam_id')[$i]], $sites->program_id, $action, [$sites->site_category], [$sites->activity_id]);
                 }
 
@@ -1082,6 +1082,7 @@ class RenewalController extends Controller
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
         for ($i=0; $i < count($sam_id); $i++) {
+
             $get_past_activities = \DB::table('site_stage_tracking')
                                     ->where('sam_id', $sam_id[$i])
                                     ->where('activity_complete', 'false')
@@ -1127,7 +1128,7 @@ class RenewalController extends Controller
             for ($j=0; $j < count($get_past_activities); $j++) {
                 $past_activities->push($get_past_activities[$j]->activity_id);
             }
-            
+
             if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
                 $activities = \DB::table('stage_activities')
                                 ->select('next_activity', 'activity_name', 'return_activity')
@@ -1135,7 +1136,7 @@ class RenewalController extends Controller
                                 ->where('program_id', $program_id)
                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
                                 ->first();
-                                               
+                                     
                 if (!is_null($activities)) {
                     if ($action == "true") {
                         $get_activitiess = \DB::table('stage_activities')
@@ -1213,7 +1214,7 @@ class RenewalController extends Controller
                                                 ->where('program_id', $program_id)
                                                 ->first();
                     }
-                    
+
                     $array = array(
                         'stage_id' => !is_null($get_stage_activity) ? $get_stage_activity->stage_id : "",
                         'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
@@ -1249,45 +1250,46 @@ class RenewalController extends Controller
         $notification_settings = \DB::table('notification_settings')
                                     ->where('program_id', $program_id[0])
                                     ->where('activity_id', $activity_id[0])
+                                    ->where('category', $site_category[0])
                                     ->where('action', $action_id)
                                     ->first();
 
         if (!is_null($notification_settings)) {
             $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
-                        ->select('profile_id')
-                        ->where('notification_settings_id', $notification_settings->notification_settings_id)
-                        ->get();
-
+                                            ->select('profile_id')
+                                            ->where('notification_settings_id', $notification_settings->notification_settings_id)
+                                            ->get();
 
             $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
 
 
             if($site_count > 1){
-            $title = $notification_settings->title_multi;
-            $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
-
+                $title = $notification_settings->title_multi;
+                $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
             } else {
-            $title = $notification_settings->title_single;
-            $body = $notification_settings->body_single;
+                $title = $notification_settings->title_single;
+                $body = $notification_settings->body_single;
             }
 
-            $userSchema = User::whereIn("profile_id", $receiver_profiles)
-                ->get();                            
+            $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->whereIn("profile_id", $receiver_profiles)
+                                ->where('user_programs.program_id', $program_id)
+                                ->get();                            
 
             foreach($userSchema as $user){
 
-            $notifData = [
-            'user_id' => $user->id,
-            'program_id' => $program_id,                
-            'site_count' => $site_count,
-            'action' => $action,
-            'activity_id' => $activity_id,
-            'title' => $title,	
-            'body' => $body,
-            'goUrl' => url('/'),
-            ];
-
-            Notification::send($user, new SiteMoved($notifData));
+                $notifData = [
+                    'user_id' => $user->id,
+                    'program_id' => $program_id,                
+                    'site_count' => $site_count,
+                    'action' => $action,
+                    'activity_id' => $activity_id,
+                    'title' => $title,	
+                    'body' => $body,
+                    'goUrl' => url('/'),
+                ];
+                
+                Notification::send($user, new SiteMoved($notifData));
 
             }   
         }

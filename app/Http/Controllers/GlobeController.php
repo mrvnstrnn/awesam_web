@@ -4570,7 +4570,8 @@ class GlobeController extends Controller
                     }
                     
                     if ($program_id == 1) {
-                        $sites->select(
+                        $sites->join('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
+                        ->select(
                                     "view_site.vendor_acronym", 
                                     "view_site.site_name", 
                                     "view_site.sam_id", 
@@ -4647,8 +4648,8 @@ class GlobeController extends Controller
                         );
                     } else if ($program_id == 5 && \Auth::user()->profile_id == 3) {
                         $sites->where('activity_id', 10);
-                    }  else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
-                        $sites
+                    } else if ($program_id == 8 && \Auth::user()->profile_id == 3) {
+                        $sites->join('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
                         ->select(
                             "view_site.vendor_acronym", 
                             "view_site.site_name", 
@@ -4666,7 +4667,7 @@ class GlobeController extends Controller
                             "program_renewal.*"
                         )
                         ->where('activity_id', 4);
-                    }   
+                    }
 
                     if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
                         $sites->whereIn('view_site.sam_region_id', $user_area);
@@ -4683,7 +4684,7 @@ class GlobeController extends Controller
 
             $sites = \DB::table("view_site")
                     ->leftJoin('site_users', 'site_users.sam_id', 'view_site.sam_id')
-                    ->where('view_site.vendor_id', $vendor)
+                    // ->where('view_site.vendor_id', $vendor)
                     ->whereNull('site_users.sam_id');
                 
                 if (\Auth::user()->profile_id == 1) {
@@ -4800,6 +4801,25 @@ class GlobeController extends Controller
                             "program_newsites.region",
                         )
                         ->where('activity_id', '>=', 7);
+                } else if ($program_id == 8) {
+                    $sites->join('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
+                    ->select(
+                        "view_site.vendor_acronym", 
+                        "view_site.site_name", 
+                        "view_site.sam_id", 
+                        "view_site.activity_id", 
+                        "view_site.program_id", 
+                        "view_site.site_category", 
+                        "view_site.activity_name", 
+                        "view_site.sam_region_name",
+                        "view_site.site_category",
+                        "view_site.aging",
+                        "view_site.site_address",
+                        "view_site.program_endorsement_date",
+                        "view_site.aging",
+                        "program_renewal.*"
+                    )
+                    ->where('view_site.activity_id', '>=', 5);
                 }
 
                 if (!is_null($user_detail) && $user_detail->mode == 'vendor') {
@@ -9080,6 +9100,22 @@ class GlobeController extends Controller
                         ->get();
 
             return response()->json(['error' => false, 'message' => $form_fields ]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage() ]);
+        }
+    }
+
+    public function get_form_program_data (Request $request)
+    {
+        try {
+            
+            if ( $request->get('program_id') == 8) {
+                $get_program_renewal = \DB::table('program_renewal')
+                        ->where('sam_id', $request->get('sam_id'))
+                        ->first();
+            }
+            return response()->json(['error' => false, 'message' => $get_program_renewal ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
