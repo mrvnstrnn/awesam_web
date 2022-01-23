@@ -597,7 +597,7 @@ class GlobeController extends Controller
 
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
-            return response()->json(['error' => true, 'message' => $asd]);
+            // return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
