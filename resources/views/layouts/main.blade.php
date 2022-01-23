@@ -376,7 +376,7 @@
 
     {{-- <script type="module" src="/js/echo.js"></script> --}}
 
-    @include('components.pusher-notification')  
+    {{-- @include('components.pusher-notification')   --}}
 
     {{-- <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script> --}}
     <script type="text/javascript" src="{{ asset('js/jquery.signature.js') }}"></script>

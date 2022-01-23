@@ -175,7 +175,7 @@
 
     {{-- <script type="module" src="/js/echo.js"></script> --}}
 
-    @include('components.pusher-notification')
+    {{-- @include('components.pusher-notification') --}}
 
     <script>
         $(document).on("click", ".mark_as_unread", function (e) {

@@ -1,5 +1,5 @@
     {{-- PUSHER NOTIFICATION --}}
-    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    {{-- <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script>
   
      var pusher = new Pusher('10d00ec4fed05fe27b51', {
@@ -30,5 +30,5 @@
 
         }
       });
-    </script>
+    </script> --}}
     {{-- PUSHER NOTIFICATION --}}

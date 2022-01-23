@@ -10,20 +10,19 @@
 
 
 
-  Echo.channel('site-endorsement')
-  .listen('.SiteEndorsement', (e) => {
-      $('#notif-box .notification_area').append(
-        // '<div p-2>' + e.endorsement + '<div class="divider"></div></div>'
-        '<div class="vertical-timeline-item vertical-timeline-element">' +
-          '<div>' +
-              '<span class="vertical-timeline-element-icon bounce-in">' +
-                  '<i class="badge badge-dot badge-dot-xl badge-success"> </i>' +
-              '</span>' +
-              '<div class="vertical-timeline-element-content bounce-in">' +
-                  '<h4 class="timeline-title">'+e.endorsement+'</h4>' +
-                  '<span class="vertical-timeline-element-date"></span>' +
-              '</div>' +
-          '</div>' +
-        '</div>'
-      );
-  });
+  // Echo.channel('site-endorsement')
+  // .listen('.SiteEndorsement', (e) => {
+  //     $('#notif-box .notification_area').append(
+  //       '<div class="vertical-timeline-item vertical-timeline-element">' +
+  //         '<div>' +
+  //             '<span class="vertical-timeline-element-icon bounce-in">' +
+  //                 '<i class="badge badge-dot badge-dot-xl badge-success"> </i>' +
+  //             '</span>' +
+  //             '<div class="vertical-timeline-element-content bounce-in">' +
+  //                 '<h4 class="timeline-title">'+e.endorsement+'</h4>' +
+  //                 '<span class="vertical-timeline-element-date"></span>' +
+  //             '</div>' +
+  //         '</div>' +
+  //       '</div>'
+  //     );
+  // });

@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Pusher\Pusher;
 // use App\Models\User;
 
-class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
+class SiteMoved extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -34,8 +34,9 @@ class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
      * @return array
      */
     public function via($notifiable)
-    {
-        return ['database', 'broadcast'];
+    { 
+        // return ['database', 'broadcast'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -47,7 +48,9 @@ class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
+                    ->subject($this->message['title'])
+                    ->line($this->message['body'])
+                    ->cc('awesamtool@globe.com.ph')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
@@ -72,28 +75,28 @@ class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
         ];
     }
 
-    public function toBroadcast($notifiable): BroadcastMessage
-    {
+    // public function toBroadcast($notifiable): BroadcastMessage
+    // {
 
-        $options = array(
-			'cluster' => 'ap1',
-			'encrypted' => true
-		);
-        $pusher = new Pusher(
-			'10d00ec4fed05fe27b51',
-			'b6dbcf5d7b2470bfdd2d',
-			'1279007', 
-			$options
-		);
+    //     $options = array(
+	// 		'cluster' => 'ap1',
+	// 		'encrypted' => true
+	// 	);
+    //     $pusher = new Pusher(
+	// 		'10d00ec4fed05fe27b51',
+	// 		'b6dbcf5d7b2470bfdd2d',
+	// 		'1279007', 
+	// 		$options
+	// 	);
 
-        $data['message'] = $this->message;
-        $pusher->trigger('site-moved', 'App\\Notifications\\SiteMoved', $data);
+    //     $data['message'] = $this->message;
+    //     $pusher->trigger('site-moved', 'App\\Notifications\\SiteMoved', $data);
 
-        return new BroadcastMessage([
-            'message' => $this->message
-        ]);
+    //     return new BroadcastMessage([
+    //         'message' => $this->message
+    //     ]);
 
-    }
+    // }
 
 
 }

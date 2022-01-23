@@ -597,7 +597,7 @@ class GlobeController extends Controller
 
             $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
 
-            // return response()->json(['error' => true, 'message' => $asd]);
+            return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
         } catch (\Throwable  $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
@@ -607,157 +607,157 @@ class GlobeController extends Controller
 
     private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
     {
-        for ($i=0; $i < count($sam_id); $i++) {
+        // for ($i=0; $i < count($sam_id); $i++) {
 
-            $get_past_activities = \DB::table('site_stage_tracking')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->where('activity_complete', 'false')
-                                    ->get();
+        //     $get_past_activities = \DB::table('site_stage_tracking')
+        //                             ->where('sam_id', $sam_id[$i])
+        //                             ->where('activity_complete', 'false')
+        //                             ->get();
 
-            if (count($get_past_activities) < 1) {
-                $site_check = \DB::table('site')
-                                ->where('sam_id',  $sam_id[$i])
-                                ->first();
+        //     if (count($get_past_activities) < 1) {
+        //         $site_check = \DB::table('site')
+        //                         ->where('sam_id',  $sam_id[$i])
+        //                         ->first();
 
-                if ( is_null($site_check->activities) ) {
-                    SiteStageTracking::create([
-                        'sam_id' => $sam_id[$i],
-                        'activity_id' => 1,
-                        'activity_complete' => 'false',
-                        'user_id' => \Auth::id()
-                    ]);
-                } else {
-                    SiteStageTracking::create([
-                        'sam_id' => $sam_id[$i],
-                        'activity_id' => 1,
-                        'activity_complete' => 'true',
-                        'user_id' => \Auth::id()
-                    ]);
+        //         if ( is_null($site_check->activities) ) {
+        //             SiteStageTracking::create([
+        //                 'sam_id' => $sam_id[$i],
+        //                 'activity_id' => 1,
+        //                 'activity_complete' => 'false',
+        //                 'user_id' => \Auth::id()
+        //             ]);
+        //         } else {
+        //             SiteStageTracking::create([
+        //                 'sam_id' => $sam_id[$i],
+        //                 'activity_id' => 1,
+        //                 'activity_complete' => 'true',
+        //                 'user_id' => \Auth::id()
+        //             ]);
                     
-                    SiteStageTracking::create([
-                        'sam_id' => $sam_id[$i],
-                        'activity_id' => $activity_id[$i],
-                        'activity_complete' => 'false',
-                        'user_id' => \Auth::id()
-                    ]);
-                }
+        //             SiteStageTracking::create([
+        //                 'sam_id' => $sam_id[$i],
+        //                 'activity_id' => $activity_id[$i],
+        //                 'activity_complete' => 'false',
+        //                 'user_id' => \Auth::id()
+        //             ]);
+        //         }
 
-                $get_past_activities = \DB::table('site_stage_tracking')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->where('activity_complete', 'false')
-                                    ->get();
+        //         $get_past_activities = \DB::table('site_stage_tracking')
+        //                             ->where('sam_id', $sam_id[$i])
+        //                             ->where('activity_complete', 'false')
+        //                             ->get();
                 
-            }
+        //     }
 
-            $past_activities = collect();
+        //     $past_activities = collect();
 
-            for ($j=0; $j < count($get_past_activities); $j++) {
-                $past_activities->push($get_past_activities[$j]->activity_id);
-            }
+        //     for ($j=0; $j < count($get_past_activities); $j++) {
+        //         $past_activities->push($get_past_activities[$j]->activity_id);
+        //     }
 
-            if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
-                $activities = \DB::table('stage_activities')
-                                ->select('next_activity', 'activity_name', 'return_activity')
-                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
-                                ->where('program_id', $program_id)
-                                ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
-                                ->first();
+        //     if ( in_array($activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i], $past_activities->all()) ) {
+        //         $activities = \DB::table('stage_activities')
+        //                         ->select('next_activity', 'activity_name', 'return_activity')
+        //                         ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
+        //                         ->where('program_id', $program_id)
+        //                         ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
+        //                         ->first();
                                      
-                if (!is_null($activities)) {
-                    if ($action == "true") {
-                        $get_activitiess = \DB::table('stage_activities')
-                                                ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                                ->where('activity_id', $activities->next_activity)
-                                                ->where('program_id', $program_id)
-                                                ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
-                                                ->first();
+        //         if (!is_null($activities)) {
+        //             if ($action == "true") {
+        //                 $get_activitiess = \DB::table('stage_activities')
+        //                                         ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+        //                                         ->where('activity_id', $activities->next_activity)
+        //                                         ->where('program_id', $program_id)
+        //                                         ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
+        //                                         ->first();
 
-                        $activity_name = $get_activitiess->activity_name;
+        //                 $activity_name = $get_activitiess->activity_name;
 
-                        $activity = $get_activitiess->activity_id;
+        //                 $activity = $get_activitiess->activity_id;
 
-                        SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                ->where('activity_complete', 'false')
-                                                ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
-                                                ->update([
-                                                    'activity_complete' => "true"
-                                                ]);
+        //                 SiteStageTracking::where('sam_id', $sam_id[$i])
+        //                                         ->where('activity_complete', 'false')
+        //                                         ->where('activity_id', $activity_id[$i] == null || $activity_id[$i] == "null" || $activity_id[$i] == "undefined" ? 1 : $activity_id[$i])
+        //                                         ->update([
+        //                                             'activity_complete' => "true"
+        //                                         ]);
 
-                        $check_if_added = \DB::table('site_stage_tracking')
-                                            ->select('sam_id')
-                                            ->where('sam_id', $sam_id[$i])
-                                            ->where('activity_id', $activity)
-                                            ->where('activity_complete', 'false')
-                                            ->get();
+        //                 $check_if_added = \DB::table('site_stage_tracking')
+        //                                     ->select('sam_id')
+        //                                     ->where('sam_id', $sam_id[$i])
+        //                                     ->where('activity_id', $activity)
+        //                                     ->where('activity_complete', 'false')
+        //                                     ->get();
 
-                        if ( count($check_if_added) < 1 ) {
-                            SiteStageTracking::create([
-                                'sam_id' => $sam_id[$i],
-                                'activity_id' => $activity,
-                                'activity_complete' => 'false',
-                                'user_id' => \Auth::id()
-                            ]);
-                        }
+        //                 if ( count($check_if_added) < 1 ) {
+        //                     SiteStageTracking::create([
+        //                         'sam_id' => $sam_id[$i],
+        //                         'activity_id' => $activity,
+        //                         'activity_complete' => 'false',
+        //                         'user_id' => \Auth::id()
+        //                     ]);
+        //                 }
 
 
-                    } else {
+        //             } else {
 
-                        $activity = $activities->return_activity;
+        //                 $activity = $activities->return_activity;
 
-                        $get_activitiess = \DB::table('stage_activities')
-                                        ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
-                                        ->where('activity_id', $activity)
-                                        ->where('program_id', $program_id)
-                                        ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
-                                        ->first();
+        //                 $get_activitiess = \DB::table('stage_activities')
+        //                                 ->select('next_activity', 'activity_name', 'profile_id', 'activity_id')
+        //                                 ->where('activity_id', $activity)
+        //                                 ->where('program_id', $program_id)
+        //                                 ->where('category', is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i])
+        //                                 ->first();
 
-                        $activity_name = $get_activitiess->activity_name;
+        //                 $activity_name = $get_activitiess->activity_name;
 
-                        SiteStageTracking::where('sam_id', $sam_id[$i])
-                                                ->update([
-                                                    'activity_complete' => "true"
-                                                ]);
+        //                 SiteStageTracking::where('sam_id', $sam_id[$i])
+        //                                         ->update([
+        //                                             'activity_complete' => "true"
+        //                                         ]);
 
-                        SiteStageTracking::create([
-                            'sam_id' => $sam_id[$i],
-                            'activity_id' => $activity,
-                            'activity_complete' => 'false',
-                            'user_id' => \Auth::id()
-                        ]);
-                    }
+        //                 SiteStageTracking::create([
+        //                     'sam_id' => $sam_id[$i],
+        //                     'activity_id' => $activity,
+        //                     'activity_complete' => 'false',
+        //                     'user_id' => \Auth::id()
+        //                 ]);
+        //             }
 
-                    $get_stage_activity = \DB::table('stage_activities')
-                                                ->select('stage_id')
-                                                ->where('activity_id', $activity)
-                                                ->where('program_id', $program_id)
-                                                ->where('category', $site_category[0])
-                                                ->first();
+        //             $get_stage_activity = \DB::table('stage_activities')
+        //                                         ->select('stage_id')
+        //                                         ->where('activity_id', $activity)
+        //                                         ->where('program_id', $program_id)
+        //                                         ->where('category', $site_category[0])
+        //                                         ->first();
 
-                    if (!is_null($get_stage_activity)) {
-                        $get_program_stages = \DB::table('program_stages')
-                                                ->select('stage_name')
-                                                ->where('stage_id', $get_stage_activity->stage_id)
-                                                ->where('program_id', $program_id)
-                                                ->first();
-                    }
+        //             if (!is_null($get_stage_activity)) {
+        //                 $get_program_stages = \DB::table('program_stages')
+        //                                         ->select('stage_name')
+        //                                         ->where('stage_id', $get_stage_activity->stage_id)
+        //                                         ->where('program_id', $program_id)
+        //                                         ->first();
+        //             }
 
-                    $array = array(
-                        'stage_id' => !is_null($get_stage_activity) ? $get_stage_activity->stage_id : "",
-                        'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
-                        'activity_id' => $activity,
-                        'activity_name' => $activity_name,
-                        'profile_id' => $get_activitiess->profile_id,
-                        'category' => is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i],
-                        'activity_created' => Carbon::now()->toDateString(),
-                    );
+        //             $array = array(
+        //                 'stage_id' => !is_null($get_stage_activity) ? $get_stage_activity->stage_id : "",
+        //                 'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
+        //                 'activity_id' => $activity,
+        //                 'activity_name' => $activity_name,
+        //                 'profile_id' => $get_activitiess->profile_id,
+        //                 'category' => is_null($site_category[$i]) || $site_category[$i] == "null" ? "none" : $site_category[$i],
+        //                 'activity_created' => Carbon::now()->toDateString(),
+        //             );
 
-                    Site::where('sam_id', $sam_id[$i])
-                    ->update([
-                        'activities' => json_encode($array)
-                    ]);
-                }
-            }
-        }
+        //             Site::where('sam_id', $sam_id[$i])
+        //             ->update([
+        //                 'activities' => json_encode($array)
+        //             ]);
+        //         }
+        //     }
+        // }
 
         // //////////////////////////// //
         //                              //   
@@ -782,39 +782,39 @@ class GlobeController extends Controller
 
         if (!is_null($notification_settings)) {
             $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
-                        ->select('profile_id')
-                        ->where('notification_settings_id', $notification_settings->notification_settings_id)
-                        ->get();
-
+                                            ->select('profile_id')
+                                            ->where('notification_settings_id', $notification_settings->notification_settings_id)
+                                            ->get();
 
             $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
 
 
             if($site_count > 1){
-            $title = $notification_settings->title_multi;
-            $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
-
+                $title = $notification_settings->title_multi;
+                $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
             } else {
-            $title = $notification_settings->title_single;
-            $body = $notification_settings->body_single;
+                $title = $notification_settings->title_single;
+                $body = $notification_settings->body_single;
             }
 
-            $userSchema = User::whereIn("profile_id", $receiver_profiles)
-                ->get();                            
+            $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->whereIn("profile_id", $receiver_profiles)
+                                ->where('user_programs.program_id', $program_id)
+                                ->get();                            
 
             foreach($userSchema as $user){
 
                 $notifData = [
-                'user_id' => $user->id,
-                'program_id' => $program_id,                
-                'site_count' => $site_count,
-                'action' => $action,
-                'activity_id' => $activity_id,
-                'title' => $title,	
-                'body' => $body,
-                'goUrl' => url('/'),
+                    'user_id' => $user->id,
+                    'program_id' => $program_id,                
+                    'site_count' => $site_count,
+                    'action' => $action,
+                    'activity_id' => $activity_id,
+                    'title' => $title,	
+                    'body' => $body,
+                    'goUrl' => url('/'),
                 ];
-
+                
                 Notification::send($user, new SiteMoved($notifData));
 
             }   
