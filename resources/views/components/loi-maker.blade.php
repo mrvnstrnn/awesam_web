@@ -229,7 +229,10 @@
                                 $.each(resp.message, function(index, data) {
                                     $(".create_loi_to_renew_form #"+index).val(data);
                                     if (index == 'expiration') {
-                                        $(".create_loi_to_renew_form #expiration_date").val(data);
+                                        expiration_date = data.split("/")
+                                        new_expiration_date = [ expiration_date[1], expiration_date[0], expiration_date[2] ].join('-');
+                                        
+                                        $(".create_loi_to_renew_form #expiration_date").val(new_expiration_date);
                                     }
                                     if (index == 'site_address') {
                                         $(".create_loi_to_renew_form #facility_site_address").val(data);
