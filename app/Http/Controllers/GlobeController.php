@@ -2883,9 +2883,9 @@ class GlobeController extends Controller
                 );
             }
 
-            // if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
-            //     $sites->whereIn('view_site.sam_region_id', $user_area);
-            // }
+            if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
+                $sites->whereIn('view_site.sam_region_id', $user_area);
+            }
             
             $sites->get();
         }
