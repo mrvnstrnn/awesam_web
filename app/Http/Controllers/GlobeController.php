@@ -6852,7 +6852,7 @@ class GlobeController extends Controller
                                                 ->get();
 
                                                 
-            $user_detail_agent = UserDetail::join('users', 'users.id', 'user_details.user_id')->where('user_details.user_id', $request->get('user_id'));
+            $user_detail_agent = UserDetail::join('users', 'users.id', 'user_details.user_id')->where('user_details.user_id', $request->get('user_id'))->first();
 
             $user_data = UserProgram::select('program_id')->where('user_id', $request->get('user_id'))->get();
 
