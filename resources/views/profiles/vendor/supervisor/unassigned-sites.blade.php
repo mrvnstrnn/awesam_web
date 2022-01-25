@@ -148,7 +148,7 @@
 
                         resp.message.forEach(element => {
                             $("#modal-assign-sites select#agent_id").append(
-                                '<option value="'+element.id+'">'+ element.name +' (' + element.user_id_count + ')' + '</option>'
+                                '<option value="'+element.id+'">'+ element.name +' - ' + element.email + ' (' + element.user_id_count + ')' + '</option>'
                             );
                         });
 
