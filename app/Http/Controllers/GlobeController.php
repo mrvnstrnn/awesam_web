@@ -6851,6 +6851,9 @@ class GlobeController extends Controller
                                                 ->where('vendor_programs.vendors_id', $user_detail->vendor_id)
                                                 ->get();
 
+                                                
+            $user_detail_agent = \Auth::user()->getUserDetail()->first();
+
             $user_data = UserProgram::select('program_id')->where('user_id', $request->get('user_id'))->get();
 
             $supervisor = User::select('users.*')
@@ -6860,7 +6863,7 @@ class GlobeController extends Controller
                                     ->where('designation', 3)
                                     ->get();
 
-            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor, 'user_detail' => $user_detail ]);
+            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor, 'user_detail' => $user_detail_agent ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
