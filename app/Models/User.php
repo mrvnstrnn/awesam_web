@@ -164,11 +164,11 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->get();
         } else {
             return VendorProgram::select('program.program_id', 'program.program')
-                                                            ->join('program', 'program.program_id', 'vendor_programs.programs')
-                                                            ->where('vendor_programs.vendors_id', $vendor_id)
-                                                            ->where('user_programs.active', 1)
-                                                            ->orderBy('program.program_id', 'asc')
-                                                            ->get();
+                    ->join('program', 'program.program_id', 'vendor_programs.programs')
+                    ->where('vendor_programs.vendors_id', $vendor_id)
+                    ->where('user_programs.active', 1)
+                    ->orderBy('program.program_id', 'asc')
+                    ->get();
         }
     }
 
@@ -411,6 +411,13 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->first();
                     
         return $get_user_program_active;
+    }
+
+    public function activities_count($program_id, $activity_id, $category)
+    {
+        // return \DB::select('exec GET_COUNT_RTB_DOCS("$program_id", "$activity_id", "$category")');
+        $activities_count = \DB::select('call GET_COUNT_RTB_DOCS(?,?,?)',array($program_id, $activity_id, $category));
+        return $activities_count[0]->count;
     }
     
 }

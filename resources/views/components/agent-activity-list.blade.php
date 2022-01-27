@@ -11,6 +11,7 @@
 @php
 
 $user_detail = \Auth::user()->getUserDetail()->first();
+$user_program = \Auth::user()->getUserProgram()[0]->program_id;
 
 $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
@@ -19,6 +20,7 @@ if (\Auth::user()->profile_id == 2) {
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->where('site_vendor_id', $vendor)
+                    ->where('program_id', $user_program)
                     ->orderBy('stage_id', 'ASC')
                     ->orderBy('activity_id', 'ASC')
                     ->get();
@@ -31,6 +33,7 @@ if (\Auth::user()->profile_id == 2) {
                     ->where('agent_id', \Auth::id())
                     ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
                     ->where('site_vendor_id', $vendor)
+                    ->where('program_id', $user_program)
                     ->orderBy('stage_id', 'ASC')
                     ->distinct('stage_id')
                     ->get();
