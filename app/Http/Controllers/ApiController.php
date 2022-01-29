@@ -81,12 +81,18 @@ class ApiController extends Controller
     public function agent_activities (Request $request)
     {
         
-        $user_program = \Auth::user()->getUserProgram()[0]->program_id;
+        $user_program = \DB::table('program')
+                            ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                            ->where('user_programs.user_id', $request->get('user_id'))
+                            ->where('user_programs.active', 1)
+                            ->orderBy('program.program_id', 'asc')
+                            ->get();
+
         $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
         return $activities = \DB::table('view_assigned_sites')
-                                ->where('agent_id', \Auth::id())
-                                ->where('activity_profile_id', \Auth::user()->profile_id == 2 ? 2 : 38)
+                                ->where('agent_id', $request->get('user_id'))
+                                ->where('activity_profile_id', $request->get('profile_id'))
                                 ->where('site_vendor_id', $vendor)
                                 ->where('program_id', $user_program)
                                 ->orderBy('stage_id', 'ASC')
