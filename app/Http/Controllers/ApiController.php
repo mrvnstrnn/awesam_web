@@ -85,7 +85,6 @@ class ApiController extends Controller
 
         if(Auth::attempt($loginDetails)){
 
-
             $profile_menu = \Auth::user()->getAllNavigation()
             ->orderBy('menu_sort', 'asc')
             ->orderBy('menu', 'asc')
@@ -99,7 +98,7 @@ class ApiController extends Controller
                     ->orderBy('program.program_id', 'asc')
                     ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu]);
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id]);
 
         } else {
 

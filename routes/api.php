@@ -30,3 +30,5 @@ Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'
 
 
 Route::post('login', [ApiController::class, 'login']);
+Route::post('login2', [ApiController::class, 'login']);
+Route::post('login3', [ApiController::class, 'login']);
