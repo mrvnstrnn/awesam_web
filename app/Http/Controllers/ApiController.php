@@ -85,7 +85,21 @@ class ApiController extends Controller
 
         if(Auth::attempt($loginDetails)){
 
-            return response()->json(['message' => 'login successful', 'code' => 200]);
+
+            $profile_menu = \Auth::user()->getAllNavigation()
+            ->orderBy('menu_sort', 'asc')
+            ->orderBy('menu', 'asc')
+            ->get();
+
+            $user_active_program = \DB::table('program')
+                    ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                    // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
+                    ->where('user_programs.user_id', \Auth::user()->id)
+                    ->where('user_programs.active', 1)
+                    ->orderBy('program.program_id', 'asc')
+                    ->get();
+
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu]);
 
         } else {
 
