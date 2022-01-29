@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Mail\VendorMail;
 use App\Mail\InvitationMail;
+use Auth;
 
 use App\Models\Invitation;
 use App\Models\VendorProgram;
@@ -76,4 +77,22 @@ class ApiController extends Controller
         return view('for-vendor-invitation')
                 ->with('invitations', $invitations);
     }
+
+
+    public function login(Request $request)
+    {
+        $loginDetails = $request->only('email', 'password');
+
+        if(Auth::attempt($loginDetails)){
+
+            return response()->json(['message' => 'login successful', 'code' => 200]);
+
+        } else {
+
+            return response()->json(['message' => 'login failed', 'code' => 501]);
+
+        }
+
+    }
+
 }
