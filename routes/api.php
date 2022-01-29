@@ -28,6 +28,8 @@ Route::any('/for-invitation', [ApiController::class, 'for_invitation'])->name('f
 Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
 Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'])->name('all.getWorkflow');
 
+Route::post('/agent-activities', [GlobeController::class, 'agent_activities']);
+
 
 Route::post('login', [ApiController::class, 'login']);
 Route::post('login2', [ApiController::class, 'login']);
