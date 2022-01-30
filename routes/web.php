@@ -543,6 +543,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/renewal-upload-file', [RenewalController::class, 'fileupload']);
     Route::post('/renewal-upload-my-file', [RenewalController::class, 'upload_my_file']);
 
+
+    // Mobile
+    Route::post('mobi/login', [ApiController::class, 'login']);
+    Route::post('mobi/login2', [ApiController::class, 'login']);
+    Route::post('mobi/login3', [ApiController::class, 'login']);
+
 });
     
 
