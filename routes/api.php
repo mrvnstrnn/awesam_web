@@ -34,3 +34,7 @@ Route::post('/agent-activities', [GlobeController::class, 'agent_activities']);
 Route::post('login', [ApiController::class, 'login']);
 Route::post('login2', [ApiController::class, 'login']);
 Route::post('login3', [ApiController::class, 'login']);
+
+Route::post('logout', [ApiController::class, 'logout']);
+Route::post('reset-password', [ApiController::class, 'reset']);
+Route::post('current-user', [ApiController::class, 'current_user']);

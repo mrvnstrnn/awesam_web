@@ -11,6 +11,7 @@ use Auth;
 
 use App\Models\Invitation;
 use App\Models\VendorProgram;
+use Validator;
 
 class ApiController extends Controller
 {
@@ -127,6 +128,44 @@ class ApiController extends Controller
 
         }
 
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/login');
+    }
+
+    public function reset($user, array $input)
+    {
+        try {
+            Validator::make($input, [
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'regex:/[a-z]/',      // must contain at least one lowercase letter
+                    'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                    'regex:/[0-9]/',      // must contain at least one digit
+                    'regex:/[@$!%*#?&]/', 
+                    'confirmed'
+                ]
+            ])->validate();
+    
+            $user->forceFill([
+                'password' => Hash::make($input['password']),
+            ])->save();
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'code' => 501]);
+        }
+    }
+
+    public function current_user(Request $request) {
+        try {
+            $user = Auth::user();
+            return response()->json(['message' => $user, 'code' => 200]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'code' => 501]);
+        }
     }
 
 }
