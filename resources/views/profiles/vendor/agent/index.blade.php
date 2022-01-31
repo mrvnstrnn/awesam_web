@@ -12,7 +12,7 @@
 
     <x-home-dashboard-milestone :programid="$user_program" />
 
-    <div class="divider"></div>
+    {{-- <div class="divider"></div>
     <div class="row">
         <div class="col-12">
             <h3>My Badges</h3>
@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <div class="divider"></div>
+    <div class="divider"></div> --}}
 
 
 @endsection
