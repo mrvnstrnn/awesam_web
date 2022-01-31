@@ -144,104 +144,103 @@ function makeDT(whatTable, whatCols, active_program) {
 
                 // MINIDASHBOARD FILTER MAKER
 
-                if(active_program == 3){
+                // if(active_program == 3){
 
-                    if(window.location.pathname == "/program-sites"){
-                        var filter_column = "gt_saq_milestone";
-                    } 
-                    else {
-                        var filter_column = "gt_saq_milestone";
+                //     if(window.location.pathname == "/program-sites"){
+                //         var filter_column = "gt_saq_milestone";
+                //     } 
+                //     else {
+                //         var filter_column = "gt_saq_milestone";
 
-                    }
-                }
-                else if(active_program == 4){
+                //     }
+                // }
+                // else if(active_program == 4){
 
-                    if(window.location.pathname == "/program-sites"){
-                        var filter_column = "saq_milestone";
-                    } 
-                    else {
-                        var filter_column = "saq_milestone";
+                //     if(window.location.pathname == "/program-sites"){
+                //         var filter_column = "saq_milestone";
+                //     } 
+                //     else {
+                //         var filter_column = "saq_milestone";
 
-                    }
-                }
-                else if(active_program == 8){
+                //     }
+                // }
+                // else if(active_program == 8){
 
-                    if(window.location.pathname == "/program-sites"){
-                        var filter_column = "mar_status";
-                    } 
-                    else {
-                        var filter_column = "classification";
+                //     if(window.location.pathname == "/program-sites"){
+                //         var filter_column = "mar_status";
+                //     } 
+                //     else {
+                //         var filter_column = "classification";
 
-                    }
-                }    
-                else if(active_program == 2){
+                //     }
+                // }    
+                // else if(active_program == 2){
 
-                    if(window.location.pathname == "/program-sites"){
-                        var filter_column = "sam_milestone";
-                    } 
-                    else {
-                        var filter_column = "sam_milestone";
+                //     if(window.location.pathname == "/program-sites"){
+                //         var filter_column = "sam_milestone";
+                //     } 
+                //     else {
+                //         var filter_column = "sam_milestone";
 
-                    }
-                }    
-                else if(active_program == 1){
+                //     }
+                // }    
+                // else if(active_program == 1){
 
-                    if(window.location.pathname == "/program-sites"){
-                        var filter_column = "saq_milestone";
-                    } 
-                    else {
-                        var filter_column = "saq_milestone";
+                //     if(window.location.pathname == "/program-sites"){
+                //         var filter_column = "saq_milestone";
+                //     } 
+                //     else {
+                //         var filter_column = "saq_milestone";
 
-                    }
-                }    
+                //     }
+                // }    
 
                 // console.log();
                 // var object_data = json.data.sort((a, b) => (a.activity_id > b.activity_id) ? 1 : -1);
 
-                var occurences = json.data.reduce(function (r, row) {
-                    r[row[filter_column]] = ++r[row[filter_column]] || 1;
-                    return r;
-                }, {});
+                // var occurences = json.data.reduce(function (r, row) {
+                //     r[row[filter_column]] = ++r[row[filter_column]] || 1;
+                //     return r;
+                // }, {});
             
-                var result = Object.keys(occurences).map(function (key) {
-                    return { key: key, value: occurences[key] };
-                });
+                // var result = Object.keys(occurences).map(function (key) {
+                //     return { key: key, value: occurences[key] };
+                // });
 
-                // console.log(result);
-                var i = 0;
-                var bg = 1;
-                $.each(result.sort((a, b) => (a.key > b.key) ? 1 : -1), function(){
+                // var i = 0;
+                // var bg = 1;
+                // $.each(result.sort((a, b) => (a.key > b.key) ? 1 : -1), function(){
 
-                    var xx =    '<div class="col-3 border" style="max-width: 150px !important;">' +          
-                                    '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
-                                    '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
-                                        '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
-                                        '<div class="widget-subheading">'+ result[i].key + '</div>' +
-                                    '</div>' +
-                                '</div>';         
+                //     var xx =    '<div class="col-3 border" style="max-width: 150px !important;">' +          
+                //                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
+                //                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
+                //                         '<div class="widget-numbers mt-1" id=>' + result[i].value + '</div>' +
+                //                         '<div class="widget-subheading">'+ result[i].key + '</div>' +
+                //                     '</div>' +
+                //                 '</div>';         
 
-                    $(document).find('#dashboard_counters_options'+active_program).append(xx);
+                //     $(document).find('#dashboard_counters_options'+active_program).append(xx);
 
-                    i = i+1;
+                //     i = i+1;
                     
-                    if(bg < 7){
-                        bg = bg + 1;
-                    } else {
-                        bg = 1;
-                    }
+                //     if(bg < 7){
+                //         bg = bg + 1;
+                //     } else {
+                //         bg = 1;
+                //     }
 
 
-                });
+                // });
 
-                var total_site =    '<div class="col-3 border" style="max-width: 150px !important;">' +          
-                                    '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
-                                    '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
-                                        '<div class="widget-numbers mt-1">'+ json.data.length + '</div>' +
-                                        '<div class="widget-subheading">Total Sites</div>' +
-                                    '</div>' +
-                                '</div>';
+                // var total_site =    '<div class="col-3 border" style="max-width: 150px !important;">' +          
+                //                     '<div class="milestone-bg bg_img_' + (bg) + '" style=""></div>' +
+                //                     '<div class="widget-chart widget-chart-hover milestone_sites"  data-activity_name="" data-total="" data-activity_id="">' +
+                //                         '<div class="widget-numbers mt-1">'+ json.data.length + '</div>' +
+                //                         '<div class="widget-subheading">Total Sites</div>' +
+                //                     '</div>' +
+                //                 '</div>';
 
-                $(document).find('#dashboard_counters_options'+active_program).append(total_site);
+                // $(document).find('#dashboard_counters_options'+active_program).append(total_site);
 
             }
               
