@@ -121,6 +121,12 @@
                                     <div>
                                     <i class="fa {{ $extension }} fa-3x text-dark"></i><br>
                                     <p><small>{{ $data[0]->sub_activity_name }}</small></p>
+                                    @if ( in_array( 'approved', $status_collect->all() ) && in_array( 'pending', $status_collect->all() ) )
+                                        <p class="pending_message_{{ $data[0]->sub_activity_id }}">
+                                            <i class="fa fa-exclamation-triangle text-danger"></i>
+                                            <small>Pending file/s here.</small>
+                                        </p>
+                                    @endif
                                     </div>
                                 </div>
                                 @if($icon_color == "success")   
@@ -417,6 +423,9 @@
                             '<i class="fa fa-times-circle fa-lg text-danger" style="position: absolute; top:10px; right: 20px"></i><br>'
                         );
                     }
+
+                    $(".pending_message_"+sub_activity_id).remove();
+                    
                     
                     $(".file_lists").removeClass("d-none");
                     $(".confirmation_message").addClass("d-none");
