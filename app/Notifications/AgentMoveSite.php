@@ -5,6 +5,8 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 // class AgentMoveSite extends Notification
@@ -44,8 +46,7 @@ class AgentMoveSite extends Notification implements ShouldBroadcast, ShouldQueue
         return (new MailMessage)
                     ->subject($this->message['title'])
                     ->line($this->message['body'])
-                    ->cc('awesamtool@globe.com.ph')
-                    ->bcc('maesternon@absi.ph')
+                    ->cc(['awesamtool@globe.com.ph', 'maesternon@absi.ph'])
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }

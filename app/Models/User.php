@@ -240,11 +240,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function checkIfSubActUploaded($sub_activity_id, $sam_id)
     {
-        $sub_act = SubActivityValue::select('id')
-                                        ->where('sub_activity_id', $sub_activity_id)
-                                        ->where('sam_id', $sam_id)
-                                        ->where('type', 'doc_upload')
-                                        ->first();
+        $sub_act = SubActivityValue::select('id', 'status')
+                        ->where('sub_activity_id', $sub_activity_id)
+                        ->where('sam_id', $sam_id)
+                        ->where('type', 'doc_upload')
+                        ->where('status', 'pending')
+                        ->first();
 
         return $sub_act;
     }
