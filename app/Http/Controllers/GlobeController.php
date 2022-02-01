@@ -27,7 +27,6 @@ use App\Models\SubActivity;
 use App\Models\ProgramMapping;
 
 use Notification;
-use App\Notifications\SiteMoved;
 use Pusher\Pusher;
 use Log;
 
@@ -51,6 +50,8 @@ use Carbon;
 use App\Events\SiteEndorsementEvent;
 use App\Listeners\SiteEndorsementListener;
 use App\Notifications\SiteEndorsementNotification;
+use App\Notifications\SiteMoved;
+use App\Notifications\AgentMoveSite;
 
 
 class GlobeController extends Controller
@@ -800,24 +801,74 @@ class GlobeController extends Controller
             $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
-                                ->get();                            
+                                ->get();
 
-            foreach($userSchema as $user){
+            if ( $notification_settings->receiver_profile_id == 2 ) {
+                for ($i=0; $i < count($sam_id); $i++) {
+                    $site_users = \DB::table('site_users')
+                                    ->where('sam_id', $sam_id[$i])
+                                    ->first();
+    
+                    if ( !is_null($site_users) ) {
+                        $user_agent = User::find($site_users->agent_id);
+                        if ( !is_null($user_agent) ) {
+                            
+                            $notifDataForAgent = [
+                                'user_id' => $site_users->agent_id,
+                                'program_id' => $program_id,
+                                'site_count' => $site_count,
+                                'action' => $action,
+                                'activity_id' => $activity_id,
+                                'title' => $title,	
+                                'body' => $body,
+                                'goUrl' => url('/'),
+                            ];
+                            Notification::send($user_agent, new SiteMoved($notifDataForAgent));
+                        }
+                    }
+                }
+            } else {
+                foreach($userSchema as $user){
 
-                $notifData = [
-                    'user_id' => $user->id,
-                    'program_id' => $program_id,                
-                    'site_count' => $site_count,
-                    'action' => $action,
-                    'activity_id' => $activity_id,
-                    'title' => $title,	
-                    'body' => $body,
-                    'goUrl' => url('/'),
-                ];
-                
-                Notification::send($user, new SiteMoved($notifData));
+                    $notifData = [
+                        'user_id' => $user->id,
+                        'program_id' => $program_id,
+                        'site_count' => $site_count,
+                        'action' => $action,
+                        'activity_id' => $activity_id,
+                        'title' => $title,	
+                        'body' => $body,
+                        'goUrl' => url('/'),
+                    ];
+                    
+                    Notification::send($user, new SiteMoved($notifData));
+                }
+            }
 
-            }   
+            // Loop sam_id per agent
+            for ($i=0; $i < count($sam_id); $i++) {
+                $site_users = \DB::table('site_users')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
+                if ( !is_null($site_users) ) {
+                    $user_agent = User::find($site_users->agent_id);
+                    if ( !is_null($user_agent) ) {
+                        
+                        $notifDataForAgent = [
+                            'user_id' => $site_users->agent_id,
+                            'program_id' => $program_id,
+                            'action' => $action,
+                            'activity_id' => $activity_id,
+                            'title' => "Site Update for " .$sam_id[$i],	
+                            'body' => "Your site has been moved to " .$activity_name,
+                            'goUrl' => url('/'),
+                        ];
+                        Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
+                    }
+                }
+            }
+            // End of Loop
         }
 
         // ///////////////////////////// //
@@ -2544,6 +2595,7 @@ class GlobeController extends Controller
                         }
                     }
                 }
+                
                 if ( $request->get('action') == "rejected" ) {
                     $active_file_status = "rejected";
                 } else {
@@ -2559,6 +2611,30 @@ class GlobeController extends Controller
                     'validators' => $approvers_collect->all(),
                     'type' => $validators_type
                 ];
+
+                $site_users = \DB::table('site_users')
+                                ->where('sam_id', $request->input('sam_id'))
+                                ->first();
+            
+                if ( !is_null($site_users) ) {
+                    $user_agent = User::find($site_users->agent_id);
+                    if ( !is_null($user_agent) ) {
+                        if ( $request->get('action') == "rejected" ) {
+                            $body_message = "Your uploaded file (" .$request->input('filename'). ") has been rejected by ".\Auth::user()->name. ". Reason: ".$request->input('reason');
+                        } else {
+                            $body_message = "Your uploaded file (" .$request->input('filename'). ") has been approved by ".\Auth::user()->name. ".";
+                        }
+                        
+                        $notifDataForAgent = [
+                            'user_id' => $site_users->agent_id,
+                            'action' => $request->get('action'),
+                            'title' => "Site Update for " .$request->input('sam_id'),	
+                            'body' => $body_message,
+                            'goUrl' => url('/'),
+                        ];
+                        Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
+                    }
+                }
 
                 if ($request->input('action') != "rejected") {
                                                             
