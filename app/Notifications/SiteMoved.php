@@ -51,7 +51,8 @@ class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
         return (new MailMessage)
                     ->subject($this->message['title'])
                     ->line($this->message['body'])
-                    ->cc(['awesamtool@globe.com.ph', 'maesternon@absi.ph'])
+                    ->cc('awesamtool@globe.com.ph')
+                    ->bcc('maesternon@absi.ph')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
