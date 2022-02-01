@@ -54,6 +54,7 @@
     </head>
     <body>
         @php
+
             $json = json_decode($json_data);
 
             $honorific = "";
@@ -67,12 +68,10 @@
                 $lessor_surname = $json->salutation . " " . end($surname);
             }
 
-            $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-
             if ( $json->terms_in_years > 1 ) {
-                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') years';
+                $date_word = numberTowords($json->terms_in_years) .' ('.$json->terms_in_years.') years';
             } else {
-                $date_word = $f->format($json->terms_in_years) .' ('.$json->terms_in_years.') year';
+                $date_word = numberTowords($json->terms_in_years) .' ('.$json->terms_in_years.') year';
             }
 
             if ($json->company == 'BAYANTEL') {
@@ -100,7 +99,7 @@
                 <tr>
                     <td style="width: 100%">
                         <p>{{ \Carbon::now()->format('M d, Y') }}</p>
-                        <p style="margin-bottom: 0px;"><b>{{ ucwords(str_replace("&amp;", "and", $json->lessor)) }}</b></p>
+                        <p style="margin-bottom: 0px;"><b>{{ ucwords(strtolower(str_replace("&amp;", "and", $json->lessor))) }}</b></p>
                         <p style="margin-bottom: 0px; margin-top: 0px;">{{ $json->lessor_position }}</p>
                         <p style="margin-top: 0px;">{{ $json->lessor_address }}</p>
                     </td>
@@ -145,7 +144,7 @@
                             <p>Very truly yours,</p>
                             {{-- <p style="margin-top: 60px;"><b>{{ $json->signatory }}</b></p>
                             <p style="margin-top: 0px;">{{ $json->signatory_position }}</p> --}}
-                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>{{ \Auth::user()->name }}</b></p>
+                            <p style="margin-top: 60px; margin-bottom: 0px;"><b>{{ ucwords(strtolower(\Auth::user()->name)) }}</b></p>
                             {{-- <p style="margin-top: 0px;">{{ \Auth::user()->getUserProfile()->profile }}</p> --}}
                             <p style="margin-top: 0px;">Contract Admin</p>
                     </td>
@@ -153,4 +152,8 @@
             </table>
         </div>
     </body>
+
+    @php
+
+@endphp
 </html>

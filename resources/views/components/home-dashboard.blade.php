@@ -133,14 +133,14 @@
                         $categories_array = [""];
                     }
                 @endphp
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3>RTB Tracker</h3>
+                    </div>
+                </div>
             
                 @if ( $user_program == 3 || $user_program == 4)
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            <h3>RTB Tracker</h3>
-                        </div>
-                    </div>
             
                     @for ($j = 0; $j < count($categories_array); $j++)
                         @php

@@ -37,8 +37,6 @@
 
             $json = json_decode($json_data);
 
-            $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-
             if ($json->company == 'BAYANTEL') {
                 $company_name = "BAYAN TELECOMMUNICATIONS, INC.";
             } elseif ($json->company == 'INNOVE') {
@@ -224,12 +222,12 @@
                     </td>
                     <td style="width: 100%; text-align: left; border: 1px solid black; padding: 10px; margin: 0px;">
                         <p style="text-align: justify; text-justify: inter-word;"><b>A.</b>
-                            Term: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->new_lease_terms_in_years )) }}</span> (<span style="text-decoration: underline;">{{ $json->new_lease_terms_in_years }}</span>) years;
+                            Term: <span style="text-decoration: underline;">{{ ucwords(numberTowords( $json->new_lease_terms_in_years )) }}</span> (<span style="text-decoration: underline;">{{ $json->new_lease_terms_in_years }}</span>) years;
                             Commencing on <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_start_date)) }}</span> to <span style="text-decoration: underline;">{{ date('M d, Y', strtotime($json->new_terms_end_date)) }}</span>.
                         </p>
                         
                         <p style="text-align: justify; text-justify: inter-word;"><b>B.</b>
-                            Consideration: <span style="text-decoration: underline;">{{ ucwords($f->format( $json->consideration_for_otp_only )) }}</span> (Php <span style="text-decoration: underline;">{{ number_format($json->consideration_for_otp_only, 2) }}</span>). 
+                            Consideration: <span style="text-decoration: underline;">{{ ucwords(numberTowords( $json->consideration_for_otp_only )) }}</span> (Php <span style="text-decoration: underline;">{{ number_format($json->consideration_for_otp_only, 2) }}</span>). 
                             Tax Application: <span style="text-decoration: underline;"><b>{{ strtoupper( $tax1) }}</b></span> of VAT and <span style="text-decoration: underline;"><b>{{ strtoupper( $tax2) }}</b></span> of Withholding Tax.
                         </p>
 
