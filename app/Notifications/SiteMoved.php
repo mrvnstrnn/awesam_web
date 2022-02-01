@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Pusher\Pusher;
 // use App\Models\User;
 
-class SiteMoved extends Notification implements ShouldBroadcast, Queueable
+class SiteMoved extends Notification implements ShouldBroadcast, ShouldQueue
 {
     use Queueable;
 
