@@ -135,23 +135,47 @@
 
                     // var get_program_renewal = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal($sam_id)); }}".replace(/&quot;/g,'"'));
                     // lessor_commercial_engagement
-                    var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
+                    // var commercial_nego = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
 
                     $(".create_lease_renewal_notice_form #representative").val("{{ \Auth::user()->name }}");
 
-                    // $.each(get_program_renewal, function(index, data) {
-                    //     $(".create_lease_renewal_notice_form #"+index).val(data);
-
-                    //     if (index == 'site_address') {
-                    //         $(".create_lease_renewal_notice_form #lease_premises").val(data);
-                    //     }
-                    // });
-
-                    $("input[type=number]").val(0);
-                    $.each(commercial_nego, function(index, data) {
-                        $(".create_lease_renewal_notice_form #"+index).val(data);
-                        if (index == 'facility_site_address') {
-                            $(".create_lease_renewal_notice_form #lease_premises").val(data);
+                    var sam_id = "{{ $sam_id }}";
+                    var program_id = "{{ $program_id }}";
+                    var type = "lrn";
+                    $.ajax({
+                        url: "/get-form-program-data",
+                        method: "POST",
+                        data : {
+                            sam_id : sam_id,
+                            program_id : program_id,
+                            type : type,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error) {
+                                $("input[type=number]").val(0);
+                                $.each(resp.message, function(index, data) {
+                                    $(".create_lease_renewal_notice_form #"+index).val(data);
+                                    if (index == 'facility_site_address') {
+                                        $(".create_lease_renewal_notice_form #lease_premises").val(data);
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (resp) {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
                         }
                     });
 

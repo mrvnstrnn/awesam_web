@@ -214,12 +214,14 @@
 
                     var sam_id = "{{ $sam_id }}";
                     var program_id = "{{ $program_id }}";
+                    var type = "loi";
                     $.ajax({
                         url: "/get-form-program-data",
                         method: "POST",
                         data : {
                             sam_id : sam_id,
                             program_id : program_id,
+                            type : type,
                         },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

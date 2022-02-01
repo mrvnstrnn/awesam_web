@@ -137,10 +137,46 @@
                     $("#method").val(value);
                     $("#date").val(today);
 
-                    var get_lrn = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
+                    // var get_lrn = JSON.parse("{{ json_decode(json_encode(\Auth::user()->get_lrn($sam_id, 'loi'))); }}".replace(/&quot;/g,'"'));
 
-                    $.each(get_lrn, function(index, data) {
-                        $(".commercial_negotiation_form #"+index).val(data);
+                    // $.each(get_lrn, function(index, data) {
+                    //     $(".commercial_negotiation_form #"+index).val(data);
+                    // });
+
+                    var sam_id = "{{ $sam_id }}";
+                    var program_id = "{{ $program_id }}";
+                    var type = "commercial_negotiation";
+                    $.ajax({
+                        url: "/get-form-program-data",
+                        method: "POST",
+                        data : {
+                            sam_id : sam_id,
+                            program_id : program_id,
+                            type : type,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error) {
+                                $.each(resp.message, function(index, data) {
+                                    $(".commercial_negotiation_form #"+index).val(data);
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (resp) {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+                        }
                     });
 
                 } else {

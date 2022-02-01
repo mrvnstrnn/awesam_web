@@ -86,7 +86,7 @@
             <table style="width: 100%; margin-top: 0px;">
                 <tr>
                     <td style="width: 100%; text-align: left;">
-                        <p style="margin-bottom: 0px;">Representative: {{ $json->representative }}</p>
+                        <p style="margin-bottom: 0px;">Representative: {{ ucwords(strtolower($json->representative)) }}</p>
                     </td>
                 </tr>
             </table>

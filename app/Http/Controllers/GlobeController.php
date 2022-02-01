@@ -9190,11 +9190,37 @@ class GlobeController extends Controller
         try {
             
             if ( $request->get('program_id') == 8) {
-                $get_program_renewal = \DB::table('program_renewal')
-                        ->where('sam_id', $request->get('sam_id'))
-                        ->first();
+                if ( $request->get('program_id') == "loi" ) {
+                    $get_program_data = \DB::table('program_renewal')
+                            ->where('sam_id', $request->get('sam_id'))
+                            ->first();
+                } else if ( $request->get('type') == "commercial_negotiation" ) {
+                    $lrn = SubActivityValue::where('sam_id', $request->get('sam_id') )
+                                        ->where('status', 'approved')
+                                        ->where('type', 'loi')
+                                        ->first();
+                    if ( is_null($lrn) ) {
+                        $get_program_data = \DB::table('program_renewal')
+                                ->where('sam_id', $request->get('sam_id'))
+                                ->first();
+                    } else {
+                        $get_program_data = json_decode($lrn->value);
+                    }
+                } else if ( $request->get('type') == "lrn" ) {
+                    $lessor_commercial_engagement = SubActivityValue::where('sam_id', $request->get('sam_id') )
+                                        ->where('status', 'approved')
+                                        ->where('type', 'lessor_commercial_engagement')
+                                        ->first();
+                    if ( is_null($lessor_commercial_engagement) ) {
+                        $get_program_data = \DB::table('program_renewal')
+                                ->where('sam_id', $request->get('sam_id'))
+                                ->first();
+                    } else {
+                        $get_program_data = json_decode($lessor_commercial_engagement->value);
+                    }
+                }
             }
-            return response()->json(['error' => false, 'message' => $get_program_renewal ]);
+            return response()->json(['error' => false, 'message' => $get_program_data ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage() ]);
