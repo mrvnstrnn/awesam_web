@@ -9195,16 +9195,16 @@ class GlobeController extends Controller
                             ->where('sam_id', $request->get('sam_id'))
                             ->first();
                 } else if ( $request->get('type') == "commercial_negotiation" ) {
-                    $lrn = SubActivityValue::where('sam_id', $request->get('sam_id') )
+                    $loi = SubActivityValue::where('sam_id', $request->get('sam_id') )
                                         ->where('status', 'approved')
                                         ->where('type', 'loi')
                                         ->first();
-                    if ( is_null($lrn) ) {
+                    if ( is_null($loi) ) {
                         $get_program_data = \DB::table('program_renewal')
                                 ->where('sam_id', $request->get('sam_id'))
                                 ->first();
                     } else {
-                        $get_program_data = json_decode($lrn->value);
+                        $get_program_data = json_decode($loi->value);
                     }
                 } else if ( $request->get('type') == "lrn" ) {
                     $lessor_commercial_engagement = SubActivityValue::where('sam_id', $request->get('sam_id') )
@@ -9217,6 +9217,18 @@ class GlobeController extends Controller
                                 ->first();
                     } else {
                         $get_program_data = json_decode($lessor_commercial_engagement->value);
+                    }
+                } else if ( $request->get('type') == "savings_computation" ) {
+                    $lrn = SubActivityValue::where('sam_id', $request->get('sam_id') )
+                                        ->where('status', 'approved')
+                                        ->where('type', 'lrn')
+                                        ->first();
+                    if ( is_null($lrn) ) {
+                        $get_program_data = \DB::table('program_renewal')
+                                ->where('sam_id', $request->get('sam_id'))
+                                ->first();
+                    } else {
+                        $get_program_data = json_decode($lrn->value);
                     }
                 }
             }

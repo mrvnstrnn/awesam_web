@@ -192,44 +192,83 @@
                 if (!resp.error) {
                     $(".form_html").html(resp.message);
 
-                    lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
-                    var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
+                    // lrn = JSON.parse( JSON.parse( JSON.stringify("{{ \Auth::user()->get_lrn($sam_id, 'lrn') }}".replace(/&quot;/g,'"')) ) );
+                    // var get_program_renewal_old = JSON.parse("{{ json_encode(\Auth::user()->get_program_renewal_old($sam_id)); }}".replace(/&quot;/g,'"'));
 
                     $("input[type=number]").val(0);
-                    $.each(get_program_renewal_old, function(index, data) {
-                        // console.log(index);
-                        // if (index == 'rate_old') {
-                        //     $(".savings_computation_form #old_terms_monthly_contract_amount").val(data == null || data == "" || data == "NULL" ? 0 : data);
-                        // } else if (index == 'escalation_old') {
-                        //     $(".savings_computation_form #old_terms_escalation_rate").val(data == null || data == "" || data == "NULL" ? 0 : data);
-                        // }
+
+                    var sam_id = "{{ $sam_id }}";
+                    var program_id = "{{ $program_id }}";
+                    var type = "savings_computation";
+                    $.ajax({
+                        url: "/get-form-program-data",
+                        method: "POST",
+                        data : {
+                            sam_id : sam_id,
+                            program_id : program_id,
+                            type : type,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            if (!resp.error) {
+                                $(".savings_computation_form #old_exdeal_amount").val(1);
+                                $.each(resp.message, function(index, data) {
+                                    $(".savings_computation_form #"+index).val(data);
+
+                                    if ( index == "lessor_demand_monthly_contract_amount" ) {
+                                        $(".savings_computation_form #new_terms_monthly_contract_amount").val(data);
+                                    } else if ( index == "lessor_demand_escalation_rate" ) {
+                                        $(".savings_computation_form #new_terms_escalation_rate").val(data);
+                                    } else if ( index == "lessor_demand_escalation_year" ) {
+                                        $(".savings_computation_form #new_terms_escalation_year").val(data);
+                                    } else if ( index == "lessor_demand_exdeal_request" ) {
+                                        $(".savings_computation_form #new_terms_exdeal_request").val(data);
+                                    } else if ( index == "old_exdeal_particulars" ) {
+                                        $(".savings_computation_form #new_terms_exdeal_particulars").val(data);
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    resp.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: function (resp) {
+                            Swal.fire(
+                                'Error',
+                                resp,
+                                'error'
+                            )
+                        }
                     });
 
-                    $(".savings_computation_form #old_exdeal_amount").val(1);
+                    // if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
+                    //     $.each(lrn, function(index, data) {
+                    //         $(".savings_computation_form #"+index).val(data);
 
-                    if( (typeof lrn === "object" || typeof lrn === 'function') && (lrn !== null) ) {
-                        $.each(lrn, function(index, data) {
-                            $(".savings_computation_form #"+index).val(data);
-
-                            if ( index == "lessor_demand_monthly_contract_amount" ) {
-                                $(".savings_computation_form #new_terms_monthly_contract_amount").val(data);
-                            } else if ( index == "lessor_demand_escalation_rate" ) {
-                                $(".savings_computation_form #new_terms_escalation_rate").val(data);
-                            } else if ( index == "lessor_demand_escalation_year" ) {
-                                $(".savings_computation_form #new_terms_escalation_year").val(data);
-                            } else if ( index == "lessor_demand_exdeal_request" ) {
-                                $(".savings_computation_form #new_terms_exdeal_request").val(data);
-                            } else if ( index == "old_exdeal_particulars" ) {
-                                $(".savings_computation_form #new_terms_exdeal_particulars").val(data);
-                            }
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            "Can't process this right now.",
-                            'error'
-                        )
-                    }
+                    //         if ( index == "lessor_demand_monthly_contract_amount" ) {
+                    //             $(".savings_computation_form #new_terms_monthly_contract_amount").val(data);
+                    //         } else if ( index == "lessor_demand_escalation_rate" ) {
+                    //             $(".savings_computation_form #new_terms_escalation_rate").val(data);
+                    //         } else if ( index == "lessor_demand_escalation_year" ) {
+                    //             $(".savings_computation_form #new_terms_escalation_year").val(data);
+                    //         } else if ( index == "lessor_demand_exdeal_request" ) {
+                    //             $(".savings_computation_form #new_terms_exdeal_request").val(data);
+                    //         } else if ( index == "old_exdeal_particulars" ) {
+                    //             $(".savings_computation_form #new_terms_exdeal_particulars").val(data);
+                    //         }
+                    //     });
+                    // } else {
+                    //     Swal.fire(
+                    //         'Error',
+                    //         "Can't process this right now.",
+                    //         'error'
+                    //     )
+                    // }
                     
                 } else {
                     Swal.fire(
