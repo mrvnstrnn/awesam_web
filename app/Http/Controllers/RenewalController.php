@@ -20,6 +20,7 @@ use App\Models\SubActivity;
 
 use Notification;
 use App\Notifications\SiteMoved;
+use App\Notifications\AgentMoveSite;
 
 use App\Mail\LOIMail;
 use App\Mail\LrnMail;
@@ -1272,24 +1273,74 @@ class RenewalController extends Controller
             $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
-                                ->get();                            
+                                ->get();
 
-            foreach($userSchema as $user){
+            if ( $notification_settings->receiver_profile_id == 2 ) {
+                for ($i=0; $i < count($sam_id); $i++) {
+                    $site_users = \DB::table('site_users')
+                                    ->where('sam_id', $sam_id[$i])
+                                    ->first();
+    
+                    if ( !is_null($site_users) ) {
+                        $user_agent = User::find($site_users->agent_id);
+                        if ( !is_null($user_agent) ) {
+                            
+                            $notifDataForAgent = [
+                                'user_id' => $site_users->agent_id,
+                                'program_id' => $program_id,
+                                'site_count' => $site_count,
+                                'action' => $action,
+                                'activity_id' => $activity_id,
+                                'title' => $title,	
+                                'body' => $body,
+                                'goUrl' => url('/'),
+                            ];
+                            Notification::send($user_agent, new SiteMoved($notifDataForAgent));
+                        }
+                    }
+                }
+            } else {
+                foreach($userSchema as $user){
 
-                $notifData = [
-                    'user_id' => $user->id,
-                    'program_id' => $program_id,                
-                    'site_count' => $site_count,
-                    'action' => $action,
-                    'activity_id' => $activity_id,
-                    'title' => $title,	
-                    'body' => $body,
-                    'goUrl' => url('/'),
-                ];
-                
-                Notification::send($user, new SiteMoved($notifData));
+                    $notifData = [
+                        'user_id' => $user->id,
+                        'program_id' => $program_id,
+                        'site_count' => $site_count,
+                        'action' => $action,
+                        'activity_id' => $activity_id,
+                        'title' => $title,	
+                        'body' => $body,
+                        'goUrl' => url('/'),
+                    ];
+                    
+                    Notification::send($user, new SiteMoved($notifData));
+                }
+            }
 
-            }   
+            // Loop sam_id per agent
+            for ($i=0; $i < count($sam_id); $i++) {
+                $site_users = \DB::table('site_users')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
+                if ( !is_null($site_users) ) {
+                    $user_agent = User::find($site_users->agent_id);
+                    if ( !is_null($user_agent) ) {
+                        
+                        $notifDataForAgent = [
+                            'user_id' => $site_users->agent_id,
+                            'program_id' => $program_id,
+                            'action' => $action,
+                            'activity_id' => $activity_id,
+                            'title' => "Site Update for " .$sam_id[$i],	
+                            'body' => "Your site has been moved to " .$activity_name,
+                            'goUrl' => url('/'),
+                        ];
+                        Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
+                    }
+                }
+            }
+            // End of Loop
         }
 
         // ///////////////////////////// //
