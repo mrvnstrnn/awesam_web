@@ -58,7 +58,7 @@
              <div class="h-100 bg-plum-plate bg-animation">
                  <div class="d-flex h-100 justify-content-center align-items-center">
                      <div class="mx-auto app-login-box col-md-8">
-                             @yield('content')
+                            @yield('content')
                          <div class="text-center text-white opacity-8 mt-3">Copyright © Globe Telecoms - Site Acquisition & Management 2021</div>
                      </div>
                  </div>

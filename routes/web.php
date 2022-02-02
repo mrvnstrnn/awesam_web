@@ -577,6 +577,7 @@ Route::post('/register-user', [UserController::class, 'register_user'])->name('r
 Route::get('/invitation-link/{token}/{invitation_code}', [InviteController::class, 'invitation_registration'])->name('invite.link')->middleware(['invitation']);
 
 Route::view('/team', 'team');
+Route::view('/privacy', 'privacy');
 
 //ROUTE TO SLUG
 //USERCONTROLLER WILL TAKE OVER THE ROUTING
