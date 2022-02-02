@@ -9190,7 +9190,7 @@ class GlobeController extends Controller
         try {
             
             if ( $request->get('program_id') == 8) {
-                if ( $request->get('program_id') == "loi" ) {
+                if ( $request->get('type') == "loi" ) {
                     $get_program_data = \DB::table('program_renewal')
                             ->where('sam_id', $request->get('sam_id'))
                             ->first();
