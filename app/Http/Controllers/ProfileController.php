@@ -213,7 +213,7 @@ class ProfileController extends Controller
                         UserProgram::create([
                             "user_id" => $request->input('user_id'),
                             "program_id" => $request->input('checkbox_id')[$i],
-                            "active" => $i == 0 ? 1 : "",
+                            "active" => $i == 0 ? 1 : 0,
                         ]);
                     }
                 // }
