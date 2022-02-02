@@ -9230,6 +9230,10 @@ class GlobeController extends Controller
                     } else {
                         $get_program_data = json_decode($lrn->value);
                     }
+                } else {
+                    $get_program_data = \DB::table('program_renewal')
+                            ->where('sam_id', $request->get('sam_id'))
+                            ->first();
                 }
             }
             return response()->json(['error' => false, 'message' => $get_program_data ]);
