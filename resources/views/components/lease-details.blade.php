@@ -23,7 +23,7 @@
             </table>
             <hr>
             <div class="text-right">
-            <button class="ml-2  btn-lg btn btn-success submit_to_ram">Request Approval</button>
+            <button class="ml-2  btn-lg btn btn-success submit_to_ram" type="button">Request Approval</button>
             </div>
         </div>
         <div class="form_data d-none">
@@ -171,7 +171,7 @@
                 </div>
                 <div class="position-relative row form-group ">
                     <div class="col border-top pt-3 text-right">
-                        <button class="ml-2  mt-1 mb-1 btn-lg btn btn-primary save_lease" type="button">Save Lease Details</button>
+                        <button class="ml-2 mt-1 mb-1 btn-lg btn btn-success submit_to_ram" type="button">Save Lease Details</button>
                     </div>
                 </div>
             </form>
@@ -181,57 +181,57 @@
 
 
 <script>
-function load_ssds(id){
-    $('.ssds_form')[0].reset();
+// function load_ssds(id){
+//     $('.ssds_form')[0].reset();
 
-    $(".set_schedule").attr("data-id", id);
-    $(".form_data").removeClass("d-none");
-    $(".aepm_table_div").addClass("d-none");
+//     $(".set_schedule").attr("data-id", id);
+//     $(".form_data").removeClass("d-none");
+//     $(".aepm_table_div").addClass("d-none");
 
-    $(".btn_switch_back_to_actions").addClass("d-none");
-    $(".btn_switch_back_to_candidates").removeClass("d-none");
+//     $(".btn_switch_back_to_actions").addClass("d-none");
+//     $(".btn_switch_back_to_candidates").removeClass("d-none");
         
 
-    $(".set_schedule").attr("data-id", id);
+//     $(".set_schedule").attr("data-id", id);
 
 
-    $.ajax({
-        url: "/get-sub-activity-value/" + id,
-        method: "GET",
-        success: function (resp) {
-            if (!resp.error) {
+//     $.ajax({
+//         url: "/get-sub-activity-value/" + id,
+//         method: "GET",
+//         success: function (resp) {
+//             if (!resp.error) {
 
 
-                var json = JSON.parse(resp.message.value);
+//                 var json = JSON.parse(resp.message.value);
                 
-                console.log(json);
+//                 console.log(json);
 
-                $.each(json, function(index, data) {
+//                 $.each(json, function(index, data) {
 
-                    if(index == 'site_type'){
-                        $("#"+index + " > [value=" + data + "]").attr("selected", "true");
-                    }
+//                     if(index == 'site_type'){
+//                         $("#"+index + " > [value=" + data + "]").attr("selected", "true");
+//                     }
 
-                    $("#"+index).val(data).change();
-                });
-            } else {
-                Swal.fire(
-                    'Error',
-                    resp.message,
-                    'error'
-                )
-            }
-        },
-        error: function (resp) {
+//                     $("#"+index).val(data).change();
+//                 });
+//             } else {
+//                 Swal.fire(
+//                     'Error',
+//                     resp.message,
+//                     'error'
+//                 )
+//             }
+//         },
+//         error: function (resp) {
             
-            Swal.fire(
-                'Error',
-                resp,
-                'error'
-            )
-        },
-    });
-}        
+//             Swal.fire(
+//                 'Error',
+//                 resp,
+//                 'error'
+//             )
+//         },
+//     });
+// }        
 
 
 $(document).ready(function() {
@@ -254,14 +254,24 @@ $(document).ready(function() {
     });
 
 
+    var sam_id = "{{ $sam_id }}";
+    var status = "assds_lease_rate";
     $('#aepm_table').DataTable({
             processing: true,
             serverSide: true,
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/assds_lease_rate",
-                type: 'GET'
+                // url: "/get-site-candidate/" + "{{ $sam_id }}" + "/assds_lease_rate",
+                url: "/get-site-candidate",
+                type: "POST",
+                data: {
+                    sam_id : sam_id,
+                    status : status,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
             dataSrc: function(json){
                 return json.data;
@@ -276,33 +286,86 @@ $(document).ready(function() {
                 { data: "distance", className: "text-left" },
                 { data: "lessor" },
                 { data: "distance", className: "text-center", render: function(row){
-                    toggle_button = '';                    
+                    toggle_button = '';
                     return toggle_button;
                 }},
                 { data: "distance", className: "text-center", render: function(row){
-                    toggle_button = 'Details Complete';                    
+                    toggle_button = 'Details Complete';
                     return toggle_button;
                 }},
                 { data: "distance", className: "text-right", render: function(row){
                     toggle_button = '<div>' +
-                                    '<button class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">Lease Details</button>'  +
+                                    '<button type="button" class="ml-2 mb-2 mt-2 btn btn-primary ssds-details">Lease Details</button>'  +
                                     '</div>';                    
                     return toggle_button;
                 }},
             ],
-            rowCallback: function ( row, data ) {
+            // rowCallback: function ( row, data ) {
+            //     $('.ssds-details', row).on( 'click', function(row, xdata){
+            //         load_ssds(data.id);
+            //     });
+            // },
 
-                    $('.ssds-details', row).on( 'click', function(row, xdata){
-                        load_ssds(data.id);
-                    });
-            },
 
-
-            "initComplete": function( settings, json){
-            }
+            // "initComplete": function( settings, json){
+            // }
 
     }); 
 
+    $('#aepm_table').on( 'click', '.ssds-details', function(){
+        var id = $(this).parent().parent().parent().attr("data-id");
+        
+        $('.ssds_form')[0].reset();
+
+        $(".set_schedule").attr("data-id", id);
+        $(".form_data").removeClass("d-none");
+        $(".aepm_table_div").addClass("d-none");
+
+        $(".btn_switch_back_to_actions").addClass("d-none");
+        $(".btn_switch_back_to_candidates").removeClass("d-none");
+            
+
+        $(".set_schedule").attr("data-id", id);
+
+
+        $.ajax({
+            url: "/get-sub-activity-value/" + id,
+            method: "GET",
+            success: function (resp) {
+                if (!resp.error) {
+                    var json = JSON.parse(resp.message.value);
+
+                    $.each(json, function(index, data) {
+                    
+                        if(index == 'site_type'){
+                            $("#"+index + " > [value=" + data + "]").attr("selected", "true");
+                        }
+                        
+                        // $(".create_lease_renewal_notice_form #lease_premises").val(data);
+
+                        $("#"+index).val(data);
+                    });
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp.message,
+                        'error'
+                    )
+                }
+            },
+            error: function (resp) {
+                
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            },
+        });
+        // load_ssds(id);
+    });
+
+    
     $(".submit_to_ram").on("click", function() {
         $(".submit_to_ram").attr("disabled", "disabled");
         $(".submit_to_ram").text("Processing...");

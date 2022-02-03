@@ -464,12 +464,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // AEPM
     Route::post('/set-schedule', [GlobeController::class, 'set_schedule']);
-    Route::get('/get-site-candidate/{sam_id}/{status}', [GlobeController::class, 'get_site_candidate']);
+    Route::post('/get-site-candidate', [GlobeController::class, 'get_site_candidate']);
+    // Route::get('/get-site-candidate/{sam_id}/{status}', [GlobeController::class, 'get_site_candidate']);
     Route::get('/get-jtss-schedule/{id}', [GlobeController::class, 'get_jtss_schedule']);
     Route::post('/submit-ssds', [GlobeController::class, 'submit_ssds']);
     Route::get('/get-ssds-schedule/{id}', [GlobeController::class, 'get_ssds_schedule']);
 
     Route::get('/get-sub-activity-value/{id}', [GlobeController::class, 'get_sub_activity_value']);
+    // Route::post('/save-lease-details', [GlobeController::class, 'save_lease_details']);
 
 
     // AGENT

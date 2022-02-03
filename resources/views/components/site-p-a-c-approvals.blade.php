@@ -374,16 +374,17 @@
         if (data_complete == "false") {
             var type = $("#type").val();
             var remarks = $("#remarks").val();
+            var activity_names = "reject_site";
 
             data = {
                 sam_id : sam_id,
                 data_complete : data_complete,
-                activity_name : activity_name,
+                activity_name : activity_names,
                 program_id : program_id,
                 site_category : site_category,
                 activity_id : activity_id,
                 type : type,
-                text_area_reason : remarks,
+                remarks : remarks,
             }
 
             // var url = "/reject-site";
@@ -402,7 +403,7 @@
         }
 
         $.ajax({
-            url: url,
+            url: "/accept-reject-endorsement",
             data: data,
             type: 'POST',
             headers: {

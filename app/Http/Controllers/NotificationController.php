@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
-use Pusher\Pusher;
+// use Pusher\Pusher;
 use App\Models\User;
 
 use Notification;

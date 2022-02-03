@@ -27,7 +27,7 @@ use App\Models\SubActivity;
 use App\Models\ProgramMapping;
 
 use Notification;
-use Pusher\Pusher;
+// use Pusher\Pusher;
 use Log;
 
 use App\Mail\RepresentativeInvitation;
@@ -297,7 +297,7 @@ class GlobeController extends Controller
                     ]);
                 }
 
-            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ibs_lead" || $request->input('activity_name') == "precon_docs_approval_ms_lead" || $request->input('activity_name') == "precon_docs_approval_ibs_lead" || $request->input('activity_name') == "postcon_docs_approval_ms_lead" || $request->input('activity_name') == "postcon_docs_approval_ibs_lead") {
+            } else if ($request->input('activity_name') == "pac_approval" || $request->input('activity_name') == "pac_director_approval" || $request->input('activity_name') == "pac_vp_approval" || $request->input('activity_name') == "fac_approval" || $request->input('activity_name') == "fac_director_approval" || $request->input('activity_name') == "fac_vp_approval" || $request->input('activity_name') == "precon_docs_approval" || $request->input('activity_name') == "postcon_docs_approval" || $request->input('activity_name') == "approved_ssds_/_ntp_validation" || $request->input('activity_name') == "approved_moc/ntp_ram_validation" || $request->input('activity_name') == "approval_ms_lead" || $request->input('activity_name') == "approval_ibs_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "loi_&_ip_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ms_lead" || $request->input('activity_name') == "rt_docs_approval_ibs_lead" || $request->input('activity_name') == "precon_docs_approval_ms_lead" || $request->input('activity_name') == "precon_docs_approval_ibs_lead" || $request->input('activity_name') == "postcon_docs_approval_ms_lead" || $request->input('activity_name') == "postcon_docs_approval_ibs_lead" || $request->input('activity_name') == "lease_contract_approval" || $request->input('activity_name') == "reject_site") {
                 
                 $notification = "Site successfully " .$message;
                 $action = $request->input('data_complete');
@@ -308,13 +308,22 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
 
                 if ( $request->input('data_complete') == 'false' ) {
-                    SubActivityValue::create([
-                        'sam_id' => $request->input("sam_id"),
-                        'value' => json_encode($request->all()),
-                        'user_id' => \Auth::id(),
-                        'type' => $request->input("type"),
-                        'status' => "denied",
-                    ]);
+
+                    $validate = Validator::make($request->all(), array(
+                        'remarks' => 'required',
+                    ));
+                    
+                    if (!$validate->passes()) {
+                        return response()->json(['error' => true, 'message' => $validate->errors() ]);
+                    } else {
+                        SubActivityValue::create([
+                            'sam_id' => $request->input("sam_id")[0],
+                            'value' => json_encode($request->all()),
+                            'user_id' => \Auth::id(),
+                            'type' => $request->input("type"),
+                            'status' => "denied",
+                        ]);
+                    }
                 }
 
             } else if ($request->input('activity_name') == "elas_approved") {
@@ -3360,19 +3369,12 @@ class GlobeController extends Controller
             elseif($program_id == 1){
                 $sites->leftJoin('program_newsites', 'view_vendor_assigned_sites.sam_id', 'program_newsites.sam_id')
                 ->select(
-                    "view_site.vendor_acronym", 
-                    "view_site.site_name", 
-                    "view_site.sam_id", 
-                    "view_site.activity_id", 
-                    "view_site.program_id", 
-                    "view_site.site_category", 
-                    "view_site.activity_name", 
-                    "view_site.sam_region_name",
-                    "view_site.site_category",
-                    "view_site.aging",
-                    "view_site.site_address",
-                    "view_site.program_endorsement_date",
-                    "view_site.aging",
+                    "view_vendor_assigned_sites.sam_id",
+                    "view_vendor_assigned_sites.activity_name",
+                    "view_vendor_assigned_sites.site_name",
+                    "view_vendor_assigned_sites.aging",
+                    "view_vendor_assigned_sites.site_category",
+                    "view_vendor_assigned_sites.site_address",
                     "program_newsites.saq_milestone",
                     "program_newsites.serial_number",
                     "program_newsites.saq_bucket",
@@ -3695,8 +3697,8 @@ class GlobeController extends Controller
                                 ->where('view_site.profile_id', \Auth::user()->profile_id);
 
                                 if (\Auth::user()->profile_id != 1 && strtolower($user_detail->mode) != 'globe') {
-                $sites->whereIn('view_site.sam_region_id', $user_area);
-            }
+                                    $sites->whereIn('view_site.sam_region_id', $user_area);
+                                }
                                 if ( $program_id == 1 ) {
                                     $sites->select(
                                         "view_site.vendor_acronym", 
@@ -3717,7 +3719,7 @@ class GlobeController extends Controller
                                         "program_newsites.saq_bucket",
                                         "program_newsites.region",
                                     )
-                                    >join('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
+                                    ->join('program_newsites', 'program_newsites.sam_id', 'view_site.sam_id')
                                     // ->whereIn('view_site.activity_id', [16, 17, 25, 27])
                                     ->where('view_site.activity_type', 'site approval')
                                     ->get();
@@ -4886,7 +4888,7 @@ class GlobeController extends Controller
                             "program_newsites.saq_bucket",
                             "program_newsites.region",
                         )
-                        ->where('activity_id', '>=', 7);
+                        ->where('activity_id', '>=', 8);
                 } else if ($program_id == 8) {
                     $sites->join('program_renewal', 'program_renewal.sam_id', 'view_site.sam_id')
                     ->select(
@@ -8130,34 +8132,35 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_site_candidate ($sam_id, $status)
+    // public function get_site_candidate ($sam_id, $status)
+    public function get_site_candidate (Request $request)
     {
         try {
-            $datas = SubActivityValue::where('sam_id', $sam_id);
+            $datas = SubActivityValue::where('sam_id', $request->sam_id);
 
-            if ($status == "jtss_schedule_site") {
+            if ($request->get('status') == "jtss_schedule_site") {
                 $datas->where('type', 'jtss_schedule_site')
                         ->where('status', 'pending');
-            } else if ( $status == 'rejected_schedule' ) {
+            } else if ( $request->get('status') == 'rejected_schedule' ) {
                 $datas->where('type', 'jtss_schedule_site')
                         ->where('status', 'rejected');
-            } else if ( $status == 'rejected' ) {
+            } else if ( $request->get('status') == 'rejected' ) {
                 $datas->where('type', 'jtss_add_site')
-                        ->where('status', $status);
-            } else if ( $status == 'jtss_ssds' ) {
+                        ->where('status', $request->get('status'));
+            } else if ( $request->get('status') == 'jtss_ssds' ) {
                 $datas->where('type', 'jtss_ssds')
-                        ->where('type', $status)
+                        ->where('type', $request->get('status'))
                         ->where('status', 'Done');
-            } else if ( $status == 'jtss_ssds_ranking' ) {
+            } else if ( $request->get('status') == 'jtss_ssds_ranking' ) {
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', 'jtss_ssds');
-            } else if ( $status == 'assds_lease_rate' ) {
+            } else if ( $request->get('status') == 'assds_lease_rate' ) {
                 $datas->where('type', 'jtss_ssds')
                         ->where('type', 'jtss_ssds');
-            } else if ( $status == 'jtss_schedule_site_approved' ) {
+            } else if ( $request->get('status') == 'jtss_schedule_site_approved' ) {
                 $datas->where('type', 'jtss_ranking')
                         ->where('status', 'pending');
-            } else if ( $status == 'jtss_approved' ) {
+            } else if ( $request->get('status') == 'jtss_approved' ) {
                 $datas->where('type', 'jtss_approved')
                         ->where('status', 'pending');
             } else {
@@ -8218,7 +8221,7 @@ class GlobeController extends Controller
                     }
                 });
 
-                if ($status == "jtss_schedule_site") {
+                if ($request->get('status') == "jtss_schedule_site") {
                     $dt->addColumn('schedule', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
@@ -8252,7 +8255,7 @@ class GlobeController extends Controller
                             return $row->status;
                         }
                     });
-                } else if ($status == "jtss_schedule_site_approved") {
+                } else if ($request->get('status') == "jtss_schedule_site_approved") {
                     $dt->addColumn('assds', function($row) {
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
@@ -8298,7 +8301,7 @@ class GlobeController extends Controller
                             return "yes";
                         }
                     });
-                } else if ($status == "jtss_approved") {
+                } else if ($request->get('status') == "jtss_approved") {
                     $dt->addColumn('assds', function($row) {
                         if (json_last_error() == JSON_ERROR_NONE){
                             $json = json_decode($row->value, true);
@@ -8331,7 +8334,7 @@ class GlobeController extends Controller
                             return $json['rank'];
                         }
                     });
-                } else if ($status == "rejected_schedule") {
+                } else if ($request->get('status') == "rejected_schedule") {
                     $dt->addColumn('schedule', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
@@ -8352,7 +8355,7 @@ class GlobeController extends Controller
                     ->addColumn('date_approved', function($row){
                         return date('M d, Y ', strtotime($row->date_approved)). ' at ' .date('h:m:a', strtotime($row->date_approved));
                     });
-                } else if ($status == "jtss_ssds") {
+                } else if ($request->get('status') == "jtss_ssds") {
                     $dt->addColumn('rank', function($row){
                         json_decode($row->value);
                         if (json_last_error() == JSON_ERROR_NONE){
@@ -8370,7 +8373,7 @@ class GlobeController extends Controller
                             return '<span class="badge badge-success">Done</span>';
                         }
                     });
-                } else if ($status == "pending") {
+                } else if ($request->get('status') == "pending") {
                     $dt->addColumn('status', function($row){
                         if ($row->status == 'pending') {
                             return '<span class="badge badge-secondary">Not Yet Scheduled</span>';
@@ -8378,7 +8381,7 @@ class GlobeController extends Controller
                             return '<span class="badge badge-success">Scheduled</span>';
                         }
                     });
-                } else if ($status == "jtss_ssds_ranking") {
+                } else if ($request->get('status') == "jtss_ssds_ranking") {
                     $dt->addColumn('rank', function($row){
 
                         $datas = SubActivityValue::select('value')
