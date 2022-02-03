@@ -59,19 +59,23 @@
     <div class="col-md-12">
 
         <div class="main-card mb-3 card">
-            <div class="card-header py-3 bg-warning border-bottom" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover;">
+            <div class="card-header py-3 bg-warning border-bottom" style=" background-image: url('/images/modal-background.jpeg'); background-size:cover; justify-content: space-between;">
                 {{-- <div class="dropdown-menu-header">  --}}
     
                 {{-- <div class="dropdown-menu-header-inner px-2 p-3 bg-primary"> --}}
                     {{-- <div class="menu-header-image opacity-2" style="background-image: url('/images/dropdown-header/abstract2.jpg');"></div> --}}
                     {{-- <div class="menu-header-content btn-pane-right d-flex justify-content-between button_header_area"> --}}
                         {{-- <h5 class="menu-header-title text-dark pl-1"> --}}
+                        <div>
                             <i class="header-icon lnr-layers icon-gradient bg-dark"></i>
                             {{ $tableheader }}
+                        </div>
+                        <div>
+                            @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
+                                <button class="btn btn-primary btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
+                            @endif
+                        </div>
                         {{-- </h5> --}}
-                        @if (in_array($tableheader, array("New CLP")) && \Auth::user()->profile_id == 8)
-                        <button class="btn btn-warning btn-shadow btn-sm btn_create_pr" data-program="{{ $program->program_id  }}">Create PR Memo</button>
-                        @endif
                     {{-- </div> --}}
                 {{-- </div> --}}
             </div> 
@@ -109,9 +113,9 @@
                                     //     $MiniDashComponent = "datatable-mini-dashboard-newsites";
                                     // }
                                     // else
-                                    if($program->program_id == 3){
-                                        $MiniDashComponent = "datatable-mini-dashboard-coloc";
-                                    }
+                                    // if($program->program_id == 3){
+                                    //     $MiniDashComponent = "datatable-mini-dashboard-coloc";
+                                    // }
                                     // elseif($program->program_id == 4){
                                     //     $MiniDashComponent = "datatable-mini-dashboard-ibs";
                                     // }
@@ -121,9 +125,9 @@
 
                                 @endphp
 
-                                @if($MiniDashComponent != "" && $program->program_id == 3)
+                                {{-- @if($MiniDashComponent != "" && $program->program_id == 3)
                                     <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
-                                @endif
+                                @endif --}}
 
                                 <table id="assigned-sites-{{ strtolower(str_replace(" ", "-", $program->program))  }}-table" 
                                     class="table-sm align-middle mb-0 table table-borderless table-striped table-hover assigned-sites-table"

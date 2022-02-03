@@ -144,7 +144,7 @@
                                     </div>
     
                                     <div class="table_financial_analysis table-responsive">
-                                        <table class="table table-hovered">
+                                        <table class="table table-hovered" id="table_financial_analysis">
                                             <thead>
                                                 <tr>
                                                     {{-- <th style='width: 20%'>Site ID</th> --}}
@@ -158,6 +158,7 @@
                                             <tbody></tbody>
                                         </table>
                                         <div class="input_hidden"></div>
+                                        <input type="hidden" class="form-control" name="total_requested_amount" id="total_requested_amount" value="0" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +200,7 @@
         });
 
         // $(document).off().on("click", ".remove_td", function(e){
-        $(document).on("click", ".remove_td", function(e){
+        $("#table_financial_analysis").on("click", ".remove_td", function(e){
 
             var sam_id = $(this).attr("data-id");
 
@@ -281,7 +282,8 @@
 
                                 var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
 
-                                $("#requested_amount").val(sum);
+                                $("#total_requested_amount").val(sum.toFixed(2));
+                                $("#requested_amount").val(sum.toFixed(2));
 
                                 // $("select option.option"+resp.message.sam_id).addClass("d-none");
                                 
