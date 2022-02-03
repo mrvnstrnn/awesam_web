@@ -307,13 +307,15 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                SubActivityValue::create([
-                    'sam_id' => $request->input("sam_id"),
-                    'value' => json_encode($request->all()),
-                    'user_id' => \Auth::id(),
-                    'type' => $request->input("type"),
-                    'status' => "denied",
-                ]);
+                if ( $request->input("type") == "reject_site" || $action == "false" ) {
+                    SubActivityValue::create([
+                        'sam_id' => $request->input("sam_id"),
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => $request->input("type"),
+                        'status' => "denied",
+                    ]);
+                }
 
             } else if ($request->input('activity_name') == "elas_approved") {
 
