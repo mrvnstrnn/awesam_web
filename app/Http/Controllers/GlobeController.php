@@ -61,7 +61,7 @@ class GlobeController extends Controller
         return \DB::statement('call `clean_variables`()');
     }
 
-    public function acceptRejectEndorsement(Request $request)
+    public function acceptRejectEndorsement (Request $request)
     {
         try {
             if(is_null($request->input('sam_id'))){
@@ -306,6 +306,14 @@ class GlobeController extends Controller
                 $program_id = $request->input('program_id');
 
                 $samid = $request->input('sam_id');
+
+                SubActivityValue::create([
+                    'sam_id' => $request->input("sam_id"),
+                    'value' => json_encode($request->all()),
+                    'user_id' => \Auth::id(),
+                    'type' => $request->input("type"),
+                    'status' => "denied",
+                ]);
 
             } else if ($request->input('activity_name') == "elas_approved") {
 
@@ -7639,31 +7647,31 @@ class GlobeController extends Controller
         }
     }
 
-    public function reject_site (Request $request)
-    {
-        try {
-            $validate = \Validator::make($request->all(), array(
-                'remarks' => 'required'
-            ));
+    // public function acceptRejectEndorsement (Request $request)
+    // {
+    //     try {
+    //         $validate = \Validator::make($request->all(), array(
+    //             'remarks' => 'required'
+    //         ));
 
-            if ($validate->passes()) {
-                SubActivityValue::create([
-                    'sam_id' => $request->input("sam_id"),
-                    'value' => json_encode($request->all()),
-                    'user_id' => \Auth::id(),
-                    'type' => $request->input("type"),
-                    'status' => "denied",
-                ]);
+    //         if ($validate->passes()) {
+    //             SubActivityValue::create([
+    //                 'sam_id' => $request->input("sam_id"),
+    //                 'value' => json_encode($request->all()),
+    //                 'user_id' => \Auth::id(),
+    //                 'type' => $request->input("type"),
+    //                 'status' => "denied",
+    //             ]);
 
-                return response()->json(['error' => false, 'message' => "Successfully rejected site." ]);
-            } else {
-                return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
-            }
-        } catch (\Throwable $th) {
-            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
-        }
-    }
+    //             return response()->json(['error' => false, 'message' => "Successfully rejected site." ]);
+    //         } else {
+    //             return response()->json([ 'error' => true, 'message' => $validate->errors() ]);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+    //         return response()->json(['error' => true, 'message' => $th->getMessage()]);
+    //     }
+    // }
 
     public function approve_reject_pr_memo (Request $request)
     {
