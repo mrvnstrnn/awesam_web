@@ -31,14 +31,14 @@
                 </div>
             </div>
             @endif
-            <div class="form-row"> 
+            {{-- <div class="form-row"> 
                 <div class="col-md-4 col-12">
                     <div class="position-relative form-group">
                         <label for="rtb_declaration" class="">RTB Declaration</label>
                     </div>
                 </div>
 
-                {{-- <div class="col-md-8 col-12">
+                <div class="col-md-8 col-12">
                     <div class="position-relative form-group">
                         <select name="rtb_declaration" id="rtb_declaration" class="form-control">
                             <option>1</option>
@@ -49,8 +49,8 @@
                         </select>
                         <small class="rtb_declaration-error text-danger"></small>
                     </div>        
-                </div> --}}
-            </div>
+                </div>
+            </div> --}}
             {{-- <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">

@@ -6276,7 +6276,7 @@ class GlobeController extends Controller
             }
             $validate = \Validator::make($request->all(), array(
                 'rtb_declaration_date' => 'required',
-                'rtb_declaration' => 'required',
+                // 'rtb_declaration' => 'required',
                 'afi_lines' => [$required_afi, 'min:0'],
             ));
 
@@ -7560,8 +7560,10 @@ class GlobeController extends Controller
 
             $what_modal = "components.create-pr-memo";
 
-            $vendors = \DB::table("fsaq_vendors")
-                                ->select("fsaq_vendors.vendor_sec_reg_name", "fsaq_vendors.vendor_id", "fsaq_vendors.vendor_acronym")
+            $vendors = \DB::table("vendor")
+                                ->select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
+                                ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+                                ->where("vendor_programs.programs", 1)
                                 ->orderBy('vendor_sec_reg_name', 'ASC')
                                 ->get();
 
@@ -8988,14 +8990,14 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_new_clp_site ($vendor_id)
+    // public function get_new_clp_site ($vendor_id)
+    public function get_new_clp_site (Request $request)
     {
         try {
             // $sites = \DB::select('call `get_fsaq`("'.$vendor_id.'")');
-
             $regions = \DB::table('fsaq')
                             ->select('region_id')
-                            ->where('vendor_id', $vendor_id)
+                            ->where('vendor_id', $request->get('vendor_id'))
                             ->distinct()
                             ->get()
                             ->pluck('region_id');
@@ -9003,6 +9005,7 @@ class GlobeController extends Controller
             $provinces = \DB::table('fsaq')
                             ->select('province_id')
                             ->whereIn('region_id', $regions)
+                            ->where('vendor_id', $request->get('vendor_id'))
                             ->distinct()
                             ->get()
                             ->pluck('province_id');
@@ -9010,6 +9013,7 @@ class GlobeController extends Controller
             $lgus = \DB::table('fsaq')
                             ->select('lgu_id')
                             ->whereIn('province_id', $provinces)
+                            ->where('vendor_id', $request->get('vendor_id'))
                             ->distinct()
                             ->get()
                             ->pluck('lgu_id');
@@ -9017,7 +9021,9 @@ class GlobeController extends Controller
             $sites = \DB::table('view_site')
                         ->select('sam_id', 'site_name')
                         ->whereIn('lgu_id', $lgus)
-                        ->where('vendor_id', $vendor_id)
+                        ->whereIn('province_id', $provinces)
+                        ->whereIn('region_id', $regions)
+                        // ->where('vendor_id', $request->get('vendor_id'))
                         ->where('program_id', 1)
                         ->where('activity_id', 2)
                         ->get();

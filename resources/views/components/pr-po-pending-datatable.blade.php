@@ -127,7 +127,7 @@
                             @endif
                         @endif --}}
 
-                        @php
+                        {{-- @php
 
                             if($program->program_id = 1){
                                 $MiniDashComponent = "datatable-mini-dashboard-newsites";
@@ -135,7 +135,7 @@
 
                         @endphp     
                     
-                        <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/>
+                        <x-dynamic-component :component="$MiniDashComponent" :tableheader="$tableheader"/> --}}
 
                         
                         @if ($loop->first)

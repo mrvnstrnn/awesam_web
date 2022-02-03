@@ -602,8 +602,15 @@
 
             if (vendor_id != "") {
                 $.ajax({
-                    url: "/get-new-clp-site/" + vendor_id,
-                    method: "GET",
+                    url: "/get-new-clp-site",
+                    // method: "GET",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        vendor_id : vendor_id
+                    },
                     success: function (resp) {
 
                         $(".remove_td").trigger("click");
