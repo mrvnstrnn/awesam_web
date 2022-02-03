@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-8 col-12">
+                {{-- <div class="col-md-8 col-12">
                     <div class="position-relative form-group">
                         <select name="rtb_declaration" id="rtb_declaration" class="form-control">
                             <option>1</option>
@@ -49,7 +49,7 @@
                         </select>
                         <small class="rtb_declaration-error text-danger"></small>
                     </div>        
-                </div>
+                </div> --}}
             </div>
             {{-- <div class="form-row"> 
                 <div class="col-md-12">
@@ -89,7 +89,7 @@
 
             var sam_id = "{{ $site[0]->sam_id }}";
             var rtb_declaration_date = $("#rtb_declaration_date").val();
-            var rtb_declaration = $("#rtb_declaration").val();
+            // var rtb_declaration = $("#rtb_declaration").val();
             var program_id = "{{ $site[0]->program_id }}";
             var activity_name = "rtb_declation";
             var afi_lines = $("#afi_lines").val();
@@ -109,7 +109,7 @@
                 data: {
                     sam_id : sam_id,
                     rtb_declaration_date : rtb_declaration_date,
-                    rtb_declaration : rtb_declaration,
+                    // rtb_declaration : rtb_declaration,
                     activity_name : activity_name,
                     program_id : program_id,
                     activity_id : activity_id,

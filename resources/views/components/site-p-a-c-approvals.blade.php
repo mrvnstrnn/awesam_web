@@ -385,6 +385,8 @@
                 type : type,
                 text_area_reason : remarks,
             }
+
+            // var url = "/reject-site";
         } else {
             data = {
                 sam_id : sam_id,
@@ -395,10 +397,12 @@
                 site_category : site_category,
                 activity_id : activity_id,
             }
+
+            // var url = "/accept-reject-endorsement";
         }
 
         $.ajax({
-            url: '/accept-reject-endorsement',
+            url: url,
             data: data,
             type: 'POST',
             headers: {

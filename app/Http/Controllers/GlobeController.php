@@ -61,7 +61,7 @@ class GlobeController extends Controller
         return \DB::statement('call `clean_variables`()');
     }
 
-    public function acceptRejectEndorsement (Request $request)
+    public function acceptRejectEndorsement(Request $request)
     {
         try {
             if(is_null($request->input('sam_id'))){
@@ -307,7 +307,7 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
-                if ( $request->input("type") == "reject_site" || $action == "false" ) {
+                if ( $request->input('data_complete') == 'false' ) {
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'value' => json_encode($request->all()),
@@ -7649,7 +7649,7 @@ class GlobeController extends Controller
         }
     }
 
-    // public function acceptRejectEndorsement (Request $request)
+    // public function reject_site (Request $request)
     // {
     //     try {
     //         $validate = \Validator::make($request->all(), array(

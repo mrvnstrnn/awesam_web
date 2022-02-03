@@ -29,14 +29,14 @@
                 </div>
             </div>
             @endif
-            <div class="form-row"> 
+            {{-- <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
                         <label for="rtb_declaration">RTB Declaration</label>
                         <input type="text" name="rtb_declaration" id="rtb_declaration" value="{{ $json['rtb_declaration'] }}" class="form-control" readonly>
                     </div>        
                 </div>
-            </div>
+            </div> --}}
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
