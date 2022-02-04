@@ -7156,72 +7156,163 @@ class GlobeController extends Controller
             $sites_fsa = collect();
 
             for ($i=0; $i < count($sam_id); $i++) {
+
+                $collect_fsa_data = collect();
+
                 $sites_data = \DB::table('site')
                             ->where('sam_id', $sam_id[$i])
                             ->first();
+
+                $fsa_data_lgu = \DB::table('fsaq')
+                        ->where('vendor_id', $vendor)
+                        ->where('lgu_id', $sites_data->site_lgu_id)
+                        ->get();
+
+                if ( count($fsa_data_lgu) < 1 ) {
+                    $fsa_data_province = \DB::table('fsaq')
+                            ->where('vendor_id', $vendor)
+                            ->where('province_id', $sites_data->site_province_id)
+                            ->whereNull('lgu_id')
+                            ->get();
+                    if ( count($fsa_data_province) < 1 ) {
+                        $fsa_data_region = \DB::table('fsaq')
+                                ->where('vendor_id', $vendor)
+                                ->where('region_id', $sites_data->site_region_id)
+                                ->whereNull('province_id')
+                                ->whereNull('lgu_id')
+                                ->get();
+
+                        // if ( count($fsa_data_region) < 1 ) {
+                        //     return response()->json(['error' => true, 'message' => "No FSAQ data."]);
+                        // } else {
+                            $fsa_data = $fsa_data_region;
+                        // }
+
+                    } else {
+                        $fsa_data = $fsa_data_province;
+                    }
+                } else {
+                    $fsa_data = $fsa_data_lgu;
+                }
+
+                foreach ($fsa_data as $fsaq) {
+                    $collect_fsa_data->push($fsaq->fsaq_id);
+                }
+
+                $line_items_include = FsaLineItem::where('site_line_items.sam_id', $sam_id[$i])
+                                                ->where('site_line_items.status', '!=', 'denied')
+                                                ->whereNotIn('site_line_items.fsa_id', $collect_fsa_data->all())
+                                                ->delete();
+                                                // return response()->json(['error' => true, 'message' => $collect_fsa_data]);
+
+                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
+            
+                // if (count($fsa_line_items) > 0) {
+                //     FsaLineItem::where('sam_id', $sam_id[$i])
+                //                     ->where('status', 'pending')
+                //                     ->where('is_include', '0')
+                //                     ->delete();
+                // }
 
                 $line_items = FsaLineItem::join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                 ->where('site_line_items.sam_id', $sam_id[$i])
                                 ->where('site_line_items.status', '!=', 'denied')
                                 ->get();
-
-                if (count($line_items) > 0) {
-                    
-                    // FsaLineItem::where('sam_id', $sam_id[$i])
-                    //                 ->where('status', '!=', 'denied')
-                    //                 ->update([
-                    //                     'is_include' => 1
-                    //                 ]);
-                } else {
                 
-                    $fsa_data = \DB::table('fsaq')
+                if (count($line_items) > 0) {
+
+                    // $collect_fsa_data = collect();
+
+                    // $fsa_data_lgu = \DB::table('fsaq')
+                    //                 ->where('vendor_id', $vendor)
+                    //                 ->where('lgu_id', $sites_data->site_lgu_id)
+                    //                 ->get();
+
+                    // if ( count($fsa_data_lgu) < 1 ) {
+                    //     $fsa_data_province = \DB::table('fsaq')
+                    //             ->where('vendor_id', $vendor)
+                    //             ->where('province_id', $sites_data->site_province_id)
+                    //             ->whereNull('lgu_id')
+                    //             ->get();
+                    //     if ( count($fsa_data_province) < 1 ) {
+                    //         $fsa_data_region = \DB::table('fsaq')
+                    //                 ->where('vendor_id', $vendor)
+                    //                 ->where('region_id', $sites_data->site_region_id)
+                    //                 ->whereNull('province_id')
+                    //                 ->whereNull('lgu_id')
+                    //                 ->get();
+
+                    //         if ( count($fsa_data_region) < 1 ) {
+                    //             return response()->json(['error' => true, 'message' => "No FSAQ data."]);
+                    //         } else {
+                    //             $fsa_data = $fsa_data_region;
+                    //         }
+
+                    //     } else {
+                    //         $fsa_data = $fsa_data_province;
+                    //     }
+                    // } else {
+                    //     $fsa_data = $fsa_data_lgu;
+                    // }
+
+                    // foreach ($fsa_data as $fsaq) {
+                    //     $collect_fsa_data->push($fsaq->fsaq_id);
+                    // }
+
+                    // $line_items_include = FsaLineItem::where('site_line_items.sam_id', $sam_id[$i])
+                    //                             ->where('site_line_items.status', '!=', 'denied')
+                    //                             ->whereNotIn('site_line_items.fsa_id', $collect_fsa_data->all())
+                    //                             ->delete();
+
+                    // $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
+                
+                    // if (count($fsa_line_items) > 0) {
+                    //     FsaLineItem::where('sam_id', $sam_id[$i])
+                    //                     ->where('status', 'pending')
+                    //                     ->where('is_include', '0')
+                    //                     ->delete();
+                    // }
+
+                    // foreach ($fsa_data as $fsa) {
+                    //     FsaLineItem::create([
+                    //         'sam_id' => $sam_id[$i],
+                    //         'fsa_id' => $fsa->fsaq_id,
+                    //         'status' => 'pending',
+                    //     ]);
+                    // }
+                } else {
+
+                    $fsa_data_lgu = \DB::table('fsaq')
+                                    ->where('vendor_id', $vendor)
+                                    ->where('lgu_id', $sites_data->site_lgu_id)
+                                    ->get();
+
+                    if ( count($fsa_data_lgu) < 1 ) {
+                        $fsa_data_province = \DB::table('fsaq')
+                                ->where('vendor_id', $vendor)
+                                ->where('province_id', $sites_data->site_province_id)
+                                ->whereNull('lgu_id')
+                                ->get();
+                                
+                        if ( count($fsa_data_province) < 1 ) {
+                            $fsa_data_region = \DB::table('fsaq')
                                     ->where('vendor_id', $vendor)
                                     ->where('region_id', $sites_data->site_region_id)
-                                    ->where('province_id', $sites_data->site_province_id)
-                                    ->where('lgu_id', $sites_data->site_lgu_id)
-                                    ->where('site_type', "ROOFTOP")
-                                    ->where('account_type', "BAU")
-                                    ->where('solution_type', "MACRO")
+                                    ->whereNull('province_id')
+                                    ->whereNull('lgu_id')
                                     ->get();
-                                    
-                    // Works up to LGU
-                    if(count($fsa_data)>0){
-                    } else {
 
-                        $fsa_data = \DB::table('fsaq')
-                                        ->select('fsaq_id')
-                                        ->where('vendor_id', $vendor)
-                                        ->where('region_id', $sites_data->site_region_id)
-                                        ->where('province_id', $sites_data->site_province_id)
-                                        ->whereNull('lgu_id')
-                                        ->where('site_type', "ROOFTOP")
-                                        ->where('account_type', "BAU")
-                                        ->where('solution_type', "MACRO")
-                                        ->get();
-
-                        // Works up to province
-                        if(count($fsa_data)>0){
+                            if ( count($fsa_data_region) < 1 ) {
+                                return response()->json(['error' => true, 'message' => "No FSAQ data."]);
+                            } else {
+                                $fsa_data = $fsa_data_region;
+                            }
 
                         } else {
-
-                            $fsa_data = \DB::table('fsaq')
-                                            ->select('fsaq_id')
-                                            ->where('vendor_id', $vendor)
-                                            ->where('region_id', $sites_data->site_region_id)
-                                            ->whereNull('province_id')
-                                            ->whereNull('lgu_id')
-                                            ->where('site_type', "ROOFTOP")
-                                            ->where('account_type', "BAU")
-                                            ->where('solution_type', "MACRO")
-                                            ->get();
-
-                            if(count($fsa_data)>0){
-
-                            } else {
-
-                            }
+                            $fsa_data = $fsa_data_province;
                         }
-
+                    } else {
+                        $fsa_data = $fsa_data_lgu;
                     }
 
                     // GET PENDING FSA LINE ITEMS
@@ -7243,7 +7334,6 @@ class GlobeController extends Controller
                     }
 
                 }
-                // return response()->json(['error' => true, 'message' => $fsa_line_items]);
 
                 $sites = FsaLineItem::select('site.site_name', 'site.site_address', 'site.sam_id', 'location_regions.region_name', 'location_provinces.province_name', 'fsaq.amount')
                             ->leftjoin('site', 'site.sam_id', 'site_line_items.sam_id')
@@ -7260,12 +7350,6 @@ class GlobeController extends Controller
                 if (count($sites) > 1) {
                     $sites_collect->push($sites);
                 }
-
-                // $pricings = FsaLineItem::select('fsaq.price')
-                //             ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
-                //             ->where('site_line_items.sam_id', $sam_id[$i])
-                //             ->where('site_line_items.status', '!=', 'denied')
-                //             ->get();
 
                 $pricings = FsaLineItem::select('fsaq.amount')
                             ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
@@ -7286,8 +7370,6 @@ class GlobeController extends Controller
 
 
             }
-
-
 
             return response()->json([ 'error' => false, 'message' => $sites_collect, 'sites_fsa' => array_sum($sites_fsa->all()) ]);
 
@@ -7562,11 +7644,21 @@ class GlobeController extends Controller
 
             $what_modal = "components.create-pr-memo";
 
-            $vendors = \DB::table("vendor")
+            // $vendors = \DB::table("vendor")
+            //                     ->select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
+            //                     ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+            //                     ->where("vendor_programs.programs", 1)
+            //                     ->orderBy('vendor_sec_reg_name', 'ASC')
+            //                     ->get();
+
+            $vendors = \DB::table("fsaq")
+                                // ->distinct("fsaq.vendor_id")
                                 ->select("vendor.vendor_sec_reg_name", "vendor.vendor_id", "vendor.vendor_acronym")
-                                ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
-                                ->where("vendor_programs.programs", 1)
-                                ->orderBy('vendor_sec_reg_name', 'ASC')
+                                ->join("vendor", "vendor.vendor_id", "fsaq.vendor_id")
+                                // ->join("vendor_programs", "vendor_programs.vendors_id", "vendor.vendor_id")
+                                ->distinct("fsaq.vendor_id")
+                                // ->where("vendor_programs.programs", 1)
+                                ->orderBy('vendor.vendor_sec_reg_name', 'ASC')
                                 ->get();
 
             // $sites = \DB::connection('mysql2')
@@ -8998,35 +9090,69 @@ class GlobeController extends Controller
     {
         try {
             // $sites = \DB::select('call `get_fsaq`("'.$vendor_id.'")');
-            $regions = \DB::table('fsaq')
-                            ->select('region_id')
-                            ->where('vendor_id', $request->get('vendor_id'))
-                            ->distinct()
-                            ->get()
-                            ->pluck('region_id');
+            $vendor = $request->get('vendor_id');
+            // $regions = \DB::table('fsaq')
+            //                 ->select('region_id')
+            //                 ->where('vendor_id', $request->get('vendor_id'))
+            //                 ->whereNull('province_id')
+            //                 ->whereNull('lgu_id')
+            //                 ->distinct()
+            //                 ->get()
+            //                 ->pluck('region_id');
 
-            $provinces = \DB::table('fsaq')
-                            ->select('province_id')
-                            ->whereIn('region_id', $regions)
-                            ->where('vendor_id', $request->get('vendor_id'))
-                            ->distinct()
-                            ->get()
-                            ->pluck('province_id');
+            // $provinces = \DB::table('fsaq')
+            //                 ->select('province_id')
+            //                 ->where('vendor_id', $request->get('vendor_id'))
+            //                 ->whereNotNull('region_id')
+            //                 ->whereNotNull('province_id')
+            //                 ->whereNull('lgu_id')
+            //                 ->distinct()
+            //                 ->get()
+            //                 ->pluck('province_id');
 
-            $lgus = \DB::table('fsaq')
-                            ->select('lgu_id')
-                            ->whereIn('province_id', $provinces)
-                            ->where('vendor_id', $request->get('vendor_id'))
-                            ->distinct()
-                            ->get()
-                            ->pluck('lgu_id');
+            // $lgus = \DB::table('fsaq')
+            //                 ->select('lgu_id')
+            //                 ->whereNotNull('region_id')
+            //                 ->whereNotNull('province_id')
+            //                 ->whereNotNull('lgu_id')
+            //                 ->where('vendor_id', $request->get('vendor_id'))
+            //                 ->distinct()
+            //                 ->get()
+            //                 ->pluck('lgu_id');
 
             $sites = \DB::table('view_site')
                         ->select('sam_id', 'site_name')
-                        ->whereIn('lgu_id', $lgus)
-                        ->whereIn('province_id', $provinces)
-                        ->whereIn('region_id', $regions)
-                        // ->where('vendor_id', $request->get('vendor_id'))
+                        // ->whereIn('lgu_id', $lgus)
+                        // ->whereIn('province_id', $provinces)
+                        // ->whereIn('region_id', $regions)
+                        ->where(function ($query) use ($vendor) {
+                            $regions = \DB::table('fsaq')
+                                    ->select('region_id')
+                                    ->where('vendor_id', $vendor)
+                                    ->distinct()
+                                    ->get()
+                                    ->pluck('region_id');
+
+                            $provinces = \DB::table('fsaq')
+                                            ->select('province_id')
+                                            ->whereIn('region_id', $regions)
+                                            ->where('vendor_id', $vendor)
+                                            ->distinct()
+                                            ->get()
+                                            ->pluck('province_id');
+
+                            $lgus = \DB::table('fsaq')
+                                            ->select('lgu_id')
+                                            ->whereIn('province_id', $provinces)
+                                            ->where('vendor_id', $vendor)
+                                            ->distinct()
+                                            ->get()
+                                            ->pluck('lgu_id');
+
+                            $query->whereIn('lgu_id', $lgus)
+                                ->orWhereIn('province_id', $provinces)
+                                ->orWhereIn('region_id', $regions);
+                        })
                         ->where('program_id', 1)
                         ->where('activity_id', 2)
                         ->get();
