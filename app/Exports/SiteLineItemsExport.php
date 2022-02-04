@@ -20,8 +20,8 @@ class SiteLineItemsExport implements FromCollection, WithHeadings, WithTitle
 
     public function collection()
     {
-        $site_items = FsaLineItem::select('fsa_table.region', 'fsa_table.finance_code', 'fsa_table.category', 'fsa_table.item', 'fsa_table.price')
-                                    ->join('fsa_table', 'fsa_table.fsa_id', 'site_line_items.fsa_id')
+        $site_items = FsaLineItem::select('fsaq.region_id', 'fsaq.category', 'fsaq.description', 'fsaq.amount')
+                                    ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                     ->where('site_line_items.sam_id', $this->sam_id)
                                     ->get();
 
@@ -32,10 +32,9 @@ class SiteLineItemsExport implements FromCollection, WithHeadings, WithTitle
     {
         return [
             "Region", 
-            "Finance Code", 
             "Category", 
-            "Item", 
-            "Price", 
+            "Description", 
+            "Amount", 
         ];
     }
 
