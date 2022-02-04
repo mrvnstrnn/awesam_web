@@ -7182,11 +7182,11 @@ class GlobeController extends Controller
                                 ->whereNull('lgu_id')
                                 ->get();
 
-                        // if ( count($fsa_data_region) < 1 ) {
-                        //     return response()->json(['error' => true, 'message' => "No FSAQ data."]);
-                        // } else {
+                        if ( count($fsa_data_region) < 1 ) {
+                            return response()->json(['error' => true, 'message' => "No FSAQ data."]);
+                        } else {
                             $fsa_data = $fsa_data_region;
-                        // }
+                        }
 
                     } else {
                         $fsa_data = $fsa_data_province;
@@ -7221,7 +7221,7 @@ class GlobeController extends Controller
                 
                 if (count($line_items) > 0) {
 
-                    // $collect_fsa_data = collect();
+                } else {
 
                     // $fsa_data_lgu = \DB::table('fsaq')
                     //                 ->where('vendor_id', $vendor)
@@ -7234,6 +7234,7 @@ class GlobeController extends Controller
                     //             ->where('province_id', $sites_data->site_province_id)
                     //             ->whereNull('lgu_id')
                     //             ->get();
+                                
                     //     if ( count($fsa_data_province) < 1 ) {
                     //         $fsa_data_region = \DB::table('fsaq')
                     //                 ->where('vendor_id', $vendor)
@@ -7254,66 +7255,6 @@ class GlobeController extends Controller
                     // } else {
                     //     $fsa_data = $fsa_data_lgu;
                     // }
-
-                    // foreach ($fsa_data as $fsaq) {
-                    //     $collect_fsa_data->push($fsaq->fsaq_id);
-                    // }
-
-                    // $line_items_include = FsaLineItem::where('site_line_items.sam_id', $sam_id[$i])
-                    //                             ->where('site_line_items.status', '!=', 'denied')
-                    //                             ->whereNotIn('site_line_items.fsa_id', $collect_fsa_data->all())
-                    //                             ->delete();
-
-                    // $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
-                
-                    // if (count($fsa_line_items) > 0) {
-                    //     FsaLineItem::where('sam_id', $sam_id[$i])
-                    //                     ->where('status', 'pending')
-                    //                     ->where('is_include', '0')
-                    //                     ->delete();
-                    // }
-
-                    // foreach ($fsa_data as $fsa) {
-                    //     FsaLineItem::create([
-                    //         'sam_id' => $sam_id[$i],
-                    //         'fsa_id' => $fsa->fsaq_id,
-                    //         'status' => 'pending',
-                    //     ]);
-                    // }
-                } else {
-
-                    $fsa_data_lgu = \DB::table('fsaq')
-                                    ->where('vendor_id', $vendor)
-                                    ->where('lgu_id', $sites_data->site_lgu_id)
-                                    ->get();
-
-                    if ( count($fsa_data_lgu) < 1 ) {
-                        $fsa_data_province = \DB::table('fsaq')
-                                ->where('vendor_id', $vendor)
-                                ->where('province_id', $sites_data->site_province_id)
-                                ->whereNull('lgu_id')
-                                ->get();
-                                
-                        if ( count($fsa_data_province) < 1 ) {
-                            $fsa_data_region = \DB::table('fsaq')
-                                    ->where('vendor_id', $vendor)
-                                    ->where('region_id', $sites_data->site_region_id)
-                                    ->whereNull('province_id')
-                                    ->whereNull('lgu_id')
-                                    ->get();
-
-                            if ( count($fsa_data_region) < 1 ) {
-                                return response()->json(['error' => true, 'message' => "No FSAQ data."]);
-                            } else {
-                                $fsa_data = $fsa_data_region;
-                            }
-
-                        } else {
-                            $fsa_data = $fsa_data_province;
-                        }
-                    } else {
-                        $fsa_data = $fsa_data_lgu;
-                    }
 
                     // GET PENDING FSA LINE ITEMS
                     $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
