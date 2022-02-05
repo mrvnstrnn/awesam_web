@@ -90,7 +90,7 @@
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
                                                 <label for="requested_amount">Requested Amount</label>
-                                                <input type="number" class="form-control" name="requested_amount" id="requested_amount" value="0.00" readonly>
+                                                <input type="text" class="form-control" name="requested_amount" id="requested_amount" value="0.00" readonly>
                                                 <small class="text-danger requested_amount-error"></small>
                                             </div>
                                         </div>
@@ -206,9 +206,12 @@
 
             $("tr.tr" + sam_id).remove();
 
-            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+            
+            var sum =  Number($("#total_requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+            // var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
 
-            $("#requested_amount").val(sum.toFixed(2));
+            $("#requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+            $("#total_requested_amount").val(sum.toFixed(2));
 
             // $("select option.option" + sam_id).removeClass("d-none");
             
@@ -267,7 +270,7 @@
                                         "<td><strong>"+element[0].site_name+"</strong><br><small><strong>SAM ID: </strong>"+ element[0].sam_id +"</small></td>" +
                                         "<td>"+element[0].region_name+"</td>" +
                                         "<td>"+element[0].province_name+"</td>" +
-                                        "<td>"+sum_fsa.toFixed(2)+"</td>" +
+                                        "<td>"+sum_fsa.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"</td>" +
                                         "<td><button type='button' class='btn btn-success btn-shadow btn-sm line_item_td' data-id='"+element[0].sam_id+"' data-sam_id='"+element[0].sam_id+"'  data-site_name='"+element[0].site_name+"'><i class='fa fa-fw' aria-hidden='true' ></i></button> <button type='button' class='btn btn-danger btn-sm btn-shadow remove_td' data-sites_fsa='"+sum_fsa.toFixed(2)+"' data-sam_id='"+element[0].sam_id+"' data-id='"+element[0].sam_id+"' data-site_name='"+element[0].site_name+"'><i class='fa fa-minus'></i></button></td>" +
                                         "</tr>");
 
@@ -280,10 +283,10 @@
                                     );
                                 });
 
-                                var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
+                                var sum =  Number($("#total_requested_amount").val()) + Number(resp.sites_fsa);
 
                                 $("#total_requested_amount").val(sum.toFixed(2));
-                                $("#requested_amount").val(sum.toFixed(2));
+                                $("#requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
 
                                 // $("select option.option"+resp.message.sam_id).addClass("d-none");
                                 
@@ -503,7 +506,6 @@
         $(".save_line_items").on("click", function(e){
             e.preventDefault();
 
-
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
             
@@ -535,12 +537,6 @@
 
                         $(".add_pr_po").removeClass('d-none');
                         $(".fsaq_btns").addClass("d-none");
-
-                        Swal.fire(
-                            'Success',
-                            resp.message,
-                            'success'
-                        )
                         
                         $('#financial_analysis').val(sam_id).trigger('change');
 
@@ -553,6 +549,11 @@
 
                         $("#craetePrPoModal .menu-header-title").text('Create PR Memo');
 
+                        Swal.fire(
+                            'Success',
+                            resp.message,
+                            'success'
+                        )
                     } else {
                         Swal.fire(
                             'Error',
@@ -597,7 +598,7 @@
 
         $("#vendor").on("change", function (e) {
             var vendor_id = $(this).val();
-
+            
             $("#financial_analysis").append(
                 '<option value="">Loading please wait...</option>'
             );
