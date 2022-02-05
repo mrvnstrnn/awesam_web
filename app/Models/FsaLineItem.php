@@ -11,5 +11,5 @@ class FsaLineItem extends Model
     // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'site_line_items';
-    protected $fillable = ['sam_id', 'fsa_id', 'status'];
+    protected $fillable = ['sam_id', 'fsa_id', 'status', 'user_id'];
 }

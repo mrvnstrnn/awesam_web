@@ -7202,10 +7202,14 @@ class GlobeController extends Controller
                 $line_items_include = FsaLineItem::where('site_line_items.sam_id', $sam_id[$i])
                                                 ->where('site_line_items.status', '!=', 'denied')
                                                 ->whereNotIn('site_line_items.fsa_id', $collect_fsa_data->all())
+                                                ->where('site_line_items.user_id', \Auth::id())
                                                 ->delete();
                                                 // return response()->json(['error' => true, 'message' => $collect_fsa_data]);
 
-                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
+                $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])
+                                        ->where('status', '=', 'pending')
+                                        ->where('site_line_items.user_id', \Auth::id())
+                                        ->get();
             
                 // if (count($fsa_line_items) > 0) {
                 //     FsaLineItem::where('sam_id', $sam_id[$i])
@@ -7217,44 +7221,12 @@ class GlobeController extends Controller
                 $line_items = FsaLineItem::join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                 ->where('site_line_items.sam_id', $sam_id[$i])
                                 ->where('site_line_items.status', '!=', 'denied')
+                                ->where('site_line_items.user_id', \Auth::id())
                                 ->get();
                 
                 if (count($line_items) > 0) {
 
                 } else {
-
-                    // $fsa_data_lgu = \DB::table('fsaq')
-                    //                 ->where('vendor_id', $vendor)
-                    //                 ->where('lgu_id', $sites_data->site_lgu_id)
-                    //                 ->get();
-
-                    // if ( count($fsa_data_lgu) < 1 ) {
-                    //     $fsa_data_province = \DB::table('fsaq')
-                    //             ->where('vendor_id', $vendor)
-                    //             ->where('province_id', $sites_data->site_province_id)
-                    //             ->whereNull('lgu_id')
-                    //             ->get();
-                                
-                    //     if ( count($fsa_data_province) < 1 ) {
-                    //         $fsa_data_region = \DB::table('fsaq')
-                    //                 ->where('vendor_id', $vendor)
-                    //                 ->where('region_id', $sites_data->site_region_id)
-                    //                 ->whereNull('province_id')
-                    //                 ->whereNull('lgu_id')
-                    //                 ->get();
-
-                    //         if ( count($fsa_data_region) < 1 ) {
-                    //             return response()->json(['error' => true, 'message' => "No FSAQ data."]);
-                    //         } else {
-                    //             $fsa_data = $fsa_data_region;
-                    //         }
-
-                    //     } else {
-                    //         $fsa_data = $fsa_data_province;
-                    //     }
-                    // } else {
-                    //     $fsa_data = $fsa_data_lgu;
-                    // }
 
                     // GET PENDING FSA LINE ITEMS
                     $fsa_line_items = FsaLineItem::where('sam_id', $sam_id[$i])->where('status', '=', 'pending')->get();
@@ -7263,6 +7235,7 @@ class GlobeController extends Controller
                     if (count($fsa_line_items) > 0) {
                         FsaLineItem::where('sam_id', $sam_id[$i])
                                         ->where('status', 'pending')
+                                        ->where('user_id', \Auth::id())
                                         ->delete();
                     }
 
@@ -7270,6 +7243,7 @@ class GlobeController extends Controller
                         FsaLineItem::create([
                             'sam_id' => $sam_id[$i],
                             'fsa_id' => $fsa->fsaq_id,
+                            'user_id' => \Auth::id(),
                             'status' => 'pending',
                         ]);
                     }
@@ -7285,6 +7259,7 @@ class GlobeController extends Controller
                             ->where('site.sam_id', $sam_id[$i])
                             ->where('site_line_items.status', '!=', 'denied')
                             ->where('site_line_items.is_include', 1)
+                            ->where('site_line_items.user_id', \Auth::id())
                             ->get();
 
 
@@ -7297,6 +7272,7 @@ class GlobeController extends Controller
                             ->where('site_line_items.status', '!=', 'denied')
                             ->where('site_line_items.is_include', 1)
                             ->where('site_line_items.sam_id', '=', $sam_id[$i])
+                            ->where('site_line_items.user_id', \Auth::id())
                             ->get();
 
                 if (count($pricings) > 1) {
@@ -7323,7 +7299,9 @@ class GlobeController extends Controller
     public function remove_fiancial_analysis($sam_id)
     {
         try {
-            FsaLineItem::where('sam_id', $sam_id)->delete();
+            FsaLineItem::where('sam_id', $sam_id)
+                        ->where('site_line_items.user_id', \Auth::id())
+                        ->delete();
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -7336,6 +7314,7 @@ class GlobeController extends Controller
                 $line_items = FsaLineItem::join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                             ->where('site_line_items.sam_id', $sam_id)
                                             ->where('site_line_items.status', '!=', 'denied')
+                                            ->where('site_line_items.user_id', \Auth::id())
                                             ->get();
 
                 return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category') ]);
@@ -7353,6 +7332,7 @@ class GlobeController extends Controller
             FsaLineItem::where('sam_id', $request->input('sam_id'))
                         ->whereNotIn('fsa_id', $request->input('line_item_id'))
                         ->where('status', '!=', 'denied')
+                        ->where('user_id', \Auth::id())
                         ->update([
                             'is_include' => 0
                         ]);
@@ -7360,6 +7340,7 @@ class GlobeController extends Controller
             FsaLineItem::where('sam_id', $request->input('sam_id'))
                         ->whereIn('fsa_id', $request->input('line_item_id'))
                         ->where('status', '!=', 'denied')
+                        ->where('user_id', \Auth::id())
                         ->update([
                             'is_include' => 1
                         ]);

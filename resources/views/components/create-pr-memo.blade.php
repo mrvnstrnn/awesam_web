@@ -90,7 +90,8 @@
                                         <div class="col-md-6 col-lg-6 col-12">
                                             <div class="form-group">
                                                 <label for="requested_amount">Requested Amount</label>
-                                                <input type="text" class="form-control" name="requested_amount" id="requested_amount" value="0.00" readonly>
+                                                <input type="text" class="form-control" name="total_requested_amount" id="total_requested_amount" value="0.00" readonly>
+                                                <input type="hidden" class="form-control" name="requested_amount" id="requested_amount" value="0.00" readonly>
                                                 <small class="text-danger requested_amount-error"></small>
                                             </div>
                                         </div>
@@ -158,7 +159,6 @@
                                             <tbody></tbody>
                                         </table>
                                         <div class="input_hidden"></div>
-                                        <input type="hidden" class="form-control" name="total_requested_amount" id="total_requested_amount" value="0.00" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -207,11 +207,11 @@
             $("tr.tr" + sam_id).remove();
 
             
-            var sum =  Number($("#total_requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
+            var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
             // var sum =  Number($("#requested_amount").val()) - Number($(this).attr("data-sites_fsa"));
 
-            $("#requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-            $("#total_requested_amount").val(sum.toFixed(2));
+            $("#total_requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+            $("#requested_amount").val(sum.toFixed(2));
 
             // $("select option.option" + sam_id).removeClass("d-none");
             
@@ -283,10 +283,10 @@
                                     );
                                 });
 
-                                var sum =  Number($("#total_requested_amount").val()) + Number(resp.sites_fsa);
+                                var sum =  Number($("#requested_amount").val()) + Number(resp.sites_fsa);
 
-                                $("#total_requested_amount").val(sum.toFixed(2));
-                                $("#requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+                                $("#requested_amount").val(sum.toFixed(2));
+                                $("#total_requested_amount").val(sum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
 
                                 // $("select option.option"+resp.message.sam_id).addClass("d-none");
                                 
