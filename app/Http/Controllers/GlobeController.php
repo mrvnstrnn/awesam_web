@@ -7780,15 +7780,14 @@ class GlobeController extends Controller
                                             'date_approved' => $request->input("data_action") == "false" ? NULL : Carbon::now()->toDate(),
                                         ]);
 
-                    FsaLineItem::where('sam_id', $site->sam_id)->where('status', '!=', 'rejected')
-                                        ->update([
-                                            'status' => $request->input("data_action") == "false" ? "denied" : "approved"
-                                        ]);
+                    FsaLineItem::where('sam_id', $site->sam_id)
+                                ->where('status', '!=', 'rejected')
+                                ->where('user_id', \Auth::id())
+                                ->update([
+                                    'status' => $request->input("data_action") == "false" ? "denied" : "approved"
+                                ]);
                 }
 
-                    // if ($request->input("data_action") == "false") {
-                        // $new_endorsements = \DB::statement('call `a_update_data`("'.$site->sam_id.'", '.\Auth::user()->profile_id.', '.\Auth::id().', "false")');
-                    // }
                 $asd = $this->move_site( $sam_id->all(), $request->input("program_id"), $request->input("data_action"), $site_category->all(), $activity_id->all() );
                 // return response()->json([ 'error' => true, 'message' => $asd ]);
 

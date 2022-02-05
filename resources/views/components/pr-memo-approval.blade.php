@@ -105,43 +105,20 @@
                                                 <span>Preview</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item ">
+                                        {{-- <li class="nav-item ">
                                             <a role="tab" class="nav-link" id="tab-approvals" data-toggle="tab" href="#tab-content-approvals">
                                                 <span>Approvals</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
 
                                     <form id="create_pr_form">
                                         @if ($activity == "Set Ariba PR Number to Sites")
-                                        {{-- <div class="text-center my-5">
-                                            <a target="_blank" href="/files/{{ $pr_memo_data->file_name }}" download="{{ $pr_memo_data->file_name }}">
-                                                <i class="fa fa-file display-1"></i>
-                                                <H5>Download PDF</H5>
-                                            </a>
-                                            <small>{{ $pr_memo_data->file_name }}</small>
-                                        </div> --}}
 
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
                                                 $sites_pr = \DB::table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
                                             @endphp
-                                            {{-- <div class="form-row">
-                                                <div class="col-md-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="pr_number">PR #</label>
-                                                        <input type="text" name="pr_number" id="pr_number" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
-                                                        <small class="pr_number-error text-danger"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="po_number">PO #</label>
-                                                        <input type="text" name="po_number" id="po_number" autofocus class="form-control">
-                                                        <small class="po_number-error text-danger"></small>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
                                         @endif
 
                                         
@@ -150,16 +127,6 @@
 
                                                 {{-- <form> --}}
                                                 <div class="form_details_pr {{ $activity == "Set Ariba PR Number to Sites" ? 'd-none' : '' }}">
-                                                    @php
-                                                        // $vendor = \App\Models\Vendor::where("vendor_id", $json['vendor'])->first();
-                                                        // $generated_pr_memos = \App\Models\PrMemoSite::join('site', 'site.sam_id', 'pr_memo_site.sam_id')
-                                                        //                     ->leftjoin('location_regions', 'site.site_region_id', 'location_regions.region_id')
-                                                        //                     ->leftjoin('location_provinces', 'site.site_province_id', 'location_provinces.province_id')
-                                                        //                     ->leftjoin('location_lgus', 'site.site_lgu_id', 'location_lgus.lgu_id')
-                                                        //                     ->leftjoin('location_sam_regions', 'location_regions.sam_region_id', 'location_sam_regions.sam_region_id')
-                                                        //                     ->where("pr_memo_site.pr_memo_id", $json['generated_pr_memo'])->get();
-
-                                                    @endphp
                                                     @if($activity == 'Set Ariba PR Number to Sites' || $activity == 'Vendor Awarding of Sites')
                                                         <div class="form-row">
                                                             <div class="col-md-6 col-lg-6 col-12">
