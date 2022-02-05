@@ -14,6 +14,7 @@ use Log;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
 use Notification;
 use App\Notifications\SiteMoved;
 use App\Notifications\AgentMoveSite;
