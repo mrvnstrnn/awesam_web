@@ -7175,6 +7175,10 @@ class GlobeController extends Controller
                 $fsa_data_lgu = \DB::table('fsaq')
                         ->where('vendor_id', $vendor)
                         ->where('lgu_id', $sites_data->site_lgu_id)
+
+                        ->where('fsaq.site_type', "EASY")
+                        ->where('fsaq.account_type', "BAU")
+
                         ->get();
 
                 if ( count($fsa_data_lgu) < 1 ) {
@@ -7182,6 +7186,10 @@ class GlobeController extends Controller
                             ->where('vendor_id', $vendor)
                             ->where('province_id', $sites_data->site_province_id)
                             ->whereNull('lgu_id')
+
+                            ->where('fsaq.site_type', "EASY")
+                            ->where('fsaq.account_type', "BAU")
+
                             ->get();
                     if ( count($fsa_data_province) < 1 ) {
                         $fsa_data_region = \DB::table('fsaq')
@@ -7189,6 +7197,10 @@ class GlobeController extends Controller
                                 ->where('region_id', $sites_data->site_region_id)
                                 ->whereNull('province_id')
                                 ->whereNull('lgu_id')
+
+                                ->where('fsaq.site_type', "EASY")
+                                ->where('fsaq.account_type', "BAU")
+    
                                 ->get();
 
                         if ( count($fsa_data_region) < 1 ) {
@@ -7231,6 +7243,10 @@ class GlobeController extends Controller
                                 ->where('site_line_items.sam_id', $sam_id[$i])
                                 ->where('site_line_items.status', '!=', 'denied')
                                 ->where('site_line_items.user_id', \Auth::id())
+
+                                ->where('fsaq.site_type', "EASY")
+                                ->where('fsaq.account_type', "BAU")
+    
                                 ->get();
                 
                 if (count($line_items) > 0) {
@@ -7269,6 +7285,10 @@ class GlobeController extends Controller
                             ->where('site_line_items.status', '!=', 'denied')
                             ->where('site_line_items.is_include', 1)
                             ->where('site_line_items.user_id', \Auth::id())
+
+                            ->where('fsaq.site_type', "EASY")
+                            ->where('fsaq.account_type', "BAU")
+
                             ->get();
 
 
@@ -7282,6 +7302,10 @@ class GlobeController extends Controller
                             ->where('site_line_items.is_include', 1)
                             ->where('site_line_items.sam_id', '=', $sam_id[$i])
                             ->where('site_line_items.user_id', \Auth::id())
+
+                            ->where('fsaq.site_type', "EASY")
+                            ->where('fsaq.account_type', "BAU")
+
                             ->get();
 
                 if (count($pricings) > 1) {
@@ -7311,6 +7335,7 @@ class GlobeController extends Controller
             FsaLineItem::where('sam_id', $sam_id)
                         ->where('site_line_items.user_id', \Auth::id())
                         ->delete();
+
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -7324,6 +7349,10 @@ class GlobeController extends Controller
                                             ->where('site_line_items.sam_id', $sam_id)
                                             ->where('site_line_items.status', '!=', 'denied')
                                             ->where('site_line_items.user_id', \Auth::id())
+
+                                            ->where('fsaq.site_type', "EASY")
+                                            ->where('fsaq.account_type', "BAU")
+
                                             ->get();
 
                 return response()->json([ 'error' => false, 'message' => $line_items->groupBy('category') ]);
