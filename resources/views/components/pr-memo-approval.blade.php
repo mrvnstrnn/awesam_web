@@ -118,6 +118,14 @@
                                         @elseif ($activity == "Vendor Awarding of Sites")
                                             @php
                                                 $sites_pr = \DB::table('site')->select('site_pr')->where('sam_id', $pr_memo_sites[0]->sam_id)->first();
+
+                                                $sites_pr_details = \DB::table('sub_activity_value')
+                                                                ->select('value')
+                                                                ->where('type', 'pr_po_details')
+                                                                ->where('sam_id', $pr_memo_sites[0]->sam_id)
+                                                                ->first();
+
+                                                $sites_pr_details_enc = json_decode($sites_pr_details->value);
                                             @endphp
                                         @endif
 
@@ -132,7 +140,7 @@
                                                             <div class="col-md-6 col-lg-6 col-12">
                                                                 <div class="form-group">
                                                                     <label for="to">PR Date</label>
-                                                                    <input type="date" name="pr_date" id="pr_date" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr->site_pr : '' }}">
+                                                                    <input type="date" name="pr_date" id="pr_date" class="form-control" {{ $activity == "Vendor Awarding of Sites" ? "disabled" : "" }} autofocus value="{{ $activity == 'Vendor Awarding of Sites' ? $sites_pr_details_enc->pr_date : '' }}">
                                                                     <small class="text-danger pr_date-error"></small>
                                                                 </div>
                                                             </div>
@@ -508,6 +516,8 @@
             var vendor = $("#vendor").val();
             var po_number = $("#po_number").val();
             var po_date = $("#po_date").val();
+            var pr_number = $("#pr_number").val();
+            var pr_date = $("#pr_date").val();
 
             var button_text = "Award to vendor";
 
@@ -518,7 +528,9 @@
                 po_number : po_number,
                 po_date : po_date,
                 pr_id : pr_id,
-                program_id : program_id
+                program_id : program_id,
+                pr_number : pr_number,
+                pr_date : pr_date,
                 // vendor : vendor
             }
         } else {

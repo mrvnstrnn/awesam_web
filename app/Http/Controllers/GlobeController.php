@@ -528,6 +528,15 @@ class GlobeController extends Controller
 
                 foreach ($sites as $site) {
 
+                    SubActivityValue::create([
+                        'sam_id' => $site->sam_id,
+                        'value' => json_encode($request->all()),
+                        'user_id' => \Auth::id(),
+                        'type' => 'pr_po_details',
+                        'status' => 'pending',
+                        'date_approved' => \Carbon::now()->toDate(),
+                    ]);
+                    
                     if($request->input('program_id') == 1){
 
                         \DB::table("site")
@@ -5601,8 +5610,8 @@ class GlobeController extends Controller
                     if ($request->input('activity') == "Vendor Awarding of Sites" || $request->input('activity') == "Set Ariba PR Number to Sites" || $request->input('activity') == "NAM PR Memo Approval" || $request->input('activity') == "RAM Head PR Memo Approval") {
 
                         $pr_memo = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                        ->where('type', 'create_pr')
-                        ->first();
+                                                ->where('type', 'create_pr')
+                                                ->first();
     
                         $what_modal = "components.pr-memo-approval";
     
@@ -7825,13 +7834,18 @@ class GlobeController extends Controller
 
                 // foreach ($sites as $site) {
                 for ($i=0; $i < count($samid_collect); $i++) {
-                    SiteEndorsementEvent::dispatch($samid_collect[$i]);
+                    // SiteEndorsementEvent::dispatch($samid_collect[$i]);
 
+                    SubActivityValue::where('sam_id', $samid_collect[$i])
+                                    ->where('type', 'pr_po_details')
+                                    ->update([
+                                        'value' => json_encode($request->all())
+                                    ]);
                     \DB::table("site")
-                                        ->where("sam_id", $samid_collect[$i])
-                                        ->update([
-                                            'site_po' => $request->input('po_number'),
-                                        ]);
+                        ->where("sam_id", $samid_collect[$i])
+                        ->update([
+                            'site_po' => $request->input('po_number'),
+                        ]);
 
                     if ($request->input('program_id') == 1) {
                         $activityid_collect->push(6);

@@ -5,6 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\FsaLineItem;
+use App\Models\SubActivityValue;
 use App\Models\PrMemoSite;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
@@ -20,9 +21,14 @@ class SiteLineItemsExport implements FromCollection, WithHeadings, WithTitle
 
     public function collection()
     {
+        $sub_act_val = SubActivityValue::select('user_id')
+                                    ->where('sam_id', $this->sam_id)
+                                    ->first();
+
         $site_items = FsaLineItem::select('fsaq.region_id', 'fsaq.category', 'fsaq.description', 'fsaq.amount')
                                     ->join('fsaq', 'fsaq.fsaq_id', 'site_line_items.fsa_id')
                                     ->where('site_line_items.sam_id', $this->sam_id)
+                                    ->where('site_line_items.user_id', $sub_act_val->user_id)
                                     ->get();
 
         return $site_items->groupBy('fsa_table.category');
