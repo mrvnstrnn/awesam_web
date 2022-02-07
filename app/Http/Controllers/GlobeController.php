@@ -818,13 +818,13 @@ class GlobeController extends Controller
             $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
 
 
-            if($site_count > 1){
-                $title = $notification_settings->title_multi;
-                $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
-            } else {
-                $title = $notification_settings->title_single;
-                $body = $notification_settings->body_single;
-            }
+            // if($site_count > 1){
+            //     $title = $notification_settings->title_multi;
+            //     $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
+            // } else {
+            //     $title = $notification_settings->title_single;
+            //     $body = $notification_settings->body_single;
+            // }
 
             $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
@@ -833,6 +833,29 @@ class GlobeController extends Controller
 
             if ( $notification_settings->receiver_profile_id == 2 ) {
                 for ($i=0; $i < count($sam_id); $i++) {
+                    if($site_count > 1){
+                        $title = $notification_settings->title_multi;
+                        $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
+                    } else {
+                        $title = $notification_settings->title_single;
+                        $site_data = \DB::table('site')
+                                        ->select('site_name')
+                                        ->where('sam_id', $sam_id[$i])
+                                        ->first();
+
+                        if ( is_null($site_data) ) {
+                            $site_name = $sam_id[$i];
+                        } else {
+                            $site_name = $site_data->site_name;
+                        }
+
+                        // if ( $action == "true" ) {
+                        //     $body = str_replace("<site>", $site_name, $notification_settings->body_single);
+                        // } else {
+                            $body = str_replace("<site>", $site_name, $notification_settings->body_single);
+                        // }
+                    }
+
                     $site_users = \DB::table('site_users')
                                     ->where('sam_id', $sam_id[$i])
                                     ->first();
