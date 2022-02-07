@@ -418,6 +418,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         // return \DB::select('exec GET_COUNT_RTB_DOCS("$program_id", "$activity_id", "$category")');
         $activities_count = \DB::select('call GET_COUNT_RTB_DOCS(?,?,?)',array($program_id, $activity_id, $category));
+
         return $activities_count[0]->count;
     }
     

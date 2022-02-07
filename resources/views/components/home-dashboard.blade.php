@@ -119,7 +119,7 @@
         
         @else
 
-            @if( \Auth::user()->getUserDetail()->first()->mode == "globe")
+            {{-- @if( \Auth::user()->getUserDetail()->first()->mode == "globe")
                 @php
                     $user_program = $program->program_id;
                     if ( $user_program == 3 ) {
@@ -169,7 +169,6 @@
                                                 <div class="milestone-bg bg_img_{{ $i }}"></div>
             
                                                 <div class="widget-chart widget-chart-hover milestone_sites">
-                                                    {{-- <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">- -</div> --}}
                                                     <div class="widget-numbers" id="stage_counter_{{ $stage_activity->id }}">
                                                         {{ \Auth::user()->activities_count($stage_activity->program_id, $stage_activity->activity_id, $categories_array[$j]); }}
                                                     </div>
@@ -181,7 +180,6 @@
                                             <div class="milestone-bg bg_img_2"></div>
             
                                             <div class="widget-chart widget-chart-hover milestone_sites">
-                                                {{-- <div class="widget-numbers" id="stage_counter_{{ $milestone->stage_id }}">- -</div> --}}
                                                 <div class="widget-numbers" id="stage_counter_0">
                                                     {{ \Auth::user()->activities_count($user_program, 0, $categories_array[$j]); }}
                                                 </div>
@@ -202,7 +200,7 @@
                         </div>
                     </div>
                 @endif
-            @endif
+            @endif --}}
 
             @if($program->program_id == 6)
                 <x-towerco-dashboard />
