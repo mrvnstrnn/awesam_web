@@ -1986,8 +1986,11 @@ class GlobeController extends Controller
                 'distance_from_creek_river' => 'required',
                 'distance_from_national_road' => 'required',
                 'demolition_of_existing_structure' => 'required',
-
             ));
+
+            // $validate = Validator::make($request->all(), array(
+            //     '*' => 'required'
+            // ));
 
             if ($validate->passes()) {
 
@@ -2002,51 +2005,51 @@ class GlobeController extends Controller
                 //     }
                 // }
 
-                $json = array(
-                    'lessor' => $request->input('lessor'),
-                    'contact_number' => $request->input('contact_number'),
-                    'address' => $request->input('address'),
-                    'region' => $request->input('region'),
-                    'province' => $request->input('province'),
-                    'lgu' => $request->input('lgu'),
-                    'latitude' => $request->input('latitude'),
-                    'longitude' => $request->input('longitude'),
-                    'distance_from_nominal_point' => $request->input('distance_from_nominal_point'),
-                    'site_type' => $request->input('site_type'),
-                    'building_no_of_floors' => $request->input('building_no_of_floors'),
-                    'area_size' => $request->input('area_size'),
-                    'lease_rate' => $request->input('lease_rate'),
-                    'property_use' => $request->input('property_use'),
-                    'right_of_way_access' => $request->input('right_of_way_access'),
-                    'certificate_of_title' => $request->input('certificate_of_title'),
-                    'tax_declaration' => $request->input('tax_declaration'),
-                    'tax_clearance' => $request->input('tax_clearance'),
-                    'mortgaged' => $request->input('mortgaged'),
-                    'tower_structure' => $request->input('tower_structure'),
-                    'tower_height' => $request->input('tower_height'),
-                    'swat_design' => $request->input('swat_design'),
-                    'with_neighbors' => $request->input('with_neighbors'),
-                    'with_history_of_opposition' => $request->input('with_history_of_opposition'),
-                    'with_hoa_restriction' => $request->input('with_hoa_restriction'),
-                    'with_brgy_restriction' => $request->input('with_brgy_restriction'),
-                    'tap_to_lessor' => $request->input('tap_to_lessor'),
-                    'tap_to_neighbor' => $request->input('tap_to_neighbor'),
-                    'distance_to_tapping_point' => $request->input('distance_to_tapping_point'),
-                    'meralco' => $request->input('meralco'),
-                    'localcoop' => $request->input('localcoop'),
-                    'genset_availability' => $request->input('genset_availability'),
-                    'distance_to_nearby_transmission_line' => $request->input('distance_to_nearby_transmission_line'),
-                    'distance_from_creek_river' => $request->input('distance_from_creek_river'),
-                    'distance_from_national_road' => $request->input('distance_from_national_road'),
-                    'demolition_of_existing_structure' => $request->input('demolition_of_existing_structure'),
+                // $json = array(
+                //     'lessor' => $request->input('lessor'),
+                //     'contact_number' => $request->input('contact_number'),
+                //     'address' => $request->input('address'),
+                //     'region' => $request->input('region'),
+                //     'province' => $request->input('province'),
+                //     'lgu' => $request->input('lgu'),
+                //     'latitude' => $request->input('latitude'),
+                //     'longitude' => $request->input('longitude'),
+                //     'distance_from_nominal_point' => $request->input('distance_from_nominal_point'),
+                //     'site_type' => $request->input('site_type'),
+                //     'building_no_of_floors' => $request->input('building_no_of_floors'),
+                //     'area_size' => $request->input('area_size'),
+                //     'lease_rate' => $request->input('lease_rate'),
+                //     'property_use' => $request->input('property_use'),
+                //     'right_of_way_access' => $request->input('right_of_way_access'),
+                //     'certificate_of_title' => $request->input('certificate_of_title'),
+                //     'tax_declaration' => $request->input('tax_declaration'),
+                //     'tax_clearance' => $request->input('tax_clearance'),
+                //     'mortgaged' => $request->input('mortgaged'),
+                //     'tower_structure' => $request->input('tower_structure'),
+                //     'tower_height' => $request->input('tower_height'),
+                //     'swat_design' => $request->input('swat_design'),
+                //     'with_neighbors' => $request->input('with_neighbors'),
+                //     'with_history_of_opposition' => $request->input('with_history_of_opposition'),
+                //     'with_hoa_restriction' => $request->input('with_hoa_restriction'),
+                //     'with_brgy_restriction' => $request->input('with_brgy_restriction'),
+                //     'tap_to_lessor' => $request->input('tap_to_lessor'),
+                //     'tap_to_neighbor' => $request->input('tap_to_neighbor'),
+                //     'distance_to_tapping_point' => $request->input('distance_to_tapping_point'),
+                //     'meralco' => $request->input('meralco'),
+                //     'localcoop' => $request->input('localcoop'),
+                //     'genset_availability' => $request->input('genset_availability'),
+                //     'distance_to_nearby_transmission_line' => $request->input('distance_to_nearby_transmission_line'),
+                //     'distance_from_creek_river' => $request->input('distance_from_creek_river'),
+                //     'distance_from_national_road' => $request->input('distance_from_national_road'),
+                //     'demolition_of_existing_structure' => $request->input('demolition_of_existing_structure'),
 
-                );
+                // );
 
                 SubActivityValue::create([
                     'sam_id' => $request->input("sam_id"),
                     'type' => $request->input("type"),
                     'sub_activity_id' => $request->input("sub_activity_id"),
-                    'value' => json_encode($json),
+                    'value' => json_encode($request->all()),
                     'user_id' => \Auth::id(),
                     'status' => "pending",
                 ]);
@@ -5188,6 +5191,21 @@ class GlobeController extends Controller
                         ->where('sam_id', $request->get('active_sam_id'))
                         ->first();
 
+            $location_regions = \DB::table('location_regions')
+                                        ->select('region_name')
+                                        ->where('region_id', $site_np->site_region_id)
+                                        ->first();
+
+            $location_provinces = \DB::table('location_provinces')
+                                        ->select('province_name')
+                                        ->where('province_id', $site_np->site_province_id)
+                                        ->first();
+
+            $location_lgus = \DB::table('location_lgus')
+                                        ->select('lgu_name')
+                                        ->where('lgu_id', $site_np->site_lgu_id)
+                                        ->first();
+
             $what_component = "components.add-site-prospects";
             return \View::make($what_component)
             ->with([
@@ -5202,7 +5220,10 @@ class GlobeController extends Controller
                 'NP_longitude' => $site_np->NP_longitude,
                 'site_region_id' => $site_np->site_region_id,
                 'site_province_id' => $site_np->site_province_id,
-                'site_lgu_id' => $site_np->site_lgu_id
+                'site_lgu_id' => $site_np->site_lgu_id,
+                'location_regions' => is_null($location_regions) ? "NA" : $location_regions->region_name,
+                'location_provinces' => is_null($location_provinces) ? "NA" : $location_provinces->province_name,
+                'location_lgus' => is_null($location_lgus) ? "NA" : $location_lgus->lgu_name
             ])
             ->render();
 
@@ -5237,7 +5258,7 @@ class GlobeController extends Controller
             $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('sam_id', $request->get('active_sam_id'))
                                         ->get();
-
+                                        
             $what_component = "components.ssds";
             return \View::make($what_component)
             ->with([
@@ -8608,7 +8629,10 @@ class GlobeController extends Controller
                             "distance_to_nearby_transmission_line" => $new_json['distance_to_nearby_transmission_line'],
                             "distance_from_creek_river" => $new_json['distance_from_creek_river'],
                             "distance_from_national_road" => $new_json['distance_from_national_road'],
-                            "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure']
+                            "demolition_of_existing_structure" => $new_json['demolition_of_existing_structure'],
+                            "region_new" => $new_json['region_new'],
+                            "province_new" => $new_json['province_new'],
+                            "lgu_new" => $new_json['lgu_new']
                         ];
 
                         // return response()->json(['error' => true, 'message' => is_null($check_if_added) ]);
@@ -8738,7 +8762,7 @@ class GlobeController extends Controller
                                             ->first();
             }
 
-            return response()->json(['error' => false, 'message' => $datas, 'address_data' => $address_data]);
+            return response()->json(['error' => false, 'message' => $datas]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

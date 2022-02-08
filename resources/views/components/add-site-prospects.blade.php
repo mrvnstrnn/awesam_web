@@ -84,22 +84,18 @@
                             <div class="position-relative row form-group">
                                 <label for="region" class="col-sm-4 col-form-label">Region</label>
                                 <div class="col-sm-8">
-                                    @php
-                                        $regions = \DB::table('location_regions')->get();
-                                    @endphp
-                                    <select class="form-control" id="region" name="region" data-name="address">
-                                        <option value="">Select Region</option>
-                                        @foreach ($regions as $region)
-                                        <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" class="form-control" id="region_new" name="region_new"  value="{{ $location_regions }}" readonly>
+                                    <input type="hidden" class="form-control" id="region" name="region" value="{{ $site_region_id }}">
                                     <small class="text-danger region-errors"></small>
                                 </div>
                             </div>
                             <div class="position-relative row form-group">
                                 <label for="province" class="col-sm-4 col-form-label">Province</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
+                                    {{-- <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select> --}}
+
+                                    <input type="text" class="form-control" id="province_new" name="province_new"  value="{{ $location_provinces }}" readonly>
+                                    <input type="hidden" class="form-control" id="province" name="province" value="{{ $site_province_id }}">
                                     <small class="text-danger province-errors"></small>
                 
                                 </div>
@@ -107,7 +103,9 @@
                             <div class="position-relative row form-group">
                                 <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
+                                    {{-- <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select> --}}
+                                    <input type="text" class="form-control" id="lgu_new" name="lgu_new"  value="{{ $location_lgus }}" readonly>
+                                    <input type="hidden" class="form-control" id="lgu" name="lgu" value="{{ $site_lgu_id }}">
                                     <small class="text-danger lgu-errors"></small>
                 
                                 </div>
@@ -492,7 +490,7 @@
             <input type="hidden" id="NP_latitude" name="NP_latitude" value="{{ $NP_latitude }}">
             <input type="hidden" id="NP_longitude" name="NP_longitude" value="{{ $NP_longitude }}">
             <input type="hidden" name="type" value="jtss_add_site">
-            <input type="hidden" name="site_category" value="">
+            <input type="hidden" name="site_category" value="{{ $site_category }}">
             <div class="position-relative row form-group ">
                 <div class="col-sm-12">
                     <button class="btn float-right btn-primary" id="btn_save_ssds" type="button">Save Site</button>
@@ -776,75 +774,75 @@ function initMap(markers) {
         }
     })
 
-    $("select[data-name=address]").on('change', function(){
+    // $("select[data-name=address]").on('change', function(){
 
-        var id = $(this).attr('id');
-        var val = $(this).val();
+    //     var id = $(this).attr('id');
+    //     var val = $(this).val();
 
-        if(id == 'province') {
-            if (val == '') {
-                $("#lgu option").remove();
-                $("#lgu").attr('disabled', 'disabled');
-                return;
-            }
-        } else if (id == 'region') {
-            if (val == '') {
-                $("#province option").remove();
-                $("#lgu option").remove();
+    //     if(id == 'province') {
+    //         if (val == '') {
+    //             $("#lgu option").remove();
+    //             $("#lgu").attr('disabled', 'disabled');
+    //             return;
+    //         }
+    //     } else if (id == 'region') {
+    //         if (val == '') {
+    //             $("#province option").remove();
+    //             $("#lgu option").remove();
 
-                $("#province").attr('disabled', 'disabled');
-                $("#lgu").attr('disabled', 'disabled');
-                return;
-            }
-        } else {
-            return;
-        }
+    //             $("#province").attr('disabled', 'disabled');
+    //             $("#lgu").attr('disabled', 'disabled');
+    //             return;
+    //         }
+    //     } else {
+    //         return;
+    //     }
 
-        $.ajax({
-            url:  '/address',
-            method: 'POST',
-            data: {
-                id : id,
-                val : val
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(resp) {
-                if(!resp.error){
-                    if(resp.new_id) {
-                        $("#"+resp.new_id+ " option").remove();
-                        $("#"+resp.new_id).removeAttr('disabled');
+    //     $.ajax({
+    //         url:  '/address',
+    //         method: 'POST',
+    //         data: {
+    //             id : id,
+    //             val : val
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(resp) {
+    //             if(!resp.error){
+    //                 if(resp.new_id) {
+    //                     $("#"+resp.new_id+ " option").remove();
+    //                     $("#"+resp.new_id).removeAttr('disabled');
 
-                        if(id == 'region'){
-                            $("#"+resp.new_id).append('<option value="">Please select province</option>');
-                            resp.message.forEach(element => {
-                                $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
-                            });
-                        } else if (id == 'province'){
-                            $("#"+resp.new_id).append('<option value="">Please select city</option>');
-                            resp.message.forEach(element => {
-                                $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
-                            });
-                        }
-                    }
-                } else {
-                    Swal.fire(
-                        'Error',
-                        resp.message,
-                        'error'
-                    )
-                }
-            },
-            error: function(resp) {
-                Swal.fire(
-                    'Error',
-                    resp,
-                    'error'
-                )
-            }
-        });
-    });
+    //                     if(id == 'region'){
+    //                         $("#"+resp.new_id).append('<option value="">Please select province</option>');
+    //                         resp.message.forEach(element => {
+    //                             $("#"+resp.new_id).append('<option value="'+element.province_id+'">'+element.province_name+'</option>');
+    //                         });
+    //                     } else if (id == 'province'){
+    //                         $("#"+resp.new_id).append('<option value="">Please select city</option>');
+    //                         resp.message.forEach(element => {
+    //                             $("#"+resp.new_id).append('<option value="'+element.lgu_id+'">'+element.lgu_name+'</option>');
+    //                         });
+    //                     }
+    //                 }
+    //             } else {
+    //                 Swal.fire(
+    //                     'Error',
+    //                     resp.message,
+    //                     'error'
+    //                 )
+    //             }
+    //         },
+    //         error: function(resp) {
+    //             Swal.fire(
+    //                 'Error',
+    //                 resp,
+    //                 'error'
+    //             )
+    //         }
+    //     });
+    // });
 
     $("#btn_save_ssds").on("click", function() {
         $(this).attr("disabled", "disabled");

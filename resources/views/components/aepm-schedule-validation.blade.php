@@ -123,22 +123,18 @@ use App\Models\SubActivityValue;
                                                     <div class="position-relative row form-group">
                                                         <label for="region" class="col-sm-4 col-form-label">Region</label>
                                                         <div class="col-sm-8">
-                                                            @php
-                                                                $regions = \DB::table('location_regions')->get();
-                                                            @endphp
-                                                            <select class="form-control" id="region" name="region" data-name="address">
-                                                                <option value="">Select Region</option>
-                                                                @foreach ($regions as $region)
-                                                                <option value="{{ $region->region_id }}">{{ $region->region_name }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control" id="region_new" name="region_new" readonly>
+                                                            <input type="hidden" class="form-control" id="region" name="region">
                                                             <small class="text-danger region-errors"></small>
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
                                                         <label for="province" class="col-sm-4 col-form-label">Province</label>
                                                         <div class="col-sm-8">
-                                                            <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select>
+                                                            {{-- <select class="form-control" name="province" id="province" data-name="address" disabled required autocomplete="off"></select> --}}
+                        
+                                                            <input type="text" class="form-control" id="province_new" name="province_new" readonly>
+                                                            <input type="hidden" class="form-control" id="province" name="province">
                                                             <small class="text-danger province-errors"></small>
                                         
                                                         </div>
@@ -146,7 +142,9 @@ use App\Models\SubActivityValue;
                                                     <div class="position-relative row form-group">
                                                         <label for="lgu" class="col-sm-4 col-form-label">City / Municipality</label>
                                                         <div class="col-sm-8">
-                                                            <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select>
+                                                            {{-- <select class="form-control" name="lgu" id="lgu" data-name="address" disabled required autocomplete="off"></select> --}}
+                                                            <input type="text" class="form-control" id="lgu_new" name="lgu_new" readonly>
+                                                            <input type="hidden" class="form-control" id="lgu" name="lgu">
                                                             <small class="text-danger lgu-errors"></small>
                                         
                                                         </div>
