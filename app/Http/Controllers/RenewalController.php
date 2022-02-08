@@ -1276,15 +1276,20 @@ class RenewalController extends Controller
                                 
 
             for ($i=0; $i < count($sam_id); $i++) {
+                $site_data = \DB::table('site')
+                                ->select('site_name', 'site_vendor_id')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
+                $site_users = \DB::table('site_users')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
                 if($site_count > 1){
                     $title = $notification_settings->title_multi;
                     $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
                 } else {
                     $title = $notification_settings->title_single;
-                    $site_data = \DB::table('site')
-                                    ->select('site_name')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->first();
 
                     if ( is_null($site_data) ) {
                         $site_name = $sam_id[$i];
@@ -1300,9 +1305,6 @@ class RenewalController extends Controller
                 }
 
                 if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
-                    $site_users = \DB::table('site_users')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->first();
 
                     if ( !is_null($site_users) ) {
                         $user_agent = User::find($site_users->agent_id);
@@ -1322,13 +1324,31 @@ class RenewalController extends Controller
                         }
                     }
                 } else {
-
-                    $userSchema = User::select('users.*')
+                    if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
+                        $userSchema = User::select('users.*', 'user_details.vendor_id')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('user_details', 'user_details.user_id', 'users.id')
+                                ->whereIn("profile_id", $receiver_profiles)
+                                ->where('user_details.vendor_id', $site_data->site_vendor_id)
+                                ->get();
+                    } else {
+                        $userSchema = User::select('users.*', 'user_details.vendor_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('user_details', 'user_details.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
                                 ->get();
+                    }
+                    // $userSchema = User::select('users.*', 'user_details.vendor_id')
+                    //             ->join('user_programs', 'user_programs.user_id', 'users.id')
+                    //             ->join('user_details', 'user_details.user_id', 'users.id')
+                    //             ->whereIn("profile_id", $receiver_profiles);
 
+                    //             if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
+                    //                 $userSchema->where('user_details.vendor_id', $site_data->site_vendor_id);
+                    //             }
+                    //             $userSchema->where('user_programs.program_id', $program_id)
+                    //             ->get();
                     foreach($userSchema as $user){
                         $notifData = [
                             'user_id' => $user->id,
@@ -1348,9 +1368,9 @@ class RenewalController extends Controller
 
             // Loop sam_id per agent
             // for ($i=0; $i < count($sam_id); $i++) {
-                $site_users = \DB::table('site_users')
-                                ->where('sam_id', $sam_id[$i])
-                                ->first();
+                // $site_users = \DB::table('site_users')
+                //                 ->where('sam_id', $sam_id[$i])
+                //                 ->first();
 
                 $site_data = \DB::table('site')
                     ->select('site_name')
