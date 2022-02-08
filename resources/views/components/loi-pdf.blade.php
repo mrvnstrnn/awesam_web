@@ -57,16 +57,19 @@
 
             $json = json_decode($json_data);
 
-            $honorific = "";
-            if ( $json->salutation == 'Not Applicable' ) {
-                $honorific = "";
-                $lessor_surname = $json->lessor;
-            } else {
-                $surname = explode(" ", $json->lessor);
+            // $honorific = "";
+            // if ( $json->salutation == 'Not Applicable' ) {
+            //     $honorific = "";
+            //     $lessor_surname = $json->lessor;
+            // } else {
+            //     $surname = explode(" ", $json->lessor);
 
-                $honorific = $json->salutation;
-                $lessor_surname = $json->salutation . " " . end($surname);
-            }
+            //     $honorific = $json->salutation;
+            //     $lessor_surname = $json->salutation . " " . end($surname);
+            // }
+
+            
+            $honorific = ucfirst($json->salutation);
 
             if ( $json->terms_in_years > 1 ) {
                 $date_word = numberTowords($json->terms_in_years) .' ('.$json->terms_in_years.') years';
