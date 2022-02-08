@@ -8270,6 +8270,7 @@ class GlobeController extends Controller
     public function get_site_candidate (Request $request)
     {
         try {
+            $sam_id = $request->get('sam_id');
             $datas = SubActivityValue::where('sam_id', $request->get('sam_id'));
 
             if ($request->get('status') == "jtss_schedule_site") {
