@@ -307,6 +307,7 @@ class GlobeController extends Controller
 
                 $samid = $request->input('sam_id');
 
+                // return response()->json(['error' => true, 'message' => $activity_id ]);
                 if ( $request->input('data_complete') == 'false' ) {
 
                     $validate = Validator::make($request->all(), array(
@@ -316,6 +317,54 @@ class GlobeController extends Controller
                     if (!$validate->passes()) {
                         return response()->json(['error' => true, 'message' => $validate->errors() ]);
                     } else {
+
+                        $get_return_act = \DB::table('stage_activities')
+                                        ->select('return_activity')
+                                        ->where('program_id', $request->input('program_id'))
+                                        ->where('activity_id', $request->input('activity_id')[0])
+                                        ->where('category', $request->input('site_category')[0])
+                                        ->first();
+
+                        if ( is_null($get_return_act) ) {
+                            SubActivityValue::whereIn('sam_id', $samid)
+                                        ->where('type', 'doc_upload')
+                                        ->where('status', 'approved')
+                                        ->update([
+                                            'status' => 'prev - approved',
+                                            'approver_id' => \Auth::id(),
+                                            'date_approved' => Carbon::now()->toDate(),
+                                        ]);
+                        } else {
+                            $get_sub_act = \DB::table('sub_activity')
+                                        ->select('sub_activity_id')
+                                        ->where('program_id', $request->input('program_id'))
+                                        ->where('activity_id', $get_return_act->return_activity)
+                                        ->where('category', $request->input('site_category')[0])
+                                        ->get()
+                                        ->pluck('sub_activity_id');
+
+                            if ( count($get_sub_act) < 1 ) {
+                                SubActivityValue::whereIn('sam_id', $samid)
+                                            ->where('type', 'doc_upload')
+                                            ->where('status', 'approved')
+                                            ->update([
+                                                'status' => 'prev - approved',
+                                                'approver_id' => \Auth::id(),
+                                                'date_approved' => Carbon::now()->toDate(),
+                                            ]);
+                            } else {
+                                SubActivityValue::whereIn('sam_id', $samid)
+                                            ->where('type', 'doc_upload')
+                                            ->where('status', 'approved')
+                                            ->whereIn('sub_activity_id', $get_sub_act)
+                                            ->update([
+                                                'status' => 'prev - approved',
+                                                'approver_id' => \Auth::id(),
+                                                'date_approved' => Carbon::now()->toDate(),
+                                            ]);
+                            }
+                        }
+                        
                         SubActivityValue::create([
                             'sam_id' => $request->input("sam_id")[0],
                             'value' => json_encode($request->all()),
@@ -624,7 +673,7 @@ class GlobeController extends Controller
                 $samid = $request->input('sam_id');
             }
 
-            $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id);
+            $asd = $this->move_site($samid, $program_id, $action, $site_category, $activity_id, $request->input('remarks'));
 
             // return response()->json(['error' => true, 'message' => $asd]);
             return response()->json(['error' => false, 'message' => $notification ]);
@@ -634,7 +683,7 @@ class GlobeController extends Controller
         }
     }
 
-    private function move_site($sam_id, $program_id, $action, $site_category, $activity_id)
+    private function move_site($sam_id, $program_id, $action, $site_category, $activity_id, $remarks = null)
     {
         for ($i=0; $i < count($sam_id); $i++) {
 
@@ -856,7 +905,8 @@ class GlobeController extends Controller
                     if ( $action == "true" ) {
                         $body = str_replace("<site>", $site_name, $notification_settings->body_single);
                     } else {
-                        $body = str_replace("<site>", $site_name, $notification_settings->body_single);
+                        $body_rejected = str_replace("<site>", $site_name, $notification_settings->body_single);
+                        $body = str_replace("<reason>", $remarks, $body_rejected);
                     }
                 }
 
@@ -939,17 +989,22 @@ class GlobeController extends Controller
                     $site_name = $site_data->site_name;
                 }
 
+                if ( $action == "true" ) {
+                    $body_agent = "Your site has been moved to " .$activity_name;
+                } else {
+                    $body_agent = "Your site has been rejected. Reason: ".$remarks;
+                }
+
                 if ( !is_null($site_users) ) {
                     $user_agent = User::find($site_users->agent_id);
                     if ( !is_null($user_agent) ) {
-                        
                         $notifDataForAgent = [
                             'user_id' => $site_users->agent_id,
                             'program_id' => $program_id,
                             'action' => $action,
                             'activity_id' => $activity_id,
                             'title' => "Site Update for " .$site_name,	
-                            'body' => "Your site has been moved to " .$activity_name,
+                            'body' => $body_agent,
                             'goUrl' => url('/'),
                         ];
                         Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
