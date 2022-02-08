@@ -203,6 +203,8 @@
                                             <select name="designation" id="designation" class="form-control" required>
                                                 <option value="2">Agent</option>
                                                 <option value="3">Supervisor</option>
+                                                <option value="37">Agent Paralegal</option>
+                                                <option value="38">Agent Contract Processor</option>
                                             </select>
                                         </div>
                                         <small class="designation-error text-danger"></small>

@@ -198,6 +198,8 @@
                                                                     <option  disabled selected>Designation</option>
                                                                     <option value="2">Agent</option>
                                                                     <option value="3">Supervisor</option>
+                                                                    <option value="37">Agent Paralegal</option>
+                                                                    <option value="38">Agent Contract Processor</option>
                                                                 </select>
                                                             @else
                                                                 <input type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->profile }}" readonly>
@@ -223,6 +225,8 @@
                                                                             <option  disabled selected>Designation</option>
                                                                             <option value="2">Agent</option>
                                                                             <option value="3">Supervisor</option>
+                                                                            <option value="37">Agent Paralegal</option>
+                                                                            <option value="38">Agent Contract Processor</option>
                                                                         </select>
                                                                     @endif
                                                                 @else
@@ -230,6 +234,8 @@
                                                                         <option  disabled selected>Designation</option>
                                                                         <option value="2">Agent</option>
                                                                         <option value="3">Supervisor</option>
+                                                                        <option value="37">Agent Paralegal</option>
+                                                                        <option value="38">Agent Contract Processor</option>
                                                                     </select>
                                                                 @endif
                                                         @endif
