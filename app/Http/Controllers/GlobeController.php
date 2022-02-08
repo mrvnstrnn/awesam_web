@@ -880,15 +880,31 @@ class GlobeController extends Controller
                         }
                     }
                 } else {
-
-                    $userSchema = User::select('users.*')
+                    if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
+                        $userSchema = User::select('users.*', 'user_details.vendor_id')
+                                ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('user_details', 'user_details.user_id', 'users.id')
+                                ->whereIn("profile_id", $receiver_profiles)
+                                ->where('user_details.vendor_id', $site_data->site_vendor_id)
+                                ->get();
+                    } else {
+                        $userSchema = User::select('users.*', 'user_details.vendor_id')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->join('user_details', 'user_details.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
-                                ->where('user_details.vendor_id', $site_data->site_vendor_id)
                                 ->get();
+                    }
+                    // $userSchema = User::select('users.*', 'user_details.vendor_id')
+                    //             ->join('user_programs', 'user_programs.user_id', 'users.id')
+                    //             ->join('user_details', 'user_details.user_id', 'users.id')
+                    //             ->whereIn("profile_id", $receiver_profiles);
 
+                    //             if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
+                    //                 $userSchema->where('user_details.vendor_id', $site_data->site_vendor_id);
+                    //             }
+                    //             $userSchema->where('user_programs.program_id', $program_id)
+                    //             ->get();
                     foreach($userSchema as $user){
                         $notifData = [
                             'user_id' => $user->id,
