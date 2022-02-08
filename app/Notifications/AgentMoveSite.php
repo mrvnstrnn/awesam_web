@@ -10,8 +10,8 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 // class AgentMoveSite extends Notification
-class AgentMoveSite extends Notification implements ShouldBroadcast, ShouldQueue
-// class AgentMoveSite extends Notification implements ShouldBroadcast
+// class AgentMoveSite extends Notification implements ShouldBroadcast, ShouldQueue
+class AgentMoveSite extends Notification implements ShouldBroadcast
 {
     use Queueable;
 

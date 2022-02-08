@@ -32,6 +32,7 @@ class SiteLineItemsExport implements FromCollection, WithHeadings, WithTitle
 
                                     ->where('site_line_items.sam_id', $this->sam_id)
                                     ->where('site_line_items.user_id', $sub_act_val->user_id)
+                                    ->where('site_line_items.is_include', 1)
 
                                     ->where('fsaq.site_type', "EASY")
                                     ->where('fsaq.account_type', "BAU")
