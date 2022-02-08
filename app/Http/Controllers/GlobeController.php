@@ -8723,9 +8723,10 @@ class GlobeController extends Controller
         }
     }
 
-    public function get_jtss_schedule($id)
+    public function get_jtss_schedule(Request $request)
     {
         try {
+            $id = $request->get('id');
             $datas = SubActivityValue::where('type', 'jtss_schedule_site')
                                         ->where('value->id', $id)
                                         ->where('status', 'pending')
@@ -8736,7 +8737,7 @@ class GlobeController extends Controller
                                             ->first();
             }
 
-            return response()->json(['error' => false, 'message' => $datas]);
+            return response()->json(['error' => false, 'message' => $datas, 'address_data' => $address_data]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

@@ -775,38 +775,44 @@ use App\Models\SubActivityValue;
 
             $(".set_schedule").attr("data-id", id);
 
-            // $.ajax({
-            //     url: "/get-jtss-schedule/" + id,
-            //     method: "GET",
-            //     success: function (resp) {
-            //         if (!resp.error) {
-            //                 var json = JSON.parse(resp.message.value);
-            //             if (resp.message != null) {
-            //                 $("#jtss_schedule").val(json.jtss_schedule);
-            //             } else {
-            //                 $("#jtss_schedule").val("");
-            //             }
+            $.ajax({
+                url: "/get-jtss-schedule",
+                type: 'POST',
+                data : {
+                    id : id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                success: function (resp) {
+                    if (!resp.error) {
+                            var json = JSON.parse(resp.message.value);
+                        if (resp.message != null) {
+                            $("#jtss_schedule").val(json.jtss_schedule);
+                        } else {
+                            $("#jtss_schedule").val("");
+                        }
 
-            //             $.each(json, function(index, data) {
-            //                 $("#"+index).val(data);
-            //             });
-            //         } else {
-            //             Swal.fire(
-            //                 'Error',
-            //                 resp.message,
-            //                 'error'
-            //             )
-            //         }
-            //     },
-            //     error: function (resp) {
+                        $.each(json, function(index, data) {
+                            $("#"+index).val(data);
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            resp.message,
+                            'error'
+                        )
+                    }
+                },
+                error: function (resp) {
                     
-            //         Swal.fire(
-            //             'Error',
-            //             resp,
-            //             'error'
-            //         )
-            //     },
-            // });
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                },
+            });
         });
 
         $("#tab-c-2").on("click", function (e) {
@@ -814,14 +820,24 @@ use App\Models\SubActivityValue;
 
             if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
 
+                var sam_id = "{{ $site[0]->sam_id }}";
+                var status = "rejected_schedule";
+
                 $('#aepm_rejected_table').DataTable({
                     processing: true,
                     serverSide: true,
                     select: true,
                     order: [ 1, "asc" ],
                     ajax: {
-                        url: "/get-site-candidate/" + "{{ $site[0]->sam_id }}" + "/rejected_schedule",
-                        type: 'GET'
+                        url: "/get-site-candidate",
+                        type: 'POST',
+                        data : {
+                            sam_id : sam_id,
+                            status : status
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                     },
                     dataSrc: function(json){
                         return json.data;

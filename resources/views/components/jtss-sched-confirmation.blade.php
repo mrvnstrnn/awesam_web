@@ -543,14 +543,25 @@
             $("#actions_list").removeClass('d-none');
         });
 
+        var sam_id = "{{ $sam_id }}";
+        var status = "jtss_schedule_site";
         $('#aepm_table').DataTable({
             processing: true,
             serverSide: true,
             select: true,
             order: [ 1, "asc" ],
             ajax: {
-                url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
-                type: 'GET'
+                // url: "/get-site-candidate/" + "{{ $sam_id }}" + "/jtss_schedule_site",
+                // type: 'GET'
+                url: "/get-site-candidate",
+                type: 'POST',
+                data : {
+                    sam_id : sam_id,
+                    status : status
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
             },
             dataSrc: function(json){
                 return json.data;
@@ -575,14 +586,26 @@
 
             if ( ! $.fn.DataTable.isDataTable('#aepm_rejected_table') ) {
 
+                var sam_id = "{{ $sam_id }}";
+                var status = "rejected_schedule";
                 $('#aepm_rejected_table').DataTable({
                     processing: true,
                     serverSide: true,
                     select: true,
                     order: [ 1, "asc" ],
                     ajax: {
-                        url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected_schedule",
-                        type: 'GET'
+                        // url: "/get-site-candidate/" + "{{ $sam_id }}" + "/rejected_schedule",
+                        // type: 'GET'
+
+                        url: "/get-site-candidate",
+                        type: 'POST',
+                        data : {
+                            sam_id : sam_id,
+                            status : status
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                     },
                     dataSrc: function(json){
                         return json.data;
