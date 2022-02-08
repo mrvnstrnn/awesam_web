@@ -175,7 +175,6 @@ class GlobeController extends Controller
                         SubActivityValue::where('sam_id', $request->input('sam_id')[0])
                                             ->where('type', 'elas_approved')
                                             ->update([
-                                                'sam_id' => $request->input('sam_id')[0],
                                                 'value' => json_encode($request->all()),
                                                 'user_id' => \Auth::id(),
                                                 'status' => 'pending',
