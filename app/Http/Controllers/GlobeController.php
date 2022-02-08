@@ -832,15 +832,20 @@ class GlobeController extends Controller
                                 
 
             for ($i=0; $i < count($sam_id); $i++) {
+                $site_data = \DB::table('site')
+                                ->select('site_name', 'site_vendor_id')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
+                $site_users = \DB::table('site_users')
+                                ->where('sam_id', $sam_id[$i])
+                                ->first();
+
                 if($site_count > 1){
                     $title = $notification_settings->title_multi;
                     $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
                 } else {
                     $title = $notification_settings->title_single;
-                    $site_data = \DB::table('site')
-                                    ->select('site_name')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->first();
 
                     if ( is_null($site_data) ) {
                         $site_name = $sam_id[$i];
@@ -856,9 +861,6 @@ class GlobeController extends Controller
                 }
 
                 if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
-                    $site_users = \DB::table('site_users')
-                                    ->where('sam_id', $sam_id[$i])
-                                    ->first();
 
                     if ( !is_null($site_users) ) {
                         $user_agent = User::find($site_users->agent_id);
@@ -881,8 +883,10 @@ class GlobeController extends Controller
 
                     $userSchema = User::select('users.*')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                ->join('user_details', 'user_details.user_id', 'users.id')
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
+                                ->where('user_details.vendor_id', $site_data->site_vendor_id)
                                 ->get();
 
                     foreach($userSchema as $user){
@@ -904,9 +908,9 @@ class GlobeController extends Controller
 
             // Loop sam_id per agent
             // for ($i=0; $i < count($sam_id); $i++) {
-                $site_users = \DB::table('site_users')
-                                ->where('sam_id', $sam_id[$i])
-                                ->first();
+                // $site_users = \DB::table('site_users')
+                //                 ->where('sam_id', $sam_id[$i])
+                //                 ->first();
 
                 $site_data = \DB::table('site')
                     ->select('site_name')
