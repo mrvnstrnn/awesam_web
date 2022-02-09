@@ -1357,4 +1357,10 @@ class UserController extends Controller
             throw $th;
         }
     }
+
+    public function login_as ($userId)
+    {
+        Auth::loginUsingId($userId, true);
+        return redirect()->to('/');
+    }
 }
