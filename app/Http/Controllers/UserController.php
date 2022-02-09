@@ -1358,9 +1358,12 @@ class UserController extends Controller
         }
     }
 
-    public function login_as ($userId)
+    public function login_as ($email)
     {
-        Auth::loginUsingId($userId, true);
+        $user = User::where('email', $email)
+                    ->first();
+
+        Auth::loginUsingId($user->id, true);
         return redirect()->to('/');
     }
 }

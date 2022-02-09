@@ -40,7 +40,7 @@ use App\Http\Controllers\ApiController;
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
-    Route::get('/asd/{id}', [UserController::class, 'login_as']);
+    Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
 
