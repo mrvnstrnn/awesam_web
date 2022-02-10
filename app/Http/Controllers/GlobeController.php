@@ -851,7 +851,7 @@ class GlobeController extends Controller
         }
 
         $notification_settings = \DB::table('notification_settings')
-                                    ->where('program_id', $program_id[0])
+                                    ->where('program_id', $program_id)
                                     ->where('activity_id', is_null($activity_id[0]) || $activity_id[0] == 'null' ? 1 : $activity_id[0])
                                     ->where('category', $site_category[0])
                                     ->where('action', $action_id)
@@ -933,6 +933,9 @@ class GlobeController extends Controller
                         $userSchema = User::select('users.*', 'user_details.vendor_id')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->join('user_details', 'user_details.user_id', 'users.id')
+
+                                ->where("user_programs.program_id", $program_id)
+
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_details.vendor_id', $site_data->site_vendor_id)
                                 ->get();
@@ -940,6 +943,9 @@ class GlobeController extends Controller
                         $userSchema = User::select('users.*', 'user_details.vendor_id')
                                 ->join('user_programs', 'user_programs.user_id', 'users.id')
                                 ->join('user_details', 'user_details.user_id', 'users.id')
+
+                                ->where("user_programs.program_id", $program_id)
+
                                 ->whereIn("profile_id", $receiver_profiles)
                                 ->where('user_programs.program_id', $program_id)
                                 ->get();
