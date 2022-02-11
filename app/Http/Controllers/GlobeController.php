@@ -858,12 +858,20 @@ class GlobeController extends Controller
                                     ->first();
 
         if (!is_null($notification_settings)) {
+            // $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
+            //                                 ->select('profile_id')
+            //                                 ->where('notification_settings_id', $notification_settings->notification_settings_id)
+            //                                 ->get();
+
             $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                                             ->select('profile_id')
                                             ->where('notification_settings_id', $notification_settings->notification_settings_id)
-                                            ->get();
+                                            ->get()
+                                            ->pluck('profile_id');
 
-            $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
+            $receiver_profiles = $notification_receiver_profiles;
+
+            // $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
 
             // if($site_count > 1){
             //     $title = $notification_settings->title_multi;
@@ -877,7 +885,6 @@ class GlobeController extends Controller
             //                     ->whereIn("profile_id", $receiver_profiles)
             //                     ->where('user_programs.program_id', $program_id)
             //                     ->get();
-                                
 
             for ($i=0; $i < count($sam_id); $i++) {
                 $site_data = \DB::table('site')
@@ -909,14 +916,53 @@ class GlobeController extends Controller
                     }
                 }
 
-                if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
+                for ($x=0; $x < count($receiver_profiles); $x++) { 
 
-                    if ( !is_null($site_users) ) {
-                        $user_agent = User::find($site_users->agent_id);
-                        if ( !is_null($user_agent) ) {
-                            
-                            $notifDataForAgent = [
-                                'user_id' => $site_users->agent_id,
+                    if ( $receiver_profiles[$x] == 2 ) {
+    
+                        if ( !is_null($site_users) ) {
+                            $user_agent = User::find($site_users->agent_id);
+                            if ( !is_null($user_agent) ) {
+                                
+                                $notifDataForAgent = [
+                                    'user_id' => $site_users->agent_id,
+                                    'program_id' => $program_id,
+                                    'site_count' => $site_count,
+                                    'action' => $action,
+                                    'activity_id' => $activity_id,
+                                    'title' => $title,	
+                                    'body' => $body,
+                                    'goUrl' => url('/'),
+                                ];
+                                Notification::send($user_agent, new SiteMoved($notifDataForAgent));
+                            }
+                        }
+                    } else {
+                        if ( $receiver_profiles[$x] == 1 || $receiver_profiles[$x] == 2 || $receiver_profiles[$x] == 3 || $receiver_profiles[$x] == 4 || $receiver_profiles[$x] == 5 ) {
+                            $userSchema = User::select('users.*', 'user_details.vendor_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+    
+                                    ->where("user_programs.program_id", $program_id)
+    
+                                    ->where("profile_id", $receiver_profiles[$x])
+                                    ->where('user_details.vendor_id', $site_data->site_vendor_id)
+                                    ->get();
+                        } else {
+                            $userSchema = User::select('users.*', 'user_details.vendor_id')
+                                    ->join('user_programs', 'user_programs.user_id', 'users.id')
+                                    ->join('user_details', 'user_details.user_id', 'users.id')
+    
+                                    ->where("user_programs.program_id", $program_id)
+    
+                                    ->where("profile_id", $receiver_profiles[$x])
+                                    ->where('user_programs.program_id', $program_id)
+                                    ->get();
+                        }
+    
+                        foreach($userSchema as $user){
+                            $notifData = [
+                                'user_id' => $user->id,
                                 'program_id' => $program_id,
                                 'site_count' => $site_count,
                                 'action' => $action,
@@ -925,56 +971,69 @@ class GlobeController extends Controller
                                 'body' => $body,
                                 'goUrl' => url('/'),
                             ];
-                            Notification::send($user_agent, new SiteMoved($notifDataForAgent));
+                            
+                            Notification::send($user, new SiteMoved($notifData));
                         }
                     }
-                } else {
-                    if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
-                        $userSchema = User::select('users.*', 'user_details.vendor_id')
-                                ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->join('user_details', 'user_details.user_id', 'users.id')
-
-                                ->where("user_programs.program_id", $program_id)
-
-                                ->whereIn("profile_id", $receiver_profiles)
-                                ->where('user_details.vendor_id', $site_data->site_vendor_id)
-                                ->get();
-                    } else {
-                        $userSchema = User::select('users.*', 'user_details.vendor_id')
-                                ->join('user_programs', 'user_programs.user_id', 'users.id')
-                                ->join('user_details', 'user_details.user_id', 'users.id')
-
-                                ->where("user_programs.program_id", $program_id)
-
-                                ->whereIn("profile_id", $receiver_profiles)
-                                ->where('user_programs.program_id', $program_id)
-                                ->get();
-                    }
-                    // $userSchema = User::select('users.*', 'user_details.vendor_id')
-                    //             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                    //             ->join('user_details', 'user_details.user_id', 'users.id')
-                    //             ->whereIn("profile_id", $receiver_profiles);
-
-                    //             if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
-                    //                 $userSchema->where('user_details.vendor_id', $site_data->site_vendor_id);
-                    //             }
-                    //             $userSchema->where('user_programs.program_id', $program_id)
-                    //             ->get();
-                    foreach($userSchema as $user){
-                        $notifData = [
-                            'user_id' => $user->id,
-                            'program_id' => $program_id,
-                            'site_count' => $site_count,
-                            'action' => $action,
-                            'activity_id' => $activity_id,
-                            'title' => $title,	
-                            'body' => $body,
-                            'goUrl' => url('/'),
-                        ];
-                        
-                        Notification::send($user, new SiteMoved($notifData));
-                    }
                 }
+
+                // if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
+
+                //     if ( !is_null($site_users) ) {
+                //         $user_agent = User::find($site_users->agent_id);
+                //         if ( !is_null($user_agent) ) {
+                            
+                //             $notifDataForAgent = [
+                //                 'user_id' => $site_users->agent_id,
+                //                 'program_id' => $program_id,
+                //                 'site_count' => $site_count,
+                //                 'action' => $action,
+                //                 'activity_id' => $activity_id,
+                //                 'title' => $title,	
+                //                 'body' => $body,
+                //                 'goUrl' => url('/'),
+                //             ];
+                //             Notification::send($user_agent, new SiteMoved($notifDataForAgent));
+                //         }
+                //     }
+                // } else {
+                //     if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
+                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
+                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
+                //                 ->join('user_details', 'user_details.user_id', 'users.id')
+
+                //                 ->where("user_programs.program_id", $program_id)
+
+                //                 ->whereIn("profile_id", $receiver_profiles)
+                //                 ->where('user_details.vendor_id', $site_data->site_vendor_id)
+                //                 ->get();
+                //     } else {
+                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
+                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
+                //                 ->join('user_details', 'user_details.user_id', 'users.id')
+
+                //                 ->where("user_programs.program_id", $program_id)
+
+                //                 ->whereIn("profile_id", $receiver_profiles)
+                //                 ->where('user_programs.program_id', $program_id)
+                //                 ->get();
+                //     }
+
+                //     foreach($userSchema as $user){
+                //         $notifData = [
+                //             'user_id' => $user->id,
+                //             'program_id' => $program_id,
+                //             'site_count' => $site_count,
+                //             'action' => $action,
+                //             'activity_id' => $activity_id,
+                //             'title' => $title,	
+                //             'body' => $body,
+                //             'goUrl' => url('/'),
+                //         ];
+                        
+                //         Notification::send($user, new SiteMoved($notifData));
+                //     }
+                // }
             // }
 
             // Loop sam_id per agent
