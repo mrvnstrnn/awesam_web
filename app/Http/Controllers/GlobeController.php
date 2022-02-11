@@ -6853,7 +6853,10 @@ class GlobeController extends Controller
                                 ->addColumn('is_temp', function($row) {
                                     $json = json_decode($row->value, true);
 
-                                    return $json['is_temp'];
+                                    if ( isset($json['is_temp']) ) {
+                                        return $json['is_temp'];
+                                    }
+
                                 });
             return $dt->make(true);
         } catch (\Throwable $th) {
