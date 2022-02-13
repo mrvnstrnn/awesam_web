@@ -33,6 +33,13 @@ $(".send_message").on("click", function (e){
                             $(".no_message").remove();
                         }
 
+                        var image = '';
+                        if ( resp.chat.image ) {
+                            image = '<img class="border border-dark" src="images/'+resp.chat.image+'" alt="">';
+                        } else {
+                            image = '<img class="border border-dark" src="images/no-image.jpg" alt="">';
+                        }
+
                         $(".chat-content.chat_content"+resp.chat.sam_id).append(
                             '<div class="chat_user_id{{ $chat->user_id }}">' +
                                 '<div class="chat-box-wrapper '+class_name+' ">' +
@@ -50,7 +57,7 @@ $(".send_message").on("click", function (e){
                                         '<div class="avatar-icon-wrapper ml-1">' +
                                             '<div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>' +
                                             '<div class="avatar-icon avatar-icon-lg rounded">' +
-                                                '<img src="/images/avatars/2.jpg" alt="">' +
+                                                image +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +

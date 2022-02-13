@@ -38,43 +38,61 @@
 </style>
 
     @php
-        $site = \DB::table('view_site')
-                ->select('site_category', 'program_endorsement_date', 'activity_id')
-                ->where('sam_id', $sam_id)
-                ->first();
 
-        if (!is_null($site)) {
-            $activities = \DB::select('call GET_FORECAST(?,?,?)',array($sam_id, $site->program_endorsement_date, $site->site_category));
-        }
+    // dd($site);
+        $activities = \DB::table("milestone_tracking_3")
+            ->select('sam_id', 'site_name', 'site_category', 'stage_id', 'stage_name', 'activity_id', 'activity_name', 'activity_type', 'activity_duration_days', 'activity_complete', 'profile_id', 'start_date', 'end_date')
+            ->distinct()
+            ->where('sam_id', "=", $sam_id)
+            // ->orderBy('activity_id', 'asc')
+            ->get();
+            dd($activities);
 
+        // $activities = \DB::connection('mysql2')
+        //                     ->table("timeline")
+        //                     ->join('stage_activities', 'stage_activities.activity_id', 'timeline.activity_id')
+        //                     ->where('timeline.sam_id', $sam_id)
+        //                     ->get();
+        // dd($activities);
     @endphp
         <div id="accordion" class="accordion-wrapper mb-3">
 
             <div class="card">
+                {{-- <div id="headingOne" class="card-header">
+                    <button type="button" data-toggle="collapse" data-target="#collapse-{{ $site->sam_id }}" aria-expanded="true" aria-controls="collapseOne" class="text-left m-0 p-0 btn btn-link text-dark btn-block">
+                        <div class="row">
+                            <i class="ml-3 mt-1 header-icon lnr-location icon-gradient bg-mixed-hopes"></i>
+                            <div class="">
+                                <h6 class="m-0 p-0">{{ $site->site_name }}</h6>
+                                <small>{{ $site->sam_id }} {{ $site->site_category }}</small>
+                            </div>   
+                        </div>
+                    </button>
+                </div> --}}
                 <ul class="todo-list-wrapper list-group list-group-flush">
 
                     @foreach($activities as $activity)
 
                         @php
-                            // if($activity->activity_complete == 'true'){
-                            //     $activity_color = 'success';
-                            //     $activity_badge = "done";
-                            // } 
-                            if ( $activity->activity_id < $site->activity_id ) {
+                            if($activity->activity_complete == 'true'){
                                 $activity_color = 'success';
                                 $activity_badge = "done";
-                            } else {
+                            } 
+                            else {
 
                                 if($activity->end_date <=  Carbon::today()){
                                     $activity_color = 'danger';
                                     $activity_badge = "delayed";
-                                } else {
+                                } 
+                                else {
+
                                     if($activity->start_date >  Carbon::today()){
 
                                         $activity_color = 'secondary';
                                         $activity_badge = "Upcoming";
 
-                                    } else {
+                                    } 
+                                    else {
 
                                         $activity_color = 'warning';
                                         $activity_badge = "On Schedule";
@@ -84,9 +102,7 @@
                             }
                         @endphp
 
-                        {{-- <li class="list-group-item activity_list_item" data-sam_id="{{ $sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
-                             --}}
-                        <li class="list-group-item activity_list_item" data-sam_id="{{ $sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}">
+                        <li class="list-group-item activity_list_item" data-sam_id="{{ $sam_id }}" data-activity_id="{{ $activity->activity_id }}" data-activity_complete="{{ $activity->activity_complete }}" data-start_date="{{ $activity->start_date }}" data-end_date="{{ $activity->end_date }}" data-profile_id="{{ $activity->profile_id }}">
                             <div class="todo-indicator bg-{{ $activity_color }}"></div>
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
@@ -98,23 +114,21 @@
                                             {{ $activity->activity_name }}
                                             <div class="badge badge-{{ $activity_color }} ml-2">{{ $activity_badge }}</div>
                                             {{-- @if ($activity->activity_complete == 'false')
-                                            <div class="badge badge-primary ml-0">Active</div>
+                                            <div class="badge badge-primary ml-0">Active</div>                                                                
                                             @endif --}}
                                         </div>
                                         <div class="widget-subheading">
                                             <i>{{ $activity->start_date }} to {{ $activity->end_date }}</i>
+
                                         </div>
                                     </div>
                                     <div class="widget-content-right">
-                                        {{-- <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $sam_id }}' data-site='{{ $site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'> --}}
-                                        <button class="border-0 btn btn-outline-light">
-                                            {{-- @if($activity->activity_complete == 'true') --}}
-
-                                                @if ( $activity->activity_id < $site->activity_id ) 
+                                        <button class="border-0 btn btn-outline-light show_activity_modal" data-sam_id='{{ $sam_id }}' data-site='{{ $site_name}}' data-activity='{{ $activity->activity_name}}' data-main_activity='{{ $activity->activity_name}}' data-activity_id='{{ $activity->activity_id}}'>
+                                            @if($activity->activity_complete == 'true')
                                                 <i class="fa fa-check fa-lg"></i>
-                                                @elseif( $activity->activity_id == $site->activity_id )
+                                            @elseif($activity->activity_complete == 'false')
                                                 <i class="fa fa-bolt fa-lg"></i>
-                                                @endif
+                                            @endif
                                         </button>
                                     </div>
                                 </div>

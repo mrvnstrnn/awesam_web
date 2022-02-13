@@ -11,5 +11,5 @@ class Chat extends Model
     // protected $connection = 'mysql2';
     public $timestamps = false;
     protected $table = 'chat';
-    protected $fillable = ['user_id', 'sam_id', 'comment'];
+    protected $fillable = ['user_id', 'sam_id', 'comment', 'created_at'];
 }

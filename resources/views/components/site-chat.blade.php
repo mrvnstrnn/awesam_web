@@ -2,8 +2,9 @@
     <div class="chat_div p-2">
         <div class="chat-wrapper p-1">
             @php
-                $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.created_at')
+                $chats = \App\Models\Chat::select('users.name', 'chat.user_id', 'profiles.profile', 'chat.comment', 'chat.created_at', 'user_details.image')
                                             ->join('users', 'users.id', 'chat.user_id')
+                                            ->join('user_details', 'user_details.user_id', 'users.id')
                                             ->join('profiles', 'profiles.id', 'users.profile_id')
                                             ->where('chat.sam_id', $site[0]->sam_id)
                                             ->orderBy("chat.created_at", "asc")
@@ -30,7 +31,11 @@
                                     <div class="avatar-icon-wrapper ml-1">
                                         <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>
                                         <div class="avatar-icon avatar-icon-lg rounded">
-                                            <img src="/images/avatars/2.jpg" alt="">
+                                            @if ( !is_null($chat->image) )
+                                                <img class="border border-dark" src="{{ asset('files/'.$chat->image) }}" alt="">
+                                            @else
+                                                <img class="border border-dark" src="images/no-image.jpg" alt="">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -43,7 +48,11 @@
                                     <div class="avatar-icon-wrapper mr-1">
                                         <div class="badge badge-bottom btn-shine badge-success badge-dot badge-dot-lg"></div>
                                         <div class="avatar-icon avatar-icon-lg rounded">
-                                            <img src="/images/avatars/2.jpg" alt="">
+                                            @if ( !is_null($chat->image) )
+                                                <img class="border border-dark" src="{{ asset('files/'.$chat->image) }}" alt="">
+                                            @else
+                                                <img class="border border-dark" src="images/no-image.jpg" alt="">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

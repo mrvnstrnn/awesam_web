@@ -5585,7 +5585,7 @@ class GlobeController extends Controller
                 return \View::make($what_modal)
                         ->with([
                             'sam_id' => $request->get('sam_id'),
-                            'site_name' => "test",
+                            // 'site_name' => "test",
                         ])
                         ->render();
 
@@ -6416,10 +6416,12 @@ class GlobeController extends Controller
                 'comment' => $request->input('comment'),
             ]);
 
-            $chat_data = Chat::join('users', 'users.id', 'chat.user_id')
-                            ->join('profiles', 'profiles.id', 'users.profile_id')
-                            ->where('chat.id', $chat->id)
-                            ->first();
+            $chat_data = Chat::select("chat.user_id", "chat.sam_id", "chat.comment", "profiles.profile", "profiles.profile", "users.name", "user_details.image", "chat.created_at")
+                    ->join('users', 'users.id', 'chat.user_id')
+                    ->join('user_details', 'user_details.user_id', 'users.id')
+                    ->join('profiles', 'profiles.id', 'users.profile_id')
+                    ->where('chat.id', $chat->id)
+                    ->first();
 
             // $chat_data = Chat::select('users.name', 'profiles.profile', 'profiles.profile', 'chat.comment', 'chat.created_at', 'user_details.image')
             //                 ->join('users', 'users.id', 'chat.user_id')
