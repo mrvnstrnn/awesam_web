@@ -5082,6 +5082,12 @@ class GlobeController extends Controller
                             $sites->get();
         }
 
+        elseif($activity_type == 'my_approvals'){
+
+            $sites = \DB::select('call GET_MY_APPROVALS(?)', array(\Auth::id()));
+
+        }
+
         else {
 
             $sites = \DB::table("milestone_tracking_2")
