@@ -816,6 +816,8 @@ class GlobeController extends Controller
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
                                                 ->first();
+                    } else {
+                        $get_program_stages = NULL;
                     }
 
                     $array = array(
@@ -7117,11 +7119,13 @@ class GlobeController extends Controller
                                                 ->get();
 
                                                 
-            $user_detail_agent = UserDetail::join('users', 'users.id', 'user_details.user_id')->where('user_details.user_id', $request->get('user_id'))->first();
+            $user_detail_agent = UserDetail::select('users.firstname', 'users.lastname', 'users.id')
+                                    ->join('users', 'users.id', 'user_details.user_id')
+                                    ->where('user_details.user_id', $request->get('user_id'))->first();
 
             $user_data = UserProgram::select('program_id')->where('user_id', $request->get('user_id'))->get();
 
-            $supervisor = User::select('users.*')
+            $supervisor = User::select('users.name', 'users.id')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->where('vendor_id', $user_detail->vendor_id)
                                     ->where('user_details.user_id', '!=', $request->get('user_id'))

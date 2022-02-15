@@ -1212,6 +1212,8 @@ class RenewalController extends Controller
                                                 ->where('stage_id', $get_stage_activity->stage_id)
                                                 ->where('program_id', $program_id)
                                                 ->first();
+                    } else {
+                        $get_program_stages = NULL;
                     }
 
                     $array = array(
