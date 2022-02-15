@@ -62,7 +62,7 @@ $(document).ready(() => {
                     // url: "/vendor-agents/"+data_id,
                     url: "/vendor-agents",
                     data : {
-                        data_id : data_id
+                        user_id : data_id
                     },
                     type: 'POST',
                     headers: {

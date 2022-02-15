@@ -281,7 +281,11 @@ $(document).ready(() => {
                     $('.agent_info_form #lastname').val(resp.user_detail.lastname);
 
                     resp.user_data.forEach(element => {
-                        $(".agent_info_form input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                        $(".agent_info_form .user_data input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);
+                    });
+
+                    resp.user_areas_data.forEach(element => {
+                        $(".agent_info_form .region_data input[type=checkbox][value='" + element.region + "']").prop('checked', true);
                     });
                     
                 } else {

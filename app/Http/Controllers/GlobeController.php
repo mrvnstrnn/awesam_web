@@ -1443,7 +1443,6 @@ class GlobeController extends Controller
     {
 
         try {
-
             $get_user_program_active = \Auth::user()->get_user_program_active()->program_id;
 
 
@@ -7125,6 +7124,8 @@ class GlobeController extends Controller
 
             $user_data = UserProgram::select('program_id')->where('user_id', $request->get('user_id'))->get();
 
+            $user_areas_data = UsersArea::select('region')->where('user_id', $request->get('user_id'))->get();
+
             $supervisor = User::select('users.name', 'users.id')
                                     ->join('user_details', 'user_details.user_id', 'users.id')
                                     ->where('vendor_id', $user_detail->vendor_id)
@@ -7132,7 +7133,7 @@ class GlobeController extends Controller
                                     ->where('designation', 3)
                                     ->get();
 
-            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor, 'user_detail' => $user_detail_agent ]);
+            return response()->json(['error' => false, 'user_data' => $user_data, 'vendor_program' => $vendor_program, 'supervisor' => $supervisor, 'user_detail' => $user_detail_agent, 'user_areas_data' => $user_areas_data ]);
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
@@ -7156,24 +7157,40 @@ class GlobeController extends Controller
             ));
 
             if ($validate->passes()) {
-
-                UserProgram::where('user_id', $request->input('user_id'))
-                                                    ->delete();
+            //     $asd = UsersArea::where('user_id', $request->input('user_id'))->get();
+            // return response()->json(['error' => true, 'message' => $asd]);
+            UserProgram::where('user_id', $request->input('user_id'))
+                                                ->delete();
 
                 for ($i=0; $i < count($request->input('program')); $i++) {
-                    $active = $i == 0 ? 1 : 0; 
-                    UserProgram::create([
-                        'user_id' => $request->input('user_id'),
-                        'program_id' => $request->input('program')[$i],
-                        'active' => $active,
-                    ]);
+                    $active = $i == 0 ? 1 : 0;
+                    $user_programs = new UserProgram();
+                    $user_programs->user_id = $request->input('user_id');
+                    $user_programs->program_id = $request->input('program')[$i];
+                    $user_programs->active = $active;
+                    $user_programs->save();
+
+                    // UserProgram::create([
+                    //     'user_id' => $request->input('user_id'),
+                    //     'program_id' => $request->input('program')[$i],
+                    //     'active' => $active,
+                    // ]);
                 }
 
+                UsersArea::where('user_id', $request->input('user_id'))
+                                                    ->delete();
+
                 for ($i=0; $i < count($request->input('region')); $i++) {
-                    UsersArea::create([
-                        'user_id' => $request->input('user_id'),
-                        'region' => $request->input('region')[$i],
-                    ]);
+
+                    $user_programs = new UsersArea();
+                    $user_programs->user_id = $request->input('user_id');
+                    $user_programs->region = $request->input('region')[$i];
+                    $user_programs->save();
+
+                    // UsersArea::create([
+                    //     'user_id' => $request->input('user_id'),
+                    //     'region' => $request->input('region')[$i],
+                    // ]);
                 }
 
                 User::where('id', $request->input('user_id'))

@@ -87,101 +87,106 @@
                 <div class="modal-body" style="overflow-y: auto !important; max-height: calc(100vh - 210px);">
 
                     <form class="agent_info_form">
-                        <div class="form-row">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="firstname">Firstname</label>
+                        <div class="user_data">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="firstname">Firstname</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    <input type="text" class="form-control" name="firstname" id="firstname" readonly>
+                                </div>
                             </div>
-                            <div class="form-group col-md-8 col-12">
-                                <input type="text" class="form-control" name="firstname" id="firstname" readonly>
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="lastname">Lastname</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    <input type="text" class="form-control" name="lastname" id="lastname" readonly>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="lastname">Lastname</label>
+    
+                            <div class="form-row profile_div">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="profile">Profile</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    <select name="profile" id="profile" class="form-control">
+                                        <option value="2">Agent</option>
+                                        <option value="3">Supervisor</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group col-md-8 col-12">
-                                <input type="text" class="form-control" name="lastname" id="lastname" readonly>
+    
+                            <div class="form-row supervisor_div">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="supervisor">Supervisor</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    <select name="supervisor" id="supervisor" class="form-control"></select>
+                                    <small class="text-danger is_id-error"></small>
+                                </div>
+                            </div>
+    
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="">Program</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    <div class="col-12 vendor_program_div"></div>
+                                    <small class="text-danger program-error"></small>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-row profile_div">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="profile">Profile</label>
-                            </div>
-                            <div class="form-group col-md-8 col-12">
-                                <select name="profile" id="profile" class="form-control">
-                                    <option value="2">Agent</option>
-                                    <option value="3">Supervisor</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row supervisor_div">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="supervisor">Supervisor</label>
-                            </div>
-                            <div class="form-group col-md-8 col-12">
-                                <select name="supervisor" id="supervisor" class="form-control"></select>
-                                <small class="text-danger is_id-error"></small>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="">Program</label>
-                            </div>
-                            <div class="form-group col-md-8 col-12">
-                                <div class="col-12 vendor_program_div"></div>
-                                <small class="text-danger program-error"></small>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-4 col-12">
-                                <label for="">Region</label>
-                            </div>
-                            <div class="form-group col-md-8 col-12">
-                                @php
-                                    $user_detail = \DB::table('user_details')
-                                                    ->select('vendor_id')
-                                                    ->where('user_id', \Auth::user()->id)
-                                                    ->first();
-                                                        
-                                    $user_programs = \DB::table('user_programs')
-                                                        ->select('program_id')
+                        <div class="region_data">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-12">
+                                    <label for="">Region</label>
+                                </div>
+                                <div class="form-group col-md-8 col-12">
+                                    @php
+                                        $user_detail = \DB::table('user_details')
+                                                        ->select('vendor_id')
                                                         ->where('user_id', \Auth::user()->id)
+                                                        ->first();
+                                                            
+                                        $user_programs = \DB::table('user_programs')
+                                                            ->select('program_id')
+                                                            ->where('user_id', \Auth::user()->id)
+                                                            ->get()
+                                                            ->pluck('program_id');
+    
+                                        if( count($user_programs) > 0){
+                                            $sites = \DB::table('view_site')
+                                                        ->select('sam_region_id')
+                                                        ->where('vendor_id', $user_detail->vendor_id)
+                                                        ->whereIn('program_id', $user_programs)
                                                         ->get()
-                                                        ->pluck('program_id');
-
-                                    if( count($user_programs) > 0){
-                                        $sites = \DB::table('view_site')
-                                                    ->select('sam_region_id')
-                                                    ->where('vendor_id', $user_detail->vendor_id)
-                                                    ->whereIn('program_id', $user_programs)
-                                                    ->get()
-                                                    ->groupBy('sam_region_id');
-
-                                        if( !is_null($sites) ){
-                                            $location_sam_regions = \DB::table('location_sam_regions')
-                                                        ->whereIn('sam_region_id', $sites->keys())
-                                                        ->get();
+                                                        ->groupBy('sam_region_id');
+    
+                                            if( !is_null($sites) ){
+                                                $location_sam_regions = \DB::table('location_sam_regions')
+                                                            ->whereIn('sam_region_id', $sites->keys())
+                                                            ->get();
+                                            } else {
+                                                echo '<p>No region found.</p>';
+                                            }
                                         } else {
-                                            echo '<p>No region found.</p>';
+                                            echo '<p>No user programs available.</p>';
                                         }
-                                    } else {
-                                        echo '<p>No user programs available.</p>';
-                                    }
-                                @endphp
-
-                                @foreach ($location_sam_regions as $location_sam_region)
-                                    <div class="col-4">
-                                        <input name="region[]" class="regionInput" id="region{{ $location_sam_region->sam_region_id }}" type="checkbox" class="" value="{{ $location_sam_region->sam_region_id }}" >
-                                        <label style="margin-left: 20px;" for="region{{ $location_sam_region->sam_region_id }}">{{ $location_sam_region->sam_region_name }}</label>
-                                        </div>
-                                @endforeach
-                                <small class="text-danger region-error"></small>
+                                    @endphp
+    
+                                    @foreach ($location_sam_regions as $location_sam_region)
+                                        <div class="col-4">
+                                            <input name="region[]" class="regionInput" id="region{{ $location_sam_region->sam_region_id }}" type="checkbox" class="" value="{{ $location_sam_region->sam_region_id }}" >
+                                            <label style="margin-left: 20px;" for="region{{ $location_sam_region->sam_region_id }}">{{ $location_sam_region->sam_region_name }}</label>
+                                            </div>
+                                    @endforeach
+                                    <small class="text-danger region-error"></small>
+                                </div>
                             </div>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">

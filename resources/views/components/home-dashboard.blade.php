@@ -119,7 +119,7 @@
         
         @else
 
-            {{-- @if( \Auth::user()->getUserDetail()->first()->mode == "globe")
+            @if( \Auth::user()->getUserDetail()->first()->mode == "globe")
                 @php
                     $user_program = $program->program_id;
                     if ( $user_program == 3 ) {
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                 @endif
-            @endif --}}
+            @endif
 
             @if($program->program_id == 6)
                 <x-towerco-dashboard />
