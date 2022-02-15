@@ -361,6 +361,24 @@ class DataController extends Controller
 
     // ************ GET SITE DATA VIA AJAX ************** //
 
+    public function get_milestone_per_program(Request $request)
+    {
+        try {
+            $user_id = \Auth::id();
+            $category = $request->get('category');
+            // $category = "none";
+            $start_date = $request->get('start_date');
+            $end_date = $request->get('end_date');
+
+            $milestone_count = \DB::select('call GET_SITE_MILESTONE_COUNT(?,?,?,?)',array($user_id, $category, $start_date, $end_date));
+
+            return response()->json(['error' => false, 'message' => $milestone_count ]);
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
 
 
 }
