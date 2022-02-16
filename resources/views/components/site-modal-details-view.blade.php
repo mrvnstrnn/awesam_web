@@ -42,11 +42,11 @@
                         <span>Site Chat</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a role="tab" class="nav-link" data-id="tab-content-site_approval id="tab-site_approval" data-toggle="tab" href="#tab-content-site_approval">
                         <span>Site Approvals</span>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </div>
     </div>
@@ -109,11 +109,11 @@
                     </div>
                 </div>
             </div>         --}}
-            <x-site-chat  :site="$site" />
+            <x-site-chat :site="$site" />
         </div>
 
-        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
-            <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
+        <div class="tab-pane tabs-animation fade" id="tab-content-site_approval" role="tabpanel">
+            {{-- <div class="loader-wrapper w-100 d-flex justify-content-center align-items-center">
                 <div class="loader">
                     <div class="ball-scale-multiple">
                         <div></div>
@@ -121,9 +121,9 @@
                         <div></div>
                     </div>
                 </div>
-            </div>        
+            </div>         --}}
             <x-site-approval-details :site="$site" />
-        </div> --}}
+        </div>
     </div>
 </div>
 
@@ -144,26 +144,28 @@
                 div_id = "#tab-content-files";
             }
 
-            $.ajax({
-                url: "/modal-view-site-component",
-                method: "POST",
-                data: {
-                    sam_id : sam_id,
-                    component : id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (resp){
-                    if ( id != "tab-content-site_chat" ) {
-                        $(div_id).html("");   
-                        $(div_id).html(resp);
+            if ( id == "site-status" || id == "tab-content-activities" || id == "tab-content-files" ) {
+                $.ajax({
+                    url: "/modal-view-site-component",
+                    method: "POST",
+                    data: {
+                        sam_id : sam_id,
+                        component : id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (resp){
+                        if ( id != "tab-content-site_chat" ) {
+                            $(div_id).html("");   
+                            $(div_id).html(resp);
+                        }
+                    },
+                    error: function (resp){
+                        toastr.error(resp.message, "Error");
                     }
-                },
-                error: function (resp){
-                    toastr.error(resp.message, "Error");
-                }
-            });
+                });
+            }
         });
 
         // $.ajax({

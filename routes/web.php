@@ -278,6 +278,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/site-milestones/{program_id}/{profile_id}/{activity_type}', [GlobeController::class, 'get_site_milestones'])->name('get_site_milestones.list');
 
     Route::post('/get-milestone-per-program', [DataController::class, 'get_milestone_per_program']);
+    Route::post('/site-approvals-per-site', [DataController::class, 'site_approvals_per_site']);
 
     
 

@@ -58,19 +58,19 @@
         //     ->get();
     }
 
-    if ( $programid == 3 ) {
-        $categories_array = ["none"];
-    } else if ( $programid == 4 ) {
-        $categories_array = ["BAU", "RETROFIT", "REFARM"];
-    } else {
-        $categories_array = ["none"];
-    }
+    // if ( $programid == 3 ) {
+    //     $categories_array = ["none"];
+    // } else if ( $programid == 4 ) {
+    //     $categories_array = ["BAU", "RETROFIT", "REFARM"];
+    // } else {
+    //     $categories_array = ["none"];
+    // }
 
     $i = 0;
 
 @endphp
 
-@if ( $programid == 3 || $programid == 4)
+{{-- @if ( $programid == 3 || $programid == 4) --}}
     <div class="row">
         <div class="col-12">
             <h3 class="site_milestone_title">
@@ -84,7 +84,7 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+            {{-- <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
                 @for ($j = 0; $j < count($categories_array); $j++)
                     <li class="nav-item">
                         @if ($j == 0)
@@ -104,9 +104,9 @@
                         @endif
                     </li>
                 @endfor
-            </ul>
+            </ul> --}}
 
-            <div class="tab-content">
+            {{-- <div class="tab-content">
                 @for ($j = 0; $j < count($categories_array); $j++)
 
                     <div class="tab-pane tabs-animation fade {{ $j == 0 ? "active show" : "" }}" id="tab-content-{{ $programid . "-" . $j }}" role="tabpanel">
@@ -163,7 +163,58 @@
                         </div>
                     </div>
                 @endfor
-            </div>  
+            </div>   --}}
+
+            <div class="row">
+                <div class="col-12">
+                    <form class="form_range_date">
+                        {{-- <input type="hidden" name="category" id="category" value="{{ $categories_array[$j] }}"> --}}
+                        <div class="form-row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="start_date">Start Date</label>
+                                    <input type="text" name="start_date" id="start_date" class="form-control">
+                                    <small class="text-danger start_date-error"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="end_date">End Date</label>
+                                    <input type="text" name="end_date" id="end_date" class="form-control">
+                                    <small class="text-danger end_date-error"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-sm btn-shadow btn-primary filter_btn mr-1" data-value="filter_me">Filter</button>
+                                <button type="button" class="btn btn-sm btn-shadow btn-danger filter_btn" data-value="clear_me">Clear Filter</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="main-card mb-3 card">            
+                <div class="no-gutters row border">
+                    @foreach ($milestones as $milestone)
+                        @php
+                            $i ++;
+                        @endphp
+                        <div class="col-sm-3 border">
+                            <div class="milestone-bg bg_img_{{ $i }}"></div>
+    
+                            <div class="widget-chart widget-chart-hover milestone_sites">
+                                <div class="widget-numbers" id="stage_counter_{{ strtolower(str_replace(" ", "", $milestone->stage_name)) }}">0</div>
+                                <div class="widget-subheading" id="stage_counter_label_{{ $milestone->stage_id }}">{{ $milestone->stage_name}}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
 
             <div class="text-center">
                 <a href="/program-sites" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-md">
@@ -177,7 +228,7 @@
         </div>
 
     </div>
-@endif
+{{-- @endif --}}
 
 @push("js_scripts")
 
@@ -218,15 +269,14 @@ $(document).ready(() => {
 
     var ajax_start_date = "{{ $startOfYear }}";
     var ajax_end_date = "{{ $now }}";
-    var ajax_category = "{{ $categories_array[0] }}";
 
     $.ajax({
         url: "/get-milestone-per-program",
         method: "POST",
         data: {
             start_date : ajax_start_date,
-            end_date : ajax_end_date,
-            category : ajax_category
+            end_date : ajax_end_date
+            // category : ajax_category
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -234,7 +284,7 @@ $(document).ready(() => {
         success: function (resp) {
             if (!resp.error) {
                 $.each(resp.message, function(index, data) {
-                    $( "#stage_counter_" + ajax_category + "_" + data.stage_name.toLowerCase().split(' ').join('') ).text(data.count);
+                    $( "#stage_counter_" + data.stage_name.toLowerCase().split(' ').join('') ).text(data.count);
                 });
             } else {
                 Swal.fire(
@@ -256,18 +306,17 @@ $(document).ready(() => {
     $(".filter_btn").on("click", function () {
 
         $(".milestone_sites .widget-numbers").text("0");
-        var count = $(this).attr("data-count");
+        // var count = $(this).attr("data-count");
 
         if ( $(this).attr("data-value") == "filter_me" ) {
-            var category = $(".form_range_date_"+count+" #category").val();
-            var start_date = $(".form_range_date_"+count+" #start_date").val();
-            var end_date = $(".form_range_date_"+count+" #end_date").val();
+            // var category = $(".form_range_date_ #category").val();
+            var start_date = $(".form_range_date #start_date").val();
+            var end_date = $(".form_range_date #end_date").val();
 
             $(".site_milestone_title b").text(start_date + " - " + end_date);
         } else {
             var start_date = "{{ $startOfYear }}";
             var end_date = "{{ $now }}";
-            var category = "{{ $categories_array[0] }}";
             
             $("#start_date").val("");
             $("#end_date").val("");
@@ -281,7 +330,7 @@ $(document).ready(() => {
             data: {
                 start_date : start_date,
                 end_date : end_date,
-                category : category,
+                // category : category,
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -289,7 +338,8 @@ $(document).ready(() => {
             success: function (resp) {
                 if (!resp.error) {
                     $.each(resp.message, function(index, data) {
-                        $("#stage_counter_" + category + "_" + data.stage_name.toLowerCase().split(' ').join('')).text(data.count);
+                        // $("#stage_counter_" + category + "_" + data.stage_name.toLowerCase().split(' ').join('')).text(data.count);
+                        $("#stage_counter_" + data.stage_name.toLowerCase().split(' ').join('')).text(data.count);
                     });
                 } else {
                     Swal.fire(

@@ -7,8 +7,6 @@
         <div class="col-12 link_url">
             @php
                 $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
-
-                
             @endphp
 
             {{-- @if ( !is_null($link_data) )
