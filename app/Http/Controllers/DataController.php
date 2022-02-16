@@ -400,7 +400,7 @@ class DataController extends Controller
             if($request->has('sam_id')) {
 
                 $get_all_files = SubActivityValue::where('sam_id', $request->get('sam_id'))
-                                    ->where('status', 'approved')
+                                    ->whereIn('status', ['approved', 'prev - approved'])
                                     ->where('type', 'doc_upload')
                                     ->get();
 
