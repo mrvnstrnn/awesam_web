@@ -7,6 +7,7 @@ use DataTables;
 use Log;
 use Validator;
 use Carbon;
+use ZipArchive;
 
 use App\Models\SubActivityValue;
 use App\Models\UserDetail;
@@ -391,6 +392,50 @@ class DataController extends Controller
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);
         }
+    }
+
+    public function zipDownload(Request $request)
+    {
+        try {
+            if($request->has('sam_id')) {
+
+                $get_all_files = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                    ->where('status', 'approved')
+                                    ->where('type', 'doc_upload')
+                                    ->get();
+
+                $files_list = collect();
+
+                foreach ($get_all_files as $get_all_file) {
+                    $file_encode = json_decode($get_all_file->value);
+
+                    $files_list->push($file_encode->file);
+                }
+                
+                $zip = new ZipArchive;
+                
+                $fileName = time().$request->get('sam_id') . ".zip";
+                if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
+                    $files = \File::files(public_path('files'));
+
+                    $fileNames = [];
+
+                    for ($i=0; $i < count($files_list->all()); $i++) { 
+                        $relativeName = basename($files_list->all()[$i]);
+
+                        array_push($fileNames, $relativeName);
+                        // $zip->addFile($relativeName);
+                        $zip->addFile($files[0], $relativeName);
+                    }
+                    
+                    $zip->close();
+                }
+                return response()->download(public_path($fileName));
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
     }
 
 

@@ -1,4 +1,9 @@
 <div class="card-body">
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ route('zip-download', ['sam_id'=> $sam_id]) }}" target="_blank" class="btn btn-primary float-right btn-shadown btn-sm"><i class="fas fa-file-download"></i> Download as Zip</a>
+        </div>
+    </div>
     <div class="row file_previews d-none">
         <div class="col-12 mb-3">
             <button id="btn_back_to_file_list_file_2" class="mt-0 btn btn-secondary" type="button">Back to files</button>

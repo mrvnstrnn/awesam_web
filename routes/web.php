@@ -285,6 +285,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/yajra-test', [GlobeController::class, 'YajraTest'])->name('YajraTest');
 
 
+    Route::get('/zip-download', [DataController::class, 'zipDownload'])->name('zip-download');
 
 
 
