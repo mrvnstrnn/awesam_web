@@ -350,7 +350,7 @@
                                                                 ->where('user_id', \Auth::id())
                                                                 ->get();
                                     @endphp
-                                    <table class="table table-bordered table-hover table-striped">
+                                    <table class="table table-bordered table-hover table-striped work_plan_upcoming_table">
                                         <tbody>                                            
                                             @for ($i = 7; $i < 14; $i++)
                                             @php

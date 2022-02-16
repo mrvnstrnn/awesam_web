@@ -9481,6 +9481,8 @@ class GlobeController extends Controller
                 $table = 'program_renewal';
             } else if ($request->get('program_id') == 2) {
                 $table = 'program_ftth';
+            } else if ($request->get('program_id') == 1) {
+                $table = 'program_newsites';
             }
 
             $form_fields = \DB::table($table)
