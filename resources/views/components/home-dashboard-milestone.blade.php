@@ -98,7 +98,7 @@
                         @endif
                         
                         @if($categories_array[$j] != "none" )
-                            <a role="tab" class="nav-link {{ $active }}" id="tab-{{ $programid  }}" data-toggle="tab" href="#tab-content-{{ $programid }}">
+                            <a role="tab" class="nav-link {{ $active }}" id="tab-{{ $programid }}" data-toggle="tab" href="#tab-content-{{ $programid . "-" . $j }}">
                                 <span>{{ $categories_array[$j] }}</span>
                             </a>
                         @endif
@@ -109,40 +109,41 @@
             <div class="tab-content">
                 @for ($j = 0; $j < count($categories_array); $j++)
 
-                    <div class="row">
-                        <div class="col-12">
-                            <form class="form_range_date">
-                                <input type="hidden" name="category" id="category" value="{{ $categories_array[$j] }}">
-                                <div class="form-row">
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="start_date">Start Date</label>
-                                            <input type="text" name="start_date" id="start_date" class="form-control">
-                                            <small class="text-danger start_date-error"></small>
+                    <div class="tab-pane tabs-animation fade {{ $j == 0 ? "active show" : "" }}" id="tab-content-{{ $programid . "-" . $j }}" role="tabpanel">
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <form class="form_range_date_{{ $j }}">
+                                    <input type="hidden" name="category" id="category" value="{{ $categories_array[$j] }}">
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="start_date">Start Date</label>
+                                                <input type="text" name="start_date" id="start_date" class="form-control">
+                                                <small class="text-danger start_date-error"></small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="end_date">End Date</label>
+                                                <input type="text" name="end_date" id="end_date" class="form-control">
+                                                <small class="text-danger end_date-error"></small>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="end_date">End Date</label>
-                                            <input type="text" name="end_date" id="end_date" class="form-control">
-                                            <small class="text-danger end_date-error"></small>
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-sm btn-shadow btn-primary filter_btn mr-1" data-value="filter_me" data-count="{{ $j }}">Filter</button>
+                                            <button type="button" class="btn btn-sm btn-shadow btn-danger filter_btn" data-value="clear_me">Clear Filter</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-row">
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-sm btn-shadow btn-primary filter_btn mr-1" data-value="filter_me">Filter</button>
-                                        <button type="button" class="btn btn-sm btn-shadow btn-danger filter_btn" data-value="clear_me">Clear Filter</button>
-                                    </div>
-                                </div>
-
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="tab-pane tabs-animation fade {{ $j == 0 ? "active show" : "" }}" id="tab-content-{{ $programid  }}" role="tabpanel">
                         <div class="main-card mb-3 card">            
                             <div class="no-gutters row border">
                                 @foreach ($milestones as $milestone)
@@ -255,17 +256,21 @@ $(document).ready(() => {
     $(".filter_btn").on("click", function () {
 
         $(".milestone_sites .widget-numbers").text("0");
+        var count = $(this).attr("data-count");
 
         if ( $(this).attr("data-value") == "filter_me" ) {
-            var start_date = $("#start_date").val();
-            var end_date = $("#end_date").val();
-            var category = $("#category").val();
+            var category = $(".form_range_date_"+count+" #category").val();
+            var start_date = $(".form_range_date_"+count+" #start_date").val();
+            var end_date = $(".form_range_date_"+count+" #end_date").val();
 
             $(".site_milestone_title b").text(start_date + " - " + end_date);
         } else {
             var start_date = "{{ $startOfYear }}";
             var end_date = "{{ $now }}";
             var category = "{{ $categories_array[0] }}";
+            
+            $("#start_date").val("");
+            $("#end_date").val("");
 
             $(".site_milestone_title b").text(start_date + " - " + end_date);
         }
