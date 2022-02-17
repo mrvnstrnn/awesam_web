@@ -163,7 +163,7 @@
                     } else {
                         $("#viewInfoModal .main-card.mb-3.card").append(
                             '<div class="modal-footer">' +
-                                '<button type="button" class="btn btn-primary btn-accept-endorsement btn-shadow btn-sm" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Endorse New Site</button>' +
+                                '<button type="button" class="btn btn-primary btn-accept-endorsement btn-shadow btn-sm" data-complete="true" id="btn-accept-endorsement-true" data-href="/accept-reject-endorsement" data-activity_name="endorse_site">Accept Endorsement</button>' +
                             '</div>'
                         );
                     }
@@ -301,7 +301,7 @@
 
         var id = $(this).attr('id');
 
-        var text = id == "reject"+data_program.replace(" ", "-") ? "Reject" : "Endorse New Sites";
+        var text = id == "reject"+data_program.replace(" ", "-") ? "Reject" : "Accept Endorsement";
 
         $("#"+id).attr("disabled", "disabled");
         $("#"+id).text("Processing...");
