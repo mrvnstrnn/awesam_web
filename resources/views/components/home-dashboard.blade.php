@@ -202,7 +202,7 @@
 
             @elseif($program->program_id == 3)
 
-                <x-coloc-dashboard />
+                <x-coloc-dashboard :programid="$get_user_program_active" />
 
             @elseif($program->program_id == 4)
 
@@ -214,7 +214,7 @@
 
             @elseif($program->program_id == 8)
 
-                <x-coloc-dashboard />
+                <x-coloc-dashboard :programid="$get_user_program_active" />
           
             @endif
         @endif    

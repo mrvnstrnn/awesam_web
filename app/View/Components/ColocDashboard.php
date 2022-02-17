@@ -11,9 +11,10 @@ class ColocDashboard extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $programid;
+    public function __construct($programid)
     {
-        //
+        $this->programid = $programid;
     }
 
     /**
