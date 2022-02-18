@@ -159,7 +159,7 @@
                                             <div class="col-sm-3 col-12 border">
                                                 <div class="milestone-bg bg_img_{{ $i }}"></div>
             
-                                                <div class="widget-chart widget-chart-hover">
+                                                <div class="widget-chart widget-chart-hover milestone_sites" data-activity_id="{{ $stage_activity->activity_id }}" data-category="{{ $stage_activity->category }}">
                                                     <div class="widget-numbers" id="stage_counter_{{ $stage_activity->id }}">
                                                         {{ \Auth::user()->activities_count($stage_activity->program_id, $stage_activity->activity_id, $categories_array[$j]); }}
                                                     </div>
@@ -170,7 +170,7 @@
                                         <div class="col-sm-3 col-12 border">
                                             <div class="milestone-bg bg_img_2"></div>
             
-                                            <div class="widget-chart widget-chart-hover">
+                                            <div class="widget-chart widget-chart-hover milestone_sites" data-activity_id="{{ $stage_activity->activity_id }}" data-category="{{ $stage_activity->category }}">
                                                 <div class="widget-numbers" id="stage_counter_0">
                                                     {{ \Auth::user()->activities_count($user_program, 0, $categories_array[$j]); }}
                                                 </div>

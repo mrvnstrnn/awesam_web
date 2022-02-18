@@ -81,7 +81,7 @@
                                 <div class="col-md-6">
                                     <div class="position-relative form-group">
                                         <label for="mode" class="">Mode</label>
-                                        <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="{{ ucfirst(\Auth::user()->getUserProfile()->first()->mode) }}" readonly>
+                                        <input name="mode" id="mode" placeholder="mode" type="text" class="form-control" value="{{ \Auth::user()->getUserProfile()->first()->mode }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

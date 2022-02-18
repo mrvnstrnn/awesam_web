@@ -8,6 +8,8 @@ use App\Models\StageActivitiesProfile;
 use App\Models\StageActivities;
 use App\Models\SubActivityValue;
 
+use DataTables;
+
 class ActivityController extends Controller
 {
     public function get_component(Request $request)
@@ -188,6 +190,46 @@ class ActivityController extends Controller
         try {
             StageActivitiesProfile::where('id', $id)->delete();
             return redirect('/workflow');
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            return response()->json(['error' => true, 'message' => $th->getMessage()]);
+        }
+    }
+
+    public function get_site_based_on_activity_id (Request $request)
+    {
+        try {
+
+            $user_program = \Auth::user()->getUserProgram()[0]->program_id;
+
+            if ( $user_program == 3) {
+                $activity_collection = [ "12", "13", "14" ];
+                if ( in_array( $request->get('activity_id'), $activity_collection ) ) {
+                    $activity_id = 11;
+                } else {
+                    $activity_id = $request->get('activity_id');
+                }
+            } else if ( $user_program == 4) {
+                $activity_collection = [ "13", "14", "15" ];
+                if ( in_array( $request->get('activity_id'), $activity_collection ) ) {
+                    $activity_id = 12;
+                } else {
+                    $activity_id = $request->get('activity_id');
+                }
+            }
+
+            $site = \DB::table( 'view_site' )
+                    ->select( 'site_name', 'sam_id', 'sam_region_name' )
+                    ->where( 'program_id', $user_program )
+                    ->where( 'activity_id', $activity_id )
+                    ->where( 'site_category', $request->get('category') )
+                    ->get();
+
+            $dt = DataTables::of($site);
+            return $dt->make(true);
+
+            return response()->json([ 'error' => false, 'message' => $site ]);
+
         } catch (\Throwable $th) {
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             return response()->json(['error' => true, 'message' => $th->getMessage()]);

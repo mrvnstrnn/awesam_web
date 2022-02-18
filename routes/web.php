@@ -507,6 +507,8 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
     Route::any('/save-stage-activities', [ActivityController::class, 'save_stage_activities'])->name('save_stage_activities');
     Route::get('/delete-stage-activities-profiles/{id}', [ActivityController::class, 'delete_stage_activities_profiles'])->name('delete_stage_activities_profiles');
 
+    Route::post('/get-site-based-on-activity-id', [ActivityController::class, 'get_site_based_on_activity_id'])->name('get_site_based_on_activity_id');
+
     // ////////////////////////////// //
     //                                //
     //        DATACONTROLLER          //
