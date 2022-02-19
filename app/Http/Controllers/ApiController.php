@@ -81,24 +81,30 @@ class ApiController extends Controller
 
     public function agent_activities (Request $request)
     {
-        
-        $user_program = \DB::table('program')
-                            ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                            ->where('user_programs.user_id', $request->get('user_id'))
-                            ->where('user_programs.active', 1)
-                            ->orderBy('program.program_id', 'asc')
-                            ->get();
+        try {
+            
+            $user_program = \DB::table('program')
+                    ->join('user_programs', 'program.program_id', 'user_programs.program_id')
+                    ->where('user_programs.user_id', \Auth::id())
+                    ->where('user_programs.active', 1)
+                    ->orderBy('program.program_id', 'asc')
+                    ->get();
 
-        $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
+            $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
-        return $activities = \DB::table('view_assigned_sites')
-                                ->where('agent_id', $request->get('user_id'))
-                                ->where('activity_profile_id', $request->get('profile_id'))
-                                ->where('site_vendor_id', $vendor)
-                                ->where('program_id', $user_program)
-                                ->orderBy('stage_id', 'ASC')
-                                ->orderBy('activity_id', 'ASC')
-                                ->get();
+            $activities = \DB::table('view_assigned_sites')
+                        ->where('agent_id', \Auth::id())
+                        ->where('activity_profile_id', \Auth::user()->profile_id)
+                        ->where('site_vendor_id', $vendor)
+                        ->where('program_id', $user_program)
+                        ->orderBy('stage_id', 'ASC')
+                        ->orderBy('activity_id', 'ASC')
+                        ->get();
+                        
+            return response()->json(['message' => 'login successful', 'code' => 200, 'activities' => $activities]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'code' => 501]);
+        }
     }
 
     public function login(Request $request)
