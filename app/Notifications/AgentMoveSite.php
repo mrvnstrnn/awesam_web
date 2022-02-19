@@ -48,7 +48,7 @@ class AgentMoveSite extends Notification implements ShouldBroadcast
                     ->subject($this->message['title'])
                     ->line($this->message['body'])
                     ->cc(['awesamtool@globe.com.ph', 'maesternon@absi.ph'])
-                    ->action('Notification Action', url('/'))
+                    ->action('Notification Action', url($this->message['goUrl']))
                     ->line('Thank you for using our application!');
     }
 

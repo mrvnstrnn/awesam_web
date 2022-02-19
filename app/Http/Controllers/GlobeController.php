@@ -860,10 +860,6 @@ class GlobeController extends Controller
                                     ->first();
 
         if (!is_null($notification_settings)) {
-            // $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
-            //                                 ->select('profile_id')
-            //                                 ->where('notification_settings_id', $notification_settings->notification_settings_id)
-            //                                 ->get();
 
             $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                                             ->select('profile_id')
@@ -872,21 +868,6 @@ class GlobeController extends Controller
                                             ->pluck('profile_id');
 
             $receiver_profiles = $notification_receiver_profiles;
-
-            // $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
-
-            // if($site_count > 1){
-            //     $title = $notification_settings->title_multi;
-            //     $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
-            // } else {
-            //     $title = $notification_settings->title_single;
-            //     $body = $notification_settings->body_single;
-            // }
-
-            // $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
-            //                     ->whereIn("profile_id", $receiver_profiles)
-            //                     ->where('user_programs.program_id', $program_id)
-            //                     ->get();
 
             for ($i=0; $i < count($sam_id); $i++) {
                 $site_data = \DB::table('site')
@@ -934,7 +915,7 @@ class GlobeController extends Controller
                                     'activity_id' => $activity_id,
                                     'title' => $title,	
                                     'body' => $body,
-                                    'goUrl' => url('/'),
+                                    'goUrl' => url($notification_settings->notification_url),
                                 ];
                                 Notification::send($user_agent, new SiteMoved($notifDataForAgent));
                             }
@@ -971,78 +952,13 @@ class GlobeController extends Controller
                                 'activity_id' => $activity_id,
                                 'title' => $title,	
                                 'body' => $body,
-                                'goUrl' => url('/'),
+                                'goUrl' => url($notification_settings->notification_url),
                             ];
                             
                             Notification::send($user, new SiteMoved($notifData));
                         }
                     }
                 }
-
-                // if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
-
-                //     if ( !is_null($site_users) ) {
-                //         $user_agent = User::find($site_users->agent_id);
-                //         if ( !is_null($user_agent) ) {
-                            
-                //             $notifDataForAgent = [
-                //                 'user_id' => $site_users->agent_id,
-                //                 'program_id' => $program_id,
-                //                 'site_count' => $site_count,
-                //                 'action' => $action,
-                //                 'activity_id' => $activity_id,
-                //                 'title' => $title,	
-                //                 'body' => $body,
-                //                 'goUrl' => url('/'),
-                //             ];
-                //             Notification::send($user_agent, new SiteMoved($notifDataForAgent));
-                //         }
-                //     }
-                // } else {
-                //     if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
-                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->join('user_details', 'user_details.user_id', 'users.id')
-
-                //                 ->where("user_programs.program_id", $program_id)
-
-                //                 ->whereIn("profile_id", $receiver_profiles)
-                //                 ->where('user_details.vendor_id', $site_data->site_vendor_id)
-                //                 ->get();
-                //     } else {
-                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->join('user_details', 'user_details.user_id', 'users.id')
-
-                //                 ->where("user_programs.program_id", $program_id)
-
-                //                 ->whereIn("profile_id", $receiver_profiles)
-                //                 ->where('user_programs.program_id', $program_id)
-                //                 ->get();
-                //     }
-
-                //     foreach($userSchema as $user){
-                //         $notifData = [
-                //             'user_id' => $user->id,
-                //             'program_id' => $program_id,
-                //             'site_count' => $site_count,
-                //             'action' => $action,
-                //             'activity_id' => $activity_id,
-                //             'title' => $title,	
-                //             'body' => $body,
-                //             'goUrl' => url('/'),
-                //         ];
-                        
-                //         Notification::send($user, new SiteMoved($notifData));
-                //     }
-                // }
-            // }
-
-            // Loop sam_id per agent
-            // for ($i=0; $i < count($sam_id); $i++) {
-                // $site_users = \DB::table('site_users')
-                //                 ->where('sam_id', $sam_id[$i])
-                //                 ->first();
 
                 $site_data = \DB::table('site')
                     ->select('site_name')
@@ -1056,7 +972,7 @@ class GlobeController extends Controller
                 }
 
                 if ( $action == "true" ) {
-                    $body_agent = "Your site has been moved to " .$activity_name;
+                    $body_agent = "Your site has been moved to " . $activity_name;
                 } else {
                     $body_agent = "Your site has been rejected. Reason: ".$remarks;
                 }
@@ -1071,7 +987,7 @@ class GlobeController extends Controller
                             'activity_id' => $activity_id,
                             'title' => "Site Update for " .$site_name,	
                             'body' => $body_agent,
-                            'goUrl' => url('/'),
+                            'goUrl' => url('/program-sites'),
                         ];
                         Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
                     }
@@ -2560,189 +2476,6 @@ class GlobeController extends Controller
 
     }
 
-    // public function doc_validation_approvals($id, $action)
-    public function doc_validation_approvals_old (Request $request)
-    {
-        try {
-            $required = "";
-            if ($request->input('action') == "rejected") {
-                $required = "required";
-            }
-
-            $validate = Validator::make($request->all(), array(
-                'reason' => $required
-            ));
-
-            if ($validate->passes()) {
-
-                $sub_activity_files = SubActivityValue::find($request->input('id'));
-
-                $validators_type = json_decode($sub_activity_files->value)->type;
-                $validators = json_decode($sub_activity_files->value)->validators;
-                $file = json_decode($sub_activity_files->value)->file;
-
-                $approvers_collect = collect();
-                $approvers_pending_collect = collect();
-
-                foreach ($validators as $validator) {
-                    if ( $request->input('action') == "rejected" ) {
-                        $new_array = array(
-                            'profile_id' => $validator->profile_id,
-                            'status' => $request->get('action'),
-                            'user_id' => \Auth::id(),
-                            'approved_date' => Carbon::now()->toDateString(),
-                        );
-
-                        $approvers_collect->push($new_array);
-                    } else {
-                        if ( $validator->profile_id == \Auth::user()->profile_id ) {
-                            $new_array = array(
-                                'profile_id' => $validator->profile_id,
-                                'status' => $request->get('action'),
-                                'user_id' => \Auth::id(),
-                                'approved_date' => Carbon::now()->toDateString(),
-                            );
-
-                            $approvers_collect->push($new_array);
-                        } else {
-                            if ( isset($validator->user_id) ) {
-                                $new_array = array(
-                                    'profile_id' => $validator->profile_id,
-                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
-                                    'user_id' => $validator->user_id,
-                                    'approved_date' => $validator->approved_date,
-                                );
-                            } else {
-                                $new_array = array(
-                                    'profile_id' => $validator->profile_id,
-                                    'status' => $request->get('action') == "rejected" ? "rejected" : $validator->status,
-                                );
-                                $approvers_pending_collect->push($validator->profile_id);
-                            }
-
-                            $approvers_collect->push($new_array);
-                        }
-                    }
-                }
-                
-                $array_data = [
-                    'file' => $file,
-                    'active_profile' => isset($approvers_pending_collect->all()[0]) ? $approvers_pending_collect->all()[0] : "",
-                    'active_status' => count($approvers_pending_collect->all()) < 1 ? "approved" : "pending",
-                    'validator' => count($approvers_pending_collect->all()),
-                    'validators' => $approvers_collect->all(),
-                    'type' => $validators_type
-                ];
-
-                if ($request->input('action') != "rejected") {
-                                                            
-                    if ( !is_null($sub_activity_files) ) {
-                        // return response()->json(['error' => true, 'message' => $array_data]);
-
-                        if ( count($approvers_pending_collect) < 1 ) {
-                            $current_status = $request->input('action') == "rejected" ? "rejected" : "approved";
-
-                            SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                        'status' => $current_status,
-                                    ]);
-
-                            if ($validators_type != 'doc_upload') {
-                                SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                        ->where('type', $validators_type)
-                                        ->update([
-                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                            'status' => $current_status,
-                                        ]);
-                            }
-                        } else {
-                            $current_status = $sub_activity_files->status;
-
-                            SubActivityValue::where('id', $request->input('id'))
-                                    ->update([
-                                        'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                    ]);
-
-                            if ($validators_type != 'doc_upload') {
-                                SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                        ->where('type', $validators_type)
-                                        ->update([
-                                            'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                            'status' => $current_status,
-                                        ]);
-                            }
-                        }
-
-                        $sub_activity_files->update([
-                            'value' => json_encode($array_data),
-                            'status' => $current_status
-                        ]);
-
-                    } else {
-                        return response()->json(['error' => true, 'message' => "No data found."]);
-                    }
-
-                    $sub_activities = SubActivity::where('activity_id', $request->input("activity_id"))
-                                                ->where('program_id', $request->input("program_id"))
-                                                ->where('category', $request->input("site_category"))
-                                                ->where('requires_validation', '1')
-                                                ->get();
-
-                    $array_sub_activity = collect();
-
-                    foreach ($sub_activities as $sub_activity) {
-                        $array_sub_activity->push($sub_activity->sub_activity_id);
-                    }
-
-                    
-                    $sub_activity_value = SubActivityValue::select('sub_activity_id')
-                                                        ->whereIn('sub_activity_id', $array_sub_activity->all())
-                                                        ->where('sam_id', $request->input('sam_id'))
-                                                        // ->where('status', 'pending')
-                                                        ->where('status', 'approved')
-                                                        ->where('type', 'doc_upload')
-                                                        ->groupBy('sub_activity_id')
-                                                        ->get();
-
-                    if ( count($array_sub_activity->all()) <= count($sub_activity_value) ) {
-                        $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", [$request->input("site_category")], [$request->input("activity_id")]);
-                    }
-
-                } else {
-                    $current_status = $request->input('action') == "rejected" ? "rejected" : "approved";
-
-                    $sub_activity_files->update([
-                        'value' => json_encode($array_data),
-                        'status' => $current_status,
-                        'remarks' => $request->input('reason')
-                    ]);
-
-                    SubActivityValue::where('id', $request->input('id'))
-                                ->update([
-                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                    'status' => $current_status,
-                                ]);
-
-                    SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                ->where('type', $validators_type)
-                                ->update([
-                                    'reason' => $request->input('action') == "rejected" ? $request->input('reason') : null,
-                                    'status' => $current_status,
-                                ]);
-                }
-
-                return response()->json(['error' => false, 'message' => "Successfully ".$request->input('action')." docs." ]);
-            } else {
-                return response()->json(['error' => true, 'message' => $validate->errors() ]);
-            }
-
-        } catch (\Throwable $th) {
-            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
-            return response()->json(['error' => true, 'message' => $th->getMessage()]);
-        }
-    }
-
     public function doc_validation_approvals(Request $request)
     {
         try {
@@ -2835,13 +2568,20 @@ class GlobeController extends Controller
                         } else {
                             $body_message = "Your uploaded file (" .$request->input('filename'). ") has been approved by ".\Auth::user()->name. ".";
                         }
+
+                        $site_data = \DB::table('site')
+                                ->select('site_name', 'site_vendor_id')
+                                ->where('sam_id', $request->input('sam_id'))
+                                ->first();
+
+                        $title_name = !is_null($site_data) ? $site_data->site_name : $request->input('sam_id');
                         
                         $notifDataForAgent = [
                             'user_id' => $site_users->agent_id,
                             'action' => $request->get('action'),
-                            'title' => "Site Update for " .$request->input('sam_id'),	
+                            'title' => "Site Update for " .$title_name,	
                             'body' => $body_message,
-                            'goUrl' => url('/'),
+                            'goUrl' => url('/activities'),
                         ];
                         Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
                     }

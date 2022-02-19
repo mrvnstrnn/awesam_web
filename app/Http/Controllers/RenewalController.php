@@ -1256,10 +1256,6 @@ class RenewalController extends Controller
                                     ->first();
 
         if (!is_null($notification_settings)) {
-            // $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
-            //                                 ->select('profile_id')
-            //                                 ->where('notification_settings_id', $notification_settings->notification_settings_id)
-            //                                 ->get();
 
             $notification_receiver_profiles = \DB::table('notification_receiver_profiles')
                                             ->select('profile_id')
@@ -1268,21 +1264,6 @@ class RenewalController extends Controller
                                             ->pluck('profile_id');
 
             $receiver_profiles = $notification_receiver_profiles;
-
-            // $receiver_profiles = json_decode(json_encode($notification_receiver_profiles), true);
-
-            // if($site_count > 1){
-            //     $title = $notification_settings->title_multi;
-            //     $body = str_replace("<count>", $site_count, $notification_settings->body_multi);
-            // } else {
-            //     $title = $notification_settings->title_single;
-            //     $body = $notification_settings->body_single;
-            // }
-
-            // $userSchema = User::join('user_programs', 'user_programs.user_id', 'users.id')
-            //                     ->whereIn("profile_id", $receiver_profiles)
-            //                     ->where('user_programs.program_id', $program_id)
-            //                     ->get();
 
             for ($i=0; $i < count($sam_id); $i++) {
                 $site_data = \DB::table('site')
@@ -1330,7 +1311,7 @@ class RenewalController extends Controller
                                     'activity_id' => $activity_id,
                                     'title' => $title,	
                                     'body' => $body,
-                                    'goUrl' => url('/'),
+                                    'goUrl' => url($notification_settings->notification_url),
                                 ];
                                 Notification::send($user_agent, new SiteMoved($notifDataForAgent));
                             }
@@ -1367,78 +1348,13 @@ class RenewalController extends Controller
                                 'activity_id' => $activity_id,
                                 'title' => $title,	
                                 'body' => $body,
-                                'goUrl' => url('/'),
+                                'goUrl' => url($notification_settings->notification_url),
                             ];
                             
                             Notification::send($user, new SiteMoved($notifData));
                         }
                     }
                 }
-
-                // if ( $notification_settings->receiver_profile_id == 2 || in_array(2, $receiver_profiles) ) {
-
-                //     if ( !is_null($site_users) ) {
-                //         $user_agent = User::find($site_users->agent_id);
-                //         if ( !is_null($user_agent) ) {
-                            
-                //             $notifDataForAgent = [
-                //                 'user_id' => $site_users->agent_id,
-                //                 'program_id' => $program_id,
-                //                 'site_count' => $site_count,
-                //                 'action' => $action,
-                //                 'activity_id' => $activity_id,
-                //                 'title' => $title,	
-                //                 'body' => $body,
-                //                 'goUrl' => url('/'),
-                //             ];
-                //             Notification::send($user_agent, new SiteMoved($notifDataForAgent));
-                //         }
-                //     }
-                // } else {
-                //     if ( in_array(1, $receiver_profiles) || in_array(2, $receiver_profiles) || in_array(3, $receiver_profiles) || in_array(37, $receiver_profiles) || in_array(38, $receiver_profiles) ) {
-                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->join('user_details', 'user_details.user_id', 'users.id')
-
-                //                 ->where("user_programs.program_id", $program_id)
-
-                //                 ->whereIn("profile_id", $receiver_profiles)
-                //                 ->where('user_details.vendor_id', $site_data->site_vendor_id)
-                //                 ->get();
-                //     } else {
-                //         $userSchema = User::select('users.*', 'user_details.vendor_id')
-                //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
-                //                 ->join('user_details', 'user_details.user_id', 'users.id')
-
-                //                 ->where("user_programs.program_id", $program_id)
-
-                //                 ->whereIn("profile_id", $receiver_profiles)
-                //                 ->where('user_programs.program_id', $program_id)
-                //                 ->get();
-                //     }
-
-                //     foreach($userSchema as $user){
-                //         $notifData = [
-                //             'user_id' => $user->id,
-                //             'program_id' => $program_id,
-                //             'site_count' => $site_count,
-                //             'action' => $action,
-                //             'activity_id' => $activity_id,
-                //             'title' => $title,	
-                //             'body' => $body,
-                //             'goUrl' => url('/'),
-                //         ];
-                        
-                //         Notification::send($user, new SiteMoved($notifData));
-                //     }
-                // }
-            // }
-
-            // Loop sam_id per agent
-            // for ($i=0; $i < count($sam_id); $i++) {
-                // $site_users = \DB::table('site_users')
-                //                 ->where('sam_id', $sam_id[$i])
-                //                 ->first();
 
                 $site_data = \DB::table('site')
                     ->select('site_name')
@@ -1467,7 +1383,7 @@ class RenewalController extends Controller
                             'activity_id' => $activity_id,
                             'title' => "Site Update for " .$site_name,	
                             'body' => $body_agent,
-                            'goUrl' => url('/'),
+                            'goUrl' => url('/program-sites'),
                         ];
                         Notification::send($user_agent, new AgentMoveSite($notifDataForAgent));
                     }
