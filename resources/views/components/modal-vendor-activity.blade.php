@@ -399,6 +399,14 @@
 
                                     </div>
                                     <x-btn-show-site-details />
+
+                                    
+                                    <div id="site_details_view" class="d-none">
+                                        @php
+                                            $main_activity = "";
+                                        @endphp
+                                        <x-site-modal-details-view :site="$site" :mainactivity="$main_activity"/>
+                                    </div>
                                 @endif
                             </div>
 
@@ -423,8 +431,22 @@
     $(document).ready(function(){
 
         $(".flatpicker").flatpickr({
-                minDate: "today"
-            });
+            minDate: "today"
+        });
+
+        $("#site_action_view_switch").on("click", function(){
+            $("#site_action_view_switch").addClass('d-none');
+            $("#actions_list").addClass('d-none');
+            $("#actions_box").addClass('d-none');
+        });
+
+        $("#site_details_view_switch").on("click", function(){
+            $("#site_action_view_switch").removeClass('d-none');
+            $("#actions_list").removeClass('d-none');
+            $("#actions_box").removeClass('d-none');
+
+            $(".btn_switch_back_to_actions").trigger("click");
+        });
 
         $(".btn_switch_show_action").on("click", function(){
 
