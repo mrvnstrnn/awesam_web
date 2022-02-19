@@ -121,6 +121,7 @@ class ApiController extends Controller
                     ->get();
 
             $user_programs = \DB::table('user_programs')
+                                ->select('user_programs.program_id', 'program.program', 'program.program_name')
                                 ->join('program', 'program.program_id', 'user_programs.program_id')
                                 ->where('user_programs.user_id', \Auth::user()->id)
                                 ->get();
