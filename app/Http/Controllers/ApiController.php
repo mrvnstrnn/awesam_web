@@ -120,7 +120,12 @@ class ApiController extends Controller
                     ->orderBy('program.program_id', 'asc')
                     ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id()]);
+            $user_programs = \DB::table('user_programs')
+                                ->join('program', 'program.program_id', 'user_programs.program_id')
+                                ->where('user_programs.user_id', \Auth::user()->id)
+                                ->get();
+
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs]);
 
         } else {
 
