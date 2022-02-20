@@ -38,6 +38,10 @@ use App\Http\Controllers\ApiController;
 
 // Route::get('/clean', [GlobeController::class, 'clean_table']);
 
+
+Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
+Route::get('/get_token', [ActivityController::class, 'get_token'])->name('get_token');
+
 Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
 Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
@@ -556,12 +560,6 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
     
     Route::post('/renewal-upload-file', [RenewalController::class, 'fileupload']);
     Route::post('/renewal-upload-my-file', [RenewalController::class, 'upload_my_file']);
-
-
-    // Mobile
-    Route::post('mobi/login', [ApiController::class, 'login']);
-    Route::post('mobi/login2', [ApiController::class, 'login']);
-    Route::post('mobi/login3', [ApiController::class, 'login']);
 
 });
     

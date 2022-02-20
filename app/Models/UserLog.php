@@ -12,5 +12,5 @@ class UserLog extends Model
     public $timestamps = false;
     // protected $connection = 'mysql2';
     protected $table = 'user_logs';
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id','via'];
 }

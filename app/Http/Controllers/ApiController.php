@@ -11,10 +11,17 @@ use Auth;
 
 use App\Models\Invitation;
 use App\Models\VendorProgram;
+use App\Models\User;
+use App\Models\UserLog;
 use Validator;
 
 class ApiController extends Controller
 {
+    public function me(Request $request)
+    {
+        return $request->user();
+    }
+
     public function send_invitation_vendor (Request $request)
     {
         // Mail::to($email)->send(new GTInvitationMail($url, $name, $password, $request->input('mode'), $email));
@@ -85,7 +92,7 @@ class ApiController extends Controller
             
             $user_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                    ->where('user_programs.user_id', $request->get('user_id'))
+                    ->where('user_programs.user_id', \Auth::id())
                     ->where('user_programs.active', 1)
                     ->orderBy('program.program_id', 'asc')
                     ->get();
@@ -93,7 +100,7 @@ class ApiController extends Controller
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
             $activities = \DB::table('view_assigned_sites')
-                        ->where('agent_id', $request->get('user_id'))
+                        ->where('agent_id', \Auth::id())
                         // ->where('activity_profile_id', $request->get('profile_id'))
                         ->where('site_vendor_id', $vendor)
                         ->where('program_id', $user_program)
@@ -118,6 +125,15 @@ class ApiController extends Controller
             ->orderBy('menu', 'asc')
             ->get();
 
+            $user = User::where('email', $request['email'])->firstOrFail();
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            UserLog::create([
+                'user_id' => \Auth::id(),
+                'via' => 'Mobile'
+            ]);
+
             $user_active_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
                     // ->join('page_route', 'page_route.program_id', 'user_programs.program_id')
@@ -132,7 +148,7 @@ class ApiController extends Controller
                                 ->where('user_programs.user_id', \Auth::user()->id)
                                 ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs]);
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs, 'access_token' => $token, 'token_type' => 'Bearer']);
 
         } else {
 
