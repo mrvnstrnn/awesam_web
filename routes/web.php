@@ -40,7 +40,6 @@ use App\Http\Controllers\ApiController;
 
 
 Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
-Route::get('/get_token', [ActivityController::class, 'get_token'])->name('get_token');
 
 Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
