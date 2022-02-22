@@ -21,7 +21,7 @@
     var site_name = "{{ $site[0]->site_name }}";
     
     if (program_id == 3) {
-        var technology = "{{ $site[0]->technology }}";
+        var technology = "{{ isset($site[0]->technology) ? $site[0]->technology : ''}}";
         var title = site_name + " - " + technology;
     } else {
         var title = site_name;
