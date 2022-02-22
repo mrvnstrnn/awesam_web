@@ -17,15 +17,38 @@
 
 <script>
     var sam_id = "{{ $site[0]->sam_id }}";
+    var program_id = "{{ $site[0]->program_id }}";
+    var site_name = "{{ $site[0]->site_name }}";
+    
+    if (program_id == 3) {
+        var technology_sitename = "{{ $site[0]->technology_sitename }}";
+        var title = site_name + " - " + technology_sitename;
+    } else {
+        var title = site_name;
+    }
 
     $(".approval_table").DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
+            {
+                extend: 'csv',
+                messageTop: title,
+            },
+            {
+                extend: 'excel',
+                messageTop: title,
+            },
+            {
+                extend: 'pdf',
+                messageTop: title,
+            }
         ],
+        // buttons: [
+        //     'copyHtml5',
+        //     'excelHtml5',
+        //     'csvHtml5',
+        //     'pdfHtml5'
+        // ],
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
         processing: true,
         serverSide: true,
