@@ -43,7 +43,7 @@ use App\Http\Controllers\ApiController;
 
 // Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
-Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
 
@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], fun
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/get-towerco', [TowerCoController::class, 'get_towerco'])->name('get_towerco');
 
@@ -132,7 +132,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], fun
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
     Route::post('/update-coop-details', [LocalCoopController::class, 'update_coop_details'])->name('update_coop_details');
@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], fun
 ///////////////////////////////////////////////////////////
 
 
-Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
 
@@ -187,7 +187,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], fun
 ///////////////////////////////////////////////////////////
 
 
-Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/', [UserController::class, 'index']);
 
