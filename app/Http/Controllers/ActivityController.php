@@ -20,7 +20,7 @@ class ActivityController extends Controller
 
                 if (str_contains($request['sam_id'], 'COLOC')) {
                     $site = \DB::table('view_site')
-                            ->select('view_site.*', 'program_coloc.technology_sitename')
+                            ->select('view_site.*', 'program_coloc.technology')
                             ->join('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
                             ->where('view_site.sam_id', $request['sam_id'])
                             ->get();
