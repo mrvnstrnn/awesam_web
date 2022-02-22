@@ -41,7 +41,7 @@ use App\Http\Controllers\ApiController;
 
 // Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
 
-// Route::get('/login-as/{email}', [UserController::class, 'login_as']);
+Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
 Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
