@@ -190,7 +190,7 @@ $user_area = \DB::table('users_areas')
         </div>
     </div>
 @empty
-    <h6 class="text-center">Nothing to see in here.</h6>
+    <h6 class="text-center">Nothing to see here.</h6>
 @endforelse
 
 <script>

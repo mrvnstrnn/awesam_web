@@ -81,7 +81,7 @@ if ( $user_program == 3 ) {
         <div class="row">
             <div class="col-lg-12">
                 <div class="main-card card p-5">            
-                    <h3 class="text-center">Nothing to see in here.</h3>
+                    <h3 class="text-center">Nothing to see here.</h3>
                 </div>
             </div>
         </div>
