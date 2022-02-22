@@ -39,11 +39,11 @@ use App\Http\Controllers\ApiController;
 // Route::get('/clean', [GlobeController::class, 'clean_table']);
 
 
-Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
+// Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
 
-Route::get('/login-as/{email}', [UserController::class, 'login_as']);
+// Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
-Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
 
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
 
@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
 
     Route::get('/get-towerco', [TowerCoController::class, 'get_towerco'])->name('get_towerco');
 
@@ -132,7 +132,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
 
     Route::get('/localcoop/{program_id}/{profile_id}/{activity_type}', [LocalCoopController::class, 'get_localcoop'])->name('get_localcoop');
     Route::post('/update-coop-details', [LocalCoopController::class, 'update_coop_details'])->name('update_coop_details');
@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 ///////////////////////////////////////////////////////////
 
 
-Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
 
     Route::get('/profile-switcher/{profile_id}', [UserController::class, 'profile_switcher'])->name('profile.switcher');
 
@@ -187,7 +187,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 ///////////////////////////////////////////////////////////
 
 
-Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
+Route::group(['middleware' => ['auth', 'verified', 'active', 'navigation']], function () {
 
     Route::get('/', [UserController::class, 'index']);
 
@@ -597,7 +597,7 @@ $uri = Request::path();
 if ($uri != 'api/send-invitation-vendor') {
     Route::get('/{slug}', [UserController::class, 'show'])
         ->where('slug', '.*')
-        ->middleware(['auth', 'verified']);
+        ->middleware(['auth', 'verified', 'navigation']);
 }
 
 

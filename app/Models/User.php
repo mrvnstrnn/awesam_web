@@ -55,25 +55,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function can_do($checkPermission)
     {
-        // dd($checkPermission);
-
-        $collection = collect();
         $permissions = Permission::where('slug', $checkPermission)
-                                    ->get();
+                                    ->first();
+
         if(is_null($permissions)) {
             return false;
         } else {
-            foreach ($permissions as $permission) {
-                $profilePermission = ProfilePermission::where('profile_id', \Auth::user()->profile_id)
-                        ->where('permission_id', $permission->id)
-                        ->first();
 
-                if(!is_null($profilePermission)){
-                    $collection->push($profilePermission);
-                }
-            }
+            $profilePermission = ProfilePermission::where('profile_id', \Auth::user()->profile_id)
+                        ->where('permission_id', $permissions->id)
+                        ->first();
             
-            return count($collection->all()) > 0 ? true : false;
+            return !is_null($profilePermission) ? true : false;
         }
     }
 
