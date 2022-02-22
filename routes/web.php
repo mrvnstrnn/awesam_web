@@ -597,7 +597,7 @@ $uri = Request::path();
 if ($uri != 'api/send-invitation-vendor') {
     Route::get('/{slug}', [UserController::class, 'show'])
         ->where('slug', '.*')
-        ->middleware(['auth', 'verified', 'navigation']);
+        ->middleware(['auth', 'verified']);
 }
 
 
