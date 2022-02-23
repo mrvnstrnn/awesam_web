@@ -182,6 +182,8 @@
                                                                             
                                                                             @if (!is_null(\Auth::user()->checkIfSubActUploaded($sub_activity->sub_activity_id, $site[0]->sam_id)))
                                                                             <i class="fa fa-check-circle fa-lg text-success" style="top:10px;"></i>
+                                                                            @elseif ( !is_null(\Auth::user()->checkIfSubActUploadedRejected($sub_activity->sub_activity_id, $site[0]->sam_id)) )
+                                                                            <i class="fa fa-times fa-lg text-danger" style="top:10px;"></i>
                                                                             @endif
                                                                         </div>
                                                                     @endif                               

@@ -243,6 +243,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $sub_act;
     }
 
+    public function checkIfSubActUploadedRejected($sub_activity_id, $sam_id)
+    {
+        $sub_act = SubActivityValue::select('id', 'status')
+                        ->where('sub_activity_id', $sub_activity_id)
+                        ->where('sam_id', $sam_id)
+                        ->where('type', 'doc_upload')
+                        ->where('status', 'rejected')
+                        ->first();
+
+        return $sub_act;
+    }
+
     public function substep_complete($sub_activity_step_id, $sam_id, $sub_activity_id)
     {
         $substeps = SubActivityValue::select('id')
