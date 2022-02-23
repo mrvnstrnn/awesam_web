@@ -21,7 +21,7 @@ function makeDT(whatTable, whatCols, active_program) {
             responsive: true,
             stateSave: false,
             regex: true,
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],    
+            aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
       
             // scrollX: true,   
     

@@ -62,7 +62,7 @@
                             buttons: [
                                 'csv', 'excel', 'pdf'
                             ],
-                            aLengthMenu: [[10, 15, 20, -1], [10, 15, 20, "All"]],
+                            aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
                             ajax: {
                                 url: "/get-site-based-on-activity-id",
                                 method: "POST",
@@ -110,7 +110,7 @@
                             buttons: [
                                 'csv', 'excel', 'pdf'
                             ],
-                            aLengthMenu: [[10, 15, 20, -1], [10, 15, 20, "All"]],
+                            aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
                             ajax: {
                                 url: "/get-site-based-on-activity-id",
                                 method: "POST",
