@@ -21,7 +21,7 @@ class Navigation
                 return redirect('/onboarding');
             } else if($request->path() && !\Auth::user()->can_do($request->path())){
                 abort(403, "Sorry, You Are Not Allowed to Access This Page");
-            } 
+            }
         }
         return $next($request);
     }

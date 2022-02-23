@@ -13,7 +13,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
         {{-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-        {{-- <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css"> --}}
+        <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="/vendors/ionicons-npm/css/ionicons.css">
         <link rel="stylesheet" href="/vendors/linearicons-master/dist/web-font/style.css">
         <link rel="stylesheet" href="/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css">

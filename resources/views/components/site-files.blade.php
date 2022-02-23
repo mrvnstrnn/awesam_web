@@ -1,7 +1,17 @@
 <div class="card-body">
     <div class="row">
         <div class="col-12">
-            <a href="{{ route('zip-download', ['sam_id'=> $sam_id]) }}" target="_blank" class="btn btn-primary float-right btn-shadown btn-sm"><i class="fas fa-file-download"></i> Download as Zip</a>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                You're not allowed to upload here. Click <a href="/activities" class="alert-link">here</a> to upload.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ route('zip-download', ['sam_id'=> $sam_id]) }}" target="_blank" class="btn btn-primary float-right btn-shadown btn-sm"><i class="fas fa-file-download"></i> Download files as Zip</a>
         </div>
     </div>
     <div class="row file_previews d-none">
