@@ -31,13 +31,14 @@
 
         <meta property="og:image" content="{{ asset('images/awesam.png') }}" />
         {{-- <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-        <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="/vendors/ionicons-npm/css/ionicons.css">
+
+        {{-- <link rel="stylesheet" href="/vendors/@fortawesome/fontawesome-free/css/all.min.css"> --}}
+        
+        {{-- <link rel="stylesheet" href="/vendors/ionicons-npm/css/ionicons.css"> --}}
         <link rel="stylesheet" href="/vendors/linearicons-master/dist/web-font/style.css">
         <link rel="stylesheet" href="/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css">
         <link href="/styles/css/base.css" rel="stylesheet">
         {{-- <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script> --}}
-        
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 
@@ -50,7 +51,7 @@
         
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
-        <link type="text/css" class="init" rel="stylesheet" href="/js/jquery-ui.css">
+        <link rel="stylesheet" href="/js/jquery-ui.css">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
