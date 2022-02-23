@@ -62,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
                                         ->first();
     
             if(is_null($permissions)) {
-                return false;
+                return true;
             } else {
                 $profilePermission = ProfilePermission::where('profile_id', \Auth::user()->profile_id)
                             ->where('permission_id', $permissions->id)

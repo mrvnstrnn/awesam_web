@@ -31,7 +31,7 @@
 
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
-        <link rel="stylesheet" href="/js/jquery-ui.css">
+        <link type="text/css" class="init" rel="stylesheet" href="/js/jquery-ui.css">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
