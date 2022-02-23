@@ -237,7 +237,7 @@ class User extends Authenticatable implements MustVerifyEmail
                         ->where('sub_activity_id', $sub_activity_id)
                         ->where('sam_id', $sam_id)
                         ->where('type', 'doc_upload')
-                        ->where('status', 'pending')
+                        ->whereIn('status', ['pending', 'approved'])
                         ->first();
 
         return $sub_act;

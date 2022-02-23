@@ -150,11 +150,11 @@
                                                         </li>
                                                         @endif
                                                         
-                                                        <li class="nav-item">
+                                                        {{-- <li class="nav-item">
                                                             <a role="tab" class="nav-link" id="tab-file" data-toggle="tab" href="#tab-content-file">
                                                                 <span>Files</span>
                                                             </a>
-                                                        </li>
+                                                        </li> --}}
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane tabs-animation fade active show" id="tab-content-action-to-complete" role="tabpanel">
@@ -175,9 +175,6 @@
                                                             <div class="row p-2 pt-3 action_to_complete_parent">
                                                                 @foreach ($sub_activities as $sub_activity)
                                                                     @if($sub_activity->activity_id == $site[0]->activity_id)
-                                                                    {{-- <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sam_id="{{$site[0]->sam_id}}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
-                                                                        data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
-                                                                        > --}}
                                                                         <div class="col-md-6 btn_switch_show_action pt-3 action_to_complete_child{{ $sub_activity->sub_activity_id }}" data-sub_activity="{{ $sub_activity->sub_activity_name }}" data-sub_activity_id="{{ $sub_activity->sub_activity_id }}" data-action="{{ $sub_activity->action }}" data-with_doc_maker="{{ $sub_activity->with_doc_maker}}" data-document_type="{{ $sub_activity->document_type}}" data-required=""
                                                                             data-substep_same="{{ \Auth::user()->substep_all($site[0]->sam_id, $sub_activity->sub_activity_id) }}"
                                                                             >
@@ -229,11 +226,11 @@
                                                             </div>
                                                         </div>
                                                         @endif
-                                                        <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
+                                                        {{-- <div class="tab-pane tabs-animation fade" id="tab-content-file" role="tabpanel">
                                                             <img src="/images/construction.gif" width="100%"/>
                                                             <h5>activity_source: File</h5>
                                                             <div class="text-danger">Missing or incorrect component defintion in stage_activities_profiles tables or the source link doesnt have the correct activity_source attribute</div>
-                                                        </div>
+                                                        </div> --}}
                                                         {{-- <div class="tab-pane tabs-animation fade" id="tab-content-lessor-engagement" role="tabpanel">
                                                             <div id="action_lessor_engagement" class=''>
                                                                 <div class="row py-5 px-4" id="control_box_log">
