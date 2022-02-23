@@ -971,15 +971,16 @@ class GlobeController extends Controller
                     $site_name = $site_data->site_name;
                 }
 
-                if ( $action == "true" ) {
-                    $body_agent = "Your site has been moved to " . $site_name;
-                } else {
-                    $body_agent = "Your site has been rejected. Reason: ".$remarks;
-                }
-
                 if ( !is_null($site_users) ) {
                     $user_agent = User::find($site_users->agent_id);
                     if ( !is_null($user_agent) ) {
+
+                        if ( $action == "true" ) {
+                            $body_agent = "Your site has been moved to " . $activity_name;
+                        } else {
+                            $body_agent = "Your site has been rejected. Reason: ".$remarks;
+                        }
+                        
                         $notifDataForAgent = [
                             'user_id' => $site_users->agent_id,
                             'program_id' => $program_id,
