@@ -199,7 +199,7 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/my-profile', [UserController::class, 'my_profile'])->name('my_profile');
 
-    Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
+    // Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
 
     // FTTH
     Route::post('/tag-artb', [GlobeController::class, 'tag_artb'])->name('tag_artb');

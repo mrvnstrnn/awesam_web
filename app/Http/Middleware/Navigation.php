@@ -20,7 +20,7 @@ class Navigation
             if (is_null(\Auth::user()->profile_id)) {
                 return redirect('/onboarding');
             } else if($request->path() && !\Auth::user()->can_do($request->path())){
-                abort(404, "Sorry, You Are Not Allowed to Access This Page");
+                abort(403, "Sorry, You Are Not Allowed to Access This Page");
             }
         }
         return $next($request);
