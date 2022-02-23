@@ -170,7 +170,7 @@
                                         <div class="col-sm-3 col-12 border">
                                             <div class="milestone-bg bg_img_2"></div>
             
-                                            <div class="widget-chart widget-chart-hover milestone_sites" data-activity_id="{{ $stage_activity->activity_id }}" data-category="{{ $stage_activity->category }}">
+                                            <div class="widget-chart widget-chart-hover milestone_sites" data-activity_id="0" data-category="{{ $stage_activity->category }}">
                                                 <div class="widget-numbers" id="stage_counter_0">
                                                     {{ \Auth::user()->activities_count($user_program, 0, $categories_array[$j]); }}
                                                 </div>

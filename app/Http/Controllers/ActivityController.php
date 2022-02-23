@@ -371,15 +371,35 @@ class ActivityController extends Controller
                 }
             }
 
-            $site = \DB::table( 'view_site' )
-                    ->select( 'site_name', 'sam_id', 'sam_region_name' )
-                    ->where( 'program_id', $user_program )
-                    ->where( 'activity_id', $activity_id )
-                    ->where( 'site_category', $request->get('category') )
-                    ->get();
+            if ( $activity_id == 0 ) {
+                $site = \DB::table( 'sub_activity_value' )
+                        ->select( 'view_site.site_name', 'view_site.sam_id', 'view_site.sam_region_name', 'view_site.vendor_acronym', 'sub_activity_value.value', 'sub_activity_value.date_approved' )
+                        ->join('view_site', 'view_site.sam_id', 'sub_activity_value.sam_id')
+                        ->join('users', 'users.id', 'sub_activity_value.user_id')
+                        ->where( 'sub_activity_value.type', 'rtb_declaration' )
+                        ->where( 'sub_activity_value.status', 'approved' )
+                        ->where( 'view_site.site_category', $request->get('category') )
+                        ->where( 'view_site.program_id', $user_program )
+                        ->where( 'users.is_test', 0 )
+                        ->get();
 
-            $dt = DataTables::of($site);
-            return $dt->make(true);
+                $dt = DataTables::of($site)
+                        ->editColumn('rtb_declaration_date', function($row) {
+                            return json_decode($row->value)->rtb_declaration_date;
+                        });
+
+                return $dt->make(true);
+            } else {
+                $site = \DB::table( 'view_site' )
+                        ->select( 'site_name', 'sam_id', 'sam_region_name', 'vendor_acronym' )
+                        ->where( 'program_id', $user_program )
+                        ->where( 'activity_id', $activity_id )
+                        ->where( 'site_category', $request->get('category') )
+                        ->get();
+
+                $dt = DataTables::of($site);
+                return $dt->make(true);
+            }
 
             return response()->json([ 'error' => false, 'message' => $site ]);
 

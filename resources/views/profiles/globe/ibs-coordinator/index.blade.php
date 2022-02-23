@@ -28,6 +28,7 @@
                                     <th>Site Name</th>
                                     <th>SAM ID</th>
                                     <th>Region</th>
+                                    <th>Vendor</th>
                                 </tr>
                             </thead>
                         </table>
@@ -41,83 +42,4 @@
     </div>
 @endsection
 
-@section('js_script')
-
-
-<!-- PR PO Counter -->
-{{-- <script type="text/javascript" src="/js/newsites_ajax_counter.js"></script>   --}}
-<script>
-    $(document).ready( function () {
-        $(".milestone_sites").on("click", function (){
-
-            var activity_id = $(this).attr("data-activity_id");
-            var category = $(this).attr("data-category");
-
-            if ( activity_id != undefined ) {
-
-                $("#rtb_tracker_modal").modal("show");
-                $('#rtb_tracker_table').dataTable().fnDestroy();
-
-                
-                $('#rtb_tracker_table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: "/get-site-based-on-activity-id",
-                        method: "POST",
-                        data : {
-                            activity_id : activity_id,
-                            category : category
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                    },
-                    dataSrc: function(json){
-                        return json.data;
-                    },
-                    columns: [
-                        { data: "site_name" },
-                        { data: "sam_id" },
-                        { data: "sam_region_name" },
-                        // { data: "status" },
-                    ],
-                });
-
-                // $.ajax({
-                //     url: "/get-site-based-on-activity-id",
-                //     method: "POST",
-                //     data : {
-                //         activity_id : activity_id,
-                //         category : category
-                //     },
-                //     headers: {
-                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                //     },
-                //     success: function (resp) {
-                //         if (!resp.error) {
-                //             console.log(resp.message);
-                //         } else {
-                //             Swal.fire(
-                //                 'Error',
-                //                 resp.message,
-                //                 'error'
-                //             )
-                //         }
-                //     },
-                //     error: function (resp) {
-                //         Swal.fire(
-                //             'Error',
-                //             resp,
-                //             'error'
-                //         )
-                //     }
-                // });
-            }
-
-        });
-    });
-</script>
-
-    
-@endsection
+@include('layouts.rtb-tracker')
