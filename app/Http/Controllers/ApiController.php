@@ -129,7 +129,7 @@ class ApiController extends Controller
 
             $user = User::where('email', $request['email'])->firstOrFail();
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // $token = $user->createToken('auth_token')->plainTextToken;
 
             UserLog::create([
                 'user_id' => \Auth::id(),
@@ -150,7 +150,8 @@ class ApiController extends Controller
                                 ->where('user_programs.user_id', \Auth::user()->id)
                                 ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs, 'access_token' => $token, 'token_type' => 'Bearer']);
+            // return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs, 'access_token' => $token, 'token_type' => 'Bearer']);
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs]);
 
         } else {
 
