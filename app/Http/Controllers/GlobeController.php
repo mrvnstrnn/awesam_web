@@ -972,7 +972,7 @@ class GlobeController extends Controller
                 }
 
                 if ( $action == "true" ) {
-                    $body_agent = "Your site has been moved to " . $activity_name;
+                    $body_agent = "Your site has been moved to " . $site_name;
                 } else {
                     $body_agent = "Your site has been rejected. Reason: ".$remarks;
                 }
