@@ -207,7 +207,7 @@
                         <div class="col-sm-3 border">
                             <div class="milestone-bg bg_img_{{ $i }}"></div>
     
-                            <div class="widget-chart widget-chart-hover milestone_sites">
+                            <div class="widget-chart widget-chart-hover milestone_sites_card">
                                 <div class="widget-numbers" id="stage_counter_{{ strtolower(str_replace(" ", "", $milestone->stage_name)) }}">0</div>
                                 <div class="widget-subheading" id="stage_counter_label_{{ $milestone->stage_id }}">{{ $milestone->stage_name}}</div>
                             </div>
@@ -305,7 +305,7 @@ $(document).ready(() => {
 
     $(".filter_btn").on("click", function () {
 
-        $(".milestone_sites .widget-numbers").text("0");
+        $(".milestone_sites_card .widget-numbers").text("0");
         // var count = $(this).attr("data-count");
 
         if ( $(this).attr("data-value") == "filter_me" ) {
