@@ -6761,84 +6761,121 @@ class GlobeController extends Controller
     public function tag_artb(Request $request)
     {
         try {
+            
+            $files_pending_check = \DB::table('sub_activity')
+                                        ->select('sub_activity_id')
+                                        ->where('category', $request->get('site_category'))
+                                        ->where('program_id', $request->get('program_id'))
+                                        ->where('activity_id', $request->get('activity_id'))
+                                        ->where('requirements', 'required')
+                                        ->get();
 
-            $array_data = array(
-                'artb' => 'yes',
-                'artb_date' => Carbon::now()->toDateString()
-            );
-        
-            SubActivityValue::create([
-                'sam_id' => $request->input('sam_id'),
-                'type' => 'artb_declaration',
-                'status' => 'pending',
-                'user_id' => \Auth::id(),
-                'value' => json_encode($array_data)
-            ]);
+            $sub_activity_id_array = $files_pending_check->pluck('sub_activity_id');
 
-            $profile_id = \Auth::user()->profile_id;
-            $id = \Auth::id();
+            $sub_activity_value_check = \DB::table('sub_activity_value')
+                                        ->select('sub_activity_id')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('status', '!=', 'rejected')
+                                        ->whereIn('sub_activity_id', $sub_activity_id_array)
+                                        ->get()
+                                        ->groupBy('sub_activity_id');
 
-            $get_category = \DB::table("site")
-                                ->select('site_category')
-                                ->where("sam_id", $request->input("sam_id"))
+            if ( count($files_pending_check) - 1 != count($sub_activity_value_check) ) {
+                $count_required_files = count($files_pending_check) - 1;
+                return response()->json(['error' => true, 'message' => "Your file is not enough for ARTB. ".$count_required_files." files are required." ]);
+            } else {
+
+                $sub_activity_value_pending_check = \DB::table('sub_activity_value')
+                                        ->select('sub_activity_id')
+                                        ->where('sam_id', $request->get('sam_id'))
+                                        ->where('status', 'pending')
+                                        ->whereIn('sub_activity_id', $sub_activity_id_array)
+                                        ->get()
+                                        ->groupBy('sub_activity_id');
+
+                if ( count($sub_activity_value_pending_check) > 0 ) {
+                    return response()->json(['error' => true, 'message' => "All files should validate before proceeding to ARTB." ]);
+                } else {
+
+                    $array_data = array(
+                        'artb' => 'yes',
+                        'artb_date' => Carbon::now()->toDateString()
+                    );
+                
+                    SubActivityValue::create([
+                        'sam_id' => $request->input('sam_id'),
+                        'type' => 'artb_declaration',
+                        'status' => 'pending',
+                        'user_id' => \Auth::id(),
+                        'value' => json_encode($array_data)
+                    ]);
+
+                    $profile_id = \Auth::user()->profile_id;
+                    $id = \Auth::id();
+
+                    $get_category = \DB::table("site")
+                                        ->select('site_category')
+                                        ->where("sam_id", $request->input("sam_id"))
+                                        ->first();
+
+                    $activities = \DB::table('stage_activities')
+                            ->select('next_activity')
+                            ->where('activity_id', $request->input("activity_id"))
+                            ->where('program_id', $request->input('program_id'))
+                            ->where('category', $get_category->site_category)
+                            ->first();
+
+                    SiteStageTracking::where('sam_id', $request->input('sam_id'))
+                                    ->where('activity_complete', 'false')
+                                    ->where('activity_id', $request->input("activity_id"))
+                                    ->update([
+                                        'activity_complete' => "true"
+                                    ]);
+
+                    SiteStageTracking::create([
+                        'sam_id' => $request->input('sam_id'),
+                        'activity_id' => $activities->next_activity,
+                        'activity_complete' => 'false',
+                        'user_id' => \Auth::id()
+                    ]);
+
+                    \DB::table("site")
+                        ->where("sam_id", $request->input("sam_id"))
+                        ->update([
+                            'site_category' => $request->input('site_category'),
+                        ]);
+
+                    $get_next_activities = \DB::table('stage_activities')
+                                ->select('activity_name', 'profile_id', 'stage_id')
+                                ->where('activity_id', $activities->next_activity)
+                                ->where('program_id', $request->input('program_id'))
+                                ->where('category', $request->input('site_category'))
                                 ->first();
 
-            $activities = \DB::table('stage_activities')
-                    ->select('next_activity')
-                    ->where('activity_id', $request->input("activity_id"))
-                    ->where('program_id', $request->input('program_id'))
-                    ->where('category', $get_category->site_category)
-                    ->first();
+                    if (!is_null($get_next_activities)) {
+                        $get_program_stages = \DB::table('program_stages')
+                                                ->select('stage_name')
+                                                ->where('stage_id', $get_next_activities->stage_id)
+                                                ->where('program_id', $request->input('program_id'))
+                                                ->first();
+                    }
+                                
+                    $array = array(
+                        'stage_id' => !is_null($get_next_activities) ? $get_next_activities->stage_id : "",
+                        'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
+                        'activity_id' => $activities->next_activity,
+                        'activity_name' => $get_next_activities->activity_name,
+                        'profile_id' => $get_next_activities->profile_id,
+                        'category' => $request->input('site_category'),
+                        'activity_created' => Carbon::now()->toDateString(),
+                    );
 
-            SiteStageTracking::where('sam_id', $request->input('sam_id'))
-                            ->where('activity_complete', 'false')
-                            ->where('activity_id', $request->input("activity_id"))
+                    Site::where('sam_id', $request->input("sam_id"))
                             ->update([
-                                'activity_complete' => "true"
+                                'activities' => json_encode($array)
                             ]);
-
-            SiteStageTracking::create([
-                'sam_id' => $request->input('sam_id'),
-                'activity_id' => $activities->next_activity,
-                'activity_complete' => 'false',
-                'user_id' => \Auth::id()
-            ]);
-
-            \DB::table("site")
-                ->where("sam_id", $request->input("sam_id"))
-                ->update([
-                    'site_category' => $request->input('site_category'),
-                ]);
-
-            $get_next_activities = \DB::table('stage_activities')
-                        ->select('activity_name', 'profile_id', 'stage_id')
-                        ->where('activity_id', $activities->next_activity)
-                        ->where('program_id', $request->input('program_id'))
-                        ->where('category', $request->input('site_category'))
-                        ->first();
-
-            if (!is_null($get_next_activities)) {
-                $get_program_stages = \DB::table('program_stages')
-                                        ->select('stage_name')
-                                        ->where('stage_id', $get_next_activities->stage_id)
-                                        ->where('program_id', $request->input('program_id'))
-                                        ->first();
+                }
             }
-                        
-            $array = array(
-                'stage_id' => !is_null($get_next_activities) ? $get_next_activities->stage_id : "",
-                'stage_name' => !is_null($get_program_stages) ? $get_program_stages->stage_name : "",
-                'activity_id' => $activities->next_activity,
-                'activity_name' => $get_next_activities->activity_name,
-                'profile_id' => $get_next_activities->profile_id,
-                'category' => $request->input('site_category'),
-                'activity_created' => Carbon::now()->toDateString(),
-            );
-
-            Site::where('sam_id', $request->input("sam_id"))
-                    ->update([
-                        'activities' => json_encode($array)
-                    ]);
 
             return response()->json(['error' => false, 'message' => "Successfully tagged a site for ARTB."]);
         } catch (\Throwable $th) {
