@@ -95,14 +95,13 @@ class ApiController extends Controller
                                     ->where('user_details.user_id', $request->get('user_id'))
                                     ->first();
 
-                                    return response()->json(['message' => $user_detail, 'code' => 501]);
             $user_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
                     // ->where('user_programs.user_id', \Auth::id())
                     ->where('user_programs.user_id', $request->get('user_id'))
                     ->where('user_programs.active', 1)
                     ->orderBy('program.program_id', 'asc')
-                    ->get();
+                    ->first();
 
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
@@ -111,7 +110,7 @@ class ApiController extends Controller
                         ->where('agent_id', $request->get('user_id'))
                         // ->where('activity_profile_id', $request->get('profile_id'))
                         ->where('site_vendor_id', $vendor)
-                        ->where('program_id', $user_program)
+                        ->where('program_id', $user_program->program_id)
                         ->orderBy('stage_id', 'ASC')
                         ->orderBy('activity_id', 'ASC')
                         ->get();
