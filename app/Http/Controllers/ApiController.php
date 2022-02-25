@@ -103,6 +103,10 @@ class ApiController extends Controller
                     ->orderBy('program.program_id', 'asc')
                     ->first();
 
+            if ( is_null($user_program) ) {
+                return response()->json(['message' => "No active program available.", 'code' => 501]);
+            }
+
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
             $activities = \DB::table('view_assigned_sites')
@@ -115,7 +119,7 @@ class ApiController extends Controller
                         ->orderBy('activity_id', 'ASC')
                         ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'activities' => $activities]);
+            return response()->json(['message' => 'login successful', 'code' => 200, 'success' => $activities]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'code' => 501]);
         }
