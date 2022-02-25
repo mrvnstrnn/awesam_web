@@ -13,6 +13,7 @@ use App\Models\Invitation;
 use App\Models\VendorProgram;
 use App\Models\User;
 use App\Models\UserLog;
+use App\Models\UserDetail;
 use Validator;
 
 class ApiController extends Controller
@@ -90,6 +91,11 @@ class ApiController extends Controller
     {
         try {
             
+            $user_detail = UserDetail::join('users', 'users.id', 'user_details.user_id')
+                                    ->where('user_details.user_id', $request->get('user_id'))
+                                    ->first();
+
+                                    return response()->json(['message' => $user_detail, 'code' => 501]);
             $user_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
                     // ->where('user_programs.user_id', \Auth::id())
