@@ -6,6 +6,10 @@
             {{-- <button id="btn_back_to_file_list" class="float-right mt-0 btn btn-success" type="button">Approve Document</button> --}}
             <button class="mr-2 float-right mt-0 btn btn-transition btn-outline-danger approve_reject_doc_btns" data-action="reject" type="button">Reject Document</button>
         </div>
+
+        <div class="col-12 link_url">
+        </div>
+
         <div class="col-12 file_viewer">
         </div>
         <div class="col-12 my-3">
@@ -214,6 +218,40 @@
         var sam_id = "{{ $site[0]->sam_id }}";
         var sub_activity_id = $(this).attr('data-sub_activity_id');
         var id = values[0].id;
+
+        $.ajax({
+            url: "/get-link-old-data",
+            method: "POST",
+            data : {
+                sub_activity_id : sub_activity_id,
+                sam_id : sam_id
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function ( resp ) {
+                if ( !resp.error ) {
+                    if (resp.message != null) {
+                        $(".link_url").html(
+                            '<a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName='+resp.message.UPLOAD_FILE+'" target="_blank" class="mb-2 mr-2 btn-icon btn-shadow btn-outline-2x btn btn-outline-link pull-right pull-right"><i class="lnr-link btn-icon-wrapper"> </i>Appsheet File Link</a>'
+                        );
+                    }
+                } else {
+                    Swal.fire(
+                        'Error',
+                        resp,
+                        'error'
+                    )
+                }
+            },
+            error: function ( resp ) {
+                Swal.fire(
+                    'Error',
+                    resp,
+                    'error'
+                )
+            }
+        });
 
         if ($(this).attr("data-status") != "rejected"){
             if ($(this).attr("data-requires_validation") == 1) {

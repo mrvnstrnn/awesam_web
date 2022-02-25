@@ -23,10 +23,6 @@
             @php
                 $datas = \DB::select('call `files_dropzone`("' .  $sam_id . '")');
             @endphp
-
-            {{-- @if ( !is_null($link_data) )
-                <a href="https://www.appsheet.com/template/gettablefileurl?appName=COLOCV2r-1419547&tableName=FILES&fileName={{ $link_data->link }}&appVersion=1.000699&signature=8278929bb83de2e6558c5f4f088f048ef78fb2dbcf13f4545b6c36c3cd6c5722e6b49614504e2a76a85831192396c318">Link here.</a>
-            @endif --}}
         </div>
 
         <div class="col-12 file_viewers">
