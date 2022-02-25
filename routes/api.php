@@ -31,6 +31,7 @@ Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}'
 Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'])->name('all.getWorkflow');
 
 Route::post('/agent/my-activities', [ApiController::class, 'agent_activities']);
+Route::post('/agent/my-activities/actions', [ApiController::class, 'agent_activities_actions']);
 
 
 Route::post('login', [ApiController::class, 'login']);

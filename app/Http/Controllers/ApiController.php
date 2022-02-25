@@ -125,6 +125,32 @@ class ApiController extends Controller
         }
     }
 
+    public function agent_activities_actions (Request $request)
+    {
+        try {
+            $site = \DB::table('view_site')
+                        ->where('sam_id', $request->get('sam_id'))
+                        ->first();
+
+            if ( is_null($site) ) {
+                return response()->json(['message' => "No site found.", 'code' => 501]);
+            } else {
+                $sub_activities = \DB::table('sub_activity')
+                                ->where('program_id', $site->program_id)
+                                ->where('activity_id', $site->activity_id)
+                                ->where('category', $site->site_category)
+                                ->orderBy('sequential_step')
+                                ->orderBy('requires_validation', 'desc')
+                                ->get();
+    
+                return response()->json(['message' => $sub_activities, 'code' => 200]);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'code' => 501]);
+        }
+    }
+
     public function login(Request $request)
     {
         $loginDetails = $request->only('email', 'password');
