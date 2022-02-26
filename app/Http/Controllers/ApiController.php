@@ -119,7 +119,7 @@ class ApiController extends Controller
                         ->orderBy('activity_id', 'ASC')
                         ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'success' => $activities]);
+            return response()->json(['message' => $activities, 'code' => 200]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'code' => 501]);
         }

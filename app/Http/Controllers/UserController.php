@@ -22,6 +22,8 @@ use Log;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
+use Illuminate\Support\Facades\Http;
+
 // use Illuminate\Support\Facades\DB;
 
 
@@ -75,6 +77,152 @@ class UserController extends Controller
             Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
             throw $th;
         }
+    }
+
+    public function draftable()
+    {
+        try {
+            if(is_null(\Auth::user()->profile_id)){
+                return redirect('/onboarding');
+            } else {
+                
+                $role = \Auth::user()->getUserProfile();
+    
+                $mode = $role->mode;
+                $profile = $role->profile;
+    
+                
+                $title = ucwords(Auth::user()->name);
+                $title_subheading  = ucwords($mode . " : " . $profile);
+                $title_icon = 'monitor';
+        
+                $active_slug = "my-profile";
+        
+                $profile_menu = self::getProfileMenuLinks();
+    
+                $profile_direct_links = self::getProfileMenuDirectLinks();
+                    
+                $program_direct_links = self::getProgramMenuDirectLinks();
+
+                //API Draftable
+
+                $token = 'ef277522f8d24adb6f46805c790e1f15';
+                $account_id = 'pxFvIM';
+
+                $data = http_build_query(
+                    [
+                        'right' => [
+                            "file_type" => "pdf",
+                            "source_url" => "https://api.draftable.com/static/test-documents/paper/right.pdf"
+                        ],
+                        'left' => [
+                            "file_type" => "pdf",
+                            "source_url" => "https://api.draftable.com/static/test-documents/paper/left.pdf"
+                        ]
+                    ]
+                );
+
+                $opts = [
+                    "http" => [
+                        "method" => "GET",
+                        "header" => "Accept-language: en\r\n".
+                                    "Content-type: multipart/form-data\r\n".
+                                    "Accept: application/json\r\n".
+                                    "Authorization: Token " . $token,
+
+                        "content" => [
+                                'right.source_url' => "http://www.africau.edu/images/default/sample.pdf",
+                                'right.file_type' => "pdf",
+                                'left.source_url' => "http://www.africau.edu/images/default/sample.pdf",
+                                'left.file_type' => "pdf",
+                            ]
+                    ]
+                ];
+                
+                $context = stream_context_create($opts);
+
+                // Get a list of all comparisons
+                $comparisons = file_get_contents('https://api.draftable.com/v1/comparisons', false, $context);
+
+                $collect = json_decode($comparisons);
+
+                dd(json_decode($comparisons));
+
+                // Create a signed viewer URL which expires next week.
+                $valid_until = time() + (7 * 24 * 60 * 60); // Timestamp one week in the future.
+                $identifier = end($collect->results)->identifier; // Take a specific comparison you want to view.
+
+                $signature = hash_hmac('sha256', '{"account_id":"' . $account_id .'","identifier":"' . $identifier . '","valid_until":' . $valid_until . '}', $token);
+                $signed_url =  'https://api.draftable.com/v1/comparisons/viewer/' . $account_id . '/' . $identifier;
+                //API Draftable
+                
+                return view('draftable', 
+                    compact(
+                        'mode',
+                        'profile',
+                        'active_slug',
+                        'profile_menu',
+                        'profile_direct_links',
+                        'program_direct_links',
+                        'title', 
+                        'title_subheading', 
+                        'title_icon',
+                        'signed_url',
+                    )
+                );
+            }
+        } catch (\Throwable $th) {
+            Log::channel('error_logs')->info($th->getMessage(), [ 'user_id' => \Auth::id() ]);
+            throw $th;
+        }
+    }
+
+    public function laravel_curl ()
+    {
+
+        // $opts = [
+        //     "http" => [
+        //         "method" => "GET",
+        //         "header" => "Content-Type: multipart/form-data Accept: application/json" ."Authorization: Token " . $token
+        //     ],
+        //     'identifier' => 'LtIqqWLR',
+        //     'public' => false,
+        //     'left' => [
+        //         "file_type" => "pdf",
+        //         "file" => "/files/1642955444renewal-000000009-loi-NONE-get-send-approved-loi-01.pdf"
+        //     ],
+        //     'right' => [
+        //         "file_type" => "pdf",
+        //         "file" => "/files1/1642955444renewal-000000009-loi-NONE-get-send-approved-loi-01.pdf",
+        //     ],
+        // ];
+
+        $token = 'ef277522f8d24adb6f46805c790e1f15';
+        $account_id = 'pxFvIM';
+
+        $opts = [
+            "http" => [
+                "method" => "GET",
+                "header" => "Accept-language: en\r\n".
+                            "Content-type: multipart/form-data\r\n".
+                            "Accept: application/json\r\n".
+                            "Authorization: Token " . $token,
+            ]
+        ];
+          
+        $context = stream_context_create($opts);
+
+        // Get a list of all comparisons
+        $comparisons = file_get_contents('https://api.draftable.com/v1/comparisons', false, $context);
+
+        // Create a signed viewer URL which expires next week.
+        $valid_until = time() + (7 * 24 * 60 * 60); // Timestamp one week in the future.
+        $identifier = 'VctsMUfX'; // Take a specific comparison you want to view.
+
+        $signature = hash_hmac('sha256', '{"account_id":"' . $account_id .'","identifier":"' . $identifier . '","valid_until":' . $valid_until . '}', $token);
+        $signed_url =  'https://api.draftable.com/v1/comparisons/viewer/' . $account_id . '/' . $identifier . '?valid_until=' . $valid_until . '&signature=' . $signature;
+        
+        return response()->json(['error' => false, 'message' => $signed_url ]);
     }
 
     public function profile_switcher($profile_id)

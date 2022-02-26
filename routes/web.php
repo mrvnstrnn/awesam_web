@@ -199,6 +199,9 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::get('/my-profile', [UserController::class, 'my_profile'])->name('my_profile');
 
+    Route::get('/draftable', [UserController::class, 'draftable'])->name('draftable');
+    Route::get('/laravel-curl', [UserController::class, 'laravel_curl'])->name('laravel_curl');
+
     // Route::get('/activities/{agent_id?}', [UserController::class, 'activities_agent']);
 
     // FTTH
