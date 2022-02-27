@@ -29,7 +29,6 @@ class EventListenerClassifier implements Classifier
                 })->toArray();
             })
             ->collapse()
-            ->flatten()
             ->unique()
             ->contains($class->getName());
     }
@@ -61,10 +60,6 @@ class EventListenerClassifier implements Classifier
     {
         if (is_string($closure)) {
             return $closure;
-        }
-
-        if (is_array($closure)) {
-            return head($closure);
         }
 
         $reflection = new ReflectionFunction($closure);
