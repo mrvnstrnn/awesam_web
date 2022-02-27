@@ -25,7 +25,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return auth()->user();
     });
 
+    
+    Route::post('/agent/my-activities', [ApiController::class, 'agent_activities']);
+
     Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do']);
+    Route::post('/agent/my-activities/actions', [ApiController::class, 'agent_activities_actions']);
+    Route::post('/current-user', [ApiController::class, 'current_user']);
 });
 
 // Route::post('/me', [ApiController::class, 'me'])->middleware('auth:sanctum');
@@ -38,8 +43,6 @@ Route::any('/for-invitation', [ApiController::class, 'for_invitation'])->name('f
 Route::get('/stored-proc/{profile_id}/{program_id}/{activity_id}/{what_to_load}', [GlobeController::class, 'getNewEndorsement'])->name('all.getNewEndorsement');
 Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'])->name('all.getWorkflow');
 
-Route::post('/agent/my-activities', [ApiController::class, 'agent_activities']);
-Route::post('/agent/my-activities/actions', [ApiController::class, 'agent_activities_actions']);
 // Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do'])->middleware('auth:sanctum');
 
 
@@ -47,4 +50,3 @@ Route::post('login', [ApiController::class, 'login']);
 
 Route::post('logout', [ApiController::class, 'logout']);
 Route::post('reset-password', [ApiController::class, 'reset']);
-Route::post('current-user', [ApiController::class, 'current_user']);
