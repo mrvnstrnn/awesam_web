@@ -4862,6 +4862,7 @@ class GlobeController extends Controller
 
     public function sub_activity_view(Request $request)
     {
+        // $request->get('sub_activity'), $request->get('sub_activity_id'), $request->get('program_id'), $request->get('site_category'), $request->get('activity_id')
         if($request->get('active_subactivity') == 'SSDS'){
 
             $jtss_add_site = SubActivityValue::where('sam_id', $request->get('active_sam_id'))
@@ -6195,69 +6196,43 @@ class GlobeController extends Controller
                 'rtb_declaration_date' => 'required',
                 // 'rtb_declaration' => 'required',
                 'afi_lines' => [$required_afi, 'min:0'],
-                'afi_type' => $required_afi,
-                'solution' => $required_afi,
             ));
 
             if ($validate->passes()){
 
-                // if ($request->get('program_id') == 2) {
-                //     $afi_lines_site = \DB::table('program_ftth')
-                //                         ->select('afi_lines')
-                //                         ->where('sam_id', $request->input('sam_id'))
-                //                         ->first();
+                $rtb = SubActivityValue::where('sam_id', $request->input('sam_id'))
+                                        ->where('user_id', \Auth::id())
+                                        ->where('status', "pending")
+                                        ->where('type', "rtb_declaration")
+                                        ->first();
 
-                //     $afi_data = $afi_lines_site->afi_lines;
+                if ($request->get('program_id') == 2) {
+                    \DB::table('program_ftth')
+                        ->where('sam_id', $request->input('sam_id'))
+                        ->update([
+                            'afi_lines' => $request->input('afi_lines')
+                        ]);
+                }
 
-                //     \DB::table('program_ftth')
-                //         ->where('sam_id', $request->input('sam_id'))
-                //         ->update([
-                //             'afi_lines' => $request->input('afi_lines'),
-                //             'solution' => $request->input('solution')
-                //         ]);
-                // }
+                if (is_null($rtb)){
 
-                if ($request->get('program_id') == 2 && $request->get('afi_type') == "Partial") {
                     SubActivityValue::create([
                         'sam_id' => $request->input("sam_id"),
                         'sub_activity_id' => $request->input("sub_activity_id"),
                         'value' => json_encode($request->all()),
                         'user_id' => \Auth::id(),
                         'status' => "pending",
-                        'type' => "rtb_declaration_partial",
+                        'type' => "rtb_declaration",
                     ]);
-                    
+
                     $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
 
-                    return response()->json([ 'error' => false, 'message' => "Successfully declared RTB partial." ]);
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 } else {
 
-                    $rtb = SubActivityValue::where('sam_id', $request->input('sam_id'))
-                                            ->where('user_id', \Auth::id())
-                                            ->where('status', "pending")
-                                            ->where('type', "rtb_declaration")
-                                            ->first();
-    
-                    if (is_null($rtb)){
-    
-                        SubActivityValue::create([
-                            'sam_id' => $request->input("sam_id"),
-                            'sub_activity_id' => $request->input("sub_activity_id"),
-                            'value' => json_encode($request->all()),
-                            'user_id' => \Auth::id(),
-                            'status' => "pending",
-                            'type' => "rtb_declaration",
-                        ]);
-    
-                        $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
-    
-                        return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
-                    } else {
-    
-                        $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
-                        
-                        return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
-                    }
+                    $asd = $this->move_site([$request->input('sam_id')], $request->input('program_id'), "true", $request->input('site_category'), $request->input('activity_id'));
+                    
+                    return response()->json(['error' => false, 'message' => "Successfully declared RTB."]);
                 }
             } else {
                 return response()->json(['error' => true, 'message' => $validate->errors() ]);

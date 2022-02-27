@@ -12,29 +12,10 @@
                     <div class="position-relative form-group">
                         <input type="text" id="rtb_declaration_date" name="rtb_declaration_date" class="flatpicker form-control" style="background-color: white;" />
                         <small class="rtb_declaration_date-error text-danger"></small>
-                    </div>
+                    </div>        
                 </div>
             </div>
             @if ($site[0]->program_id == 2)
-            <div class="form-row"> 
-                <div class="col-md-4 col-12">
-                    <div class="position-relative form-group">
-                        <label for="afi_type">AFI Type</label>
-                    </div>
-                </div>
-
-                <div class="col-md-8 col-12">
-                    <div class="position-relative form-group">
-                        <select name="afi_type" id="afi_type" class="form-control">
-                            <option value=""></option>
-                            <option value="Partial">Partial</option>
-                            <option value="Full">Full</option>
-                        </select>
-                        <small class="afi_type-error text-danger"></small>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-row"> 
                 <div class="col-md-4 col-12">
                     <div class="position-relative form-group">
@@ -47,25 +28,6 @@
                         <input type="number" min="0" id="afi_lines" name="afi_lines" class="form-control" />
                         <small class="afi_lines-error text-danger"></small>
                     </div>        
-                </div>
-            </div>
-
-            <div class="form-row"> 
-                <div class="col-md-4 col-12">
-                    <div class="position-relative form-group">
-                        <label for="solution">Solution</label>
-                    </div>
-                </div>
-
-                <div class="col-md-8 col-12">
-                    <div class="position-relative form-group">
-                        <select name="solution" id="solution" class="form-control">
-                            <option value=""></option>
-                            <option value="Sunny">Sunny</option>
-                            <option value="Cloudy">Cloudy</option>
-                        </select>
-                        <small class="solution-error text-danger"></small>
-                    </div>
                 </div>
             </div>
             @endif
@@ -127,14 +89,10 @@
 
             var sam_id = "{{ $site[0]->sam_id }}";
             var rtb_declaration_date = $("#rtb_declaration_date").val();
-            
-            var afi_type = $("#afi_type").val();
-            var solution = $("#solution").val();
-            var afi_lines = $("#afi_lines").val();
-
             // var rtb_declaration = $("#rtb_declaration").val();
             var program_id = "{{ $site[0]->program_id }}";
             var activity_name = "rtb_declation";
+            var afi_lines = $("#afi_lines").val();
 
             var activity_id = ["{{ $site[0]->activity_id }}"];
             var site_category = ["{{ $site[0]->site_category }}"];
@@ -157,8 +115,6 @@
                     activity_id : activity_id,
                     site_category : site_category,
                     afi_lines : afi_lines,
-                    afi_type : afi_type,
-                    solution : solution,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -93,14 +93,13 @@ class ApiController extends Controller
         try {
             
             $user_detail = UserDetail::join('users', 'users.id', 'user_details.user_id')
-                                    // ->where('user_details.user_id', $request->get('user_id'))
-                                    ->where('user_details.user_id', \Auth::id())
+                                    ->where('user_details.user_id', $request->get('user_id'))
                                     ->first();
 
             $user_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                    ->where('user_programs.user_id', \Auth::id())
-                    // ->where('user_programs.user_id', $request->get('user_id'))
+                    // ->where('user_programs.user_id', \Auth::id())
+                    ->where('user_programs.user_id', $request->get('user_id'))
                     ->where('user_programs.active', 1)
                     ->orderBy('program.program_id', 'asc')
                     ->first();
@@ -112,8 +111,8 @@ class ApiController extends Controller
             $vendor = is_null($user_detail) ? NULL : $user_detail->vendor_id;
 
             $activities = \DB::table('view_assigned_sites')
-                        ->where('agent_id', \Auth::id())
-                        // ->where('agent_id', $request->get('user_id'))
+                        // ->where('agent_id', \Auth::id())
+                        ->where('agent_id', $request->get('user_id'))
                         // ->where('activity_profile_id', $request->get('profile_id'))
                         ->where('site_vendor_id', $vendor)
                         ->where('program_id', $user_program->program_id)
@@ -166,7 +165,7 @@ class ApiController extends Controller
 
             $user = User::where('email', $request['email'])->firstOrFail();
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // $token = $user->createToken('auth_token')->plainTextToken;
 
             UserLog::create([
                 'user_id' => \Auth::id(),
@@ -187,8 +186,8 @@ class ApiController extends Controller
                                 ->where('user_programs.user_id', \Auth::user()->id)
                                 ->get();
 
-            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs, 'access_token' => $token, 'token_type' => 'Bearer']);
-            // return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs]);
+            // return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs, 'access_token' => $token, 'token_type' => 'Bearer']);
+            return response()->json(['message' => 'login successful', 'code' => 200, 'active_program' => $user_active_program, 'menu' => $profile_menu, 'profile_id' => Auth::user()->profile_id, 'user_id' => Auth::id(), 'user_programs' => $user_programs]);
 
         } else {
 
@@ -236,13 +235,12 @@ class ApiController extends Controller
         }
     }
 
-    public function agent_activities_actions_do($sam_id, $sub_activity_id)
+    public function agent_activities_actions_do(Request $request)
     {
         try {
             $site = \DB::table('view_site')
-                    ->where('sam_id', $sam_id)
+                    ->where('sam_id', $request->get('sam_id'))
                     ->first();
-                    
 
             if ( is_null($site) ) {
 
@@ -252,7 +250,7 @@ class ApiController extends Controller
 
             if($site->activity_name == 'SSDS'){
 
-                $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                         ->where('type', 'jtss_add_site')
                                                         ->get();
 
@@ -260,8 +258,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -273,7 +271,7 @@ class ApiController extends Controller
 
             else if($site->activity_name == 'Set Approved Site'){
 
-                $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                         ->where('type', 'jtss_add_site')
                                                         ->get();
 
@@ -281,8 +279,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -298,8 +296,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -314,8 +312,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -330,8 +328,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -345,8 +343,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -356,20 +354,20 @@ class ApiController extends Controller
             }
             elseif($site->activity_name == 'Set Survey Representatives'){
 
-                $datas = SubActivityValue::where('sam_id', $sam_id)
+                $datas = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                             ->where('type', 'jtss_representative')
                                             ->get();
 
                 $site = Site::select('site_name')
-                                ->where('sam_id', $sam_id)
+                                ->where('sam_id', $request->get('sam_id'))
                                 ->first();
 
                 $what_component = "components.set-survey-representatives";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -381,12 +379,12 @@ class ApiController extends Controller
             }
             elseif($site->activity_name == 'Add Site Candidates'){
 
-                $jtss_add_site = SubActivityValue::where('sam_id', $sam_id)
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
                                                         ->where('type', 'jtss_add_site')
                                                         ->get();
 
                 $site_np = Site::select('NP_latitude', 'NP_longitude', 'site_region_id', 'site_province_id', 'site_lgu_id')
-                            ->where('sam_id', $sam_id)
+                            ->where('sam_id', $request->get('sam_id'))
                             ->first();
 
                 $location_regions = \DB::table('location_regions')
@@ -408,8 +406,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -429,7 +427,7 @@ class ApiController extends Controller
             elseif($site->activity_name == 'JTSS Sched Confirmation'){
 
                 $np = \DB::table('site')
-                    ->where('sam_id', $sam_id)
+                    ->where('sam_id', $request->get('sam_id'))
                     ->select('NP_latitude', 'NP_longitude')
                     ->get();
 
@@ -438,8 +436,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -450,19 +448,19 @@ class ApiController extends Controller
             elseif($site->activity_name == 'Site Survey Deliberation Sheet'){
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
                                             
                 $what_component = "components.ssds";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -474,19 +472,19 @@ class ApiController extends Controller
             elseif($site->activity_name == 'SSDS Ranking'){
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $what_component = "components.ssds-ranking";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -499,19 +497,19 @@ class ApiController extends Controller
             elseif($site->activity_name == 'Approved SSDS'){
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $what_component = "components.approved-ssds";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -523,19 +521,19 @@ class ApiController extends Controller
             elseif($site->activity_name == 'SSDS NTP'){
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $what_component = "components.ssds-ntp";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -547,19 +545,19 @@ class ApiController extends Controller
             elseif($site->activity_name == 'Lease Details'){
 
                 $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
-                                            ->where('sam_id', $sam_id)
+                                            ->where('sam_id', $request->get('sam_id'))
                                             ->get();
 
                 $what_component = "components.lease-details";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -571,15 +569,15 @@ class ApiController extends Controller
 
                 $program_renewal = \DB::table('program_renewal')
                                     ->select('site_address', 'lessor', 'expiration')
-                                    ->where('sam_id', $sam_id)
+                                    ->where('sam_id', $request->get('sam_id'))
                                     ->first();
 
                 $what_component = "components.loi-maker";
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -594,8 +592,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -609,8 +607,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -624,8 +622,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -640,7 +638,7 @@ class ApiController extends Controller
 
                     $files = SubActivityValue::select('value')
                                     ->where('sub_activity_id', 423)
-                                    ->where('sam_id', $sam_id)
+                                    ->where('sam_id', $request->get('sam_id'))
                                     ->first();
 
                 } else if ($site->activity_name == 'Get Send Approved LRN') {
@@ -648,14 +646,14 @@ class ApiController extends Controller
 
                     $files = SubActivityValue::select('value')
                                     ->where('sub_activity_id', 424)
-                                    ->where('sam_id', $sam_id)
+                                    ->where('sam_id', $request->get('sam_id'))
                                     ->first();
                 }
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -670,8 +668,8 @@ class ApiController extends Controller
                 return \View::make($what_component)
                 ->with([
                     'sub_activity' => $site->activity_name,
-                    'sam_id' => $sam_id,
-                    'sub_activity_id' => $sub_activity_id,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
                     'program_id' => $site->program_id,
                     'site_category' => $site->site_category,
                     'activity_id' => $site->activity_id,
@@ -684,9 +682,6 @@ class ApiController extends Controller
         }
     }
 
-    public function test_asd ($sam_id = null, $sub_activity_id = null)
-    {
-        return response()->json(['message' => 'login failed', 'code' => 501]);
-    }
+
 
 }

@@ -43,9 +43,6 @@ use App\Http\Controllers\ApiController;
 
 Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
-//MOBILE Web
-Route::get('/mobile/agent/my-activities/actions/do/{?sam_id}/{?sub_activity_id}', [ApiController::class, 'test_asd']);
-
 Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
