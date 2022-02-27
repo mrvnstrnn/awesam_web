@@ -212,7 +212,7 @@
             $('#table_uploaded_files_'+"{{ $sub_activity_id }}").DataTable().ajax.reload();
         }
 
-        if ("{{ \Auth::user()->getUserProfile()->mode }}" == "vendor") {
+        // if (" \Auth::user()->getUserProfile()->mode " == "vendor") {
             Dropzone.autoDiscover = false;
             $(".dropzone_files_activities").dropzone({
                 addRemoveLinks: true,
@@ -309,7 +309,7 @@
                     )
                 }
             });
-        }
+        // }
 
 
         $(".add_remarks_button").on("click", function(e){

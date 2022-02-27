@@ -14,6 +14,7 @@ use App\Models\VendorProgram;
 use App\Models\User;
 use App\Models\UserLog;
 use App\Models\UserDetail;
+use App\Models\SubActivityValue;
 use Validator;
 
 class ApiController extends Controller
@@ -233,5 +234,454 @@ class ApiController extends Controller
             return response()->json(['message' => $th->getMessage(), 'code' => 501]);
         }
     }
+
+    public function agent_activities_actions_do(Request $request)
+    {
+        try {
+            $site = \DB::table('view_site')
+                    ->where('sam_id', $request->get('sam_id'))
+                    ->first();
+
+            if ( is_null($site) ) {
+
+            } else {
+
+            }
+
+            if($site->activity_name == 'SSDS'){
+
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->get();
+
+                $what_component = "components.subactivity-ssds";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'check_if_added' => $jtss_add_site,
+                ])
+                ->render();
+
+            }
+
+            else if($site->activity_name == 'Set Approved Site'){
+
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->get();
+
+                $what_component = "components.set-approved-site";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'check_if_added' => $jtss_add_site,
+                ])
+                ->render();
+
+            }
+
+            else if($site->activity_name == 'Lessor Negotiation' || $site->activity_name == 'LESSOR ENGAGEMENT' || $site->activity_name == 'Lessor Engagement' || $site->activity_name == 'Lessor Renewal Negotiation'){
+
+                $what_component = "components.subactivity-lessor-engagement";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+
+            else if($site->activity_name == 'Commercial Negotiation'){
+
+                $what_component = "components.renewal-commercial-negotiation";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+
+            elseif($site->activity_name == 'Set Site Category'){
+
+                $what_component = "components.set-site-category";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Schedule Advanced Site Hunting'){
+
+                $what_component = "components.schedule-advance-site-hunting";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Set Survey Representatives'){
+
+                $datas = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                            ->where('type', 'jtss_representative')
+                                            ->get();
+
+                $site = Site::select('site_name')
+                                ->where('sam_id', $request->get('sam_id'))
+                                ->first();
+
+                $what_component = "components.set-survey-representatives";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'site_name' => $site->site_name,
+                    'is_done' => count($datas) > 0 ? 'done' : 'not_done',
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Add Site Candidates'){
+
+                $jtss_add_site = SubActivityValue::where('sam_id', $request->get('sam_id'))
+                                                        ->where('type', 'jtss_add_site')
+                                                        ->get();
+
+                $site_np = Site::select('NP_latitude', 'NP_longitude', 'site_region_id', 'site_province_id', 'site_lgu_id')
+                            ->where('sam_id', $request->get('sam_id'))
+                            ->first();
+
+                $location_regions = \DB::table('location_regions')
+                                            ->select('region_name')
+                                            ->where('region_id', $site_np->site_region_id)
+                                            ->first();
+
+                $location_provinces = \DB::table('location_provinces')
+                                            ->select('province_name')
+                                            ->where('province_id', $site_np->site_province_id)
+                                            ->first();
+
+                $location_lgus = \DB::table('location_lgus')
+                                            ->select('lgu_name')
+                                            ->where('lgu_id', $site_np->site_lgu_id)
+                                            ->first();
+
+                $what_component = "components.add-site-prospects";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'check_if_added' => $jtss_add_site,
+                    'NP_latitude' => $site_np->NP_latitude,
+                    'NP_longitude' => $site_np->NP_longitude,
+                    'site_region_id' => $site_np->site_region_id,
+                    'site_province_id' => $site_np->site_province_id,
+                    'site_lgu_id' => $site_np->site_lgu_id,
+                    'location_regions' => is_null($location_regions) ? "NA" : $location_regions->region_name,
+                    'location_provinces' => is_null($location_provinces) ? "NA" : $location_provinces->province_name,
+                    'location_lgus' => is_null($location_lgus) ? "NA" : $location_lgus->lgu_name
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'JTSS Sched Confirmation'){
+
+                $np = \DB::table('site')
+                    ->where('sam_id', $request->get('sam_id'))
+                    ->select('NP_latitude', 'NP_longitude')
+                    ->get();
+
+
+                $what_component = "components.jtss-sched-confirmation";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Site Survey Deliberation Sheet'){
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+                                            
+                $what_component = "components.ssds";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'SSDS Ranking'){
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $what_component = "components.ssds-ranking";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                    'count_ssds' => count($jtss_ssds),
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Approved SSDS'){
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $what_component = "components.approved-ssds";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'SSDS NTP'){
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $what_component = "components.ssds-ntp";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Lease Details'){
+
+                $jtss_ssds = SubActivityValue::where('type', 'jtss_ssds')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $jtss_schedule_site = SubActivityValue::where('type', 'jtss_schedule_site')
+                                            ->where('sam_id', $request->get('sam_id'))
+                                            ->get();
+
+                $what_component = "components.lease-details";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'is_match' => count($jtss_ssds) == count($jtss_schedule_site) ? "match" : "not_match",
+                ])
+                ->render();
+            }
+            elseif($site->activity_name == 'Create LOI to Renew'){
+
+                $program_renewal = \DB::table('program_renewal')
+                                    ->select('site_address', 'lessor', 'expiration')
+                                    ->where('sam_id', $request->get('sam_id'))
+                                    ->first();
+
+                $what_component = "components.loi-maker";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'program_renewal' => $program_renewal,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Savings Computation'){
+
+                $what_component = "components.savings-computation";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Create Lease Renewal Notice'){
+
+                $what_component = "components.lease-renewal-notice";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Schedule of Rental Payment'){
+
+                $what_component = "components.renewal-schedule-of-rental-payment";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+
+            }
+            elseif($site->activity_name == 'Get Send Approved LOI' || $site->activity_name == 'Get Send Approved LRN'){
+
+                if ($site->activity_name == 'Get Send Approved LOI') {
+                    $what_component = "components.get-send-approved-loi";
+
+                    $files = SubActivityValue::select('value')
+                                    ->where('sub_activity_id', 423)
+                                    ->where('sam_id', $request->get('sam_id'))
+                                    ->first();
+
+                } else if ($site->activity_name == 'Get Send Approved LRN') {
+                    $what_component = "components.get-send-approved-lrn";
+
+                    $files = SubActivityValue::select('value')
+                                    ->where('sub_activity_id', 424)
+                                    ->where('sam_id', $request->get('sam_id'))
+                                    ->first();
+                }
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                    'files' => $files,
+                ])
+                ->render();
+
+            }
+            else {
+
+                $what_component = "components.subactivity-doc-upload";
+                return \View::make($what_component)
+                ->with([
+                    'sub_activity' => $site->activity_name,
+                    'sam_id' => $request->get('sam_id'),
+                    'sub_activity_id' => $request->get('sub_activity_id'),
+                    'program_id' => $site->program_id,
+                    'site_category' => $site->site_category,
+                    'activity_id' => $site->activity_id,
+                ])
+                ->render();
+            }
+            
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'code' => 501]);
+        }
+    }
+
+
 
 }
