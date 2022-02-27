@@ -93,13 +93,12 @@ class ApiController extends Controller
         try {
             
             $user_detail = UserDetail::join('users', 'users.id', 'user_details.user_id')
-                                    ->where('user_details.user_id', $request->get('user_id'))
+                                    ->where('user_details.user_id', \Auth::id())
                                     ->first();
 
             $user_program = \DB::table('program')
                     ->join('user_programs', 'program.program_id', 'user_programs.program_id')
-                    // ->where('user_programs.user_id', \Auth::id())
-                    ->where('user_programs.user_id', $request->get('user_id'))
+                    ->where('user_programs.user_id', \Auth::id())
                     ->where('user_programs.active', 1)
                     ->orderBy('program.program_id', 'asc')
                     ->first();
@@ -112,7 +111,7 @@ class ApiController extends Controller
 
             $activities = \DB::table('view_assigned_sites')
                         // ->where('agent_id', \Auth::id())
-                        ->where('agent_id', $request->get('user_id'))
+                        ->where('agent_id', \Auth::id())
                         // ->where('activity_profile_id', $request->get('profile_id'))
                         ->where('site_vendor_id', $vendor)
                         ->where('program_id', $user_program->program_id)
