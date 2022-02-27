@@ -12,10 +12,11 @@ use App\Models\UserDetail;
 use App\Models\Profile;
 use App\Models\VendorProgram;
 use App\Models\SubActivityValue;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     // protected $connection = 'mysql2';
 
