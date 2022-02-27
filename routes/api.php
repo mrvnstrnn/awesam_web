@@ -20,6 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/me', function() {
+        return auth()->user();
+    });
+
+    Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do']);
+});
+
 // Route::post('/me', [ApiController::class, 'me'])->middleware('auth:sanctum');
 // oHL3YjtnfV7rPulPgixQ0v418LqHRBxNzvvCEugV
 Route::any('/send-invitation-vendor', [ApiController::class, 'send_invitation_vendor'])->name('send_invitation_vendor');
@@ -32,7 +40,7 @@ Route::get('/workflow-proc/{program_id}', [GlobeController::class, 'getWorkflow'
 
 Route::post('/agent/my-activities', [ApiController::class, 'agent_activities']);
 Route::post('/agent/my-activities/actions', [ApiController::class, 'agent_activities_actions']);
-Route::post('/agent/my-activities/actions/do', [ApiController::class, 'agent_activities_actions_do']);
+// Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do'])->middleware('auth:sanctum');
 
 
 Route::post('login', [ApiController::class, 'login']);
