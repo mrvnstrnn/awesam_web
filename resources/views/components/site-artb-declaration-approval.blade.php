@@ -19,21 +19,32 @@
                     </div>        
                 </div>
             </div>
+            @if ( isset($json['afi_lines']) && $site[0]->program_id == 2 )
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
-                        <label for="rtb_declaration">ARTB Declaration</label>
-                        {{-- <select name="rtb_declaration" id="rtb_declaration" class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select> --}}
-                        <input type="text" name="rtb_declaration" id="rtb_declaration" value="{{ $json['rtb_declaration'] }}" class="form-control" readonly>
+                        <label for="afi_lines">AFI Lines</label>
+                        <input type="text" id="afi_lines" name="afi_lines" value="{{ $json['afi_lines'] }}" class="form-control" readonly />
                     </div>        
                 </div>
             </div>
+
+            <div class="form-row"> 
+                <div class="col-md-12">
+                    <div class="position-relative form-group">
+                        <label for="solution">Solution</label>
+                        <br>
+                        <b>Current Solution:</b> {{ $site[0]->solution }}
+                        <select name="solution" id="solution" class="form-control">
+                            <option value=""></option>
+                            <option value="Sunny">Sunny</option>
+                            <option value="Cloudy">Cloudy</option>
+                        </select>
+                        <small class="solution-error text-danger"></small>
+                    </div>        
+                </div>
+            </div>
+            @endif
             <div class="form-row"> 
                 <div class="col-md-12">
                     <div class="position-relative form-group">
@@ -53,12 +64,66 @@
     </div>
 </div>
 
+@if ($site[0]->program_id == 2)
+<hr>
+<h5>Partial Declaration List</h5>
+<div class="row">
+    <div class="col-12">
+        <table class="table table-hover rtb_declaration_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>AFI Lines</th>
+                    <th>Type</th>
+                    <th>Solution</th>
+                    <th>Declaration Date</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<div class="row mb-3 border-top pt-3">
+    <div class="col-12">
+        <button class="float-right btn btn-shadow btn-primary declare_rtb" data-value="now">Submit now RTB</button>
+    </div>
+</div>
+@endif
 
 <script>
 
     $(document).ready(function(){
 
-    
+        var sam_id = "{{ $site[0]->sam_id }}";
+        var status = "approved";
+
+        $('.rtb_declaration_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/get-partial-rtb-declaration",
+                type: 'POST',
+                data: {
+                    sam_id : sam_id,
+                    status : status
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            dataSrc: function(json){
+                return json.data;
+            },
+            columns: [
+                { data: "id" },
+                { data: "afi_lines" },
+                { data: "afi_type" },
+                { data: "solution" },
+                { data: "rtb_declaration_date" },
+                { data: "date_created" },
+            ],
+        });
+
         $(".declaration_approve_reject").on("click", function(e) {
             e.preventDefault();
             var sam_id = "{{ $site[0]->sam_id }}";
@@ -73,9 +138,12 @@
             $(this).attr("disabled", "disabled");
             $(this).text("Processing...");
 
-            var message = action == "false" ? "Reject" : "Approve ARTB Declaration";
+            var message = action == "false" ? "Reject" : "Approve RTB Declaration";
             var button_id = action == "false" ? "declaration_reject" : "declaration_approve";
             
+            var solution = $("#solution").val();
+            var afi_lines = $("#afi_lines").val();
+
             $("form small").text("");
 
             $.ajax({
@@ -89,6 +157,8 @@
                     program_id : program_id,
                     activity_id : activity_id,
                     site_category : site_category,
+                    solution : solution,
+                    afi_lines : afi_lines,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

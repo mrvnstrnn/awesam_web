@@ -24,6 +24,12 @@ class ActivityController extends Controller
                             ->join('program_coloc', 'program_coloc.sam_id', 'view_site.sam_id')
                             ->where('view_site.sam_id', $request['sam_id'])
                             ->get();
+                } else if (str_contains($request['sam_id'], 'FTTH')) {
+                    $site = \DB::table('view_site')
+                            ->select('view_site.*', 'program_ftth.afi_lines', 'program_ftth.solution')
+                            ->join('program_ftth', 'program_ftth.sam_id', 'view_site.sam_id')
+                            ->where('view_site.sam_id', $request['sam_id'])
+                            ->get();
                 } else {
                     $site = \DB::table('view_site')
                             ->where('sam_id', $request['sam_id'])

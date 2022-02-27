@@ -16,6 +16,7 @@ use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\FTTHController;
 
 
 
@@ -562,6 +563,10 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
     
     Route::post('/renewal-upload-file', [RenewalController::class, 'fileupload']);
     Route::post('/renewal-upload-my-file', [RenewalController::class, 'upload_my_file']);
+
+    //FTTH
+    Route::post('/get-partial-rtb-declaration', [FTTHController::class, 'get_partial_rtb_declaration']);
+    
 
 });
     
