@@ -9,10 +9,12 @@
  */
 namespace SebastianBergmann\CodeCoverage\StaticAnalysis;
 
+use SebastianBergmann\LinesOfCode\LinesOfCode;
+
 /**
  * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
  */
-interface FileAnalyser
+interface CoveredFileAnalyser
 {
     public function classesIn(string $filename): array;
 
@@ -20,12 +22,7 @@ interface FileAnalyser
 
     public function functionsIn(string $filename): array;
 
-    /**
-     * @psalm-return array{linesOfCode: int, commentLinesOfCode: int, nonCommentLinesOfCode: int}
-     */
-    public function linesOfCodeFor(string $filename): array;
-
-    public function executableLinesIn(string $filename): array;
+    public function linesOfCodeFor(string $filename): LinesOfCode;
 
     public function ignoredLinesFor(string $filename): array;
 }
