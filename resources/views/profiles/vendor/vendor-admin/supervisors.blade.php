@@ -158,6 +158,8 @@
                                 <div class="form-group col-md-8 col-12">
                                     <select name="profile" id="profile" class="form-control">
                                         <option value="2">Agent</option>
+                                        <option value="37">Agent Paralegal</option>
+                                        <option value="38">Agent Contract Processor</option>
                                         <option value="3">Supervisor</option>
                                     </select>
                                     <small class="text-danger profile-error"></small>
