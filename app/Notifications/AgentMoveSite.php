@@ -33,7 +33,8 @@ class AgentMoveSite extends Notification implements ShouldBroadcast
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        // return ['mail', 'database'];
+        return ['database'];
     }
 
     /**

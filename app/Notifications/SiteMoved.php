@@ -37,7 +37,8 @@ class SiteMoved extends Notification implements ShouldBroadcast
     public function via($notifiable)
     { 
         // return ['database', 'broadcast'];
-        return ['mail', 'database'];
+        // return ['mail', 'database'];
+        return ['database'];
     }
 
     /**
