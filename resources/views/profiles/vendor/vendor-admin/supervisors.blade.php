@@ -342,7 +342,7 @@
     <script>
         $(".supervisor_info_form .profile_div").on("change", "#profile", function () {
             console.log($(this).val());
-            if ($(this).val() == 3) {
+            if ($(this).val() == 3 || $(this).val() == 37 || $(this).val() == 38) {
                 $(".supervisor_info_form .supervisor_div").addClass("d-none");
             } else {
                 $(".supervisor_info_form .supervisor_div").removeClass("d-none");

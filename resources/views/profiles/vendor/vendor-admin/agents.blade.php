@@ -244,7 +244,7 @@
 
     <script>
         $(".profile_div").on("change", "#profile", function () {
-            if ($(this).val() == 3) {
+            if ($(this).val() == 3 || $(this).val() == 37 || $(this).val() == 38) {
                 $(".supervisor_div").addClass("d-none");
             } else {
                 $(".supervisor_div").removeClass("d-none");
