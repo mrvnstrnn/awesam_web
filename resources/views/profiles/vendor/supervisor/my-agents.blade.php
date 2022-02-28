@@ -120,36 +120,8 @@
                                 <label for="region">Region</label>
                                 <div class="row" id="region_div">
                                     @php
-                                        $user_detail = \DB::table('user_details')
-                                                        ->select('vendor_id')
-                                                        ->where('user_id', \Auth::user()->id)
-                                                        ->first();
-
-                                                            
-                                        $user_programs = \DB::table('user_programs')
-                                                            ->select('program_id')
-                                                            ->where('user_id', \Auth::user()->id)
-                                                            ->get()
-                                                            ->pluck('program_id');   
-
-                                        if( count($user_programs) > 0){
-                                            $sites = \DB::table('view_site')
-                                                        ->select('sam_region_id')
-                                                        ->where('vendor_id', $user_detail->vendor_id)
-                                                        ->whereIn('program_id', $user_programs)
-                                                        ->get()
-                                                        ->groupBy('sam_region_id');
-
-                                            if( !is_null($sites) ){
-                                                $location_sam_regions = \DB::table('location_sam_regions')
-                                                            ->whereIn('sam_region_id', $sites->keys())
-                                                            ->get();
-                                            } else {
-                                                echo '<p>No region found.</p>';
-                                            }
-                                        } else {
-                                            echo '<p>No user programs available.</p>';
-                                        }
+                                    $location_sam_regions = \DB::table('location_sam_regions')
+                                                ->get();
                                     @endphp
 
                                     @foreach ($location_sam_regions as $location_sam_region)
@@ -184,6 +156,7 @@
         $("table").on("click", ".update-data", function () {
 
             var user_id = $(this).attr("data-value");
+            $("#assign-agent-site-form input[name='region[]']").attr("checked", false);
 
             $("#assign-agent-site-form #user_id").val(user_id);
 
@@ -204,7 +177,7 @@
                         });
 
                         resp.user_areas.forEach(element => {
-                            $("#assign-agent-site-form #region"+element.region).attr("checked", "checkek");
+                            $("#assign-agent-site-form #region"+element.region).attr("checked", "checked");
                         });
                     } else {
                         Swal.fire(

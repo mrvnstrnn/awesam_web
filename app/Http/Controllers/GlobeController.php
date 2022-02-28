@@ -1221,45 +1221,59 @@ class GlobeController extends Controller
     {
 
         try {
-            $checkAgent = \DB::table('users_areas')
-                            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province', 'user_details.image', 'location_sam_regions.sam_region_name')
-                            ->join('users', 'users.id', 'users_areas.user_id')
-                            ->join('user_details', 'user_details.user_id', 'users.id')
+            // $checkAgent = \DB::table('users_areas')
+            //                 ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users_areas.region', 'users_areas.province', 'user_details.image', 'location_sam_regions.sam_region_name')
+            //                 ->join('users', 'users.id', 'users_areas.user_id')
+            //                 ->join('user_details', 'user_details.user_id', 'users.id')
+            //                 ->join('user_programs', 'user_programs.user_id', 'users.id')
+            //                 ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
+            //                 ->where('user_details.IS_id', \Auth::user()->id)
+            //                 ->where('user_programs.program_id', $request->program_id)
+            //                 ->where('users.is_test', 0)
+            //                 ->get()
+            //                 ->groupBy('users.id');
+
+            $checkAgent = \DB::table('user_details')
+                            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'user_details.image')
+                            ->join('users', 'users.id', 'user_details.user_id')
                             ->join('user_programs', 'user_programs.user_id', 'users.id')
-                            // ->join('users_areas', 'users_areas.user_id', 'users.id')
-                            ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
                             ->where('user_details.IS_id', \Auth::user()->id)
                             ->where('user_programs.program_id', $request->program_id)
                             ->where('users.is_test', 0)
-                            ->get()
-                            ->groupBy('users.id');
+                            ->get();
 
             $dt = DataTables::of($checkAgent)
                     ->addColumn('firstname', function($row){
-                        return $row[0]->firstname;
+                        return $row->firstname;
                     })
                     ->addColumn('lastname', function($row){
-                        return $row[0]->lastname;
+                        return $row->lastname;
                     })
                     ->addColumn('email', function($row){
-                        return $row[0]->email;
+                        return $row->email;
                     })
                     ->addColumn('photo', function($row){
-                        if (is_null($row[0]->image)) {
+                        if (is_null($row->image)) {
                             return '<img width="42" height="42" class="rounded-circle border border-dark" src="images/no-image.jpg" alt="">';
                         } else {
-                            return '<img width="42" height="42" class="rounded-circle border border-dark" src="'.asset('files/'.$row[0]->image).'" alt="">';
+                            return '<img width="42" height="42" class="rounded-circle border border-dark" src="'.asset('files/'.$row->image).'" alt="">';
                         }
                     })
                     ->addColumn('areas', function($row){
+                        $areas = \DB::table('users_areas')
+                                ->select('location_sam_regions.sam_region_name')
+                                ->join('location_sam_regions', 'location_sam_regions.sam_region_id', 'users_areas.region')
+                                ->where('users_areas.user_id', $row->id)
+                                ->get();
+
                         $collect_areas = collect();
-                        foreach ($row as $areas) {
-                            $collect_areas->push($areas->sam_region_name);
+                        foreach ($areas as $area) {
+                            $collect_areas->push($area->sam_region_name);
                         }
                         return $collect_areas->all();
                     })
                     ->addColumn('action', function($row){
-                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row[0]->id.'" title="Update" type="button">Update</button>';
+                        $btn = '<button class="btn btn-sm btn-primary btn-shadow update-data" data-value="'.$row->id.'" title="Update" type="button">Update</button>';
 
                         return $btn;
                     });;
@@ -1370,7 +1384,7 @@ class GlobeController extends Controller
                 $checkAgent = UserDetail::join('users', 'user_details.user_id', 'users.id')
                                         ->join('user_programs', 'user_programs.user_id', 'users.id')
                                         ->where('user_details.vendor_id', $vendors->vendor_id)
-                                        ->where('users.profile_id', 2)
+                                        ->whereIn('users.profile_id', [2, 37, 38])
                                         ->where('user_programs.program_id', $get_user_program_active)
                                         ->where('users.is_test', 0)
                                         ->get();
@@ -6989,7 +7003,7 @@ class GlobeController extends Controller
                                                 ->get();
 
                                                 
-            $user_detail_agent = UserDetail::select('users.firstname', 'users.lastname', 'users.id')
+            $user_detail_agent = UserDetail::select('users.firstname', 'users.lastname', 'users.id', 'users.profile_id')
                                     ->join('users', 'users.id', 'user_details.user_id')
                                     ->where('user_details.user_id', $request->get('user_id'))->first();
 
@@ -7017,14 +7031,13 @@ class GlobeController extends Controller
 
             $required = "";
 
-            if ($request->get("profile") == 2) {
-                $required = "required";
-            }
+            // if ($request->get("profile") == 2) {
+            //     $required = "required";
+            // }
 
             $validate = \Validator::make($request->all(), array(
                 'region' => 'required',
                 'program' => 'required',
-                'is_id' => $required,
             ));
 
             if ($validate->passes()) {

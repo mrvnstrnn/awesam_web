@@ -257,6 +257,8 @@ $(document).ready(() => {
             success: function (resp) {
                 if (!resp.error) {
 
+                    
+                    $('#modal-info .agent_info_form #supervisor').append("<option value=''>Select supervisor</option>");
                     resp.supervisor.forEach(element => {
                         $("#modal-info .agent_info_form #supervisor").append(
                             '<option value="'+element.id+'">'+element.name+'</option>'
@@ -279,6 +281,7 @@ $(document).ready(() => {
 
                     $('.agent_info_form #firstname').val(resp.user_detail.firstname);
                     $('.agent_info_form #lastname').val(resp.user_detail.lastname);
+                    $('.agent_info_form #profile').val(resp.user_detail.profile_id).trigger('change');
 
                     resp.user_data.forEach(element => {
                         $(".agent_info_form .user_data input[type=checkbox][value='" + element.program_id + "']").prop('checked', true);

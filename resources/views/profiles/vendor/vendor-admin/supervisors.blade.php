@@ -68,6 +68,9 @@
                     if (!resp.error) {
                         $("#modal-info-supervisor").modal("show");
 
+                        $("#modal-info-supervisor .supervisor_info_form  #supervisor").append(
+                            '<option value="">Select supervisor</option>'
+                        );
                         resp.supervisor.forEach(element => {
                             $("#modal-info-supervisor .supervisor_info_form  #supervisor").append(
                                 '<option value="'+element.id+'">'+element.name+'</option>'
@@ -194,35 +197,38 @@
                                 </div>
                                 <div class="form-group col-md-8 col-12">
                                     @php
-                                        $user_detail = \DB::table('user_details')
-                                                        ->select('vendor_id')
-                                                        ->where('user_id', \Auth::user()->id)
-                                                        ->first();
+                                        // $user_detail = \DB::table('user_details')
+                                        //                 ->select('vendor_id')
+                                        //                 ->where('user_id', \Auth::user()->id)
+                                        //                 ->first();
                                                             
-                                        $user_programs = \DB::table('user_programs')
-                                                            ->select('program_id')
-                                                            ->where('user_id', \Auth::user()->id)
-                                                            ->get()
-                                                            ->pluck('program_id');
+                                        // $user_programs = \DB::table('user_programs')
+                                        //                     ->select('program_id')
+                                        //                     ->where('user_id', \Auth::user()->id)
+                                        //                     ->get()
+                                        //                     ->pluck('program_id');
     
-                                        if( count($user_programs) > 0){
-                                            $sites = \DB::table('view_site')
-                                                        ->select('sam_region_id')
-                                                        ->where('vendor_id', $user_detail->vendor_id)
-                                                        ->whereIn('program_id', $user_programs)
-                                                        ->get()
-                                                        ->groupBy('sam_region_id');
+                                        // if( count($user_programs) > 0){
+                                        //     $sites = \DB::table('view_site')
+                                        //                 ->select('sam_region_id')
+                                        //                 ->where('vendor_id', $user_detail->vendor_id)
+                                        //                 ->whereIn('program_id', $user_programs)
+                                        //                 ->get()
+                                        //                 ->groupBy('sam_region_id');
     
-                                            if( !is_null($sites) ){
-                                                $location_sam_regions = \DB::table('location_sam_regions')
-                                                            ->whereIn('sam_region_id', $sites->keys())
+                                        //     if( !is_null($sites) ){
+                                        //         $location_sam_regions = \DB::table('location_sam_regions')
+                                        //                     ->whereIn('sam_region_id', $sites->keys())
+                                        //                     ->get();
+                                        //     } else {
+                                        //         echo '<p>No region found.</p>';
+                                        //     }
+                                        // } else {
+                                        //     echo '<p>No user programs available.</p>';
+                                        // }
+
+                                        $location_sam_regions = \DB::table('location_sam_regions')
                                                             ->get();
-                                            } else {
-                                                echo '<p>No region found.</p>';
-                                            }
-                                        } else {
-                                            echo '<p>No user programs available.</p>';
-                                        }
                                     @endphp
     
                                     @foreach ($location_sam_regions as $location_sam_region)
