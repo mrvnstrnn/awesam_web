@@ -3,6 +3,18 @@
 @section('content')
 <div class="main-card mb-3 card">
     <div class="card-body">
+
+        @if (session('sent'))
+            <div class="alert alert-success">
+                {{ session('sent') }}
+            </div>
+        @endif
+        <form method="POST" action="/submit-test-email">@csrf
+            <button class="btn btn-primary">Submit test email</button>
+        </form>
+
+        <hr>
+
         <button class="btn btn-sm btn-primary m-3 addnewpermission_btn">Add new permission</button>
         <table style="width: 100%;" id="permission-table" class="table table-hover table-striped table-bordered" data-href="{{ route('all.permission') }}">
             <thead>

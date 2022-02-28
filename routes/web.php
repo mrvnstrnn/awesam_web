@@ -17,6 +17,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FTTHController;
+use App\Http\Controllers\TestController;
 
 
 
@@ -567,6 +568,10 @@ Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
     //FTTH
     Route::post('/get-partial-rtb-declaration', [FTTHController::class, 'get_partial_rtb_declaration']);
     
+
+
+    
+    Route::post('/submit-test-email', [TestController::class, 'submit_test_email']);
 
 });
     
