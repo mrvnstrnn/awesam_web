@@ -6316,6 +6316,7 @@ class GlobeController extends Controller
     {
         try {
             $required = "";
+            $required_solution = "";
             if ($request->input('action') == "false" ) {
                 $required = "required";
             }
