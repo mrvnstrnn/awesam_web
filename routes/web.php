@@ -43,12 +43,13 @@ use App\Http\Controllers\TestController;
 
 // Route::get('/get-component-no-auth/{sam_id}/{activity_source}/{profile_id}', [ActivityController::class, 'get_component_no_auth'])->name('get_component_no_auth');
 
+
+//Mobile
+Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do'])->middleware('auth:sanctum');
+
 Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
 Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
-
-    //Mobile
-    Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do']);
 
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
 
