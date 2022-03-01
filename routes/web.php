@@ -47,6 +47,9 @@ Route::get('/login-as/{email}', [UserController::class, 'login_as']);
 
 Route::group(['middleware' => ['auth', 'verified', 'active']], function () {
 
+    //Mobile
+    Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do']);
+
     Route::post('/change-active-program', [GlobeController::class, 'change_active_program'])->name('change_active_program');
 
     Route::post('/update-profile-data', [UserController::class, 'update_profile_data']);

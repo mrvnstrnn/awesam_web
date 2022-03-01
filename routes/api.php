@@ -28,7 +28,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::post('/agent/my-activities', [ApiController::class, 'agent_activities']);
 
-    Route::get('/agent/my-activities/actions/do/{sam_id}/{sub_activity_id}', [ApiController::class, 'agent_activities_actions_do']);
     Route::post('/agent/my-activities/actions', [ApiController::class, 'agent_activities_actions']);
     Route::post('/current-user', [ApiController::class, 'current_user']);
 });
